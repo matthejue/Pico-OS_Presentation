@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-03",
+  "primarySource": {
+    "repository": "/home/areo/Documents/Studium/Pico-OS",
+    "file": "README.md",
+    "commit": "7038309980dd1432530ef4acee345e2b8566ee64",
+    "contentSha256": "c0be11b1a9616e0ce029f51c1e0f75952cc4292fe97ecb8bfaa926f9ea91c901",
+    "dirtyAtGeneration": true,
+    "snapshot": ".source/Pico-OS-README.md"
+  },
+  "additionalSources": [
+    {
+      "repository": "/home/areo/Documents/Studium/RETI-Emulator",
+      "file": "README.md",
+      "commit": "bae844441ffcd4ea5280e71cf48545f3898bba45",
+      "contentSha256": "9765dbbf0c1042bb268e12fe9dc1f611d921ec7d5a6908c101a75ed1af1869a0"
+    },
+    {
+      "repository": "/home/areo/Documents/Studium/PicoC-Compiler",
+      "file": "README.md",
+      "commit": "792f0a13ff0d85935d2482416c7f942c3476d9fa",
+      "contentSha256": "ca726ce6f96e5e3250e3bd45c55347b4dfebdd47faf7a7de915fbd10d980df38"
+    }
+  ],
+  "slideCount": 36,
+  "sourceMarker": "<!-- SOURCE Pico-OS/README.md#... -->"
+}
