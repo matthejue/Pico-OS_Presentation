@@ -1,11 +1,11 @@
 ---
 theme: default
-title: PicoOS — a complete operating system you can still see
+title: PicoOS presentation
 info: |
   PicoOS is a small educational operating system for the RETI teaching CPU.
   This deck follows the structure of the PicoOS README.
 author: Matthejue
-colorSchema: dark
+colorSchema: light
 highlighter: shiki
 lineNumbers: true
 transition: slide-left
@@ -13,8 +13,8 @@ drawings:
   persist: false
 mdc: true
 fonts:
-  sans: Inter
-  mono: IBM Plex Mono
+  sans: Cantarell
+  mono: Fira Code
 ---
 
 <!-- SOURCE Pico-OS/README.md#picoos — overview and educational purpose -->
@@ -23,28 +23,28 @@ fonts:
 
 # PicoOS
 
-<div class="cover-title mt-2">A complete operating system<br><span class="accent">you can still see.</span></div>
+<div class="cover-title mt-2">Operating system for the<br><span class="accent">RETI teaching CPU</span></div>
 
 <div class="subtitle mt-7">
-From one RETI instruction or keyboard byte<br>to kernel policy—and back again.
+Bootloader · kernel · processes · files · shell · applications
 </div>
 
 <div class="hero-orbit"></div>
 <div class="hero-core">PicoOS</div>
 
 <div class="absolute bottom-10 left-12 flex gap-2">
-  <span class="chip">educational</span>
-  <span class="chip">inspectable</span>
-  <span class="chip">end-to-end</span>
+  <span class="chip">PicoC</span>
+  <span class="chip">RETI</span>
+  <span class="chip">operating systems</span>
 </div>
 
 ---
 
 <!-- SOURCE Pico-OS/README.md#picoos — three sibling projects and complete-system pipeline -->
 
-<div class="eyebrow">The complete machine</div>
+<div class="eyebrow">Project overview</div>
 
-# Three projects. One visible path.
+# How PicoOS is built and run
 
 <div class="grid grid-cols-3 gap-5 mt-10 items-stretch">
   <div class="card">
@@ -75,9 +75,9 @@ From one RETI instruction or keyboard byte<br>to kernel policy—and back again.
 
 <!-- SOURCE Pico-OS/README.md#picoos and #build-and-run — deliberate limits, scheduling model, build entry point -->
 
-<div class="eyebrow">Design boundary</div>
+<div class="eyebrow">What PicoOS implements</div>
 
-# Small on purpose
+# Scope and limitations
 
 <div class="grid grid-cols-2 gap-4 mt-7">
   <div class="card flex gap-4 items-center"><div class="metric">∅</div><div><b>No virtual memory</b><div class="muted text-sm">absolute SRAM addresses</div></div></div>
@@ -87,7 +87,6 @@ From one RETI instruction or keyboard byte<br>to kernel policy—and back again.
 </div>
 
 <div class="terminal mt-7">
-  <div class="terminal-bar"><i class="terminal-dot"></i><i class="terminal-dot"></i><i class="terminal-dot"></i></div>
   <div class="terminal-body"><span class="muted">$</span> make firmware user<br><span class="muted">$</span> make bootload <span class="muted"># press V for the UART terminal</span></div>
 </div>
 
@@ -101,7 +100,7 @@ class: section
 <div class="grid grid-cols-[14rem_1fr] gap-10 items-end">
   <div class="section-number">01</div>
   <div>
-    <div class="eyebrow mb-3">from inert memory to a running kernel</div>
+    <div class="eyebrow mb-3">How PicoOS starts</div>
     <h1 class="section-title">Bootloading</h1>
   </div>
 </div>
@@ -112,7 +111,7 @@ class: section
 
 <div class="eyebrow">1.1 · loading the kernel</div>
 
-# EPROM hands control to SRAM
+# Loading the kernel from EPROM into SRAM
 
 ```mermaid
 sequenceDiagram
@@ -143,7 +142,7 @@ sequenceDiagram
 
 <div class="eyebrow">1.2–1.3 · memory constants + UART hardware</div>
 
-# The compiler closes the hardware loop
+# Memory constants and UART hardware
 
 <div class="grid grid-cols-[1.15fr_.85fr] gap-6 mt-7">
   <div>
@@ -181,7 +180,7 @@ sequenceDiagram
 
 <div class="eyebrow">1.4 · UART file protocol</div>
 
-# Raw bytes become a tiny host bridge
+# Accessing host files over UART
 
 <div class="grid grid-cols-3 gap-4 mt-7">
   <div class="card">
@@ -218,7 +217,7 @@ sequenceDiagram
 
 <div class="eyebrow">2.1 · kernel main loop</div>
 
-# Initialization is the main loop
+# Kernel initialization
 
 ```mermaid
 flowchart LR
@@ -245,7 +244,7 @@ flowchart LR
 
 <div class="eyebrow">2.2 · the first dispatch</div>
 
-# A process begins one cell before `_start`
+# Starting the init process
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-6 mt-8">
   <div class="card">
@@ -269,7 +268,7 @@ flowchart LR
   </div>
 </div>
 
-<div class="quote-line mt-7">The return instruction doubles as the process-entry instruction.</div>
+<div class="card mt-7 text-sm"><span class="mono">RTI</span> is used both to return from an interrupt and to start a process.</div>
 
 ---
 
@@ -277,7 +276,7 @@ flowchart LR
 
 <div class="eyebrow">3.1–3.2 · sections + vector table</div>
 
-# Four cells define every exceptional path
+# Interrupt vector table
 
 <div class="memory-bar mt-7">
   <div class="memory-segment seg-ivt" style="width:10%">0<br>syscall</div>
@@ -310,7 +309,7 @@ void (*interrupt_vector_table[4])(void) = {
 
 <div class="eyebrow">3.3 + 3.5 · interrupt service routines</div>
 
-# One vector table, four contracts
+# Interrupt handlers
 
 <div class="grid grid-cols-4 gap-3 mt-9">
   <div class="card text-center"><div class="metric">0</div><h3>syscall</h3><div class="muted text-xs">software<br>switch stacks</div></div>
@@ -330,7 +329,7 @@ void (*interrupt_vector_table[4])(void) = {
 
 <div class="eyebrow">3.4 · CPU exceptions</div>
 
-# The emulator detects. PicoOS decides.
+# Handling CPU exceptions
 
 ```mermaid
 flowchart LR
@@ -358,25 +357,29 @@ flowchart LR
 
 <div class="eyebrow">3.6 · system calls</div>
 
-# `INT 0` is the kernel doorway
+# Handling system calls with `INT 0`
 
-```mermaid
-sequenceDiagram
-    participant U as userspace wrapper
-    participant H as vector 0 hub
-    participant K as handle_syscall
-    participant D as dispatcher
-    U->>H: ACC = number · IN1 = argument · INT 0
-    H->>H: push ACC IN1 IN2 BAF CS DS
-    H->>K: switch to kernel CS DS SP
-    alt immediate
-      K-->>H: result in IN2
-      H-->>U: ACC = result · RTI
-    else block / yield / exit
-      K->>D: save caller context
-      D-->>U: another activation · RTI
-    end
-```
+<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-4 mt-8">
+  <div class="card">
+    <div class="eyebrow mb-3">userspace wrapper</div>
+    <div class="mono text-sm">ACC = number<br>IN1 = argument<br><span class="accent">INT 0</span></div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="card amber-border">
+    <div class="eyebrow mb-3 amber">vector 0 hub</div>
+    <div class="mono text-sm">push six registers<br>switch CS · DS · SP</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="card">
+    <div class="eyebrow mb-3">handle_syscall</div>
+    <div class="mono text-sm">decode request<br>run the requested kernel code</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4 mt-5">
+  <div class="card green-border"><span class="green mono text-sm">immediate</span><span class="muted text-sm ml-5">IN2 → ACC · restore · RTI</span></div>
+  <div class="card coral-border"><span class="coral mono text-sm">block / yield / exit</span><span class="muted text-sm ml-5">save context → dispatcher → another RTI</span></div>
+</div>
 
 <div class="flex justify-center gap-3 mt-3">
   <span class="chip">31 syscall numbers</span>
@@ -390,7 +393,7 @@ sequenceDiagram
 
 <div class="eyebrow">3.7 · stack-frame ABI</div>
 
-# The callee owns `BAF`
+# Function stack frames and `BAF`
 
 <div class="grid grid-cols-[.8fr_1.2fr] gap-6 mt-6">
   <div class="card">
@@ -411,7 +414,7 @@ sequenceDiagram
       <div class="timeline-step"><b>callee</b><br>reserve locals</div>
       <div class="timeline-step"><b>epilogue</b><br>restore + jump</div>
     </div>
-    <div class="quote-line mt-10">Interrupt frames extend this convention instead of inventing a second ABI.</div>
+    <div class="card mt-10 text-sm">Interrupt frames use the same layout and add the registers saved by the interrupt handler.</div>
   </div>
 </div>
 
@@ -421,7 +424,7 @@ sequenceDiagram
 
 <div class="eyebrow">3.8–3.9 · asynchronous hardware</div>
 
-# Same CPU. Two very different interrupts.
+# Timer and UART interrupts
 
 <div class="grid grid-cols-2 gap-5 mt-7">
   <div class="card amber-border">
@@ -454,7 +457,7 @@ sequenceDiagram
 
 <div class="eyebrow">4.1–4.4 · processes</div>
 
-# The “table” is a linked list
+# The process table is a linked list
 
 <div class="flex items-center justify-center gap-3 mt-6">
   <div class="process-node running">PID 1<br>RUNNING</div><span class="flow-arrow">→</span>
@@ -480,7 +483,7 @@ sequenceDiagram
 
 <div class="eyebrow">4.5–4.8 · loading + initial stack</div>
 
-# A binary becomes a runnable context
+# Loading a process
 
 <div class="grid grid-cols-[1.25fr_.75fr] gap-6 mt-5">
   <div>
@@ -514,7 +517,7 @@ sequenceDiagram
 
 <div class="eyebrow">5.1 + 5.3–5.5 · wait queues</div>
 
-# Block on events, not time
+# Waiting for an event
 
 <div class="flex items-center justify-center gap-3 mt-6">
   <div class="process-node blocked">A</div><span class="flow-arrow">→</span>
@@ -529,7 +532,7 @@ sequenceDiagram
   <div class="card green-border"><div class="metric green">event</div><div class="metric-label">child · mutex · UART · signal</div></div>
 </div>
 
-<div class="quote-line mt-7"><span class="mono">sleep(queue)</span> has no duration. Timer ticks do not expire it.</div>
+<div class="card mt-7 text-sm"><span class="mono">sleep(queue)</span> waits until <span class="mono">wakeup(queue)</span> is called; timer ticks do not end the wait.</div>
 
 ---
 
@@ -537,7 +540,7 @@ sequenceDiagram
 
 <div class="eyebrow">5.2 · exact-child waitpid</div>
 
-# Status survives either race
+# `waitpid()` before or after the child exits
 
 ```mermaid
 flowchart LR
@@ -565,7 +568,7 @@ flowchart LR
 
 <div class="eyebrow">5.6 · signals</div>
 
-# Five signals, explicit semantics
+# Signals in PicoOS
 
 <div class="compact-table mt-5">
 
@@ -577,9 +580,9 @@ flowchart LR
 </div>
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-5 mt-7">
-  <div class="card"><span class="chip">shell policy</span><div class="mt-3 mono text-sm">PR_SET_PDEATHSIG<br><span class="amber">SIGTERM</span></div></div>
-  <div class="flow-arrow">→ inherited →</div>
-  <div class="card coral-border"><span class="chip">shell child</span><div class="mt-3 text-sm">parent exits<br><span class="coral mono">orphan + signal</span></div></div>
+  <div class="card"><span class="chip">shell setup</span><div class="mt-3 mono text-sm">PR_SET_PDEATHSIG<br><span class="amber">SIGTERM</span></div></div>
+  <div class="flow-arrow">→ child inherits →</div>
+  <div class="card coral-border"><span class="chip">shell child</span><div class="mt-3 text-sm">parent exits<br><span class="coral mono">child gets SIGTERM</span></div></div>
 </div>
 
 <div class="muted text-xs text-center mt-5">Terminal ESC c / ESC z targets the registered foreground PID.</div>
@@ -590,7 +593,7 @@ flowchart LR
 
 <div class="eyebrow">6 · scheduler</div>
 
-# Policy: round-robin list scan
+# Round-robin scheduling
 
 <div class="flex items-center justify-center gap-3 mt-8">
   <div class="process-node running">A<br>RUNNING</div><span class="flow-arrow">→</span>
@@ -605,7 +608,7 @@ flowchart LR
   <div class="card"><div class="metric green">yield</div><div class="metric-label">same save path, voluntarily</div></div>
 </div>
 
-<div class="quote-line mt-7">State says who may run. The scheduler chooses who. The dispatcher makes it real.</div>
+<div class="card mt-7 text-sm">The scheduler selects a ready process. The dispatcher restores its registers and continues it.</div>
 
 ---
 
@@ -613,7 +616,7 @@ flowchart LR
 
 <div class="eyebrow">7 · dispatcher</div>
 
-# Mechanism: save here, resume there
+# Saving and restoring process state
 
 ```mermaid
 sequenceDiagram
@@ -641,7 +644,7 @@ sequenceDiagram
 
 <div class="eyebrow">8.1 · memory layout</div>
 
-# One SRAM, three allocation scales
+# Memory layout and allocators
 
 <div class="mono text-xs muted mt-6 mb-2">SRAM offset · low → high</div>
 <div class="memory-bar">
@@ -673,7 +676,7 @@ sequenceDiagram
 
 <div class="eyebrow">8.2–8.3 · first-fit heap</div>
 
-# Split when allocating. Coalesce when freeing.
+# Heap allocation and `free()`
 
 ```c {1-3|4-10|all}{lines:true}
 struct BlockHeader {
@@ -705,7 +708,7 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 <div class="eyebrow">8.4–8.5 · allocator reuse + shared memory</div>
 
-# One algorithm, three heaps
+# Kernel, process, and application heaps
 
 <div class="grid grid-cols-3 gap-4 mt-6">
   <div class="card"><div class="metric">k*</div><h3>kernel heap</h3><div class="muted text-xs">PCB · paths · metadata</div></div>
@@ -731,20 +734,18 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 <div class="eyebrow">9 · libraries</div>
 
-# Familiar names, inspectable mechanisms
+# Main library functions
 
 <div class="grid grid-cols-4 gap-3 mt-6 text-center">
-  <div class="card"><span class="chip">unistd</span><div class="mt-3 text-xs muted">I/O · processes · waits</div></div>
-  <div class="card"><span class="chip">stdlib</span><div class="mt-3 text-xs muted">heap · env · exit</div></div>
-  <div class="card"><span class="chip">stdio</span><div class="mt-3 text-xs muted">streams · format · scan</div></div>
-  <div class="card"><span class="chip">signal</span><div class="mt-3 text-xs muted">handlers · kill · restorer</div></div>
-  <div class="card"><span class="chip">fcntl</span><div class="mt-3 text-xs muted">open flags</div></div>
-  <div class="card"><span class="chip">mutex</span><div class="mt-3 text-xs muted">TSL · sleep · wakeup</div></div>
-  <div class="card"><span class="chip">mman</span><div class="mt-3 text-xs muted">shared SRAM</div></div>
-  <div class="card"><span class="chip">start</span><div class="mt-3 text-xs muted">heap · env · main · exit</div></div>
+  <div class="card"><span class="chip">files</span><div class="mt-3 text-xs mono">open · read · write · close</div></div>
+  <div class="card"><span class="chip">processes</span><div class="mt-3 text-xs mono">load · run · waitpid · getpid</div></div>
+  <div class="card"><span class="chip">stdio</span><div class="mt-3 text-xs mono">fopen · printf · scanf</div></div>
+  <div class="card"><span class="chip">stdlib</span><div class="mt-3 text-xs mono">malloc · free · getenv · setenv</div></div>
+  <div class="card"><span class="chip">paths</span><div class="mt-3 text-xs mono">chdir · getcwd · opendir · readdir</div></div>
+  <div class="card"><span class="chip">signals</span><div class="mt-3 text-xs mono">signal · kill</div></div>
+  <div class="card"><span class="chip">synchronization</span><div class="mt-3 text-xs mono">yield · mutex_lock · mutex_unlock</div></div>
+  <div class="card"><span class="chip">shared memory</span><div class="mt-3 text-xs mono">shm_open · mmap · shm_unlink</div></div>
 </div>
-
-<div class="quote-line mt-7"><span class="mono">-C libstart.picoc</span> puts a custom `_start` first in `.text`, then calls `main(argc, argv)`.</div>
 
 ---
 
@@ -752,7 +753,7 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 <div class="eyebrow">10.1–10.3 · filesystem</div>
 
-# Descriptors over UART—not an on-device disk
+# How file descriptors use host files
 
 ```mermaid
 flowchart LR
@@ -777,7 +778,7 @@ flowchart LR
 
 <div class="eyebrow">10.4–10.6 · redirection</div>
 
-# `dup2()` turns shell policy into inheritance
+# Output redirection with `dup2()`
 
 <div class="timeline mt-7">
   <div class="timeline-step"><b>open</b><br>path + flags</div>
@@ -806,11 +807,11 @@ flowchart LR
 
 <div class="eyebrow">11 · init process</div>
 
-# PID 1 keeps policy out of the kernel
+# Init starts and restarts the shell
 
 <div class="grid grid-cols-3 gap-4 mt-6">
-  <div class="card"><span class="chip">kernel</span><h3 class="mt-3">mechanism</h3><div class="muted text-xs">memory · interrupts · load PID 1 · dispatch</div></div>
-  <div class="card amber-border"><span class="chip">init</span><h3 class="mt-3">system policy</h3><div class="muted text-xs">environment · start shell · exact wait</div></div>
+  <div class="card"><span class="chip">kernel</span><h3 class="mt-3">start init</h3><div class="muted text-xs">memory · interrupts · load PID 1 · dispatch</div></div>
+  <div class="card amber-border"><span class="chip">init</span><h3 class="mt-3">manage the shell</h3><div class="muted text-xs">environment · start shell · exact wait</div></div>
   <div class="card green-border"><span class="chip">shell</span><h3 class="mt-3">interaction</h3><div class="muted text-xs">parse · PATH · jobs · redirection</div></div>
 </div>
 
@@ -828,10 +829,9 @@ flowchart LR
 
 <div class="eyebrow">12 · userspace</div>
 
-# A small shell exposes the whole OS
+# Shell commands and programs
 
 <div class="terminal mt-5">
-  <div class="terminal-bar"><i class="terminal-dot"></i><i class="terminal-dot"></i><i class="terminal-dot"></i></div>
   <div class="terminal-body">
     PicoOS&gt; export NAME=world<br>
     PicoOS&gt; echo "hello $NAME" &gt; greeting.txt<br>
@@ -853,7 +853,7 @@ flowchart LR
 
 <div class="eyebrow">13 · teaching</div>
 
-# Concepts connect because the implementation connects
+# Topics demonstrated by PicoOS
 
 <div class="grid grid-cols-2 gap-5 mt-6">
   <div class="card">
@@ -872,7 +872,7 @@ flowchart LR
   </div>
 </div>
 
-<div class="quote-line mt-8">Students can compare PicoC, symbolic RETI, section metadata, machine words, and the live machine state.</div>
+<div class="card mt-8 text-sm">Students can compare PicoC source, RETI assembly, section data, machine words, and the running machine.</div>
 
 ---
 
@@ -880,7 +880,7 @@ flowchart LR
 
 <div class="eyebrow">14.1–14.2 · test system</div>
 
-# Three layers, one toolchain
+# PicoOS tests
 
 <div class="grid grid-cols-3 gap-4 mt-7">
   <div class="card"><div class="metric">lib</div><h3>single PicoC file</h3><div class="muted text-xs">top-of-file input + expected metadata</div></div>
@@ -899,7 +899,7 @@ flowchart LR
 
 <div class="eyebrow">14.3–14.4 · normal versus fast</div>
 
-# Reuse the expensive boot, reset the state
+# Normal and fast tests
 
 <div class="grid grid-cols-2 gap-5 mt-6">
   <div class="card amber-border">
@@ -922,8 +922,8 @@ flowchart LR
 </div>
 
 <div class="card mt-5 text-center text-sm">
-  <span class="accent mono">reset_processes()</span>
-  <span class="muted"> removes test processes · closes private FDs · restores environment · resets PID expectations</span>
+  <span class="accent">process-state reset</span>
+  <span class="muted"> · remove test processes · close private FDs · restore environment · reset PID expectations</span>
 </div>
 
 <div class="flex justify-center gap-3 mt-4">
@@ -939,27 +939,27 @@ flowchart LR
 
 <div class="eyebrow">15 · use of AI</div>
 
-# Assistance is not authority
+# How AI was used
 
 <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-6 mt-9">
   <div class="card">
     <div class="metric">AI</div>
     <div class="mt-4 flex flex-wrap gap-2">
-      <span class="chip">scaffolding</span><span class="chip">refactoring</span>
-      <span class="chip">debug ideas</span><span class="chip">documentation</span>
+      <span class="chip">draft code</span><span class="chip">reorganize code</span>
+      <span class="chip">debugging suggestions</span><span class="chip">documentation drafts</span>
     </div>
   </div>
   <div class="flow-arrow text-3xl">→</div>
   <div class="card green-border">
     <div class="metric green">✓</div>
     <div class="mt-4 flex flex-wrap gap-2">
-      <span class="chip">source review</span><span class="chip">focused tests</span>
-      <span class="chip">cross-project contracts</span><span class="chip">human decisions</span>
+      <span class="chip">read the source</span><span class="chip">run focused tests</span>
+      <span class="chip">check all three projects</span><span class="chip">authors decide</span>
     </div>
   </div>
 </div>
 
-<div class="quote-line mt-9">Architecture, educational scope, RETI/PicoC contracts, and final technical decisions remain project decisions.</div>
+<div class="card mt-9 text-sm">AI suggestions were checked against the source code and focused tests. The authors made the final decisions.</div>
 
 ---
 
@@ -967,7 +967,7 @@ flowchart LR
 
 <div class="eyebrow">16 · source map + limits</div>
 
-# Every mechanism has a trail
+# Where to find the code
 
 <div class="grid grid-cols-4 gap-3 mt-6 text-center">
   <div class="card"><span class="chip">boot</span><div class="mt-3 text-xs muted">startprogram<br>process_loader</div></div>
@@ -991,9 +991,9 @@ layout: center
 
 <!-- SOURCE Pico-OS/README.md#picoos through #16-source-map-and-deliberate-limitations — end-to-end synthesis -->
 
-<div class="eyebrow text-center mb-7">the whole point</div>
+<div class="eyebrow text-center mb-7">Example</div>
 
-# One keypress can be followed all the way down.
+# What happens after a key is pressed
 
 <div class="flex justify-center items-center gap-2 mt-10 mono text-xs">
   <span class="chip">key</span><span class="flow-arrow">→</span>
@@ -1005,6 +1005,4 @@ layout: center
   <span class="chip">shell</span>
 </div>
 
-<div class="text-center mt-10 text-2xl font-semibold">
-  Small enough to inspect.<br><span class="accent">Complete enough to connect.</span>
-</div>
+<div class="text-center mt-10 text-xl">Each step can be found in the source code and observed in the debugger.</div>
