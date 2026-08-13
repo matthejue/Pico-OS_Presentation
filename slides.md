@@ -1,9 +1,9 @@
 ---
 theme: default
-title: PicoOS presentation
+title: PicoOS — master project presentation
 info: |
   PicoOS is a small educational operating system for the RETI teaching CPU.
-  This deck follows the structure of the PicoOS README.
+  This presentation explains the finished system and its internal workings.
 author: Matthejue
 colorSchema: light
 highlighter: shiki
@@ -19,97 +19,109 @@ fonts:
 
 <!-- SOURCE Pico-OS/README.md#picoos — overview and educational purpose -->
 
-<div class="eyebrow mb-5">PicoC · RETI · operating systems</div>
+<div class="eyebrow mb-5">Master project presentation</div>
 
 # PicoOS
 
-<div class="cover-title mt-2">Operating system for the<br><span class="accent">RETI teaching CPU</span></div>
+<div class="cover-title mt-2">A complete operating system for the<br><span class="accent">RETI teaching CPU</span></div>
 
-<div class="subtitle mt-7">
-Bootloader · kernel · processes · files · shell · applications
+<div class="mt-8 grid grid-cols-2 gap-x-10 gap-y-3 max-w-2xl text-sm">
+  <div><span class="accent mono mr-3">01</span>Architecture &amp; scope</div>
+  <div><span class="accent mono mr-3">02</span>Boot process</div>
+  <div><span class="amber mono mr-3">03</span>Kernel &amp; processes</div>
+  <div><span class="green mono mr-3">04</span>Memory &amp; I/O</div>
+  <div><span class="coral mono mr-3">05</span>Userspace &amp; shell</div>
+  <div><span class="muted mono mr-3">06</span>Integration &amp; tests</div>
 </div>
 
 <div class="hero-orbit"></div>
 <div class="hero-core">PicoOS</div>
 
-<div class="absolute bottom-10 left-12 flex gap-2">
-  <span class="chip">PicoC</span>
-  <span class="chip">RETI</span>
-  <span class="chip">operating systems</span>
-</div>
-
 ---
 
 <!-- SOURCE Pico-OS/README.md#picoos — three sibling projects and complete-system pipeline -->
 
-<div class="eyebrow">Project overview</div>
+<div class="eyebrow">Project result</div>
 
-# How PicoOS is built and run
+# What I built
 
-<div class="grid grid-cols-3 gap-5 mt-10 items-stretch">
+<div class="grid grid-cols-4 gap-3 mt-7 items-stretch text-center">
   <div class="card">
-    <div class="metric">01</div>
-    <h2 class="mt-3">PicoC-Compiler</h2>
-    <p class="muted text-sm">PicoC → symbolic RETI<br><span class="mono">.ivt · .text · .data</span></p>
+    <div class="metric">boot</div>
+    <h3 class="mt-3">Boot path</h3>
+    <p class="muted text-xs">EPROM bootloader loads and starts the kernel in SRAM</p>
   </div>
   <div class="card amber-border">
-    <div class="metric amber">02</div>
-    <h2 class="mt-3">PicoOS</h2>
-    <p class="muted text-sm">bootloader · kernel · libraries<br>init · shell · applications</p>
+    <div class="metric amber">kernel</div>
+    <h3 class="mt-3">Operating system</h3>
+    <p class="muted text-xs">interrupts · processes · scheduler · signals · memory</p>
   </div>
   <div class="card green-border">
-    <div class="metric green">03</div>
-    <h2 class="mt-3">RETI-Emulator</h2>
-    <p class="muted text-sm">CPU · SRAM · EPROM · UART<br>interrupts · timer · debugger</p>
+    <div class="metric green">shell</div>
+    <h3 class="mt-3">User environment</h3>
+    <p class="muted text-xs">libraries · init · shell · jobs · files · applications</p>
+  </div>
+  <div class="card coral-border">
+    <div class="metric coral">tests</div>
+    <h3 class="mt-3">Verification</h3>
+    <p class="muted text-xs">library · OS feature · shell · complete boot tests</p>
   </div>
 </div>
 
-<div class="flex justify-center items-center gap-3 mt-8 mono text-sm">
-  <span class="chip">.picoc</span><span class="flow-arrow">→</span>
-  <span class="chip">.reti + .sections</span><span class="flow-arrow">→</span>
-  <span class="chip">big-endian .bin</span><span class="flow-arrow">→</span>
-  <span class="chip">RETI execution</span>
-</div>
+<div class="card mt-6 text-center text-sm">The result is a bootable system that can run several user programs, handle terminal input, access host files, and be inspected instruction by instruction.</div>
 
 ---
 
 <!-- SOURCE Pico-OS/README.md#picoos and #build-and-run — deliberate limits, scheduling model, build entry point -->
 
-<div class="eyebrow">What PicoOS implements</div>
+<div class="eyebrow">System architecture</div>
 
-# Scope and limitations
+# From PicoC source to a running system
+
+<div class="grid grid-cols-[1fr_auto_1fr_auto_1.15fr] items-center gap-4 mt-8">
+  <div class="card text-center">
+    <span class="chip">PicoC-Compiler</span>
+    <div class="mt-5 mono text-sm">PicoC<br>↓<br>RETI + sections<br>↓<br>binary images</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="card amber-border text-center">
+    <span class="chip">PicoOS</span>
+    <div class="mt-5 text-sm">bootloader<br>kernel<br>libraries<br>init + shell + apps</div>
+  </div>
+  <div class="flow-arrow">↔</div>
+  <div class="card green-border text-center">
+    <span class="chip">RETI-Emulator / FPGA</span>
+    <div class="mt-5 text-sm">CPU · EPROM · SRAM<br>interrupt controller · timer<br>UART · debugger / serial host</div>
+  </div>
+</div>
+
+<div class="flex justify-center gap-3 mt-7">
+  <span class="chip">32-bit cells</span><span class="chip">262,144 SRAM words</span>
+  <span class="chip">UART host services</span><span class="chip">timer preemption</span>
+</div>
+
+---
+layout: default
+---
+
+<!-- SOURCE Pico-OS/README.md#picoos and #build-and-run — master-project contributions -->
+
+<div class="eyebrow">Main contributions</div>
+
+# The parts I designed and connected
 
 <div class="grid grid-cols-2 gap-4 mt-7">
-  <div class="card flex gap-4 items-center"><div class="metric">∅</div><div><b>No virtual memory</b><div class="muted text-sm">absolute SRAM addresses</div></div></div>
-  <div class="card flex gap-4 items-center"><div class="metric amber">⇄</div><div><b>Host-backed files</b><div class="muted text-sm">UART control frames</div></div></div>
-  <div class="card flex gap-4 items-center"><div class="metric green">⟳</div><div><b>User preemption</b><div class="muted text-sm">round-robin timer scheduling</div></div></div>
-  <div class="card flex gap-4 items-center"><div class="metric coral">◆</div><div><b>Non-preemptive kernel</b><div class="muted text-sm">kernel work resumes in place</div></div></div>
-</div>
-
-<div class="terminal mt-7">
-  <div class="terminal-body"><span class="muted">$</span> make firmware user<br><span class="muted">$</span> make bootload <span class="muted"># press V for the UART terminal</span></div>
-</div>
-
----
-layout: center
-class: section
----
-
-<!-- SOURCE Pico-OS/README.md#1-bootloading — chapter 1 -->
-
-<div class="grid grid-cols-[14rem_1fr] gap-10 items-end">
-  <div class="section-number">01</div>
-  <div>
-    <div class="eyebrow mb-3">How PicoOS starts</div>
-    <h1 class="section-title">Bootloading</h1>
-  </div>
+  <div class="card"><span class="chip">CPU → kernel</span><h3 class="mt-3">Low-level execution</h3><div class="muted text-sm">bootloading · interrupt vector table · handlers · system calls · exceptions</div></div>
+  <div class="card amber-border"><span class="chip">kernel</span><h3 class="mt-3">Process system</h3><div class="muted text-sm">process lifecycle · scheduling · dispatching · blocking · waiting · signals</div></div>
+  <div class="card green-border"><span class="chip">memory + I/O</span><h3 class="mt-3">Runtime services</h3><div class="muted text-sm">three allocators · shared memory · descriptors · host-backed files · UART input</div></div>
+  <div class="card coral-border"><span class="chip">userspace</span><h3 class="mt-3">Usable operating system</h3><div class="muted text-sm">startup runtime · libraries · init · shell · job control · applications · tests</div></div>
 </div>
 
 ---
 
 <!-- SOURCE Pico-OS/README.md#11-loading-and-starting-the-kernel -->
 
-<div class="eyebrow">1.1 · loading the kernel</div>
+<div class="eyebrow">Boot process</div>
 
 # Loading the kernel from EPROM into SRAM
 
@@ -140,7 +152,7 @@ sequenceDiagram
 
 <!-- SOURCE Pico-OS/README.md#12-generated-memory-constants and #13-uart-hardware-interface -->
 
-<div class="eyebrow">1.2–1.3 · memory constants + UART hardware</div>
+<div class="eyebrow">Boot process · memory and UART</div>
 
 # Memory constants and UART hardware
 
@@ -178,7 +190,7 @@ sequenceDiagram
 
 <!-- SOURCE Pico-OS/README.md#14-file-loading-protocol-over-uart -->
 
-<div class="eyebrow">1.4 · UART file protocol</div>
+<div class="eyebrow">Host connection · UART protocol</div>
 
 # Accessing host files over UART
 
@@ -215,7 +227,7 @@ sequenceDiagram
 
 <!-- SOURCE Pico-OS/README.md#21-kernel-initialization -->
 
-<div class="eyebrow">2.1 · kernel main loop</div>
+<div class="eyebrow">Kernel startup</div>
 
 # Kernel initialization
 
@@ -242,7 +254,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#22-transition-from-bootloading-to-normal-execution -->
 
-<div class="eyebrow">2.2 · the first dispatch</div>
+<div class="eyebrow">Kernel startup · first user process</div>
 
 # Starting the init process
 
@@ -274,7 +286,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#31-binary-sections and #32-interrupt-vector-table -->
 
-<div class="eyebrow">3.1–3.2 · sections + vector table</div>
+<div class="eyebrow">Interrupts · vector table</div>
 
 # Interrupt vector table
 
@@ -307,7 +319,7 @@ void (*interrupt_vector_table[4])(void) = {
 
 <!-- SOURCE Pico-OS/README.md#33-interrupt-service-routines and #35-picoc-compiler-support-for-low-level-handlers -->
 
-<div class="eyebrow">3.3 + 3.5 · interrupt service routines</div>
+<div class="eyebrow">Interrupts · low-level handlers</div>
 
 # Interrupt handlers
 
@@ -327,7 +339,7 @@ void (*interrupt_vector_table[4])(void) = {
 
 <!-- SOURCE Pico-OS/README.md#34-exception-handlers and #stack-overflow-boundary -->
 
-<div class="eyebrow">3.4 · CPU exceptions</div>
+<div class="eyebrow">Interrupts · CPU exceptions</div>
 
 # Handling CPU exceptions
 
@@ -355,7 +367,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#36-system-call-handling -->
 
-<div class="eyebrow">3.6 · system calls</div>
+<div class="eyebrow">Kernel interface · system calls</div>
 
 # Handling system calls with `INT 0`
 
@@ -391,7 +403,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#37-system-call-arguments-and-stack-frame-layout -->
 
-<div class="eyebrow">3.7 · stack-frame ABI</div>
+<div class="eyebrow">Kernel interface · call stack</div>
 
 # Function stack frames and `BAF`
 
@@ -422,7 +434,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#38-timer-interrupt and #39-uart-and-keypress-interrupt -->
 
-<div class="eyebrow">3.8–3.9 · asynchronous hardware</div>
+<div class="eyebrow">Interrupts · hardware events</div>
 
 # Timer and UART interrupts
 
@@ -455,7 +467,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#41-process-table through #44-process-states -->
 
-<div class="eyebrow">4.1–4.4 · processes</div>
+<div class="eyebrow">Process management</div>
 
 # The process table is a linked list
 
@@ -481,7 +493,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#45-loading-processes through #48-environment-variables -->
 
-<div class="eyebrow">4.5–4.8 · loading + initial stack</div>
+<div class="eyebrow">Process management · loading</div>
 
 # Loading a process
 
@@ -515,7 +527,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#51-wait-queues, #53-sleep, #54-wakeup, and #55-blocked-to-ready-transitions -->
 
-<div class="eyebrow">5.1 + 5.3–5.5 · wait queues</div>
+<div class="eyebrow">Process coordination · blocking</div>
 
 # Waiting for an event
 
@@ -538,7 +550,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#52-waitpid-and-the-preserved-waiting-process-explanation -->
 
-<div class="eyebrow">5.2 · exact-child waitpid</div>
+<div class="eyebrow">Process coordination · waiting</div>
 
 # `waitpid()` before or after the child exits
 
@@ -566,7 +578,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#56-signals and #parent-death-signal -->
 
-<div class="eyebrow">5.6 · signals</div>
+<div class="eyebrow">Process coordination · signals</div>
 
 # Signals in PicoOS
 
@@ -591,7 +603,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#6-scheduler -->
 
-<div class="eyebrow">6 · scheduler</div>
+<div class="eyebrow">Process scheduling</div>
 
 # Round-robin scheduling
 
@@ -614,7 +626,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#7-dispatcher -->
 
-<div class="eyebrow">7 · dispatcher</div>
+<div class="eyebrow">Context switching</div>
 
 # Saving and restoring process state
 
@@ -642,7 +654,7 @@ sequenceDiagram
 
 <!-- SOURCE Pico-OS/README.md#81-process-and-kernel-memory-layouts -->
 
-<div class="eyebrow">8.1 · memory layout</div>
+<div class="eyebrow">Memory management · layout</div>
 
 # Memory layout and allocators
 
@@ -674,7 +686,7 @@ sequenceDiagram
 
 <!-- SOURCE Pico-OS/README.md#82-heap-implementation and #83-free-and-block-merging -->
 
-<div class="eyebrow">8.2–8.3 · first-fit heap</div>
+<div class="eyebrow">Memory management · heap</div>
 
 # Heap allocation and `free()`
 
@@ -706,7 +718,7 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 <!-- SOURCE Pico-OS/README.md#84-process-memory-allocation and #85-shared-memory -->
 
-<div class="eyebrow">8.4–8.5 · allocator reuse + shared memory</div>
+<div class="eyebrow">Memory management · shared memory</div>
 
 # Kernel, process, and application heaps
 
@@ -732,26 +744,38 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 <!-- SOURCE Pico-OS/README.md#9-libraries -->
 
-<div class="eyebrow">9 · libraries</div>
+<div class="eyebrow">Userspace runtime</div>
 
-# Main library functions
+# How user programs reach the kernel
 
-<div class="grid grid-cols-4 gap-3 mt-6 text-center">
-  <div class="card"><span class="chip">files</span><div class="mt-3 text-xs mono">open · read · write · close</div></div>
-  <div class="card"><span class="chip">processes</span><div class="mt-3 text-xs mono">load · run · waitpid · getpid</div></div>
-  <div class="card"><span class="chip">stdio</span><div class="mt-3 text-xs mono">fopen · printf · scanf</div></div>
-  <div class="card"><span class="chip">stdlib</span><div class="mt-3 text-xs mono">malloc · free · getenv · setenv</div></div>
-  <div class="card"><span class="chip">paths</span><div class="mt-3 text-xs mono">chdir · getcwd · opendir · readdir</div></div>
-  <div class="card"><span class="chip">signals</span><div class="mt-3 text-xs mono">signal · kill</div></div>
-  <div class="card"><span class="chip">synchronization</span><div class="mt-3 text-xs mono">yield · mutex_lock · mutex_unlock</div></div>
-  <div class="card"><span class="chip">shared memory</span><div class="mt-3 text-xs mono">shm_open · mmap · shm_unlink</div></div>
+<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-4 mt-8">
+  <div class="card text-center">
+    <div class="metric">apps</div>
+    <div class="mt-4 text-sm">shell · utilities<br>student programs</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="card green-border text-center">
+    <div class="metric green">libs</div>
+    <div class="mt-4 text-sm">streams · heap · strings<br>processes · signals · mutexes</div>
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="card amber-border text-center">
+    <div class="metric amber">INT 0</div>
+    <div class="mt-4 text-sm">one syscall entry<br>request structures<br>result returned in a register</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-3 gap-3 mt-6 text-center text-sm">
+  <div class="card"><b>Pure userspace</b><div class="muted mt-2">strings · formatting · heap management</div></div>
+  <div class="card"><b>Kernel services</b><div class="muted mt-2">processes · files · signals · scheduling</div></div>
+  <div class="card"><b>Small by design</b><div class="muted mt-2">the complete call path stays understandable</div></div>
 </div>
 
 ---
 
 <!-- SOURCE Pico-OS/README.md#10-filesystem through #103-file-operations -->
 
-<div class="eyebrow">10.1–10.3 · filesystem</div>
+<div class="eyebrow">Input and output · file descriptors</div>
 
 # How file descriptors use host files
 
@@ -776,7 +800,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#104-output-redirection-with-, #105-dup2, and #106-output-appending-with- -->
 
-<div class="eyebrow">10.4–10.6 · redirection</div>
+<div class="eyebrow">Input and output · shell redirection</div>
 
 # Output redirection with `dup2()`
 
@@ -805,7 +829,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#11-init-process -->
 
-<div class="eyebrow">11 · init process</div>
+<div class="eyebrow">Userspace · init process</div>
 
 # Init starts and restarts the shell
 
@@ -827,7 +851,7 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#12-user-applications -->
 
-<div class="eyebrow">12 · userspace</div>
+<div class="eyebrow">Userspace · shell and applications</div>
 
 # Shell commands and programs
 
@@ -851,20 +875,20 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#13-use-in-the-operating-systems-and-real-time-operating-systems-lectures -->
 
-<div class="eyebrow">13 · teaching</div>
+<div class="eyebrow">Project scope</div>
 
-# Topics demonstrated by PicoOS
+# Operating-system mechanisms working together
 
 <div class="grid grid-cols-2 gap-5 mt-6">
   <div class="card">
-    <div class="eyebrow mb-4">real-time operating systems</div>
+    <div class="eyebrow mb-4">Processes and coordination</div>
     <div class="flex flex-wrap gap-2">
       <span class="chip">process states</span><span class="chip">round-robin</span><span class="chip">dispatcher</span>
       <span class="chip">wait queues</span><span class="chip">TSL mutex</span><span class="chip">shared memory</span>
     </div>
   </div>
   <div class="card amber-border">
-    <div class="eyebrow mb-4">operating systems</div>
+    <div class="eyebrow mb-4">Machine and kernel</div>
     <div class="flex flex-wrap gap-2">
       <span class="chip">boot + sections</span><span class="chip">process loading</span><span class="chip">signals</span>
       <span class="chip">IVT + ISRs</span><span class="chip">file descriptors</span><span class="chip">heaps</span>
@@ -872,20 +896,20 @@ flowchart LR
   </div>
 </div>
 
-<div class="card mt-8 text-sm">Students can compare PicoC source, RETI assembly, section data, machine words, and the running machine.</div>
+<div class="card mt-8 text-sm">These mechanisms are connected in one running system: terminal input can wake a process, the scheduler can select it, and the shell can start another program or redirect its output.</div>
 
 ---
 
 <!-- SOURCE Pico-OS/README.md#14-test-system through #142-make-test-lib -->
 
-<div class="eyebrow">14.1–14.2 · test system</div>
+<div class="eyebrow">Verification</div>
 
-# PicoOS tests
+# How I tested the system
 
 <div class="grid grid-cols-3 gap-4 mt-7">
-  <div class="card"><div class="metric">lib</div><h3>single PicoC file</h3><div class="muted text-xs">top-of-file input + expected metadata</div></div>
-  <div class="card amber-border"><div class="metric amber">OS</div><h3>feature directory</h3><div class="muted text-xs">launcher · UART input · expected output</div></div>
-  <div class="card green-border"><div class="metric green">sh</div><h3>shell behavior</h3><div class="muted text-xs">commands through prompt or fast eval</div></div>
+  <div class="card"><div class="metric">lib</div><h3>Libraries</h3><div class="muted text-xs">allocation · strings · formatting · synchronization</div></div>
+  <div class="card amber-border"><div class="metric amber">OS</div><h3>Kernel features</h3><div class="muted text-xs">processes · signals · files · memory · exceptions</div></div>
+  <div class="card green-border"><div class="metric green">sh</div><h3>Complete shell sessions</h3><div class="muted text-xs">commands · job control · redirection · exact output</div></div>
 </div>
 
 <div class="grid grid-cols-2 gap-4 mt-7">
@@ -897,9 +921,9 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#143-system-and-os-tests and #144-shell-tests -->
 
-<div class="eyebrow">14.3–14.4 · normal versus fast</div>
+<div class="eyebrow">Verification · test execution</div>
 
-# Normal and fast tests
+# Fresh boots and fast repeated tests
 
 <div class="grid grid-cols-2 gap-5 mt-6">
   <div class="card amber-border">
@@ -935,54 +959,24 @@ flowchart LR
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#15-use-of-ai-in-the-project -->
+<!-- SOURCE Pico-OS/README.md#16-source-map-and-deliberate-limitations — project outcome -->
 
-<div class="eyebrow">15 · use of AI</div>
+<div class="eyebrow">Project outcome</div>
 
-# How AI was used
+# The finished PicoOS system
 
-<div class="grid grid-cols-[1fr_auto_1fr] items-center gap-6 mt-9">
-  <div class="card">
-    <div class="metric">AI</div>
-    <div class="mt-4 flex flex-wrap gap-2">
-      <span class="chip">draft code</span><span class="chip">reorganize code</span>
-      <span class="chip">debugging suggestions</span><span class="chip">documentation drafts</span>
-    </div>
-  </div>
-  <div class="flow-arrow text-3xl">→</div>
-  <div class="card green-border">
-    <div class="metric green">✓</div>
-    <div class="mt-4 flex flex-wrap gap-2">
-      <span class="chip">read the source</span><span class="chip">run focused tests</span>
-      <span class="chip">check all three projects</span><span class="chip">authors decide</span>
-    </div>
-  </div>
+<div class="grid grid-cols-4 gap-3 mt-7 text-center">
+  <div class="card"><div class="metric">5</div><div class="metric-label">signals with job control</div></div>
+  <div class="card amber-border"><div class="metric amber">8</div><div class="metric-label">file descriptors per process</div></div>
+  <div class="card green-border"><div class="metric green">3</div><div class="metric-label">heap users: kernel, loader, apps</div></div>
+  <div class="card coral-border"><div class="metric coral">1 MiB</div><div class="metric-label">addressable SRAM</div></div>
 </div>
 
-<div class="card mt-9 text-sm">AI suggestions were checked against the source code and focused tests. The authors made the final decisions.</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#16-source-map-and-deliberate-limitations -->
-
-<div class="eyebrow">16 · source map + limits</div>
-
-# Where to find the code
-
-<div class="grid grid-cols-4 gap-3 mt-6 text-center">
-  <div class="card"><span class="chip">boot</span><div class="mt-3 text-xs muted">startprogram<br>process_loader</div></div>
-  <div class="card"><span class="chip">interrupts</span><div class="mt-3 text-xs muted">os_isrs<br>interpr.c</div></div>
-  <div class="card"><span class="chip">processes</span><div class="mt-3 text-xs muted">process.header<br>dispatcher</div></div>
-  <div class="card"><span class="chip">memory</span><div class="mt-3 text-xs muted">heap.picoc<br>kmalloc · pmalloc</div></div>
-  <div class="card"><span class="chip">files</span><div class="mt-3 text-xs muted">kernel/filesystem<br>UART protocol</div></div>
-  <div class="card"><span class="chip">userspace</span><div class="mt-3 text-xs muted">libstart · init<br>shell</div></div>
-  <div class="card"><span class="chip">compiler</span><div class="mt-3 text-xs muted">attributes<br>stack frames</div></div>
-  <div class="card"><span class="chip">emulator</span><div class="mt-3 text-xs muted">INT · RTI<br>timer · UART</div></div>
-</div>
-
-<div class="flex flex-wrap justify-center gap-2 mt-7">
-  <span class="chip">no MMU</span><span class="chip">no resident filesystem</span><span class="chip">5 signals</span>
-  <span class="chip">8 FDs</span><span class="chip">wait-queue sleep</span><span class="chip">small parsers</span>
+<div class="grid grid-cols-2 gap-4 mt-6 text-sm">
+  <div class="card"><b>Runs complete programs</b><div class="muted mt-2">arguments · environment · heap · stack · files · signals · exit status</div></div>
+  <div class="card"><b>Works on emulator and planned hardware</b><div class="muted mt-2">the same UART protocol connects the OS to host services</div></div>
+  <div class="card"><b>Can be used interactively</b><div class="muted mt-2">shell · applications · background jobs · Ctrl+C / Ctrl+Z · redirection</div></div>
+  <div class="card"><b>Can be inspected and tested</b><div class="muted mt-2">instruction debugger · source view · automated library, OS, and shell tests</div></div>
 </div>
 
 ---
@@ -991,7 +985,7 @@ layout: center
 
 <!-- SOURCE Pico-OS/README.md#picoos through #16-source-map-and-deliberate-limitations — end-to-end synthesis -->
 
-<div class="eyebrow text-center mb-7">Example</div>
+<div class="eyebrow text-center mb-7">End-to-end example</div>
 
 # What happens after a key is pressed
 
@@ -1005,4 +999,4 @@ layout: center
   <span class="chip">shell</span>
 </div>
 
-<div class="text-center mt-10 text-xl">Each step can be found in the source code and observed in the debugger.</div>
+<div class="text-center mt-10 text-xl">This one input passes through interrupt handling, blocking, scheduling, dispatching, and the shell.</div>
