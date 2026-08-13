@@ -1,0 +1,36 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Generate presentation PDF",
+      "type": "shell",
+      "command": "make generate-presentation-pdf",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build static presentation",
+      "type": "shell",
+      "command": "make build-static-presentation",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch presentation in browser",
+      "type": "shell",
+      "command": "make launch-presentation-in-browser",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "slidev",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "^$"
+        }
+      }
+    }
+  ]
+}

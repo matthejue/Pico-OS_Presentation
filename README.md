@@ -5,18 +5,25 @@ Slidev presentation generated from
 
 ```sh
 yarn install
-yarn dev
+make launch-presentation-in-browser
 ```
 
-Use `yarn dev` to run the presentation locally and open it in your browser.
+In VS Code, use `Ctrl+Shift+P` → `Tasks: Run Task` to choose a clearly named
+presentation task.
 
 To export a PDF:
 
 ```sh
-yarn export
+make generate-presentation-pdf
 ```
 
-Build the static presentation with `yarn build`. The slide source is
+Build the static presentation with:
+
+```sh
+make build-static-presentation
+```
+
+The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
 Each slide contains an invisible `SOURCE` comment that maps it back to a stable
 Pico-OS README heading. Source tracking and the future update workflow are
