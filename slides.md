@@ -1,10 +1,10 @@
 ---
 theme: default
-title: PicoOS — master project presentation
+title: Pico-OS — master project presentation
 info: |
-  PicoOS is a small educational operating system for the RETI teaching CPU.
+  Pico-OS is a small educational operating system for the RETI teaching CPU.
   This presentation explains the finished system and its internal workings.
-author: Matthejue
+author: Jürgen Mattheis
 colorSchema: light
 highlighter: shiki
 lineNumbers: true
@@ -19,9 +19,9 @@ fonts:
 
 <!-- SOURCE Pico-OS/README.md#picoos — overview and educational purpose -->
 
-<div class="eyebrow mb-5">Master project presentation</div>
+<div class="eyebrow mb-5">Master Project Presentation</div>
 
-# PicoOS
+# Pico-OS
 
 <div class="cover-title mt-2">A complete operating system for the<br><span class="accent">RETI teaching CPU</span></div>
 
@@ -34,45 +34,170 @@ fonts:
   <div><span class="muted mono mr-3">06</span>Integration &amp; tests</div>
 </div>
 
-<div class="hero-orbit"></div>
-<div class="hero-core">PicoOS</div>
+<div class="project-art" aria-label="Pico-OS source is compiled by PicoC-Compiler and assembled and executed by RETI-Emulator">
+  <div class="art-trace trace-a"></div><div class="art-trace trace-b"></div><div class="art-trace trace-c"></div>
+  <div class="art-node art-os"><b>Pico-OS</b><span>.picoc</span></div>
+  <div class="art-node art-compiler"><b>PicoC-Compiler</b><span>RETI + .sections</span></div>
+  <div class="art-node art-emulator"><b>RETI-Emulator</b><span>assemble · execute</span></div>
+  <div class="art-pulse pulse-a"></div><div class="art-pulse pulse-b"></div>
+</div>
+
+<div class="cover-footline"><span>Jürgen Mattheis</span><span>University of Freiburg · Technical Faculty</span></div>
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#picoos — three sibling projects and complete-system pipeline -->
+<!-- SOURCE Pico-OS/README.md#picoos — educational motivation and lecture concepts -->
 
-<div class="eyebrow">Project result</div>
+<div class="eyebrow">Motivation</div>
 
-# What I built
+# Make operating-system mechanisms inspectable
 
-<div class="grid grid-cols-4 gap-3 mt-7 items-stretch text-center">
+<div class="grid grid-cols-2 gap-5 mt-5">
   <div class="card">
-    <div class="metric">boot</div>
-    <h3 class="mt-3">Boot path</h3>
-    <p class="muted text-xs">EPROM bootloader loads and starts the kernel in SRAM</p>
+    <h2 class="text-xl mb-3">Operating systems lecture</h2>
+    <div class="grid grid-cols-[6.5rem_1fr] gap-x-3 gap-y-3 items-start text-sm">
+      <span class="mono accent">processes</span><span>parent / child · process loading · signals</span>
+      <span class="mono accent">interrupts</span><span>vector table · service routines · software + hardware interrupts</span>
+      <span class="mono accent">memory</span><span><span class="mono">malloc() / free()</span> · block splitting + merging</span>
+    </div>
   </div>
   <div class="card amber-border">
-    <div class="metric amber">kernel</div>
-    <h3 class="mt-3">Operating system</h3>
-    <p class="muted text-xs">interrupts · processes · scheduler · signals · memory</p>
-  </div>
-  <div class="card green-border">
-    <div class="metric green">shell</div>
-    <h3 class="mt-3">User environment</h3>
-    <p class="muted text-xs">libraries · init · shell · jobs · files · applications</p>
-  </div>
-  <div class="card coral-border">
-    <div class="metric coral">tests</div>
-    <h3 class="mt-3">Verification</h3>
-    <p class="muted text-xs">library · OS feature · shell · complete boot tests</p>
+    <h2 class="text-xl mb-3">Real-time operating systems lecture</h2>
+    <div class="grid grid-cols-[6.5rem_1fr] gap-x-3 gap-y-3 items-start text-sm">
+      <span class="mono amber">state</span><span>process states · scheduling · dispatching</span>
+      <span class="mono amber">waiting</span><span><span class="mono">waitpid()</span> · wait-queue <span class="mono">sleep() / wakeup()</span></span>
+      <span class="mono amber">coordination</span><span>mutexes · shared memory</span>
+    </div>
   </div>
 </div>
 
-<div class="card mt-6 text-center text-sm">The result is a bootable system that can run several user programs, handle terminal input, access host files, and be inspected instruction by instruction.</div>
+<div class="grid grid-cols-3 gap-4 mt-5 text-sm">
+  <div class="card"><span class="mono accent">process loading</span><div class="mt-2">5-word header → SRAM region → PCB → initial stack</div></div>
+  <div class="card amber-border"><span class="mono amber">interrupts</span><div class="mt-2">4-entry <span class="mono">.ivt</span> → naked ISR → saved context → <span class="mono">RTI</span></div></div>
+  <div class="card green-border"><span class="mono green">synchronization</span><div class="mt-2">TSL mutex → intrusive FIFO wait queue → dispatcher</div></div>
+</div>
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#picoos and #build-and-run — deliberate limits, scheduling model, build entry point -->
+<!-- SOURCE Pico-OS/README.md#intended-physical-hardware -->
+
+<div class="eyebrow">Intended physical hardware</div>
+
+# Two 16-bit SRAMs are enough for Pico-OS
+
+<div class="grid grid-cols-[.95fr_1.05fr] gap-5 mt-4">
+  <div class="grid gap-3">
+    <div class="card py-4">
+      <div class="flex justify-between gap-4"><div><a href="https://www.digikey.de/short/8cmz0qnc" target="_blank"><b>Alchitry Cu V2 ↗</b></a><div class="muted text-xs mt-1">FPGA board · Lattice iCE40-HX8K</div></div><div class="mono text-lg accent">€55.66</div></div>
+    </div>
+    <div class="card amber-border py-4">
+      <div class="flex justify-between gap-4"><div><a href="https://www.digikey.de/short/075fh38w" target="_blank"><b>ISSI IS61WV25616 SRAM ↗</b></a><div class="muted text-xs mt-1">quantity 2 · each: 2<sup>18</sup> addressable cells × 16 bits</div></div><div class="mono text-lg amber whitespace-nowrap">2 × €5.80</div></div>
+    </div>
+    <div class="card py-4">
+      <div class="flex justify-between gap-4"><div><a href="https://www.digikey.de/short/h83tqvbw" target="_blank"><b>SparkFun Serial Basic ↗</b></a><div class="muted text-xs mt-1">CH340C USB-C to UART adapter</div></div><div class="mono text-lg green">€10.92</div></div>
+    </div>
+    <div class="flex justify-between px-2 text-sm"><b>Total including VAT</b><b class="mono">€78.18</b></div>
+  </div>
+  <div class="card amber-border">
+    <div class="text-center">
+      <div class="mono text-sm">2 × (2<sup>18</sup> cells × 16 bits)</div>
+      <div class="metric amber mt-2">2<sup>18</sup> × 32 bits</div>
+      <div class="metric-label">262,144 addressable words = 1 MiB</div>
+      <div class="muted text-xs mt-2">same 18 address lines · D[15:0] + D[31:16]</div>
+    </div>
+    <div class="mono text-xs mt-3 leading-6 border-t border-cyan-900/15 pt-2">
+      <div class="muted">measured .bin files · five-word headers included</div>
+      <div><span class="accent">kernel</span> 37,179 + <span class="amber">init</span> 10,749 + <span class="green">shell</span> 26,129</div>
+      <div>= 74,057 resident image words</div>
+      <div class="text-sm mt-1">⌊(262,144 − 74,057) ÷ 8,772<sub>cat</sub>⌋ = <span class="amber">21</span></div>
+    </div>
+    <div class="text-center text-sm mt-2"><span class="accent mono">kernel + init + shell</span> + <span class="green mono">21 × cat.bin images</span></div>
+  </div>
+</div>
+
+<div class="muted text-xs text-center mt-3">Conservative image-size comparison; each running process additionally needs heap and stack space.</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#new-picoos-support-features — PicoC-Compiler Overall Flow -->
+
+<div class="eyebrow">PicoC-Compiler</div>
+
+# Overall flow
+
+```mermaid {scale: 0.74}
+flowchart LR
+    source[PicoC source]
+
+    subgraph preprocessing[Preprocessing]
+        preprocessor[Includes, macros, and line splicing]
+        preprocessed[Preprocessed source]
+    end
+
+    subgraph frontend[Lexing and parsing]
+        tokens[Token stream]
+        parse_tree[Tree-sitter parse tree]
+        ast[PicoC AST]
+    end
+
+    subgraph compilation[Per-file compilation passes]
+        shrink[picoc_shrink]
+        blocks[picoc_blocks]
+        symbol[picoc_symbol]
+        typing[picoc_typing]
+        anf[picoc_anf]
+        reti_blocks[reti_blocks]
+    end
+
+    subgraph linking[Program-wide linking passes]
+        merge[Merge units, symbols, and startup]
+        patch[reti_patch]
+        reti[reti]
+    end
+
+    output[Flat RETI output]
+
+    source --> preprocessor --> preprocessed --> tokens --> parse_tree --> ast
+    ast --> shrink --> blocks --> symbol --> typing --> anf --> reti_blocks
+    reti_blocks --> merge --> patch --> reti --> output
+```
+
+---
+
+<!-- SOURCE Pico-OS/README.md#new-picoos-support-features — PicoC-Compiler and RETI-Emulator PicoOS support -->
+
+<div class="eyebrow">PicoOS support features</div>
+
+# Compiler and emulator: the essential additions
+
+<div class="grid grid-cols-2 gap-5 mt-4 text-sm">
+  <div class="card">
+    <div class="chip">PicoC-Compiler</div>
+    <div class="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-3 mt-4 items-start">
+      <span class="mono accent">source + ABI</span><span><span class="mono">#include</span> · <span class="mono">#pragma once</span> · <span class="mono">typedef</span> · <span class="mono">void *</span> · <span class="mono">int (*fn)(int)</span> · <span class="mono">asm("…")</span></span>
+      <span class="mono accent">linking</span><span><span class="mono">-c</span> → <span class="mono">.reti_blocks + .st</span> → staged link · cross-file symbols · cached unchanged units · <span class="mono">--dependency-file</span></span>
+      <span class="mono accent">startup</span><span><span class="mono">-C boot.picoc</span> · generated <span class="mono">_start</span> · <span class="mono">__attribute__((naked))</span> · <span class="mono">static inline</span> assembly helpers</span>
+      <span class="mono accent">image layout</span><span><span class="mono">.ivt / .text / .data</span> · <span class="mono">IVTE timer_isr</span> · <span class="mono">-O1</span> globals · <span class="mono">.sections</span> · <span class="mono">-k sram</span></span>
+      <span class="mono accent">debug</span><span><span class="mono">debug;</span> → <span class="mono">INT 3</span> · <span class="mono">-g</span> source metadata · inspect <span class="mono">*_combined.reti_blocks</span></span>
+    </div>
+  </div>
+  <div class="card green-border">
+    <div class="chip">RETI-Emulator</div>
+    <div class="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-3 mt-4 items-start">
+      <span class="mono green">program image</span><span><span class="mono">.sections</span> layout · raw data words · <span class="mono">--assemble</span> → <span class="mono">.bin</span> with 5-word loader header · <span class="mono">-e boot.reti</span></span>
+      <span class="mono green">devices</span><span><span class="mono">TSL S D i</span> · priority interrupt cells <span class="mono">3…8</span> · timer interval cell <span class="mono">9</span> · UART bytes at <span class="mono">0…2</span></span>
+      <span class="mono green">kernel I/O</span><span><span class="mono">ESC file-size path ESC /</span> · host file services · interactive UART terminal · receive interrupts</span>
+      <span class="mono green">protection</span><span>exception vector <span class="mono">3</span> · cause cell <span class="mono">11</span> · heap/stack boundary cell <span class="mono">10</span> · <span class="mono">-n 4</span> bootloaded vectors</span>
+      <span class="mono green">debugger</span><span><span class="mono">d</span> PicoC source + symbols · live register/SRAM edits · code/data view follows <span class="mono">CS / DS</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="muted text-xs text-center mt-4">Full feature lists: <a href="https://github.com/matthejue/PicoC-Compiler/blob/linker_update/documentation/new_features_for_pico_os.md" target="_blank">PicoC-Compiler ↗</a> · <a href="https://github.com/matthejue/RETI-Emulator/blob/statemachine/documentation/new_features_for_pico_os.md" target="_blank">RETI-Emulator ↗</a></div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#picoos — sibling projects, binary pipeline, and scheduling model -->
 
 <div class="eyebrow">System architecture</div>
 
@@ -81,11 +206,11 @@ fonts:
 <div class="grid grid-cols-[1fr_auto_1fr_auto_1.15fr] items-center gap-4 mt-8">
   <div class="card text-center">
     <span class="chip">PicoC-Compiler</span>
-    <div class="mt-5 mono text-sm">PicoC<br>↓<br>RETI + sections<br>↓<br>binary images</div>
+    <div class="mt-5 mono text-sm">PicoC<br>↓<br>RETI + .sections<br>↓<br>5-word header + image</div>
   </div>
   <div class="flow-arrow">→</div>
   <div class="card amber-border text-center">
-    <span class="chip">PicoOS</span>
+  <span class="chip">Pico-OS</span>
     <div class="mt-5 text-sm">bootloader<br>kernel<br>libraries<br>init + shell + apps</div>
   </div>
   <div class="flow-arrow">↔</div>
@@ -96,25 +221,8 @@ fonts:
 </div>
 
 <div class="flex justify-center gap-3 mt-7">
-  <span class="chip">32-bit cells</span><span class="chip">262,144 SRAM words</span>
-  <span class="chip">UART host services</span><span class="chip">timer preemption</span>
-</div>
-
----
-layout: default
----
-
-<!-- SOURCE Pico-OS/README.md#picoos and #build-and-run — master-project contributions -->
-
-<div class="eyebrow">Main contributions</div>
-
-# The parts I designed and connected
-
-<div class="grid grid-cols-2 gap-4 mt-7">
-  <div class="card"><span class="chip">CPU → kernel</span><h3 class="mt-3">Low-level execution</h3><div class="muted text-sm">bootloading · interrupt vector table · handlers · system calls · exceptions</div></div>
-  <div class="card amber-border"><span class="chip">kernel</span><h3 class="mt-3">Process system</h3><div class="muted text-sm">process lifecycle · scheduling · dispatching · blocking · waiting · signals</div></div>
-  <div class="card green-border"><span class="chip">memory + I/O</span><h3 class="mt-3">Runtime services</h3><div class="muted text-sm">three allocators · shared memory · descriptors · host-backed files · UART input</div></div>
-  <div class="card coral-border"><span class="chip">userspace</span><h3 class="mt-3">Usable operating system</h3><div class="muted text-sm">startup runtime · libraries · init · shell · job control · applications · tests</div></div>
+  <span class="chip">compiler-generated memory constants</span>
+  <span class="chip">UART host services</span><span class="chip">userspace timer preemption</span>
 </div>
 
 ---
@@ -134,9 +242,9 @@ sequenceDiagram
     participant SRAM
     participant K as Kernel _start
     CPU->>EPROM: CS:0
-    EPROM->>EPROM: SP = SRAM top, DS = EPROM data
-    EPROM->>UART: ESC load kernel.bin ESC /
-    Host-->>UART: word count + 4-word header + payload
+    EPROM->>EPROM: CS = 0, SP = SRAM top, DS = EPROM data
+    EPROM->>UART: ESC load kernel/kernel.bin ESC /
+    Host-->>UART: word count + 5-word header + payload
     UART->>SRAM: copy .ivt + .text + .data
     EPROM->>CPU: set CS · DS · SP · BAF
     CPU->>K: jump to generated _start → main()
@@ -144,7 +252,7 @@ sequenceDiagram
 
 <div class="grid grid-cols-3 gap-3 mt-1 text-center text-xs">
   <div class="chip justify-center">polling—no interrupts yet</div>
-  <div class="chip justify-center">header stays off the process image</div>
+  <div class="chip justify-center">five header words stay out of SRAM</div>
   <div class="chip justify-center">compile-time globals already present</div>
 </div>
 
@@ -188,39 +296,41 @@ sequenceDiagram
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#14-file-loading-protocol-over-uart -->
+<!-- SOURCE Pico-OS/README.md#14-host-services-over-uart -->
 
 <div class="eyebrow">Host connection · UART protocol</div>
 
 # Accessing host files over UART
 
-<div class="grid grid-cols-3 gap-4 mt-7">
+<div class="grid grid-cols-3 gap-4 mt-6">
   <div class="card">
     <div class="chip">load</div>
     <div class="mono text-sm mt-5 accent">ESC load path ESC /</div>
-    <div class="muted text-xs mt-3">word count + exact bytes</div>
+    <div class="muted text-xs mt-3">word count + five-word header + payload</div>
   </div>
   <div class="card">
-    <div class="chip">read-range</div>
-    <div class="mono text-sm mt-5 amber">offset · count · path</div>
-    <div class="muted text-xs mt-3">returned count + slice</div>
+    <div class="chip">files</div>
+    <div class="mono text-sm mt-5 amber">read-range · file-size</div>
+    <div class="muted text-xs mt-3">write · append · stdout / stderr</div>
   </div>
   <div class="card">
-    <div class="chip">file-size</div>
-    <div class="mono text-sm mt-5 green">path → 32-bit size</div>
-    <div class="muted text-xs mt-3">UINT32_MAX = missing</div>
+    <div class="chip">directories</div>
+    <div class="mono text-sm mt-5 green">pwd · ls · is-directory</div>
+    <div class="muted text-xs mt-3">mkdir · unlink · rmdir</div>
   </div>
 </div>
 
-<div class="mt-7 card amber-border">
-  <div class="flex items-center gap-3 mb-3"><span class="chip">program.bin</span><span class="flow-arrow">→</span><span class="muted text-sm">four big-endian words, then code/data</span></div>
+<div class="mt-6 card amber-border">
+  <div class="flex items-center gap-3 mb-3"><span class="chip">program.bin</span><span class="flow-arrow">→</span><span class="muted text-sm">five big-endian words, then encoded program words</span></div>
   <div class="memory-bar h-14">
-    <div class="memory-segment seg-ivt" style="width:15%">CS</div>
-    <div class="memory-segment seg-data" style="width:15%">DS</div>
-    <div class="memory-segment seg-heap" style="width:15%">heap</div>
-    <div class="memory-segment seg-stack" style="width:15%">stack</div>
-    <div class="memory-segment seg-text" style="width:40%">encoded payload</div>
+    <div class="memory-segment seg-ivt" style="width:11%">CS</div>
+    <div class="memory-segment seg-data" style="width:11%">DS</div>
+    <div class="memory-segment seg-heap" style="width:12%">heap start</div>
+    <div class="memory-segment seg-heap" style="width:12%">heap size</div>
+    <div class="memory-segment seg-stack" style="width:12%">stack</div>
+    <div class="memory-segment seg-text" style="width:42%">encoded payload</div>
   </div>
+  <div class="muted text-xs text-center mt-2">The loader subtracts five and copies only the payload into SRAM.</div>
 </div>
 
 ---
@@ -311,7 +421,7 @@ void (*interrupt_vector_table[4])(void) = {
 
 <div class="flex justify-center gap-3 mt-3 text-xs">
   <span class="chip">INT i saves only PC</span>
-  <span class="chip">PicoOS saves every other live register</span>
+  <span class="chip">Pico-OS saves every other live register</span>
   <span class="chip">RTI restores + advances</span>
 </div>
 
@@ -394,7 +504,7 @@ flowchart LR
 </div>
 
 <div class="flex justify-center gap-3 mt-3">
-  <span class="chip">31 syscall numbers</span>
+  <span class="chip">32 syscall numbers · 0…31</span>
   <span class="chip">one scalar or request pointer</span>
   <span class="chip">same hub, different return path</span>
 </div>
@@ -500,14 +610,14 @@ flowchart LR
 <div class="grid grid-cols-[1.25fr_.75fr] gap-6 mt-5">
   <div>
     <div class="timeline mt-6">
-      <div class="timeline-step"><b>load</b><br>UART header</div>
+      <div class="timeline-step"><b>load</b><br>5-word header</div>
       <div class="timeline-step"><b>pmalloc</b><br>complete region</div>
       <div class="timeline-step"><b>copy</b><br>payload</div>
       <div class="timeline-step"><b>PCB</b><br>state NEW</div>
       <div class="timeline-step"><b>run</b><br>state READY</div>
     </div>
     <div class="card mt-8">
-      <div class="mono text-xs muted">defaults when stack_start == -1</div>
+      <div class="mono text-xs muted">defaults: heap_size == -1 · stack_start == -1</div>
       <div class="flex gap-4 mt-3"><span class="chip">1000 heap cells</span><span class="chip">1000 stack cells</span><span class="chip">first-fit region</span></div>
     </div>
   </div>
@@ -529,26 +639,41 @@ flowchart LR
 
 <div class="eyebrow">Process coordination · blocking</div>
 
-# Waiting for an event
+# Intrusive FIFO wait queues
 
-<div class="flex items-center justify-center gap-3 mt-6">
-  <div class="process-node blocked">A</div><span class="flow-arrow">→</span>
-  <div class="process-node blocked">B</div><span class="flow-arrow">→</span>
-  <div class="process-node blocked">C</div><span class="flow-arrow">→</span>
-  <span class="mono muted text-sm">NULL</span>
+<div class="grid grid-cols-[.9fr_1.1fr] gap-5 mt-5">
+  <div class="card">
+    <div class="mono text-xs accent mb-4">struct wait_queue { head; tail; }</div>
+    <div class="flex items-center gap-2 text-center">
+      <div class="mono text-xs">head<br>↓</div>
+      <div class="process-node blocked">PCB A</div><span class="flow-arrow">→</span>
+      <div class="process-node blocked">PCB B</div><span class="flow-arrow">→</span>
+      <span class="mono muted text-xs">NULL</span>
+    </div>
+    <div class="mono text-xs text-right mt-2">tail ──────────────↑</div>
+    <div class="grid grid-cols-2 gap-3 mt-5 text-xs">
+      <div><span class="accent mono">PCB.wait_next</span><br><span class="muted">intrusive next link</span></div>
+      <div><span class="accent mono">PCB.waiting_queue_ptr</span><br><span class="muted">one queue per process</span></div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div class="card py-4">
+      <b class="mono accent text-[0.61rem]">enqueue_current_process_<br>on_wait_queue()</b>
+      <div class="mono text-xs leading-6 mt-2">tail→wait_next = current<br>tail = current<br>state = BLOCKED<br>dispatcher_switch(...)</div>
+    </div>
+    <div class="card amber-border py-4">
+      <b class="mono amber">wakeup_wait_queue()</b>
+      <div class="mono text-xs leading-6 mt-2">p = head<br>head = p→wait_next<br>empty ⇒ tail = NULL<br>clear links · state = READY</div>
+    </div>
+    <div class="col-span-2 border-t border-cyan-900/15 pt-3 text-sm">
+      Queue owners: <span class="mono accent">child.waiters</span> · <span class="mono amber">fd_table.stdin_waiters</span> · <span class="mono green">mutex.waiters</span>
+    </div>
+  </div>
 </div>
-
-<div class="grid grid-cols-3 gap-4 mt-8">
-  <div class="card"><div class="metric">sleep</div><div class="metric-label">append self · BLOCKED · dispatch</div></div>
-  <div class="card amber-border"><div class="metric amber">wakeup</div><div class="metric-label">remove one FIFO head · READY</div></div>
-  <div class="card green-border"><div class="metric green">event</div><div class="metric-label">child · mutex · UART · signal</div></div>
-</div>
-
-<div class="card mt-7 text-sm"><span class="mono">sleep(queue)</span> waits until <span class="mono">wakeup(queue)</span> is called; timer ticks do not end the wait.</div>
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#52-waitpid-and-the-preserved-waiting-process-explanation -->
+<!-- SOURCE Pico-OS/README.md#52-waitpid-and-saved-wait-state -->
 
 <div class="eyebrow">Process coordination · waiting</div>
 
@@ -580,7 +705,7 @@ flowchart LR
 
 <div class="eyebrow">Process coordination · signals</div>
 
-# Signals in PicoOS
+# Signals in Pico-OS
 
 <div class="compact-table mt-5">
 
@@ -597,7 +722,7 @@ flowchart LR
   <div class="card coral-border"><span class="chip">shell child</span><div class="mt-3 text-sm">parent exits<br><span class="coral mono">child gets SIGTERM</span></div></div>
 </div>
 
-<div class="muted text-xs text-center mt-5">Terminal ESC c / ESC z targets the registered foreground PID.</div>
+<div class="muted text-xs text-center mt-5">Ctrl+C → SIGTERM · Ctrl+Z → SIGTSTP for the registered foreground PID; SIGINT and SIGSTOP are deliberately absent.</div>
 
 ---
 
@@ -607,20 +732,26 @@ flowchart LR
 
 # Round-robin scheduling
 
-<div class="flex items-center justify-center gap-3 mt-8">
-  <div class="process-node running">A<br>RUNNING</div><span class="flow-arrow">→</span>
-  <div class="process-node">B<br>READY</div><span class="flow-arrow">→</span>
-  <div class="process-node blocked">C<br>BLOCKED</div><span class="flow-arrow">→</span>
+<div class="mono text-sm muted text-center mt-6">global linked process list · scan starts after the current process</div>
+
+<div class="flex items-center justify-center gap-3 mt-5">
+  <div class="process-node">A<br><span class="muted">current</span></div><span class="flow-arrow">→</span>
+  <div class="process-node blocked">B<br>BLOCKED</div><span class="flow-arrow">→</span>
+  <div class="process-node running">C<br>READY ✓</div><span class="flow-arrow">→</span>
   <div class="process-node">D<br>READY</div><span class="flow-arrow">↺</span>
 </div>
 
-<div class="grid grid-cols-3 gap-4 mt-9">
-  <div class="card"><div class="metric">O(n)</div><div class="metric-label">scan PCBs, skip non-runnable</div></div>
-  <div class="card"><div class="metric amber">tick</div><div class="metric-label">preempt userspace</div></div>
-  <div class="card"><div class="metric green">yield</div><div class="metric-label">same save path, voluntarily</div></div>
+<div class="timeline mt-8" style="grid-template-columns: repeat(4, 1fr)">
+  <div class="timeline-step"><b>begin</b><br><span class="mono">current→next</span></div>
+  <div class="timeline-step"><b>scan</b><br>toward the list tail</div>
+  <div class="timeline-step"><b>skip</b><br>every state except <span class="mono">READY</span></div>
+  <div class="timeline-step"><b>wrap</b><br>to the list head once</div>
 </div>
 
-<div class="card mt-7 text-sm">The scheduler selects a ready process. The dispatcher restores its registers and continues it.</div>
+<div class="grid grid-cols-2 gap-8 mt-8 border-t border-cyan-900/15 pt-5 text-sm">
+  <div><span class="accent mono">selected</span><div class="mt-1">C changes from <span class="mono">READY</span> to <span class="mono green">RUNNING</span>.</div></div>
+  <div><span class="amber mono">no separate ready queue</span><div class="mt-1">Changing a PCB's state to <span class="mono">READY</span> makes it eligible for the next scan.</div></div>
+</div>
 
 ---
 
@@ -722,58 +853,86 @@ if (block->size >= size + sizeof(struct BlockHeader) + 1) {
 
 # Kernel, process, and application heaps
 
-<div class="grid grid-cols-3 gap-4 mt-6">
-  <div class="card"><div class="metric">k*</div><h3>kernel heap</h3><div class="muted text-xs">PCB · paths · metadata</div></div>
-  <div class="card amber-border"><div class="metric amber">p*</div><h3>process memory</h3><div class="muted text-xs">whole regions · shared backing</div></div>
-  <div class="card green-border"><div class="metric green">libc</div><h3>user heap</h3><div class="muted text-xs">1000 cells inside each process</div></div>
+<div class="grid grid-cols-3 gap-4 mt-5">
+  <div class="card"><div class="mono accent">kmalloc</div><h3 class="mt-2">kernel heap</h3><div class="muted text-xs">allocates PCBs, paths, descriptor tables, and shared-memory metadata from the 4096-cell kernel heap</div></div>
+  <div class="card amber-border"><div class="mono amber">pmalloc</div><h3 class="mt-2">SRAM regions</h3><div class="muted text-xs">first-fit allocation of complete process images and shared-memory backing after the kernel stack</div></div>
+  <div class="card green-border"><div class="mono green">malloc</div><h3 class="mt-2">per-process heap</h3><div class="muted text-xs">same split/merge allocator over the heap_start + heap_size range encoded in the binary</div></div>
 </div>
 
-<div class="flex justify-center items-center gap-3 mt-7 mono text-sm">
-  <span class="chip">shm_open(name)</span><span class="flow-arrow">→</span>
-  <span class="chip">ID</span><span class="flow-arrow">→</span>
-  <span class="chip">mmap(ID)</span><span class="flow-arrow">→</span>
-  <span class="chip">same absolute SRAM address</span>
+<div class="timeline mt-6" style="grid-template-columns: repeat(5, 1fr)">
+  <div class="timeline-step"><b>shm_open</b><br>find/create named kernel record</div>
+  <div class="timeline-step"><b>pmalloc</b><br>allocate backing on first create</div>
+  <div class="timeline-step"><b>mmap</b><br>attach PCB to record</div>
+  <div class="timeline-step"><b>pointer</b><br>return same absolute SRAM address</div>
+  <div class="timeline-step"><b>detach</b><br>last attachment frees backing</div>
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-6">
-  <div class="card"><b>Lifetime</b><div class="muted text-sm mt-2">unlink hides the name; last attachment frees backing</div></div>
-  <div class="card"><b>Synchronization</b><div class="muted text-sm mt-2">shared memory provides storage—mutexes provide order</div></div>
+<div class="grid grid-cols-2 gap-6 mt-5 text-sm border-t border-cyan-900/15 pt-4">
+  <div><span class="mono accent">shm_unlink</span> removes name lookup but preserves backing while attachments remain.</div>
+  <div><span class="mono amber">mutex</span> may live in the shared region; its wait queue points directly to kernel-visible PCBs.</div>
 </div>
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#9-libraries -->
+<!-- SOURCE Pico-OS/README.md#91-implemented-libraries -->
+
+<div class="eyebrow">Userspace runtime · public API</div>
+
+# 14 implemented library interfaces
+
+<div class="grid grid-cols-2 gap-x-5 gap-y-2 mt-4 text-xs">
+  <div class="api-row"><b>unistd</b><span>read · write · close · dup2 · lseek · chdir · getcwd · unlink · rmdir · load · run · unload · list · getpid</span></div>
+  <div class="api-row"><b>stdlib</b><span>malloc · realloc · free · atoi · getenv · setenv · unsetenv · putenv · clearenv · exit</span></div>
+  <div class="api-row"><b>fcntl</b><span>open · creat · access/create/truncate/append flags</span></div>
+  <div class="api-row"><b>string</b><span>memcpy · memset · strcpy · strcat · strcmp · strncmp · strlen</span></div>
+  <div class="api-row"><b>sys/wait</b><span>waitpid · WIFSTOPPED</span></div>
+  <div class="api-row"><b>stdio</b><span>stdin/out/err · fopen · fclose · fputc · fputs · fprintf · printf · scanf</span></div>
+  <div class="api-row"><b>schedule</b><span>yield</span></div>
+  <div class="api-row"><b>dirent</b><span>opendir · readdir · closedir · directory entries</span></div>
+  <div class="api-row"><b>mutex</b><span>mutex_init · mutex_lock · mutex_unlock</span></div>
+  <div class="api-row"><b>sys/mman</b><span>shm_open · mmap · shm_unlink</span></div>
+  <div class="api-row"><b>signal</b><span>signal · kill · default/ignore constants</span></div>
+  <div class="api-row"><b>sys/stat</b><span>mkdir</span></div>
+  <div class="api-row"><b>sys/prctl</b><span>prctl(PR_SET_PDEATHSIG, signal)</span></div>
+  <div class="api-row"><b>start</b><span>automatic heap/environment initialization before main</span></div>
+</div>
+
+<div class="muted text-xs text-center mt-3">Application-facing functions only; syscall plumbing, startup helpers, and test hooks are excluded.</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#92-library-organization through #97-start-function -->
 
 <div class="eyebrow">Userspace runtime</div>
 
-# How user programs reach the kernel
+# Library calls: userspace or `INT 0`
 
-<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-4 mt-8">
-  <div class="card text-center">
-    <div class="metric">apps</div>
-    <div class="mt-4 text-sm">shell · utilities<br>student programs</div>
+<div class="grid grid-cols-[1.05fr_.95fr] gap-5 mt-5">
+  <div class="card">
+    <div class="mono text-xs accent mb-3">example: read(fd, buffer, count)</div>
+    <div class="mono text-xs leading-6">
+      struct IoRequest request;<br>
+      request.file_descriptor = fd;<br>
+      request.buffer = buffer;<br>
+      request.count = count;<br>
+      <span class="amber">invoke_syscall(SYSCALL_READ, &amp;request)</span>
+    </div>
+    <div class="timeline mt-5" style="grid-template-columns: repeat(3, 1fr)">
+      <div class="timeline-step"><b>ACC</b><br>syscall number</div>
+      <div class="timeline-step"><b>IN1</b><br>request pointer</div>
+      <div class="timeline-step"><b>INT 0</b><br>ACC receives result</div>
+    </div>
   </div>
-  <div class="flow-arrow">→</div>
-  <div class="card green-border text-center">
-    <div class="metric green">libs</div>
-    <div class="mt-4 text-sm">streams · heap · strings<br>processes · signals · mutexes</div>
+  <div class="grid gap-3">
+    <div class="card green-border py-4"><b>Pure userspace</b><div class="muted text-sm mt-2">strings · formatting · environment · <span class="mono">atoi</span> · heap block management</div></div>
+    <div class="card amber-border py-4"><b>Kernel-backed wrappers</b><div class="muted text-sm mt-2">files · processes · signals · scheduling · shared memory</div></div>
+    <div class="card py-4"><b>Automatic startup</b><div class="mono text-xs mt-2">_start → init_process_heap → initialize_environment → main → exit</div></div>
   </div>
-  <div class="flow-arrow">→</div>
-  <div class="card amber-border text-center">
-    <div class="metric amber">INT 0</div>
-    <div class="mt-4 text-sm">one syscall entry<br>request structures<br>result returned in a register</div>
-  </div>
-</div>
-
-<div class="grid grid-cols-3 gap-3 mt-6 text-center text-sm">
-  <div class="card"><b>Pure userspace</b><div class="muted mt-2">strings · formatting · heap management</div></div>
-  <div class="card"><b>Kernel services</b><div class="muted mt-2">processes · files · signals · scheduling</div></div>
-  <div class="card"><b>Small by design</b><div class="muted mt-2">the complete call path stays understandable</div></div>
 </div>
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#10-filesystem through #103-file-operations -->
+<!-- SOURCE Pico-OS/README.md#10-filesystem through #103-file-operations and #107-working-directories-and-directory-operations -->
 
 <div class="eyebrow">Input and output · file descriptors</div>
 
@@ -786,6 +945,8 @@ flowchart LR
     T -->|stdout / stderr| O[UART output]
     T -->|regular file| F[path + flags + offset]
     F -->|read-range / file-size / append| H[emulator host files]
+    P -->|relative path| C[absolute working directory in PCB]
+    C --> F
 ```
 
 <div class="grid grid-cols-3 gap-4 mt-5">
@@ -794,7 +955,7 @@ flowchart LR
   <div class="card"><div class="metric green">3–7</div><div class="metric-label">private file slots</div></div>
 </div>
 
-<div class="muted text-xs text-center mt-4">Copies have independent offsets; there is no shared open-file object.</div>
+<div class="muted text-xs text-center mt-4">Each process has its own absolute working directory; descriptor copies have independent offsets.</div>
 
 ---
 
@@ -804,25 +965,37 @@ flowchart LR
 
 # Output redirection with `dup2()`
 
-<div class="timeline mt-7">
-  <div class="timeline-step"><b>open</b><br>path + flags</div>
-  <div class="timeline-step"><b>backup</b><br>dup2(1, 7)</div>
-  <div class="timeline-step"><b>redirect</b><br>dup2(fd, 1)</div>
-  <div class="timeline-step"><b>run</b><br>copy fd 0..2</div>
-  <div class="timeline-step"><b>restore</b><br>dup2(7, 1)</div>
+<div class="timeline mt-6">
+  <div class="timeline-step"><b>open target</b><br><span class="mono">fd = open(path, flags)</span></div>
+  <div class="timeline-step"><b>save shell stdout</b><br><span class="mono">dup2(1, 7)</span></div>
+  <div class="timeline-step"><b>replace stdout</b><br><span class="mono">dup2(fd, 1)</span></div>
+  <div class="timeline-step"><b>start child</b><br><span class="mono">run()</span> copies fd 0…2</div>
+  <div class="timeline-step"><b>restore shell</b><br><span class="mono">dup2(7, 1)</span></div>
 </div>
 
-<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3 mt-8 text-center">
-  <div class="card"><span class="chip">shell before</span><div class="mono text-sm mt-3">fd 1 → UART</div></div>
-  <span class="flow-arrow">→</span>
-  <div class="card green-border"><span class="chip">child copy</span><div class="mono text-sm mt-3 green">fd 1 → path</div></div>
-  <span class="flow-arrow">→</span>
-  <div class="card"><span class="chip">shell after</span><div class="mono text-sm mt-3">fd 1 → UART</div></div>
+<div class="grid grid-cols-2 gap-4 mt-6">
+  <div class="card">
+    <b>Descriptor-table implementation</b>
+    <div class="mono text-xs leading-6 mt-2">
+      dup2(old, new): free target path<br>
+      copy kind · flags · offset · cloned path<br>
+      run(): deep-copy shell fd 0…2 into child<br>
+      ⇒ restoring the shell cannot change the child
+    </div>
+  </div>
+  <div class="card amber-border">
+    <b>UART file implementation</b>
+    <div class="mono text-xs leading-6 mt-2">
+      &gt;  open flags include O_TRUNC<br>
+      kernel sends ESC write path ESC / once<br>
+      write(fd): ESC append path ESC / → bytes<br>
+      finally ESC write stdout ESC /
+    </div>
+  </div>
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-5">
-  <div class="card"><span class="metric">&gt;</span><div class="metric-label">truncate first, then append writes</div></div>
-  <div class="card"><span class="metric amber">&gt;&gt;</span><div class="metric-label">keep content, append writes</div></div>
+<div class="mt-4 text-sm text-center">
+  <span class="mono amber">&gt;&gt;</span> uses the same descriptor workflow with <span class="mono">O_APPEND</span> and omits the one-time truncate request.
 </div>
 
 ---
@@ -833,19 +1006,31 @@ flowchart LR
 
 # Init starts and restarts the shell
 
-<div class="grid grid-cols-3 gap-4 mt-6">
-  <div class="card"><span class="chip">kernel</span><h3 class="mt-3">start init</h3><div class="muted text-xs">memory · interrupts · load PID 1 · dispatch</div></div>
-  <div class="card amber-border"><span class="chip">init</span><h3 class="mt-3">manage the shell</h3><div class="muted text-xs">environment · start shell · exact wait</div></div>
-  <div class="card green-border"><span class="chip">shell</span><h3 class="mt-3">interaction</h3><div class="muted text-xs">parse · PATH · jobs · redirection</div></div>
+<div class="grid grid-cols-[.85fr_1.15fr] gap-5 mt-5">
+  <div class="card">
+    <div class="mono text-xs accent mb-3">PID 1 initialization</div>
+    <div class="mono text-xs leading-6">
+      pwd over UART<br>
+      → store absolute cwd in PCB<br>
+      read config/environment.txt<br>
+      → parse NAME=value lines<br>
+      → setenv(PATH=./user, ...)
+    </div>
+  </div>
+  <div class="card amber-border">
+    <div class="mono text-xs amber mb-3">supervision loop</div>
+    <div class="mono text-xs leading-6">
+      shell_pid = load("./user/shell.bin")<br>
+      run(shell_pid, "", environ)<br>
+      waitpid(shell_pid, &amp;status)<br>
+      → parent sleeps on shell.waiters<br>
+      → shell exit writes status + wakes init<br>
+      → repeat with a new shell PCB
+    </div>
+  </div>
 </div>
 
-<div class="mt-7 flex justify-center items-center gap-3 mono text-sm">
-  <span class="chip">PATH=./user</span><span class="flow-arrow">→</span>
-  <span class="chip">load shell</span><span class="flow-arrow">→</span>
-  <span class="chip">waitpid(shell)</span><span class="flow-arrow">↺</span>
-</div>
-
-<div class="muted text-xs text-center mt-6">`exit` ends one shell session. `poweroff` invokes the shutdown syscall.</div>
+<div class="muted text-xs text-center mt-5">The kernel starts only init; shell restart policy remains in userspace.</div>
 
 ---
 
@@ -853,50 +1038,58 @@ flowchart LR
 
 <div class="eyebrow">Userspace · shell and applications</div>
 
-# Shell commands and programs
+# How the shell starts a command
 
-<div class="terminal mt-5">
-  <div class="terminal-body">
-    PicoOS&gt; export NAME=world<br>
-    PicoOS&gt; echo "hello $NAME" &gt; greeting.txt<br>
-    PicoOS&gt; cat greeting.txt<br>
-    <span class="green">hello world</span><br>
-    PicoOS&gt; job &amp;&nbsp;&nbsp;<span class="muted"># $! · fg · bg</span>
+<div class="timeline mt-5" style="grid-template-columns: repeat(6, 1fr)">
+  <div class="timeline-step"><b>read line</b><br>80-cell buffer + history/editing</div>
+  <div class="timeline-step"><b>parse</b><br><span class="mono">&amp;</span> and final <span class="mono">&gt; / &gt;&gt;</span></div>
+  <div class="timeline-step"><b>expand</b><br><span class="mono">$NAME · $? · $!</span></div>
+  <div class="timeline-step"><b>resolve</b><br>direct path or colon-separated PATH</div>
+  <div class="timeline-step"><b>load/run</b><br>new PCB + inherited env/fd 0…2</div>
+  <div class="timeline-step"><b>foreground</b><br>register PID + exact <span class="mono">waitpid</span></div>
+</div>
+
+<div class="grid grid-cols-[1.2fr_.8fr] gap-5 mt-7">
+  <div class="card">
+    <div class="mono text-xs leading-6">
+      command contains '/' <span class="accent">→ load that path</span><br>
+      otherwise <span class="accent">→ try each PATH directory</span><br>
+      background <span class="amber">→ store PID in $!; do not wait</span><br>
+      foreground <span class="green">→ transfer terminal owner; wait; store status in $?</span>
+    </div>
+  </div>
+  <div class="card amber-border">
+    <div class="flex justify-between"><b>11 binaries</b><b>11 built-ins</b></div>
+    <div class="muted text-xs mt-3">Built-ins such as <span class="mono">cd</span>, <span class="mono">export</span>, <span class="mono">fg</span>, and <span class="mono">bg</span> run inside the shell because they modify its PCB or state.</div>
   </div>
 </div>
 
-<div class="grid grid-cols-3 gap-4 mt-6">
-  <div class="card"><b>shell</b><div class="muted text-xs mt-2">80 cells · PATH lookup · simple expansion</div></div>
-  <div class="card"><b>echo</b><div class="muted text-xs mt-2">arguments + `\n` conversion</div></div>
-  <div class="card"><b>cat</b><div class="muted text-xs mt-2">64-cell chunks · robust partial writes</div></div>
-</div>
-
+---
+class: compact-sequence
 ---
 
 <!-- SOURCE Pico-OS/README.md#13-use-in-the-operating-systems-and-real-time-operating-systems-lectures -->
 
 <div class="eyebrow">Project scope</div>
 
-# Operating-system mechanisms working together
+# Cross-layer trace: a foreground command
 
-<div class="grid grid-cols-2 gap-5 mt-6">
-  <div class="card">
-    <div class="eyebrow mb-4">Processes and coordination</div>
-    <div class="flex flex-wrap gap-2">
-      <span class="chip">process states</span><span class="chip">round-robin</span><span class="chip">dispatcher</span>
-      <span class="chip">wait queues</span><span class="chip">TSL mutex</span><span class="chip">shared memory</span>
-    </div>
-  </div>
-  <div class="card amber-border">
-    <div class="eyebrow mb-4">Machine and kernel</div>
-    <div class="flex flex-wrap gap-2">
-      <span class="chip">boot + sections</span><span class="chip">process loading</span><span class="chip">signals</span>
-      <span class="chip">IVT + ISRs</span><span class="chip">file descriptors</span><span class="chip">heaps</span>
-    </div>
-  </div>
-</div>
+```mermaid
+sequenceDiagram
+    participant Sh as Shell
+    participant K as Kernel
+    participant H as Host over UART
+    participant C as Child
+    Sh->>K: load(resolved .bin path)
+    K->>H: ESC load absolute-path ESC /
+    H-->>K: count + 5 layout words + payload
+    K->>K: pmalloc region, copy payload, create NEW PCB
+    Sh->>K: run(pid, args, environ)
+    K->>K: copy fd 0..2, build argc/argv/envp stack, set READY
+    K->>C: dispatcher restores context and RTI enters _start
+```
 
-<div class="card mt-8 text-sm">These mechanisms are connected in one running system: terminal input can wake a process, the scheduler can select it, and the shell can start another program or redirect its output.</div>
+<div class="muted text-xs text-center mt-2">On <span class="mono">exit(status)</span>, the kernel writes through the parent's saved wait-status pointer, wakes the shell, and reclaims the child. The full path combines loading, allocation, PCB state, descriptor inheritance, initial-stack ABI, dispatch, waiting, and cleanup.</div>
 
 ---
 
@@ -906,16 +1099,36 @@ flowchart LR
 
 # How I tested the system
 
-<div class="grid grid-cols-3 gap-4 mt-7">
-  <div class="card"><div class="metric">lib</div><h3>Libraries</h3><div class="muted text-xs">allocation · strings · formatting · synchronization</div></div>
-  <div class="card amber-border"><div class="metric amber">OS</div><h3>Kernel features</h3><div class="muted text-xs">processes · signals · files · memory · exceptions</div></div>
-  <div class="card green-border"><div class="metric green">sh</div><h3>Complete shell sessions</h3><div class="muted text-xs">commands · job control · redirection · exact output</div></div>
+<div class="flex justify-center gap-3 mt-4">
+  <span class="chip">12 library</span><span class="chip">17 OS feature</span><span class="chip">9 shell</span><span class="chip">38 total</span>
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-7">
-  <div class="terminal"><div class="terminal-body"><span class="muted">$</span> make test<br><span class="muted">lib → OS → shell · fresh boots</span></div></div>
-  <div class="terminal"><div class="terminal-body"><span class="muted">$</span> make test-fast<br><span class="muted">lib → shared OS boot → shared shell</span></div></div>
+<div class="grid grid-cols-2 gap-5 mt-5">
+  <div class="card amber-border">
+    <h2>Normal OS-backed tests</h2>
+    <div class="mono text-xs leading-6 mt-3">
+      compile launcher + worker binaries<br>
+      → isolated peripheral directory<br>
+      → boot release runtime per test<br>
+      → wait for prompt; inject input.txt via UART<br>
+      → raw_output.txt → normalize → output.txt<br>
+      → compare with expected_output.txt
+    </div>
+  </div>
+  <div class="card green-border">
+    <h2>Fast OS-backed tests</h2>
+    <div class="mono text-xs leading-6 mt-3">
+      compile all tests + build manifests<br>
+      → boot one release runtime per group<br>
+      → shell eval or in-system launcher.bin<br>
+      → redirect each test's stdout to output.txt<br>
+      → wait; restore descriptors; reset OS state<br>
+      → compare every expected_output.txt
+    </div>
+  </div>
 </div>
+
+<div class="muted text-xs text-center mt-4">Library tests run directly in RETI-Emulator with metadata-defined input, expected output, dependencies, and a five-second timeout.</div>
 
 ---
 
@@ -925,78 +1138,68 @@ flowchart LR
 
 # Fresh boots and fast repeated tests
 
-<div class="grid grid-cols-2 gap-5 mt-6">
+<div class="grid grid-cols-2 gap-5 mt-5">
   <div class="card amber-border">
-    <div class="flex justify-between items-center"><h2>normal</h2><span class="chip">fresh boot / test</span></div>
-    <div class="flex items-center gap-2 mt-6 mono text-xs">
-      <span class="chip">compile</span><span class="flow-arrow">→</span>
-      <span class="chip">boot</span><span class="flow-arrow">→</span>
-      <span class="chip">UART</span><span class="flow-arrow">→</span>
-      <span class="chip">compare</span>
+    <h2>Normal runner: host isolation</h2>
+    <div class="mono text-xs leading-6 mt-3">
+      mktemp peripheral directory per emulator<br>
+      boot binary/boot/bootloader.reti<br>
+      wait for each "Pico-OS&gt; " prompt<br>
+      inject input line + carriage return<br>
+      capture UART → raw_output.txt<br>
+      render controls; strip prompt/loading UI<br>
+      compare normalized output.txt
     </div>
   </div>
   <div class="card green-border">
-    <div class="flex justify-between items-center"><h2>fast</h2><span class="chip">one shared boot</span></div>
-    <div class="flex items-center gap-2 mt-6 mono text-xs">
-      <span class="chip">manifest</span><span class="flow-arrow">→</span>
-      <span class="chip">eval / launch</span><span class="flow-arrow">→</span>
-      <span class="chip">reset ↺</span>
+    <h2>Fast runner: in-system isolation</h2>
+    <div class="mono text-xs leading-6 mt-3">
+      launcher redirects fd 1 to test/output.txt<br>
+      load + run launcher.bin; waitpid<br>
+      restore fd 1; invoke process-state reset<br>
+      remove all test PCBs + descriptor tables<br>
+      shell_reset: fd 3…7 · env · $? · $! · PIDs<br>
+      next manifest entry uses the same boot
     </div>
   </div>
 </div>
 
-<div class="card mt-5 text-center text-sm">
-  <span class="accent">process-state reset</span>
-  <span class="muted"> · remove test processes · close private FDs · restore environment · reset PID expectations</span>
-</div>
-
-<div class="flex justify-center gap-3 mt-4">
-  <span class="chip">raw terminal capture</span>
-  <span class="chip">control-character rendering</span>
-  <span class="chip">prompt/loading cleanup</span>
-  <span class="chip">exact output diff</span>
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#16-source-map-and-deliberate-limitations — project outcome -->
-
-<div class="eyebrow">Project outcome</div>
-
-# The finished PicoOS system
-
-<div class="grid grid-cols-4 gap-3 mt-7 text-center">
-  <div class="card"><div class="metric">5</div><div class="metric-label">signals with job control</div></div>
-  <div class="card amber-border"><div class="metric amber">8</div><div class="metric-label">file descriptors per process</div></div>
-  <div class="card green-border"><div class="metric green">3</div><div class="metric-label">heap users: kernel, loader, apps</div></div>
-  <div class="card coral-border"><div class="metric coral">1 MiB</div><div class="metric-label">addressable SRAM</div></div>
-</div>
-
-<div class="grid grid-cols-2 gap-4 mt-6 text-sm">
-  <div class="card"><b>Runs complete programs</b><div class="muted mt-2">arguments · environment · heap · stack · files · signals · exit status</div></div>
-  <div class="card"><b>Works on emulator and planned hardware</b><div class="muted mt-2">the same UART protocol connects the OS to host services</div></div>
-  <div class="card"><b>Can be used interactively</b><div class="muted mt-2">shell · applications · background jobs · Ctrl+C / Ctrl+Z · redirection</div></div>
-  <div class="card"><b>Can be inspected and tested</b><div class="muted mt-2">instruction debugger · source view · automated library, OS, and shell tests</div></div>
+<div class="grid grid-cols-2 gap-6 mt-5 text-sm border-t border-cyan-900/15 pt-4">
+  <div><span class="mono accent">OS features</span> run through <span class="mono">system/fast_os_test_launcher</span>.</div>
+  <div><span class="mono amber">shell tests</span> use the shell's <span class="mono">run-shell-tests</span> built-in; line editing still traverses raw UART.</div>
 </div>
 
 ---
 layout: center
 ---
 
-<!-- SOURCE Pico-OS/README.md#picoos through #16-source-map-and-deliberate-limitations — end-to-end synthesis -->
+<!-- SOURCE Pico-OS/README.md#picoos through #16-source-map-and-limitations — end-to-end synthesis -->
 
 <div class="eyebrow text-center mb-7">End-to-end example</div>
 
 # What happens after a key is pressed
 
-<div class="flex justify-center items-center gap-2 mt-10 mono text-xs">
-  <span class="chip">key</span><span class="flow-arrow">→</span>
-  <span class="chip">UART</span><span class="flow-arrow">→</span>
-  <span class="chip">ISR</span><span class="flow-arrow">→</span>
-  <span class="chip">wait queue</span><span class="flow-arrow">→</span>
-  <span class="chip">scheduler</span><span class="flow-arrow">→</span>
-  <span class="chip">dispatcher</span><span class="flow-arrow">→</span>
-  <span class="chip">shell</span>
+<div class="grid grid-cols-3 gap-4 mt-6 text-sm">
+  <div class="card">
+    <div class="mono accent">1 · device</div>
+    <div class="mono text-xs leading-6 mt-2">host byte → UART R1<br>set R2 receive-ready<br>raise device 2 → vector 2<br>CPU saves interrupted PC</div>
+  </div>
+  <div class="card amber-border">
+    <div class="mono amber">2 · ISR</div>
+    <div class="mono text-xs leading-6 mt-2">save six registers<br>read R1; preserve ready bit<br>locate terminal-owner PCB<br>pending read or ring buffer?</div>
+  </div>
+  <div class="card green-border">
+    <div class="mono green">3 · pending read</div>
+    <div class="mono text-xs leading-6 mt-2">copy byte to saved buffer<br>activation.acc = count<br>unlink stdin_waiters<br>BLOCKED → READY</div>
+  </div>
 </div>
 
-<div class="text-center mt-10 text-xl">This one input passes through interrupt handling, blocking, scheduling, dispatching, and the shell.</div>
+<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3 mt-7 text-center text-sm">
+  <div class="card"><span class="mono">UART ISR</span><div class="muted text-xs mt-2">restore interrupted context with RTI</div></div>
+  <span class="flow-arrow">→ later →</span>
+  <div class="card"><span class="mono">scheduler</span><div class="muted text-xs mt-2">select READY terminal owner</div></div>
+  <span class="flow-arrow">→</span>
+  <div class="card"><span class="mono">dispatcher</span><div class="muted text-xs mt-2">restore 7 registers; RTI; read() returns</div></div>
+</div>
+
+<div class="muted text-xs text-center mt-4">Terminal ownership moves from shell to foreground child and returns when that child exits or stops.</div>
