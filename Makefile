@@ -9,7 +9,7 @@ build-static-presentation:
 	$(YARN) build
 
 generate-presentation-pdf:
-	$(YARN) export --executable-path $(BROWSER)
+	$(YARN) export --per-slide --executable-path $(BROWSER)
 
 launch-presentation-in-browser:
 	$(YARN) dev
