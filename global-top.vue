@@ -4,6 +4,17 @@
   </div>
 </template>
 
+<script setup>
+import { onMounted } from 'vue'
+
+onMounted(() => {
+  document.documentElement.classList.toggle(
+    'selectable-text',
+    window.location.pathname.startsWith('/selectable-text/'),
+  )
+})
+</script>
+
 <style scoped>
 .deck-page-number {
   position: absolute;

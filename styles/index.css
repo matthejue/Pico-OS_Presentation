@@ -42,6 +42,13 @@
 .slidev-layout strong { color: var(--cyan); font-weight: 650; }
 .slidev-layout code { font-family: 'Fira Code', ui-monospace, monospace; }
 
+/* The /selectable-text/ dev route enables selection for slide review. */
+html.selectable-text .slidev-layout,
+html.selectable-text .slidev-layout * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
 .slidev-layout::after {
   content: '';
   position: absolute;

@@ -3,4 +3,5 @@ dist/
 *.pdf
 *.pptx
 *.png
+!public/**/*.png
 .DS_Store

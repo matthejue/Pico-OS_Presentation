@@ -5,8 +5,12 @@ Slidev presentation generated from
 
 ```sh
 yarn install
-make launch-presentation-in-browser
+make launch-presentation-with-selectable-text
 ```
+
+This target opens the `/selectable-text/` variant, which keeps ordinary text
+selection enabled on slides. Use `make launch-presentation-in-browser` for the
+normal Slidev presentation behavior.
 
 In VS Code, use `Ctrl+Shift+P` → `Tasks: Run Task` to choose a clearly named
 presentation task.

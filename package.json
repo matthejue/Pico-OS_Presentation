@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "slidev --open",
+    "dev:selectable-text": "slidev --open --base /selectable-text/",
     "build": "slidev build",
     "export": "slidev export"
   },
