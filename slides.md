@@ -73,7 +73,11 @@ fonts:
   </div>
 </div>
 
-<div class="quote-line mt-7">Small enough to inspect: no virtual memory, no on-device filesystem, and only a focused subset of POSIX-like interfaces.</div>
+<div class="grid grid-cols-3 gap-3 mt-7 text-xs text-center">
+  <div class="chip justify-center">no virtual memory</div>
+  <div class="chip justify-center">no on-device filesystem</div>
+  <div class="chip justify-center">focused POSIX-like interfaces</div>
+</div>
 
 ---
 
@@ -81,7 +85,7 @@ fonts:
 
 <div class="eyebrow">Intended physical hardware</div>
 
-# Two 16-bit SRAMs are enough for Pico-OS
+# Physical setup and verified SRAM capacity
 
 <div class="grid grid-cols-[.95fr_1.05fr] gap-5 mt-4">
   <div class="grid gap-3">
@@ -157,26 +161,24 @@ flowchart LR
 
 <div class="eyebrow">Build and run</div>
 
-# Build the release tree and boot from EPROM
+# The tool invocations behind a PicoOS boot
 
-<div class="terminal mt-6"><div class="terminal-body text-base">$ make bootload</div></div>
-
-<div class="timeline mt-7" style="grid-template-columns:repeat(5,1fr)">
-  <div class="timeline-step"><b>firmware</b><br>release tree</div>
-  <div class="timeline-step"><b>bootloader</b><br>EPROM <span class="mono">.reti</span></div>
-  <div class="timeline-step"><b>kernel</b><br><span class="mono">.bin + .sections</span></div>
-  <div class="timeline-step"><b>userspace</b><br>system + user binaries</div>
-  <div class="timeline-step"><b>debug TUI</b><br>emulator starts</div>
+<div class="grid grid-cols-[.9fr_1.1fr] gap-5 mt-5">
+  <div class="grid gap-3 text-xs">
+    <div class="card"><span class="mono accent">1 · compile + link</span><div class="mono leading-6 mt-2"><div>picoc_compiler program.picoc + libraries</div><div>-C library/start/libstart.picoc</div><div>-O1 -i -w -s -g -v -o program.reti</div></div></div>
+    <div class="card amber-border"><span class="mono amber">2 · create loadable image</span><div class="mono leading-6 mt-2"><div>reti_emulator -a program.reti</div><div class="muted">→ program.bin with layout header</div></div></div>
+  </div>
+  <div class="terminal"><div class="terminal-body text-xs leading-6"><div>$ reti_emulator -n 4 -e boot/bootloader.reti</div><div>&nbsp;&nbsp;-d -c -O -r 262144</div><div>&nbsp;&nbsp;-S kernel/kernel.sections</div><div>&nbsp;&nbsp;-D kernel/kernel.debuginfo</div></div></div>
 </div>
 
-<div class="grid grid-cols-4 gap-3 mt-7 text-xs">
-  <div class="card py-3"><span class="mono accent">-e</span><br>EPROM bootloader</div>
-  <div class="card py-3"><span class="mono accent">-n 4</span><br>runtime-loaded IVT</div>
-  <div class="card py-3"><span class="mono accent">-r 262144</span><br>2<sup>18</sup>-word SRAM</div>
-  <div class="card py-3"><span class="mono accent">-O</span><br>synthetic first RTI context</div>
+<div class="grid grid-cols-4 gap-3 mt-6 text-xs">
+  <div class="card py-3"><span class="mono accent">-e</span><div>EPROM bootloader</div></div>
+  <div class="card py-3"><span class="mono accent">-n 4</span><div>runtime-loaded IVT</div></div>
+  <div class="card py-3"><span class="mono accent">-r 262144</span><div>2<sup>18</sup>-word SRAM</div></div>
+  <div class="card py-3"><span class="mono accent">-O</span><div>synthetic first RTI context</div></div>
 </div>
 
-<div class="muted text-xs text-center mt-4"><span class="mono">-S kernel.sections</span> and <span class="mono">-D kernel.debuginfo</span> keep runtime memory and source views aligned.</div>
+<div class="muted text-xs text-center mt-4"><span class="mono">-S</span> supplies the runtime kernel layout; <span class="mono">-D</span> maps machine state back to PicoC source.</div>
 
 ---
 
@@ -186,24 +188,34 @@ flowchart LR
 
 # The compiler flow PicoOS relies on
 
-```mermaid {scale:0.72}
-flowchart LR
-    SRC[PicoC source]
-    PP[preprocessor]
-    TOK[tokens]
-    TREE[Tree-sitter tree]
-    AST[PicoC AST]
-    subgraph PF[per-file passes]
-      SHR[shrink] --> BLK[blocks] --> SYM[symbol] --> TYP[typing] --> ANF[ANF] --> RB[RETI blocks]
-    end
-    subgraph LINK[program-wide linking]
-      MERGE[merge units + startup] --> PATCH[reti_patch] --> RETI[flat RETI]
-    end
-    SRC --> PP --> TOK --> TREE --> AST --> SHR
-    RB --> MERGE
-```
+<div class="relative h-[365px] mt-2">
+  <div v-click-hide="1" class="absolute inset-0">
+    <div class="chip w-max mb-2 text-xs">before PicoOS adaptation</div>
+    <div class="text-xs muted mb-2">A single-source teaching compiler: parse, lower, emit RETI.</div>
+    <div class="grid grid-cols-3 gap-2 text-center text-xs mt-7">
+      <div class="card py-3">PicoC source</div><div class="mono accent self-center">→</div><div class="card py-3">preprocessor</div>
+      <div class="col-span-2"></div><div class="mono accent">↓</div>
+      <div class="card py-3">AST</div><div class="mono accent self-center">← tokens ← Tree-sitter</div><div class="card py-3">parse tree</div>
+      <div class="mono amber">↓</div><div class="col-span-2"></div>
+      <div class="card amber-border py-3">shrink → blocks → symbol</div><div class="mono amber self-center">→</div><div class="card amber-border py-3">typing → ANF → RETI</div>
+    </div>
+  </div>
+  <div v-click="1" class="absolute inset-0">
+    <div class="chip w-max mb-2 text-xs">adapted for PicoOS</div>
+    <div class="text-xs muted mb-2">Per-file artifacts and a final linker preserve enough information to load and debug programs.</div>
+    <div class="grid grid-cols-3 gap-2 text-center text-xs mt-7">
+      <div class="card py-3">PicoC source</div><div class="mono accent self-center">→</div><div class="card py-3">preprocessor → tokens</div>
+      <div class="col-span-2"></div><div class="mono accent">↓</div>
+      <div class="card py-3">AST</div><div class="mono accent self-center">← Tree-sitter parse tree</div><div class="card py-3">syntax + types</div>
+      <div class="mono amber">↓</div><div class="col-span-2"></div>
+      <div class="card amber-border py-3">shrink → blocks → symbol</div><div class="mono amber self-center">→</div><div class="card amber-border py-3">typing → ANF → RETI blocks</div>
+      <div class="col-span-2"></div><div class="mono green">↓</div>
+      <div class="card green-border py-3">merge units + startup</div><div class="mono green self-center">← reti_patch ←</div><div class="card green-border py-3">RETI + sections + debug</div>
+    </div>
+  </div>
+</div>
 
-<div class="grid grid-cols-4 gap-2 mt-3 text-[10px] text-center">
+<div class="grid grid-cols-4 gap-2 mt-1 text-[10px] text-center">
   <div class="chip justify-center">headers · macros</div>
   <div class="chip justify-center">types · frames</div>
   <div class="chip justify-center">sections · symbols</div>
@@ -216,18 +228,38 @@ flowchart LR
 
 <div class="eyebrow">PicoC-Compiler extensions</div>
 
-# C and ABI features added for PicoOS
+# PicoC-Compiler extensions used by PicoOS
 
-<div class="grid grid-cols-3 gap-4 mt-5 text-sm">
-  <div class="card"><span class="mono accent">language</span><div class="muted text-xs leading-6 mt-3">headers · macros · <span class="mono">typedef</span><br>casts · <span class="mono">sizeof</span> · postfix <span class="mono">++</span><br>mixed declarations and statements</div></div>
-  <div class="card amber-border"><span class="mono amber">types + calls</span><div class="muted text-xs leading-6 mt-3"><span class="mono">void *</span> · typed pointer arithmetic<br>function pointers · variadics<br>System-V-style stack frames</div></div>
-  <div class="card green-border"><span class="mono green">low level</span><div class="muted text-xs leading-6 mt-3"><span class="mono">asm("…")</span> · <span class="mono">debug;</span><br>naked functions · section attributes<br><span class="mono">IVTE</span> · linked assembly labels</div></div>
+<div class="float-left w-[49%] card text-[11px] leading-5 mt-4">
+    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+      <div><span class="mono accent">source</span><div>includes · <span class="mono">#pragma once</span> · macros</div><div>mixed declarations · constant expressions</div></div>
+      <div><span class="mono amber">types</span><div><span class="mono">typedef</span> · casts · <span class="mono">sizeof</span> · <span class="mono">void *</span></div><div>typed pointer arithmetic · structs</div></div>
+      <div><span class="mono green">data + expressions</span><div>arrays / strings · escapes · postfix <span class="mono">++</span></div><div>dereference/member conditions</div></div>
+      <div><span class="mono accent">calls + ABI</span><div>function pointers · variadics</div><div>System-V-style frames · shared epilogue</div></div>
+      <div><span class="mono amber">low-level control</span><div><span class="mono">asm</span> · <span class="mono">debug;</span> · <span class="mono">NOP</span></div><div>naked functions · linked labels</div></div>
+      <div><span class="mono green">linked image</span><div><span class="mono">.ivt/.text/.data</span> · IVTE</div><div>startup selection · loader layout metadata</div></div>
+    </div>
 </div>
 
-<div class="grid grid-cols-2 gap-4 mt-5 text-sm">
-  <div class="card"><b>Separate compilation</b><div class="muted text-xs mt-2"><span class="mono">-c unit.picoc → .reti_blocks + .st</span><br>cross-file symbols · source/header hashes · dependency files</div></div>
-  <div class="card"><b>Inspectable output</b><div class="muted text-xs mt-2"><span class="mono">.pre · .debuginfo · .sections</span><br>source-correlated labels · startup and combined RETI blocks</div></div>
-</div>
+```c {lines:false}
+#define CELLS 3
+typedef int (*op_t)(int, int);
+struct Header { int size; int *next; };
+
+int add(int a, int b) { return a + b; }
+void main(void) {
+  int values[] = {4, 5, 6}; int i = 0;
+  char text[] = "PicoOS\n"; op_t op = add;
+  struct Header h = {sizeof(text), values};
+  int first = values[i++];
+  printf("%d %d %d\n", op(first, values[1]), h.size,
+         *(h.next + (CELLS - 1)));
+}
+```
+
+<div class="clear-both"></div>
+
+<div class="muted text-xs text-center mt-4">The accompanying compiler test executes this example’s source, type, pointer, array, function-pointer, variadic-call, and ABI features.</div>
 
 ---
 
@@ -311,12 +343,12 @@ flowchart LR
 # The runner became PicoOS’s machine environment
 
 <div class="grid grid-cols-3 gap-4 mt-5 text-xs">
-  <div class="card"><span class="mono accent">memory + images</span><div class="leading-6 mt-3">EPROM-only boot<br><span class="mono">.sections</span> loading<br>raw data words<br><span class="mono">--assemble → .bin</span></div></div>
-  <div class="card amber-border"><span class="mono amber">devices</span><div class="leading-6 mt-3"><span class="mono">TSL</span><br>interrupt controller<br>runtime timer<br>raw-byte UART</div></div>
-  <div class="card green-border"><span class="mono green">protection</span><div class="leading-6 mt-3">exception vector 3<br>cause cell 11<br>stack boundary cell 10<br>explicit <span class="mono">-n 4</span></div></div>
-  <div class="card"><span class="mono accent">debug data</span><div class="leading-6 mt-3">source / locals / frames<br>runtime CS / DS views<br>snapshots · live editing</div></div>
-  <div class="card amber-border"><span class="mono amber">interaction</span><div class="leading-6 mt-3">paged action help<br>manual interrupt trigger<br>normal + raw terminals</div></div>
-  <div class="card green-border"><span class="mono green">host bridge</span><div class="leading-6 mt-3">bounded UART requests<br>load · read · write<br>pwd · ls · mkdir …</div></div>
+  <div class="card"><span class="mono accent">images + memory</span><div class="leading-6 mt-3">raw RETI words / bytes<br><span class="mono">.sections</span> region loading<br><span class="mono">--assemble → .bin</span><br>EPROM-only boot · explicit <span class="mono">-n</span></div></div>
+  <div class="card amber-border"><span class="mono amber">CPU + devices</span><div class="leading-6 mt-3"><span class="mono">TSL</span> atomic locking<br>interrupt controller + priority<br>runtime timer · raw-byte UART<br>normal stdout execution</div></div>
+  <div class="card green-border"><span class="mono green">protection</span><div class="leading-6 mt-3">synchronous exception vector 3<br>cause cell 11 · boundary cell 10<br>per-process heap / stack guard<br>runtime CS / DS interpretation</div></div>
+  <div class="card"><span class="mono accent">source-aware debug</span><div class="leading-6 mt-3">comments · source · globals<br>locals · frames · calls/returns<br>watch windows · transcoding<br>snapshots · restart · live editing</div></div>
+  <div class="card amber-border"><span class="mono amber">interactive control</span><div class="leading-6 mt-3">three help pages<br>manual ISR selection/trigger<br>post-halt inspection<br>normal + raw UART terminals</div></div>
+  <div class="card green-border"><span class="mono green">host bridge</span><div class="leading-6 mt-3">bounded UART control frames<br>load · read · write · size<br>pwd · ls · mkdir · unlink<br>separate metadata paths <span class="mono">-S/-D</span></div></div>
 </div>
 
 ---

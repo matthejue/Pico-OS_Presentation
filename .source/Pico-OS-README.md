@@ -146,100 +146,100 @@ so the kernel itself needs no locks.
    - [UART hardware interface](#uart-hardware-interface)
    - [Host requests over UART](#host-requests-over-uart)
    - [Debug TUI and terminal views](#debug-tui-and-terminal-views)
-1. [Bootloading](#1-bootloading)
-   - [1.1 Loading and starting the kernel](#11-loading-and-starting-the-kernel)
-2. [Kernel main loop](#2-kernel-main-loop)
-   - [2.1 Kernel initialization](#21-kernel-initialization)
-   - [2.2 Transition from bootloading to normal execution](#22-transition-from-bootloading-to-normal-execution)
-3. [Interrupts, system calls, and exceptions](#3-interrupt-vector-table-interrupts-system-calls-and-exceptions)
-   - [3.1 Binary sections](#31-binary-sections)
-   - [3.2 Interrupt vector table](#32-interrupt-vector-table)
-   - [3.3 Interrupt service routines](#33-interrupt-service-routines)
-   - [3.4 Exception handlers](#34-exception-handlers)
-   - [3.5 PicoC-Compiler support for low-level handlers](#35-picoc-compiler-support-for-low-level-handlers)
-   - [3.6 System call handling](#36-system-call-handling)
-   - [3.7 System call arguments and stack-frame layout](#37-system-call-arguments-and-stack-frame-layout)
-   - [3.8 Timer interrupt](#38-timer-interrupt)
-   - [3.9 UART and keypress interrupt](#39-uart-and-keypress-interrupt)
-4. [Processes](#4-processes)
-   - [4.1 Process table](#41-process-table)
-   - [4.2 Process structure](#42-process-structure)
-   - [4.3 Activation records and stack frames](#43-activation-records-and-stack-frames)
-   - [4.4 Process states](#44-process-states)
-   - [4.5 Loading processes](#45-loading-processes)
-   - [4.6 Program arguments and environment](#46-program-arguments-and-environment)
-   - [4.7 Initial process stack](#47-initial-process-stack)
-   - [4.8 Environment variables](#48-environment-variables)
-5. [Blocking, waiting, synchronization, and signals](#5-process-blocking-waiting-synchronization-and-signals)
-   - [5.1 Wait queues](#51-wait-queues)
-   - [5.2 `waitpid()` and saved wait state](#52-waitpid-and-saved-wait-state)
-   - [5.3 `sleep()`](#53-sleep)
-   - [5.4 `wakeup()`](#54-wakeup)
-   - [5.5 Blocked-to-ready transitions](#55-blocked-to-ready-transitions)
-   - [5.6 Signals](#56-signals)
-6. [Scheduler](#6-scheduler)
-   - [6.1 Relationship to process states](#61-relationship-to-process-states)
-   - [6.2 Ready processes](#62-ready-processes)
-   - [6.3 Scheduling algorithm](#63-scheduling-algorithm)
-   - [6.4 Timer-based preemption](#64-timer-based-preemption)
-   - [6.5 `yield()`](#65-yield)
-7. [Dispatcher](#7-dispatcher)
-   - [7.1 Context switching](#71-context-switching)
-   - [7.2 Saving the current process](#72-saving-the-current-process)
-   - [7.3 Restoring the selected process](#73-restoring-the-selected-process)
-   - [7.4 Transferring control between processes](#74-transferring-control-between-processes)
-8. [Memory management](#8-memory-management)
-   - [8.1 Process and kernel memory layouts](#81-process-and-kernel-memory-layouts)
-   - [8.2 Heap implementation](#82-heap-implementation)
-   - [8.3 `free()` and block merging](#83-free-and-block-merging)
-   - [8.4 Process memory allocation](#84-process-memory-allocation)
-   - [8.5 Shared memory](#85-shared-memory)
-9. [Libraries](#9-libraries)
-   - [9.1 Implemented libraries](#91-implemented-libraries)
-   - [9.2 Library organization](#92-library-organization)
-   - [9.3 Design tradeoffs](#93-design-tradeoffs)
-   - [9.4 Standard I/O](#94-standard-io)
-   - [9.5 Variadic functions and the stack-frame layout](#95-variadic-functions-and-the-stack-frame-layout)
-   - [9.6 `libstart`](#96-libstart)
-   - [9.7 Start function](#97-start-function)
-10. [Filesystem](#10-filesystem)
-    - [10.1 File-descriptor table](#101-file-descriptor-table)
-    - [10.2 File descriptors](#102-file-descriptors)
-    - [10.3 File operations](#103-file-operations)
-    - [10.4 Output redirection with `>`](#104-output-redirection-with-)
-    - [10.5 `dup2()`](#105-dup2)
-    - [10.6 Output appending with `>>`](#106-output-appending-with-)
-    - [10.7 Working directories and directory operations](#107-working-directories-and-directory-operations)
-11. [Init process](#11-init-process)
-    - [11.1 Purpose of init](#111-purpose-of-init)
-    - [11.2 Separation of responsibilities](#112-separation-of-responsibilities)
-    - [11.3 Configuration file](#113-configuration-file)
-    - [11.4 Starting the shell](#114-starting-the-shell)
-    - [11.5 Waiting for the shell with `waitpid()`](#115-waiting-for-the-shell-with-waitpid)
-    - [11.6 Why init is in the system directory](#116-why-init-is-in-the-system-directory)
-12. [User applications](#12-user-applications)
-    - [12.1 User binaries](#121-user-binaries)
-    - [12.2 Shell built-ins](#122-shell-built-ins)
-    - [12.3 Shell](#123-shell)
-    - [12.4 `echo`](#124-echo)
-    - [12.5 `count`](#125-count)
-    - [12.6 `cat`](#126-cat)
-    - [12.7 Host-backed directory commands](#127-host-backed-directory-commands)
-    - [12.8 `kill`](#128-kill)
-    - [12.9 `poweroff`](#129-poweroff)
-    - [12.10 Actionable command errors](#1210-actionable-command-errors)
-13. [Use in lectures](#13-use-in-the-operating-systems-and-real-time-operating-systems-lectures)
-    - [13.1 Real-time operating systems lecture](#131-real-time-operating-systems-lecture)
-    - [13.2 Operating systems lecture](#132-operating-systems-lecture)
-    - [13.3 Exercise sheets and teaching material](#133-exercise-sheets-and-teaching-material)
-14. [Test system](#14-test-system)
-    - [14.1 Testing across all three repositories](#141-testing-across-all-three-repositories)
-    - [14.2 `make test` and `make test-fast`](#142-make-test-and-make-test-fast)
-    - [14.3 `make test-lib`](#143-make-test-lib)
-    - [14.4 System and OS tests](#144-system-and-os-tests)
-    - [14.5 Shell tests](#145-shell-tests)
-15. [Use of AI](#15-use-of-ai-in-the-project)
-16. [Source map and limitations](#16-source-map-and-limitations)
+2. [Bootloading](#2-bootloading)
+   - [2.1 Loading and starting the kernel](#21)
+3. [Kernel main loop](#3-kernel-main-loop)
+   - [3.1 Kernel initialization](#31)
+   - [3.2 Transition from bootloading to normal execution](#32)
+4. [Interrupts, system calls, and exceptions](#4-interrupt-vector-table-interrupts-system-calls-and-exceptions)
+   - [4.1 Binary sections](#41)
+   - [4.2 Interrupt vector table](#42)
+   - [4.3 Interrupt service routines](#43)
+   - [4.4 Exception handlers](#44)
+   - [4.5 PicoC-Compiler support for low-level handlers](#45)
+   - [4.6 System call handling](#46)
+   - [4.7 System call arguments and stack-frame layout](#47)
+   - [4.8 Timer interrupt](#48)
+   - [4.9 UART and keypress interrupt](#49)
+5. [Processes](#5-processes)
+   - [5.1 Process table](#51)
+   - [5.2 Process structure](#52)
+   - [5.3 Activation records and stack frames](#53)
+   - [5.4 Process states](#54)
+   - [5.5 Loading processes](#55)
+   - [5.6 Program arguments and environment](#56)
+   - [5.7 Initial process stack](#57)
+   - [5.8 Environment variables](#58)
+6. [Blocking, waiting, synchronization, and signals](#6-process-blocking-waiting-synchronization-and-signals)
+   - [6.1 Wait queues](#61)
+   - [6.2 `waitpid()` and saved wait state](#62)
+   - [6.3 `sleep()`](#63)
+   - [6.4 `wakeup()`](#64)
+   - [6.5 Blocked-to-ready transitions](#65)
+   - [6.6 Signals](#66)
+7. [Scheduler](#7-scheduler)
+   - [7.1 Relationship to process states](#71)
+   - [7.2 Ready processes](#72)
+   - [7.3 Scheduling algorithm](#73)
+   - [7.4 Timer-based preemption](#74)
+   - [7.5 `yield()`](#75)
+8. [Dispatcher](#8-dispatcher)
+   - [8.1 Context switching](#81)
+   - [8.2 Saving the current process](#82)
+   - [8.3 Restoring the selected process](#83)
+   - [8.4 Transferring control between processes](#84)
+9. [Memory management](#9-memory-management)
+   - [9.1 Process and kernel memory layouts](#91)
+   - [9.2 Heap implementation](#92)
+   - [9.3 `free()` and block merging](#93)
+   - [9.4 Process memory allocation](#94)
+   - [9.5 Shared memory](#95)
+10. [Libraries](#10-libraries)
+   - [10.1 Implemented libraries](#101)
+   - [10.2 Library organization](#102)
+   - [10.3 Design tradeoffs](#103)
+   - [10.4 Standard I/O](#104)
+   - [10.5 Variadic functions and the stack-frame layout](#105)
+   - [10.6 `libstart`](#106)
+   - [10.7 Start function](#107)
+11. [Filesystem](#11-filesystem)
+    - [11.1 File-descriptor table](#111)
+    - [11.2 File descriptors](#112)
+    - [11.3 File operations](#113)
+    - [11.4 Output redirection with `>`](#114)
+    - [11.5 `dup2()`](#115)
+    - [11.6 Output appending with `>>`](#116)
+    - [11.7 Working directories and directory operations](#117)
+12. [Init process](#12-init-process)
+    - [12.1 Purpose of init](#121)
+    - [12.2 Separation of responsibilities](#122)
+    - [12.3 Configuration file](#123)
+    - [12.4 Starting the shell](#124)
+    - [12.5 Waiting for the shell with `waitpid()`](#125)
+    - [12.6 Why init is in the system directory](#126)
+13. [User applications](#13-user-applications)
+    - [13.1 User binaries](#131)
+    - [13.2 Shell built-ins](#132)
+    - [13.3 Shell](#133)
+    - [13.4 `echo`](#134)
+    - [13.5 `count`](#135)
+    - [13.6 `cat`](#136)
+    - [13.7 Host-backed directory commands](#137)
+    - [13.8 `kill`](#138)
+    - [13.9 `poweroff`](#139)
+    - [13.10 Actionable command errors](#1310)
+14. [Use in lectures](#14-use-in-the-operating-systems-and-real-time-operating-systems-lectures)
+    - [14.1 Real-time operating systems lecture](#141)
+    - [14.2 Operating systems lecture](#142)
+    - [14.3 Exercise sheets and teaching material](#143)
+15. [Test system](#15-test-system)
+    - [15.1 Testing across all three repositories](#151)
+    - [15.2 `make test` and `make test-fast`](#152)
+    - [15.3 `make test-lib`](#153)
+    - [15.4 System and OS tests](#154)
+    - [15.5 Shell tests](#155)
+16. [Use of AI](#16-use-of-ai-in-the-project)
+17. [Source map and limitations](#17-source-map-and-limitations)
 - [Appendix: Inspecting `.bin` files with `hexyl`](#appendix-inspecting-bin-files-with-hexyl)
 
 ## Build and run
@@ -272,7 +272,7 @@ interrupt context, allowing the dispatcher to launch PicoOS's first process
 with `RTI` even though no real interrupt entered the kernel. Press capital `V`
 to enter the UART terminal view; `Escape` returns to the debug TUI. `make
 run-os OS_RUN_PATH=test/hello_world` runs one configured OS scenario, while
-the test targets are documented in [section 14](#14-test-system).
+the test targets are documented in [section 15](#15-test-system).
 
 Both bootload targets pass `-n 4` because PicoOS's four-entry interrupt-vector
 table is copied into SRAM by the EPROM loader and therefore cannot be counted
@@ -281,7 +281,7 @@ counts the raw address words at the beginning of the parsed `.reti` ISR section
 to determine the vector-table size; `-n 4` supplies that count explicitly for
 the runtime-loaded table.
 
-# Extending the PicoC-Compiler and RETI-Emulator
+# 1. Extending the PicoC-Compiler and RETI-Emulator
 
 PicoOS could not be implemented on the original teaching toolchain unchanged.
 The [PicoC-Compiler feature history](https://github.com/matthejue/PicoC-Compiler/blob/linker_update/documentation/new_features_for_pico_os.md)
@@ -465,7 +465,7 @@ entering a normal userspace `main()`.
 ## Generated memory constants
 
 Unlike a user process, the kernel has no [process control block
-(PCB)](#42-process-structure) from which low-level code could obtain its own
+(PCB)](#52-process-structure) from which low-level code could obtain its own
 segment, heap, and stack addresses. The EPROM bootloader has the same problem:
 the kernel and its PCBs do not exist in SRAM when the first boot instruction
 runs, and nothing earlier can pass the bootloader its own layout. The compiler
@@ -652,7 +652,7 @@ emulator places a byte in `uart_receive` and sets bit 1, and then reads that
 byte. The linked bootloader always uses these polling routines; its design does
 not configure interrupts or create processes. Keypress interrupts provide
 input through the UART hardware interrupt and the terminal owner's per-process
-input buffer described in [section 3.9](#39-uart-and-keypress-interrupt).
+input buffer described in [section 4.9](#49-uart-and-keypress-interrupt).
 
 See `kernel/uart_hardware.picoc`, the local
 UART protocol notes, and the emulator's
@@ -807,9 +807,9 @@ while paused only displays captured output; opening it during `c` keeps the CPU
 running and each received byte can raise a UART interrupt.
 
 
-# 1. Bootloading
+# 2. Bootloading
 
-## 1.1 Loading and starting the kernel
+## 2.1 Loading and starting the kernel
 
 The firmware entry point is the naked `_start()` in
 `boot/bootloader.picoc`.
@@ -1006,9 +1006,9 @@ signed 32-bit value. See
 `common/uart_protocol.picoc` and the emulator's
 [section-file format](../RETI-Emulator/documentation/section_file_entries.md).
 
-# 2. Kernel main loop
+# 3. Kernel main loop
 
-## 2.1 Kernel initialization
+## 3.1 Kernel initialization
 
 The exact startup code in `kernel/kernel.picoc` is:
 
@@ -1049,7 +1049,7 @@ control with `RTI`. Whenever every existing process is blocked,
 interrupt makes a process runnable. If all processes have been removed,
 control ultimately reaches `shutdown()` (`JUMP 0`).
 
-## 2.2 Transition from bootloading to normal execution
+## 3.2 Transition from bootloading to normal execution
 
 Bootloading ends at `MOVE CS PC` in `start_loaded_kernel()`. At that point:
 
@@ -1068,9 +1068,9 @@ Kernel `_start` calls `main()`. After initialization, init is the only
 executes `RTI`. The initial stack cell holds `_start - 1`; because `RTI`
 advances `PC` after restoring it, userspace starts exactly at `_start`.
 
-# 3. Interrupt vector table, interrupts, system calls, and exceptions
+# 4. Interrupt vector table, interrupts, system calls, and exceptions
 
-## 3.1 Binary sections
+## 4.1 Binary sections
 
 The compiler links three sections:
 
@@ -1099,7 +1099,7 @@ In the current kernel, `.ivt` is four cells at offsets `0..3`, and `.text`
 starts at offset 4. User binaries normally have no `.ivt` and start `.text` at
 offset 0.
 
-## 3.2 Interrupt vector table
+## 4.2 Interrupt vector table
 
 The operating-system table in
 `interrupt_service_routines/os_isrs.picoc`
@@ -1125,7 +1125,7 @@ slot 3. `RTI` reverses the automatic part: load `PC` from `SP + 1`, increment
 Only the return PC is saved automatically. Every ordinary register needed
 afterward is explicitly pushed by PicoOS.
 
-## 3.3 Interrupt service routines
+## 4.3 Interrupt service routines
 
 The current OS has four vector entries:
 
@@ -1141,7 +1141,7 @@ The custom hardware signal line exists in the emulator but PicoOS maps it to
 is a separate UART/polling table used by standalone library test, not an
 additional kernel ISR.
 
-## 3.4 Exception handlers
+## 4.4 Exception handlers
 
 Four conditions terminate an affected user process with exception status 1:
 
@@ -1226,7 +1226,7 @@ installs it at runtime. If fewer than four entries are parsed or configured,
 the emulator reports an unhandled CPU exception and stops instead of entering
 PicoOS.
 
-## 3.5 PicoC-Compiler support for low-level handlers
+## 4.5 PicoC-Compiler support for low-level handlers
 
 PicoC's special attributes are documented in
 [the compiler README](../PicoC-Compiler/README.md#picoc-attributes-and-entry-points):
@@ -1246,7 +1246,7 @@ PicoC's special attributes are documented in
 Normal functions receive a compiler prologue/epilogue. Naked interrupt hubs
 instead contain only the written `asm("...")` instructions.
 
-## 3.6 System call handling
+## 4.6 System call handling
 
 All userspace wrappers put the system-call number in `ACC`, one scalar or
 request-structure pointer in `IN1`, and execute `INT 0`. The vector-0 hub saves
@@ -1302,7 +1302,7 @@ sequenceDiagram
     end
 ```
 
-## 3.7 System call arguments and stack-frame layout
+## 4.7 System call arguments and stack-frame layout
 
 RETI stacks grow toward lower addresses. `SP` points one cell **below** the
 lowest occupied cell. In a normal current PicoC call, arguments are evaluated
@@ -1365,7 +1365,7 @@ flowchart LR
     F --> G["Callee epilogue restores BAF<br/>caller removes arguments"]
 ```
 
-## 3.8 Timer interrupt
+## 4.8 Timer interrupt
 
 Periphery cell 9 is the timer instruction interval. Zero disables the timer;
 writing a positive value resets the counter and requests an interrupt after
@@ -1401,7 +1401,7 @@ the emulator resets the interval counter when it raises the interrupt,
 temporarily deactivates that timer line while its ISR is active, and reactivates
 it when `RTI` completes the hardware interrupt.
 
-## 3.9 UART and keypress interrupt
+## 4.9 UART and keypress interrupt
 
 UART device 2 maps through periphery cell 5 to vector 2 at priority 2. A host
 keypress makes the emulator put its low byte in receive register 1, set status
@@ -1464,9 +1464,9 @@ Printable input is appended and echoed. Control bytes `Ctrl+C` (3) and
 `Ctrl+Z` (26) are intercepted by the kernel as `SIGTERM` or `SIGTSTP` for the
 foreground process rather than passed to the shell.
 
-# 4. Processes
+# 5. Processes
 
-## 4.1 Process table
+## 5.1 Process table
 
 Despite the conventional name, PicoOS does **not** use a fixed array. Its
 "process table" is a kernel-heap-allocated singly linked list with head and
@@ -1485,7 +1485,7 @@ The kernel has no entry because it does not use a user code/data region,
 parent, descriptors, or schedulable user state. Low-level kernel addresses
 come from `memory_constants.header`.
 
-## 4.2 Process structure
+## 5.2 Process structure
 
 The structure is defined in
 `kernel/process.header`. Important fields are:
@@ -1524,7 +1524,7 @@ prefixes a relative operand with the calling PCB's absolute directory. It
 removes repeated separators and resolves `.` and `..` components before
 sending the absolute path, so emulator load messages contain clean paths.
 
-## 4.3 Activation records and stack frames
+## 5.3 Activation records and stack frames
 
 An activation record is the saved machine context in the PCB. A function stack
 frame is the live per-call area containing locals, saved `BAF`, return address,
@@ -1536,7 +1536,7 @@ Function results travel in `IN2`; a normal call continuation pushes that result
 when the expression needs it. System-call wrappers instead receive the kernel
 result in `ACC`, matching the explicit interrupt-return stub.
 
-## 4.4 Process states
+## 5.4 Process states
 
 There is no `TERMINATED` constant. `ZOMBIE` retains status for a living parent;
 full termination means removal from the list.
@@ -1562,7 +1562,7 @@ stateDiagram-v2
     ZOMBIE --> [*]: parent waitpid or orphan cleanup
 ```
 
-## 4.5 Loading processes
+## 5.5 Loading processes
 
 The kernel does not search `PATH`; its caller supplies a concrete `.bin` path.
 The shell performs `PATH` lookup before calling `load()`.
@@ -1596,7 +1596,7 @@ allocated process size is `effective_stack_start + 1`. Loading and running are
 separate operations, so a successfully loaded process remains `NEW` until
 `run()`.
 
-## 4.6 Program arguments and environment
+## 5.6 Program arguments and environment
 
 `store_process_arguments()` creates this
 ascending-address layout near the top of the allocated process region:
@@ -1644,7 +1644,7 @@ standard `argc`/`argv`. `main()` has no direct third `envp` parameter in the
 current startup API; the application-facing environment functions use the
 process-local global `environ`.
 
-## 4.7 Initial process stack
+## 5.7 Initial process stack
 
 Three layouts must not be confused:
 
@@ -1659,7 +1659,7 @@ Three layouts must not be confused:
 After the first `RTI`, `_start` uses the initial `BAF` as if the kernel had
 created its outer caller frame. Subsequent calls use the ordinary convention.
 
-## 4.8 Environment variables
+## 5.8 Environment variables
 
 Environment entries are heap-owned `NAME=value` strings in a null-terminated
 `char **environ`. Startup clones the initial stack entries. `getenv()` returns
@@ -1699,9 +1699,9 @@ operations can set `show_loading_bar = false` when progress output would mix
 with program output; the fast test launcher also removes
 `PICOOS_LOADING_BAR` from its inherited environment before running test.
 
-# 5. Process blocking, waiting, synchronization, and signals
+# 6. Process blocking, waiting, synchronization, and signals
 
-## 5.1 Wait queues
+## 6.1 Wait queues
 
 A wait queue is a two-pointer FIFO:
 
@@ -1756,7 +1756,7 @@ Wait queues are kernel-visible absolute memory structures even when a mutex
 placed them in shared process memory. This works because PicoOS has one
 physical address space and no virtual-memory protection.
 
-## 5.2 `waitpid()` and saved wait state
+## 6.2 `waitpid()` and saved wait state
 
 The public API has only `waitpid(pid)`, which waits for one exact child. There
 is no general `wait()` wrapper and no `waitpid` options argument. The diagram
@@ -1811,7 +1811,7 @@ produce status `-1`.
 This exact-child behavior is important to init. Other children or `SIGCHLD`
 must not make init's `waitpid(shell_pid)` return as though its shell exited.
 
-## 5.3 `sleep()`
+## 6.3 `sleep()`
 
 PicoOS `sleep()` does **not** accept a duration and does not register a timer
 deadline. It means "block the current process on this wait queue":
@@ -1850,7 +1850,7 @@ Timer interrupts may let another process run while the caller sleeps, but they
 do not expire the sleep. A timed `sleep(seconds)` facility, deadline list, and
 timer-driven timeout transition are not implemented.
 
-## 5.4 `wakeup()`
+## 6.4 `wakeup()`
 
 `wakeup(queue)` invokes syscall 12. The kernel removes at most one head waiter,
 clears its queue links, and makes it ready. It returns whether a waiter existed.
@@ -1872,7 +1872,7 @@ sequenceDiagram
     S-->>P: Select on a later dispatch
 ```
 
-## 5.5 Blocked-to-ready transitions
+## 6.5 Blocked-to-ready transitions
 
 Implemented causes are:
 
@@ -1888,7 +1888,7 @@ Implemented causes are:
 There is no sleep timeout. Default fatal signals terminate rather than ready a
 blocked process. `SIGTSTP` stops it while preserving its queue membership.
 
-## 5.6 Signals
+## 6.6 Signals
 
 PicoOS uses five familiar Unix signal numbers, with a much smaller set of
 semantics:
@@ -1946,16 +1946,16 @@ the setting. Those children terminate if the shell terminates. This is explicit
 shell policy, not PicoOS's default for all children; init and the initial shell
 begin with zero.
 
-# 6. Scheduler
+# 7. Scheduler
 
-## 6.1 Relationship to process states
+## 7.1 Relationship to process states
 
 The scheduler considers only `READY` processes plus the current `RUNNING`
 process when a complete wrap finds no alternative. `NEW` has no initial
 execution frame, `BLOCKED` lacks a satisfied event, `STOPPED` is suspended, and
 `ZOMBIE` exists only for status collection.
 
-## 6.2 Ready processes
+## 7.2 Ready processes
 
 There is no separate ready queue. `scheduler_next_process()` scans the global
 linked process list. Making a process ready means changing its state; it
@@ -1965,7 +1965,7 @@ This is simple and educational but makes selection O(number of PCBs). That is
 reasonable for this small system and exposes state transitions without another
 queue abstraction.
 
-## 6.3 Scheduling algorithm
+## 7.3 Scheduling algorithm
 
 Scheduling is round-robin by process-list order:
 
@@ -1980,7 +1980,7 @@ can run but blocked/stopped processes remain, the dispatcher waits in kernel
 context so a UART or other hardware interrupt can change state. If the list is
 empty, there is no user process to dispatch and shutdown follows.
 
-## 6.4 Timer-based preemption
+## 7.4 Timer-based preemption
 
 On a user timer interrupt, the ISR explicitly pushes the general context and
 the CPU has already saved the resumption PC. The dispatcher copies register
@@ -1993,7 +1993,7 @@ The timer ISR detects kernel execution by comparing `CS` to generated kernel
 The timer therefore preempts userspace but never schedules another process
 while the kernel is running.
 
-## 6.5 `yield()`
+## 7.5 `yield()`
 
 `yield()` is syscall 13 through software
 `INT 0`. Unlike a timer interrupt it is voluntary and deterministic, but both
@@ -2005,9 +2005,9 @@ can be selected again.
 It is not required for timer-preempted fairness, and it does not block on an
 event.
 
-# 7. Dispatcher
+# 8. Dispatcher
 
-## 7.1 Context switching
+## 8.1 Context switching
 
 Context is divided between two locations:
 
@@ -2023,7 +2023,7 @@ process's code and data bases. No separate `PC` PCB field is needed.
 `RTI` restores that PC and advances it, which is why new-process and exception
 return addresses use the `address - 1` convention where appropriate.
 
-## 7.2 Saving the current process
+## 8.2 Saving the current process
 
 Timer interrupts, blocking syscalls, and `yield()` eventually pass the common
 saved-frame pointer to:
@@ -2053,7 +2053,7 @@ The PC at `caller_context[7]` remains in process memory. Because it points to
 the interrupted instruction under the emulator's interrupt convention, the
 later `RTI` resumes at the correct following instruction.
 
-## 7.3 Restoring the selected process
+## 8.3 Restoring the selected process
 
 `dispatcher_switch_to_process()` readies an old running process if necessary,
 sets the selected PCB as current, marks it `RUNNING`, and calls the naked
@@ -2083,7 +2083,7 @@ hub first obtains the PCB and boundary arguments from its kernel call frame,
 writes the process boundary, then restores `SP`, segments, ordinary registers,
 and finally `BAF`. `RTI` performs the actual control transfer.
 
-## 7.4 Transferring control between processes
+## 8.4 Transferring control between processes
 
 ```mermaid
 sequenceDiagram
@@ -2106,9 +2106,9 @@ sequenceDiagram
     CPU-->>B: Resume B
 ```
 
-# 8. Memory management
+# 9. Memory management
 
-## 8.1 Process and kernel memory layouts
+## 9.1 Process and kernel memory layouts
 
 The top two address bits select EPROM (`00`), periphery (`01`), or SRAM
 (`10`/`11`). Within SRAM, the current kernel layout is:
@@ -2177,7 +2177,7 @@ copies the five required fields into the binary header described in
 [Host requests over UART](#host-requests-over-uart); kernel binaries use that
 same header but take their heap range from generated kernel constants.
 
-## 8.2 Heap implementation
+## 9.2 Heap implementation
 
 `common/heap.picoc` implements the shared allocator:
 
@@ -2249,7 +2249,7 @@ process for failed positive-size requests, while `kmalloc()` and `krealloc()`
 panic the kernel. `pmalloc()` and `prealloc()` retain the raw `NULL` result for
 the loader to handle.
 
-## 8.3 `free()` and block merging
+## 9.3 `free()` and block merging
 
 `heap_free_from()` treats `NULL` as a no-op, obtains the preceding header,
 marks it free, and scans the entire list. Whenever `current` and
@@ -2270,7 +2270,7 @@ pointers are not detected.
 free block, or allocates/copies/frees. `realloc(NULL, n)` is `malloc(n)` and
 `realloc(p, 0)` frees and returns `NULL`.
 
-## 8.4 Process memory allocation
+## 9.4 Process memory allocation
 
 `init_process_memory_heap()` creates one heap covering every cell from
 `PROCESS_MEMORY_START` through `SRAM_MAX_ADDRESS_IN_MEMORY_MAP`.
@@ -2283,7 +2283,7 @@ Shared-memory backing also comes from this allocator, so shared regions and
 complete processes compete for the same post-kernel SRAM pool. This is separate
 from the per-process `malloc()` heap inside each allocated process region.
 
-## 8.5 Shared memory
+## 9.5 Shared memory
 
 The existing shared-memory API is preserved:
 
@@ -2344,9 +2344,9 @@ sequenceDiagram
     K->>M: pfree backing and metadata
 ```
 
-# 9. Libraries
+# 10. Libraries
 
-## 9.1 Implemented libraries
+## 10.1 Implemented libraries
 
 Public headers and principal application-facing facilities are listed below.
 Low-level syscall wrappers, startup plumbing, test hooks, and implementation
@@ -2384,7 +2384,7 @@ bool overwrite = true;
 setenv("MODE", "debug", overwrite);
 ```
 
-## 9.2 Library organization
+## 10.2 Library organization
 
 An umbrella source such as `library/stdio/libstdio.picoc` includes implementation
 parts such as `stdio.picoc` and `scanf.picoc`. The Makefile passes umbrella
@@ -2397,7 +2397,7 @@ structure, put its pointer in `IN1`, put the syscall number in `ACC`, and issue
 management, formatting, and heap block management do not require the kernel
 except when they ultimately perform I/O or process operations.
 
-## 9.3 Design tradeoffs
+## 10.3 Design tradeoffs
 
 The libraries favor readable mechanisms over completeness:
 
@@ -2411,7 +2411,7 @@ The libraries favor readable mechanisms over completeness:
 - allocation omits invalid-pointer hardening; and
 - names resemble POSIX/C where educationally useful but semantics may differ.
 
-## 9.4 Standard I/O
+## 10.4 Standard I/O
 
 `stdio` implements `fopen()`, `fclose()`, `fputc()`, `fputs()`, `fprintf()`,
 `printf()`, and `scanf()`. There is no `fwrite()` in the current repository.
@@ -2435,7 +2435,7 @@ format conversions and reduce them to `fputc()`/`fputs()`. In standalone
 library test where the kernel descriptor syscall is unavailable, stdout can
 fall back to the direct UART send syscall.
 
-## 9.5 Variadic functions and the stack-frame layout
+## 10.5 Variadic functions and the stack-frame layout
 
 Right-to-left argument evaluation and pushing make fixed and extra arguments
 contiguous at increasing addresses from `BAF + 3`. PicoOS does not implement
@@ -2448,14 +2448,14 @@ format, ...)` begins extras at `+5`. `scanf` follows the same principle.
 This depends directly on saved old `BAF` at `+1`, return address at `+2`, and
 fixed parameters from `+3`.
 
-## 9.6 `libstart`
+## 10.6 `libstart`
 
 `library/start/libstart.picoc` is the umbrella startup
 translation unit. It includes the standard-library implementation and
 `start.picoc`. The compiler's `-C` option makes its
 custom `_start` replace the generated default and places it first in `.text`.
 
-## 9.7 Start function
+## 10.7 Start function
 
 The naked `_start(int argc, char *first_argument)` avoids creating another
 frame before it has interpreted the kernel-built outer frame. The startup
@@ -2470,7 +2470,7 @@ The exit path marks the process zombie or removes it, wakes an exact waiting
 parent, sends `SIGCHLD`, cleans children as appropriate, and dispatches another
 process.
 
-# 10. Filesystem
+# 11. Filesystem
 
 PicoOS's "filesystem" is a kernel descriptor layer over the emulator host
 filesystem. Each process has an absolute working-directory string. Data reads use UART
@@ -2478,7 +2478,7 @@ filesystem. Each process has an absolute working-directory string. Data reads us
 `file-size <path>`, and writes use `write` or `append`. It is not an on-SRAM
 filesystem.
 
-## 10.1 File-descriptor table
+## 11.1 File-descriptor table
 
 Each PCB owns a dynamically allocated `FileDescriptorTable` with exactly eight
 entries (`0..7`), a 128-cell stdin ring buffer, pending-read fields, and a
@@ -2494,7 +2494,7 @@ duplicated values.
 Process removal frees all path copies and the table. `close()` intentionally
 refuses descriptors below 3, although `dup2()` may replace standard entries.
 
-## 10.2 File descriptors
+## 11.2 File descriptors
 
 | Number | Conventional macro | Initial kind |
 | ---: | --- | --- |
@@ -2503,7 +2503,7 @@ refuses descriptors below 3, although `dup2()` may replace standard entries.
 | 2 | `STDERR_FILENO` | UART output temporarily routed to host stderr |
 | 3–7 | none | First-free slots for regular files or descriptor copies |
 
-## 10.3 File operations
+## 11.3 File operations
 
 Implemented calls are `open()`, `creat()`, `close()`, `read()`, `write()`,
 `lseek()`, `dup2()`, `chdir()`, `getcwd()`, `mkdir()`, `unlink()`, `rmdir()`,
@@ -2526,7 +2526,7 @@ A deliberate limitation is that regular-file writes always append after open.
 `O_TRUNC` makes `>` work by emptying the file first; there is no positioned
 overwrite despite `lseek`, and `O_APPEND` mainly communicates opening intent.
 
-## 10.4 Output redirection with `>`
+## 11.4 Output redirection with `>`
 
 The shell recognizes a whitespace-preceded `>` followed by one final path. It
 opens that path with `O_WRONLY | O_CREAT | O_TRUNC`, copies stdout to private
@@ -2538,7 +2538,7 @@ inherits redirected stdout. Immediately afterward, the shell restores
 descriptor 1 from 7 and closes 7. Descriptor tables are copied, so restoring
 the shell does not change the child's path.
 
-## 10.5 `dup2()`
+## 11.5 `dup2()`
 
 `dup2(old, new)` validates both indices and the source. If they are identical,
 it returns `new` without modification. Otherwise it frees the target path and
@@ -2548,14 +2548,14 @@ target.
 Unlike POSIX, there is no shared open-file object or descriptor reference
 count: subsequent offset changes in one copy do not update the other.
 
-## 10.6 Output appending with `>>`
+## 11.6 Output appending with `>>`
 
 The parser distinguishes a second `>` and opens with
 `O_WRONLY | O_CREAT | O_APPEND`, omitting `O_TRUNC`. The same `dup2()` workflow
 then passes stdout to the child. Since kernel regular writes use the emulator's
 `append` escape sequence, existing content remains and new output is added at the end.
 
-## 10.7 Working directories and directory operations
+## 11.7 Working directories and directory operations
 
 `chdir(path)` and `getcwd(buffer, size)` are provided by
 `library/unistd`. A `chdir()` request works as follows:
@@ -2609,9 +2609,9 @@ only `d_type` (`DT_DIR` or `DT_REG`) and `d_name`; there is no size or other
 metadata. `unlink()` and `rmdir()` are provided by
 `library/unistd`.
 
-# 11. Init process
+# 12. Init process
 
-## 11.1 Purpose of init
+## 12.1 Purpose of init
 
 The first userspace process is traditionally called **init**. Many modern
 Linux installations use `systemd` as an init system; PicoOS uses its own
@@ -2619,7 +2619,7 @@ minimal `system/init.picoc`, PID 1. It establishes the
 initial environment, repeatedly starts one shell, and waits for that exact
 shell.
 
-## 11.2 Separation of responsibilities
+## 12.2 Separation of responsibilities
 
 | Component | Responsibility | Why it belongs there |
 | --- | --- | --- |
@@ -2630,7 +2630,7 @@ shell.
 The kernel does not parse commands or configuration. Init does not schedule or
 manage registers. The shell does not initialize global kernel structures.
 
-## 11.3 Configuration file
+## 12.3 Configuration file
 
 Init first calls `getcwd()` with a `PATH_MAX` buffer. Because PID 1 has no
 parent directory to inherit, the kernel sends `<ESC>pwd<ESC>/`, stores the
@@ -2652,7 +2652,7 @@ If the file is missing, cannot be read, exceeds 255 bytes, contains a malformed
 line without `=`, or an environment allocation fails, init prints an error and
 returns status 1. Because no shell exists, the kernel eventually shuts down.
 
-## 11.4 Starting the shell
+## 12.4 Starting the shell
 
 Init directly requests `./user/shell.bin`; it does not use `PATH`. `load()`
 prefixes this relative path with init's directory and creates a `NEW` child.
@@ -2661,7 +2661,7 @@ supplies no extra arguments and inherits init's environment and standard
 descriptors. A load return of 0 or failed `run()` makes init print an error and
 exit with status 1.
 
-## 11.5 Waiting for the shell with `waitpid()`
+## 12.5 Waiting for the shell with `waitpid()`
 
 After starting the shell, init calls `waitpid(shell_pid)`. It remains blocked
 until that exact child stops or terminates, rather than waking merely because
@@ -2677,7 +2677,7 @@ The shell's `exit` command therefore exits the current shell session, not the
 kernel. `user/poweroff.picoc` invokes the shutdown
 syscall when an actual emulator halt is wanted.
 
-## 11.6 Why init is in the system directory
+## 12.6 Why init is in the system directory
 
 Init is system policy, not an ordinary command. Keeping it in `system`
 and using the direct `./system/init.bin` kernel path prevents it from appearing
@@ -2685,14 +2685,14 @@ in the normal `PATH=./user` or being launched casually from the shell.
 `fast_os_test_launcher.picoc` is likewise a system helper, while interactive
 commands belong in `user`.
 
-# 12. User applications
+# 13. User applications
 
 PicoOS provides **11 user binaries**: the interactive shell plus ten standalone
 commands. The shell also provides **11 built-ins**. The two groups are distinct:
 a binary runs as its own process, whereas a built-in runs inside the existing
 shell and can therefore change shell state.
 
-## 12.1 User binaries
+## 13.1 User binaries
 
 | Binary | Purpose |
 | --- | --- |
@@ -2711,7 +2711,7 @@ shell and can therefore change shell state.
 The following sections explain the shell and the commands with behavior that is
 useful to understand in more detail.
 
-## 12.2 Shell built-ins
+## 13.2 Shell built-ins
 
 | Built-in | Purpose |
 | --- | --- |
@@ -2742,7 +2742,7 @@ PicoOS> pwd.bin
 /opt/picoos/binary/kernel
 ```
 
-## 12.3 Shell
+## 13.3 Shell
 
 ### Command parsing and execution
 
@@ -2808,12 +2808,12 @@ Down select entries from the bounded command history; Left and Right are
 ignored because cursor movement is not implemented. Unsupported escape
 sequences are discarded without echoing the raw Escape byte to the host
 terminal. This behavior sits above the UART receive interrupt and blocking `read()` path from
-[section 3.9](#39-uart-and-keypress-interrupt).
+[section 4.9](#49-uart-and-keypress-interrupt).
 
 ### Output redirection
 
 `>` and `>>` use `open()` plus `dup2()` as described in
-[section 10](#10-filesystem). There is no `dup()` function in PicoOS; only
+[section 11](#11-filesystem). There is no `dup()` function in PicoOS; only
 `dup2()` exists.
 
 ### Environment variables
@@ -2840,9 +2840,9 @@ prctl(PR_SET_PDEATHSIG, SIGTERM);
 
 The child creation path inherits this field, so shell descendants receive
 `SIGTERM` if the shell terminates. This is a policy chosen by the shell, not an
-OS-wide default; [section 5.6](#56-signals) describes the inheritance rules.
+OS-wide default; [section 6.6](#66-signals) describes the inheritance rules.
 
-## 12.4 `echo`
+## 13.4 `echo`
 
 `user/echo.picoc` prints `argv[1..argc-1]` separated by one
 space and adds a newline at the end. Calling it without arguments therefore
@@ -2859,7 +2859,7 @@ The shell does not perform this conversion; it passes the argument text to
 `echo.bin` unchanged. Options such as `-n` and escape sequences other than
 `\n` are not implemented. `echo.bin` always returns status 0.
 
-## 12.5 `count`
+## 13.5 `count`
 
 `user/count.picoc` counts upward forever, returning to the
 start of the current line with `\r` before each value. `count.bin DELAY` sets
@@ -2876,7 +2876,7 @@ other ready processes can run. `Ctrl+C` terminates it when it owns the
 foreground. A negative delay or more than one argument prints help and returns
 status 1; `-h` and `--help` print the same help and return 0.
 
-## 12.6 `cat`
+## 13.6 `cat`
 
 `user/cat.picoc` opens each path argument read-only, reads
 64 cells at a time, and writes the files to standard output in argument order:
@@ -2892,7 +2892,7 @@ also returns status 1. It requires at least one path and does not read from
 standard input; the usual `cat` options are not implemented. `-h` and
 `--help` print its usage when supplied as the only argument.
 
-## 12.7 Host-backed directory commands
+## 13.7 Host-backed directory commands
 
 The directory binaries are small clients of the `dirent` functions, `mkdir()`,
 `getcwd()`, `unlink()`, and `rmdir()`. Those calls enter the kernel, which uses
@@ -2900,7 +2900,7 @@ the bounded [host requests over UART](#host-requests-over-uart). No host program
 launched.
 
 All five directory commands use the calling process's PicoOS working directory
-and the host operations described in [section 10.7](#107-working-directories-and-directory-operations).
+and the host operations described in [section 11.7](#117-working-directories-and-directory-operations).
 They do not start similarly named programs on the host.
 
 `ls.bin [DIRECTORY]` lists the current directory when no path is given. It
@@ -2952,7 +2952,7 @@ PicoOS> rm.bin files.txt
 PicoOS> rmdir.bin new-directory
 ```
 
-## 12.8 `kill`
+## 13.8 `kill`
 
 `user/kill.picoc` sends `SIGTERM` by default or accepts a
 signal name or number before the PID. The accepted names are `SIGKILL`,
@@ -2969,11 +2969,11 @@ process exists without delivering a signal.
 Incorrect argument counts, invalid PIDs or signal numbers, and unknown
 processes print a specific error and return status 1. `SIGKILL` cannot be
 caught or ignored; the other signal semantics are listed in
-[section 5.6](#56-signals). After a successful call, `kill.bin` yields once so
+[section 6.6](#66-signals). After a successful call, `kill.bin` yields once so
 the signalled process can be scheduled promptly. `-h` and `--help` list the
 accepted forms.
 
-## 12.9 `poweroff`
+## 13.9 `poweroff`
 
 `user/poweroff.picoc` invokes the shutdown syscall.
 This differs from the shell's `exit` built-in: `exit` ends only the current
@@ -2987,7 +2987,7 @@ shuts PicoOS down and lets the emulator halt. The command accepts no operands;
 `-h` and `--help` print help without shutting down, and other arguments return
 status 1.
 
-## 12.10 Actionable command errors
+## 13.10 Actionable command errors
 
 The shell validates built-in argument counts, quoting, redirection, process
 lookup, and external command lookup before continuing. Errors name the failed
@@ -3009,9 +3009,9 @@ failures, while `kill.bin` distinguishes PID, signal, and process lookup
 errors. These commands return failure where appropriate, making the result
 visible through `$?`.
 
-# 13. Use in the operating systems and real-time operating systems lectures
+# 14. Use in the operating systems and real-time operating systems lectures
 
-## 13.1 Real-time operating systems lecture
+## 14.1 Real-time operating systems lecture
 
 The real-time operating systems topics can be followed directly in the source:
 
@@ -3034,7 +3034,7 @@ Relevant sources include `kernel/scheduler.picoc`,
 `library/mutex/mutex.picoc`, and
 `test/shared_memory_mutual_exclusion`.
 
-## 13.2 Operating systems lecture
+## 14.2 Operating systems lecture
 
 The bootloader and process loader provide examples of executable sections,
 symbolic labels, binary headers, relocation bases, and initial stacks.
@@ -3054,7 +3054,7 @@ passes resolve addresses. Generated `.reti` files such as
 `kernel/kernel.reti` allow students to compare PicoC source, symbolic
 assembly, section metadata, and executable words.
 
-## 13.3 Exercise sheets and teaching material
+## 14.3 Exercise sheets and teaching material
 
 The course handouts themselves are not stored in these repositories, but the
 following teaching examples are checked in:
@@ -3076,9 +3076,9 @@ following teaching examples are checked in:
 
 Course handouts can be linked here later if they are added to the project.
 
-# 14. Test system
+# 15. Test system
 
-## 14.1 Testing across all three repositories
+## 15.1 Testing across all three repositories
 
 PicoOS, PicoC-Compiler, and RETI-Emulator are all tested both locally and on
 fresh **GitHub-hosted Ubuntu 22.04 runners**. Thus, the integration is also
@@ -3141,7 +3141,7 @@ they should be updated when test cases are added or removed.
 
 The detailed contributor guide is `test/README.md`.
 
-## 14.2 `make test` and `make test-fast`
+## 15.2 `make test` and `make test-fast`
 
 `make test` runs:
 
@@ -3170,7 +3170,7 @@ reusing staged artifacts, run:
 $ make test TEST_BUILD_MODE=direct
 ```
 
-## 14.3 `make test-lib`
+## 15.3 `make test-lib`
 
 Library tests use exact top-of-file metadata:
 
@@ -3203,7 +3203,7 @@ line. It reports compilation, emulator, timeout, missing-output, and diff
 failures; writes a summary to `test/test.res`; and records failed source
 paths in `config/not_passed_tests.txt`.
 
-## 14.4 System and OS tests
+## 15.4 System and OS tests
 
 The available targets are:
 
@@ -3272,7 +3272,7 @@ and destroys their descriptor tables. The launcher also removes the
 loading-bar variable. This reuses the expensive boot while isolating process
 state.
 
-## 14.5 Shell tests
+## 15.5 Shell tests
 
 Shell tests have `input.txt` and `expected_output.txt` but no standard
 launcher input pattern. Normal `make test-shell` injects their commands
@@ -3296,7 +3296,7 @@ raw UART/`read_line()`, so the fast runner appends it to the shared session's
 UART input instead of calling `eval()`. Fast mode permits 60 seconds per
 selected test when computing the shared session limit.
 
-# 15. Use of AI in the project
+# 16. Use of AI in the project
 
 I used AI tools while working on parts of the Makefile and Python test runners,
 for repetitive code and test setup, and for help with refactoring, debugging,
@@ -3307,7 +3307,7 @@ I reviewed the resulting changes against the PicoOS, PicoC-Compiler, and
 RETI-Emulator source and ran the relevant tests. The architecture, project
 scope, and final technical decisions were still my responsibility.
 
-# 16. Source map and limitations
+# 17. Source map and limitations
 
 Start with these files when following a subsystem:
 
