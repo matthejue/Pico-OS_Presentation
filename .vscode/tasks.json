@@ -31,6 +31,23 @@
           "endsPattern": "^$"
         }
       }
+    },
+    {
+      "label": "Launch presentation in browser (selectable text)",
+      "type": "shell",
+      "command": "make launch-presentation-with-selectable-text",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "slidev",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "^$"
+        }
+      }
     }
   ]
 }

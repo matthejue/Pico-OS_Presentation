@@ -1,7 +1,7 @@
 YARN ?= yarn
 BROWSER ?= /usr/bin/chromium
 
-.PHONY: generate-presentation-pdf build-static-presentation launch-presentation-in-browser all
+.PHONY: generate-presentation-pdf build-static-presentation launch-presentation-in-browser launch-presentation-with-selectable-text all
 
 all: generate-presentation-pdf
 
@@ -13,3 +13,6 @@ generate-presentation-pdf:
 
 launch-presentation-in-browser:
 	$(YARN) dev
+
+launch-presentation-with-selectable-text:
+	$(YARN) dev:selectable-text
