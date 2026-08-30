@@ -27,6 +27,16 @@ Build the static presentation with:
 make build-static-presentation
 ```
 
+## Releases
+
+Pushing a tag whose name starts with `v` builds `picoos-presentation.pdf` and
+uploads it to the matching GitHub release. After committing and pushing the
+release changes, create the release tag with, for example:
+
+```sh
+./create_tag.sh v1.0.0 "v1.0.0"
+```
+
 The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
 Each slide contains an invisible `SOURCE` comment that maps it back to a stable
