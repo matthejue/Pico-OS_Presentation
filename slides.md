@@ -230,34 +230,41 @@ flowchart LR
 
 # PicoC-Compiler extensions used by PicoOS
 
-<div class="float-left w-[49%] card text-[11px] leading-5 mt-4">
-    <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-      <div><span class="mono accent">source</span><div>includes · <span class="mono">#pragma once</span> · macros</div><div>mixed declarations · constant expressions</div></div>
-      <div><span class="mono amber">types</span><div><span class="mono">typedef</span> · casts · <span class="mono">sizeof</span> · <span class="mono">void *</span></div><div>typed pointer arithmetic · structs</div></div>
-      <div><span class="mono green">data + expressions</span><div>arrays / strings · escapes · postfix <span class="mono">++</span></div><div>dereference/member conditions</div></div>
-      <div><span class="mono accent">calls + ABI</span><div>function pointers · variadics</div><div>System-V-style frames · shared epilogue</div></div>
-      <div><span class="mono amber">low-level control</span><div><span class="mono">asm</span> · <span class="mono">debug;</span> · <span class="mono">NOP</span></div><div>naked functions · linked labels</div></div>
-      <div><span class="mono green">linked image</span><div><span class="mono">.ivt/.text/.data</span> · IVTE</div><div>startup selection · loader layout metadata</div></div>
+<div class="compiler-showcase mt-4">
+<div class="compiler-feature-map card text-xs leading-[1.45]">
+    <div class="grid grid-cols-2 gap-x-5 gap-y-3">
+      <div><span class="mono accent">preprocessing + syntax</span><div>includes · <span class="mono">#pragma once</span> · macros · <span class="mono">-I/-M</span></div><div>line splicing · mixed declarations</div><div>constant expressions</div></div>
+      <div><span class="mono amber">types + aggregates</span><div>casts · <span class="mono">sizeof</span> · <span class="mono">void *</span> · pointer returns</div><div>scaled pointer arithmetic</div><div>repeat-safe structs · scoped aliases</div></div>
+      <div><span class="mono green">data + expressions</span><div>inferred arrays · string storage / escapes</div><div>global initializers · postfix <span class="mono">++</span></div><div>member conditions · negated calls</div></div>
+      <div><span class="mono accent">calls + ABI</span><div>function pointers · indirect calls · variadics</div><div>right-to-left arguments · System-V frames</div><div>shared epilogue</div></div>
+      <div><span class="mono amber">low-level control</span><div><span class="mono">asm</span> · <span class="mono">debug;</span> · naked functions</div><div>linked labels · section attributes · IVTE</div><div>custom / generated <span class="mono">_start</span></div></div>
+      <div><span class="mono green">compile, link, inspect</span><div>multi-file symbols · <span class="mono">-c</span> artifacts</div><div>symbol tables · dependency files</div><div><span class="mono">.ivt/.text/.data</span> · <span class="mono">.sections</span> · debug info · <span class="mono">-k</span></div></div>
     </div>
 </div>
 
+<div class="compiler-showcase-code">
+
 ```c {lines:false}
-#define CELLS 3
-typedef int (*op_t)(int, int);
-struct Header { int size; int *next; };
+#include <stdio.header>
+#include <stdlib.header>
+
+#define N 3
 
 int add(int a, int b) { return a + b; }
 void main(void) {
-  int values[] = {4, 5, 6}; int i = 0;
-  char text[] = "PicoOS\n"; op_t op = add;
-  struct Header h = {sizeof(text), values};
-  int first = values[i++];
-  printf("%d %d %d\n", op(first, values[1]), h.size,
-         *(h.next + (CELLS - 1)));
+  int v[] = {4, 5, 6}, i = 0;
+  int (*op)(int, int) = add;
+  int *h = (int *)malloc(N * sizeof(int));
+  scanf(" %d", &h[i++]);
+  h[1] = v[1]; h[2] = v[2];
+  printf("%d %d %d", op(h[0], v[1]),
+         sizeof("PicoOS\n"), *(h + N - 1));
+  free(h);
 }
 ```
 
-<div class="clear-both"></div>
+</div>
+</div>
 
 <div class="muted text-xs text-center mt-4">The accompanying compiler test executes this example’s source, type, pointer, array, function-pointer, variadic-call, and ABI features.</div>
 
