@@ -17,6 +17,12 @@ fonts:
   mono: Fira Code
 ---
 
+<script setup>
+import releaseVersion from './config/presentation-release.txt?raw'
+
+const presentationVersion = releaseVersion.trim()
+</script>
+
 <!-- SOURCE Pico-OS/README.md#picoos -->
 
 <div class="eyebrow mb-5">Master Project Presentation</div>
@@ -42,7 +48,7 @@ fonts:
   <div class="art-pulse pulse-a"></div><div class="art-pulse pulse-b"></div>
 </div>
 
-<div class="cover-footline"><span>Jürgen Mattheis</span><span>University of Freiburg · Technical Faculty</span></div>
+<div class="cover-footline"><span>Jürgen Mattheis</span><div class="cover-meta"><span>University of Freiburg · Technical Faculty</span><span class="cover-version">{{ presentationVersion }}</span></div></div>
 
 ---
 
