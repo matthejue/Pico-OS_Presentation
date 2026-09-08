@@ -14,3 +14,7 @@
 4. Map changed README headings to `SOURCE ` comments in `slides.md`; update slides in place or insert at the matching chapter. Keep text short, use visuals, and give every new slide a `SOURCE:` marker.
 5. Build only this presentation; do not run the PicoOS test suite.
 6. On success, replace `.source/Pico-OS-README.md` with the exact README used and refresh commits, SHA-256 hashes, dirty state, date, and slide count in `source-state.json`.
+
+# COMMIT_SUMMARY and PUSH
+
+Please read: /home/areo/.config_stow/codex/Documents/Studium/PicoC-Compiler/AGENTS.md
