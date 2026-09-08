@@ -5,12 +5,22 @@ BROWSER ?= /usr/bin/chromium
 PDF ?= picoos-presentation.pdf
 PDF_CHUNK_SIZE ?= 20
 
-.PHONY: generate-presentation-pdf build-static-presentation launch-presentation-in-browser launch-presentation-with-selectable-text all
+.PHONY: generate-presentation-pdf build-static-presentation package-static-presentation launch-presentation-in-browser launch-presentation-with-selectable-text all
 
 all: generate-presentation-pdf
 
 build-static-presentation:
-	$(YARN) build
+	$(YARN) build --router-mode hash
+
+package-static-presentation: build-static-presentation
+	@set -euo pipefail; \
+	package_dir="$$(mktemp -d)"; \
+	trap 'rm -rf "$$package_dir"' EXIT; \
+	mkdir "$$package_dir/picoos-presentation-static"; \
+	cp -a dist/. "$$package_dir/picoos-presentation-static/"; \
+	install -m 755 scripts/start-presentation.sh "$$package_dir/picoos-presentation-static/start-presentation.sh"; \
+	cp docs/static-presentation.md "$$package_dir/picoos-presentation-static/README.md"; \
+	tar -czf picoos-presentation-static.tar.gz -C "$$package_dir" picoos-presentation-static
 
 generate-presentation-pdf:
 	@set -euo pipefail; \

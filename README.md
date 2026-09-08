@@ -29,13 +29,34 @@ make build-static-presentation
 
 ## Releases
 
-Pushing a tag whose name starts with `v` builds `picoos-presentation.pdf` and
-uploads it to the matching GitHub release. After committing and pushing the
-release changes, create the release tag with, for example:
+Pushing a tag whose name starts with `v` builds and uploads two assets to the
+matching GitHub release:
+
+- `picoos-presentation.pdf`
+- `picoos-presentation-static.tar.gz`, containing the browser presentation and an
+  Ubuntu launcher script.
+
+After committing and pushing the release changes, create the release tag with,
+for example:
 
 ```sh
 ./create_tag.sh v1.0.0 "v1.0.0"
 ```
+
+To present on Ubuntu, download the static archive from the release and run:
+
+```sh
+tar -xzf picoos-presentation-static.tar.gz
+cd picoos-presentation-static
+./start-presentation.sh
+```
+
+Open <http://127.0.0.1:8000/> in your browser. The script installs Python 3 if
+needed; Node.js and Yarn are not required. See the included
+[Ubuntu instructions](docs/static-presentation.md) for presenter view, setup,
+and offline font behavior.
+
+To build the same archive locally, run `make package-static-presentation`.
 
 The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
