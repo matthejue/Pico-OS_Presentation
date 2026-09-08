@@ -1,4 +1,4 @@
-name: Build PicoOS presentation PDF
+name: Build PicoOS presentation release
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Build presentation PDF
+    name: Build PDF and static presentation
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
@@ -36,11 +36,16 @@ jobs:
       - name: Build PDF
         run: make generate-presentation-pdf BROWSER="$(node -e "console.log(require('playwright-chromium').chromium.executablePath())")"
 
-      - name: Upload PDF artifact
+      - name: Build static presentation archive
+        run: make package-static-presentation
+
+      - name: Upload presentation artifacts
         uses: actions/upload-artifact@v7
         with:
           name: picoos-presentation
-          path: picoos-presentation.pdf
+          path: |
+            picoos-presentation.pdf
+            picoos-presentation-static.tar.gz
           if-no-files-found: error
 
   release:
@@ -58,4 +63,7 @@ jobs:
 
       - uses: softprops/action-gh-release@v3
         with:
-          files: release/picoos-presentation.pdf
+          files: |
+            release/picoos-presentation.pdf
+            release/picoos-presentation-static.tar.gz
+          fail_on_unmatched_files: true
