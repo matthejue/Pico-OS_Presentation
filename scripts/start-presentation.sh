@@ -17,4 +17,25 @@ fi
 
 echo "Open http://127.0.0.1:$port/ in your browser to present."
 echo "Keep this terminal open. Press Ctrl+C to stop the server."
+
+# Wait for the server before opening the browser; failures leave the URL above
+# available for manually opening the presentation.
+python3 - "$port" >/dev/null 2>&1 <<'PY' &
+import sys
+import time
+import urllib.request
+import webbrowser
+
+url = f"http://127.0.0.1:{sys.argv[1]}/"
+for _ in range(50):
+    try:
+        with urllib.request.urlopen(url, timeout=0.2):
+            pass
+    except OSError:
+        time.sleep(0.1)
+    else:
+        webbrowser.open(url)
+        break
+PY
+
 exec python3 -m http.server "$port" --bind 127.0.0.1 --directory "$presentation_dir"
