@@ -1,4 +1,6 @@
 <template>
+  <VisualZoom />
+  <div v-if="$nav.currentPage > 1" class="zoom-hint">Click diagrams, code or tables to enlarge</div>
   <div v-if="$nav.currentPage > 1" class="deck-page-number">
     {{ $nav.currentPage }} / {{ $nav.total }}
   </div>
@@ -6,6 +8,7 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import VisualZoom from './components/VisualZoom.vue'
 
 onMounted(() => {
   document.documentElement.classList.toggle(
@@ -16,6 +19,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.zoom-hint {
+  position: absolute;
+  left: 3rem;
+  bottom: 0.85rem;
+  color: var(--muted);
+  font: 400 0.65rem/1 Cantarell, sans-serif;
+  pointer-events: none;
+}
 .deck-page-number {
   position: absolute;
   z-index: 100;
