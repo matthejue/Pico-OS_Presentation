@@ -1,30 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-14",
+  "generatedAt": "2026-09-09",
   "primarySource": {
     "repository": "/home/areo/Documents/Studium/Pico-OS",
     "file": "README.md",
-    "commit": "ea7a9fe34c5c9b9ee837d67d63b0523d372bf9ee",
-    "contentSha256": "9bbf528e71bb24581f7235e737f5b603be37361a5829cff6a511342fd1b62c32",
-    "dirtyAtGeneration": true,
+    "commit": "9acd091edc4b70d5adc26eb76cd27059d63366fc",
+    "contentSha256": "d545566b3095bf95bfe70623e5f322a208608b31b2f27ac541f8947c716c3291",
+    "dirtyAtGeneration": false,
     "snapshot": ".source/Pico-OS-README.md"
   },
-  "additionalSources": [
-    {
-      "repository": "/home/areo/Documents/Studium/RETI-Emulator",
-      "file": "README.md",
-      "commit": "fe3cc192416dde82103dcc149285ca6b1244fbf6",
-      "contentSha256": "8bc240bdbf10e73a6f7d7364a02f833ead71080cb43cfe8c8aec5bb857f942e0",
-      "dirtyAtGeneration": true
-    },
-    {
-      "repository": "/home/areo/Documents/Studium/PicoC-Compiler",
-      "file": "README.md",
-      "commit": "8710c51ad08a5327027590b42f8fdfe36df16e38",
-      "contentSha256": "39199ff138bddcac6c61caaf4364aa337707060bc42245f0ea4e082171d1ba39",
-      "dirtyAtGeneration": true
-    }
-  ],
-  "slideCount": 76,
+  "additionalSources": [],
+  "slideCount": 149,
   "sourceMarker": "<!-- SOURCE Pico-OS/README.md#... -->"
 }
