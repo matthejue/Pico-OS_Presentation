@@ -317,8 +317,8 @@ html.selectable-text .slidev-layout * {
 
 .cover-title {
   max-width: 39rem;
-  font-size: 3.65rem !important;
-  line-height: 0.96 !important;
+  font-size: 3rem !important;
+  line-height: 1.12 !important;
 }
 
 .cover-footline {
@@ -554,3 +554,4 @@ html.selectable-text .slidev-layout * {
 .shell-session-compact { margin-top: 0; }
 .shell-session-compact .shell-session-bar { padding: 0.55rem 1rem; }
 .shell-session-compact .slidev-code { padding: 0.9rem 1.05rem !important; line-height: 1.5 !important; }
+.compilation-session .slidev-code { font-size: 0.84rem !important; }
