@@ -55,7 +55,7 @@ for (const { page, slide, source, anchor } of pages) {
 }
 assert.equal(JSON.parse(await readFile(new URL('../source-state.json', import.meta.url))).slideCount, pages.length)
 
-const expectedTopics = ['Toolchain extensions', 'Boot & kernel startup', 'Interrupts, system calls & exceptions', 'Processes, memory & I/O', 'Shell & user applications', 'Test system', 'OS & RTOS lectures']
+const expectedTopics = ['Toolchain extensions', 'Boot & kernel startup', 'Interrupts, system calls & exceptions', 'Processes, memory & I/O', 'Shell & user applications', 'Test system', 'Educational Value']
 assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover is the only contents overview')
 
 const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] })

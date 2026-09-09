@@ -28,7 +28,7 @@ const presentationVersion = releaseVersion.trim()
 
 # PicoOS
 
-<div class="cover-title mt-2">A complete operating system for the<br><span class="accent">RETI teaching CPU</span></div>
+<div class="cover-title mt-2">An educational operating<br>system toolchain for the<br><span class="accent">OS and RTOS lectures</span></div>
 
 <div class="cover-outline" aria-label="Presentation outline">
   <div class="cover-chapter"><span>01</span><span>Toolchain extensions</span></div>
@@ -37,7 +37,7 @@ const presentationVersion = releaseVersion.trim()
   <div class="cover-chapter"><span>04</span><span>Processes, memory &amp; I/O</span></div>
   <div class="cover-chapter"><span>05</span><span>Shell &amp; user applications</span></div>
   <div class="cover-chapter"><span>06</span><span>Test system</span></div>
-  <div class="cover-chapter cover-lecture"><span>07</span><span>OS &amp; RTOS lectures</span></div>
+  <div class="cover-chapter cover-lecture"><span>07</span><span>Educational Value</span></div>
 </div>
 
 <div class="project-art" aria-label="Pico-OS source is compiled by PicoC-Compiler and assembled and executed by RETI-Emulator">
@@ -369,35 +369,23 @@ flowchart LR
 
 <div class="deck-content">
 
-<div class="content-columns columns-2">
-
-<div>
-
-<div class="code-panel shell-session shell-session-compact">
-<div class="shell-session-bar"><span>Conventional C</span><span class="shell-session-caption">compile · link</span></div>
-<pre class="slidev-code"><code><span class="shell-prompt">$</span> <span class="shell-command">gcc</span> <span class="shell-operator">-c</span> main.c math.c
-<span class="shell-comment"># main.o · math.o</span>
-&#10;<span class="shell-prompt">$</span> <span class="shell-command">gcc</span> <span class="shell-operator">-o</span> example main.o math.o</code></pre>
+<div class="code-panel shell-session shell-session-compact compilation-session">
+<div class="shell-session-bar"><span>Host shell</span><span class="shell-session-caption">GCC &amp; PicoC · compile · link</span></div>
+<pre class="slidev-code"><code><span class="shell-prompt">$</span> <span class="shell-command">gcc</span> -c -O2 example/c/main.c example/c/math.c
+<span class="shell-prompt">$</span> <span class="shell-command">ls</span> example/c
+<span class="shell-output">main.c  main.h  main.o  math.c  math.h  math.o</span>
+&#10;<span class="shell-prompt">$</span> <span class="shell-command">picoc_compiler</span> -c -O1 example/picoc/main.picoc example/picoc/math.picoc
+<span class="shell-prompt">$</span> <span class="shell-command">ls</span> example/picoc
+<span class="shell-output">main.header  main.picoc  main.reti_blocks  main.st  math.header  math.picoc  math.reti_blocks  math.st</span>
+&#10;<span class="shell-prompt">$</span> <span class="shell-command">gcc</span> -o binary/c-example example/c/main.o example/c/math.o
+<span class="shell-prompt">$</span> <span class="shell-command">picoc_compiler</span> -O1 -o binary/picoc-example.reti \
+    example/picoc/main.reti_blocks example/picoc/math.reti_blocks
+<span class="shell-prompt">$</span> <span class="shell-command">ls</span> binary
+<span class="shell-output">c-example  picoc-example.reti  picoc-example.sections</span></code></pre>
 </div>
 
 </div>
 
-<div>
-
-<div class="code-panel shell-session shell-session-compact">
-<div class="shell-session-bar"><span>PicoC</span><span class="shell-session-caption">shortened example paths</span></div>
-<pre class="slidev-code"><code><span class="shell-prompt">$</span> <span class="shell-command">picoc_compiler</span> <span class="shell-operator">-c</span> main.picoc math.picoc
-<span class="shell-comment"># main.reti_blocks + main.st</span>
-<span class="shell-comment"># math.reti_blocks + math.st</span>
-&#10;<span class="shell-prompt">$</span> <span class="shell-command">picoc_compiler</span> <span class="shell-operator">-o</span> example.reti <span class="shell-prompt">\</span>
-  main.reti_blocks math.reti_blocks</code></pre>
-</div>
-
-</div>
-
-</div><div class="step-flow zoomable"><div class="card">Per-file code + symbols</div><span class="flow-arrow">→</span><div class="card">Final link</div><span class="flow-arrow">→</span><div class="card">RETI + sections + debug metadata</div></div>
-
-</div>
 
 ---
 
