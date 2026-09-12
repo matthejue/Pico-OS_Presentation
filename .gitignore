@@ -1,6 +1,7 @@
 node_modules/
 dist/
 picoos-presentation-static.tar.gz
+picoos-presentation-short-static.tar.gz
 *.pdf
 *.pptx
 *.png

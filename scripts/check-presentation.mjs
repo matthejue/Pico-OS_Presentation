@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
+import { inspectSlides, parseSlideNumbers } from './short-version.mjs'
 
 // Test a real Slidev dev server or the built browser deck. This never exports
 // slides or executes PicoOS programs.
@@ -9,6 +10,10 @@ const routerMode = process.env.PRESENTATION_ROUTER || 'hash'
 const slideURL = (n, root = base) => new URL(routerMode === 'hash' ? `#/${n}` : `${n}`, root).href
 const executablePath = process.env.BROWSER || '/usr/bin/chromium'
 const markdown = await readFile(new URL('../slides.md', import.meta.url), 'utf8')
+const shortSelection = parseSlideNumbers(
+  await readFile(new URL('../short-version-disabled-slides.txt', import.meta.url), 'utf8'),
+  'short-version-disabled-slides.txt',
+)
 const slides = markdown.split(/^---\s*$/m).slice(2)
 const primary = await readFile(new URL('../.source/Pico-OS-README.md', import.meta.url), 'utf8')
 
@@ -54,6 +59,9 @@ for (const { page, slide, source, anchor } of pages) {
   }
 }
 assert.equal(JSON.parse(await readFile(new URL('../source-state.json', import.meta.url))).slideCount, pages.length)
+const shortVersion = inspectSlides(markdown)
+assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees every source slide')
+assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')
 
 const expectedTopics = ['Toolchain extensions', 'Boot & kernel startup', 'Interrupts, system calls & exceptions', 'Processes, memory & I/O', 'Shell & user applications', 'Test system', 'Educational Value']
 assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover is the only contents overview')
@@ -141,7 +149,7 @@ try {
   assert.deepEqual(layoutIssues, [], 'Every slide fits its content area')
   assert.equal(await page.locator('svg[aria-roledescription="error"]').count(), 0, 'No Mermaid error SVGs left in the document')
 
-  const sampleSelectors = ['.mermaid', '.code-panel .slidev-code', '.compiler-showcase-code .slidev-code', '.shell-session .slidev-code', '.data-table', '.memory-visual', '.timeline', '.debugger-image']
+  const sampleSelectors = ['.mermaid', '.code-panel .slidev-code', '.compiler-showcase-code .slidev-code', '.shell-session .slidev-code', '.data-table', '.memory-visual', '.timeline']
   for (const selector of sampleSelectors) {
     const sample = pages.find(p => selector === '.mermaid' ? p.slide.includes('```mermaid') : p.slide.includes(selector.split(' ')[0].slice(1)))
     assert.ok(sample, `Sample exists for ${selector}`)
@@ -177,6 +185,59 @@ try {
     assert.notEqual(page.url(), before, 'Slide navigation resumes after closing')
   }
 
+  const recordingSample = pages.find(p => p.slide.includes('<AsciinemaRecording'))
+  assert.ok(recordingSample, 'A local terminal recording exists')
+  const recordingLayout = await navigate(recordingSample.page)
+  const recording = recordingLayout.locator('.asciinema-recording').first()
+  await recording.locator('.asciinema-recording-player-host .ap-player').waitFor({ timeout: 15000 })
+  const localCast = await page.evaluate(async (url) => {
+    const response = await fetch(url)
+    const header = JSON.parse((await response.text()).split('\n', 1)[0])
+    return { ok: response.ok, version: header.version }
+  }, new URL('casts/reti_emulator.cast', base).href)
+  assert.deepEqual(localCast, { ok: true, version: 3 }, 'The bundled local asciicast is available')
+
+  const recordingUrl = page.url()
+  await recording.locator('.asciinema-recording-activation').click()
+  await recording.waitFor({ state: 'visible' })
+  await recording.locator('.ap-control-bar').waitFor({ state: 'visible' })
+  assert.ok(await recording.evaluate(el => el.classList.contains('is-active')), 'The recording activates inline')
+  assert.equal(page.url(), recordingUrl, 'Starting a recording does not advance or redirect')
+  assert.equal(
+    await recordingLayout.getByRole('link', { name: /fallback on asciinema.org/i }).getAttribute('href'),
+    'https://asciinema.org/a/1264549',
+    'The slide exposes its explicit website fallback beside the recording',
+  )
+
+  const elapsed = recording.locator('.ap-time-elapsed')
+  await page.waitForTimeout(1200)
+  await recording.locator('.ap-playback-button').click()
+  await page.waitForTimeout(200)
+  const pausedAt = await elapsed.textContent()
+  await page.waitForTimeout(1200)
+  assert.equal(await elapsed.textContent(), pausedAt, 'The player play/pause button pauses playback')
+  await recording.locator('.ap-playback-button').click()
+  await page.waitForTimeout(1200)
+  assert.notEqual(await elapsed.textContent(), pausedAt, 'The player play/pause button resumes playback')
+
+  await page.keyboard.press('Space')
+  await page.waitForTimeout(200)
+  const spacePausedAt = await elapsed.textContent()
+  await page.waitForTimeout(1200)
+  assert.equal(await elapsed.textContent(), spacePausedAt, 'Space pauses playback while the player has focus')
+  await page.keyboard.press('ArrowRight')
+  await page.waitForTimeout(250)
+  assert.notEqual(await elapsed.textContent(), spacePausedAt, 'ArrowRight seeks while the player has focus')
+  const rightSeekAt = await elapsed.textContent()
+  await page.keyboard.press('ArrowLeft')
+  await page.waitForTimeout(250)
+  assert.notEqual(await elapsed.textContent(), rightSeekAt, 'ArrowLeft seeks while the player has focus')
+  assert.equal(page.url(), recordingUrl, 'Player keys do not navigate the slide deck')
+  await recordingLayout.locator('.slide-note').click()
+  await page.keyboard.press('ArrowRight')
+  await page.waitForTimeout(250)
+  assert.notEqual(page.url(), recordingUrl, 'Slide navigation resumes after clicking outside the player')
+
   // For production, exercise selection with the built entry under its prefix.
   // Development checks use an actual --base /selectable-text/ server.
   if (routerMode === 'hash') {
@@ -203,8 +264,13 @@ try {
   await codeTarget.click()
   await page.locator('dialog[open]').waitFor()
   await page.keyboard.press('Escape')
+
+  const selectableRecordingLayout = await navigate(recordingSample.page)
+  await selectableRecordingLayout.locator('.asciinema-recording-activation').click()
+  await selectableRecordingLayout.locator('.asciinema-recording.is-active .ap-control-bar').waitFor({ state: 'visible' })
+  assert.ok(await page.locator('html').evaluate(el => el.classList.contains('selectable-text')), 'Recording plays inline in selectable-text mode')
   assert.deepEqual(errors, [], 'No browser runtime errors')
-  console.log(`Verified ${pages.length} slides: source hierarchy, numbering, rendering, and zoom/selection/navigation.`)
+  console.log(`Verified ${pages.length} slides: source hierarchy, numbering, rendering, zoom, local recording playback, selection, and navigation.`)
 } finally {
   await browser.close()
 }

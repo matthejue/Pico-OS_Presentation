@@ -16,6 +16,20 @@
       "problemMatcher": []
     },
     {
+      "label": "Generate short presentation PDF",
+      "type": "shell",
+      "command": "make generate-short-presentation-pdf",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build short static presentation",
+      "type": "shell",
+      "command": "make build-short-static-presentation",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "Launch presentation in browser",
       "type": "shell",
       "command": "make launch-presentation-in-browser",
@@ -36,6 +50,40 @@
       "label": "Launch presentation in browser (selectable text)",
       "type": "shell",
       "command": "make launch-presentation-with-selectable-text",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "slidev",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "^$"
+        }
+      }
+    },
+    {
+      "label": "Launch short presentation in browser",
+      "type": "shell",
+      "command": "make launch-short-presentation-in-browser",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "slidev",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "^$"
+        }
+      }
+    },
+    {
+      "label": "Launch short presentation in browser (selectable text)",
+      "type": "shell",
+      "command": "make launch-short-presentation-with-selectable-text",
       "isBackground": true,
       "problemMatcher": {
         "owner": "slidev",

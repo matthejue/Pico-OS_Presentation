@@ -1,6 +1,7 @@
 <template>
   <VisualZoom />
-  <div v-if="$nav.currentPage > 1" class="zoom-hint">Click diagrams, code or tables to enlarge</div>
+  <ShortVersionStatus />
+  <div v-if="$nav.currentPage > 1" class="zoom-hint">Click visuals to enlarge · click recordings to play</div>
   <div v-if="$nav.currentPage > 1" class="deck-page-number">
     {{ $nav.currentPage }} / {{ $nav.total }}
   </div>
@@ -8,6 +9,7 @@
 
 <script setup>
 import { onMounted } from 'vue'
+import ShortVersionStatus from './components/ShortVersionStatus.vue'
 import VisualZoom from './components/VisualZoom.vue'
 
 onMounted(() => {
