@@ -5,11 +5,15 @@
     "dev": "slidev --open",
     "dev:selectable-text": "slidev --open --base /selectable-text/",
     "build": "slidev build",
-    "export": "slidev export"
+    "export": "slidev export",
+    "short:apply": "node scripts/apply-short-version.mjs",
+    "short:sync": "node scripts/sync-short-version-selection.mjs",
+    "test:short": "node scripts/test-short-version.mjs"
   },
   "devDependencies": {
     "@slidev/cli": "52.18.0",
     "@slidev/theme-default": "0.25.0",
+    "asciinema-player": "3.15.1",
     "playwright-chromium": "1.62.0"
   }
 }

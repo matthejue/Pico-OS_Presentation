@@ -27,6 +27,28 @@ Build the static presentation with:
 make build-static-presentation
 ```
 
+## Short presentation
+
+While reviewing the full deck in the Slidev development server, press `m` to
+toggle the current slide in [`short-version-disabled-slides.txt`](short-version-disabled-slides.txt).
+Press `Alt+A` (**Apply**) to persist that selection as slide-local markers,
+and press `Alt+S` (**Sync**) after a deck update to regenerate the numbered
+text file from those markers.
+
+Run or generate the filtered deck with:
+
+```sh
+make launch-short-presentation-in-browser
+make launch-short-presentation-with-selectable-text
+make build-short-static-presentation
+make generate-short-presentation-pdf
+```
+
+The full selection workflow, standalone scripts, static package target,
+environment variable, update ordering, and failure behavior are documented in
+[short presentation version](docs/short-version.md). Existing presentation
+targets continue to produce the full deck.
+
 ## Releases
 
 Pushing a tag whose name starts with `v` builds and uploads two assets to the
@@ -90,6 +112,28 @@ palette and sizes SVGs inside Slidev's shadow DOM. It uses Mermaid's browser
 bundle, matching Slidev's own import; the package-root entry fails to load its
 CommonJS dependencies in the development server. HTML labels are normalized
 before SVG serialization so line breaks remain valid in the rendered diagrams.
+
+## Terminal recordings
+
+Use the reusable `AsciinemaRecording` component to show a poster generated from
+a local asciicast. Clicking the poster starts the full player directly on the
+slide without advancing it:
+
+```html
+<AsciinemaRecording
+  src="/casts/example.cast"
+  title="Example terminal session"
+  poster="npt:8"
+  fallback-href="https://asciinema.org/a/REPLACE_ME"
+/>
+```
+
+Place the `.cast` file in `public/casts/`. Vite copies it into the static build,
+and the bundled player loads that local file. Keep `fallback-href` on every use
+as the editable asciinema.org fallback shown beside the recording. While the
+player has focus, Space toggles playback and the arrow keys seek; click outside
+it to return those keys to Slidev. Playback and fallback handling are implemented in
+[`components/AsciinemaRecording.vue`](components/AsciinemaRecording.vue).
 
 ## Browser checks
 

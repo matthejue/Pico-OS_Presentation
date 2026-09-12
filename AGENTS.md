@@ -5,6 +5,11 @@
 - Every slide needs an invisible `SOURCE ` comment with a stable PicoOS README anchor. Insert new slides beside their matching section.
 - Do not update `speaker-notes.md` as part of `UPDATE_PRESENTATION`.
 - Do not regenerate or export the PDF; the user always handles PDF generation.
+- Preserve `<!-- SHORT_VERSION_DISABLED -->` markers with their slides during
+  README-driven updates. Before an update, apply any pending numbered selection
+  with `make apply-short-version-selection`; after a successful update, run
+  `make sync-short-version-selection` so `short-version-disabled-slides.txt`
+  reflects the slides' new full-deck numbers. See `docs/short-version.md`.
 - Keep a short, summarized outline only on the title page, with seven topics: toolchain extensions; boot and kernel startup; interrupts, system calls and exceptions; processes, memory and I/O; shell and user applications; test system; OS and RTOS lectures. Place topics 01–06 on the left and topic 07 below the decorative artwork on the right, aligned with the bottom row (topics 05 and 06). Preserve the original title-page composition and decorative artwork. Do not add a separate Contents slide or expand the cover into a full README chapter list.
 
 - Use the shared terminal styling for all shell transcripts and command examples, even when the README omits prompts: match regular code blocks with a light background, subtle border, and restrained syntax colors; no decorative window-control dots; retain a concise caption in the header’s right corner describing the session.
