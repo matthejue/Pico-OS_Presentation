@@ -736,13 +736,17 @@ void entry(void) {
 
 <div class="debugger-frame">
 
-<img class="debugger-image" src="/images/reti-debug-tui-page-1.png" alt="RETI debugger showing assembly, registers, memory, and peripherals" />
+<AsciinemaRecording
+  src="/casts/reti_emulator.cast"
+  title="RETI emulator · debugger and terminal views"
+  poster="npt:8.4"
+  :idle-time-limit="1"
+  fallback-href="https://asciinema.org/a/1264549"
+/>
 
 </div>
 
-<p class="slide-note">Live CS / DS · source frames via .debuginfo · editable machine state</p>
-
-<a class="recording-link" href="https://asciinema.org/a/1264549" target="_blank" rel="noopener">▶ Open the README’s debugger recording</a>
+<p class="slide-note">Inline local playback · live CS / DS · source frames via .debuginfo · editable machine state</p>
 
 </div>
 

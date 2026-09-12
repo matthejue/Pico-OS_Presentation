@@ -513,11 +513,8 @@ html.selectable-text .slidev-layout * {
 .diagram-panel .mermaid { flex: 1; min-height: 0; width: 100%; align-items: center; }
 .diagram-panel .mermaid svg { width: 100%; height: 100%; max-height: 100%; }
 .diagram-panel .mermaid p { line-height: inherit; }
-.deck-content > p:has(> .debugger-image) { flex: 1; min-height: 0; display: flex; }
 .debugger-frame { flex: 1; min-height: 0; display: flex; }
 .debugger-frame > p { flex: 1; min-height: 0; display: flex; }
-.debugger-image { object-fit: contain; width: 100%; height: 100%; flex: 1; min-height: 0; }
-.recording-link { font-size: 0.9rem; align-self: center; }
 .compiler-showcase { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.2rem; }
 .compiler-showcase-code .slidev-code { font-size: 0.69rem !important; line-height: 1.4 !important; }
 .compiler-showcase-code .slidev-code pre { white-space: pre !important; overflow-wrap: normal; }
