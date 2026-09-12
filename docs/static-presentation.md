@@ -17,9 +17,11 @@ The script installs Python 3 with `sudo apt-get update` and
 internet before presenting. Node.js, Yarn, and the source repository are not
 needed on the presentation computer.
 
-The slides and images are included. Web fonts and external links still use the
-internet; without it, the browser uses fallback fonts. Check the deck on the
-presentation computer beforehand.
+The slides, images, terminal recordings, and recording player are included.
+Embedded recordings play from their local `.cast` files without internet access.
+Web fonts and optional fallback links still use the internet; without it, the
+browser uses fallback fonts. Check the deck on the presentation computer
+beforehand.
 
 If port 8000 is occupied, choose another port:
 
