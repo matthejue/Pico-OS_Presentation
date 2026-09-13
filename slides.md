@@ -821,7 +821,7 @@ void entry(void) {
 <ESC>operation arguments<ESC>/
 ```
 
-</div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Images</div><div class="tile-detail">load · file-size · read-range</div></div><div class="card"><div class="tile-title">Output</div><div class="tile-detail">write · write-at · stdout / stderr</div></div><div class="card"><div class="tile-title">Inspect paths</div><div class="tile-detail">pwd · is-directory · ls</div></div><div class="card"><div class="tile-title">Change files</div><div class="tile-detail">mkdir · unlink · rmdir · move · touch</div></div></div><p class="slide-note">Fixed operations. Responses use big-endian values and bounded byte payloads.</p>
+</div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Images</div><div class="tile-detail">load · file-size · read-range</div></div><div class="card"><div class="tile-title">Output</div><div class="tile-detail">write · write-at · literal-output · stdout / stderr</div></div><div class="card"><div class="tile-title">Inspect paths</div><div class="tile-detail">pwd · is-directory · ls</div></div><div class="card"><div class="tile-title">Change files</div><div class="tile-detail">mkdir · unlink · rmdir · move · touch</div></div></div><p class="slide-note">literal-output protects binary ESC bytes. Responses use big-endian values and bounded byte payloads.</p>
 
 </div>
 
@@ -1143,7 +1143,7 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 
 <div class="deck-content">
 
-<div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">39</div><div class="metric-label">implemented syscalls</div></div><div class="card"><div class="metric">0–41</div><div class="metric-label">selector range</div></div><div class="card"><div class="metric">1 · 26 · 28</div><div class="metric-label">unused selectors</div></div></div><div class="step-flow zoomable"><div class="card">ACC = selector · IN1 = value/pointer</div><span class="flow-arrow">→</span><div class="card">INT 0</div><span class="flow-arrow">→</span><div class="card">Kernel subsystem</div><span class="flow-arrow">→</span><div class="card">IN2 = result</div></div><p class="slide-note">The same saved frame supports immediate return, blocking, and deferred timer scheduling.</p>
+<div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">38</div><div class="metric-label">implemented syscalls</div></div><div class="card"><div class="metric">0–37</div><div class="metric-label">continuous selector range</div></div><div class="card"><div class="metric">6</div><div class="metric-label">related selector groups</div></div></div><div class="step-flow zoomable"><div class="card">ACC = selector · IN1 = value/pointer</div><span class="flow-arrow">→</span><div class="card">INT 0</div><span class="flow-arrow">→</span><div class="card">Kernel subsystem</div><span class="flow-arrow">→</span><div class="card">IN2 = result</div></div><p class="slide-note">Every selector is used; adjacent ranges group system control, processes, scheduling, memory, I/O, and paths.</p>
 
 </div>
 
@@ -1565,7 +1565,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div>
 
-<div class="tile-grid cols-1 "><div class="card"><div class="tile-title">Vector 3 · cause register 11</div><div class="tile-detail">Divide by zero · stack overflow · illegal instruction</div></div><div class="card"><div class="tile-title">Heap exhaustion</div><div class="tile-detail">Process: syscall 31. Kernel: panic and halt.</div></div></div>
+<div class="tile-grid cols-1 "><div class="card"><div class="tile-title">Vector 3 · cause register 11</div><div class="tile-detail">Divide by zero · stack overflow · illegal instruction</div></div><div class="card"><div class="tile-title">Heap exhaustion</div><div class="tile-detail">Process: syscall 18. Kernel: panic and halt.</div></div></div>
 
 </div>
 
@@ -1822,7 +1822,7 @@ sequenceDiagram
  participant K as Kernel loader
  participant H as UART host
  participant M as Process arena
- C->>K: load(path), syscall 3
+ C->>K: load(path), syscall 2
  K->>H: file-size path
  H-->>K: Byte count
  K->>H: read-range 0 20 path
@@ -1856,7 +1856,7 @@ sequenceDiagram
 
 <div>
 
-<div class="tile-grid cols-1 "><div class="card"><div class="tile-title">Polling fallback</div><div class="tile-detail">Return continue → repeat syscall 3 → request ≤1 KiB → copy at base + progress → repeat</div></div></div>
+<div class="tile-grid cols-1 "><div class="card"><div class="tile-title">Polling fallback</div><div class="tile-detail">Return continue → repeat syscall 2 → request ≤1 KiB → copy at base + progress → repeat</div></div></div>
 
 </div>
 
@@ -1966,11 +1966,11 @@ sequenceDiagram
     participant D as Dispatcher
     participant E as Event owner
 
-    P->>K: sleep(&queue), syscall 11
+    P->>K: sleep(&queue), syscall 13
     K->>Q: Append P using PCB.wait_next
     K->>P: RUNNING to BLOCKED
     K->>D: Save activation and select another process
-    E->>K: wakeup(&queue), syscall 12
+    E->>K: wakeup(&queue), syscall 14
     K->>Q: Remove FIFO head and clear intrusive links
     K->>P: BLOCKED to READY
     D-->>P: Restore later when selected
@@ -2187,6 +2187,7 @@ void mutex_lock(struct mutex *m) {
 
 void mutex_unlock(struct mutex *m) {
     m->lock = false;
+        K->>D: Request rescheduling at the safe syscall-return boundary
     wakeup(&(m->waiters));
     return;
 }
@@ -2826,7 +2827,7 @@ sequenceDiagram
     participant D as Dispatcher
     participant U as UART ISR
 
-    P->>K: read(0, buffer, count), syscall 16
+    P->>K: read(0, buffer, count), syscall 24
     alt input_buffer contains bytes
         K->>T: Pop up to count bytes
         K-->>P: Return count immediately
@@ -2893,7 +2894,7 @@ sequenceDiagram
 
     C->>A: read(fd, buffer, count)
     loop Until count, EOF, or error
-        A->>K: read chunk, syscall 16 with IoRequest
+        A->>K: read chunk, syscall 24 with IoRequest
         K->>K: Validate descriptor and remaining count
         K->>U: Request at most 1 KiB at descriptor.offset
         U->>E: ESC read-range offset chunk-count absolute-path ESC /
@@ -2972,7 +2973,7 @@ sequenceDiagram
     participant PCB as Current PCB
     participant E as RETI-Emulator host service
 
-    P->>K: chdir(path), syscall 32
+    P->>K: chdir(path), syscall 30
     K->>PCB: Read current working_directory for relative normalization
     K->>E: ESC is-directory absolute-path ESC /
     E-->>K: 0 or failure
@@ -2982,7 +2983,7 @@ sequenceDiagram
     else invalid directory
         K-->>P: -1 without changing PCB
     end
-    P->>K: getcwd(buffer, size), syscall 33
+    P->>K: getcwd(buffer, size), syscall 31
     K->>PCB: Copy stored working_directory without a host request
     K-->>P: 0, getcwd wrapper returns buffer
 ```
@@ -3184,7 +3185,7 @@ struct DirectoryStream {
 
 <div class="deck-content">
 
-<div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Heap</div><div class="tile-detail">malloc · realloc · free · first-fit allocator</div></div><div class="card"><div class="tile-title">Environment</div><div class="tile-detail">getenv · setenv · unsetenv · putenv · clearenv</div></div><div class="card"><div class="tile-title">Copy / restore</div><div class="tile-detail">clone_environment · restore_environment · destroy_environment</div></div><div class="card"><div class="tile-title">Strings / exit</div><div class="tile-detail">strcpy · strcat · strcmp · strlen · atoi · exit</div></div></div><p class="slide-note">Each process owns process_heap and environ. Syscalls 6/7 provide heap bounds; failed positive allocation invokes syscall 31.</p>
+<div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Heap</div><div class="tile-detail">malloc · realloc · free · first-fit allocator</div></div><div class="card"><div class="tile-title">Environment</div><div class="tile-detail">getenv · setenv · unsetenv · putenv · clearenv</div></div><div class="card"><div class="tile-title">Copy / restore</div><div class="tile-detail">clone_environment · restore_environment · destroy_environment</div></div><div class="card"><div class="tile-title">Strings / exit</div><div class="tile-detail">strcpy · strcat · strcmp · strlen · atoi · exit</div></div></div><p class="slide-note">Each process owns process_heap and environ. Syscalls 16/17 provide heap bounds; failed positive allocation invokes syscall 18.</p>
 
 </div>
 
@@ -3262,24 +3263,7 @@ struct PicoFile {
 
 <div class="deck-content">
 
-<div class="code-panel ">
-
-<div class="visual-label">Complete userspace startup</div>
-
-```c {lines:false}
-void start_process(int argc, char **argv) {
-    init_process_heap();
-    initialize_environment(argv + argc + 1);
-    exit(main(argc, argv));
-}
-
-__attribute__((naked))
-void _start(int argc, char *first_argument) {
-    start_process(argc, (char **)&first_argument);
-}
-```
-
-</div><p class="slide-note">envp begins at argv + argc + 1. Heap setup precedes environment cloning.</p>
+<div class="step-flow zoomable"><div class="card">Kernel initial stack</div><span class="flow-arrow">→</span><div class="card">libstart _start</div><span class="flow-arrow">→</span><div class="card">start_process</div><span class="flow-arrow">→</span><div class="card">Application main</div><span class="flow-arrow">→</span><div class="card">exit syscall 6</div></div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Allocator first</div><div class="tile-detail">init_process_heap prepares process_heap before environment strings are cloned</div></div><div class="card"><div class="tile-title">Initial stack contract</div><div class="tile-detail">argv begins at &amp;first_argument; envp begins at argv + argc + 1</div></div></div><p class="slide-note">The complete source and compiler startup selection are shown earlier in Toolchain extensions for PicoOS.</p>
 
 </div>
 
@@ -3409,7 +3393,7 @@ shell_pid = load("./user/shell.bin");
 
 <div class="deck-content">
 
-<div class="tile-grid cols-3 "><div class="card"><div class="tile-title">exit</div><div class="tile-detail">End shell → init collects → new session</div></div><div class="card"><div class="tile-title">poweroff.bin</div><div class="tile-detail">Syscall 2 → halt machine</div></div><div class="card"><div class="tile-title">reboot.bin</div><div class="tile-detail">Syscall 40 → EPROM → kernel startup</div></div></div><p class="slide-note">Init waits for one exact PID. Since waitpid reports stops, stopping the shell itself can begin another session.</p>
+<div class="tile-grid cols-3 "><div class="card"><div class="tile-title">exit</div><div class="tile-detail">End shell → init collects → new session</div></div><div class="card"><div class="tile-title">poweroff.bin</div><div class="tile-detail">Syscall 0 → halt machine</div></div><div class="card"><div class="tile-title">reboot.bin</div><div class="tile-detail">Syscall 1 → EPROM → kernel startup</div></div></div><p class="slide-note">Init waits for one exact PID. Since waitpid reports stops, stopping the shell itself can begin another session.</p>
 
 </div>
 
@@ -3701,7 +3685,7 @@ changed</span>
 
 <div class="deck-content">
 
-<div class="tile-grid cols-2 "><div class="card"><div class="tile-title">cat</div><div class="tile-detail">64-cell chunks; terminal editing; Ctrl+D finishes</div></div><div class="card"><div class="tile-title">sed</div><div class="tile-detail">Insert / change / append / literal replacement; input loaded in memory</div></div><div class="card"><div class="tile-title">count</div><div class="tile-detail">Busy-loop delay, not milliseconds; yield after each value</div></div><div class="card"><div class="tile-title">ls</div><div class="tile-detail">Host order; -a for dot entries; no sorting or recursion</div></div><div class="card"><div class="tile-title">File tools</div><div class="tile-detail">cp / mv: source + destination; mkdir has no -p</div></div><div class="card"><div class="tile-title">Machine control</div><div class="tile-detail">exit → shell restart; poweroff → halt; reboot → EPROM</div></div></div>
+<div class="tile-grid cols-2 "><div class="card"><div class="tile-title">cat</div><div class="tile-detail">64-cell chunks; terminal editing; Ctrl+D finishes</div></div><div class="card"><div class="tile-title">sed</div><div class="tile-detail">Insert / change / append / literal replacement; input loaded in memory</div></div><div class="card"><div class="tile-title">count</div><div class="tile-detail">Busy-loop delay, not milliseconds; yield after each value</div></div><div class="card"><div class="tile-title">ls</div><div class="tile-detail">Sorted by name; -a for dot entries; no long format or recursion</div></div><div class="card"><div class="tile-title">File tools</div><div class="tile-detail">cp / mv: source + destination; mkdir has no -p</div></div><div class="card"><div class="tile-title">Machine control</div><div class="tile-detail">exit → shell restart; poweroff → halt; reboot → EPROM</div></div></div>
 
 </div>
 
@@ -3906,7 +3890,7 @@ sequenceDiagram
     participant A as Heap exercise
     participant K as Kernel
     S->>H: init_process_heap()
-    H->>K: Query heap start and size (syscalls 6 and 7)
+    H->>K: Query heap start and size (syscalls 16 and 17)
     K-->>H: Process heap bounds
     H->>H: heap_init_region()
     H-->>S: Heap ready
@@ -3919,7 +3903,7 @@ sequenceDiagram
     A->>H: free(p3)
     H-->>A: Block freed and adjacent free blocks merged
     A-->>S: Return 0
-    S->>K: exit(0) invokes syscall 9
+    S->>K: exit(0) invokes syscall 6
 ```
 
 </div>
@@ -4075,17 +4059,17 @@ flowchart TD
 
 <div class="deck-content">
 
-<div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">12</div><div class="metric-label">library · standalone sources</div></div><div class="card"><div class="metric">22</div><div class="metric-label">OS feature · launcher cases</div></div><div class="card"><div class="metric">28</div><div class="metric-label">shell · command scenarios</div></div></div><div class="diagram-panel ">
+<div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">12</div><div class="metric-label">library · standalone sources</div></div><div class="card"><div class="metric">23</div><div class="metric-label">OS feature · launcher cases</div></div><div class="card"><div class="metric">28</div><div class="metric-label">shell · command scenarios</div></div></div><div class="diagram-panel ">
 
 ```mermaid
 flowchart LR
- T["make test · 62"] --> L["test-lib · 12"]
- T --> S["test-sys · 50"]
- S --> O["test-os · 22"]
+ T["make test · 63"] --> L["test-lib · 12"]
+ T --> S["test-sys · 51"]
+ S --> O["test-os · 23"]
  S --> H["test-shell · 28"]
 ```
 
-</div><p class="slide-note">Library: RETI + test ISRs. OS / shell: complete EPROM → kernel → init → shell sessions.</p><!-- Counts follow section 15.1 prose/table; its 61/49/27 diagram and earlier counts are stale. -->
+</div><p class="slide-note">Library: RETI + test ISRs. OS / shell: complete EPROM → kernel → init → shell sessions.</p>
 
 </div>
 
