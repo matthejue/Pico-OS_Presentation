@@ -54,6 +54,7 @@ const presentationVersion = releaseVersion.trim()
 ---
 
 <!-- SOURCE Pico-OS/README.md#picoos -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS
 
@@ -131,6 +132,7 @@ flowchart LR
 ---
 
 <!-- SOURCE Pico-OS/README.md#reti-execution-model -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS · Intended physical hardware
 
@@ -153,6 +155,7 @@ flowchart LR
 ---
 
 <!-- SOURCE Pico-OS/README.md#build-and-run -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS
 
@@ -176,6 +179,7 @@ flowchart LR
 ---
 
 <!-- SOURCE Pico-OS/README.md#use-the-picoos-shell -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS · Build and run
 
@@ -200,6 +204,7 @@ flowchart LR
 ---
 
 <!-- SOURCE Pico-OS/README.md#use-the-picoos-shell -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS · Build and run
 
@@ -214,6 +219,7 @@ flowchart LR
 ---
 
 <!-- SOURCE Pico-OS/README.md#release-archive-layout -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # PicoOS · Build and run
 
@@ -654,21 +660,7 @@ MOVE ACC PC
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
 
-## 1.1.6 Custom userspace startup
-
-<div class="deck-content">
-
-<div class="timeline zoomable" style="grid-template-columns:repeat(4,1fr)"><div class="timeline-step"><b>-C libstart</b><div>Select custom startup</div></div><div class="timeline-step"><b>_start</b><div>Preserve kernel-built frame</div></div><div class="timeline-step"><b>heap + env</b><div>Initialize heap, clone envp</div></div><div class="timeline-step"><b>main → exit</b><div>Application result → syscall 9</div></div></div><div class="tile-grid cols-3 "><div class="card"><div class="tile-title">EPROM</div><div class="tile-detail">Naked reset installs its own registers</div></div><div class="card"><div class="tile-title">Kernel</div><div class="tile-detail">Generated SRAM entry calls kernel main</div></div><div class="card"><div class="tile-title">Userspace</div><div class="tile-detail">naked _start reads argc / argv from the initial stack</div></div></div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#117-interrupt-sections-and-naked-functions -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
-
-## 1.1.7 Interrupt sections and naked functions
+## 1.1.6 Custom userspace startup (1)
 
 <div class="deck-content">
 
@@ -678,11 +670,13 @@ MOVE ACC PC
 
 <div class="code-panel ">
 
-<div class="visual-label">Focused attribute syntax</div>
+<div class="visual-label">No -C · compiler-generated entry</div>
 
 ```c {lines:false}
-__attribute__((section("ivt")))
-void (*vectors[])(void) = { /* handlers */ };
+void _start(void) {
+    main();
+    Exit(0); // compiler-internal
+}
 ```
 
 </div>
@@ -693,7 +687,111 @@ void (*vectors[])(void) = { /* handlers */ };
 
 <div class="code-panel ">
 
-<div class="visual-label">Focused attribute syntax</div>
+<div class="visual-label">-C library/start/libstart.picoc</div>
+
+```c {lines:false}
+void start_process(int argc, char **argv) {
+    init_process_heap();
+    initialize_environment(argv + argc + 1);
+    exit(main(argc, argv));
+}
+
+__attribute__((naked))
+void _start(int argc, char *first_argument) {
+    start_process(argc, (char **)&first_argument);
+}
+```
+
+</div>
+
+</div>
+
+</div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Default</div><div class="tile-detail">Global runtime initializers → main → LOADI ACC 0 · JUMP 0</div></div><div class="card"><div class="tile-title">Startup source defines _start</div><div class="tile-detail">Replace the default and place the supplied entry first in .text</div></div></div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#116-custom-userspace-startup -->
+
+# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
+
+## 1.1.6 Custom userspace startup (2)
+
+<div class="deck-content">
+
+<div class="timeline zoomable" style="grid-template-columns:repeat(4,1fr)"><div class="timeline-step"><b>Kernel-built stack</b><div>argc · argv · envp</div></div><div class="timeline-step"><b>naked _start</b><div>Keep the initial frame intact</div></div><div class="timeline-step"><b>heap + environment</b><div>Prepare per-process runtime state</div></div><div class="timeline-step"><b>main → exit</b><div>Return value → syscall 6</div></div></div>
+
+<div class="data-table">
+
+| Image | `_start` | Handoff |
+| --- | --- | --- |
+| EPROM bootloader | Own naked definition · no `-C` | `boot_main()` |
+| SRAM kernel | Generated default · no `-C` | Kernel `main()` |
+| Init process | `libstart` via `-C` | Init `main()` |
+| Shell | `libstart` via `-C` | Shell `main()` |
+| Other applications | `libstart` via common link rule | Application `main()` |
+
+</div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#117-program-sections-and-low-level-functions -->
+
+# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
+
+## 1.1.7 Program sections and low-level functions (1)
+
+<div class="deck-content">
+
+<div class="memory-visual zoomable"><div class="visual-label">Final flat RETI image · low offset → high offset</div><div class="memory-bar"><div class="memory-segment seg-ivt" style="flex:1">.ivt · offset 0</div><div class="memory-segment seg-text" style="flex:3">.text · CS / PC</div><div class="memory-segment seg-data" style="flex:1.4">.data · DS</div></div></div>
+
+<div class="tile-grid cols-3 "><div class="card"><div class="tile-title">.ivt</div><div class="tile-detail">Explicit section attribute · vector words and optional low-level code · CS-relative data</div></div><div class="card"><div class="tile-title">.text</div><div class="tile-detail">Default for _start and ordinary functions · CS-relative instructions</div></div><div class="card"><div class="tile-title">.data</div><div class="tile-detail">Default for global and static storage · DS-relative data</div></div></div>
+
+<div class="step-flow zoomable"><div class="card">-O1 known scalars · strings · structs · arrays · function pointers</div><span class="flow-arrow">→</span><div class="card">Emit words directly into .data or attributed .ivt</div><span class="flow-arrow">→</span><div class="card">Load kernel payload</div><span class="flow-arrow">→</span><div class="card">Vector table ready before _start</div></div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#117-program-sections-and-low-level-functions -->
+
+# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
+
+## 1.1.7 Program sections and low-level functions (2)
+
+<div class="deck-content">
+
+<div class="content-columns columns-2">
+
+<div>
+
+<div class="code-panel ">
+
+<div class="visual-label">Place the vector array at image offset 0</div>
+
+```c {lines:false}
+__attribute__((section("ivt")))
+void (*interrupt_vector_table[5])(void) = {
+    syscall_interrupt,
+    timer_interrupt,
+    uart_interrupt,
+    cpu_exception_interrupt,
+    dma_interrupt
+};
+```
+
+</div>
+
+</div>
+
+<div>
+
+<div class="code-panel ">
+
+<div class="visual-label">Take exact control of the frame</div>
 
 ```c {lines:false}
 __attribute__((naked))
