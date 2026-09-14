@@ -113,15 +113,15 @@ flowchart LR
       <div class="muted text-xs mt-2">same 18 address lines · D[15:0] + D[31:16]</div>
     </div>
     <div class="memory-bar h-10 mt-4">
-      <div class="memory-segment seg-text" style="width:33.1%">86,721 resident image words</div>
-      <div class="memory-segment seg-process" style="width:66.9%">175,423 words remain</div>
+      <div class="memory-segment seg-text" style="width:32.4%">84,824 resident image words</div>
+      <div class="memory-segment seg-process" style="width:67.6%">177,320 words remain</div>
     </div>
     <div class="grid grid-cols-3 gap-2 mt-3 text-center text-[10px] mono">
-      <div class="chip justify-center"><span class="accent">kernel</span> 42,464</div>
-      <div class="chip justify-center"><span class="amber">init</span> 10,795</div>
-      <div class="chip justify-center"><span class="green">shell</span> 33,462</div>
+      <div class="chip justify-center"><span class="accent">kernel</span> 41,635</div>
+      <div class="chip justify-center"><span class="amber">init</span> 10,696</div>
+      <div class="chip justify-center"><span class="green">shell</span> 32,493</div>
     </div>
-    <div class="text-center text-sm mt-3"><span class="accent mono">kernel + init + shell</span> + <span class="green mono">17 × cat.bin images</span></div>
+    <div class="text-center text-sm mt-3"><span class="accent mono">kernel + init + shell</span> + <span class="green mono">18 × cat.bin images</span></div>
   </div>
 </div>
 
@@ -1452,9 +1452,9 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
- T["Timer expiry"] --> P["Record reschedule request"] --> Q{"Interrupted code?"}
- Q -->|Userspace| D["Save activation + dispatch"]
- Q -->|Kernel| R["RTI to kernel work"]
+ T["Timer expiry"] --> F["Save interrupt frame"] --> Q{"Saved PC belongs to?"}
+ Q -->|Userspace| S["Switch to kernel stack"] --> P["Record request"] --> D["Save activation + dispatch"]
+ Q -->|Kernel| K["Record request on current stack"] --> R["RTI to kernel work"]
  R --> B["Next syscall return"] --> D
 ```
 
@@ -1474,7 +1474,7 @@ flowchart LR
 
 <div class="code-panel code-medium">
 
-<div class="visual-label">Entry · save frame and record expiry</div>
+<div class="visual-label">Entry · save frame and install kernel segments</div>
 
 ```c {lines:false}
 __attribute__((naked))
@@ -1491,14 +1491,6 @@ void timer_interrupt(void) {
     // Uses kernel segments because an interrupt can arrive during entry or return
     asm(KERNEL_CS_START_ASM);
     asm(KERNEL_DS_START_ASM);
-
-    asm("LOADI32 ACC timer_interrupt_after_reschedule_request");
-    asm("ADD ACC CS");
-    asm("PUSH ACC");
-    asm("LOADI32 ACC dispatcher_request_reschedule");
-    asm("ADD ACC CS");
-    asm("MOVE ACC PC");
-}
 ```
 
 </div>
@@ -1517,29 +1509,22 @@ void timer_interrupt(void) {
 
 <div class="code-panel code-medium">
 
-<div class="visual-label">Continuation · kernel return or stack handoff</div>
+<div class="visual-label">Entry continued · classify before calling the scheduler</div>
 
 ```c {lines:false}
-__attribute__((naked))
-void timer_interrupt_after_reschedule_request(void) {
-    /*
-     * Restores kernel regs when the interrupted instruction belongs to the
-     * kernel code segment. The pending request is consumed when that kernel
-     * work next returns to a process
-     */
+    // Process interrupts must leave the nearly exhausted process stack before
+    // calling kernel functions. Kernel interrupts keep their live kernel stack
     asm("LOADIN SP ACC 7"); // Interrupted PC above the six saved registers
     asm("SUB ACC DS");
-    asm("JUMP>= 14"); // Only process code executes at or above this boundary
-    asm("POP DS");
-    asm("POP CS");
-    asm("POP BAF");
-    asm("POP IN2");
-    asm("POP IN1");
-    asm("POP ACC");
-    asm("RTI");
+    asm("JUMP32>= timer_interrupt_process");
 
-    // BAF keeps old_sp while loading kernel CS, DS and SP
-    asm("MOVE SP BAF");
+    asm("LOADI32 ACC timer_interrupt_kernel_return");
+    asm("ADD ACC CS");
+    asm("PUSH ACC");
+    asm("LOADI32 ACC dispatcher_request_reschedule");
+    asm("ADD ACC CS");
+    asm("MOVE ACC PC");
+}
 ```
 
 </div>
@@ -1558,16 +1543,80 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="code-panel code-medium">
 
-<div class="visual-label">Continuation · enter dispatcher</div>
+<div class="visual-label">Kernel path · keep the live kernel stack</div>
 
 ```c {lines:false}
-asm("LOADI IN1 0");
+__attribute__((naked))
+void timer_interrupt_kernel_return(void) {
+    // The pending request is consumed when this kernel work returns to a process
+    asm("POP DS");
+    asm("POP CS");
+    asm("POP BAF");
+    asm("POP IN2");
+    asm("POP IN1");
+    asm("POP ACC");
+    asm("RTI");
+}
+```
+
+</div><p class="slide-note">A timer inside kernel code records the request, restores the interrupted frame, and defers dispatch until kernel work returns to userspace.</p>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#44-timer-isr-and-preemption -->
+
+# 4. Interrupts, system calls, and exceptions
+
+## 4.4 Timer ISR and preemption (5)
+
+<div class="deck-content">
+
+<div class="code-panel code-medium">
+
+<div class="visual-label">Process path · switch stacks before kernel calls</div>
+
+```c {lines:false}
+__attribute__((naked))
+void timer_interrupt_process(void) {
+    // BAF keeps old_sp while loading kernel CS, DS and SP
+    asm("MOVE SP BAF");
+    asm("LOADI IN1 0");
     write_stack_heap_boundary_from_in1();
-    asm(KERNEL_CS_START_ASM);
-    asm(KERNEL_DS_START_ASM);
     asm(KERNEL_SP_START_ASM);
     activate_kernel_stack_boundary();
 
+    asm("LOADI32 ACC timer_interrupt_after_reschedule_request");
+    asm("ADD ACC CS");
+    asm("PUSH ACC");
+    asm("LOADI32 ACC dispatcher_request_reschedule");
+    asm("ADD ACC CS");
+    asm("MOVE ACC PC");
+}
+```
+
+</div><p class="slide-note">The scheduler call needs a call frame. Moving SP first prevents that frame from crossing an almost-full process stack.</p>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#44-timer-isr-and-preemption -->
+
+# 4. Interrupts, system calls, and exceptions
+
+## 4.4 Timer ISR and preemption (6)
+
+<div class="deck-content">
+
+<div class="code-panel code-medium">
+
+<div class="visual-label">Process continuation · dispatch saved frame</div>
+
+```c {lines:false}
+__attribute__((naked))
+void timer_interrupt_after_reschedule_request(void) {
     // Passes the interrupted stack frame to the dispatcher
     asm("PUSH BAF"); // Caller context
 
@@ -2477,11 +2526,12 @@ void dispatcher_jump_to_process(struct Process *process, int stack_boundary) {
     asm("LOADIN SP BAF 2");
     asm("LOADIN SP IN1 3");
 
-    // Installs the process boundary without creating a call frame
+    // Restores SP before the process boundary so an interrupt cannot compare the
+    // kernel stack against the process heap during this context-switch window
+    asm("LOADIN BAF SP 11");
     write_stack_heap_boundary_from_in1();
 
-    // Restores the saved activation record while BAF still points to the process
-    asm("LOADIN BAF SP 11");
+    // Restores the remaining activation record while BAF still points to the process
     asm("LOADIN BAF CS 13");
     asm("LOADIN BAF DS 14");
     asm("LOADIN BAF IN1 8");
@@ -2616,11 +2666,11 @@ struct Heap {
 | SRAM offset | Region |
 | --- | --- |
 | 0–4 | .ivt |
-| 5–41703 | .text |
-| 41704–42458 | .data |
-| 42459–46554 | 4096-cell kernel heap |
-| 46555–49270 | Stack room + initial free SP |
-| 49271–262143 | Process-memory heap |
+| 5–40897 | .text |
+| 40898–41629 | .data |
+| 41630–45725 | 4096-cell kernel heap |
+| 45726–48441 | Stack room + initial free SP |
+| 48442–262143 | Process-memory heap |
 
 </div>
 
