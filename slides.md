@@ -78,7 +78,7 @@ flowchart LR
     SRAM --> K["PicoOS kernel and userspace"]
 ```
 
-</div><div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">14</div><div class="metric-label">libraries</div></div><div class="card"><div class="metric">18</div><div class="metric-label">user applications</div></div><div class="card"><div class="metric">39</div><div class="metric-label">implemented syscalls</div></div></div>
+</div><div class="tile-grid cols-3 stat-cards"><div class="card"><div class="metric">14</div><div class="metric-label">libraries</div></div><div class="card"><div class="metric">18</div><div class="metric-label">user applications</div></div><div class="card"><div class="metric">38</div><div class="metric-label">implemented syscalls</div></div></div>
 
 </div>
 
@@ -804,7 +804,7 @@ void entry(void) {
 
 </div>
 
-</div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Static vector words</div><div class="tile-detail">Linked handler addresses exist before startup code</div></div><div class="card"><div class="tile-title">Exact frame control</div><div class="tile-detail">No automatic prologue, epilogue or return</div></div></div>
+</div><div class="tile-grid cols-2 "><div class="card"><div class="tile-title">Explicit section choice</div><div class="tile-detail">section("ivt") accepts variables or functions; the compiler selects .text / .data by default</div></div><div class="card"><div class="tile-title">Exact frame control</div><div class="tile-detail">naked removes the automatic prologue, shared epilogue and return</div></div></div>
 
 </div>
 
@@ -2187,6 +2187,7 @@ sequenceDiagram
     S->>K: kill(pid, signal) or kernel-generated signal
     alt target is currently RUNNING and must terminate
         K->>P: Store pending termination signal
+        K->>D: Request rescheduling at the safe syscall-return boundary
         D->>K: prepare_process_termination(P)
         K->>P: Terminate safely before restore
     else other target or stop/continue action
@@ -2285,7 +2286,6 @@ void mutex_lock(struct mutex *m) {
 
 void mutex_unlock(struct mutex *m) {
     m->lock = false;
-        K->>D: Request rescheduling at the safe syscall-return boundary
     wakeup(&(m->waiters));
     return;
 }
