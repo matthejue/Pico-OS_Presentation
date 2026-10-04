@@ -1,31 +1,214 @@
 {
-"list-27": ["PicoC-Compiler compiles and links PicoC into RETI assembly and section metadata.", "RETI-Emulator assembles and runs RETI; models memory, devices, interrupts, and the host file protocol.", "PicoOS supplies the bootloader, kernel, libraries, init, shell, applications, and tests."],
-"list-185": ["Alchitry Cu V2 / iCE40-HX8K FPGA: CPU, timer, interrupt controller, UART, DMA, and SRAM arbitration.", "Two 256K × 16-bit SRAM chips share address/control lines; their data pins form one 256K × 32-bit memory for CPU and DMA.", "CH340C USB–UART connects the host serial port to the FPGA. Ordinary receive-ready triggers interrupts; active DMA receives groups of four bytes."],
-"list-2151": ["Save ACC, IN1, IN2, BAF, CS, and DS beside the automatically saved PC.", "Keep the saved-frame pointer in BAF while changing stacks.", "Disable the old boundary; install kernel CS, DS, and SP; activate the kernel boundary.", "Push context, argument, and selector onto the kernel stack before reusing registers.", "Initialize saved IN2 to 1 for calls that resume after a process switch; an operation may replace it.", "Return via syscall_interrupt_return; transfer control to handle_syscall, whose epilogue restores BAF to the context pointer."],
-"list-2179": ["Save IN2 in caller_context[4] before rescheduling can move it into the PCB.", "Call dispatcher_reschedule_if_requested with the saved context and syscall_interrupt_restore continuation.", "Without a pending request, restore directly; otherwise enter the dispatcher."],
-"list-2195": ["Copy BAF to SP to select the saved process frame and discard kernel scratch frames.", "Activate the caller's stack boundary while kernel CS and DS can still access the PCB.", "Pop DS, CS, BAF, IN2, IN1, and ACC; RTI restores the saved PC and resumes after INT 0."],
-"list-2243": ["Match the SYSCALL_* selector; pass the saved context when the operation needs it.", "Return the result in IN2, or 0 for an unknown selector. Blocking, yielding, or terminating calls may switch first."],
-"list-2322": ["Change the outgoing process from RUNNING to READY when applicable.", "Clear reschedule_requested; make the selected PCB current and mark it RUNNING.", "Compute its stack boundary, restore its activation, and finish with RTI."],
-"list-2544": ["Save six registers on the interrupted stack; the automatic return PC is now at SP + 7.", "Install kernel CS and DS, retaining the interrupted SP until classification.", "Load the saved PC, subtract kernel DS, and branch to the process path when the result is nonnegative."],
-"list-2563": ["Below kernel DS: keep the stack and request deferred rescheduling. Otherwise enter timer_interrupt_process."],
-"list-2570": ["Pop DS, CS, BAF, IN2, IN1, and ACC. This path needs no MOVE BAF SP or boundary change.", "RTI resumes the kernel; a later scheduling point checks reschedule_requested."],
-"list-2582": ["Copy SP to BAF to retain the process frame. Kernel CS and DS are already active.", "Disable the old boundary, install kernel SP, then activate the kernel boundary.", "Set reschedule_requested through dispatcher_request_reschedule; continue at timer_interrupt_after_reschedule_request."],
-"list-2599": ["Push the BAF context pointer and dummy return address 0.", "dispatcher_switch_from_context saves the PCB activation and selects a process. Restoration belongs to the selected process; there is no direct return here."],
-"list-2711": ["Save the six registers beside the automatic return PC.", "Keep the frame pointer in BAF and install kernel CS and DS; retain interrupted SP and boundary.", "Call handle_uart_interrupt with uart_interrupt_return as its continuation."],
-"list-2722": ["Copy BAF to SP after the C handler returns.", "Pop DS, CS, BAF, IN2, IN1, and ACC.", "RTI resumes the interrupted stream without checking the scheduling flag or switching processes."],
-"list-2756": ["Find the input process and global terminal.", "Read the received byte and acknowledge UART_RECEIVE_READY.", "Handle Ctrl+C as SIGINT and Ctrl+Z as SIGTSTP; stop processing a consumed signal character.", "Enqueue ordinary input; a full ring drops the new byte. Complete a waiting foreground read, save its result in activation.in2, and mark it runnable."],
-"list-2902": ["Save the six registers on the interrupted stack.", "Keep BAF as the frame pointer; install kernel CS and DS while preserving SP and boundary.", "Call handle_dma_interrupt with dma_interrupt_return as its continuation."],
-"list-2918": ["Copy BAF to SP after the handler returns.", "Pop DS, CS, BAF, IN2, IN1, and ACC.", "RTI returns without checking the reschedule flag or dispatching; this uses the borrowed-stack convention."],
-"list-3011": ["Preserve interrupted CS in BAF for classification.", "Disable the old boundary; reset kernel CS, DS, and SP; activate the kernel boundary, even for a kernel fault.", "Subtract kernel CS from the preserved value and pass the difference to the C handler.", "Call handle_cpu_exception with dummy return address 0. It halts or terminates the process and never returns."],
-"list-3047": ["Read the exception cause and test whether interrupted CS equals kernel CS.", "Print the diagnostic: direct UART for kernel faults, descriptor 1 for process faults.", "Kernel fault: shutdown halts with JUMP 0.", "Process fault: record exception status, mark ZOMBIE, and remove immediately when no parent needs collection.", "Dispatch another process, or halt if the list empties. Never restore the faulting context."],
-"list-3847": ["Resolve the path, validate the header, apply heap/stack defaults, and reserve a Process Payload with PSDMalloc.", "Track polling or DMA progress in the caller's pending_load.", "Create and append a NEW PCB with payload bounds, segment registers, preliminary entry PC, paths, and fresh descriptors.", "Clear pending_load, release temporary metadata, and return the child PID."],
-"list-3941": ["Pack PID, arguments, and environment into RunProcessRequest; NULL selects the caller's environment.", "Require a NEW target PCB.", "Copy inheritable descriptors from the run caller.", "Copy strings and pointer arrays onto the child stack; update activation.sp and activation.baf.", "Mark READY and return success."],
-"list-4109": ["waitpid places its local status address in WaitPidRequest.", "The kernel retains that pointer, queues the parent on the child's waiters, and marks the parent BLOCKED.", "Termination records status and ZOMBIE, writes through the parent's pointer, clears wait links, and wakes the parent.", "The resumed wrapper returns its updated local status; the child may already be removed."],
-"list-4124": ["Creation records the loading parent's PID and initializes empty wait state.", "Waiting identifies the caller through active_process and finds the requested PID in the process list.", "Only the actual parent may collect the child. A missing target or different parent completes with −1; wakeup also verifies parent identity."],
-"list-4606": ["Userspace timer preemption and yield switch immediately.", "sleep, blocking waitpid/read, and DMA load switch after recording their wait.", "Deferred timer or termination requests switch at syscall return when reschedule_requested is set."],
-"list-4642": ["Obtain the current PCB.", "Copy six registers into activation; set activation.sp = caller_context + 6, leaving the saved PC on the stack.", "Change RUNNING to READY; preserve states already changed by blocking or signals.", "Start selection through dispatcher_start_next_process."],
-"list-4687": ["Ask the scheduler for a candidate.", "While processes remain, retry when none is runnable or termination handling rejects a candidate. UART/DMA may wake a waiter.", "Switch to an accepted process; return only if the list is empty."],
-"list-4733": ["Read the PCB pointer into BAF and precomputed boundary into IN1.", "Install activation.sp before the user boundary so nested interrupts never apply it to the kernel stack.", "Write the boundary through the inline helper, which needs no C frame.", "Restore CS, DS, IN1, IN2, and ACC; restore BAF last because it holds the PCB pointer.", "RTI consumes PC at SP + 1. It resumes an interrupted instruction/syscall or starts a prepared process at CS."],
-"list-7434": ["echo: expands literal \\n, joins arguments with spaces, and adds a newline; no -n option; returns 0.", "count: optional nonnegative busy-loop delay, not milliseconds; yields after each printed value.", "cat: copies 64-cell chunks; preserves bytes for files and escapes nonprintable terminal bytes. Terminal input supports editing and Ctrl+D; failures return 1.", "touch accepts multiple paths; cp/mv need one source and destination. cp copies 64-cell chunks; mv uses one host move request. ps includes itself and zombies.", "sed reads seekable stdin into memory. Supports line insertion/change/append, pattern insertion, and first literal substitution per line; no path operand.", "ls supports one directory and -a. mkdir has no -p; rm has no force/recursive mode; rmdir removes empty directories. These three accept multiple paths.", "kill defaults to SIGKILL; accepts supported names or numbers, including probe 0. Probe rejects zombies; an accepted request is followed by yield.", "poweroff halts; reboot restarts bootloader/kernel without ending the emulator; uname prints the installed PicoOS version. These take no operands."],
-"list-8127": ["One physical address space: no MMU, hardware isolation, or virtual memory.", "Files reside on the host and are reached through UART.", "Eight descriptors per process; state is copied rather than shared through open-file descriptions.", "Lazy Round Robin scans cyclically instead of rotating a ready queue.", "Kernel execution is non-preemptive; rescheduling is deferred.", "Fixed/default heap and stack reservations; no dynamic stack growth.", "Reduced formatting, scanning, shell parsing, and library interfaces.", "No implemented physical PicoOS RETI CPU or hardware timer. Instruction-count timing is reproducible, not exact elapsed time.", "No sound hardware or dedicated LCD; terminal and files come through the host.", "Static images: no dynamic loader, shared libraries, or dynamically linked libc.", "POSIX-like names without full POSIX semantics."]
+  "list-27": [
+    "PicoC: compile + link",
+    "RETI: execute + inspect",
+    "PicoOS: boot → kernel → applications"
+  ],
+  "list-185": [
+    [
+      "FPGA: Alchitry Cu V2 — €55.66",
+      "Lattice iCE40-HX8K",
+      "CPU / IRQ / UART / DMA",
+      "Timer + buffer + SRAM arbitration"
+    ],
+    [
+      "SRAM: 2 × ISSI chips",
+      "IS61WV25616BLL-10TLI",
+      "2 × €5.80 = €11.60",
+      "Shared address + control",
+      "Combined 32-bit bus; 1 MiB"
+    ],
+    [
+      "USB–UART: SparkFun CH340C",
+      "Price: €10.92",
+      "TXO → RX; RXI ← TX",
+      "Common ground; matching serial format",
+      "DMA: four bytes → one word"
+    ]
+  ],
+  "list-2151": [
+    "Save six registers + PC",
+    "BAF → saved frame",
+    "Install kernel segments + stack boundary",
+    "Push context, argument, selector",
+    "Default saved IN2 = 1",
+    "handle_syscall → syscall_interrupt_return"
+  ],
+  "list-2179": [
+    "Save IN2 in caller_context[4]",
+    "Check deferred rescheduling",
+    "Restore directly or dispatch"
+  ],
+  "list-2195": [
+    "SP ← BAF; discard scratch frames",
+    "Restore caller stack boundary",
+    "Pop registers; RTI restores PC"
+  ],
+  "list-2243": [
+    "Match selector; pass saved context",
+    "IN2 ← result; unknown selector → 0"
+  ],
+  "list-2322": [
+    "Outgoing RUNNING → READY",
+    "Clear request; selected PCB → RUNNING",
+    "Restore boundary + activation; RTI"
+  ],
+  "list-2544": [
+    "Save registers; PC at SP + 7",
+    "Install kernel CS + DS",
+    "Classify saved PC against kernel DS"
+  ],
+  "list-2563": [
+    "Kernel → defer; userspace → switch"
+  ],
+  "list-2570": [
+    "Pop registers; retain stack boundary",
+    "RTI; reschedule at later safe point"
+  ],
+  "list-2582": [
+    "BAF ← process frame",
+    "Install kernel SP + boundary",
+    "Request rescheduling; continue entry path"
+  ],
+  "list-2599": [
+    "Push context + dummy return",
+    "Save PCB; dispatch selected process"
+  ],
+  "list-2711": [
+    "Save registers + automatic PC",
+    "Retain interrupted SP + boundary",
+    "handle_uart_interrupt → uart_interrupt_return"
+  ],
+  "list-2722": [
+    "SP ← BAF",
+    "Pop six registers",
+    "RTI; no scheduling check"
+  ],
+  "list-2756": [
+    "Find foreground owner + terminal",
+    "Read byte; acknowledge receive-ready",
+    "Ctrl+C → SIGINT; Ctrl+Z → SIGTSTP",
+    "Buffer byte; complete waiting read"
+  ],
+  "list-2902": [
+    "Save six registers",
+    "Borrow stack; install kernel CS/DS",
+    "handle_dma_interrupt → dma_interrupt_return"
+  ],
+  "list-2918": [
+    "SP ← BAF",
+    "Pop six registers",
+    "RTI; retain borrowed-stack convention"
+  ],
+  "list-3011": [
+    "BAF ← interrupted CS",
+    "Reset kernel segments, stack, boundary",
+    "Compare interrupted CS with kernel CS",
+    "Handle exception; never return"
+  ],
+  "list-3047": [
+    "Read cause; classify kernel/userspace",
+    "Print diagnostic via UART or stdout",
+    "Kernel fault → shutdown",
+    "Process fault → status + ZOMBIE",
+    "Dispatch survivor; never restore fault"
+  ],
+  "list-3847": [
+    "Validate header; reserve Process Payload",
+    "Track polling/DMA progress",
+    "Append NEW PCB + fresh descriptors",
+    "Release load metadata; return PID"
+  ],
+  "list-3941": [
+    "Pack PID, arguments, environment",
+    "Require NEW PCB",
+    "Copy inheritable descriptors",
+    "Build child stack; update SP/BAF",
+    "NEW → READY"
+  ],
+  "list-4109": [
+    "Request points to local status",
+    "Queue parent; mark BLOCKED",
+    "Child exits; write status; wake parent",
+    "Wrapper resumes; returns child status"
+  ],
+  "list-4124": [
+    "Creation records parent PID",
+    "Find caller + requested child",
+    "Parent-only collection; mismatch → −1"
+  ],
+  "list-4606": [
+    "Timer/yield → immediate switch",
+    "Blocking call → save wait; switch",
+    "Deferred request → switch on syscall return"
+  ],
+  "list-4642": [
+    "Find current PCB",
+    "Save registers; SP = context + 6",
+    "RUNNING → READY; retain blocking states",
+    "Select next process"
+  ],
+  "list-4687": [
+    "Ask scheduler for candidate",
+    "Retry; interrupts can wake blocked processes",
+    "Restore accepted process; empty list → return"
+  ],
+  "list-4733": [
+    "BAF ← PCB; IN1 ← boundary",
+    "Install saved SP before boundary",
+    "Write boundary without C frame",
+    "Restore registers; BAF last",
+    "RTI → saved PC or initial entry"
+  ],
+  "list-7434": [
+    [
+      "echo: spaces + newline; expands \\n",
+      "No -n; returns 0"
+    ],
+    [
+      "count: optional busy-loop delay",
+      "Yield after each value"
+    ],
+    [
+      "cat: files/stdin → stdout",
+      "64-cell chunks; terminal editing + Ctrl+D"
+    ],
+    [
+      "touch: multiple paths",
+      "cp/mv: one source + destination",
+      "cp: 64-cell chunks; ps includes zombies"
+    ],
+    [
+      "sed: seekable stdin; no path operand",
+      "Insert/change/append; first literal substitution"
+    ],
+    [
+      "ls: one directory; -a",
+      "mkdir: no -p; rm: nonrecursive",
+      "rmdir: empty directories; multiple paths"
+    ],
+    [
+      "kill: default SIGKILL; names/numbers",
+      "Signal 0 probes; zombies rejected",
+      "Accepted request → yield"
+    ],
+    [
+      "poweroff: halt; reboot: restart",
+      "uname: installed version",
+      "All three: no operands"
+    ]
+  ],
+  "list-8158": [
+    "No MMU, isolation, or virtual memory",
+    "Host files via UART",
+    "Eight descriptors; independent copied state",
+    "Lazy Round Robin; cyclic scan",
+    "Non-preemptive kernel; deferred switching",
+    "Fixed heap/stack; no stack growth",
+    "Reduced libraries, formatting, shell parsing",
+    "Hardware unimplemented; instruction-count timing",
+    "No sound/LCD; host terminal",
+    "Static images; no dynamic linking",
+    "POSIX-like names; reduced semantics"
+  ]
 }

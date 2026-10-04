@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto'
 export const md = new MarkdownIt({ html: true })
 export const hash = text => createHash('sha256').update(text).digest('hex')
 export const anchorFor = title => title.replaceAll('`', '').toLowerCase().replace(/[^\w -]/g, '').replaceAll(' ', '-')
-export const plain = text => md.renderInline(text).replace(/<[^>]+>/g, '').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim()
+export const plain = text => md.renderInline(text).replace(/<[^>]+>/g, ' ').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim()
 export function readmeSource(text) {
   const lines = text.split('\n'), tokens = md.parse(text, {})
   const sections = [], assets = [], stack = []

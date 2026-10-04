@@ -154,6 +154,16 @@ try {
         if (r.top < body.top - 2 || r.bottom > bounds.bottom - 20 * scale || r.left < body.left - 2 || r.right > body.right + 2)
           found.push(`Source visual overlaps the title or footer: ${child.textContent.slice(0, 70)}`)
       }
+      for (const visual of element.querySelectorAll('.readme-visual[data-kind="code"]')) {
+        const frame = visual.getBoundingClientRect()
+        const stage = visual.querySelector('.source-fit-stage').getBoundingClientRect()
+        if (Math.abs(frame.left - stage.left) > 2 || Math.abs(frame.right - stage.right) > 2)
+          found.push('Code box does not fill its slide or column width')
+      }
+      for (const cell of element.querySelectorAll('.readme-table th, .readme-table td')) {
+        if (cell.scrollWidth > cell.clientWidth + 2)
+          found.push(`Horizontally clipped table cell: ${cell.textContent.slice(0, 70)}`)
+      }
       for (const host of element.querySelectorAll('.mermaid')) {
         const svg = host.shadowRoot?.querySelector('svg')
         if (!svg) { found.push('Missing Mermaid SVG'); continue }

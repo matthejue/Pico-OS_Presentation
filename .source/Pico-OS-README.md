@@ -8082,41 +8082,72 @@ and [`6.1.1 Algorithm and Round Robin comparison`](#611-algorithm-and-round-robi
 # 16. Use of AI in the project
 [\[↑ TOC\]](#contents)
 
-I use the University of Freiburg's
+This section applies the University of Freiburg's transparency and documentation
+principles from its
 [Academic Writing Guide](https://uni-freiburg.de/ska/wp-content/uploads/sites/186/AcademicWritingGuide_2025.09.29.pdf)
-as a basis for documenting AI assistance. It concerns academic writing
-rather than code generation. Here I apply its transparency principles
-to the tools, stages, tasks, and results of source-code work.
+to PicoOS. The guide is about academic writing, not source-code creation, and
+does not explicitly cover code generation. For this project, I apply its
+distinction between work done on one's own and help with repetitive or
+time-consuming tasks to source-code work. Its recommendation to state the
+tool, stage, use, and result also gives a useful way to document AI use in this
+project.
 
-I developed the core concepts, architecture, and structural decisions
-myself. AI did not decide how PicoOS or its core mechanisms should work.
+I developed all core concepts, the architecture, structural decisions,
+and the understanding behind PicoOS on my own. AI was not used
+to decide how the operating system should work or how its core mechanisms
+should be structured.
 
-A **substantial part of the work was manual debugging**. I added a PicoC
-source debugger to the RETI-Emulator because this custom architecture has
-no existing GDB support. The compiler's RETI output, stack frames, and
-runtime conventions required detailed inspection. AI assistance was not
-reliable enough for that work, so I debugged it with my own tools.
+A **substantial part of the work consisted of manual debugging**. I had to add
+my own source-code debugger to the RETI-Emulator, which I had previously used
+as an assembly-level debugger. GDB cannot be used with this custom RETI
+architecture. RETI assembly is the assembly language of a custom, little-known
+educational CPU architecture, for which little public training material exists.
+The PicoC-Compiler compiles PicoC into this RETI assembly, and its code
+generation, including its stack-frame layout and other runtime conventions, is
+also highly custom. AI could not directly use my RETI-Emulator or its
+source-code debugger: AI companies obviously wouldn't and also couldn't use such non-established custom
+tools to train their models. AI could not reliably see how all these parts fit
+together: the generated RETI assembly and the way the
+compiler's stack-frame layout and runtime conventions arrange data on the
+stack. There is no established debugging ecosystem for this architecture, so I
+had to debug the code myself with my own tools.
 
-I used AI for repetitive or time-consuming implementation tasks whose
-behavior and approach I already understood, and for supporting work.
-Understanding the system, planning features, and integrating them remained
-my responsibility.
+I used AI only to speed up repetitive or very time-consuming work, or work
+that was not important to the core operating system and not directly related to
+the results I had to present at the end. In each case, the intended behavior,
+implementation approach, and expected result were already clear. This work did
+not involve AI doing the work that a Master's project is meant to assess:
+understanding a complex system in detail, keeping an overview of it, and
+planning and integrating new features into it. It reduced the time spent on
+repetitive tasks and made small extra additions possible that I otherwise would
+not have had time to create.
 
-Pointer arithmetic is one example. Once I understood the memory layout,
-AI could draft the address calculations, which I then checked and fixed.
-It helped write an already understood solution more quickly.
+Low-level pointer arithmetic is one example. I may already understand the
+solution and required memory layout, but writing the exact address calculations
+and fixing small arithmetic mistakes by hand can take a lot of time. When the
+requirements were known, AI could often produce an almost correct
+implementation immediately, leaving only a few small changes or fixes. In
+these cases, I did not use AI to find the solution, but to write an already
+understood solution more quickly.
 
-AI also helped with user applications, tests, Makefiles, Python, and shell
-scripts. I would not have had time to create some of these additions
-otherwise. The [AI usage record](documentation/ai_usage.md) lists the
-source files where it was used.
+Compared with the core operating-system mechanisms, user applications, tests,
+Makefiles, Python and shell scripts, and similar supporting code are generally
+simple and do not contribute to understanding how an operating system works.
+I would simply not have created some of these applications and tests without
+AI. They are the cherry on top of the project, not a central part of it. The
+[AI usage record](documentation/ai_usage.md) lists where AI was used in the
+source code.
 
-I used AI more toward the end as the models available through GitHub
-Copilot improved. I also saw supervisors at other chairs encourage its
-use. I regarded it as another technical tool, much as computers replaced
-typewriters and online research supplemented libraries. By then I had
-worked on the project for three semesters, spending the last entirely
-on the OS, well beyond its 18 ECTS scope.
+Towards the end of the project, the models in GitHub Copilot through GitHub
+Education became better, so I started using AI more. At other university chairs
+(especially AI chairs), I saw that supervisors even told students to use AI. I
+therefore thought that using the newest technical advances was entirely normal,
+as people similarly began using computers instead of typewriters and the
+internet instead of going to libraries.
+By then, I was already far beyond the 18 ECTS mark: I had worked on this
+Master's project for three semesters and spent the last one doing nothing but
+coding this operating system, so I thought it was reasonable to use AI a bit
+more extensively.
 
 # 17. Limitations
 [\[↑ TOC\]](#contents)

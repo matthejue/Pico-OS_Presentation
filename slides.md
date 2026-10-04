@@ -60,8 +60,12 @@ const presentationVersion = releaseVersion.trim()
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>PicoOS is an educational operating system for the RETI teaching CPU. Its bootloader, kernel, libraries, init process, shell, and applications form a complete system whose execution can be followed in the debugger.</p>
-<p>Code and data share physical memory without an MMU or process isolation. Files live on the host and are reached through UART; the small scope keeps the path from a library call to a context switch visible.</p></div><aside class="context-note"><b>POSIX context</b><span>PicoOS borrows Unix interface names and conventions, but implements a small subset and does not claim POSIX conformance.</span></aside>
+<div class="readme-list"><ul><li>Educational OS for RETI</li>
+<li>Bootloader → kernel → init → shell</li>
+<li>Shared physical memory; no MMU</li>
+<li>Host-backed files via UART</li></ul></div>
+<aside class="context-note"><b>POSIX context</b><ul><li>Unix-inspired interfaces</li>
+<li>Educational subset; reduced semantics</li></ul></aside>
 
 </div>
 
@@ -74,15 +78,30 @@ const presentationVersion = releaseVersion.trim()
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-27 -->
-<div class="readme-list"><ul><li>PicoC-Compiler compiles and links PicoC into RETI assembly and section metadata.</li>
-<li>RETI-Emulator assembles and runs RETI; models memory, devices, interrupts, and the host file protocol.</li>
-<li>PicoOS supplies the bootloader, kernel, libraries, init, shell, applications, and tests.</li></ul></div>
+<div class="readme-list"><ul><li>PicoC: compile + link</li>
+<li>RETI: execute + inspect</li>
+<li>PicoOS: boot → kernel → applications</li></ul></div>
+
+</div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#picoos -->
+<!-- SHORT_VERSION_DISABLED -->
+
+# PicoOS
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-42 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/picoos-build-boot.svg" alt="PicoOS build and boot overview" />
 
@@ -100,42 +119,16 @@ const presentationVersion = releaseVersion.trim()
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-51 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-51 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-51:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Producer</th>
-<th>Contract</th>
-<th>Consumer</th>
-</tr>
-</thead><tbody><tr>
-<td>PicoC-Compiler</td>
-<td>Linked <span class="source-link"><code>.reti</code></span>, <code>.sections</code>, generated memory headers, and <code>.debuginfo</code></td>
-<td>RETI-Emulator assembler/debugger and PicoOS low-level builds</td>
-</tr>
-<tr>
-<td>RETI-Emulator assembler</td>
-<td>Five-word layout header followed by encoded RETI words in <code>.bin</code></td>
-<td>EPROM bootloader and kernel process loader</td>
-</tr>
-<tr>
-<td>PicoOS libraries</td>
-<td>Syscall number plus direct value/pointer or stack-local request structure</td>
-<td>Interrupt entry, <span class="source-link"><code>handle_syscall()</code></span>, and the owning kernel subsystem</td>
-</tr>
-<tr>
-<td>Kernel subsystems</td>
-<td>PCBs, activations, queues, descriptor/shared-memory state, and periphery-register writes</td>
-<td>Scheduler/dispatcher and emulated RETI hardware</td>
-</tr>
-<tr>
-<td>PicoOS UART host request protocol</td>
-<td>Bounded <code>&lt;ESC&gt;...&lt;ESC&gt;/</code> requests and big-endian responses</td>
-<td>RETI-Emulator host file services, or a companion serial host on hardware</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.58%" /><col style="width:39.16%" /><col style="width:32.26%" /></colgroup><thead><tr><th>Producer</th><th>Contract</th><th>Consumer</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>PicoC-Compiler</li></ul></td><td><ul><li>Linked code + layout + debug metadata</li></ul></td><td><ul><li>Assembler + source debugger</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>RETI-Emulator assembler</li></ul></td><td><ul><li>Five-word header + RETI binary</li></ul></td><td><ul><li>Bootloader + process loader</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>PicoOS libraries</li></ul></td><td><ul><li>Selector + value/request pointer</li></ul></td><td><ul><li>Interrupt entry + kernel subsystem</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Kernel subsystems</li></ul></td><td><ul><li>PCBs, queues, descriptors, periphery writes</li></ul></td><td><ul><li>Dispatcher + emulated hardware</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>PicoOS UART host request protocol</li></ul></td><td><ul><li>Bounded UART requests + big-endian replies</li></ul></td><td><ul><li>Emulator or companion serial host</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -154,11 +147,12 @@ const presentationVersion = releaseVersion.trim()
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-68 -->
-<ReadmeVisual kind="code" :width="865.5999999999999" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-68" data-code-part="1">
 
+<!-- README_CODE_PART code-68 lines=1-5 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -188,42 +182,16 @@ $ ./start-picoos.sh
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-86 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-86 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-86:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Behavior</th>
-<th>Shell launcher</th>
-<th>PowerShell launcher</th>
-</tr>
-</thead><tbody><tr>
-<td>Use a specific emulator</td>
-<td><code>--reti-emulator PATH</code></td>
-<td><code>-RetiEmulator PATH</code></td>
-</tr>
-<tr>
-<td>Enable DMA loading</td>
-<td><code>--dma</code> or <code>-M</code></td>
-<td><code>-Dma</code> or <code>-M</code></td>
-</tr>
-<tr>
-<td>Run directly in the terminal</td>
-<td><code>--notui</code> or <code>-N</code></td>
-<td><code>-NoTui</code> or <code>-N</code></td>
-</tr>
-<tr>
-<td>Show help</td>
-<td><code>--help</code> or <code>-h</code></td>
-<td><code>-Help</code> or <code>-h</code></td>
-</tr>
-<tr>
-<td>Pass remaining emulator options</td>
-<td><code>-- EMULATOR_ARGS...</code></td>
-<td><code>-- EMULATOR_ARGS...</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.69%" /><col style="width:33.15%" /><col style="width:33.15%" /></colgroup><thead><tr><th>Behavior</th><th>Shell launcher</th><th>PowerShell launcher</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Use a specific emulator</li></ul></td><td><ul><li><code>--reti-emulator PATH</code></li></ul></td><td><ul><li><code>-RetiEmulator PATH</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Enable DMA loading</li></ul></td><td><ul><li><code>--dma</code> or <code>-M</code></li></ul></td><td><ul><li><code>-Dma</code> or <code>-M</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Run directly in the terminal</li></ul></td><td><ul><li><code>--notui</code> or <code>-N</code></li></ul></td><td><ul><li><code>-NoTui</code> or <code>-N</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Show help</li></ul></td><td><ul><li><code>--help</code> or <code>-h</code></li></ul></td><td><ul><li><code>-Help</code> or <code>-h</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Pass remaining emulator options</li></ul></td><td><ul><li><code>-- EMULATOR_ARGS...</code></li></ul></td><td><ul><li><code>-- EMULATOR_ARGS...</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -242,12 +210,12 @@ $ ./start-picoos.sh
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">At <code>PicoOS&gt;</code>, run a program by its executable name or a path. The shell finds commands such as <code>echo.bin</code> in <code>/user</code>. This example replaces a phrase through a file-backed pipeline and writes the result to <code>topics.txt</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-122 -->
-<ReadmeVisual kind="code" :width="736.6" style="flex-grow:8">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-122" data-code-part="1">
 
+<!-- README_CODE_PART code-122 lines=1-6 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -278,52 +246,20 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-150 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-150 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-150:1,2,3,4,5,6,7,8,9">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Archive path</th>
-<th>Contents and purpose</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>binary/README.md</code></span></td>
-<td>Short release-specific startup and host-filesystem instructions. It becomes <span class="source-link"><code>README.md</code></span> at the archive root.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/start-picoos.sh</code></span>, <span class="source-link"><code>binary/start-picoos.ps1</code></span></td>
-<td>Linux/macOS/Android and Windows launchers. They find or download the tools, select the boot and kernel metadata, and start the emulator.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/download-tools.sh</code></span>, <span class="source-link"><code>binary/download-tools.ps1</code></span></td>
-<td>Helpers used by the launcher to download matching released <code>picoc_compiler</code> and <code>reti_emulator</code> binaries when they are missing.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/boot/</code></span></td>
-<td><span class="source-link"><code>bootloader.reti</code></span>, the RETI EPROM image built from <span class="source-link"><code>bootloader.picoc</code></span> that loads and starts the kernel.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/kernel/</code></span></td>
-<td><span class="source-link"><code>kernel.bin</code></span>, the loadable image built from <span class="source-link"><code>kernel.picoc</code></span>, <span class="source-link"><code>kernel.sections</code></span>, its linked memory-layout metadata, and <span class="source-link"><code>kernel.debuginfo</code></span>, its source/debug metadata.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/system/</code></span></td>
-<td>Loadable system-program binaries, currently <span class="source-link"><code>init.bin</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/user/</code></span></td>
-<td>Loadable PicoOS command binaries, including <span class="source-link"><code>shell.bin</code></span> and the standard user commands built from <span class="source-link"><code>user/</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/config/</code></span></td>
-<td>Runtime configuration copied from <span class="source-link"><code>config/</code></span>: the initial environment, emulator options, and PicoOS release version.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary/device/</code></span></td>
-<td><code>terminal.dev</code> and <code>null.dev</code> marker files. They represent PicoOS virtual device paths, they do not hold device data.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.04%" /><col style="width:50.96%" /></colgroup><thead><tr><th>Archive path</th><th>Purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>binary/README.md</code></span></li></ul></td><td><ul><li>Release startup + filesystem instructions</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>binary/start-picoos.sh</code></span>, <span class="source-link"><code>binary/start-picoos.ps1</code></span></li></ul></td><td><ul><li>Find tools; configure; launch emulator</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>binary/download-tools.sh</code></span>, <span class="source-link"><code>binary/download-tools.ps1</code></span></li></ul></td><td><ul><li>Download missing released tools</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>binary/boot/</code></span></li></ul></td><td><ul><li>EPROM image; load kernel</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>binary/kernel/</code></span></li></ul></td><td><ul><li>Kernel binary + layout/debug metadata</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>binary/system/</code></span></li></ul></td><td><ul><li>Init binary</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>binary/user/</code></span></li></ul></td><td><ul><li>Shell + standalone commands</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>binary/config/</code></span></li></ul></td><td><ul><li>Environment, emulator options, OS version</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>binary/device/</code></span></li></ul></td><td><ul><li>Virtual terminal/null marker files</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -341,10 +277,10 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-178 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/intended-hardware.svg" alt="Intended physical hardware: host, FPGA, and shared SRAM" />
 
@@ -364,63 +300,33 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET list-185 -->
-<div class="readme-list"><ul><li>Alchitry Cu V2 / iCE40-HX8K FPGA: CPU, timer, interrupt controller, UART, DMA, and SRAM arbitration.</li>
-<li>Two 256K × 16-bit SRAM chips share address/control lines; their data pins form one 256K × 32-bit memory for CPU and DMA.</li>
-<li>CH340C USB–UART connects the host serial port to the FPGA. Ordinary receive-ready triggers interrupts; active DMA receives groups of four bytes.</li></ul></div>
+<div class="hardware-tiles"><div class="readme-tile"><ul><li>FPGA: Alchitry Cu V2 — €55.66</li>
+<li>Lattice iCE40-HX8K</li>
+<li>CPU / IRQ / UART / DMA</li>
+<li>Timer + buffer + SRAM arbitration</li></ul></div><div class="readme-tile"><ul><li>SRAM: 2 × ISSI chips</li>
+<li>IS61WV25616BLL-10TLI</li>
+<li>2 × €5.80 = €11.60</li>
+<li>Shared address + control</li>
+<li>Combined 32-bit bus; 1 MiB</li></ul></div><div class="readme-tile"><ul><li>USB–UART: SparkFun CH340C</li>
+<li>Price: €10.92</li>
+<li>TXO → RX; RXI ← TX</li>
+<li>Common ground; matching serial format</li>
+<li>DMA: four bytes → one word</li></ul></div></div>
+<div class="artifact-columns hardware-details"><div class="readme-list"><ul><li>Parts total: €78.18 including VAT</li>
+<li>DigiKey Germany estimate: 12 August 2026</li>
+<li>Excludes wiring, PCB, cables, shipping</li>
+<li>Proposed hardware; development uses emulator</li>
+<li>Hardware needs companion host service</li></ul></div>
 
-</div>
+<!-- README_ASSET table-236 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-236:1,2,3,4,5">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#intended-physical-hardware -->
-
-# PicoOS
-
-## Intended physical hardware (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-236 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Image</th>
-<th style="text-align:right">32-bit words</th>
-<th style="text-align:right">Size</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>kernel.bin</code></span> (<span class="source-link"><code>kernel.picoc</code></span>)</td>
-<td style="text-align:right">41,502</td>
-<td style="text-align:right">0.166008 MB</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>init.bin</code></span> (<span class="source-link"><code>init.picoc</code></span>)</td>
-<td style="text-align:right">10,824</td>
-<td style="text-align:right">0.043296 MB</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell.bin</code></span> (<span class="source-link"><code>shell.picoc</code></span>)</td>
-<td style="text-align:right">29,647</td>
-<td style="text-align:right">0.118588 MB</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>cat.bin</code></span> (<span class="source-link"><code>cat.picoc</code></span>)</td>
-<td style="text-align:right">10,487</td>
-<td style="text-align:right">0.041948 MB</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>echo.bin</code></span> (<span class="source-link"><code>echo.picoc</code></span>)</td>
-<td style="text-align:right">12,018</td>
-<td style="text-align:right">0.048072 MB</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:45.31%" /><col style="width:26.58%" /><col style="width:28.10%" /></colgroup><thead><tr><th>Image</th><th>32-bit words</th><th>Size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>kernel.bin</code></span> (<span class="source-link"><code>kernel.picoc</code></span>)</li></ul></td><td><ul><li>41,502</li></ul></td><td><ul><li>0.166008 MB</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>init.bin</code></span> (<span class="source-link"><code>init.picoc</code></span>)</li></ul></td><td><ul><li>10,824</li></ul></td><td><ul><li>0.043296 MB</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>shell.bin</code></span> (<span class="source-link"><code>shell.picoc</code></span>)</li></ul></td><td><ul><li>29,647</li></ul></td><td><ul><li>0.118588 MB</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>cat.bin</code></span> (<span class="source-link"><code>cat.picoc</code></span>)</li></ul></td><td><ul><li>10,487</li></ul></td><td><ul><li>0.041948 MB</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>echo.bin</code></span> (<span class="source-link"><code>echo.picoc</code></span>)</li></ul></td><td><ul><li>12,018</li></ul></td><td><ul><li>0.048072 MB</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -439,11 +345,10 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">RETI uses 32-bit word addresses. The top two bits select EPROM, peripherals, or SRAM, as shown below. SRAM spans both <code>10</code> and <code>11</code>, giving it half of the address space. These are address ranges, independent of installed capacity:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-256 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/reti-memory-map.svg" alt="RETI address space with EPROM and periphery each occupying one quarter and SRAM occupying one half" />
 
@@ -464,32 +369,14 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-260 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-260 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-260:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>High bits</th>
-<th>Address space</th>
-<th>PicoOS use</th>
-</tr>
-</thead><tbody><tr>
-<td><code>00</code></td>
-<td>EPROM</td>
-<td>Bootloader</td>
-</tr>
-<tr>
-<td><code>01</code></td>
-<td>Memory-mapped periphery</td>
-<td>UART, interrupt controller, timer, stack boundary, exception cause, DMA</td>
-</tr>
-<tr>
-<td><code>10</code> or <code>11</code></td>
-<td>SRAM</td>
-<td>Interrupt table, kernel, process images, heaps, and stacks</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.82%" /><col style="width:30.15%" /><col style="width:45.02%" /></colgroup><thead><tr><th>High bits</th><th>Address space</th><th>PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>00</code></li></ul></td><td><ul><li>EPROM</li></ul></td><td><ul><li>Bootloader</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>01</code></li></ul></td><td><ul><li>Memory-mapped periphery</li></ul></td><td><ul><li>UART, interrupts, timer, exceptions, DMA</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>10</code> or <code>11</code></li></ul></td><td><ul><li>SRAM</li></ul></td><td><ul><li>Kernel, processes, heaps, stacks</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -503,139 +390,38 @@ scheduler
 
 # 1. Toolchain extensions for PicoOS
 
-## 1.1 PicoC-Compiler extensions (1)
+## 1.1 PicoC-Compiler extensions
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-501 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-501 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-501:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Feature</th>
-<th>Contribution used by PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Installation</td>
-<td>The compiler installation creates the environment and installs the <code>picoc_compiler</code> command</td>
-</tr>
-<tr>
-<td>Preprocessing</td>
-<td><code>#include</code>, include paths, <code>#pragma once</code>, object-like macros, line splicing, dependency output, and optional syntax checking</td>
-</tr>
-<tr>
-<td>Multiple translation units</td>
-<td>Per-file compilation, symbol merging, cross-file calls/globals, and final program-wide linking</td>
-</tr>
-<tr>
-<td>Reusable build artifacts</td>
-<td><code>.reti_blocks</code> and <code>.st</code> retain lowered code, symbols, data, startup, and debug metadata for later links</td>
-</tr>
-<tr>
-<td>Automatic artifact reuse</td>
-<td>Source/header hashes and compiler options decide whether an unchanged compiled file can be reused, Make dependency files expose the same inputs</td>
-</tr>
-<tr>
-<td>Broader PicoC syntax</td>
-<td><code>typedef</code>, casts, mixed declarations/statements, postfix increment, array-size inference, and compile-time integer simplification</td>
-</tr>
-<tr>
-<td>Pointer support</td>
-<td>Pointer returns, <code>void *</code>, typed pointer arithmetic, dereference/member conditions, and compatible forward/repeated struct declarations</td>
-</tr>
-<tr>
-<td>Function pointers</td>
-<td>Declarations, arrays, assignments, indirect calls, and statically emitted function addresses</td>
-</tr>
-<tr>
-<td>Variadic functions</td>
-<td>Variadic declarations and the documented System-V-style stack-frame locations used by <span class="source-link"><code>printf()</code></span> and <span class="source-link"><code>scanf()</code></span></td>
-</tr>
-<tr>
-<td>String and character data</td>
-<td>Escapes, inferred local arrays, global strings, deduplicated string literals, and linker-safe literal names</td>
-</tr>
-<tr>
-<td>Inline RETI assembly</td>
-<td><code>asm(&quot;...&quot;)</code>, linked labels inside assembly, and safe pseudoinstructions such as <code>LOADI32</code>, <code>JUMP32</code>, <code>PUSH</code>, and <code>POP</code></td>
-</tr>
-<tr>
-<td>Low-level functions</td>
-<td><code>__attribute__((naked))</code> suppresses compiler prologue/epilogue code for startup and interrupt handlers</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#11-picoc-compiler-extensions -->
-
-# 1. Toolchain extensions for PicoOS
-
-## 1.1 PicoC-Compiler extensions (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-501 rows=13-23 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Feature</th>
-<th>Contribution used by PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Custom sections</td>
-<td><code>__attribute__((section(&quot;ivt&quot;)))</code> places selected globals or functions in <code>.ivt</code>, ordinary functions and globals use <code>.text</code> and <code>.data</code></td>
-</tr>
-<tr>
-<td>interrupt service routines entries</td>
-<td><code>IVTE</code> resolves handler pointers into tagged SRAM addresses</td>
-</tr>
-<tr>
-<td>Runtime startup</td>
-<td>Generated default entry or a replaceable custom <code>-C</code> startup such as PicoOS <span class="source-link"><code>libstart</code></span></td>
-</tr>
-<tr>
-<td>Global initialization</td>
-<td><code>-O1</code> emits known scalar, string, struct, array, and function-pointer initializers directly into <code>.data</code> or an attributed <code>.ivt</code></td>
-</tr>
-<tr>
-<td>Shared epilogues</td>
-<td>All ordinary returns converge on one generated restore/return block</td>
-</tr>
-<tr>
-<td>Section layout</td>
-<td>Separate <code>.ivt</code>, <code>.text</code>, and <code>.data</code> regions and the paired final <code>.sections</code> file</td>
-</tr>
-<tr>
-<td>Linked labels</td>
-<td>Human-readable labels remain until final patching, making generated RETI inspectable</td>
-</tr>
-<tr>
-<td>Kernel headers</td>
-<td><code>-k sram</code> and <code>-k eprom</code> generate <span class="source-link"><code>memory_constants.header</code></span> for code that has no PCB/runtime loader context</td>
-</tr>
-<tr>
-<td>Debug information</td>
-<td><code>.debuginfo</code> describes source ranges, globals, frames, arguments, calls, returns, and local variables for the emulator TUI</td>
-</tr>
-<tr>
-<td>Inspectable intermediates</td>
-<td>Preprocessed source and named RETI-block stages make the result of individual compiler passes visible</td>
-</tr>
-<tr>
-<td>Source trap and RETI <code>NOP</code></td>
-<td><code>debug;</code> lowers to the emulator trap and inline <code>NOP</code> remains a real instruction</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Installation</li></ul></td><td><ul><li>Install picoc_compiler + environment</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Preprocessing</li></ul></td><td><ul><li>Includes, macros, #pragma once</li><li>Dependencies + optional syntax checking</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Multiple translation units</li></ul></td><td><ul><li>Per-file compilation + final linking</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Reusable build artifacts</li></ul></td><td><ul><li>Reusable code/symbol/debug artifacts</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Automatic artifact reuse</li></ul></td><td><ul><li>Hashes + options decide reuse</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Broader PicoC syntax</li></ul></td><td><ul><li>typedef, casts, declarations, increment</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Pointer support</li></ul></td><td><ul><li>Typed pointers + compatible structs</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>Function pointers</li></ul></td><td><ul><li>Indirect calls + linked addresses</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>Variadic functions</li></ul></td><td><ul><li>Variadic declarations + System V frames</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li>String and character data</li></ul></td><td><ul><li>Escapes + linker-safe string literals</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li>Inline RETI assembly</li></ul></td><td><ul><li>Inline assembly + linked labels</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li>Low-level functions</li></ul></td><td><ul><li>Naked startup/interrupt handlers</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="13"><td class="table-key"><ul><li>Custom sections</li></ul></td><td><ul><li>.ivt attributes; .text/.data defaults</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li>ISR entries</li></ul></td><td><ul><li>Tagged SRAM handler addresses</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li>Runtime startup</li></ul></td><td><ul><li>Generated entry or custom -C source</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li>Global initialization</li></ul></td><td><ul><li>-O1 static global initializers</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li>Shared epilogues</li></ul></td><td><ul><li>One shared restore/return block</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><ul><li>Section layout</li></ul></td><td><ul><li>.ivt + .text + .data + .sections</li></ul></td></tr>
+<tr data-source-row="19"><td class="table-key"><ul><li>Linked labels</li></ul></td><td><ul><li>Readable labels until final patching</li></ul></td></tr>
+<tr data-source-row="20"><td class="table-key"><ul><li>Kernel headers</li></ul></td><td><ul><li>Generated kernel/boot memory constants</li></ul></td></tr>
+<tr data-source-row="21"><td class="table-key"><ul><li>Debug information</li></ul></td><td><ul><li>Source, globals, locals, calls, frames</li></ul></td></tr>
+<tr data-source-row="22"><td class="table-key"><ul><li>Inspectable intermediates</li></ul></td><td><ul><li>Preprocessed source + named pass results</li></ul></td></tr>
+<tr data-source-row="23"><td class="table-key"><ul><li>Debug trap + NOP</li></ul></td><td><ul><li>debug trap + real NOP</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -649,15 +435,16 @@ scheduler
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
 
-## 1.1.1 Compilation pipeline and compiler passes (1)
+## 1.1.1 Compilation pipeline and compiler passes
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The original compiler parsed one PicoC file with Lark, built an AST, and lowered it into RETI. Its <span class="source-link">passes</span> and <span class="source-link">AST transformer</span> followed this sequence:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts pipeline-comparison"><div class="pipeline-panel"><div class="readme-list"><ul><li>Original: one source file</li>
+<li>Lark → AST → RETI</li>
+<li>Single-file compiler passes</li></ul></div>
 
 <!-- README_ASSET mermaid-534 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -688,23 +475,12 @@ flowchart LR
 
 </div>
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#111-compilation-pipeline-and-compiler-passes -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
-
-## 1.1.1 Compilation pipeline and compiler passes (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The extended pipeline preprocesses includes and macros, checks symbols and types, and then lowers each file. The linker merges those results, inserts startup code, and resolves addresses. The yellow stages show the additions:</div>
-<div class="readme-artifacts artifact-single">
+<div class="pipeline-panel"><div class="readme-list"><ul><li>Extended: reusable compilation units</li>
+<li>Includes, macros, symbols, types</li>
+<li>Linking + startup + address resolution</li></ul></div>
 
 <!-- README_ASSET mermaid-563 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -747,7 +523,7 @@ flowchart LR
 
 </ReadmeVisual>
 
-</div>
+</div></div>
 
 </div>
 
@@ -761,11 +537,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-612 -->
-<ReadmeVisual kind="code" :width="762.4" style="flex-grow:25">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="762.4" data-code-source="code-612" data-code-part="1">
+
+<!-- README_CODE_PART code-612 lines=1-12 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -781,6 +560,18 @@ basic_string
 $ picoc_compiler -c -O1 library/string/libstring.picoc test/basic_string.picoc \
     library/stdlib/libstdlib.picoc library/stdio/libstdio.picoc
 $ ls -1 library/string/libstring.{reti_blocks,st} test/basic_string.{reti_blocks,st}
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="762.4" data-code-source="code-612" data-code-part="2">
+
+<!-- README_CODE_PART code-612 lines=13-23 -->
+<div class="readme-code readme-terminal">
+
+```console {lines:false}
 library/string/libstring.reti_blocks
 library/string/libstring.st
 test/basic_string.reti_blocks
@@ -802,6 +593,8 @@ binary/basic_string.sections
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#112-separate-compilation-reusable-artifacts-and-linking -->
@@ -812,11 +605,10 @@ binary/basic_string.sections
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">In C, the linker consumes object files and their embedded symbol tables:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET mermaid-640 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TB
@@ -829,25 +621,8 @@ flowchart TB
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#112-separate-compilation-reusable-artifacts-and-linking -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
-
-## 1.1.2 Separate compilation, reusable artifacts, and linking (3)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">In PicoC, each <code>.reti_blocks</code> input needs its matching <code>.st</code> in the same directory. The compiler reads it automatically:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET mermaid-652 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TB
@@ -877,8 +652,13 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Compiled functions, inline assembly, startup code, and interrupt handlers share one calling convention.</p>
-<p>BAF identifies the stack frame. The caller pushes arguments and a continuation, then removes argument cells after return; the callee restores BAF and returns its value in IN2.</p></div><aside class="context-note"><b>System V ABI</b><span>The ABI model coordinates compiled functions, assembly wrappers, and startup code. PicoC adapts it to RETI; it does not implement the AMD64 ABI.</span></aside>
+<div class="readme-list"><ul><li>Shared convention: C, assembly, startup, interrupts</li>
+<li>BAF identifies stack frame</li>
+<li>Caller pushes arguments + continuation</li>
+<li>Caller removes arguments after return</li>
+<li>Callee restores BAF; result in IN2</li></ul></div>
+<aside class="context-note"><b>System V ABI</b><ul><li>General model adapted to RETI</li>
+<li>Different from AMD64 ABI</li></ul></aside>
 
 </div>
 
@@ -888,119 +668,29 @@ flowchart TB
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
 
-## 1.1.3.1 Stack-frame layout and caller cleanup (1)
+## 1.1.3.1 Stack-frame layout and caller cleanup
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-689 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-689 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-689:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Address direction / position</th>
-<th>Contents</th>
-<th>Managed by</th>
-</tr>
-</thead><tbody><tr>
-<td><strong>Higher addresses ↑</strong></td>
-<td><em>Earlier stack contents</em></td>
-<td><em>Earlier calls</em></td>
-</tr>
-<tr>
-<td><em><code>caller BAF + 3</code></em></td>
-<td><em>Caller function's argument</em></td>
-<td><em>Caller's caller</em></td>
-</tr>
-<tr>
-<td><em><code>caller BAF + 2</code></em></td>
-<td><em>Caller function's return address</em></td>
-<td><em>Caller's caller</em></td>
-</tr>
-<tr>
-<td><em><code>caller BAF + 1</code></em></td>
-<td><em>Frame pointer saved on entry to the caller</em></td>
-<td><em>Caller function's own frame</em></td>
-</tr>
-<tr>
-<td><em><code>caller BAF</code></em></td>
-<td><em>Caller function's local variable</em></td>
-<td><em>Caller function's own frame</em></td>
-</tr>
-<tr>
-<td><em><code>caller BAF - 1</code></em></td>
-<td><em>Temporary expression value retained across this call</em></td>
-<td><em>Caller function's expression evaluation</em></td>
-</tr>
-<tr>
-<td><strong><code>BAF + 4</code></strong></td>
-<td><strong>Second argument (<code>arg2</code>)</strong></td>
-<td><strong>Caller, for this call</strong></td>
-</tr>
-<tr>
-<td><strong><code>BAF + 3</code></strong></td>
-<td><strong>First argument (<code>arg1</code>)</strong></td>
-<td><strong>Caller, for this call</strong></td>
-</tr>
-<tr>
-<td><strong><code>BAF + 2</code></strong></td>
-<td><strong>Return address to the caller's continuation block</strong></td>
-<td><strong>Caller, for this call</strong></td>
-</tr>
-<tr>
-<td><strong><code>BAF + 1</code></strong></td>
-<td><strong>Saved <code>caller BAF</code></strong></td>
-<td><strong>Current callee</strong></td>
-</tr>
-<tr>
-<td><strong><code>BAF</code></strong></td>
-<td><strong>First local variable, if present</strong></td>
-<td><strong>Current callee</strong></td>
-</tr>
-<tr>
-<td><strong><code>BAF - 1</code>, ...</strong></td>
-<td><strong>Further locals and temporary expression values</strong></td>
-<td><strong>Current callee</strong></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1131-stack-frame-layout-and-caller-cleanup -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
-
-## 1.1.3.1 Stack-frame layout and caller cleanup (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-689 rows=13-14 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Address direction / position</th>
-<th>Contents</th>
-<th>Managed by</th>
-</tr>
-</thead><tbody><tr>
-<td><strong><code>SP</code></strong></td>
-<td><strong>Free cell immediately below occupied stack cells</strong></td>
-<td><strong>Current stack boundary</strong></td>
-</tr>
-<tr>
-<td><strong>Lower addresses ↓</strong></td>
-<td><strong>Direction of stack growth</strong></td>
-<td></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.60%" /><col style="width:44.05%" /><col style="width:28.36%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><strong>Higher addresses ↑</strong></li></ul></td><td><ul><li>Earlier stack contents</li></ul></td><td><ul><li>Earlier calls</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><em><code>caller BAF + 3</code></em></li></ul></td><td><ul><li>Caller argument</li></ul></td><td><ul><li>Caller’s caller</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><em><code>caller BAF + 2</code></em></li></ul></td><td><ul><li>Caller return address</li></ul></td><td><ul><li>Caller’s caller</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><em><code>caller BAF + 1</code></em></li></ul></td><td><ul><li>Saved caller frame pointer</li></ul></td><td><ul><li>Caller frame</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><em><code>caller BAF</code></em></li></ul></td><td><ul><li>Caller local</li></ul></td><td><ul><li>Caller frame</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><em><code>caller BAF - 1</code></em></li></ul></td><td><ul><li>Retained temporary expression</li></ul></td><td><ul><li>Caller expression</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><strong><code>BAF + 4</code></strong></li></ul></td><td><ul><li>Second argument (arg2)</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><strong><code>BAF + 3</code></strong></li></ul></td><td><ul><li>First argument (arg1)</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><strong><code>BAF + 2</code></strong></li></ul></td><td><ul><li>Return continuation address</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><strong><code>BAF + 1</code></strong></li></ul></td><td><ul><li>Saved caller BAF</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><strong><code>BAF</code></strong></li></ul></td><td><ul><li>First local</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><strong><code>BAF - 1</code>, ...</strong></li></ul></td><td><ul><li>More locals + temporaries</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><strong><code>SP</code></strong></li></ul></td><td><ul><li>Free cell below occupied stack</li></ul></td><td><ul><li>Current stack boundary</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><strong>Lower addresses ↓</strong></li></ul></td><td><ul><li>Stack grows toward lower addresses</li></ul></td><td><ul></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1018,11 +708,10 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Every ordinary function has one <code>&lt;function&gt;_epilogue</code> block. A return puts its value in <code>IN2</code> and jumps there to restore <code>BAF</code> and the return address. Keeping the result in <code>IN2</code> leaves <code>ACC</code> free for long jumps:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET mermaid-723 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -1032,6 +721,26 @@ flowchart LR
     epilogue --> restore["Restore BAF"]
     restore --> caller["Jump to saved return address"]
 ```
+
+</ReadmeVisual>
+
+<!-- README_ASSET code-735 -->
+<ReadmeVisual kind="code" :width="980" data-code-source="code-735" data-code-part="1">
+
+<!-- README_CODE_PART code-735 lines=1-7 -->
+<div class="readme-code">
+
+```c {lines:false}
+int add_one(int value) {
+    return value + 1;
+}
+
+int main(void) {
+    return add_one(41);
+}
+```
+
+</div>
 
 </ReadmeVisual>
 
@@ -1049,30 +758,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
-
-<!-- README_ASSET code-735 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:9">
-
-<div class="readme-code">
-
-```c {lines:false}
-int add_one(int value) {
-    return value + 1;
-}
-
-int main(void) {
-    return add_one(41);
-}
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-748 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-748" data-code-part="1" style="flex:0 0 46px">
 
+<!-- README_CODE_PART code-748 lines=1-1 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -1083,26 +774,12 @@ $ picoc_compiler -c -O1 -v -w normal-function.picoc
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1132-shared-function-epilogue-and-return-values -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
-
-## 1.1.3.2 Shared function epilogue and return values (3)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The <code>.picoc_anf</code> file is the last PicoC representation before RETI lowering:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-754 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:28">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-754" data-code-part="1">
+
+<!-- README_CODE_PART code-754 lines=1-13 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1119,6 +796,18 @@ add_one_epilogue:
   RestoreReturnAddress()
 main:
   NewStackframe(Num('0'))
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-754" data-code-part="2">
+
+<!-- README_CODE_PART code-754 lines=14-26 -->
+<div class="readme-code">
+
+```text {lines:false}
   // Call(Name('add_one'), [Num('41')])
   Exp(Num('41'))
   SaveReturnAddress(Name('main_cont.3'))
@@ -1142,22 +831,26 @@ main_epilogue:
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1132-shared-function-epilogue-and-return-values -->
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
 
-## 1.1.3.2 Shared function epilogue and return values (4)
+## 1.1.3.2 Shared function epilogue and return values (3)
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The <code>.reti_blocks</code> output retains labels and pseudoinstructions. Pattern comments show the operation behind each sequence. Only the machine-specific <code># @picoc-cache</code> line is omitted:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-787 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:69">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-787" data-code-part="1">
+
+<!-- README_CODE_PART code-787 lines=1-34 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1195,6 +888,18 @@ main:
   # NewStackframe(Num('0'))
   PUSH BAF
   MOVE SP BAF
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-787" data-code-part="2">
+
+<!-- README_CODE_PART code-787 lines=35-67 -->
+<div class="readme-code">
+
+```text {lines:false}
   SUBI SP 0
   # // Call(Name('add_one'), [Num('41')])
   # Exp(Num('41'))
@@ -1238,6 +943,8 @@ main_epilogue:
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1133-naked-functions-without-a-generated-frame -->
@@ -1248,11 +955,12 @@ main_epilogue:
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-874 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-874" data-code-part="1">
 
+<!-- README_CODE_PART code-874 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1273,19 +981,6 @@ int main(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET code-891 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
-
-<div class="readme-code readme-terminal">
-
-```console {lines:false}
-$ picoc_compiler -c -O1 naked-function.picoc
-```
-
-</div>
-
-</ReadmeVisual>
-
 </div>
 
 </div>
@@ -1300,12 +995,28 @@ $ picoc_compiler -c -O1 naked-function.picoc
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Compile-only mode preserves the complete naked block and its surrounding sections:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-command-above">
+
+<!-- README_ASSET code-891 -->
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-891" data-code-part="1" style="flex:0 0 46px">
+
+<!-- README_CODE_PART code-891 lines=1-1 -->
+<div class="readme-code readme-terminal">
+
+```console {lines:false}
+$ picoc_compiler -c -O1 naked-function.picoc
+```
+
+</div>
+
+</ReadmeVisual>
 
 <!-- README_ASSET code-895 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:31">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-895" data-code-part="1">
+
+<!-- README_CODE_PART code-895 lines=1-15 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1324,6 +1035,18 @@ main:
   ADD ACC CS
   PUSH ACC
   LOADI32 ACC constant
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-895" data-code-part="2">
+
+<!-- README_CODE_PART code-895 lines=16-29 -->
+<div class="readme-code">
+
+```text {lines:false}
   ADD ACC CS
   PUSH ACC
   POP ACC
@@ -1348,6 +1071,8 @@ main_epilogue:
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
@@ -1358,12 +1083,12 @@ main_epilogue:
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">These two function-pointer tables contain the same handler. The attribute places only <code>ivt_table</code> in <code>.ivt</code>, at the beginning of the linked image:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-948 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:15">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-948" data-code-part="1">
 
+<!-- README_CODE_PART code-948 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1400,12 +1125,12 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">With <code>-O1</code>, known initializers become <code>IVTE</code> entries rather than startup stores. Compile-only output retains their labels and sections:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-967 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-967" data-code-part="1" style="flex:0 0 46px">
 
+<!-- README_CODE_PART code-967 lines=1-1 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -1416,26 +1141,12 @@ $ picoc_compiler -c -O1 section-placement.picoc
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
-
-## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (3)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The emitted <code>section-placement.reti_blocks</code> program body is:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-973 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:32">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-973" data-code-part="1">
+
+<!-- README_CODE_PART code-973 lines=1-15 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1454,6 +1165,18 @@ handler_epilogue:
   POP IN1
   MOVE IN1 PC
 main:
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-973" data-code-part="2">
+
+<!-- README_CODE_PART code-973 lines=16-30 -->
+<div class="readme-code">
+
+```text {lines:false}
   PUSH BAF
   MOVE SP BAF
   SUBI SP 0
@@ -1479,21 +1202,24 @@ ordinary_table:
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions
 
-## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (4)
+## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (3)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-1009 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-1009" data-code-part="1" style="flex:0 0 46px">
 
+<!-- README_CODE_PART code-1009 lines=1-1 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -1505,8 +1231,9 @@ $ picoc_compiler -O1 -v -o section-placement.reti section-placement.picoc
 </ReadmeVisual>
 
 <!-- README_ASSET code-1016 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:14">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1016" data-code-part="1">
 
+<!-- README_CODE_PART code-1016 lines=1-12 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1542,12 +1269,12 @@ SUBI SP 0
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Without a custom entry, the compiler generates <code>_start</code> for a program with <code>main</code>. This source-equivalent example shows the flow. <code>Exit</code> is an internal compiler operation:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1050 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1050" data-code-part="1">
 
+<!-- README_CODE_PART code-1050 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1571,16 +1298,16 @@ void _start(void) {
 
 # 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
 
-## 1.1.5.2 PicoOS `libstart` startup sequence (1)
+## 1.1.5.2 PicoOS `libstart` startup sequence
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">PicoOS selects <span class="source-link"><code>library/start/libstart.picoc</code></span> for userspace with <code>-C library/start/libstart.picoc</code>. The wrapper records its compiled-library dependency and includes the actual startup implementation:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1072 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1072" data-code-part="1">
 
+<!-- README_CODE_PART code-1072 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1593,26 +1320,10 @@ void _start(void) {
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1152-picoos-libstart-startup-sequence -->
-
-# 1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
-
-## 1.1.5.2 PicoOS `libstart` startup sequence (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The included <span class="source-link"><code>library/start/start.picoc</code></span> contains the complete userspace startup path:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-1081 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:18">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1081" data-code-part="1">
 
+<!-- README_CODE_PART code-1081 lines=1-16 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1652,42 +1363,16 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1112 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1112 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1112:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Image</th>
-<th><code>_start</code> used</th>
-<th>Next function</th>
-</tr>
-</thead><tbody><tr>
-<td>EPROM bootloader</td>
-<td>Its explicitly defined naked <span class="source-link"><code>_start()</code></span>, compiled as part of the bootloader without <code>-C</code></td>
-<td><span class="source-link"><code>boot_main()</code></span></td>
-</tr>
-<tr>
-<td>SRAM kernel</td>
-<td>Compiler-generated default <code>_start</code>, because the kernel is linked without <code>-C</code></td>
-<td><span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td>Init process</td>
-<td><span class="source-link"><code>libstart</code> <code>_start()</code></span>, selected with <code>-C library/start/libstart.picoc</code></td>
-<td><span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td>Shell</td>
-<td><span class="source-link"><code>libstart</code> <code>_start()</code></span>, selected with the same <code>-C</code> option</td>
-<td><span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td>User applications</td>
-<td><span class="source-link"><code>libstart</code> <code>_start()</code></span>, selected by the common userspace link rule</td>
-<td>The application's <code>main</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.20%" /><col style="width:52.37%" /><col style="width:23.44%" /></colgroup><thead><tr><th>Image</th><th>_start used</th><th>Next function</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>EPROM bootloader</li></ul></td><td><ul><li>Explicit naked _start; no -C</li></ul></td><td><ul><li><span class="source-link"><code>boot_main()</code></span></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>SRAM kernel</li></ul></td><td><ul><li>Compiler-generated _start</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Init process</li></ul></td><td><ul><li>libstart; -C library/start/libstart.picoc</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Shell</li></ul></td><td><ul><li>Same libstart -C option</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>User applications</li></ul></td><td><ul><li>Common userspace libstart link rule</li></ul></td><td><ul><li>Application main()</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1705,11 +1390,12 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1760 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:10">
+<ReadmeVisual kind="code" :width="616.1999999999999" data-code-source="code-1760" data-code-part="1">
 
+<!-- README_CODE_PART code-1760 lines=1-8 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1728,8 +1414,9 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 </ReadmeVisual>
 
 <!-- README_ASSET code-1787 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1787" data-code-part="1">
 
+<!-- README_CODE_PART code-1787 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1743,7 +1430,9 @@ void syscall_interrupt(void) {
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Calling convention</b><span>Inline assembly calls the linked C helpers using the same RETI adaptation of the System V stack-frame rules.</span></aside>
+</div>
+<aside class="context-note"><b>Calling convention</b><ul><li>C helpers + inline assembly</li>
+<li>Shared RETI stack-frame rules</li></ul></aside>
 
 </div>
 
@@ -1757,32 +1446,14 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1126 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1126 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1126:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Section</th>
-<th>Default contents and addressing</th>
-<th>How source selects it</th>
-</tr>
-</thead><tbody><tr>
-<td><code>.ivt</code></td>
-<td>interrupt service routines words and, when requested, low-level functions, it begins at image offset 0 and uses <code>CS</code>-relative global references</td>
-<td>Add <code>__attribute__((section(&quot;ivt&quot;)))</code> to a global variable, function declaration, or function definition</td>
-</tr>
-<tr>
-<td><code>.text</code></td>
-<td><code>_start</code> followed by ordinary functions and their instructions, execution and code labels are relative to <code>CS</code></td>
-<td>This is the default for functions</td>
-</tr>
-<tr>
-<td><code>.data</code></td>
-<td>Ordinary global storage, addressed relative to <code>DS</code></td>
-<td>This is the default for global variables</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:18.09%" /><col style="width:40.78%" /><col style="width:41.14%" /></colgroup><thead><tr><th>Section</th><th>Default contents and addressing</th><th>How source selects it</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>.ivt</code></li></ul></td><td><ul><li>ISR words; CS-relative globals</li></ul></td><td><ul><li>section(&quot;ivt&quot;) attribute</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>.text</code></li></ul></td><td><ul><li>Entry + ordinary instructions; CS-relative</li></ul></td><td><ul><li>Default for functions</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>.data</code></li></ul></td><td><ul><li>Ordinary globals; DS-relative</li></ul></td><td><ul><li>Default for globals</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1800,37 +1471,15 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1152 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1152 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1152:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Pseudoinstruction</th>
-<th>Purpose</th>
-<th style="text-align:right">Concrete size</th>
-</tr>
-</thead><tbody><tr>
-<td><code>PUSH reg</code></td>
-<td>Reserves one stack cell and stores <code>reg</code> in it</td>
-<td style="text-align:right">2 instructions</td>
-</tr>
-<tr>
-<td><code>POP reg</code></td>
-<td>Loads the top stack cell into <code>reg</code> and releases it</td>
-<td style="text-align:right">2 instructions</td>
-</tr>
-<tr>
-<td><code>LOADI32 reg operand</code></td>
-<td>Loads a 32-bit literal, linked symbol, or <code>symbol +/- offset</code></td>
-<td style="text-align:right">3 instructions</td>
-</tr>
-<tr>
-<td><code>JUMP32[relation] target</code></td>
-<td>Jumps to an immediate address or linked code label without the normal jump-range limit</td>
-<td style="text-align:right">4--6 instructions when retained</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.86%" /><col style="width:37.40%" /><col style="width:30.74%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Purpose</th><th>Concrete size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>PUSH reg</code></li></ul></td><td><ul><li>Reserve cell; store register</li></ul></td><td><ul><li>2 instructions</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>POP reg</code></li></ul></td><td><ul><li>Load top cell; release cell</li></ul></td><td><ul><li>2 instructions</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>LOADI32 reg operand</code></li></ul></td><td><ul><li>Load 32-bit literal or linked address</li></ul></td><td><ul><li>3 instructions</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>JUMP32[relation] target</code></li></ul></td><td><ul><li>Jump beyond immediate range</li></ul></td><td><ul><li>4--6 instructions when retained</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1848,24 +1497,13 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1169 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1169 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1169:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Pseudoinstruction</th>
-<th>Expansion</th>
-</tr>
-</thead><tbody><tr>
-<td><code>PUSH ACC</code></td>
-<td><code>SUBI SP 1</code><br><code>STOREIN SP ACC 1</code></td>
-</tr>
-<tr>
-<td><code>POP ACC</code></td>
-<td><code>LOADIN SP ACC 1</code><br><code>ADDI SP 1</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>PUSH ACC</code></li></ul></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>POP ACC</code></li></ul></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1883,12 +1521,12 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The compiler uses these operations for arguments, return addresses, and saved <code>BAF</code>. PicoOS also uses them in naked functions, for example to save registers in an ISR:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1183 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1183" data-code-part="1">
 
+<!-- README_CODE_PART code-1183 lines=1-5 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1917,11 +1555,12 @@ asm("POP ACC");
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1211 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1211" data-code-part="1">
 
+<!-- README_CODE_PART code-1211 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1935,8 +1574,9 @@ ORI reg lower_bits
 </ReadmeVisual>
 
 <!-- README_ASSET code-1223 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1223" data-code-part="1">
 
+<!-- README_CODE_PART code-1223 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -1963,12 +1603,12 @@ ORI ACC 5
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This also explains the tagged SRAM base <code>0x80000000</code>, represented in PicoC as <code>-2147483648</code>. Code labels are resolved relative to <code>CS</code>, so an absolute code address requires adding <code>CS</code> afterward. The bootloader uses this pattern:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1233 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1233" data-code-part="1">
 
+<!-- README_CODE_PART code-1233 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -1995,12 +1635,12 @@ asm("MOVE ACC PC");
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>JUMP32</code> reaches beyond the hardware's signed 22-bit relative range. For a symbolic target, it builds the target's <code>CS</code>-relative address in <code>ACC</code>, adds <code>CS</code>, and moves the result to <code>PC</code>. The bit split follows <span class="source-link"><code>1.1.7.2 Loading 32-bit values with LOADI32</code></span>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1275 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1275" data-code-part="1">
 
+<!-- README_CODE_PART code-1275 lines=1-5 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -2029,11 +1669,10 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This strip shows why expanded sizes matter. The address of <code>done</code> depends on both preceding blocks:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-1308 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/pseudoinstruction-blocks.svg" alt="Expanded code blocks and the jump to done" />
 
@@ -2053,32 +1692,14 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1310 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1310 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1310:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Block</th>
-<th>Symbolic instructions</th>
-<th style="text-align:right">Real instructions after expansion</th>
-</tr>
-</thead><tbody><tr>
-<td><code>entry</code></td>
-<td><code>PUSH BAF</code>, <code>LOADI32 ACC done</code>, <code>JUMP32 done</code></td>
-<td style="text-align:right"><code>2 + 3 + 5 = 10</code></td>
-</tr>
-<tr>
-<td><code>work</code></td>
-<td><code>PUSH ACC</code>, <code>POP IN1</code>, <code>LOADI32 ACC 7</code></td>
-<td style="text-align:right"><code>2 + 2 + 3 = 7</code></td>
-</tr>
-<tr>
-<td><code>done</code></td>
-<td><code>POP BAF</code></td>
-<td style="text-align:right"><code>2</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.80%" /><col style="width:45.54%" /><col style="width:31.67%" /></colgroup><thead><tr><th>Block</th><th>Symbolic instructions</th><th>Real instructions after expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>entry</code></li></ul></td><td><ul><li><code>PUSH BAF</code>, <code>LOADI32 ACC done</code>, <code>JUMP32 done</code></li></ul></td><td><ul><li><code>2 + 3 + 5 = 10</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>work</code></li></ul></td><td><ul><li><code>PUSH ACC</code>, <code>POP IN1</code>, <code>LOADI32 ACC 7</code></li></ul></td><td><ul><li><code>2 + 2 + 3 = 7</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>done</code></li></ul></td><td><ul><li><code>POP BAF</code></li></ul></td><td><ul><li><code>2</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2096,12 +1717,12 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">A completed link emits <span class="source-link"><code>program.reti</code></span> and <code>program.sections</code>. The latter records the image layout used for loading and segment, heap, and stack setup. A typical userspace file looks like this:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1336 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:9">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1336" data-code-part="1">
 
+<!-- README_CODE_PART code-1336 lines=1-7 -->
 <div class="readme-code">
 
 ```json {lines:false}
@@ -2132,40 +1753,17 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1349 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1349 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1349:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Entry</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody><tr>
-<td><code>interrupt_service_routines_start</code></td>
-<td>Optional start of separately identified ISR code when the linked image contains it</td>
-</tr>
-<tr>
-<td><code>codesegment_start</code></td>
-<td>Process-relative start loaded into <code>CS</code>, for a normal userspace image this is also its initial entry region</td>
-</tr>
-<tr>
-<td><code>datasegment_start</code></td>
-<td>Process-relative start loaded into <code>DS</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_start</code></span></td>
-<td>First cell after static data and first cell managed by the process-local heap</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_size</code></span></td>
-<td>Heap capacity in RETI cells, <code>-1</code> requests PicoOS's default</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stack_start</code></span></td>
-<td>Highest process-relative stack cell, <code>-1</code> requests the kernel's default placement</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:50.59%" /><col style="width:49.41%" /></colgroup><thead><tr><th>Entry</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>interrupt_service_routines_start</code></li></ul></td><td><ul><li>Optional ISR code start</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>codesegment_start</code></li></ul></td><td><ul><li>Initial CS + entry region</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>datasegment_start</code></li></ul></td><td><ul><li>Initial DS</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>heap_start</code></span></li></ul></td><td><ul><li>First process-local heap cell</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Capacity in cells; −1 → default</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>stack_start</code></span></li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2183,11 +1781,10 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Run <code>reti_emulator -a program.reti</code> to assemble a loadable binary. It reads the matching <code>.sections</code> file and prepends five big-endian layout words. <code>-S PATH</code> selects another metadata file. The diagram shows both inputs:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-1366 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TB
@@ -2212,12 +1809,12 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">For example, with the <code>.sections</code> values above, assembling an illustrative <span class="source-link"><code>program.reti</code></span> produces this five-word header:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1376 -->
-<ReadmeVisual kind="code" :width="728" style="flex-grow:8">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1376" data-code-part="1">
 
+<!-- README_CODE_PART code-1376 lines=1-6 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -2247,42 +1844,16 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1390 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1390 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1390:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Word</th>
-<th>Value</th>
-<th>Use in PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td><code>codesegment_start</code></td>
-<td>Initial code segment and entry point</td>
-</tr>
-<tr>
-<td style="text-align:right">1</td>
-<td><code>datasegment_start</code></td>
-<td>Initial data segment</td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td><span class="source-link"><code>heap_start</code></span></td>
-<td>Start of the User Process Heap within a Process Payload</td>
-</tr>
-<tr>
-<td style="text-align:right">3</td>
-<td><span class="source-link"><code>heap_size</code></span></td>
-<td>Configured heap size, or <code>-1</code> for the PicoOS default</td>
-</tr>
-<tr>
-<td style="text-align:right">4</td>
-<td><span class="source-link"><code>stack_start</code></span></td>
-<td>Highest stack cell, or <code>-1</code> for the PicoOS default</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.34%" /><col style="width:32.71%" /><col style="width:42.96%" /></colgroup><thead><tr><th>Word</th><th>Value</th><th>Use in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><code>codesegment_start</code></li></ul></td><td><ul><li>Initial CS + entry</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><code>datasegment_start</code></li></ul></td><td><ul><li>Initial DS</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>heap_start</code></span></li></ul></td><td><ul><li>Process-local heap start</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li><span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Configured cells; −1 → default</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li><span class="source-link"><code>stack_start</code></span></li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2300,12 +1871,12 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The current kernel header is shown below. Its values come from the linked kernel layout with a 4,096-cell heap and a 2,715-cell stack:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1416 -->
-<ReadmeVisual kind="code" :width="736.6" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1416" data-code-part="1">
 
+<!-- README_CODE_PART code-1416 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -2338,44 +1909,18 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1430 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1430 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1430:1,2,3,4,5,6,7">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel constant</th>
-<th>Consumer and purpose</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>SRAM_BASE</code></span></td>
-<td>Converts process-relative linked addresses to the absolute SRAM address space</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SRAM_MAX_ADDRESS_IN_MEMORY_MAP</code></span></td>
-<td>Inclusive final configured SRAM cell, bounds the Process and Shared Data Heap</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KERNEL_HEAP_START</code></span>, <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span></td>
-<td>Initialize the global <span class="source-link"><code>kernel_heap</code></span> descriptor and define its stack boundary</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>PROCESS_MEMORY_START</code></span></td>
-<td>First cell managed by the global <span class="source-link"><code>process_shared_data_heap</code></span> for Process Payloads and Shared Data Payloads</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KERNEL_CS_START_ASM</code></span>, <span class="source-link"><code>KERNEL_DS_START_ASM</code></span></td>
-<td>Inline assembly fragments used when interrupt entries install kernel segments</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KERNEL_SP_START_ASM</code></span></td>
-<td>Inline assembly fragment that installs the linked kernel stack start</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KERNEL_CS_ACC_ASM</code></span></td>
-<td>Generated fragment for loading the kernel code base into <code>ACC</code>, currently unused by PicoOS source</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:53.02%" /><col style="width:46.98%" /></colgroup><thead><tr><th>Kernel constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_BASE</code></span></li></ul></td><td><ul><li>Relative → absolute SRAM addresses</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_MAX_ADDRESS_IN_MEMORY_MAP</code></span></li></ul></td><td><ul><li>Inclusive outer-heap limit</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_HEAP_START</code></span>, <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span></li></ul></td><td><ul><li>Kernel Heap bounds + stack boundary</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>PROCESS_MEMORY_START</code></span></li></ul></td><td><ul><li>First Process/Shared Data Heap cell</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_CS_START_ASM</code></span>, <span class="source-link"><code>KERNEL_DS_START_ASM</code></span></li></ul></td><td><ul><li>Install kernel CS + DS</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_SP_START_ASM</code></span></li></ul></td><td><ul><li>Install kernel SP</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_CS_ACC_ASM</code></span></li></ul></td><td><ul><li>Load kernel code base; currently unused</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2393,12 +1938,12 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The current bootloader header establishes the temporary context before the kernel image supplies its own segment and stack values. The code shows the generated format, and the following table explains its three constants:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1444 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1444" data-code-part="1">
 
+<!-- README_CODE_PART code-1444 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -2425,28 +1970,14 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1450 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1450 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1450:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Bootloader constant</th>
-<th>Consumer and purpose</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>SRAM_MAX_ADDRESS</code></span></td>
-<td>Final physical SRAM offset, fallback kernel stack offset when the loaded header contains -1</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>EPROM_DS_START_ASM</code></span></td>
-<td>Loads the bootloader's linked EPROM data segment</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>EPROM_STACK_START_ASM</code></span></td>
-<td>Loads the absolute top-of-SRAM temporary stack</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.29%" /><col style="width:51.71%" /></colgroup><thead><tr><th>Bootloader constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_MAX_ADDRESS</code></span></li></ul></td><td><ul><li>Physical SRAM limit; fallback stack</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>EPROM_DS_START_ASM</code></span></li></ul></td><td><ul><li>Install linked EPROM DS</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>EPROM_STACK_START_ASM</code></span></li></ul></td><td><ul><li>Temporary stack at SRAM top</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2464,64 +1995,24 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1470 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1470 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-1470:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Feature</th>
-<th>Contribution used by PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Plain execution output</td>
-<td>Without the debugger, completed UART output is written directly to host stdout</td>
-</tr>
-<tr>
-<td>Commented assembly</td>
-<td>Debug mode can show source-derived labels and comments beside instructions</td>
-</tr>
-<tr>
-<td>Atomic locking</td>
-<td><code>TSL</code> atomically returns a cell's old value and stores <code>1</code>, supporting the mutex library</td>
-</tr>
-<tr>
-<td>Structured loading</td>
-<td><code>.sections</code> distinguishes the interrupt service routine table, ISR code, <code>.text</code>, <code>.data</code>, heap, and stack</td>
-</tr>
-<tr>
-<td>Binary assembly</td>
-<td><code>--assemble program.reti</code> combines RETI words with the five layout header words in <code>program.bin</code></td>
-</tr>
-<tr>
-<td>EPROM-only boot</td>
-<td><code>-e boot/bootloader.reti</code> starts CPU execution at the EPROM bootloader without preloading a program into SRAM</td>
-</tr>
-<tr>
-<td>Configurable SRAM</td>
-<td>PicoOS selects 262,144 physical 32-bit cells while retaining the RETI tagged address space</td>
-</tr>
-<tr>
-<td>Memory-mapped periphery</td>
-<td>UART, device mappings, priorities, timer interval, stack boundary, exception cause, and optional DMA occupy offsets 0–16</td>
-</tr>
-<tr>
-<td>Interrupt controller</td>
-<td>Timer, DMA through the custom device line, and UART have configurable ISR mappings, priorities, pending state, and nesting behavior</td>
-</tr>
-<tr>
-<td>Direct memory access</td>
-<td>Optional DMA copies UART words into SRAM for kernel, init, and later program loading, scheduled loads receive a completion interrupt</td>
-</tr>
-<tr>
-<td>Manual interrupts</td>
-<td>The TUI can select and trigger an interrupt service routines for inspection</td>
-</tr>
-<tr>
-<td>Runtime timer</td>
-<td>An instruction-count interval produces repeatable userspace preemption and exposes the live counter in the TUI</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Plain execution output</li></ul></td><td><ul><li>UART output → host stdout</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Commented assembly</li></ul></td><td><ul><li>Source labels/comments beside assembly</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Atomic locking</li></ul></td><td><ul><li>Atomic old value + store 1</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Structured loading</li></ul></td><td><ul><li>Distinct code/data/heap/stack regions</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Binary assembly</li></ul></td><td><ul><li>RETI words + five-word header</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>EPROM-only boot</li></ul></td><td><ul><li>Start bootloader without SRAM preload</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Configurable SRAM</li></ul></td><td><ul><li>Configurable physical word capacity</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li>Memory-mapped periphery</li></ul></td><td><ul><li>Memory-mapped offsets 0–16</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>Interrupt controller</li></ul></td><td><ul><li>Mappings, priorities, pending state, nesting</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li>Direct memory access</li></ul></td><td><ul><li>UART words → SRAM; completion interrupt</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li>Manual interrupts</li></ul></td><td><ul><li>Trigger selected ISR in TUI</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li>Runtime timer</li></ul></td><td><ul><li>Instruction-count timer; visible live counter</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li>Raw-byte UART</li></ul></td><td><ul><li>Byte registers + status bits</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2539,95 +2030,23 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1470 rows=13-24 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1470 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-1470:14,15,16,17,18,19,20,21,22,23,24,25">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Feature</th>
-<th>Contribution used by PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Raw-byte UART</td>
-<td>Receive/send registers and status bits model byte delivery rather than line-oriented console input</td>
-</tr>
-<tr>
-<td>UART host services</td>
-<td>The emulator parses bounded load, read, file-size, output, directory, and removal requests from the byte stream</td>
-</tr>
-<tr>
-<td>Normal and raw terminals</td>
-<td>The normal view preserves host signal processing, raw mode forwards control and escape bytes needed by the shell</td>
-</tr>
-<tr>
-<td>CPU exceptions</td>
-<td>Divide by zero, stack overflow, and illegal instructions enter interrupt service routine table entry 3 and expose a cause value</td>
-</tr>
-<tr>
-<td>Stack/heap protection</td>
-<td>The active inclusive boundary is checked whenever an instruction attempts to decrease <code>SP</code></td>
-</tr>
-<tr>
-<td>Runtime segment interpretation</td>
-<td>Code/data/watch views follow live <code>CS</code> and <code>DS</code> after bootloading and context switches</td>
-</tr>
-<tr>
-<td>Source-level debugging</td>
-<td><code>.debuginfo</code> and preprocessed source provide globals, locals, arguments, calls, frames, and source positions</td>
-</tr>
-<tr>
-<td>SRAM transcoding</td>
-<td>Memory can be viewed as numbers, characters, or decoded instructions without losing known-code regions</td>
-</tr>
-<tr>
-<td>Snapshots and restart</td>
-<td>Complete CPU, memory, interrupt, UART, and peripheral state can be saved, restored repeatedly, or restarted</td>
-</tr>
-<tr>
-<td>Live inspection/editing</td>
-<td>Windows can be selected, scrolled, centered, and edited while inspecting registers or memory</td>
-</tr>
-<tr>
-<td>Synthetic OS context</td>
-<td>The initial debugger state can model the kernel/interrupt context needed before PicoOS's first <code>RTI</code></td>
-</tr>
-<tr>
-<td>Explicit ISR table size</td>
-<td>The emulator can reserve the five-entry IVT before the bootloader populates SRAM</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#12-reti-emulator-extensions -->
-
-# 1. Toolchain extensions for PicoOS
-
-## 1.2 RETI-Emulator extensions (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1470 rows=25-25 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Feature</th>
-<th>Contribution used by PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Isolated assembly runs</td>
-<td>The repository wrapper keeps assembler processes from overwriting peripheral files belonging to an active OS instance</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="14"><td class="table-key"><ul><li>UART host services</li></ul></td><td><ul><li>Bounded host filesystem protocol</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li>Normal and raw terminals</li></ul></td><td><ul><li>Normal/raw input + control bytes</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li>CPU exceptions</li></ul></td><td><ul><li>Divide/stack/illegal → IVT entry 3</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li>Stack/heap protection</li></ul></td><td><ul><li>Inclusive lower SP boundary</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><ul><li>Runtime segment interpretation</li></ul></td><td><ul><li>Views follow live CS + DS</li></ul></td></tr>
+<tr data-source-row="19"><td class="table-key"><ul><li>Source-level debugging</li></ul></td><td><ul><li>Globals, locals, frames, source locations</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="20"><td class="table-key"><ul><li>SRAM transcoding</li></ul></td><td><ul><li>Numbers, characters, decoded instructions</li></ul></td></tr>
+<tr data-source-row="21"><td class="table-key"><ul><li>Snapshots and restart</li></ul></td><td><ul><li>Save/restore/restart complete machine state</li></ul></td></tr>
+<tr data-source-row="22"><td class="table-key"><ul><li>Live inspection/editing</li></ul></td><td><ul><li>Select, scroll, center, edit views</li></ul></td></tr>
+<tr data-source-row="23"><td class="table-key"><ul><li>Synthetic OS context</li></ul></td><td><ul><li>Synthetic startup kernel/interrupt context</li></ul></td></tr>
+<tr data-source-row="24"><td class="table-key"><ul><li>Explicit ISR table size</li></ul></td><td><ul><li>Reserve five-entry IVT</li></ul></td></tr>
+<tr data-source-row="25"><td class="table-key"><ul><li>Isolated assembly runs</li></ul></td><td><ul><li>Keep assembler periphery files isolated</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2645,11 +2064,10 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The emulator documentation calls the <code>01</code> region <strong>periphery</strong>. The map places this region between EPROM and SRAM:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-1508 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/reti-periphery-memory-map.svg" alt="RETI address space with periphery between EPROM and SRAM" />
 
@@ -2669,36 +2087,14 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1513 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1513 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1513:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Address range</th>
-<th>Top-bit prefix</th>
-<th>RETI region</th>
-<th>Implemented PicoOS use</th>
-</tr>
-</thead><tbody><tr>
-<td><code>0x00000000..0x3fffffff</code></td>
-<td><code>00</code></td>
-<td>EPROM</td>
-<td>Bootloader code and data</td>
-</tr>
-<tr>
-<td><strong><code>0x40000000..0x7fffffff</code></strong></td>
-<td><strong><code>01</code></strong></td>
-<td><strong>Periphery</strong></td>
-<td><strong>Offsets <code>0..16</code>, through <code>0x40000010</code>, are implemented memory-mapped registers</strong></td>
-</tr>
-<tr>
-<td><code>0x80000000..0xffffffff</code></td>
-<td><code>10</code> or <code>11</code></td>
-<td>SRAM</td>
-<td>Kernel image, process images, heaps, stacks, and shared data</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.38%" /><col style="width:17.00%" /><col style="width:18.52%" /><col style="width:30.09%" /></colgroup><thead><tr><th>Address range</th><th>Top-bit prefix</th><th>RETI region</th><th>Implemented PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>0x00000000..0x3fffffff</code></li></ul></td><td><ul><li><code>00</code></li></ul></td><td><ul><li>EPROM</li></ul></td><td><ul><li>Bootloader code + data</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><strong><code>0x40000000..0x7fffffff</code></strong></li></ul></td><td><ul><li><strong><code>01</code></strong></li></ul></td><td><ul><li><strong>Periphery</strong></li></ul></td><td><ul><li>Implemented offsets 0–16</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>0x80000000..0xffffffff</code></li></ul></td><td><ul><li><code>10</code> or <code>11</code></li></ul></td><td><ul><li>SRAM</li></ul></td><td><ul><li>Kernel, processes, heaps, stacks</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2716,110 +2112,24 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1523 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1523 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-1523:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Offset</th>
-<th>Register</th>
-<th>Access and connection to PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td>UART send</td>
-<td>Kernel/bootloader write the low byte and clear send-ready in offset 2</td>
-</tr>
-<tr>
-<td style="text-align:right">1</td>
-<td>UART receive</td>
-<td>Emulator writes an incoming byte, polling code or UART ISR reads it</td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td>UART status</td>
-<td>Bit 0 reports send-ready and bit 1 receive-ready</td>
-</tr>
-<tr>
-<td style="text-align:right">3–5</td>
-<td>Device-to-ISR mappings</td>
-<td>Timer, custom device, and UART select IVT indices, 255 disables a line</td>
-</tr>
-<tr>
-<td style="text-align:right">6–8</td>
-<td>Device priorities</td>
-<td>Interrupt controller selects the highest-priority pending device</td>
-</tr>
-<tr>
-<td style="text-align:right">9</td>
-<td>Timer interval</td>
-<td>Instruction-count period, zero disables and a write restarts the counter</td>
-</tr>
-<tr>
-<td style="text-align:right">10</td>
-<td>Stack/heap boundary</td>
-<td>Inclusive active lower stack limit, dispatcher rewrites it on every context switch</td>
-</tr>
-<tr>
-<td style="text-align:right">11</td>
-<td>CPU exception cause</td>
-<td>Read-only: none, divide by zero, stack overflow, or illegal instruction</td>
-</tr>
-<tr>
-<td style="text-align:right">12</td>
-<td>DMA active</td>
-<td>Always present, <code>1</code> enables DMA and exposes offsets 13–16</td>
-</tr>
-<tr>
-<td style="text-align:right">13</td>
-<td>DMA source</td>
-<td>Absolute UART receive address used by PicoOS</td>
-</tr>
-<tr>
-<td style="text-align:right">14</td>
-<td>DMA destination</td>
-<td>Absolute SRAM destination address</td>
-</tr>
-<tr>
-<td style="text-align:right">15</td>
-<td>DMA word count</td>
-<td>Number of complete 32-bit words to copy</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#121-reti-machine-model-and-memory-mapped-peripherals -->
-
-# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
-
-## 1.2.1 RETI machine model and memory-mapped peripherals (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1523 rows=13-13 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Offset</th>
-<th>Register</th>
-<th>Access and connection to PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">16</td>
-<td>DMA status/control</td>
-<td><code>0</code> idle, write/read <code>1</code> for start/busy, <code>2</code> complete, <code>3</code> error</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>UART send</li></ul></td><td><ul><li>Write low byte; clear send-ready</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li>UART receive</li></ul></td><td><ul><li>Receive byte; poll or ISR reads</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li>UART status</li></ul></td><td><ul><li>Bit 0: send; bit 1: receive</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>3–5</li></ul></td><td><ul><li>Device-to-ISR mappings</li></ul></td><td><ul><li>Timer/custom/UART → IVT; 255 disables</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>6–8</li></ul></td><td><ul><li>Device priorities</li></ul></td><td><ul><li>Highest pending priority wins</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>9</li></ul></td><td><ul><li>Timer interval</li></ul></td><td><ul><li>Instruction interval; zero disables</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>10</li></ul></td><td><ul><li>Stack/heap boundary</li></ul></td><td><ul><li>Inclusive SP limit; rewrite on switch</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li>11</li></ul></td><td><ul><li>CPU exception cause</li></ul></td><td><ul><li>None/divide/stack/illegal cause</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>12</li></ul></td><td><ul><li>DMA active</li></ul></td><td><ul><li>1 enables DMA + extra registers</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li>13</li></ul></td><td><ul><li>DMA source</li></ul></td><td><ul><li>Absolute UART receive source</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li>14</li></ul></td><td><ul><li>DMA destination</li></ul></td><td><ul><li>Absolute SRAM destination</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li>15</li></ul></td><td><ul><li>DMA word count</li></ul></td><td><ul><li>Complete 32-bit words</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li>16</li></ul></td><td><ul><li>DMA status/control</li></ul></td><td><ul><li>0 idle; 1 busy; 2 done; 3 error</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2837,11 +2147,12 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1552 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1552" data-code-part="1">
 
+<!-- README_CODE_PART code-1552 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -2851,13 +2162,6 @@ TSL DS ACC 2
 ```
 
 </div>
-
-</ReadmeVisual>
-
-<!-- README_ASSET image-1562 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
-
-<img src="/readme/tsl-memory-layout.svg" alt="TSL DS ACC 2 accessing adjacent SRAM word cells with the target changing from 0 to 1" />
 
 </ReadmeVisual>
 
@@ -2875,11 +2179,17 @@ TSL DS ACC 2
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>TSL</code> occupies mode <code>10</code> of RETI's Store, Move category. These fields encode <code>TSL DS ACC 2</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
+
+<!-- README_ASSET image-1562 -->
+<ReadmeVisual kind="image" :width="980">
+
+<img src="/readme/tsl-memory-layout.svg" alt="TSL DS ACC 2 accessing adjacent SRAM word cells with the target changing from 0 to 1" />
+
+</ReadmeVisual>
 
 <!-- README_ASSET image-1572 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/tsl-instruction-format.svg" alt="TSL DS ACC 2 instruction fields" />
 
@@ -2899,42 +2209,15 @@ TSL DS ACC 2
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1580 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1580 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1580:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Type</th>
-<th>Mode <code>M</code></th>
-<th>Assembly syntax</th>
-<th>Operation</th>
-</tr>
-</thead><tbody><tr>
-<td><code>10</code></td>
-<td><code>00</code></td>
-<td><code>STORE S i</code></td>
-<td>Store register <code>S</code> at the direct, DS-completed address</td>
-</tr>
-<tr>
-<td><code>10</code></td>
-<td><code>01</code></td>
-<td><code>STOREIN D S i</code></td>
-<td>Store register <code>S</code> at address <code>D + i</code></td>
-</tr>
-<tr>
-<td><code>10</code></td>
-<td><code>10</code></td>
-<td><code>TSL S D i</code></td>
-<td>Return <code>M[S + i]</code> in <code>D</code>, then set that cell to <code>1</code></td>
-</tr>
-<tr>
-<td><code>10</code></td>
-<td><code>11</code></td>
-<td><code>MOVE S D</code></td>
-<td>Copy register <code>S</code> to register <code>D</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.19%" /><col style="width:20.19%" /><col style="width:21.72%" /><col style="width:37.90%" /></colgroup><thead><tr><th>Type</th><th>Mode M</th><th>Assembly syntax</th><th>Operation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>00</code></li></ul></td><td><ul><li><code>STORE S i</code></li></ul></td><td><ul><li>Store S at DS-relative address</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>01</code></li></ul></td><td><ul><li><code>STOREIN D S i</code></li></ul></td><td><ul><li>Store register <code>S</code> at address <code>D + i</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>10</code></li></ul></td><td><ul><li><code>TSL S D i</code></li></ul></td><td><ul><li>D ← M[S+i]; M[S+i] ← 1</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>11</code></li></ul></td><td><ul><li><code>MOVE S D</code></li></ul></td><td><ul><li>Copy register <code>S</code> to register <code>D</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2952,11 +2235,10 @@ TSL DS ACC 2
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">On hardware, a host program serves PicoOS filesystem and terminal requests over the USB-to-UART connection. The diagram follows requests and responses through that connection:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET mermaid-1598 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -2974,25 +2256,8 @@ flowchart LR
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
-
-# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
-
-## 1.2.3 UART host-service protocol (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">During development, the emulator models UART and serves those requests directly:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET mermaid-1615 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"flowchart": {"nodeSpacing": 20, "rankSpacing": 45, "wrappingWidth": 300}}}%%
@@ -3025,129 +2290,51 @@ flowchart LR
 
 # 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
 
+## 1.2.3 UART host-service protocol (2)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<!-- README_ASSET table-1642 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-1642:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>&lt;ESC&gt;load &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Word count + binary bytes</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>&lt;ESC&gt;read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Returned count + file range</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>&lt;ESC&gt;file-size &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>32-bit file size</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>&lt;ESC&gt;write &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create/truncate; route UART output</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>&lt;ESC&gt;write-at &lt;offset&gt; &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Preserve file; output at offset</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>&lt;ESC&gt;write stdout&lt;ESC&gt;/</code> / <span class="source-link"><code>stderr</code></span></li></ul></td><td><ul><li>Restore host stdout/stderr</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>&lt;ESC&gt;literal-output &lt;count&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Following bytes bypass control parser</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>&lt;ESC&gt;pwd&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Length-prefixed PicoOS root /</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="9"><td class="table-key"><ul><li><code>&lt;ESC&gt;is-directory &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Directory existence/type test</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><code>&lt;ESC&gt;mkdir &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create directory</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><code>&lt;ESC&gt;ls &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Length-prefixed listing</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><code>&lt;ESC&gt;unlink &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Remove file</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><code>&lt;ESC&gt;rmdir &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Remove empty directory</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><code>&lt;ESC&gt;move &lt;old path&gt;\n&lt;new path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Move/rename path</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li><code>&lt;ESC&gt;touch &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create/update timestamps</li></ul></td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
+
+</div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
+
+# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
+
 ## 1.2.3 UART host-service protocol (3)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1642 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Request form</th>
-<th>Result</th>
-</tr>
-</thead><tbody><tr>
-<td><code>&lt;ESC&gt;load &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Big-endian word count followed by binary bytes, used by the bootloader</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Returned byte count followed by that file range</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;file-size &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>File size as one 32-bit value</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;write &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Create/truncate a file and route following UART bytes to it</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;write-at &lt;offset&gt; &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Preserve a file and route following UART bytes to the byte offset</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;write stdout&lt;ESC&gt;/</code> / <span class="source-link"><code>stderr</code></span></td>
-<td>Restore a host standard output stream</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;literal-output &lt;count&gt;&lt;ESC&gt;/</code></td>
-<td>Treat exactly the next <code>count</code> UART bytes as output data, even when they contain <code>&lt;ESC&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;pwd&lt;ESC&gt;/</code></td>
-<td>PicoOS root <code>/</code> as a length-prefixed string</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;is-directory &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Directory test</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;mkdir &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Create a directory</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;ls &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Length-prefixed directory listing</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;unlink &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Remove a file</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
-
-# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
-
-## 1.2.3 UART host-service protocol (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1642 rows=13-15 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Request form</th>
-<th>Result</th>
-</tr>
-</thead><tbody><tr>
-<td><code>&lt;ESC&gt;rmdir &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Remove an empty directory</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;move &lt;old path&gt;\n&lt;new path&gt;&lt;ESC&gt;/</code></td>
-<td>Move or rename a file or directory</td>
-</tr>
-<tr>
-<td><code>&lt;ESC&gt;touch &lt;path&gt;&lt;ESC&gt;/</code></td>
-<td>Create a file or update its timestamps</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
-
-# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
-
-## 1.2.3 UART host-service protocol (5)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Replies arrive on the same UART stream. A <span class="source-link"><code>load</code></span> response contains a word count followed by file bytes. <code>ESC</code> below means byte 27:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET mermaid-1666 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"sequence": {"wrap": false, "actorMargin": 60, "width": 180, "height": 45, "messageMargin": 25, "mirrorActors": false, "diagramMarginY": 35}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
@@ -3162,25 +2349,8 @@ sequenceDiagram
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
-
-# 1. Toolchain extensions for PicoOS · 1.2 RETI-Emulator extensions
-
-## 1.2.3 UART host-service protocol (6)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Ranged reads return a byte count and payload. Metadata and status requests return one big-endian value:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET mermaid-1680 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"sequence": {"wrap": false, "actorMargin": 60, "width": 180, "height": 45, "messageMargin": 25, "mirrorActors": false, "diagramMarginY": 35}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
@@ -3213,12 +2383,11 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The debugger shows RETI state alongside PicoC source. This recording demonstrates execution controls, snapshots, and the UART terminal:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET recording-1714 -->
 <AsciinemaRecording src="/casts/reti_emulator.cast" title="RETI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />
-<p class="slide-note">Click to play the recording on this slide. Click outside the player to resume slide navigation.</p>
+<ul class="slide-note"><li>Click to play; click outside to navigate</li></ul>
 
 </div>
 
@@ -3234,42 +2403,16 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1726 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1726 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1726:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>View</th>
-<th>Default tracking</th>
-<th>Additional selection</th>
-</tr>
-</thead><tbody><tr>
-<td>CPU registers</td>
-<td>All eight current register values</td>
-<td>Select a register to inspect or edit its value</td>
-</tr>
-<tr>
-<td>EEPROM / SRAM code</td>
-<td><code>PC</code>, in the matching address space</td>
-<td>Assign another register or a direct memory address</td>
-</tr>
-<tr>
-<td>SRAM data</td>
-<td><code>DS</code></td>
-<td>Assign another register or a direct memory address</td>
-</tr>
-<tr>
-<td>SRAM stack</td>
-<td><code>SP</code></td>
-<td>Assign another register or a direct memory address</td>
-</tr>
-<tr>
-<td>Periphery</td>
-<td>UART state</td>
-<td>Cycle interrupt/timer, exception, and DMA views</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.97%" /><col style="width:26.73%" /><col style="width:51.30%" /></colgroup><thead><tr><th>View</th><th>Default tracking</th><th>Additional selection</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>CPU registers</li></ul></td><td><ul><li>All eight live registers</li></ul></td><td><ul><li>Inspect/edit selected register</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>EEPROM / SRAM code</li></ul></td><td><ul><li>PC in matching address space</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>SRAM data</li></ul></td><td><ul><li>DS</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>SRAM stack</li></ul></td><td><ul><li>SP</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Periphery</li></ul></td><td><ul><li>UART state</li></ul></td><td><ul><li>Cycle interrupt/timer/exception/DMA views</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3287,12 +2430,12 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The first five SRAM cells hold the kernel's interrupt service routine table. The array and table below connect each entry to its source:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1760 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:10">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1760" data-code-part="1">
 
+<!-- README_CODE_PART code-1760 lines=1-8 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -3324,42 +2467,16 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1771 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1771 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1771:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Index</th>
-<th>Entry</th>
-<th>Source</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td><span class="source-link"><code>syscall_interrupt()</code></span></td>
-<td>Software <code>INT 0</code> from userspace</td>
-</tr>
-<tr>
-<td style="text-align:right">1</td>
-<td><span class="source-link"><code>timer_interrupt()</code></span></td>
-<td>Timer device</td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td><span class="source-link"><code>uart_interrupt()</code></span></td>
-<td>UART receive device</td>
-</tr>
-<tr>
-<td style="text-align:right">3</td>
-<td><span class="source-link"><code>cpu_exception_interrupt()</code></span></td>
-<td>Fixed synchronous CPU exception entry</td>
-</tr>
-<tr>
-<td style="text-align:right">4</td>
-<td><span class="source-link"><code>dma_interrupt()</code></span></td>
-<td>DMA completion on the hardware custom-device line</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.02%" /><col style="width:43.05%" /><col style="width:33.93%" /></colgroup><thead><tr><th>Index</th><th>Entry</th><th>Source</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><span class="source-link"><code>syscall_interrupt()</code></span></li></ul></td><td><ul><li>Userspace INT 0</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><span class="source-link"><code>timer_interrupt()</code></span></li></ul></td><td><ul><li>Timer</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>uart_interrupt()</code></span></li></ul></td><td><ul><li>UART receive</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li><span class="source-link"><code>cpu_exception_interrupt()</code></span></li></ul></td><td><ul><li>Synchronous CPU exception</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li><span class="source-link"><code>dma_interrupt()</code></span></li></ul></td><td><ul><li>DMA completion; custom-device line</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3377,12 +2494,12 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This excerpt connects the first entry to <span class="source-link"><code>syscall_interrupt()</code></span>. Its <code>naked</code> attribute lets it save registers before any generated code could change them. <span class="source-link"><code>2.4.2 System-call entry, execution, and return to userspace</code></span> gives the complete body:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1787 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1787" data-code-part="1">
 
+<!-- README_CODE_PART code-1787 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -3410,12 +2527,14 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Startup first disables each device, then writes its configured mapping and priority. The timer starts after init is ready, with a 5,000-instruction interval:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1813 -->
-<ReadmeVisual kind="code" :width="745.1999999999999" style="flex-grow:31">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="745.1999999999999" data-code-source="code-1813" data-code-part="1">
+
+<!-- README_CODE_PART code-1813 lines=1-15 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -3434,6 +2553,18 @@ int interrupt_device_priorities[INTERRUPT_DEVICE_COUNT] = {
 void interrupt_controller_initialize(void) {
     int device = 0;
     int interrupt_index;
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="745.1999999999999" data-code-source="code-1813" data-code-part="2">
+
+<!-- README_CODE_PART code-1813 lines=16-29 -->
+<div class="readme-code">
+
+```c {lines:false}
     int priority;
 
     while (device < INTERRUPT_DEVICE_COUNT) {
@@ -3458,6 +2589,8 @@ void interrupt_controller_initialize(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
@@ -3468,11 +2601,10 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The memory map locates these arrays within the kernel image. Arrows show where their values are written in the interrupt controller. <span class="source-link"><code>1.2.1 RETI machine model and memory-mapped peripherals</code></span> describes the peripheral registers:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-1853 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/interrupt-controller-initialization.svg" alt="SRAM initialization arrays and six interrupt-controller cells in the ReTI memory map" />
 
@@ -3492,134 +2624,14 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1859 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1859 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1859:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Device / array index</th>
-<th>Mapping source → periphery cell</th>
-<th>Priority source → periphery cell</th>
-</tr>
-</thead><tbody><tr>
-<td>Timer / <code>0</code></td>
-<td><code>interrupt_device_isrs[0] = 1</code> → <code>0x40000003</code></td>
-<td><code>interrupt_device_priorities[0] = 1</code> → <code>0x40000006</code></td>
-</tr>
-<tr>
-<td>DMA on custom line / <code>1</code></td>
-<td><code>interrupt_device_isrs[1] = 4</code> → <code>0x40000004</code></td>
-<td><code>interrupt_device_priorities[1] = 1</code> → <code>0x40000007</code></td>
-</tr>
-<tr>
-<td>UART / <code>2</code></td>
-<td><code>interrupt_device_isrs[2] = 2</code> → <code>0x40000005</code></td>
-<td><code>interrupt_device_priorities[2] = 2</code> → <code>0x40000008</code></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#221-interrupt-controller-function-reference -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.2 Interrupt-controller mappings and priorities
-
-## 2.2.1 Interrupt-controller function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1876 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>interrupt_controller_initialize(void)</code></span></td>
-<td>Returns no value</td>
-<td>Rewrites timer, DMA, and UART mappings and priorities in periphery registers 3–8 from <span class="source-link"><code>interrupt_device_isrs</code></span> and <span class="source-link"><code>interrupt_device_priorities</code></span></td>
-<td><span class="source-link"><code>interrupt_controller_disable_device()</code></span>, <span class="source-link"><code>interrupt_controller_assign_device()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_controller_assign_device(device, interrupt_index, priority)</code></span></td>
-<td>Returns no value</td>
-<td>Writes one device's interrupt service routine-table index and priority</td>
-<td><span class="source-link"><code>interrupt_controller_device_to_isr_register()</code></span>, <span class="source-link"><code>interrupt_controller_device_to_priority_register()</code></span>, <span class="source-link"><code>periphery_write_register()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>interrupt_controller_initialize()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_controller_disable_device(device)</code></span></td>
-<td>Returns no value</td>
-<td>Writes mapping 255 and priority 0 for one device</td>
-<td><span class="source-link"><code>interrupt_controller_device_to_isr_register()</code></span>, <span class="source-link"><code>interrupt_controller_device_to_priority_register()</code></span>, <span class="source-link"><code>periphery_write_register()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>interrupt_controller_initialize()</code></span>, <span class="source-link"><code>reboot()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_controller_activate_timer(void)</code></span></td>
-<td>Returns no value</td>
-<td>Writes the 5,000-instruction interval to periphery register 9</td>
-<td><span class="source-link"><code>periphery_write_register()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#222-memory-mapped-periphery-function-reference -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.2 Interrupt-controller mappings and priorities
-
-## 2.2.2 Memory-mapped periphery function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-1890 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>periphery_read_register(register_index)</code></span></td>
-<td>Returns the selected periphery value</td>
-<td>Reads one memory-mapped periphery cell, changes no kernel state</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>handle_cpu_exception()</code></span>, <span class="source-link"><code>handle_uart_interrupt()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>periphery_write_register(register_index, value)</code></span></td>
-<td>Returns no value</td>
-<td>Writes one memory-mapped periphery cell</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>activate_current_process_stack_boundary()</code></span>, <span class="source-link"><code>activate_kernel_stack_boundary()</code></span>, <span class="source-link"><code>handle_uart_interrupt()</code></span>, <span class="source-link"><code>interrupt_controller_activate_timer()</code></span>, <span class="source-link"><code>interrupt_controller_assign_device()</code></span>, <span class="source-link"><code>interrupt_controller_disable_device()</code></span>, <span class="source-link"><code>reboot()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.68%" /><col style="width:40.97%" /><col style="width:46.35%" /></colgroup><thead><tr><th>Device / array index</th><th>Mapping source → periphery cell</th><th>Priority source → periphery cell</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Timer / <code>0</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[0] = 1</code> → <code>0x40000003</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[0] = 1</code> → <code>0x40000006</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>DMA on custom line / <code>1</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[1] = 4</code> → <code>0x40000004</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[1] = 1</code> → <code>0x40000007</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>UART / <code>2</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[2] = 2</code> → <code>0x40000005</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[2] = 2</code> → <code>0x40000008</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3637,52 +2649,26 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-1901 rows=1-8 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-1901 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1901:1,2,3,4,5,6,7,8">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Offset</th>
-<th>Stored value</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right"><code>+0</code></td>
-<td>Free cell addressed by <span class="source-link"><code>caller_context</code></span></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+1</code></td>
-<td>Saved <code>DS</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+2</code></td>
-<td>Saved <code>CS</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+3</code></td>
-<td>Saved <code>BAF</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+4</code></td>
-<td>Saved <code>IN2</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+5</code></td>
-<td>Saved <code>IN1</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+6</code></td>
-<td>Saved <code>ACC</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>+7</code></td>
-<td>Return PC saved by interrupt entry</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.52%" /><col style="width:57.48%" /></colgroup><thead><tr><th>Offset</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>+0</code></li></ul></td><td><ul><li>Free cell addressed by <span class="source-link"><code>caller_context</code></span></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>+1</code></li></ul></td><td><ul><li>Saved <code>DS</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>+2</code></li></ul></td><td><ul><li>Saved <code>CS</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>+3</code></li></ul></td><td><ul><li>Saved <code>BAF</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>+4</code></li></ul></td><td><ul><li>Saved <code>IN2</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>+5</code></li></ul></td><td><ul><li>Saved <code>IN1</code></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>+6</code></li></ul></td><td><ul><li>Saved <code>ACC</code></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>+7</code></li></ul></td><td><ul><li>Return PC saved by interrupt entry</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Linux comparison</b><span>Linux saves syscall context on the kernel stack. RETI entry and RTI use the active SP; PicoOS saves context on the user stack and has no memory isolation.</span></aside>
+</div>
+<aside class="context-note"><b>Linux comparison</b><ul><li>Linux: context on kernel stack</li>
+<li>PicoOS: context on user stack</li>
+<li>RETI entry/RTI use active SP</li></ul></aside>
 
 </div>
 
@@ -3696,8 +2682,12 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>A library wrapper passes a syscall selector and arguments to the installed kernel. <span class="source-link"><code>handle_syscall()</code></span> chooses the implementation. This avoids embedding kernel function addresses in user programs.</p>
-<p>Kernel functions can move without changing the wrapper. Compatibility still depends on selectors, register conventions, request layouts, and argument and result meanings. Together these form the syscall ABI. Changing it can require rebuilding libraries or programs.</p></div><aside class="context-note"><b>POSIX: source portability</b><span>A library may expose familiar interfaces over different kernel syscalls. PicoOS also differs in signatures and behavior; familiar names do not imply binary compatibility.</span></aside>
+<div class="readme-list"><ul><li>Library wrapper → selector + request</li>
+<li>INT 0 → handle_syscall</li>
+<li>No hardcoded kernel function addresses</li>
+<li>ABI: registers, layouts, result meanings</li></ul></div>
+<aside class="context-note"><b>POSIX portability</b><ul><li>Source interfaces across different kernels</li>
+<li>PicoOS signatures/behavior differ</li></ul></aside>
 
 </div>
 
@@ -3711,11 +2701,12 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4917 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4917" data-code-part="1">
 
+<!-- README_CODE_PART code-4917 lines=1-10 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -3735,7 +2726,9 @@ int waitpid(int pid) {
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>ABI connection</b><span>IN2 carries the syscall result just as it carries a PicoC function result. The wrapper and interrupt entry must agree on this register contract.</span></aside>
+</div>
+<aside class="context-note"><b>ABI connection</b><ul><li>IN2: syscall + function result</li>
+<li>Wrapper and entry agree</li></ul></aside>
 
 </div>
 
@@ -3749,12 +2742,14 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The declarations in <span class="source-link"><code>common/syscall.header</code></span> and <span class="source-link"><code>common/file.header</code></span> define these requests. The field tables below explain their contents:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1960 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:29">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="685" data-code-source="code-1960" data-code-part="1">
+
+<!-- README_CODE_PART code-1960 lines=1-14 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -3772,6 +2767,18 @@ struct OpenRequest { char *path; int flags; };
 struct IoRequest {
     int file_descriptor;
     char *buffer;
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="685" data-code-source="code-1960" data-code-part="2">
+
+<!-- README_CODE_PART code-1960 lines=15-27 -->
+<div class="readme-code">
+
+```c {lines:false}
     int count;
     bool protect_uart_control;
     bool show_loading_bar;
@@ -3795,92 +2802,6 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 </div>
 
----
-
-<!-- SOURCE Pico-OS/README.md#2411-process-wait-signal-and-memory-request-structures -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
-
-## 2.4.1.1 Process, wait, signal, and memory request structures (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-2001 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>LoadProcessRequest.path</code></span></td>
-<td>Path of the <code>.bin</code> image</td>
-<td>First initialized by <span class="source-link"><code>load()</code></span>, passed through <span class="source-link"><code>SYSCALL_LOAD_PROCESS</code></span>, the loader normalizes it and the PCB receives its own <span class="source-link"><code>kmalloc()</code></span> path copy</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>LoadProcessRequest.show_loading_bar</code></span></td>
-<td>Whether UART transfer progress should be printed</td>
-<td>First initialized by <span class="source-link"><code>load()</code></span>, read only during loading, derived from <span class="source-link"><code>PICOOS_LOADING_BAR</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>RunProcessRequest.pid</code></span></td>
-<td>PID of an existing process in state <span class="source-link"><code>NEW</code></span></td>
-<td>First initialized by <span class="source-link"><code>run()</code></span> (or kernel <span class="source-link"><code>main()</code></span> for init), passed through <span class="source-link"><code>SYSCALL_RUN_PROCESS_WITH_ARGUMENTS</code></span>, identifies the process whose PCB state becomes <span class="source-link"><code>READY</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>RunProcessRequest.arguments</code></span></td>
-<td>Space/tab-separated argument string, or <code>NULL</code></td>
-<td>First initialized by <span class="source-link"><code>run()</code></span> (or kernel <span class="source-link"><code>main()</code></span> for init), copied into the child's initial process stack, the pointer itself is not retained</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>RunProcessRequest.environment</code></span></td>
-<td>Null-terminated array of <code>NAME=value</code> pointers</td>
-<td>First initialized by <span class="source-link"><code>run()</code></span> (or kernel <span class="source-link"><code>main()</code></span> for init), strings and pointer table are copied into the child's initial stack</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>WaitPidRequest.pid</code></span></td>
-<td>Exact child PID</td>
-<td>First initialized by <span class="source-link"><code>waitpid()</code></span>, passed through <span class="source-link"><code>SYSCALL_WAITPID</code></span>, used to find and validate the child</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>WaitPidRequest.status</code></span></td>
-<td>Address of caller's status cell</td>
-<td>First initialized by <span class="source-link"><code>waitpid()</code></span>, immediate status destination or copied into the waiting parent's <span class="source-link"><code>waiting_status_ptr</code></span> while blocked</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KillRequest.pid</code></span></td>
-<td>Target process</td>
-<td>First initialized by <span class="source-link"><code>kill()</code></span>, passed through <span class="source-link"><code>SYSCALL_KILL</code></span>, lookup only, not retained</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>KillRequest.signal_number</code></span></td>
-<td>Signal to deliver, 0 probes existence</td>
-<td>First initialized by <span class="source-link"><code>kill()</code></span>, may change target state or defer termination, but the request is not retained</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>PrctlRequest.option</code></span></td>
-<td>Currently only <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></td>
-<td>First initialized by <span class="source-link"><code>prctl()</code></span>, passed through <span class="source-link"><code>SYSCALL_PRCTL</code></span>, selects the supported operation</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>PrctlRequest.argument</code></span></td>
-<td>Signal number, or 0 to disable</td>
-<td>First initialized by <span class="source-link"><code>prctl()</code></span>, copied into current PCB <span class="source-link"><code>parent_death_signal</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ShmOpenRequest.name</code></span></td>
-<td>Name used to find an entry in the kernel's shared-memory linked list</td>
-<td>First initialized by <span class="source-link"><code>shm_open()</code></span>, passed through <span class="source-link"><code>SYSCALL_SHM_OPEN</code></span>, a new entry receives a <span class="source-link"><code>kmalloc()</code></span> copy</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
 </div>
 
 ---
@@ -3889,26 +2810,28 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 # 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
-## 2.4.1.1 Process, wait, signal, and memory request structures (2)
+## 2.4.1.1 Process, wait, signal, and memory request structures
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2001 rows=13-13 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-2001 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-2001:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>ShmOpenRequest.size</code></span></td>
-<td>Requested shared region size in RETI cells</td>
-<td>First initialized by <span class="source-link"><code>shm_open()</code></span>, used only when creating a name, an existing entry is not resized</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>LoadProcessRequest.path</code></span></li></ul></td><td><ul><li>Binary path</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>LoadProcessRequest</code></li><li><code>.show_loading_bar</code></li></ul></td><td><ul><li>Whether UART transfer progress should be printed</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.pid</code></span></li></ul></td><td><ul><li>Existing NEW PID</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.arguments</code></span></li></ul></td><td><ul><li>Argument string / NULL</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.environment</code></span></li></ul></td><td><ul><li>Null-terminated array of <code>NAME=value</code> pointers</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span></li></ul></td><td><ul><li>Exact child PID</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span></li></ul></td><td><ul><li>Address of caller's status cell</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.pid</code></span></li></ul></td><td><ul><li>Target process</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.signal_number</code></span></li></ul></td><td><ul><li>Signal to deliver, 0 probes existence</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.option</code></span></li></ul></td><td><ul><li>Currently only <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.argument</code></span></li></ul></td><td><ul><li>Signal number, or 0 to disable</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.name</code></span></li></ul></td><td><ul><li>Shared-entry lookup name</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.size</code></span></li></ul></td><td><ul><li>Requested shared region size in RETI cells</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3922,159 +2845,37 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 # 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
-## 2.4.1.2 File and directory request structures (1)
+## 2.4.1.2 File and directory request structures
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2023 rows=1-11 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-2023 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-2023:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>OpenRequest.path</code></span></td>
-<td>Relative or absolute PicoOS path to a host-backed file or kernel device</td>
-<td>First initialized by <span class="source-link"><code>open()</code></span> or <span class="source-link"><code>fopen()</code></span>, passed through <span class="source-link"><code>SYSCALL_OPEN</code></span>, normalized and copied into the selected descriptor</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>OpenRequest.flags</code></span></td>
-<td>Access mode plus <span class="source-link"><code>O_CREAT</code></span>, <span class="source-link"><code>O_TRUNC</code></span>, or <span class="source-link"><code>O_APPEND</code></span></td>
-<td>First initialized by <span class="source-link"><code>open()</code></span> or <span class="source-link"><code>fopen()</code></span>, copied into the descriptor, create/truncate decide open requests and append changes later write positioning</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.file_descriptor</code></span></td>
-<td>Entry number in the current PCB’s eight-entry table</td>
-<td>First initialized by <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>write_without_uart_escape_check()</code></span>, or stdio I/O wrappers, passed through <span class="source-link"><code>SYSCALL_READ</code></span> or <span class="source-link"><code>SYSCALL_WRITE</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.buffer</code></span></td>
-<td>Userspace destination for read or source for write</td>
-<td>First initialized by <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>write_without_uart_escape_check()</code></span>, or stdio I/O wrappers, used directly during the call, for a blocked terminal read the caller's PCB temporarily retains the destination pointer</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.count</code></span></td>
-<td>Maximum cells to read or exact cells to write</td>
-<td>First initialized by <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>write_without_uart_escape_check()</code></span>, or stdio I/O wrappers, validated before transfer, retained in terminal pending state only while stdin is blocked</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.protect_uart_control</code></span></td>
-<td>Whether a write must scan for <code>&lt;ESC&gt;</code> and protect a matching buffer with <code>literal-output &lt;count&gt;</code></td>
-<td>First initialized to <code>true</code> by <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>fputc()</code></span>, and <span class="source-link"><code>fputs()</code></span>, initialized to <code>false</code> by <span class="source-link"><code>write_without_uart_escape_check()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>fgetc()</code></span>, <span class="source-link"><code>write_process_exception_message()</code></span>, and <span class="source-link"><code>list_processes()</code></span>, read by <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.show_loading_bar</code></span></td>
-<td>Whether a host-file read shows progress</td>
-<td>First initialized by <span class="source-link"><code>read()</code></span>, write wrappers, or stdio I/O wrappers, <span class="source-link"><code>read()</code></span> derives this from the environment, writes set it false</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.transferred</code></span></td>
-<td>Bytes already copied by earlier chunks of the same <span class="source-link"><code>read()</code></span></td>
-<td>First initialized to 0 by <span class="source-link"><code>read()</code></span> (or stdio input), updated by <span class="source-link"><code>read()</code></span> and read by <span class="source-link"><code>read_regular_file()</code></span> as the next buffer position</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.loading_bar_update</code></span></td>
-<td>Next total byte count that redraws read progress</td>
-<td>First initialized by <span class="source-link"><code>read_regular_file()</code></span> after the first successful range response, retained and updated for subsequent chunks</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>IoRequest.complete</code></span></td>
-<td>Whether <span class="source-link"><code>read()</code></span> should return instead of invoking another chunk</td>
-<td>First initialized to false by <span class="source-link"><code>read()</code></span>, set by <span class="source-link"><code>read_file_descriptor()</code></span> or <span class="source-link"><code>read_regular_file()</code></span> on completion/error</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SeekRequest.file_descriptor</code></span></td>
-<td>Regular-file descriptor to reposition</td>
-<td>First initialized by <span class="source-link"><code>lseek()</code></span>, passed through <span class="source-link"><code>SYSCALL_LSEEK</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
-
-## 2.4.1.2 File and directory request structures (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-2023 rows=12-22 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>SeekRequest.offset</code></span></td>
-<td>Signed displacement</td>
-<td>First initialized by <span class="source-link"><code>lseek()</code></span>, combined with <span class="source-link"><code>SEEK_SET</code></span>, current descriptor offset, or host file size</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SeekRequest.origin</code></span></td>
-<td><span class="source-link"><code>SEEK_SET</code></span>, <span class="source-link"><code>SEEK_CUR</code></span>, or <span class="source-link"><code>SEEK_END</code></span></td>
-<td>First initialized by <span class="source-link"><code>lseek()</code></span>, selects the base for the new descriptor offset</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Dup2Request.old_file_descriptor</code></span></td>
-<td>Descriptor to copy</td>
-<td>First initialized by <span class="source-link"><code>dup2()</code></span>, <span class="source-link"><code>SYSCALL_DUP2</code></span> leaves the source entry unchanged</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Dup2Request.new_file_descriptor</code></span></td>
-<td>Entry to replace</td>
-<td>First initialized by <span class="source-link"><code>dup2()</code></span>, the target receives an independent copy of the source fields and path</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>GetCwdRequest.buffer</code></span></td>
-<td>Userspace destination</td>
-<td>First initialized by <span class="source-link"><code>getcwd()</code></span>, passed through <span class="source-link"><code>SYSCALL_GETCWD</code></span>, receives the selected directory copy</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>GetCwdRequest.size</code></span></td>
-<td>Destination capacity</td>
-<td>First initialized by <span class="source-link"><code>getcwd()</code></span>, prevents copying a path that does not fit</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ReadDirectoryRequest.path</code></span></td>
-<td>Directory to list</td>
-<td>First initialized by <span class="source-link"><code>opendir()</code></span>, passed through <span class="source-link"><code>SYSCALL_READ_DIRECTORY</code></span>, normalized for the host request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ReadDirectoryRequest.buffer</code></span></td>
-<td>Userspace listing buffer</td>
-<td>First initialized by <span class="source-link"><code>opendir()</code></span>, receives <code>d name\n</code> / <code>- name\n</code> records from the host</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ReadDirectoryRequest.capacity</code></span></td>
-<td>Maximum returned cells</td>
-<td>First initialized by <span class="source-link"><code>opendir()</code></span>, bounds the UART response and copy</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>MoveRequest.old_path</code></span></td>
-<td>Existing file or directory</td>
-<td>First initialized by <span class="source-link"><code>move()</code></span>, normalized and sent as the first <span class="source-link"><code>move</code></span> host request path</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>MoveRequest.new_path</code></span></td>
-<td>New file or directory path</td>
-<td>First initialized by <span class="source-link"><code>move()</code></span>, normalized and sent as the second <span class="source-link"><code>move</code></span> host request path</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>OpenRequest.path</code></span></li></ul></td><td><ul><li>Relative/absolute file or device path</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>OpenRequest.flags</code></span></li></ul></td><td><ul><li>Access mode plus <span class="source-link"><code>O_CREAT</code></span>, <span class="source-link"><code>O_TRUNC</code></span>, or <span class="source-link"><code>O_APPEND</code></span></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.file_descriptor</code></span></li></ul></td><td><ul><li>Entry number in the current PCB’s eight-entry table</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace destination for read or source for write</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.count</code></span></li></ul></td><td><ul><li>Maximum cells to read or exact cells to write</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.protect_uart_control</code></span></li></ul></td><td><ul><li>Scan escapes; protect with literal-output</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.show_loading_bar</code></span></li></ul></td><td><ul><li>Whether a host-file read shows progress</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.transferred</code></span></li></ul></td><td><ul><li>Bytes already copied by earlier chunks of the same <span class="source-link"><code>read()</code></span></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.loading_bar_update</code></span></li></ul></td><td><ul><li>Next total byte count that redraws read progress</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.complete</code></span></li></ul></td><td><ul><li>Whether <span class="source-link"><code>read()</code></span> should return instead of invoking another chunk</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.file_descriptor</code></span></li></ul></td><td><ul><li>Regular-file descriptor to reposition</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.offset</code></span></li></ul></td><td><ul><li>Signed displacement</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.origin</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SEEK_SET</code></span>, <span class="source-link"><code>SEEK_CUR</code></span>, or <span class="source-link"><code>SEEK_END</code></span></li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>Dup2Request.old_file_descriptor</code></span></li></ul></td><td><ul><li>Descriptor to copy</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>Dup2Request.new_file_descriptor</code></span></li></ul></td><td><ul><li>Entry to replace</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>GetCwdRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace destination</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>GetCwdRequest.size</code></span></li></ul></td><td><ul><li>Destination capacity</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.path</code></span></li></ul></td><td><ul><li>Directory to list</li></ul></td></tr>
+<tr data-source-row="19"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace listing buffer</li></ul></td></tr>
+<tr data-source-row="20"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.capacity</code></span></li></ul></td><td><ul><li>Maximum returned cells</li></ul></td></tr>
+<tr data-source-row="21"><td class="table-key"><ul><li><span class="source-link"><code>MoveRequest.old_path</code></span></li></ul></td><td><ul><li>Existing file or directory</li></ul></td></tr>
+<tr data-source-row="22"><td class="table-key"><ul><li><span class="source-link"><code>MoveRequest.new_path</code></span></li></ul></td><td><ul><li>New file or directory path</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4092,11 +2893,10 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>INT 0</code> saves its PC on the process stack and enters <span class="source-link"><code>syscall_interrupt()</code></span>. The ISR installs the kernel context and calls <span class="source-link"><code>handle_syscall()</code></span>. The diagram follows the request through execution and either direct restoration or scheduling. <span class="source-link"><code>2.4.2.2 Selecting the return path</code></span> explains that choice:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-2064 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -4125,12 +2925,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">These naked routines manage registers and stacks explicitly. <code>BAF</code> holds the saved-frame pointer while kernel <code>CS</code>, <code>DS</code>, and <code>SP</code> are active. The macros come from <span class="source-link"><code>kernel/memory_constants.header</code></span>, described in <span class="source-link"><code>1.1.9 Generated memory constants for the bootloader and kernel</code></span>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2079 -->
-<ReadmeVisual kind="code" :width="745.1999999999999" style="flex-grow:68">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="745.1999999999999" data-code-source="code-2079" data-code-part="1">
+
+<!-- README_CODE_PART code-2079 lines=1-33 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4167,6 +2969,18 @@ void syscall_interrupt(void) {
     // Calls handle_syscall and returns through syscall_interrupt_return
     asm("LOADI32 ACC syscall_interrupt_return");
     asm("ADD ACC CS");
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="745.1999999999999" data-code-source="code-2079" data-code-part="2">
+
+<!-- README_CODE_PART code-2079 lines=34-66 -->
+<div class="readme-code">
+
+```c {lines:false}
     asm("PUSH ACC"); // Return address: syscall return continuation
     asm("LOADI32 ACC handle_syscall");
     asm("ADD ACC CS");
@@ -4210,6 +3024,8 @@ void syscall_interrupt_restore(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#242-system-call-entry-execution-and-return-to-userspace -->
@@ -4220,15 +3036,20 @@ void syscall_interrupt_restore(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-2151 -->
-<div class="readme-list"><ol start="1"><li>Save ACC, IN1, IN2, BAF, CS, and DS beside the automatically saved PC.</li>
-<li>Keep the saved-frame pointer in BAF while changing stacks.</li>
-<li>Disable the old boundary; install kernel CS, DS, and SP; activate the kernel boundary.</li>
-<li>Push context, argument, and selector onto the kernel stack before reusing registers.</li>
-<li>Initialize saved IN2 to 1 for calls that resume after a process switch; an operation may replace it.</li>
-<li>Return via syscall_interrupt_return; transfer control to handle_syscall, whose epilogue restores BAF to the context pointer.</li></ol></div>
+<div class="readme-list"><ul><li>Save six registers + PC</li>
+<li>BAF → saved frame</li>
+<li>Install kernel segments + stack boundary</li>
+<li>Push context, argument, selector</li>
+<li>Default saved IN2 = 1</li>
+<li>handle_syscall → syscall_interrupt_return</li></ul></div>
+
+<!-- README_ASSET list-2179 -->
+<div class="readme-list"><ul><li>Save IN2 in caller_context[4]</li>
+<li>Check deferred rescheduling</li>
+<li>Restore directly or dispatch</li></ul></div>
 
 </div>
 
@@ -4244,17 +3065,12 @@ void syscall_interrupt_restore(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
-
-<!-- README_ASSET list-2179 -->
-<div class="readme-list"><ol start="1"><li>Save IN2 in caller_context[4] before rescheduling can move it into the PCB.</li>
-<li>Call dispatcher_reschedule_if_requested with the saved context and syscall_interrupt_restore continuation.</li>
-<li>Without a pending request, restore directly; otherwise enter the dispatcher.</li></ol></div>
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-2195 -->
-<div class="readme-list"><ol start="1"><li>Copy BAF to SP to select the saved process frame and discard kernel scratch frames.</li>
-<li>Activate the caller's stack boundary while kernel CS and DS can still access the PCB.</li>
-<li>Pop DS, CS, BAF, IN2, IN1, and ACC; RTI restores the saved PC and resumes after INT 0.</li></ol></div>
+<div class="readme-list"><ul><li>SP ← BAF; discard scratch frames</li>
+<li>Restore caller stack boundary</li>
+<li>Pop registers; RTI restores PC</li></ul></div>
 
 </div>
 
@@ -4270,12 +3086,14 @@ void syscall_interrupt_restore(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>handle_syscall()</code></span> selects the operation with an <code>if</code>/<code>else if</code> chain. It passes simple values directly and casts request pointers to their declared types. This excerpt shows both forms and a call needing the saved context:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2212 -->
-<ReadmeVisual kind="code" :width="788.1999999999999" style="flex-grow:28">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="788.1999999999999" data-code-source="code-2212" data-code-part="1">
+
+<!-- README_CODE_PART code-2212 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4292,6 +3110,18 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
             ((struct LoadProcessRequest *)argument)->show_loading_bar,
             caller_context
         );
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="788.1999999999999" data-code-source="code-2212" data-code-part="2">
+
+<!-- README_CODE_PART code-2212 lines=14-26 -->
+<div class="readme-code">
+
+```c {lines:false}
     } else if (syscall_number == SYSCALL_RUN_PROCESS_WITH_ARGUMENTS) {
         return mark_process_ready_with_arguments((struct RunProcessRequest *)argument);
     } else if (syscall_number == SYSCALL_LIST_PROCESSES) {
@@ -4315,6 +3145,8 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#2421-handle-syscall -->
@@ -4325,11 +3157,11 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-2243 -->
-<div class="readme-list"><ol start="1"><li>Match the SYSCALL_* selector; pass the saved context when the operation needs it.</li>
-<li>Return the result in IN2, or 0 for an unknown selector. Blocking, yielding, or terminating calls may switch first.</li></ol></div>
+<div class="readme-list"><ul><li>Match selector; pass saved context</li>
+<li>IN2 ← result; unknown selector → 0</li></ul></div>
 
 </div>
 
@@ -4345,47 +3177,17 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2258 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-2258 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-2258:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Group</th>
-<th>Syscalls, in declaration order</th>
-<th>Kernel functions</th>
-</tr>
-</thead><tbody><tr>
-<td>System control</td>
-<td>Shutdown, reboot</td>
-<td><span class="source-link"><code>shutdown()</code></span>, <span class="source-link"><code>reboot()</code></span></td>
-</tr>
-<tr>
-<td>Process management</td>
-<td>Load, run, list, unload, exit, exact-child wait, PID query, terminal ownership, signal delivery, parent-death setting</td>
-<td><span class="source-link"><code>load_process_chunk()</code></span>, <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, <span class="source-link"><code>list_processes()</code></span>, <span class="source-link"><code>unload_process_by_pid()</code></span>, <span class="source-link"><code>exit_process()</code></span>, <span class="source-link"><code>wait_for_process_by_pid()</code></span>, <span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span>, <span class="source-link"><code>send_signal_by_pid()</code></span>, <span class="source-link"><code>set_parent_death_signal()</code></span></td>
-</tr>
-<tr>
-<td>Scheduling</td>
-<td>Queue sleep, queue wakeup, yield</td>
-<td><span class="source-link"><code>sleep_on_wait_queue()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span></td>
-</tr>
-<tr>
-<td>Process and shared memory</td>
-<td>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</td>
-<td><span class="source-link"><code>process_heap_start()</code></span>, <span class="source-link"><code>process_heap_size()</code></span>, <span class="source-link"><code>handle_process_heap_full_exception()</code></span>, <span class="source-link"><code>open_shared_memory()</code></span>, <span class="source-link"><code>map_shared_memory()</code></span>, <span class="source-link"><code>unlink_shared_memory()</code></span></td>
-</tr>
-<tr>
-<td>Descriptors and I/O</td>
-<td>Descriptor availability, open, read, write, close, seek, duplicate, direct UART byte send</td>
-<td>Descriptor availability returns 1 directly, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>close_file_descriptor()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>duplicate_file_descriptor()</code></span>, <span class="source-link"><code>send_byte_over_uart()</code></span></td>
-</tr>
-<tr>
-<td>Paths and directories</td>
-<td>Change/get working directory, make/read directory, unlink file, remove directory, move path, touch file</td>
-<td><span class="source-link"><code>change_working_directory()</code></span>, <span class="source-link"><code>get_working_directory()</code></span>, <span class="source-link"><code>make_host_directory()</code></span>, <span class="source-link"><code>read_host_directory()</code></span>, <span class="source-link"><code>unlink_host_file()</code></span>, <span class="source-link"><code>remove_host_directory()</code></span>, <span class="source-link"><code>move_host_path()</code></span>, <span class="source-link"><code>touch_host_file()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.37%" /><col style="width:75.63%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>System control</li></ul></td><td><ul><li>Shutdown, reboot</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Process management</li></ul></td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Scheduling</li></ul></td><td><ul><li>Queue sleep, queue wakeup, yield</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Process and shared memory</li></ul></td><td><ul><li>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Descriptors and I/O</li></ul></td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Paths and directories</li></ul></td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4403,11 +3205,12 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-2277 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-2277" data-code-part="1">
 
+<!-- README_CODE_PART code-2277 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4429,8 +3232,9 @@ void dispatcher_reschedule_if_requested(int *caller_context) {
 </ReadmeVisual>
 
 <!-- README_ASSET code-2305 -->
-<ReadmeVisual kind="code" :width="805.4" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="805.4" data-code-source="code-2305" data-code-part="1">
 
+<!-- README_CODE_PART code-2305 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4465,12 +3269,12 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-2322 -->
-<div class="readme-list"><ol start="1"><li>Change the outgoing process from RUNNING to READY when applicable.</li>
-<li>Clear reschedule_requested; make the selected PCB current and mark it RUNNING.</li>
-<li>Compute its stack boundary, restore its activation, and finish with RTI.</li></ol></div>
+<div class="readme-list"><ul><li>Outgoing RUNNING → READY</li>
+<li>Clear request; selected PCB → RUNNING</li>
+<li>Restore boundary + activation; RTI</li></ul></div>
 
 </div>
 
@@ -4482,16 +3286,16 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 # 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
 
-## 2.4.2.3 Stack-boundary helpers (1)
+## 2.4.2.3 Stack-boundary helpers
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The inline writer in <span class="source-link"><code>common/periphery_asm.header</code></span> uses <code>IN1</code> without a C call frame. It can disable protection even on an almost exhausted stack. It clobbers <code>ACC</code>, which resumable entries have already saved:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-2358 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-2358" data-code-part="1">
 
+<!-- README_CODE_PART code-2358 lines=1-5 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4506,26 +3310,10 @@ static inline void write_stack_heap_boundary_from_in1(void) {
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#2423-stack-boundary-helpers -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
-
-## 2.4.2.3 Stack-boundary helpers (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The C helpers in <span class="source-link"><code>kernel/exception.picoc</code></span> need ordinary call space, so entry installs kernel <code>SP</code> before calling them:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-2373 -->
-<ReadmeVisual kind="code" :width="728" style="flex-grow:19">
+<ReadmeVisual kind="code" :width="728" data-code-source="code-2373" data-code-part="1">
 
+<!-- README_CODE_PART code-2373 lines=1-17 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4558,43 +3346,6 @@ void activate_current_process_stack_boundary(void) {
 
 ---
 
-<!-- SOURCE Pico-OS/README.md#243-system-call-selection-function-reference -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution
-
-## 2.4.3 System-call selection function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-2418 rows=1-1 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>handle_syscall(syscall_number, argument, caller_context)</code></span></td>
-<td>Returns the selected operation's result for immediate calls. Calls that switch processes leave through the saved interrupt frame. Exit, shutdown, and reboot do not return normally.</td>
-<td>Selects one of 37 kernel operations and may change process, scheduler, memory, descriptor, or host-filesystem state</td>
-<td>The kernel functions in <span class="source-link"><code>2.4.2.1.1 System-call groups</code></span></td>
-<td><strong>System-call entry:</strong> <span class="source-link"><code>syscall_interrupt()</code></span> after userspace executes <code>INT 0</code></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
 
 # 2. Interrupts, system calls, preemption, and exceptions · 2.5 Timer interrupts and userspace preemption
@@ -4603,11 +3354,10 @@ void activate_current_process_stack_boundary(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The timer schedules immediately after interrupting userspace and defers scheduling after interrupting kernel work. This diagram follows both paths. <code>c</code> is the saved-frame pointer from <span class="source-link"><code>2.3 Saved interrupt stack frame</code></span>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET mermaid-2436 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -4629,25 +3379,8 @@ flowchart LR
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.5 Timer interrupts and userspace preemption
-
-## 2.5.1 Timer interrupt path (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The entry distinguishes them using the saved PC. This diagram isolates the implemented <code>&gt;=</code> test:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET mermaid-2457 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -4669,16 +3402,18 @@ flowchart LR
 
 # 2. Interrupts, system calls, preemption, and exceptions · 2.5 Timer interrupts and userspace preemption
 
-## 2.5.1 Timer interrupt path (3)
+## 2.5.1 Timer interrupt path (2)
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The entry and its three continuations implement those paths:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2467 -->
-<ReadmeVisual kind="code" :width="753.8" style="flex-grow:73">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="753.8" data-code-source="code-2467" data-code-part="1">
+
+<!-- README_CODE_PART code-2467 lines=1-36 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4718,6 +3453,18 @@ void timer_interrupt_kernel_return(void) {
     asm("POP DS");
     asm("POP CS");
     asm("POP BAF");
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="753.8" data-code-source="code-2467" data-code-part="2">
+
+<!-- README_CODE_PART code-2467 lines=37-71 -->
+<div class="readme-code">
+
+```c {lines:false}
     asm("POP IN2");
     asm("POP IN1");
     asm("POP ACC");
@@ -4763,6 +3510,29 @@ void timer_interrupt_after_reschedule_request(void) {
 
 </div>
 
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
+
+# 2. Interrupts, system calls, preemption, and exceptions · 2.5 Timer interrupts and userspace preemption
+
+## 2.5.1 Timer interrupt path (3)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<!-- README_ASSET list-2544 -->
+<div class="readme-list"><ul><li>Save registers; PC at SP + 7</li>
+<li>Install kernel CS + DS</li>
+<li>Classify saved PC against kernel DS</li></ul></div>
+
+</div>
+
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
@@ -4773,15 +3543,10 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
-
-<!-- README_ASSET list-2544 -->
-<div class="readme-list"><ol start="1"><li>Save six registers on the interrupted stack; the automatic return PC is now at SP + 7.</li>
-<li>Install kernel CS and DS, retaining the interrupted SP until classification.</li>
-<li>Load the saved PC, subtract kernel DS, and branch to the process path when the result is nonnegative.</li></ol></div>
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-2553 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/timer-pc-memory-layout.svg" alt="Kernel execution below kernel DS and user-process execution strictly above it" />
 
@@ -4801,14 +3566,14 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-2563 -->
-<div class="readme-list"><ol start="4"><li>Below kernel DS: keep the stack and request deferred rescheduling. Otherwise enter timer_interrupt_process.</li></ol></div>
+<div class="readme-list"><ul><li>Kernel → defer; userspace → switch</li></ul></div>
 
 <!-- README_ASSET list-2570 -->
-<div class="readme-list"><ol start="1"><li>Pop DS, CS, BAF, IN2, IN1, and ACC. This path needs no MOVE BAF SP or boundary change.</li>
-<li>RTI resumes the kernel; a later scheduling point checks reschedule_requested.</li></ol></div>
+<div class="readme-list"><ul><li>Pop registers; retain stack boundary</li>
+<li>RTI; reschedule at later safe point</li></ul></div>
 
 </div>
 
@@ -4824,16 +3589,16 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-2582 -->
-<div class="readme-list"><ol start="1"><li>Copy SP to BAF to retain the process frame. Kernel CS and DS are already active.</li>
-<li>Disable the old boundary, install kernel SP, then activate the kernel boundary.</li>
-<li>Set reschedule_requested through dispatcher_request_reschedule; continue at timer_interrupt_after_reschedule_request.</li></ol></div>
+<div class="readme-list"><ul><li>BAF ← process frame</li>
+<li>Install kernel SP + boundary</li>
+<li>Request rescheduling; continue entry path</li></ul></div>
 
 <!-- README_ASSET list-2599 -->
-<div class="readme-list"><ol start="1"><li>Push the BAF context pointer and dummy return address 0.</li>
-<li>dispatcher_switch_from_context saves the PCB activation and selects a process. Restoration belongs to the selected process; there is no direct return here.</li></ol></div>
+<div class="readme-list"><ul><li>Push context + dummy return</li>
+<li>Save PCB; dispatch selected process</li></ul></div>
 
 </div>
 
@@ -4849,8 +3614,11 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Deferring a process switch lets a kernel operation finish before another process enters the kernel. Device interrupts can still run during that work.</p>
-<p>A timer during kernel execution requests a later switch and returns to the interrupted work. Syscall return checks the flag before resuming userspace, subject to the timing window in <span class="source-link"><code>2.4.2.2 Selecting the return path</code></span>. UART handlers also return to the interrupted operation. This serializes processes' kernel calls, while shared terminal state still needs protection against UART interrupts.</p></div>
+<div class="readme-list"><ul><li>Kernel work completes before process switch</li>
+<li>Device interrupts remain enabled</li>
+<li>Timer → deferred rescheduling flag</li>
+<li>Syscall return → safe switching point</li>
+<li>Polling: bounded chunks; DMA: block</li></ul></div>
 
 </div>
 
@@ -4864,11 +3632,10 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Shorter timer intervals give processes more frequent turns but spend more time switching. The following measurements time shell character delay while an endless empty loop is running:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-2642 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/timer_interval_measurements.png" alt="Measured character delay for each timer interrupt interval" />
 
@@ -4888,11 +3655,10 @@ void timer_interrupt_after_reschedule_request(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">UART reception enters service routine 2 at priority 2. It handles one byte and resumes the interrupted context. The diagram follows the choice between a terminal signal and ordinary input:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-2657 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -4919,12 +3685,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The naked entry and return keep the interrupted stack:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2668 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:39">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-2668" data-code-part="1">
+
+<!-- README_CODE_PART code-2668 lines=1-19 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -4947,6 +3715,18 @@ void uart_interrupt(void) {
 
     asm("LOADI32 ACC uart_interrupt_return");
     asm("ADD ACC CS");
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-2668" data-code-part="2">
+
+<!-- README_CODE_PART code-2668 lines=20-37 -->
+<div class="readme-code">
+
+```c {lines:false}
     asm("PUSH ACC");
     asm("LOADI32 ACC handle_uart_interrupt");
     asm("ADD ACC CS");
@@ -4975,6 +3755,8 @@ void uart_interrupt_return(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
@@ -4985,17 +3767,17 @@ void uart_interrupt_return(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-2711 -->
-<div class="readme-list"><ol start="1"><li>Save the six registers beside the automatic return PC.</li>
-<li>Keep the frame pointer in BAF and install kernel CS and DS; retain interrupted SP and boundary.</li>
-<li>Call handle_uart_interrupt with uart_interrupt_return as its continuation.</li></ol></div>
+<div class="readme-list"><ul><li>Save registers + automatic PC</li>
+<li>Retain interrupted SP + boundary</li>
+<li>handle_uart_interrupt → uart_interrupt_return</li></ul></div>
 
 <!-- README_ASSET list-2722 -->
-<div class="readme-list"><ol start="1"><li>Copy BAF to SP after the C handler returns.</li>
-<li>Pop DS, CS, BAF, IN2, IN1, and ACC.</li>
-<li>RTI resumes the interrupted stream without checking the scheduling flag or switching processes.</li></ol></div>
+<div class="readme-list"><ul><li>SP ← BAF</li>
+<li>Pop six registers</li>
+<li>RTI; no scheduling check</li></ul></div>
 
 </div>
 
@@ -5011,12 +3793,12 @@ void uart_interrupt_return(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The complete C handler below acknowledges the byte before deciding whether it is a signal character or ordinary terminal input:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2730 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:22">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-2730" data-code-part="1">
 
+<!-- README_CODE_PART code-2730 lines=1-20 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -5060,13 +3842,13 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-2756 -->
-<div class="readme-list"><ol start="1"><li>Find the input process and global terminal.</li>
-<li>Read the received byte and acknowledge UART_RECEIVE_READY.</li>
-<li>Handle Ctrl+C as SIGINT and Ctrl+Z as SIGTSTP; stop processing a consumed signal character.</li>
-<li>Enqueue ordinary input; a full ring drops the new byte. Complete a waiting foreground read, save its result in activation.in2, and mark it runnable.</li></ol></div>
+<div class="readme-list"><ul><li>Find foreground owner + terminal</li>
+<li>Read byte; acknowledge receive-ready</li>
+<li>Ctrl+C → SIGINT; Ctrl+Z → SIGTSTP</li>
+<li>Buffer byte; complete waiting read</li></ul></div>
 
 </div>
 
@@ -5082,8 +3864,11 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>UART and DMA save registers and call their handlers on the interrupted stack. Calls use free space below the saved frame. Resetting kernel <code>SP</code> could overwrite suspended kernel calls.</p>
-<p>The existing stack limit remains active. A fault inside either handler is classified as a kernel exception once kernel <code>CS</code> has been installed, even when the handler is borrowing a user stack.</p></div>
+<div class="readme-list"><ul><li>UART/DMA borrow interrupted stack</li>
+<li>Handler uses space below saved frame</li>
+<li>Retain SP + stack boundary</li>
+<li>Kernel CS classifies nested faults</li>
+<li>Return restores interrupted execution</li></ul></div>
 
 </div>
 
@@ -5097,52 +3882,18 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2797 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-2797 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-2797:1,2,3,4,5,6,7">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Event</th>
-<th>Context already executing</th>
-<th>Result</th>
-</tr>
-</thead><tbody><tr>
-<td>UART receive</td>
-<td>Syscall, with no hardware handler active</td>
-<td>UART runs immediately and returns to the same syscall work</td>
-</tr>
-<tr>
-<td>UART receive</td>
-<td>Timer or DMA handler</td>
-<td>UART priority <code>2</code> nests over priority <code>1</code>, then restores the interrupted handler</td>
-</tr>
-<tr>
-<td>Timer expiration</td>
-<td>UART handler</td>
-<td>Priority <code>1</code> waits in the emulator's pending-handler queue until UART returns</td>
-</tr>
-<tr>
-<td>DMA completion</td>
-<td>UART handler</td>
-<td>Priority <code>1</code> waits in that queue until UART returns</td>
-</tr>
-<tr>
-<td>Timer expiration</td>
-<td>DMA handler</td>
-<td>Equal priority waits until DMA returns</td>
-</tr>
-<tr>
-<td>DMA completion</td>
-<td>Timer handler</td>
-<td>Equal priority waits until timer completes its <code>RTI</code> path</td>
-</tr>
-<tr>
-<td>Another UART byte</td>
-<td>UART handler or an already pending UART byte</td>
-<td>The terminal input queue keeps it until the active byte's ISR completes</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.52%" /><col style="width:33.49%" /><col style="width:41.99%" /></colgroup><thead><tr><th>Event</th><th>Context already executing</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>UART receive</li></ul></td><td><ul><li>Syscall, with no hardware handler active</li></ul></td><td><ul><li>Immediate UART; return to syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>UART receive</li></ul></td><td><ul><li>Timer or DMA handler</li></ul></td><td><ul><li>UART priority 2 nests over priority 1</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Timer expiration</li></ul></td><td><ul><li>UART handler</li></ul></td><td><ul><li>Timer pending until UART returns</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>DMA completion</li></ul></td><td><ul><li>UART handler</li></ul></td><td><ul><li>DMA pending until UART returns</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Timer expiration</li></ul></td><td><ul><li>DMA handler</li></ul></td><td><ul><li>Timer pending until DMA returns</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>DMA completion</li></ul></td><td><ul><li>Timer handler</li></ul></td><td><ul><li>DMA pending until timer RTI</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Another UART byte</li></ul></td><td><ul><li>UART handler or an already pending UART byte</li></ul></td><td><ul><li>Queued byte until active UART ISR completes</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5160,33 +3911,12 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2829 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-2829 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-2829:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>send_byte_over_uart(value)</code></span></td>
-<td>Returns no value</td>
-<td>Sends the low byte through UART register 0 and polls UART status, changes no kernel structure</td>
-<td><span class="source-link"><code>switch_to_periphery_address_space()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>send_byte_over_uart()</code></span> through the direct-UART syscall<br><strong>Shared/Common functions:</strong> <span class="source-link"><code>uart_print_character()</code></span>, linked directly to the kernel implementation<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>receive_byte_over_uart(void)</code></span></td>
-<td>Returns one received byte</td>
-<td>Polls UART status and reads UART register 1, changes no kernel structure</td>
-<td><span class="source-link"><code>switch_to_periphery_address_space()</code></span></td>
-<td><strong>Shared/Common functions:</strong> <span class="source-link"><code>receive_word()</code></span>, linked directly to the kernel implementation<br><strong>Kernel functions:</strong> <span class="source-link"><code>drain_process_bytes()</code></span>, <span class="source-link"><code>read_regular_file()</code></span>, <span class="source-link"><code>uart_receive_string()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.24%" /><col style="width:16.22%" /><col style="width:20.07%" /><col style="width:31.47%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>send_byte_over_uart()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Send one polled UART byte</li></ul></td><td><ul><li><code>send_byte_over_uart()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5204,11 +3934,10 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">DMA completion enters service routine 4 and wakes the waiting loader. The loader checks success or failure when it next runs. This diagram follows delivery and wakeup:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-2841 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -5239,12 +3968,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The entry and return borrow the interrupted stack. The C handler wakes a waiter and leaves process selection to the dispatcher:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2857 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:41">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="702.1999999999999" data-code-source="code-2857" data-code-part="1">
+
+<!-- README_CODE_PART code-2857 lines=1-20 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -5268,6 +3999,18 @@ void dma_interrupt(void) {
     asm("PUSH ACC");
     asm("LOADI32 ACC handle_dma_interrupt");
     asm("ADD ACC CS");
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="702.1999999999999" data-code-source="code-2857" data-code-part="2">
+
+<!-- README_CODE_PART code-2857 lines=21-39 -->
+<div class="readme-code">
+
+```c {lines:false}
     asm("MOVE ACC PC");
 }
 
@@ -5297,6 +4040,8 @@ void handle_dma_interrupt(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#27-dma-completion-interrupt-path -->
@@ -5307,68 +4052,17 @@ void handle_dma_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-2902 -->
-<div class="readme-list"><ol start="1"><li>Save the six registers on the interrupted stack.</li>
-<li>Keep BAF as the frame pointer; install kernel CS and DS while preserving SP and boundary.</li>
-<li>Call handle_dma_interrupt with dma_interrupt_return as its continuation.</li></ol></div>
+<div class="readme-list"><ul><li>Save six registers</li>
+<li>Borrow stack; install kernel CS/DS</li>
+<li>handle_dma_interrupt → dma_interrupt_return</li></ul></div>
 
 <!-- README_ASSET list-2918 -->
-<div class="readme-list"><ol start="1"><li>Copy BAF to SP after the handler returns.</li>
-<li>Pop DS, CS, BAF, IN2, IN1, and ACC.</li>
-<li>RTI returns without checking the reschedule flag or dispatching; this uses the borrowed-stack convention.</li></ol></div>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#271-dma-waiting-and-completion-function-reference -->
-
-# 2. Interrupts, system calls, preemption, and exceptions · 2.7 DMA completion interrupt path
-
-## 2.7.1 DMA waiting and completion function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-2939 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>initialize_dma(void)</code></span></td>
-<td>Returns no value</td>
-<td>Initializes <span class="source-link"><code>dma_waiters</code></span> and sets <span class="source-link"><code>dma_initialized</code></span> once when DMA is active, otherwise changes nothing</td>
-<td><span class="source-link"><code>dma_is_active()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>start_dma_uart_receive()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start_dma_uart_receive(destination, word_count, caller_context)</code></span></td>
-<td>Returns <code>false</code> when DMA is unavailable, busy, or already has a waiter. Successful setup does not return through the current kernel call. The process later resumes from its saved interrupt frame with <span class="source-link"><code>SYSCALL_LOAD_PROCESS_CONTINUE</code></span>.</td>
-<td>Stores the continuation result in the saved syscall frame, blocks the caller on <span class="source-link"><code>dma_waiters</code></span>, starts a UART-to-SRAM transfer, and switches processes</td>
-<td><span class="source-link"><code>dma_is_active()</code></span>, <span class="source-link"><code>initialize_dma()</code></span>, <span class="source-link"><code>dma_transfer_status()</code></span>, <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>start_dma_uart_transfer()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>handle_dma_interrupt(void)</code></span></td>
-<td>Returns no value</td>
-<td>Wakes the first process whose PCB is queued on <span class="source-link"><code>dma_waiters</code></span></td>
-<td><span class="source-link"><code>wakeup_wait_queue()</code></span></td>
-<td><strong>Hardware interrupts:</strong> DMA completion via <span class="source-link"><code>dma_interrupt()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
+<div class="readme-list"><ul><li>SP ← BAF</li>
+<li>Pop six registers</li>
+<li>RTI; retain borrowed-stack convention</li></ul></div>
 
 </div>
 
@@ -5384,11 +4078,10 @@ void handle_dma_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Division or modulo by zero, stack overflow, and illegal instructions enter service routine 3 directly, bypassing device mappings and priorities. The diagram shows why the faulting context does not resume:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-2959 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -5418,27 +4111,13 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2974 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-2974 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-2974:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Register</th>
-<th>Written by</th>
-<th>Contents and use</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">10, <span class="source-link"><code>STACK_HEAP_BOUNDARY_REGISTER</code></span></td>
-<td>PicoOS</td>
-<td><code>0</code> disables stack protection. Any other value is the active boundary, the emulator raises a stack-overflow exception when an instruction decreases <code>SP</code> to a value below it. <span class="source-link"><code>activate_kernel_stack_boundary()</code></span> writes <span class="source-link"><code>KERNEL_HEAP_START</code></span> + <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span> − 1. A process boundary is <span class="source-link"><code>base_address</code></span> + <span class="source-link"><code>heap_start</code></span> + <span class="source-link"><code>heap_size</code></span> − 1.</td>
-</tr>
-<tr>
-<td style="text-align:right">11, <span class="source-link"><code>CPU_EXCEPTION_CAUSE_REGISTER</code></span></td>
-<td>RETI CPU/emulator</td>
-<td><code>0</code> means no exception has been recorded, <code>1</code> means division or modulo by zero, <code>2</code> means stack overflow, and <code>3</code> means illegal instruction. Guest writes are ignored. <span class="source-link"><code>handle_cpu_exception()</code></span> reads this value after exception entry.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.42%" /><col style="width:18.40%" /><col style="width:44.18%" /></colgroup><thead><tr><th>Register</th><th>Written by</th><th>Contents and use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>10, <span class="source-link"><code>STACK_HEAP_BOUNDARY_REGISTER</code></span></li></ul></td><td><ul><li>PicoOS</li></ul></td><td><ul><li>0: disabled</li><li>SP below boundary → exception</li><li>Boundary: final heap cell</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>11, <span class="source-link"><code>CPU_EXCEPTION_CAUSE_REGISTER</code></span></li></ul></td><td><ul><li>RETI CPU/emulator</li></ul></td><td><ul><li>0: none; 1: divide-by-zero</li><li>2: stack overflow; 3: illegal instruction</li><li>Read-only cause register</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5456,12 +4135,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Exception entry saves the faulting PC minus one. The naked handler abandons that context, so it does not save the other registers:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2982 -->
-<ReadmeVisual kind="code" :width="736.6" style="flex-grow:25">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="736.6" data-code-source="code-2982" data-code-part="1">
+
+<!-- README_CODE_PART code-2982 lines=1-12 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -5477,6 +4158,18 @@ void cpu_exception_interrupt(void) {
     activate_kernel_stack_boundary();
 
     // A zero difference identifies an exception raised in kernel code
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="736.6" data-code-source="code-2982" data-code-part="2">
+
+<!-- README_CODE_PART code-2982 lines=13-23 -->
+<div class="readme-code">
+
+```c {lines:false}
     asm("MOVE BAF ACC");
     asm("SUB ACC CS");
     asm("PUSH ACC");
@@ -5498,6 +4191,8 @@ void cpu_exception_interrupt(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#281-cpu-exception-entry-and-registers -->
@@ -5508,17 +4203,18 @@ void cpu_exception_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-3011 -->
-<div class="readme-list"><ol start="1"><li>Preserve interrupted CS in BAF for classification.</li>
-<li>Disable the old boundary; reset kernel CS, DS, and SP; activate the kernel boundary, even for a kernel fault.</li>
-<li>Subtract kernel CS from the preserved value and pass the difference to the C handler.</li>
-<li>Call handle_cpu_exception with dummy return address 0. It halts or terminates the process and never returns.</li></ol></div>
+<div class="readme-list"><ul><li>BAF ← interrupted CS</li>
+<li>Reset kernel segments, stack, boundary</li>
+<li>Compare interrupted CS with kernel CS</li>
+<li>Handle exception; never return</li></ul></div>
 
 <!-- README_ASSET code-3030 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="642" data-code-source="code-3030" data-code-part="1">
 
+<!-- README_CODE_PART code-3030 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -5553,14 +4249,14 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-3047 -->
-<div class="readme-list"><ol start="1"><li>Read the exception cause and test whether interrupted CS equals kernel CS.</li>
-<li>Print the diagnostic: direct UART for kernel faults, descriptor 1 for process faults.</li>
-<li>Kernel fault: shutdown halts with JUMP 0.</li>
-<li>Process fault: record exception status, mark ZOMBIE, and remove immediately when no parent needs collection.</li>
-<li>Dispatch another process, or halt if the list empties. Never restore the faulting context.</li></ol></div>
+<div class="readme-list"><ul><li>Read cause; classify kernel/userspace</li>
+<li>Print diagnostic via UART or stdout</li>
+<li>Kernel fault → shutdown</li>
+<li>Process fault → status + ZOMBIE</li>
+<li>Dispatch survivor; never restore fault</li></ul></div>
 
 </div>
 
@@ -5576,54 +4272,17 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3080 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3080 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3080:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Condition</th>
-<th>Trigger</th>
-<th>Entry or reported cause</th>
-<th>PicoOS handling</th>
-</tr>
-</thead><tbody><tr>
-<td>Division or modulo by zero</td>
-<td>A RETI <code>DIV</code>, <code>DIVI</code>, <code>MOD</code>, or <code>MODI</code> instruction has a zero divisor</td>
-<td>CPU exception cause <code>1</code>, interrupt service routine table entry 3</td>
-<td><span class="source-link"><code>handle_cpu_exception()</code></span> reports division by zero. It terminates the current process with exception status for a userspace fault, or reports a kernel panic and shuts down for a kernel fault.</td>
-</tr>
-<tr>
-<td>Stack overflow</td>
-<td>An instruction decreases <code>SP</code> below the active boundary in periphery register 10</td>
-<td>CPU exception cause <code>2</code>, interrupt service routine table entry 3</td>
-<td><span class="source-link"><code>handle_cpu_exception()</code></span> reports process stack overflow and terminates that process, or reports kernel stack overflow and shuts down.</td>
-</tr>
-<tr>
-<td>Illegal instruction</td>
-<td>The fetched word is not a valid RETI instruction, or instruction decoding reaches an unsupported opcode</td>
-<td>CPU exception cause <code>3</code>, interrupt service routine table entry 3</td>
-<td><span class="source-link"><code>handle_cpu_exception()</code></span> reports an illegal instruction and applies the process-or-kernel policy above. The message helper also treats any unexpected cause value as illegal instruction.</td>
-</tr>
-<tr>
-<td>Process heap full</td>
-<td><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</td>
-<td><span class="source-link"><code>require_process_heap_allocation()</code></span> invokes the process-heap-full syscall</td>
-<td><span class="source-link"><code>handle_process_heap_full_exception()</code></span> reports <code>Process terminated: heap full</code> through descriptor 1 and terminates the current process with exception status.</td>
-</tr>
-<tr>
-<td>Kernel heap full</td>
-<td><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</td>
-<td><span class="source-link"><code>require_kernel_heap_allocation()</code></span> calls the panic handler directly</td>
-<td><span class="source-link"><code>panic_kernel_heap_full()</code></span> writes <code>Kernel panic: kernel heap full</code> directly over UART and shuts down.</td>
-</tr>
-<tr>
-<td>Process and Shared Data Heap exhausted</td>
-<td><span class="source-link"><code>PSDMalloc()</code></span> cannot reserve a contiguous Process Payload or Shared Data Payload</td>
-<td>Returns <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span>, no CPU exception is raised</td>
-<td><span class="source-link"><code>begin_process_load()</code></span> and <span class="source-link"><code>load_process()</code></span> report <code>error: not enough process memory</code> and fail the load. <span class="source-link"><code>open_shared_memory()</code></span> frees the new entry and returns <code>-1</code>. The running process and kernel continue.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.25%" /><col style="width:26.18%" /><col style="width:36.48%" /><col style="width:22.09%" /></colgroup><thead><tr><th>Condition</th><th>Trigger</th><th>Entry or reported cause</th><th>PicoOS handling</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Division or modulo by zero</li></ul></td><td><ul><li>DIV/DIVI/MOD/MODI with zero divisor</li></ul></td><td><ul><li>Cause 1; IVT entry 3</li></ul></td><td><ul><li>Userspace → terminate</li><li>Kernel → panic + shutdown</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Stack overflow</li></ul></td><td><ul><li>SP decreased below active boundary</li></ul></td><td><ul><li>Cause 2; IVT entry 3</li></ul></td><td><ul><li>Process overflow → terminate</li><li>Kernel overflow → shutdown</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Illegal instruction</li></ul></td><td><ul><li>Invalid/unsupported decoded RETI instruction</li></ul></td><td><ul><li>Cause 3; IVT entry 3</li></ul></td><td><ul><li>Same process/kernel fault policy</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Process heap full</li></ul></td><td><ul><li><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</li></ul></td><td><ul><li><span class="source-link"><code>require_process_heap_allocation()</code></span> invokes the process-heap-full syscall</li></ul></td><td><ul><li>Print heap-full diagnostic; terminate process</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Kernel heap full</li></ul></td><td><ul><li><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</li></ul></td><td><ul><li><span class="source-link"><code>require_kernel_heap_allocation()</code></span> calls the panic handler directly</li></ul></td><td><ul><li>UART panic; shut down kernel</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Process and Shared Data Heap exhausted</li></ul></td><td><ul><li>No contiguous Process/Shared Data Payload</li></ul></td><td><ul><li>Returns <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span>, no CPU exception is raised</li></ul></td><td><ul><li>Load fails / shm_open returns −1</li><li>Process + kernel continue</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5641,61 +4300,12 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3097 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-3097 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3097:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>handle_process_heap_full_exception(void)</code></span></td>
-<td>Does not return normally</td>
-<td>Writes a diagnostic through descriptor 1 and terminates the current process with exception status</td>
-<td><span class="source-link"><code>write_process_exception_message()</code></span>, <span class="source-link"><code>exit_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>require_process_heap_allocation()</code></span> through the process-heap-full syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>activate_kernel_stack_boundary(void)</code></span></td>
-<td>Returns no value</td>
-<td>Writes the kernel heap end to periphery register 10</td>
-<td><span class="source-link"><code>periphery_write_register()</code></span></td>
-<td><strong>System-call entry:</strong> <span class="source-link"><code>syscall_interrupt()</code></span><br><strong>Hardware interrupts:</strong> timer via <span class="source-link"><code>timer_interrupt_process()</code></span><br><strong>CPU exceptions:</strong> <span class="source-link"><code>cpu_exception_interrupt()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_stack_boundary(process)</code></span></td>
-<td>Returns the process's absolute heap end</td>
-<td>Reads <span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>heap_start</code></span>, and <span class="source-link"><code>heap_size</code></span>, changes no state</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>activate_current_process_stack_boundary()</code></span>, <span class="source-link"><code>dispatcher_switch_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>activate_current_process_stack_boundary(void)</code></span></td>
-<td>Returns no value</td>
-<td>Writes the current process boundary to periphery register 10</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>process_stack_boundary()</code></span>, <span class="source-link"><code>periphery_write_register()</code></span></td>
-<td><strong>System-call return:</strong> <span class="source-link"><code>syscall_interrupt_restore()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>handle_cpu_exception(interrupted_kernel_cs_difference)</code></span></td>
-<td>Does not return normally</td>
-<td>Reads register 11, terminates the current process for a process fault or shuts down for a kernel fault</td>
-<td><span class="source-link"><code>periphery_read_register()</code></span>, <span class="source-link"><code>print_cpu_exception_message()</code></span>, <span class="source-link"><code>shutdown()</code></span>, <span class="source-link"><code>exit_process()</code></span></td>
-<td><strong>CPU exceptions:</strong> <span class="source-link"><code>cpu_exception_interrupt()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>panic_kernel_heap_full(void)</code></span></td>
-<td>Does not return</td>
-<td>Writes a UART kernel-panic message and shuts down</td>
-<td><span class="source-link"><code>uart_print_string()</code></span>, <span class="source-link"><code>shutdown()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>require_kernel_heap_allocation()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:36.64%" /><col style="width:13.24%" /><col style="width:16.44%" /><col style="width:33.68%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>handle_process_heap_full_exception()</code></li></ul></td><td><ul><li>Terminates process</li></ul></td><td><ul><li>Print diagnostic; terminate process</li></ul></td><td><ul><li><code>require_process_heap_allocation()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5713,12 +4323,12 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>Heap.first_block</code></span> starts the allocator's list. Each <span class="source-link"><code>BlockHeader</code></span> describes the payload immediately after it. The definition and field table show how the allocator uses them:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-3120 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-3120" data-code-part="1">
 
+<!-- README_CODE_PART code-3120 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -5751,11 +4361,10 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Every header occupies three cells for <span class="source-link"><code>size</code></span>, <span class="source-link"><code>free</code></span>, and <span class="source-link"><code>next</code></span>. This four-block example shows physical adjacency and the header-pointer chain:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3140 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-generic-heap.svg" alt="One contiguous heap with Block Headers A–D and adjacent payloads, rooted at Heap.first_block" />
 
@@ -5775,37 +4384,15 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3145 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3145 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3145:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>BlockHeader.size</code></span></td>
-<td>Number of usable cells after this header, excluding the header itself</td>
-<td>First initialized by <span class="source-link"><code>heap_init_region()</code></span>, read by <span class="source-link"><code>heap_alloc_from()</code></span>, read/changed by <span class="source-link"><code>heap_split_block()</code></span>, <span class="source-link"><code>heap_merge_free_blocks()</code></span>, and <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>BlockHeader.free</code></span></td>
-<td>Whether the associated cells may satisfy an allocation</td>
-<td>First initialized by <span class="source-link"><code>heap_init_region()</code></span>, initialized for new split headers by <span class="source-link"><code>heap_split_block()</code></span>, read/changed by <span class="source-link"><code>heap_alloc_from()</code></span>, changed by <span class="source-link"><code>heap_free_from()</code></span>, read by <span class="source-link"><code>heap_realloc_from()</code></span> and <span class="source-link"><code>heap_merge_free_blocks()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>BlockHeader.next</code></span></td>
-<td>Address of the next in-region header, or <code>NULL</code>. Splitting inserts and merging removes links</td>
-<td>First initialized by <span class="source-link"><code>heap_init_region()</code></span>, read by <span class="source-link"><code>heap_alloc_from()</code></span>, read/changed by <span class="source-link"><code>heap_split_block()</code></span>, <span class="source-link"><code>heap_merge_free_blocks()</code></span>, and <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Heap.first_block</code></span></td>
-<td>First header in the managed region, the descriptor owns no separate block array</td>
-<td>First initialized by <span class="source-link"><code>heap_init_region()</code></span>, read by <span class="source-link"><code>heap_alloc_from()</code></span> and <span class="source-link"><code>heap_merge_free_blocks()</code></span>. Reallocation/freeing reach it through these functions</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.71%" /><col style="width:59.29%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.size</code></span></li></ul></td><td><ul><li>Usable cells; excludes header</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.free</code></span></li></ul></td><td><ul><li>Whether payload can satisfy allocation</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.next</code></span></li></ul></td><td><ul><li>Next header or NULL</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>Heap.first_block</code></span></li></ul></td><td><ul><li>First header; no separate block array</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5823,36 +4410,14 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3167 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3167 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3167:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Heap context</th>
-<th>Descriptor storage</th>
-<th>Managed payloads</th>
-<th>Interface</th>
-</tr>
-</thead><tbody><tr>
-<td>Kernel Heap</td>
-<td><span class="source-link"><code>kernel_heap</code></span>, a <span class="source-link"><code>struct Heap</code></span> global in kernel <code>.data</code></td>
-<td>PCBs, copied paths, descriptor tables, <span class="source-link"><code>SharedMemoryEntry</code></span>, <span class="source-link"><code>SharedMemoryAttachment</code></span>, and other kernel objects</td>
-<td><span class="source-link"><code>kmalloc()</code></span> / <span class="source-link"><code>kfree()</code></span></td>
-</tr>
-<tr>
-<td>Process and Shared Data Heap</td>
-<td><span class="source-link"><code>process_shared_data_heap</code></span>, a <span class="source-link"><code>struct Heap</code></span> global in kernel <code>.data</code></td>
-<td>Complete Process Payloads and Shared Data Payloads</td>
-<td><span class="source-link"><code>PSDMalloc()</code></span> / <span class="source-link"><code>PSDFree()</code></span></td>
-</tr>
-<tr>
-<td>User Process Heap</td>
-<td><span class="source-link"><code>process_heap</code></span>, a <span class="source-link"><code>struct Heap</code></span> global in that process's <code>.data</code></td>
-<td>Allocations made by that process and its linked libraries</td>
-<td><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.13%" /><col style="width:35.34%" /><col style="width:29.36%" /><col style="width:19.17%" /></colgroup><thead><tr><th>Heap context</th><th>Descriptor storage</th><th>Managed payloads</th><th>Interface</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel Heap</li></ul></td><td><ul><li>kernel_heap in kernel .data</li></ul></td><td><ul><li>PCBs, paths, descriptors, shared metadata</li></ul></td><td><ul><li><span class="source-link"><code>kmalloc()</code></span> / <span class="source-link"><code>kfree()</code></span></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Process and Shared Data Heap</li></ul></td><td><ul><li>process_shared_data_heap in kernel .data</li></ul></td><td><ul><li>Complete process + shared-data payloads</li></ul></td><td><ul><li><span class="source-link"><code>PSDMalloc()</code></span> / <span class="source-link"><code>PSDFree()</code></span></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>User Process Heap</li></ul></td><td><ul><li>process_heap in each process .data</li></ul></td><td><ul><li>Process + linked-library allocations</li></ul></td><td><ul><li><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5870,11 +4435,10 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The expanded Process Payload shows its inner heap. Its headers are separate from the outer header that manages the whole payload. Only <code>.ivt</code>, <code>.text</code>, and <code>.data</code> belong to the linked User Process Image.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3183 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-sram-overview.svg" alt="Continuous SRAM with the Kernel Heap, Process and Shared Data Heap, and nested User Process Heap highlighted by orange outlines and grouping bands, four blocks per heap, concrete kernel payload examples, and a dashed expansion of Process Payload A into its image, heap, and stack" />
 
@@ -5894,107 +4458,28 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-3189 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3189 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3189:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Larger part</th>
-<th style="text-align:right">SRAM offset</th>
-<th>Section or region</th>
-<th>Contents</th>
-</tr>
-</thead><tbody><tr>
-<td>Kernel Image</td>
-<td style="text-align:right"><code>0..4</code></td>
-<td><code>.ivt</code></td>
-<td>Five interrupt service routine addresses</td>
-</tr>
-<tr>
-<td>Kernel Image</td>
-<td style="text-align:right"><code>5..40765</code></td>
-<td><code>.text</code></td>
-<td>Kernel code, including interrupt service routines</td>
-</tr>
-<tr>
-<td>Kernel Image</td>
-<td style="text-align:right"><code>40766..41496</code></td>
-<td><code>.data</code></td>
-<td>Kernel globals, including both kernel-managed heap descriptors and list roots</td>
-</tr>
-<tr>
-<td>Kernel runtime reservation</td>
-<td style="text-align:right"><code>41497..45592</code></td>
-<td>Kernel Heap</td>
-<td>4096 cells, including in-region block headers</td>
-</tr>
-<tr>
-<td>Kernel runtime reservation</td>
-<td style="text-align:right"><code>45593..48308</code></td>
-<td>Kernel Stack</td>
-<td>Stack grows toward lower addresses from the initial free <code>SP</code> cell</td>
-</tr>
-<tr>
-<td>After the Kernel region</td>
-<td style="text-align:right"><code>48309..262143</code></td>
-<td>Process and Shared Data Heap</td>
-<td>Outer blocks for Process Payloads and Shared Data Payloads</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.83%" /><col style="width:21.97%" /><col style="width:17.41%" /><col style="width:35.78%" /></colgroup><thead><tr><th>Larger part</th><th>SRAM offset</th><th>Section or region</th><th>Contents</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>0..4</code></li></ul></td><td><ul><li><code>.ivt</code></li></ul></td><td><ul><li>Five ISR addresses</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>5..40765</code></li></ul></td><td><ul><li><code>.text</code></li></ul></td><td><ul><li>Kernel + interrupt code</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>40766..41496</code></li></ul></td><td><ul><li><code>.data</code></li></ul></td><td><ul><li>Globals, heap descriptors, list roots</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Kernel runtime reservation</li></ul></td><td><ul><li><code>41497..45592</code></li></ul></td><td><ul><li>Kernel Heap</li></ul></td><td><ul><li>4096 cells + in-region headers</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Kernel runtime reservation</li></ul></td><td><ul><li><code>45593..48308</code></li></ul></td><td><ul><li>Kernel Stack</li></ul></td><td><ul><li>Downward-growing kernel stack</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>After the Kernel region</li></ul></td><td><ul><li><code>48309..262143</code></li></ul></td><td><ul><li>Process and Shared Data Heap</li></ul></td><td><ul><li>Outer process + shared-data allocations</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-3207 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3207:1,2,3,4,5">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
-
-# 3. Memory management and shared memory
-
-## 3.2 SRAM image and heap hierarchy (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3207 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Process Payload part</th>
-<th>Relative address</th>
-<th>Runtime role</th>
-</tr>
-</thead><tbody><tr>
-<td>Optional <code>.ivt</code></td>
-<td>Before <span class="source-link"><code>code_start</code></span> when present</td>
-<td>Process-local attributed data, ordinary PicoOS user images normally omit it</td>
-</tr>
-<tr>
-<td><code>.text</code></td>
-<td><span class="source-link"><code>code_start</code></span></td>
-<td><span class="source-link"><code>create_process()</code></span> adds <span class="source-link"><code>base_address</code></span> to initialize <span class="source-link"><code>activation.cs</code></span></td>
-</tr>
-<tr>
-<td><code>.data</code></td>
-<td><span class="source-link"><code>data_start</code></span></td>
-<td>Added to <span class="source-link"><code>base_address</code></span> for <span class="source-link"><code>activation.ds</code></span>, contains global data such as <span class="source-link"><code>process_heap</code></span></td>
-</tr>
-<tr>
-<td>User Process Heap</td>
-<td><span class="source-link"><code>heap_start</code></span> through <code>heap_start + heap_size - 1</code></td>
-<td>Contains its own <span class="source-link"><code>BlockHeader</code></span> chain and library allocations. Its final cell is the stack boundary</td>
-</tr>
-<tr>
-<td>User Process Stack</td>
-<td>First cell beyond the heap through <span class="source-link"><code>effective_stack_start</code></span></td>
-<td>Holds initial arguments, environment strings, return PC, and later call frames. Grows toward lower addresses</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.31%" /><col style="width:41.54%" /><col style="width:39.14%" /></colgroup><thead><tr><th>Process Payload part</th><th>Relative address</th><th>Runtime role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Optional <code>.ivt</code></li></ul></td><td><ul><li>Before <span class="source-link"><code>code_start</code></span> when present</li></ul></td><td><ul><li>Optional attributed data</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>.text</code></li></ul></td><td><ul><li><span class="source-link"><code>code_start</code></span></li></ul></td><td><ul><li>base_address → activation.cs</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>.data</code></li></ul></td><td><ul><li><span class="source-link"><code>data_start</code></span></li></ul></td><td><ul><li>base_address → activation.ds; process_heap</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>User Process Heap</li></ul></td><td><ul><li><span class="source-link"><code>heap_start</code></span> through <code>heap_start + heap_size - 1</code></li></ul></td><td><ul><li>Inner headers + allocations; stack boundary</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>User Process Stack</li></ul></td><td><ul><li>First cell beyond the heap through <span class="source-link"><code>effective_stack_start</code></span></li></ul></td><td><ul><li>Arguments, environment, PC, call frames</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6012,73 +4497,10 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>The kernel-global <span class="source-link"><code>kernel_heap.first_block</code></span> points to the first header at <span class="source-link"><code>KERNEL_HEAP_START</code></span>. Each object occupies a separate allocation.</p>
-<p><span class="source-link"><code>create_process()</code></span> uses <span class="source-link"><code>kmalloc()</code></span> for its PCB and <span class="source-link"><code>copy_process_path()</code></span> for the PCB-owned path string. <span class="source-link"><code>open_shared_memory()</code></span> allocates its entry here too. <span class="source-link"><code>base_address</code></span> and <span class="source-link"><code>address</code></span> point into the outer heap instead.</p></div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#332-kernel-heap-allocator-function-reference -->
-
-# 3. Memory management and shared memory · 3.3 Kernel Heap
-
-## 3.3.2 Kernel Heap allocator function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3242 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>kmalloc(size)</code></span> (Kernel only)</td>
-<td>Payload pointer, <code>NULL</code> for nonpositive size, panics if a positive request has no fit</td>
-<td>Allocates through the list rooted at <span class="source-link"><code>kernel_heap</code></span>'s <span class="source-link"><code>first_block</code></span>, may insert a split header and marks the selected block allocated</td>
-<td><span class="source-link"><code>require_kernel_heap_allocation()</code></span>, <span class="source-link"><code>heap_alloc_from()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>copy_shared_memory_name()</code></span>, <span class="source-link"><code>open_shared_memory()</code></span>, <span class="source-link"><code>map_shared_memory()</code></span>, <span class="source-link"><code>copy_process_path()</code></span>, <span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>copy_file_path()</code></span>, <span class="source-link"><code>create_file_descriptor_table()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>krealloc(ptr, size)</code></span> (Kernel only)</td>
-<td>Original/replacement payload pointer, <code>NULL</code> after freeing on nonpositive size, panics on positive-size failure</td>
-<td>Resizes a Kernel Heap block, a null pointer requests a new allocation. Currently unused</td>
-<td><span class="source-link"><code>require_kernel_heap_allocation()</code></span>, <span class="source-link"><code>heap_realloc_from()</code></span></td>
-<td>None</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>kfree(ptr)</code></span> (Kernel only)</td>
-<td>Returns no value</td>
-<td>Marks the preceding <span class="source-link"><code>BlockHeader.free</code></span> true and coalesces free neighbors throughout the Kernel Heap. A null pointer has no effect</td>
-<td><span class="source-link"><code>heap_free_from()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>destroy_shared_memory_entry()</code></span>, <span class="source-link"><code>open_shared_memory()</code></span>, <span class="source-link"><code>unlink_shared_memory()</code></span>, <span class="source-link"><code>release_process_shared_memory()</code></span>, <span class="source-link"><code>free_process_load()</code></span>, <span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>set_process_working_directory()</code></span>, <span class="source-link"><code>copy_file_descriptor()</code></span>, <span class="source-link"><code>destroy_file_descriptor_table()</code></span>, <span class="source-link"><code>close_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>init_kernel_heap(void)</code></span> (Kernel only)</td>
-<td>Returns no value</td>
-<td>Initializes <span class="source-link"><code>kernel_heap</code></span> over <span class="source-link"><code>KERNEL_HEAP_START</code></span> and <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span>, creating one free block</td>
-<td><span class="source-link"><code>heap_init_region()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>require_kernel_heap_allocation(memory, size)</code></span> (Kernel only)</td>
-<td>Returns the unchanged pointer, or does not return if a positive request failed</td>
-<td>Converts a failed positive Kernel Heap allocation into a kernel panic</td>
-<td><span class="source-link"><code>panic_kernel_heap_full()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>kmalloc()</code></span>, <span class="source-link"><code>krealloc()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
+<div class="readme-list"><ul><li>Kernel Heap: PCB, paths, shared metadata</li>
+<li>Separate allocation for each object</li>
+<li>Metadata points into outer heap</li>
+<li>kernel_heap.first_block → header chain</li></ul></div>
 
 </div>
 
@@ -6092,8 +4514,11 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p><span class="source-link"><code>PSDMalloc()</code></span> returns the payload's absolute address. A PCB records it in <span class="source-link"><code>base_address</code></span> and keeps the requested cell count in <span class="source-link"><code>size</code></span>. The actual block may be slightly larger if its remainder is too small to split.</p>
-<p><span class="source-link"><code>4.1.2.1 From PCBs to Process Payloads in SRAM</code></span> shows PCB pointers reaching these payloads. The PCB's <span class="source-link"><code>next</code></span> links process records, independently of the allocator's header chain.</p></div>
+<div class="readme-list"><ul><li>PSDMalloc → complete Process Payload</li>
+<li>PCB records base_address + size</li>
+<li>Image + user heap + stack</li>
+<li>remove_process → PSDFree whole payload</li>
+<li>User free releases inner allocation only</li></ul></div>
 
 </div>
 
@@ -6107,66 +4532,11 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p><span class="source-link"><code>open_shared_memory()</code></span> also calls <span class="source-link"><code>PSDMalloc()</code></span> and stores the address in <span class="source-link"><code>SharedMemoryEntry.address</code></span>. Its entry and name are separate Kernel Heap allocations.</p>
-<p><span class="source-link"><code>3.2 SRAM image and heap hierarchy</code></span> shows that pointer reaching the Shared Data Payload. <span class="source-link"><code>shared_memory_list_head</code></span> and the entries' <span class="source-link"><code>next</code></span> links form an independent registry, and each <span class="source-link"><code>name</code></span> points to a copied Kernel Heap string.</p></div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#343-process-and-shared-data-heap-allocator-function-reference -->
-
-# 3. Memory management and shared memory · 3.4 Process and Shared Data Heap
-
-## 3.4.3 Process and Shared Data Heap allocator function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3296 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>PSDMalloc(size)</code></span> (Kernel only)</td>
-<td>Absolute payload address, or <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span> (<code>-1</code>) for nonpositive size or no fit</td>
-<td>Allocates a complete Process Payload or shared-data region through <span class="source-link"><code>process_shared_data_heap</code></span>, converts the common payload pointer to an integer address</td>
-<td><span class="source-link"><code>heap_alloc_from()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>open_shared_memory()</code></span>, <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>load_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>PSDRealloc(start, size)</code></span> (Kernel only)</td>
-<td>Absolute original/replacement payload address, or <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span> (<code>-1</code>) for nonpositive size or no fit</td>
-<td>Resizes an outer allocation. An invalid start requests a new allocation. Nonpositive size releases an existing block, failed positive growth preserves it. Currently unused</td>
-<td><span class="source-link"><code>heap_realloc_from()</code></span></td>
-<td>None</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>PSDFree(start)</code></span> (Kernel only)</td>
-<td>Returns no value</td>
-<td>Releases the outer block at the supplied payload address and coalesces free neighbors throughout <span class="source-link"><code>process_shared_data_heap</code></span>. An invalid start has no effect</td>
-<td><span class="source-link"><code>heap_free_from()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>destroy_shared_memory_entry()</code></span>, <span class="source-link"><code>cancel_process_load()</code></span>, <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>init_process_shared_data_heap(void)</code></span> (Kernel only)</td>
-<td>Returns no value</td>
-<td>Initializes <span class="source-link"><code>process_shared_data_heap</code></span> over <span class="source-link"><code>PROCESS_MEMORY_START</code></span> through <span class="source-link"><code>SRAM_MAX_ADDRESS_IN_MEMORY_MAP</code></span>, inclusive, creating one free block</td>
-<td><span class="source-link"><code>heap_init_region()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
+<div class="readme-list"><ul><li>PSDMalloc → Shared Data Payload</li>
+<li>Entry + name in Kernel Heap</li>
+<li>Several mappings → same shared payload</li>
+<li>No nested user heap</li>
+<li>Unlinked + unmapped → PSDFree</li></ul></div>
 
 </div>
 
@@ -6180,8 +4550,11 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p><span class="source-link"><code>process_heap</code></span> resides in the process image's <code>.data</code>. <span class="source-link"><code>init_process_heap()</code></span> obtains the heap bounds through syscalls and initializes its first header. <span class="source-link"><code>3.2 SRAM image and heap hierarchy</code></span> shows the inner block list between the image and stack.</p>
-<p><span class="source-link"><code>malloc()</code></span>, <span class="source-link"><code>realloc()</code></span>, and <span class="source-link"><code>free()</code></span> call the shared allocator directly with this descriptor. They change the inner block chain, leaving the outer allocation in place.</p></div>
+<div class="readme-list"><ul><li>process_heap stored in process .data</li>
+<li>Startup obtains bounds through syscalls</li>
+<li>malloc/realloc/free → common allocator</li>
+<li>Inner blocks; outer payload stays allocated</li>
+<li>Restored DS selects process-local globals</li></ul></div>
 
 </div>
 
@@ -6195,60 +4568,16 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3332 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-3332 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3332:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Syscalls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>malloc(size)</code></span> (Library only)</td>
-<td>Payload pointer, <code>NULL</code> for nonpositive size, process-heap-full exception if a positive request has no fit</td>
-<td>Allocates through the calling image's <span class="source-link"><code>process_heap</code></span>, searches and updates blocks directly in library code</td>
-<td><span class="source-link"><code>require_process_heap_allocation()</code></span>, <span class="source-link"><code>heap_alloc_from()</code></span></td>
-<td>Process-heap-full on positive-size failure</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>opendir()</code></span>, <span class="source-link"><code>copy_environment_variable()</code></span>, <span class="source-link"><code>initialize_environment()</code></span>, <span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>clone_environment()</code></span><br><strong>User applications:</strong> <span class="source-link"><code>main()</code> in sed</span>, <span class="source-link"><code>read_environment()</code> in init</span><br><strong>Test programs (direct calls):</strong> <span class="source-link"><code>basic_heap_allocator_example.picoc</code></span>, <span class="source-link"><code>basic_malloc.picoc</code></span>, <span class="source-link"><code>basic_free.picoc</code></span>, <span class="source-link"><code>basic_free_block_merging.picoc</code></span>, <span class="source-link"><code>basic_realloc.picoc</code></span>, <span class="source-link"><code>basic_realloc_null_and_zero.picoc</code></span>, <span class="source-link"><code>basic_string.picoc</code></span>, <span class="source-link"><code>exception_heap_full/heap_full.picoc</code></span>, <span class="source-link"><code>exercise_sheet_4_heap/launcher.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>realloc(ptr, size)</code></span> (Library only)</td>
-<td>Original/replacement payload pointer, <code>NULL</code> after freeing on nonpositive size, process-heap-full exception on positive-size failure</td>
-<td>Resizes a User Process Heap block, a null pointer requests a new allocation. Calls the common implementation directly</td>
-<td><span class="source-link"><code>require_process_heap_allocation()</code></span>, <span class="source-link"><code>heap_realloc_from()</code></span></td>
-<td>Process-heap-full on positive-size failure</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>store_environment_variable()</code></span><br><strong>Test programs (direct calls):</strong> <span class="source-link"><code>basic_realloc.picoc</code></span>, <span class="source-link"><code>basic_realloc_null_and_zero.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>free(ptr)</code></span> (Library only)</td>
-<td>Returns no value</td>
-<td>Releases and coalesces blocks only in the calling image's <span class="source-link"><code>process_heap</code></span>. A null pointer has no effect</td>
-<td><span class="source-link"><code>heap_free_from()</code></span></td>
-<td>None</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>opendir()</code></span>, <span class="source-link"><code>closedir()</code></span>, <span class="source-link"><code>store_environment_variable()</code></span>, <span class="source-link"><code>unsetenv()</code></span>, <span class="source-link"><code>clearenv()</code></span>, <span class="source-link"><code>destroy_environment()</code></span><br><strong>User applications:</strong> <span class="source-link"><code>main()</code> in sed</span>, <span class="source-link"><code>read_environment()</code> in init</span><br><strong>Test programs (direct calls):</strong> <span class="source-link"><code>basic_heap_allocator_example.picoc</code></span>, <span class="source-link"><code>basic_free.picoc</code></span>, <span class="source-link"><code>basic_free_block_merging.picoc</code></span>, <span class="source-link"><code>basic_realloc.picoc</code></span>, <span class="source-link"><code>exercise_sheet_4_heap/launcher.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>init_process_heap(void)</code></span> (Library only)</td>
-<td>Returns no value</td>
-<td>Gets the current process's absolute heap start and size, then initializes <span class="source-link"><code>process_heap</code></span> and its first free header</td>
-<td><span class="source-link"><code>heap_init_region()</code></span></td>
-<td>Process-heap-start, process-heap-size</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>start_process()</code></span><br><strong>Test programs (direct calls):</strong> <span class="source-link"><code>basic_heap_allocator_example.picoc</code></span>, <span class="source-link"><code>basic_environment.picoc</code></span>, <span class="source-link"><code>basic_malloc.picoc</code></span>, <span class="source-link"><code>basic_free.picoc</code></span>, <span class="source-link"><code>basic_free_block_merging.picoc</code></span>, <span class="source-link"><code>basic_realloc.picoc</code></span>, <span class="source-link"><code>basic_realloc_null_and_zero.picoc</code></span>, <span class="source-link"><code>basic_string.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>require_process_heap_allocation(memory, size)</code></span> (Library only)</td>
-<td>Returns the unchanged pointer, or terminates the process if a positive request failed</td>
-<td>Invokes the process-heap-full syscall only when the common allocator returns <code>NULL</code> for a positive request</td>
-<td>No C calls</td>
-<td>Process-heap-full on positive-size failure</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>malloc()</code></span>, <span class="source-link"><code>realloc()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.94%" /><col style="width:14.79%" /><col style="width:17.79%" /><col style="width:33.48%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>malloc()</code></li></ul></td><td><ul><li>Pointer / NULL / heap-full</li></ul></td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>copy_environment_variable()</code></li><li><code>initialize_environment()</code></li><li><code>setenv()</code></li><li><code>clone_environment()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>realloc()</code></li></ul></td><td><ul><li>Pointer / NULL / heap-full</li></ul></td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>store_environment_variable()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>free()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>closedir()</code></li><li><code>store_environment_variable()</code></li><li><code>unsetenv()</code></li><li><code>clearenv()</code></li><li><code>destroy_environment()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>init_process_heap()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>start_process()</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>require_process_heap_allocation()</code></li></ul></td><td><ul><li>Pointer or termination</li></ul></td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>malloc()</code></li><li><code>realloc()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6266,11 +4595,10 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The kernel links <span class="source-link"><code>common/heap.picoc</code></span> directly. <span class="source-link"><code>libstdlib</code></span> includes it in user images. These arrows represent ordinary C calls within each target:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-3353 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -6299,98 +4627,15 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3368 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-3368 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3368:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>heap_init_region(heap, start, cell_count)</code></span> (Shared/Common)</td>
-<td>Returns no value</td>
-<td>For a null heap, does nothing. For a null start or at most three cells, sets <span class="source-link"><code>Heap.first_block</code></span> to <code>NULL</code>. Otherwise writes one header with <span class="source-link"><code>size</code></span> = cell count minus three, <span class="source-link"><code>free</code></span> = true, <span class="source-link"><code>next</code></span> = <code>NULL</code>, and stores its address in the descriptor</td>
-<td>None</td>
-<td><strong>Library functions (directly linked):</strong> <span class="source-link"><code>init_process_heap()</code></span><br><strong>Kernel functions (directly linked):</strong> <span class="source-link"><code>init_kernel_heap()</code></span>, <span class="source-link"><code>init_process_shared_data_heap()</code></span><br><strong>Test programs (direct calls):</strong> <span class="source-link"><code>basic_heap_allocator_example.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_alloc_from(heap, size)</code></span> (Shared/Common)</td>
-<td>Payload pointer, or <code>NULL</code> for a null heap, nonpositive size, or no fit</td>
-<td>Scans from <span class="source-link"><code>Heap.first_block</code></span> through <span class="source-link"><code>next</code></span>, selects the first free block with enough payload cells, optionally splits it, sets <span class="source-link"><code>free</code></span> false, and returns the address immediately after the header</td>
-<td><span class="source-link"><code>heap_split_block()</code></span></td>
-<td><strong>Library functions (directly linked):</strong> <span class="source-link"><code>malloc()</code></span><br><strong>Kernel functions (directly linked):</strong> <span class="source-link"><code>kmalloc()</code></span>, <span class="source-link"><code>PSDMalloc()</code></span><br><strong>Shared/common functions (directly linked):</strong> <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_realloc_from(heap, ptr, size)</code></span> (Shared/Common)</td>
-<td>Original/replacement payload pointer, or <code>NULL</code> for a null heap, nonpositive size, or failed replacement allocation</td>
-<td>With a valid heap, nonpositive size frees the block, a null pointer allocates. Otherwise shrinks/splits in place and coalesces, grows into only the immediate free neighbor if sufficient, or allocates/copies/frees. Failed replacement allocation preserves the old block</td>
-<td><span class="source-link"><code>heap_free_from()</code></span>, <span class="source-link"><code>heap_alloc_from()</code></span>, <span class="source-link"><code>heap_split_block()</code></span>, <span class="source-link"><code>heap_merge_free_blocks()</code></span>, <span class="source-link"><code>heap_copy_cells()</code></span></td>
-<td><strong>Library functions (directly linked):</strong> <span class="source-link"><code>realloc()</code></span><br><strong>Kernel functions (directly linked):</strong> <span class="source-link"><code>krealloc()</code></span>, <span class="source-link"><code>PSDRealloc()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_free_from(heap, ptr)</code></span> (Shared/Common)</td>
-<td>Returns no value</td>
-<td>For a null heap or pointer, does nothing. Otherwise finds the preceding header, sets <span class="source-link"><code>free</code></span> true, and scans the entire heap to coalesce consecutive free blocks. Does not erase payload contents</td>
-<td><span class="source-link"><code>heap_merge_free_blocks()</code></span></td>
-<td><strong>Library functions (directly linked):</strong> <span class="source-link"><code>free()</code></span><br><strong>Kernel functions (directly linked):</strong> <span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>PSDFree()</code></span><br><strong>Shared/common functions (directly linked):</strong> <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_split_block(block, size)</code></span> (Shared/Common)</td>
-<td>Returns no value</td>
-<td>Splits only if <span class="source-link"><code>size</code></span> ≥ requested size + three header cells + one payload cell. Inserts a free header after the requested payload, links it to the old successor, then updates the original size and successor. Otherwise leaves the block unchanged. Does not change the original free flag</td>
-<td>None</td>
-<td><strong>Shared/common functions (directly linked):</strong> <span class="source-link"><code>heap_alloc_from()</code></span>, <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#361-common-allocator-linkage-and-function-reference -->
-
-# 3. Memory management and shared memory · 3.6 Heap and allocator function reference
-
-## 3.6.1 Common allocator linkage and function reference (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3368 rows=6-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>heap_merge_free_blocks(heap)</code></span> (Shared/Common)</td>
-<td>Returns no value</td>
-<td>For a null heap, does nothing. Scans from <span class="source-link"><code>Heap.first_block</code></span>. When current and next are free, adds three header cells and the next payload to the current size, bypasses the next header, and rechecks the same current header. Advances only when the pair cannot merge</td>
-<td>None</td>
-<td><strong>Shared/common functions (directly linked):</strong> <span class="source-link"><code>heap_realloc_from()</code></span>, <span class="source-link"><code>heap_free_from()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_copy_cells(destination, source, count)</code></span> (Shared/Common)</td>
-<td>Returns no value</td>
-<td>Copies count cells in increasing index order from source to destination. Used for the overlap between old payload size and requested replacement size</td>
-<td>None</td>
-<td><strong>Shared/common functions (directly linked):</strong> <span class="source-link"><code>heap_realloc_from()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.56%" /><col style="width:16.95%" /><col style="width:32.17%" /><col style="width:24.32%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>heap_init_region()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Initialize one free header</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>heap_alloc_from()</code></li></ul></td><td><ul><li>Pointer or NULL</li></ul></td><td><ul><li>First fit; split; mark allocated</li></ul></td><td><ul><li><code>malloc()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>heap_realloc_from()</code></li></ul></td><td><ul><li>Pointer or NULL; old block on failure</li></ul></td><td><ul><li>Shrink, grow, or allocate/copy/free</li></ul></td><td><ul><li><code>realloc()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>heap_free_from()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Mark free; coalesce neighbors</li></ul></td><td><ul><li><code>free()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6408,11 +4653,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">For a valid block and positive size, this graph shows when realloc keeps the address or moves the payload. A failed move preserves the old block. A null pointer allocates, while a nonpositive size frees:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-3385 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -6445,8 +4689,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Follow one allocation and two frees through the same 52-cell heap. Amber cells are headers, cyan payloads are allocated, and green payloads are free.</p>
-<p>Arrows preserve the next links. The amber outline marks the changed block; offsets count cells, while widths are illustrative.</p></div>
+<div class="readme-list"><ul><li>Allocation → free → repeated coalescing</li>
+<li>Amber: headers; cyan: allocated payloads</li>
+<li>Green: free payloads</li>
+<li>Arrows: next links; offsets: cells</li></ul></div>
 
 </div>
 
@@ -6460,11 +4706,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The four payloads have sizes 8, 4, 12, and 16. Including four three-cell headers gives <code>8 + 4 + 12 + 16 + 4 × 3 = 52</code> cells. Allocating all four and then freeing B and D produces this state:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3418 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-01-initial.svg" alt="Initial heap with allocated A, C and free B, D, linked from left to right" />
 
@@ -6484,11 +4729,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The remainder D′ gets a header at <code>36 + 11 = 47</code> and a two-cell payload. Its <span class="source-link"><code>next</code></span> is <code>NULL</code>, and D's <span class="source-link"><code>next</code></span> now points to it. A, B, and C stay put.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3433 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-02-allocated.svg" alt="After allocation, D has eleven allocated payload cells and links to new free Header D′ with two payload cells" />
 
@@ -6508,17 +4752,17 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET image-3444 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-03-d-marked-free.svg" alt="D marked free with its eleven payload cells still separate from free D′ and its two payload cells" />
 
 </ReadmeVisual>
 
 <!-- README_ASSET image-3450 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-04-d-merged.svg" alt="D restored to sixteen free payload cells after absorbing Header D′ and its two payload cells" />
 
@@ -6538,17 +4782,17 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET image-3460 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-05-c-marked-free.svg" alt="C marked free, making B, C, and D consecutive free blocks after allocated A" />
 
 </ReadmeVisual>
 
 <!-- README_ASSET image-3465 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-06-b-c-merged.svg" alt="First merge at B bypasses Header C and produces nineteen free payload cells followed by free D" />
 
@@ -6568,11 +4812,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The scan stays at B and checks its new neighbor D. It merges again, giving B <code>19 + 3 + 16 = 38</code> payload cells and <code>next = NULL</code>. This is repeated iteration at one header:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3471 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/heap-07-b-d-merged.svg" alt="Second merge at B bypasses Header D, leaving allocated A and a thirty-eight-cell free B with next equal to NULL" />
 
@@ -6592,12 +4835,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>ProcessControlBlock</code></span> is the kernel's record for one process. Its definition and field table connect memory, resources, saved registers, and lifecycle bookkeeping to the functions that initialize and use them:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-3496 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:29">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-3496" data-code-part="1">
+
+<!-- README_CODE_PART code-3496 lines=1-14 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -6615,6 +4860,18 @@ struct ProcessControlBlock {
     int *waiting_status_ptr;
     struct wait_queue waiters;
     struct wait_queue *waiting_queue_ptr;
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-3496" data-code-part="2">
+
+<!-- README_CODE_PART code-3496 lines=15-27 -->
+<div class="readme-code">
+
+```c {lines:false}
     struct ProcessControlBlock *wait_next;
     struct ProcessControlBlock *next;
     struct SharedMemoryAttachment *shared_memory_attachments;
@@ -6638,6 +4895,8 @@ struct ProcessControlBlock {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#41-process-control-block-fields -->
@@ -6648,135 +4907,29 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3526 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3526 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-3526:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>pid</code></span></td>
-<td>Assigned from the global counter when the PCB is created, never changes</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, read by <span class="source-link"><code>find_process_by_pid()</code></span> and <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>state</code></span></td>
-<td><span class="source-link"><code>NEW</code></span>, <span class="source-link"><code>READY</code></span>, <span class="source-link"><code>RUNNING</code></span>, <span class="source-link"><code>BLOCKED</code></span>, <span class="source-link"><code>STOPPED</code></span>, or <span class="source-link"><code>ZOMBIE</code></span></td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, changed by <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, queue helpers, <span class="source-link"><code>stop_process()</code></span>, <span class="source-link"><code>continue_process()</code></span>, <span class="source-link"><code>dispatcher_switch_to_process()</code></span>, and <span class="source-link"><code>terminate_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></td>
-<td>Absolute start and requested cell count of the <span class="source-link"><code>PSDMalloc()</code></span> Process Payload</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, released by <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></td>
-<td>Process-relative userspace heap start and cell count from the binary header/defaults</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, read by <span class="source-link"><code>process_heap_start()</code></span>, <span class="source-link"><code>process_heap_size()</code></span>, and <span class="source-link"><code>process_stack_boundary()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>binary_path</code></span></td>
-<td>PCB-owned executable path without the leading <code>/</code>, it exists while the process is <span class="source-link"><code>NEW</code></span>, supplies the later <span class="source-link"><code>argv[0]</code></span> copy, and remains the kernel's stable name for process listings</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, copied by <span class="source-link"><code>store_process_arguments()</code></span>, printed by <span class="source-link"><code>list_processes()</code></span>, freed by <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>working_directory</code></span></td>
-<td>PCB-owned absolute PicoOS path, copied from the parent or initialized to <code>/</code> for PID 1</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span> through copying, read by <span class="source-link"><code>build_process_path()</code></span>, replaced by <span class="source-link"><code>change_working_directory()</code></span>, freed by <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>activation</code></span></td>
-<td>Embedded saved CPU context needed later by the dispatcher, <span class="source-link"><code>6.2 Saved process registers</code></span> explains its fields</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, later maintained by <span class="source-link"><code>store_process_arguments()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, <span class="source-link"><code>complete_pending_terminal_read()</code></span>, and <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>file_descriptors</code></span></td>
-<td>Pointer to this process's descriptor table. <span class="source-link"><code>9.2 Containment and reference relationships</code></span> shows the wrapper, entry array, and path references</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span> through <span class="source-link"><code>create_file_descriptor_table()</code></span>, inherited by <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, destroyed by <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waiting_status_ptr</code></span></td>
-<td>Pointer into this process’s suspended userspace <span class="source-link"><code>waitpid()</code></span> frame</td>
-<td>First initialized to <code>NULL</code> by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>wait_for_process_by_pid()</code></span>, written and cleared by <span class="source-link"><code>wake_parent_waiting_for_process()</code></span> or <span class="source-link"><code>notify_process_stopped()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waiters</code></span></td>
-<td>Embedded FIFO queue of processes waiting for this process</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, filled by <span class="source-link"><code>wait_for_process_by_pid()</code></span>, drained by <span class="source-link"><code>wake_parent_waiting_for_process()</code></span> or <span class="source-link"><code>notify_process_stopped()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></td>
-<td>Queue containing this PCB and its intrusive successor link</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, maintained by <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>enqueue_terminal_reader()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, and <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>next</code></span></td>
-<td>Link in the global process list</td>
-<td>First initialized/linked by <span class="source-link"><code>create_process()</code></span>, traversed by <span class="source-link"><code>scheduler_next_process()</code></span> and <span class="source-link"><code>find_process_by_pid()</code></span>, unlinked by <span class="source-link"><code>remove_process()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#41-process-control-block-fields -->
-
-# 4. Processes and process lifecycle
-
-## 4.1 Process control block fields (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3526 rows=13-18 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>shared_memory_attachments</code></span></td>
-<td>Head of this process's mapping-record list. Each record references a shared-memory entry as shown in <span class="source-link"><code>9.2 Containment and reference relationships</code></span></td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, extended by <span class="source-link"><code>map_shared_memory()</code></span>, released by <span class="source-link"><code>remove_process()</code></span> through <span class="source-link"><code>release_process_shared_memory()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></td>
-<td>Creator PID and optional signal delivered when that parent terminates</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, parent-death setting changed by <span class="source-link"><code>set_parent_death_signal()</code></span>, used by <span class="source-link"><code>orphan_and_signal_children()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>exit_status</code></span></td>
-<td>Status retained while the process is a zombie</td>
-<td>First initialized to 0 by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>terminate_process()</code></span>, collected by <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></td>
-<td>Signal bookkeeping for stopped and deferred termination paths</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, used by <span class="source-link"><code>stop_process()</code></span>, <span class="source-link"><code>continue_process()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span>, and <span class="source-link"><code>prepare_process_termination()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td>
-<td>Userspace request retained while a terminal read is blocked or stopped</td>
-<td>First initialized to <code>NULL</code>/0 by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>begin_terminal_read()</code></span>, consumed by <span class="source-link"><code>complete_pending_terminal_read()</code></span> or <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>pending_load</code></span></td>
-<td>Executable metadata, paths, progress, and reserved Process and Shared Data Heap region while this process is between load chunks</td>
-<td>First initialized to <code>NULL</code> by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>begin_process_load()</code></span>, advanced by <span class="source-link"><code>continue_process_load()</code></span>, cleared by <span class="source-link"><code>finish_process_load()</code></span> or <span class="source-link"><code>cancel_process_load()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>pid</code></span></li></ul></td><td><ul><li>Stable process ID</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>state</code></span></li></ul></td><td><ul><li>NEW / READY / RUNNING</li><li>BLOCKED / STOPPED / ZOMBIE</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></li></ul></td><td><ul><li>Absolute Process Payload base + size</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Relative userspace heap bounds</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>binary_path</code></span></li></ul></td><td><ul><li>Owned executable path; later argv[0]</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Owned absolute path; inherited or /</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>activation</code></span></li></ul></td><td><ul><li>Embedded saved CPU context</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>file_descriptors</code></span></li></ul></td><td><ul><li>Owned descriptor table</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>waiting_status_ptr</code></span></li></ul></td><td><ul><li>Pointer into suspended waitpid frame</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>waiters</code></span></li></ul></td><td><ul><li>Embedded FIFO of waiting parents</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></li></ul></td><td><ul><li>Owning queue + intrusive successor</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>next</code></span></li></ul></td><td><ul><li>Global process-list successor</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>shared_memory_attachments</code></span></li></ul></td><td><ul><li>Head of process mapping records</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Parent identity + parent-death signal</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>exit_status</code></span></li></ul></td><td><ul><li>Retained zombie termination status</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></li></ul></td><td><ul><li>Stop/prior-state/deferred-termination bookkeeping</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Retained buffer + requested count</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><ul><li><span class="source-link"><code>pending_load</code></span></li></ul></td><td><ul><li>Metadata + progress of pending load</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6794,54 +4947,17 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3561 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3561 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3561:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>State</th>
-<th>Numeric value</th>
-<th>Meaning</th>
-<th>Typical transition</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>NEW</code></span></td>
-<td>0</td>
-<td>Loaded image and PCB exist, but the final startup layout is not yet prepared</td>
-<td>Completed process load</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>READY</code></span></td>
-<td>1</td>
-<td>Eligible for the scheduler</td>
-<td>Run setup, queue wakeup, or <span class="source-link"><code>SIGCONT</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>RUNNING</code></span></td>
-<td>2</td>
-<td>Activation is loaded into the CPU</td>
-<td>Dispatcher</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>BLOCKED</code></span></td>
-<td>3</td>
-<td>PCB is linked into one wait queue</td>
-<td>Terminal read, DMA completion wait, <span class="source-link"><code>waitpid()</code></span>, or <span class="source-link"><code>sleep()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>STOPPED</code></span></td>
-<td>4</td>
-<td>Suspended by <span class="source-link"><code>SIGSTOP</code></span>, <span class="source-link"><code>SIGTSTP</code></span>, or <span class="source-link"><code>SIGTTIN</code></span></td>
-<td>Signal subsystem</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ZOMBIE</code></span></td>
-<td>5</td>
-<td>Terminated status retained for a parent</td>
-<td><span class="source-link"><code>terminate_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.21%" /><col style="width:19.21%" /><col style="width:30.66%" /><col style="width:30.91%" /></colgroup><thead><tr><th>State</th><th>Numeric value</th><th>Meaning</th><th>Typical transition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>NEW</code></span></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>Loaded; startup not prepared</li></ul></td><td><ul><li>Load completion</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>READY</code></span></li></ul></td><td><ul><li>1</li></ul></td><td><ul><li>Eligible for scheduling</li></ul></td><td><ul><li>Run, wakeup, SIGCONT</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>RUNNING</code></span></li></ul></td><td><ul><li>2</li></ul></td><td><ul><li>Activation loaded into CPU</li></ul></td><td><ul><li>Dispatch</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>BLOCKED</code></span></li></ul></td><td><ul><li>3</li></ul></td><td><ul><li>Linked into wait queue</li></ul></td><td><ul><li>Read, DMA, waitpid, sleep</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>STOPPED</code></span></li></ul></td><td><ul><li>4</li></ul></td><td><ul><li>Suspended by signal</li></ul></td><td><ul><li>SIGSTOP/TSTP/TTIN</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ZOMBIE</code></span></li></ul></td><td><ul><li>5</li></ul></td><td><ul><li>Status retained for parent</li></ul></td><td><ul><li>Termination</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6859,11 +4975,10 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The diagram follows normal startup, scheduling, waits, signals, and termination. Removal ends the PCB's lifetime. <span class="source-link"><code>6. Scheduling and context switching</code></span> explains scheduling, and <span class="source-link"><code>7. Blocking, wait queues, signals, and mutexes</code></span> explains blocking and signal suspension:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-3590 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
@@ -6904,11 +5019,10 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The upper view locates the allocations in SRAM. The lower view shows the same three PCBs, with the head at PCB 1, tail at PCB 3, and current pointer at PCB 2:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3627 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-process-list.svg" alt="Kernel globals and three linked PCBs in SRAM, followed by a process-list view of those same PCB objects with process_list_head, process_list_tail, and active_process pointing to PCB 1, PCB 3, and PCB 2" />
 
@@ -6928,27 +5042,13 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3648 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3648 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3648:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>List</th>
-<th>Insertion policy</th>
-<th>Pointers and linking cost</th>
-</tr>
-</thead><tbody><tr>
-<td>PCB list</td>
-<td><span class="source-link"><code>create_process()</code></span> appends at the end</td>
-<td><span class="source-link"><code>process_list_head</code></span> starts traversal, <span class="source-link"><code>process_list_tail</code></span> makes append O(1). With only a head, append would take O(n)</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry</code></span> registry</td>
-<td><span class="source-link"><code>open_shared_memory()</code></span> prepends at the beginning</td>
-<td>Sets the new entry's <span class="source-link"><code>next</code></span> to <span class="source-link"><code>shared_memory_list_head</code></span>, then moves the head to the new entry. A head alone makes insertion O(1)</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.86%" /><col style="width:27.65%" /><col style="width:41.50%" /></colgroup><thead><tr><th>List</th><th>Insertion policy</th><th>Pointers and linking cost</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>PCB list</li></ul></td><td><ul><li>Append at tail</li></ul></td><td><ul><li>Head for traversal; tail → O(1)</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry</code></span> registry</li></ul></td><td><ul><li>Prepend at head</li></ul></td><td><ul><li>Head insertion → O(1)</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6966,11 +5066,10 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">In this two-process example, PCB 1 and PCB 2 occupy Kernel Heap payloads A and C. Their green <span class="source-link"><code>base_address</code></span> arrows reach the corresponding Process Payloads. The middle allocation holds shared data:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3674 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-process-payload-links.svg" alt="Complete SRAM with three blocks per heap and two kernel PCBs pointing through base_address to Process Payloads A and C" />
 
@@ -6990,11 +5089,10 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The blue highlight locates one process's stack after its image and heap. Other processes have their own stacks in separate Process Payloads:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3693 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/process-stack-placement.svg" alt="Complete SRAM expanded into Process Payload A, with both the payload and its User Process Stack highlighted by matching blue fills and thick blue borders" />
 
@@ -7014,41 +5112,22 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3716 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3716 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3716:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Name</th>
-<th>Meaning</th>
-<th>Calculation</th>
-</tr>
-</thead><tbody><tr>
-<td><code>startup_cell_count</code></td>
-<td>Number of cells needed for all startup values and strings</td>
-<td>Sum shown below</td>
-</tr>
-<tr>
-<td><code>entry_pc_address</code></td>
-<td>Address of the cell holding the entry PC</td>
-<td><code>base_address + size - startup_cell_count</code></td>
-</tr>
-<tr>
-<td><code>strings_start_address</code></td>
-<td>Address of the first copied string character</td>
-<td><code>entry_pc_address + argc + envc + 4</code></td>
-</tr>
-<tr>
-<td><code>highest_stack_address</code></td>
-<td>Address of the highest reserved stack cell</td>
-<td><code>base_address + size - 1</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.70%" /><col style="width:29.15%" /><col style="width:38.14%" /></colgroup><thead><tr><th>Name</th><th>Meaning</th><th>Calculation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>startup_cell_count</code></li></ul></td><td><ul><li>All startup values + strings</li></ul></td><td><ul><li>Sum shown below</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>entry_pc_address</code></li></ul></td><td><ul><li>Saved initial entry PC cell</li></ul></td><td><ul><li><code>base_address + size - startup_cell_count</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>strings_start_address</code></li></ul></td><td><ul><li>First copied character</li></ul></td><td><ul><li><code>entry_pc_address + argc + envc + 4</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>highest_stack_address</code></li></ul></td><td><ul><li>Highest reserved stack cell</li></ul></td><td><ul><li><code>base_address + size - 1</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>System V / POSIX</b><span>The Intel386 initial-stack model supplies the argc → argv → NULL → envp → NULL order. RETI adds an entry PC, uses word cells, fixes string order, and omits the auxiliary vector. POSIX defines the arrays and NAME=value strings, not their physical layout.</span></aside>
+</div>
+<aside class="context-note"><b>System V / POSIX</b><ul><li>Intel386: argc → argv → envp</li>
+<li>NULL ends pointer arrays</li>
+<li>RETI: entry PC; no auxiliary vector</li></ul></aside>
 
 </div>
 
@@ -7062,64 +5141,25 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3726 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3726 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3726:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Cell address</th>
-<th>Stored value</th>
-</tr>
-</thead><tbody><tr>
-<td><strong>↑ Decreasing addresses</strong></td>
-<td><strong>Lower addresses · stack grows ↑</strong></td>
-</tr>
-<tr>
-<td><code>entry_pc_address</code></td>
-<td>Entry PC = <span class="source-link"><code>activation.cs</code></span> minus 1</td>
-</tr>
-<tr>
-<td><code>entry_pc_address + 1</code></td>
-<td><span class="source-link"><code>argc</code></span></td>
-</tr>
-<tr>
-<td><code>entry_pc_address + 2</code></td>
-<td><span class="source-link"><code>argv[0]</code></span></td>
-</tr>
-<tr>
-<td><code>...</code></td>
-<td><code>...</code></td>
-</tr>
-<tr>
-<td><code>entry_pc_address + argc + 2</code></td>
-<td><span class="source-link"><code>argv[argc] = NULL</code></span></td>
-</tr>
-<tr>
-<td><code>entry_pc_address + argc + 3</code></td>
-<td><span class="source-link"><code>envp[0]</code></span></td>
-</tr>
-<tr>
-<td><code>...</code></td>
-<td><code>...</code></td>
-</tr>
-<tr>
-<td><code>entry_pc_address + argc + envc + 3</code></td>
-<td><span class="source-link"><code>envp[envc] = NULL</code></span></td>
-</tr>
-<tr>
-<td><code>strings_start_address</code></td>
-<td>First character of the copied <span class="source-link"><code>binary_path</code></span></td>
-</tr>
-<tr>
-<td><code>strings_start_address + 1</code></td>
-<td>Next character of the path, or its <code>\0</code> terminator</td>
-</tr>
-<tr>
-<td><code>...</code></td>
-<td>Remaining path, argument, and environment characters and <code>\0</code> terminators</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.30%" /><col style="width:50.70%" /></colgroup><thead><tr><th>Cell address</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><strong>↑ Decreasing addresses</strong></li></ul></td><td><ul><li><strong>Lower addresses · stack grows ↑</strong></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>entry_pc_address</code></li></ul></td><td><ul><li>Entry PC = <span class="source-link"><code>activation.cs</code></span> minus 1</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>entry_pc_address + 1</code></li></ul></td><td><ul><li><span class="source-link"><code>argc</code></span></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>entry_pc_address + 2</code></li></ul></td><td><ul><li><span class="source-link"><code>argv[0]</code></span></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li><code>...</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>entry_pc_address + argc + 2</code></li></ul></td><td><ul><li><span class="source-link"><code>argv[argc] = NULL</code></span></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>entry_pc_address + argc + 3</code></li></ul></td><td><ul><li><span class="source-link"><code>envp[0]</code></span></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li><code>...</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><code>entry_pc_address + argc + envc + 3</code></li></ul></td><td><ul><li><span class="source-link"><code>envp[envc] = NULL</code></span></li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><code>strings_start_address</code></li></ul></td><td><ul><li>First character of the copied <span class="source-link"><code>binary_path</code></span></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><code>strings_start_address + 1</code></li></ul></td><td><ul><li>Path character / \0</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li>Remaining path, argument, and environment characters and <code>\0</code> terminators</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><code>highest_stack_address</code></li></ul></td><td><ul><li>Final \0</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><strong>↓ Increasing addresses</strong></li></ul></td><td><ul><li><strong>Higher addresses</strong></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7137,47 +5177,12 @@ stateDiagram-v2
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3726 rows=13-14 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Cell address</th>
-<th>Stored value</th>
-</tr>
-</thead><tbody><tr>
-<td><code>highest_stack_address</code></td>
-<td>Last string's <code>\0</code></td>
-</tr>
-<tr>
-<td><strong>↓ Increasing addresses</strong></td>
-<td><strong>Higher addresses</strong></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#422-initial-argc-argv-and-envp -->
-
-# 4. Processes and process lifecycle · 4.2 Initial user process stack
-
-## 4.2.2 Initial `argc`, `argv`, and `envp` (4)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Setup uses the existing reservation without checking that all startup data fits above the heap. This calculation includes the entry PC, counts, pointer sentinels, and string terminators:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-3756 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-3756" data-code-part="1">
 
+<!-- README_CODE_PART code-3756 lines=1-4 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -7205,12 +5210,12 @@ startup_cell_count = 1 + 1 + argc + 1 + envc + 1
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Save this program as <code>add.picoc</code> and link it with <span class="source-link"><code>libstart</code></span> and <span class="source-link"><code>libstdlib</code></span>. It adds two arguments when environment variable <code>X</code> is <code>1</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-3791 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-3791" data-code-part="1">
 
+<!-- README_CODE_PART code-3791 lines=1-10 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -7230,26 +5235,10 @@ int main(int argc, char **argv) {
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Reading the stack</b><span>argc counts the program name too; argv and envp are NULL-terminated pointer arrays. PicoOS prepares them during run rather than POSIX exec.</span></aside>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#4221-concrete-initial-stack-example -->
-
-# 4. Processes and process lifecycle · 4.2 Initial user process stack · 4.2.2 Initial `argc`, `argv`, and `envp`
-
-## 4.2.2.1 Concrete initial-stack example (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The launcher passes <code>2</code>, <code>3</code>, and a null-terminated environment array. With successful loading and starting, <span class="source-link"><code>waitpid()</code></span> returns the result <code>5</code>:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-3807 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:15">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-3807" data-code-part="1">
 
+<!-- README_CODE_PART code-3807 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -7273,6 +5262,9 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
+<aside class="context-note"><b>Reading the stack</b><ul><li>argc includes program name</li>
+<li>argv/envp: NULL-terminated arrays</li>
+<li>PicoOS prepares stack during run</li></ul></aside>
 
 </div>
 
@@ -7282,15 +5274,14 @@ int main(void) {
 
 # 4. Processes and process lifecycle · 4.2 Initial user process stack · 4.2.2 Initial `argc`, `argv`, and `envp`
 
-## 4.2.2.1 Concrete initial-stack example (3)
+## 4.2.2.1 Concrete initial-stack example (2)
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>argc = 3</code> and two environment entries occupy 29 startup cells. Thus <code>entry_pc_address = base_address + size - 29</code>. Read the rows in order. Each box is one cell labeled by its offset, and the pointer values stored there are absolute addresses:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3828 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/process-initial-stack-example.svg" alt="Initial stack for add.bin with two arguments, 2 and 3, and two environment variables, X=1 and Y=0, showing cell offsets from entry_pc_address, absolute pointer targets by offset, both address directions, and continuation arrows between rows" />
 
@@ -7310,13 +5301,13 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-3847 -->
-<div class="readme-list"><ol start="1"><li>Resolve the path, validate the header, apply heap/stack defaults, and reserve a Process Payload with PSDMalloc.</li>
-<li>Track polling or DMA progress in the caller's pending_load.</li>
-<li>Create and append a NEW PCB with payload bounds, segment registers, preliminary entry PC, paths, and fresh descriptors.</li>
-<li>Clear pending_load, release temporary metadata, and return the child PID.</li></ol></div>
+<div class="readme-list"><ul><li>Validate header; reserve Process Payload</li>
+<li>Track polling/DMA progress</li>
+<li>Append NEW PCB + fresh descriptors</li>
+<li>Release load metadata; return PID</li></ul></div>
 
 </div>
 
@@ -7332,13 +5323,19 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This first step follows the image from host storage through UART into SRAM. Dashed arrows show data movement, and solid arrows show stored pointers:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET image-3863 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/process-load-transfer.svg" alt="EPROM, the complete peripheral mapping, and SRAM with CPU-polling and DMA transfer paths into the newly allocated User Process Image, while the caller owns ProcessLoad" />
+
+</ReadmeVisual>
+
+<!-- README_ASSET image-3878 -->
+<ReadmeVisual kind="image" :width="980">
+
+<img src="/readme/process-load-complete.svg" alt="Completed load with the child PCB appended in the kernel heap, state NEW, fresh descriptors, initialized activation fields, and only one preliminary entry-PC cell on its stack" />
 
 </ReadmeVisual>
 
@@ -7356,86 +5353,20 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">After reception, creation appends the PCB, advances <span class="source-link"><code>next_process_id</code></span>, and leaves <span class="source-link"><code>state</code></span> set to <span class="source-link"><code>NEW</code></span>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET image-3878 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<!-- README_ASSET table-3888 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3888:1,2,3,4,5,6,7,8,9">
 
-<img src="/readme/process-load-complete.svg" alt="Completed load with the child PCB appended in the kernel heap, state NEW, fresh descriptors, initialized activation fields, and only one preliminary entry-PC cell on its stack" />
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#431-loading-a-process-load-library-call -->
-
-# 4. Processes and process lifecycle · 4.3 Loading and starting a process
-
-## 4.3.1 Loading a process (`load` library call) (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3888 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>ProcessLoad.base_address</code></span></td>
-<td>Absolute start of the reserved Process and Shared Data Heap region</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, used by <span class="source-link"><code>continue_process_load(owner)</code></span>, <span class="source-link"><code>finish_process_load(owner)</code></span>, and <span class="source-link"><code>cancel_process_load(process)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.process_size</code></span></td>
-<td>Total reserved cells for the User Process Image, User Process Heap, and User Process Stack</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, passed to <span class="source-link"><code>create_process()</code></span> by <span class="source-link"><code>finish_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.code_start</code></span>, <span class="source-link"><code>ProcessLoad.data_start</code></span></td>
-<td>Linked code- and data-segment offsets from the binary header</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, passed to <span class="source-link"><code>create_process()</code></span> by <span class="source-link"><code>finish_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.heap_start</code></span>, <span class="source-link"><code>ProcessLoad.heap_size</code></span></td>
-<td>Resolved userspace heap offset and cell count</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, passed to <span class="source-link"><code>create_process()</code></span> by <span class="source-link"><code>finish_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.payload_word_count</code></span></td>
-<td>Encoded program words after the five-word header</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, bounds both DMA and polling transfers in <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span> and <span class="source-link"><code>continue_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.loaded_word_count</code></span></td>
-<td>Words copied by the polling transfer so far</td>
-<td>First initialized to 0 by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, advanced and checked by <span class="source-link"><code>continue_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.loading_bar_update</code></span></td>
-<td>Next word count at which progress output is redrawn</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, updated by <span class="source-link"><code>continue_process_load(owner)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.uses_dma</code></span></td>
-<td>Whether the reserved image is being filled by one DMA transfer rather than polling chunks</td>
-<td>First initialized to <code>false</code> and set to <code>true</code> by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, checked by <span class="source-link"><code>continue_process_load(owner)</code></span> and <span class="source-link"><code>cancel_process_load(process)</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad.path</code></span></td>
-<td>Kernel-owned absolute binary path used by later range requests and copied into the completed PCB</td>
-<td>First initialized by <span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span>, read by <span class="source-link"><code>continue_process_load(owner)</code></span> and <span class="source-link"><code>finish_process_load(owner)</code></span>, freed by <span class="source-link"><code>free_process_load(load)</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.41%" /><col style="width:51.59%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.base_address</code></span></li></ul></td><td><ul><li>Absolute reserved payload base</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.process_size</code></span></li></ul></td><td><ul><li>Image + heap + stack cells</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.code_start</code></span>, <span class="source-link"><code>ProcessLoad.data_start</code></span></li></ul></td><td><ul><li>Linked code- and data-segment offsets from the binary header</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.heap_start</code></span>, <span class="source-link"><code>ProcessLoad.heap_size</code></span></li></ul></td><td><ul><li>Resolved userspace heap offset and cell count</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.payload_word_count</code></span></li></ul></td><td><ul><li>Encoded program words after the five-word header</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.loaded_word_count</code></span></li></ul></td><td><ul><li>Words copied by the polling transfer so far</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.loading_bar_update</code></span></li></ul></td><td><ul><li>Next word count at which progress output is redrawn</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.uses_dma</code></span></li></ul></td><td><ul><li>DMA transfer versus polling chunks</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.path</code></span></li></ul></td><td><ul><li>Owned binary path; range requests + PCB</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7449,181 +5380,16 @@ int main(void) {
 
 # 4. Processes and process lifecycle · 4.3 Loading and starting a process · 4.3.1 Loading a process (`load` library call)
 
-## 4.3.1.1 Load function reference (1)
+## 4.3.1.1 Load function reference
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3914 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-3914 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3914:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>load_process_chunk(path, show_loading_bar, caller_context)</code></span></td>
-<td>Positive PID when complete, 0 on failure, or <span class="source-link"><code>SYSCALL_LOAD_PROCESS_CONTINUE</code></span> (-1) while work remains</td>
-<td>Starts or resumes the caller-owned load. Successful completion creates a PCB with <span class="source-link"><code>state</code></span> <span class="source-link"><code>NEW</code></span></td>
-<td><span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>continue_process_load()</code></span>, <span class="source-link"><code>current_process()</code></span><br><strong>Host requests:</strong> <code>file-size &lt;path&gt;</code> and <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> through helpers</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>load()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>load_process(path, show_loading_bar)</code></span></td>
-<td>PID on success, 0 on rejected path, missing/short header, invalid stack placement, or exhausted process memory</td>
-<td>Kernel boot-time continuous transfer. Reserves the Process Payload, receives the image, and creates the PCB</td>
-<td><span class="source-link"><code>PSDMalloc()</code></span>, <span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>drain_process_words()</code></span>, <span class="source-link"><code>loaded_process_stack_start()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>receive_words_to_sram()</code></span>, <span class="source-link"><code>system_relative_path()</code></span>, <span class="source-link"><code>uart_print_loading_bar_label()</code></span>, <span class="source-link"><code>uart_print_string()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span><br><strong>Host requests:</strong> <code>load &lt;path&gt;</code></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span> in <span class="source-link"><code>kernel/kernel.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>begin_process_load(path, show_loading_bar, caller_context)</code></span></td>
-<td>PID for an empty payload, continuation status after transfer setup, or 0 on path/header/allocation/transfer failure</td>
-<td>Reads the header, reserves memory, allocates <span class="source-link"><code>ProcessLoad</code></span> and its path, sets <span class="source-link"><code>caller.pending_load</code></span>, initializes progress, and optionally starts blocking DMA</td>
-<td><span class="source-link"><code>PSDMalloc()</code></span>, <span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>cancel_process_load()</code></span>, <span class="source-link"><code>copy_process_path()</code></span>, <span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>dma_is_active()</code></span>, <span class="source-link"><code>drain_process_bytes()</code></span>, <span class="source-link"><code>finish_process_load()</code></span>, <span class="source-link"><code>kmalloc()</code></span>, <span class="source-link"><code>loaded_process_stack_start()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>start_dma_uart_receive()</code></span>, <span class="source-link"><code>system_relative_path()</code></span>, <span class="source-link"><code>uart_print_loading_bar_label()</code></span>, <span class="source-link"><code>uart_print_string()</code></span>, <span class="source-link"><code>uart_send_file_range_command()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>uart_start_loading_bar()</code></span><br><strong>Host requests:</strong> <code>file-size &lt;path&gt;</code>, <code>read-range 0 20 &lt;path&gt;</code>, optional whole-payload <code>read-range 20 &lt;count&gt; &lt;path&gt;</code></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>load_process_chunk()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>continue_process_load(owner)</code></span></td>
-<td>PID on completion, continuation status while DMA is busy or polling work remains, or 0 on transfer failure</td>
-<td>Checks DMA status or polls up to 256 payload words, advances <span class="source-link"><code>loaded_word_count</code></span> and progress, completes or cancels the load</td>
-<td><span class="source-link"><code>cancel_process_load()</code></span>, <span class="source-link"><code>dma_transfer_status()</code></span>, <span class="source-link"><code>drain_process_bytes()</code></span>, <span class="source-link"><code>finish_process_load()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>uart_send_file_range_command()</code></span>, <span class="source-link"><code>uart_update_loading_bar()</code></span><br><strong>Host requests:</strong> Polling <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>load_process_chunk()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>finish_process_load(owner)</code></span></td>
-<td>New PID</td>
-<td>Creates the child PCB after transfer, clears <span class="source-link"><code>owner.pending_load</code></span>, and frees temporary load metadata and its copied path</td>
-<td><span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>free_process_load()</code></span>, <span class="source-link"><code>system_relative_path()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>continue_process_load()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#4311-load-function-reference -->
-
-# 4. Processes and process lifecycle · 4.3 Loading and starting a process · 4.3.1 Loading a process (`load` library call)
-
-## 4.3.1.1 Load function reference (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3914 rows=7-13 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>create_process(base_address, size, code_start, data_start, heap_start, heap_size, binary_path)</code></span></td>
-<td>PCB pointer. Kernel-heap exhaustion halts the OS through allocation checks</td>
-<td>Assigns PID and <span class="source-link"><code>state</code></span> <span class="source-link"><code>NEW</code></span>, records memory fields, initializes <span class="source-link"><code>activation</code></span>, queues and signals, creates standard descriptors, copies paths and parent-derived metadata, writes the preliminary entry PC, and appends the PCB</td>
-<td><span class="source-link"><code>copy_process_path()</code></span>, <span class="source-link"><code>create_file_descriptor_table()</code></span>, <span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>kmalloc()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>finish_process_load()</code></span>, <span class="source-link"><code>load_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>copy_process_path(path)</code></span></td>
-<td>New kernel-owned string pointer</td>
-<td>Allocates and copies a path including its terminator</td>
-<td><span class="source-link"><code>kmalloc()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>set_process_working_directory()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>loaded_process_stack_start(heap_start, heap_size, stack_start)</code></span></td>
-<td>Highest process-relative stack offset, or <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span> for overlap</td>
-<td>Resolves the default highest stack offset or checks an explicit offset, no memory writes</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>load_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>cancel_process_load(process)</code></span></td>
-<td>No return value</td>
-<td>Cancels busy DMA if needed, clears <span class="source-link"><code>process.pending_load</code></span>, frees the partial Process Payload and temporary metadata</td>
-<td><span class="source-link"><code>PSDFree()</code></span>, <span class="source-link"><code>cancel_dma_transfer()</code></span>, <span class="source-link"><code>dma_transfer_status()</code></span>, <span class="source-link"><code>free_process_load()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>continue_process_load()</code></span>, <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>free_process_load(load)</code></span></td>
-<td>No return value</td>
-<td>Frees the temporary kernel-owned host path and <span class="source-link"><code>ProcessLoad</code></span></td>
-<td><span class="source-link"><code>kfree()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>cancel_process_load()</code></span>, <span class="source-link"><code>finish_process_load()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>drain_process_words(payload_word_count, show_loading_bar)</code></span></td>
-<td>No return value</td>
-<td>Consumes a rejected continuous payload so UART remains synchronized, optionally reports progress</td>
-<td><span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>uart_start_loading_bar()</code></span>, <span class="source-link"><code>uart_update_loading_bar()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>load_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>drain_process_bytes(byte_count)</code></span></td>
-<td>No return value</td>
-<td>Consumes unexpected positive range-response data so UART remains synchronized</td>
-<td><span class="source-link"><code>receive_byte_over_uart()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>continue_process_load()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#4311-load-function-reference -->
-
-# 4. Processes and process lifecycle · 4.3 Loading and starting a process · 4.3.1 Loading a process (`load` library call)
-
-## 4.3.1.1 Load function reference (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-3932 rows=1-1 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel / Library Function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>receive_words_to_sram(base_address, word_count, show_loading_bar)</code></span> (Shared/Common)</td>
-<td>No return value</td>
-<td>Receives word_count cells at base_address. Polls UART without DMA, otherwise starts DMA and busy-waits for its status, updates requested loading progress</td>
-<td><span class="source-link"><code>dma_is_active()</code></span>, <span class="source-link"><code>dma_transfer_status()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>start_dma_uart_transfer()</code></span>, <span class="source-link"><code>uart_start_loading_bar()</code></span>, <span class="source-link"><code>uart_update_loading_bar()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>load_process()</code></span><br><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.01%" /><col style="width:21.53%" /><col style="width:33.92%" /><col style="width:15.55%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>load_process_chunk()</code></li></ul></td><td><ul><li>PID success; 0 failure; −1 pending</li></ul></td><td><ul><li>Incremental load; preserve progress</li><li>Create NEW PCB on completion</li></ul></td><td><ul><li><code>load()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7641,14 +5407,14 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-3941 -->
-<div class="readme-list"><ol start="1"><li>Pack PID, arguments, and environment into RunProcessRequest; NULL selects the caller's environment.</li>
-<li>Require a NEW target PCB.</li>
-<li>Copy inheritable descriptors from the run caller.</li>
-<li>Copy strings and pointer arrays onto the child stack; update activation.sp and activation.baf.</li>
-<li>Mark READY and return success.</li></ol></div>
+<div class="readme-list"><ul><li>Pack PID, arguments, environment</li>
+<li>Require NEW PCB</li>
+<li>Copy inheritable descriptors</li>
+<li>Build child stack; update SP/BAF</li>
+<li>NEW → READY</li></ul></div>
 
 </div>
 
@@ -7664,11 +5430,10 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The figure highlights the new stack, descriptor table, and changed PCB fields. The heap remains reserved until userspace startup:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3952 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/process-run-setup.svg" alt="Run changes inside the same SRAM layout: inherited descriptor table, copied caller arguments and environment, new stack and activation pointers, and state NEW to READY" />
 
@@ -7688,46 +5453,22 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-3973 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-3973 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3973:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Child field or resource</th>
-<th>Source and time</th>
-<th>Relationship to parent afterward</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>parent_pid</code></span></td>
-<td>Loader's PID recorded by <span class="source-link"><code>create_process()</code></span> during load completion</td>
-<td>Identifies the parent until orphaning, not a shared PCB pointer</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>working_directory</code></span></td>
-<td>Kernel-heap string copied by <span class="source-link"><code>create_process()</code></span></td>
-<td>Independent path allocation, a later <span class="source-link"><code>chdir()</code></span> changes only its caller</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>parent_death_signal</code></span></td>
-<td>Integer copied from the loader by <span class="source-link"><code>create_process()</code></span></td>
-<td>Later <span class="source-link"><code>prctl()</code></span> changes only the caller and what its future children inherit</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>file_descriptors</code></span></td>
-<td>Fresh standard table during loading, replaced during <span class="source-link"><code>mark_process_ready_with_arguments()</code></span> with a deep copy from the current run caller</td>
-<td>Table, entry fields, offsets, and path strings are independent. Standard slots 0–2 are copied, slots 3–4 are copied only for opened regular-file entries, and reserved shell save slots 5–7 remain free in the child</td>
-</tr>
-<tr>
-<td>Initial environment</td>
-<td><span class="source-link"><code>run()</code></span> selects the caller's current environment for a <code>NULL</code> argument, or the explicitly supplied array</td>
-<td><span class="source-link"><code>store_process_arguments()</code></span> copies strings to the child stack, then <span class="source-link"><code>initialize_environment()</code></span> copies them into the child's heap after dispatch</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.73%" /><col style="width:30.25%" /><col style="width:38.02%" /></colgroup><thead><tr><th>Child field or resource</th><th>Source and time</th><th>Relationship to parent afterward</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>parent_pid</code></span></li></ul></td><td><ul><li>Loading parent; during load</li></ul></td><td><ul><li>Parent identity; no shared PCB pointer</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Owned path copied during load</li></ul></td><td><ul><li>Independent owned path</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Signal setting copied during load</li></ul></td><td><ul><li>Independent signal setting</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>file_descriptors</code></span></li></ul></td><td><ul><li>Run caller; during run</li></ul></td><td><ul><li>Independent entries, paths, offsets</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Initial environment</li></ul></td><td><ul><li>Explicit env or run caller</li></ul></td><td><ul><li>Copied to child stack; then heap</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>fork versus load/run</b><span>PicoOS loads a fresh image instead of cloning the parent's memory. Loading and running copy different parts of the parent state.</span></aside>
+</div>
+<aside class="context-note"><b>fork / load + run</b><ul><li>Unix fork: clone parent process</li>
+<li>PicoOS: fresh image + copied state</li></ul></aside>
 
 </div>
 
@@ -7741,11 +5482,10 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Solid arrows show stored pointers, and dashed arrows show copies at each phase. PCBs, paths, and descriptor tables are Kernel Heap allocations. <span class="source-link"><code>8.6 File-descriptor creation, inheritance, duplication, and cleanup</code></span> explains descriptor copying:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3985 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/process-inheritance.svg" alt="Parent and child PCBs with independent directory strings and descriptor tables in contiguous kernel-heap blocks, distinguishing stored pointers from load-time and run-time copies" />
 
@@ -7765,11 +5505,10 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The shell passes its environment to applications in the same way. The diagram follows unchanged values and branches that remove or replace them:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-4031 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -7801,12 +5540,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>cat.bin</code> removes its inherited entry before reading, keeping progress bars out of file contents. The constant names the environment variable:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4062 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4062" data-code-part="1">
 
+<!-- README_CODE_PART code-4062 lines=1-5 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -7835,10 +5574,10 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-4081 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"flowchart": {"wrappingWidth": 360, "rankSpacing": 30}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
@@ -7868,7 +5607,9 @@ flowchart TB
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Unix terminology: reaping</b><span>Reaping means final status collection and removal. PicoOS does not reparent orphaned children to init; it clears parent_pid and applies the configured parent-death signal.</span></aside>
+</div>
+<aside class="context-note"><b>Unix: reaping</b><ul><li>Collect status; remove child</li>
+<li>PicoOS: no reparenting to init</li></ul></aside>
 
 </div>
 
@@ -7882,18 +5623,18 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-4109 -->
-<div class="readme-list"><ol start="1"><li>waitpid places its local status address in WaitPidRequest.</li>
-<li>The kernel retains that pointer, queues the parent on the child's waiters, and marks the parent BLOCKED.</li>
-<li>Termination records status and ZOMBIE, writes through the parent's pointer, clears wait links, and wakes the parent.</li>
-<li>The resumed wrapper returns its updated local status; the child may already be removed.</li></ol></div>
+<div class="readme-list"><ul><li>Request points to local status</li>
+<li>Queue parent; mark BLOCKED</li>
+<li>Child exits; write status; wake parent</li>
+<li>Wrapper resumes; returns child status</li></ul></div>
 
 <!-- README_ASSET list-4124 -->
-<div class="readme-list"><ul><li>Creation records the loading parent's PID and initializes empty wait state.</li>
-<li>Waiting identifies the caller through active_process and finds the requested PID in the process list.</li>
-<li>Only the actual parent may collect the child. A missing target or different parent completes with −1; wakeup also verifies parent identity.</li></ul></div>
+<div class="readme-list"><ul><li>Creation records parent PID</li>
+<li>Find caller + requested child</li>
+<li>Parent-only collection; mismatch → −1</li></ul></div>
 
 </div>
 
@@ -7909,32 +5650,14 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4164 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4164 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4164:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Lifecycle order</th>
-<th>Status handoff and child <span class="source-link"><code>state</code></span></th>
-<th>Who deletes the child PCB, and when</th>
-</tr>
-</thead><tbody><tr>
-<td>Parent calls <span class="source-link"><code>waitpid()</code></span> while child is alive</td>
-<td><span class="source-link"><code>wait_for_process_by_pid()</code></span> links the parent PCB into the child's <span class="source-link"><code>waiters</code></span> queue and blocks it. Child termination writes through the parent's <span class="source-link"><code>waiting_status_ptr</code></span> and wakes it.</td>
-<td><span class="source-link"><code>terminate_process()</code></span> calls <span class="source-link"><code>remove_process()</code></span> directly after the status handoff because <span class="source-link"><code>process_has_waiting_parent()</code></span> was true. Deletion occurs inside termination, not during later dispatch. For self-exit it precedes the <span class="source-link"><code>exit_process()</code></span> dispatch.</td>
-</tr>
-<tr>
-<td>Child terminates before parent calls <span class="source-link"><code>waitpid()</code></span></td>
-<td>The complete child PCB remains allocated with <span class="source-link"><code>state</code></span> set to <span class="source-link"><code>ZOMBIE</code></span>, retaining <span class="source-link"><code>pid</code></span>, <span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>exit_status</code></span>, and owned resources.</td>
-<td>The later syscall reaches <span class="source-link"><code>wait_for_process_by_pid()</code></span>, which copies <span class="source-link"><code>exit_status</code></span> to the stack-local status and immediately calls <span class="source-link"><code>remove_process()</code></span> before returning.</td>
-</tr>
-<tr>
-<td>No live parent remains</td>
-<td>No future caller can collect the status.</td>
-<td><span class="source-link"><code>terminate_process()</code></span> removes an orphan immediately. <span class="source-link"><code>orphan_and_signal_children()</code></span> also removes children that were already zombies when their parent terminates.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.20%" /><col style="width:27.30%" /><col style="width:38.50%" /></colgroup><thead><tr><th>Lifecycle order</th><th>Status handoff and child state</th><th>Who deletes the child PCB, and when</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Parent calls <span class="source-link"><code>waitpid()</code></span> while child is alive</li></ul></td><td><ul><li>Parent blocks; child later exits</li></ul></td><td><ul><li>Exit writes status; wakes; removes child</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Child terminates before parent calls <span class="source-link"><code>waitpid()</code></span></li></ul></td><td><ul><li>Child zombie; parent later waits</li></ul></td><td><ul><li>waitpid collects + removes child</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>No live parent remains</li></ul></td><td><ul><li>No future parent collection</li></ul></td><td><ul><li>Orphan exit or parent cleanup removes child</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7952,89 +5675,12 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4184 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-4184 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4184:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>mark_process_ready_with_arguments(request)</code></span></td>
-<td>true after setup, false for missing PID or <span class="source-link"><code>state</code></span> other than <span class="source-link"><code>NEW</code></span></td>
-<td>Copies current caller descriptors when present, writes the child stack, updates <span class="source-link"><code>activation.sp</code></span> and <span class="source-link"><code>activation.baf</code></span>, then sets <span class="source-link"><code>state</code></span> to <span class="source-link"><code>READY</code></span>. Init keeps its original table because no current process exists</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>destroy_file_descriptor_table()</code></span>, <span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>inherit_file_descriptors()</code></span>, <span class="source-link"><code>store_process_arguments()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>run()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span>, <span class="source-link"><code>main()</code></span> in <span class="source-link"><code>kernel/kernel.picoc</code></span></td>
-</tr>
-<tr>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>store_process_arguments(process, arguments, environment)</code></span></td>
-<td>No return value</td>
-<td>Copies path, tokens, and selected NAME=value strings into the child User Process Stack, writes entry PC/count/arrays/NULL sentinels, and saves <span class="source-link"><code>activation.sp</code></span> and <span class="source-link"><code>activation.baf</code></span></td>
-<td><span class="source-link"><code>copy_process_string()</code></span>, <span class="source-link"><code>process_argument_is_quote()</code></span>, <span class="source-link"><code>process_argument_is_space()</code></span>, <span class="source-link"><code>process_argument_string_cell_count()</code></span>, <span class="source-link"><code>process_argument_token_count()</code></span>, <span class="source-link"><code>process_environment_count()</code></span>, <span class="source-link"><code>process_string_cell_count()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>mark_process_ready_with_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_argument_token_count(arguments)</code></span></td>
-<td>Number of argument tokens, 0 for NULL</td>
-<td>Reads the raw string, treating space/tab outside matching quotes as separators</td>
-<td><span class="source-link"><code>process_argument_is_quote()</code></span>, <span class="source-link"><code>process_argument_is_space()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_argument_string_cell_count(arguments)</code></span></td>
-<td>Copied argument characters plus one terminator per token, 0 for NULL</td>
-<td>Counts the exact argument-string cells after matching quote removal</td>
-<td><span class="source-link"><code>process_argument_is_quote()</code></span>, <span class="source-link"><code>process_argument_is_space()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_argument_is_space(value)</code></span></td>
-<td>true for space or tab, otherwise false</td>
-<td>Classifies one input character, no writes</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>process_argument_string_cell_count()</code></span>, <span class="source-link"><code>process_argument_token_count()</code></span>, <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_argument_is_quote(value)</code></span></td>
-<td>true for single or double quote, otherwise false</td>
-<td>Classifies one input character, no writes</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>process_argument_string_cell_count()</code></span>, <span class="source-link"><code>process_argument_token_count()</code></span>, <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_environment_count(environment)</code></span></td>
-<td>Number of entries before NULL, 0 for NULL array</td>
-<td>Reads the selected environment pointer array</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_string_cell_count(value)</code></span></td>
-<td>Number of character cells including the zero terminator</td>
-<td>Reads one null-terminated string</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>copy_process_string(target, source)</code></span></td>
-<td>Address of the first cell after the copied zero terminator</td>
-<td>Copies a string and its terminator to the destination stack area</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>store_process_arguments()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.09%" /><col style="width:12.29%" /><col style="width:34.57%" /><col style="width:13.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>mark_process_ready_with_arguments()</code></li></ul></td><td><ul><li>true / false</li></ul></td><td><ul><li>Build arguments/environment stack</li><li>Inherit descriptors; NEW → READY</li></ul></td><td><ul><li><code>run()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8048,165 +5694,21 @@ flowchart TB
 
 # 4. Processes and process lifecycle
 
-## 4.4 Process list, PCB metadata, and lifecycle function reference (1)
+## 4.4 Process list, PCB metadata, and lifecycle function reference
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4204 rows=1-11 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-4204 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4204:1,2,3,4,5,9">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>list_processes(void)</code></span></td>
-<td>No return value</td>
-<td>Traverses the process list and writes each PID and stable binary path through descriptor 1</td>
-<td><span class="source-link"><code>first_process()</code></span>, <span class="source-link"><code>system_relative_path()</code></span>, <span class="source-link"><code>uart_append_decimal()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span><br><strong>Host requests:</strong> Output through a regular file uses <code>write-at &lt;offset&gt; &lt;path&gt;</code>, optional append <code>file-size &lt;path&gt;</code>, then <code>write stdout</code>. Terminal stderr uses <code>write stderr</code>, then <code>write stdout</code>. Terminal stdout or null needs no host request</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>list_processes()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span><br><strong>User applications:</strong> <span class="source-link"><code>main()</code></span> in <span class="source-link"><code>user/ps.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>unload_process_by_pid(pid)</code></span></td>
-<td>true after removal, false for a missing or currently active PID</td>
-<td>Terminates with success status and forces final removal, including an uncollected zombie</td>
-<td><span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>terminate_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>unload()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>exit_process(status)</code></span></td>
-<td>Does not return normally</td>
-<td>Terminates the current process and dispatches another process, shuts down if none remain</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>dispatcher_start_next_process()</code></span>, <span class="source-link"><code>shutdown()</code></span>, <span class="source-link"><code>terminate_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>exit()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_cpu_exception()</code></span>, <span class="source-link"><code>handle_process_heap_full_exception()</code></span>, <span class="source-link"><code>handle_syscall()</code></span><br><strong>CPU exceptions:</strong> through <span class="source-link"><code>handle_cpu_exception()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_heap_start(void)</code></span></td>
-<td>Absolute current-process heap address</td>
-<td>Adds <span class="source-link"><code>base_address</code></span> to <span class="source-link"><code>heap_start</code></span>, no writes</td>
-<td><span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>init_process_heap()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_heap_size(void)</code></span></td>
-<td>Current-process heap cell count</td>
-<td>Reads <span class="source-link"><code>heap_size</code></span>, no writes</td>
-<td><span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>init_process_heap()</code></span> via the syscall<br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-<td><hr><hr></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>initialize_process_table(void)</code></span></td>
-<td>No return value</td>
-<td>Clears head, tail, and <span class="source-link"><code>active_process</code></span>, resets <span class="source-link"><code>next_process_id</code></span> to 1</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span> in <span class="source-link"><code>kernel/kernel.picoc</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>first_process(void)</code></span></td>
-<td>Head PCB pointer or NULL</td>
-<td>Reads <span class="source-link"><code>process_list_head</code></span></td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_start_next_process()</code></span>, <span class="source-link"><code>list_processes()</code></span> in <span class="source-link"><code>kernel/process/process.picoc</code></span>, <span class="source-link"><code>scheduler_next_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>current_process(void)</code></span></td>
-<td>Current PCB pointer or NULL</td>
-<td>Reads <span class="source-link"><code>active_process</code></span></td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>activate_current_process_stack_boundary()</code></span>, <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>change_working_directory()</code></span>, <span class="source-link"><code>close_file_descriptor()</code></span>, <span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, <span class="source-link"><code>dispatcher_switch_to_process()</code></span>, <span class="source-link"><code>duplicate_file_descriptor()</code></span>, <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>exit_process()</code></span>, <span class="source-link"><code>get_working_directory()</code></span>, <span class="source-link"><code>handle_syscall()</code></span>, <span class="source-link"><code>load_process_chunk()</code></span>, <span class="source-link"><code>map_shared_memory()</code></span>, <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>process_heap_size()</code></span>, <span class="source-link"><code>process_heap_start()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>scheduler_next_process()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span> in <span class="source-link"><code>kernel/signal.picoc</code></span>, <span class="source-link"><code>set_parent_death_signal()</code></span>, <span class="source-link"><code>terminal_input_process()</code></span>, <span class="source-link"><code>wait_for_process_by_pid()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>set_current_process(process)</code></span></td>
-<td>No return value</td>
-<td>Replaces <span class="source-link"><code>active_process</code></span></td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_switch_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>find_process_by_pid(pid)</code></span></td>
-<td>Matching PCB pointer or NULL</td>
-<td>Traverses <span class="source-link"><code>process_list_head</code></span> through PCB next</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_terminal_signal_character()</code></span>, <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, <span class="source-link"><code>send_signal_by_pid()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span> in <span class="source-link"><code>kernel/signal.picoc</code></span>, <span class="source-link"><code>terminal_input_process()</code></span>, <span class="source-link"><code>terminate_process()</code></span>, <span class="source-link"><code>unload_process_by_pid()</code></span>, <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#44-process-list-pcb-metadata-and-lifecycle-function-reference -->
-
-# 4. Processes and process lifecycle
-
-## 4.4 Process list, PCB metadata, and lifecycle function reference (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4204 rows=12-16 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>terminate_process(process, status)</code></span></td>
-<td>No return value, no effect for NULL or an existing zombie</td>
-<td>Handles children, records <span class="source-link"><code>exit_status</code></span>, sets <span class="source-link"><code>state</code></span> <span class="source-link"><code>ZOMBIE</code></span>, hands off status and wakes <span class="source-link"><code>waiters</code></span>, removes the PCB when no parent remains or its waiting parent received the status</td>
-<td><span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>orphan_and_signal_children()</code></span>, <span class="source-link"><code>process_has_waiting_parent()</code></span>, <span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>wake_parent_waiting_for_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>exit_process()</code></span>, <span class="source-link"><code>kill_process()</code></span>, <span class="source-link"><code>unload_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>remove_process(process)</code></span></td>
-<td>No return value, no effect when absent from the list</td>
-<td>Unlinks queue and process-list membership, adjusts list roots, releases shared mappings, cancels partial loading, frees Process Payload, descriptor objects, PCB-owned strings and PCB</td>
-<td><span class="source-link"><code>PSDFree()</code></span>, <span class="source-link"><code>cancel_process_load()</code></span>, <span class="source-link"><code>destroy_file_descriptor_table()</code></span>, <span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>release_process_shared_memory()</code></span>, <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>orphan_and_signal_children()</code></span>, <span class="source-link"><code>terminate_process()</code></span>, <span class="source-link"><code>unload_process_by_pid()</code></span>, <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>orphan_and_signal_children(parent)</code></span></td>
-<td>No return value</td>
-<td>Sets direct children <span class="source-link"><code>parent_pid</code></span> to 0, removes existing zombies, signals live children when <span class="source-link"><code>parent_death_signal</code></span> is nonzero</td>
-<td><span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>terminate_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_has_waiting_parent(process)</code></span></td>
-<td>true when the recorded parent is in the child <span class="source-link"><code>waiters</code></span> queue, otherwise false</td>
-<td>Scans the child <span class="source-link"><code>waiters</code></span> queue through <span class="source-link"><code>wait_next</code></span></td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>terminate_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wake_parent_waiting_for_process(process, status)</code></span></td>
-<td>No return value</td>
-<td>Writes the status through the parent <span class="source-link"><code>waiting_status_ptr</code></span> when supplied, clears that pointer, and wakes all child <span class="source-link"><code>waiters</code></span></td>
-<td><span class="source-link"><code>wakeup_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>terminate_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.77%" /><col style="width:23.01%" /><col style="width:29.78%" /><col style="width:22.44%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>list_processes()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Print all PIDs + binary paths</li></ul></td><td><ul><li><code>list_processes()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>unload_process_by_pid()</code></li></ul></td><td><ul><li>true / false</li></ul></td><td><ul><li>Remove noncurrent process by PID</li></ul></td><td><ul><li><code>unload()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>exit_process()</code></li></ul></td><td><ul><li>No normal return</li></ul></td><td><ul><li>Record exit; notify parent; dispatch</li></ul></td><td><ul><li><code>exit()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>process_heap_start()</code></li></ul></td><td><ul><li>Absolute heap address</li></ul></td><td><ul><li>Current process heap base</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>process_heap_size()</code></li></ul></td><td><ul><li>Heap cell count</li></ul></td><td><ul><li>Current process heap capacity</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><code>current_process()</code></li></ul></td><td><ul><li>PCB pointer or NULL</li></ul></td><td><ul><li>Current PCB; GETPID reads its pid</li></ul></td><td><ul><li><code>getpid()</code> → <code>GETPID</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8224,12 +5726,12 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The definitions and field tables show the metadata and pointers connecting these objects:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4241 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:15">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4241" data-code-part="1">
 
+<!-- README_CODE_PART code-4241 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8266,85 +5768,25 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
-<!-- README_ASSET table-4265 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4265 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4265:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>SharedMemoryEntry.name</code></span></td>
-<td>Kernel-owned lookup name, freed and set to <code>NULL</code> on unlink</td>
-<td>First initialized by <span class="source-link"><code>open_shared_memory()</code></span>, read by <span class="source-link"><code>find_shared_memory_by_name()</code></span>, freed by <span class="source-link"><code>unlink_shared_memory()</code></span> and <span class="source-link"><code>destroy_shared_memory_entry()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry.id</code></span></td>
-<td>Numeric open/map handle</td>
-<td>First initialized and returned by <span class="source-link"><code>open_shared_memory()</code></span>, read by <span class="source-link"><code>find_shared_memory_by_id()</code></span> for <span class="source-link"><code>map_shared_memory()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry.address</code></span></td>
-<td>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</td>
-<td>First initialized by <span class="source-link"><code>open_shared_memory()</code></span>, returned by <span class="source-link"><code>map_shared_memory()</code></span> and freed by <span class="source-link"><code>destroy_shared_memory_entry()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></td>
-<td>Attachment count, not distinct PID count</td>
-<td>First initialized by <span class="source-link"><code>open_shared_memory()</code></span>, changed by <span class="source-link"><code>map_shared_memory()</code></span> and <span class="source-link"><code>release_process_shared_memory()</code></span>, checked by <span class="source-link"><code>unlink_shared_memory()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></td>
-<td>Defers destruction until the last attachment disappears</td>
-<td>First initialized by <span class="source-link"><code>open_shared_memory()</code></span>, set by <span class="source-link"><code>unlink_shared_memory()</code></span> and checked by <span class="source-link"><code>release_process_shared_memory()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry.next</code></span></td>
-<td>Link to the next entry in the kernel's linked list</td>
-<td>First initialized by <span class="source-link"><code>open_shared_memory()</code></span>, traversed by <span class="source-link"><code>find_shared_memory_by_name()</code></span> and <span class="source-link"><code>find_shared_memory_by_id()</code></span>, traversed and updated by <span class="source-link"><code>destroy_shared_memory_entry()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.name</code></span></li></ul></td><td><ul><li>Owned lookup name</li><li>Unlink → free + NULL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.id</code></span></li></ul></td><td><ul><li>Numeric open/map handle</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.address</code></span></li></ul></td><td><ul><li>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></li></ul></td><td><ul><li>Attachment count, not distinct PID count</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></li></ul></td><td><ul><li>Defers destruction until the last attachment disappears</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.next</code></span></li></ul></td><td><ul><li>Link to the next entry in the kernel's linked list</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-4277 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4277:1,2">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
-
-# 5. Shared Memory Entries and Mappings
-
-## 5.1 Named entries and per-process attachments (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4277 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></td>
-<td>Non-owning pointer to the linked-list entry whose reference count this mapping contributes to</td>
-<td>First initialized by <span class="source-link"><code>map_shared_memory()</code></span>, read by <span class="source-link"><code>release_process_shared_memory()</code></span> to decrement the entry's count before freeing the attachment</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryAttachment.next</code></span></td>
-<td>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</td>
-<td>First initialized by <span class="source-link"><code>map_shared_memory()</code></span>, traversed by <span class="source-link"><code>release_process_shared_memory()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.35%" /><col style="width:55.65%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></li></ul></td><td><ul><li>Non-owning entry pointer; contributes one reference</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryAttachment.next</code></span></li></ul></td><td><ul><li>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8362,11 +5804,10 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The upper view locates two entries and their copied names in the Kernel Heap. The lower view shows the same registry. <span class="source-link"><code>next</code></span> skips the name allocations, while each <span class="source-link"><code>name</code></span> points to its own string:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-4299 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-shared-list.svg" alt="The global shared-memory list head reaches two linked entries in SRAM, each with a name pointer to a separate string. The lower view repeats the same two entries as a linked list." />
 
@@ -8386,11 +5827,10 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The green arrows connect entries 1 and 2 to Shared Data Payloads A and C. The middle Process Payload shows that both kinds of data use the same outer heap:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-4311 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-shared-mappings.svg" alt="Three blocks in each heap: Shared Memory Entries 1 and 2 point through address to Shared Data Payloads A and C. PCB 1 and Process Payload B provide context." />
 
@@ -8410,11 +5850,10 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">PCB 1 maps both entries, and PCB 2 also maps Entry 1. Their <span class="source-link"><code>reference_count</code></span> values are therefore 2 and 1. Process cleanup walks its attachment list and follows <span class="source-link"><code>entry</code></span> to release each reference.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-4332 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-shared-attachments.svg" alt="Two PCBs, three attachments and two shared entries in the Kernel Heap, followed by the same two per-process attachment lists with shared_memory_attachments, next and entry arrows. The Process and Shared Data Heap is one box." />
 
@@ -8434,11 +5873,10 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This timeline follows Entry 1: opening creates it, mapping adds references, unlinking removes its name, and process removal releases the references. The data stays allocated until both destruction conditions hold:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-4354 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/memory-shared-destruction.svg" alt="Shared-memory lifetime from left to right: shm_open creates Entry 1 with count 0, mmap in two processes raises the count to 2, shm_unlink removes the name while the count stays 2, removal of PCB 1 lowers it to 1, and removal of PCB 2 lowers it to 0 and frees the unlinked entry and its data." />
 
@@ -8458,12 +5896,14 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>shm_open()</code></span> returns an ID, and <span class="source-link"><code>mmap()</code></span> returns its address. This launcher shares one cell containing <code>7</code>, then waits for a worker to change it:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4371 -->
-<ReadmeVisual kind="code" :width="1287" style="flex-grow:28">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="1287" data-code-source="code-4371" data-code-part="1">
+
+<!-- README_CODE_PART code-4371 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8480,6 +5920,18 @@ int main(void) {
     int result = 1;
 
     shared_memory_id = shm_open("shared-value", 1);
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="1287" data-code-source="code-4371" data-code-part="2">
+
+<!-- README_CODE_PART code-4371 lines=14-26 -->
+<div class="readme-code">
+
+```c {lines:false}
     shared_value = (int *)mmap(shared_memory_id);
     shared_value[0] = 7;
 
@@ -8503,6 +5955,8 @@ int main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#52-mapping-unlinking-and-deferred-destruction -->
@@ -8513,12 +5967,12 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The worker opens the same name, maps the existing region, and changes <code>7</code> to <code>8</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4403 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:15">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4403" data-code-part="1">
 
+<!-- README_CODE_PART code-4403 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8555,20 +6009,14 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4432 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-4432 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4432:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr><th>Kernel function</th><th>Return value / status</th><th>Effects</th><th>Calls</th><th>Called by</th></tr>
-</thead><tbody><tr><td><span class="source-link"><code>open_shared_memory(request)</code></span></td><td>Existing/new ID, <code>-1</code> for a null request/name, a nonpositive new size, or insufficient Process and Shared Data Heap space</td><td>If the name already exists, returns its <span class="source-link"><code>SharedMemoryEntry.id</code></span> without creating a structure. Otherwise creates a <span class="source-link"><code>SharedMemoryEntry</code></span> and copied name with <span class="source-link"><code>kmalloc()</code></span>, creates its data region with <span class="source-link"><code>PSDMalloc()</code></span>, and prepends the <span class="source-link"><code>SharedMemoryEntry</code></span> to the kernel&#39;s linked list</td><td><span class="source-link"><code>find_shared_memory_by_name()</code></span>, <span class="source-link"><code>kmalloc()</code></span>, <span class="source-link"><code>copy_shared_memory_name()</code></span>, <span class="source-link"><code>PSDMalloc()</code></span>, <span class="source-link"><code>kfree()</code></span></td><td><strong>Library functions:</strong> <span class="source-link"><code>shm_open()</code></span><br><strong>Kernel functions (syscall dispatch):</strong> <span class="source-link"><code>handle_syscall()</code></span></td></tr>
-<tr><td><span class="source-link"><code>map_shared_memory(shared_memory_id)</code></span></td><td>Address, or <code>NULL</code> for an unknown ID or no current process</td><td>For every successful mapping, creates one <span class="source-link"><code>SharedMemoryAttachment</code></span> with <span class="source-link"><code>kmalloc()</code></span>, links it from the current PCB&#39;s <span class="source-link"><code>shared_memory_attachments</code></span> field, points it at the existing <span class="source-link"><code>SharedMemoryEntry</code></span>, and increments that entry&#39;s count</td><td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>find_shared_memory_by_id()</code></span>, <span class="source-link"><code>kmalloc()</code></span></td><td><strong>Library functions:</strong> <span class="source-link"><code>mmap()</code></span><br><strong>Kernel functions (syscall dispatch):</strong> <span class="source-link"><code>handle_syscall()</code></span></td></tr>
-<tr><td><span class="source-link"><code>unlink_shared_memory(name)</code></span></td><td><code>0</code> on unlink, <code>-1</code> for a null or unknown name</td><td>Frees the name and marks the existing <span class="source-link"><code>SharedMemoryEntry</code></span> for removal, destroys that <span class="source-link"><code>SharedMemoryEntry</code></span> immediately only when its mapping count is zero</td><td><span class="source-link"><code>find_shared_memory_by_name()</code></span>, <span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>destroy_shared_memory_entry()</code></span></td><td><strong>Library functions:</strong> <span class="source-link"><code>shm_unlink()</code></span><br><strong>Kernel functions (syscall dispatch):</strong> <span class="source-link"><code>handle_syscall()</code></span></td></tr>
-<tr><td colspan="5"><hr><hr></td></tr>
-<tr><td><span class="source-link"><code>initialize_shared_memory(void)</code></span></td><td>Returns no value</td><td>Initializes the shared-memory list head and next ID</td><td>—</td><td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td></tr>
-<tr><td><span class="source-link"><code>release_process_shared_memory(process)</code></span></td><td>Returns no value</td><td>Walks one PCB&#39;s <span class="source-link"><code>SharedMemoryAttachment</code></span> list, frees every <span class="source-link"><code>SharedMemoryAttachment</code></span>, and decrements the referenced <span class="source-link"><code>SharedMemoryEntry.reference_count</code></span>, destroys an unlinked <span class="source-link"><code>SharedMemoryEntry</code></span> after its last attachment is released</td><td><span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>destroy_shared_memory_entry()</code></span></td><td><strong>Kernel functions:</strong> <span class="source-link"><code>remove_process()</code></span></td></tr>
-<tr><td><span class="source-link"><code>destroy_shared_memory_entry(entry)</code></span></td><td>Returns no value</td><td>Removes one <span class="source-link"><code>SharedMemoryEntry</code></span> from the kernel&#39;s linked list, frees its <span class="source-link"><code>SharedMemoryEntry.address</code></span> data region with <span class="source-link"><code>PSDFree()</code></span>, and frees the <span class="source-link"><code>SharedMemoryEntry</code></span> and its name with <span class="source-link"><code>kfree()</code></span></td><td><span class="source-link"><code>PSDFree()</code></span>, <span class="source-link"><code>kfree()</code></span></td><td><strong>Kernel functions:</strong> <span class="source-link"><code>unlink_shared_memory()</code></span>, <span class="source-link"><code>release_process_shared_memory()</code></span></td></tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.02%" /><col style="width:16.51%" /><col style="width:33.16%" /><col style="width:20.31%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open_shared_memory()</code></li></ul></td><td><ul><li>ID or −1</li></ul></td><td><ul><li>Find/create named shared entry</li></ul></td><td><ul><li><code>shm_open()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>map_shared_memory()</code></li></ul></td><td><ul><li>Address or NULL</li></ul></td><td><ul><li>Attach process; return shared address</li></ul></td><td><ul><li><code>mmap()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>unlink_shared_memory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Remove name; defer final release</li></ul></td><td><ul><li><code>shm_unlink()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8584,8 +6032,9 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>The scheduler chooses the next runnable process. The dispatcher saves the outgoing registers and restores the selected process. They share PCB information but have separate jobs.</p>
-<p>PicoOS represents states with integer constants. The scheduler accepts <span class="source-link"><code>PROCESS_STATE_READY</code></span> and <span class="source-link"><code>PROCESS_STATE_RUNNING</code></span>, returning the selected process's PCB. The dispatcher uses its saved activation to resume execution.</p></div>
+<div class="readme-list"><ul><li>Save activation → select PCB → restore</li>
+<li>Lazy Round Robin scans process list</li>
+<li>Only runnable processes enter execution</li></ul></div>
 
 </div>
 
@@ -8599,11 +6048,10 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This example has <code>P3</code> as the current process. It shows cyclic order and the extra traversal past non-runnable processes:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-4489 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -8629,12 +6077,14 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The implementation separates the state check from the cyclic scan:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4510 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:40">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="719.4" data-code-source="code-4510" data-code-part="1">
+
+<!-- README_CODE_PART code-4510 lines=1-19 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8657,6 +6107,18 @@ struct ProcessControlBlock *scheduler_next_process(void) {
         start = first_process();
     } else {
         start = current_process()->next;
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="719.4" data-code-source="code-4510" data-code-part="2">
+
+<!-- README_CODE_PART code-4510 lines=20-38 -->
+<div class="readme-code">
+
+```c {lines:false}
     }
 
     candidate = start;
@@ -8686,48 +6148,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 </div>
 
----
-
-<!-- SOURCE Pico-OS/README.md#612-scheduler-function-reference -->
-
-# 6. Scheduling and context switching · 6.1 Scheduler implementation
-
-## 6.1.2 Scheduler function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4556 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>scheduler_can_run(process)</code></span></td>
-<td><code>true</code> for a non-<code>NULL</code> PCB whose state is <span class="source-link"><code>READY</code></span> or <span class="source-link"><code>RUNNING</code></span>, otherwise <code>false</code></td>
-<td>Reads the candidate PCB's <span class="source-link"><code>state</code></span></td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>scheduler_next_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>scheduler_next_process(void)</code></span></td>
-<td>PCB representing the first runnable process found during one cyclic scan, or <code>NULL</code> when the process list is empty or no process can run</td>
-<td>Reads <span class="source-link"><code>process_list_head</code></span>, <span class="source-link"><code>active_process</code></span>, and PCB <span class="source-link"><code>next</code></span> and <span class="source-link"><code>state</code></span> fields, does not change process state</td>
-<td><span class="source-link"><code>first_process()</code></span>, <span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>scheduler_can_run()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_start_next_process()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
 </div>
 
 ---
@@ -8740,12 +6160,12 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The definition and table show the saved registers. <span class="source-link"><code>9.2 Containment and reference relationships</code></span> places the activation within its PCB:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4574 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4574" data-code-part="1">
 
+<!-- README_CODE_PART code-4574 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8778,42 +6198,16 @@ struct ActivationRecord {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4586 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4586 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4586:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td>
-<td>General argument/result registers at the suspension point</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, saved by <span class="source-link"><code>dispatcher_switch_from_context()</code></span> and restored by <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sp</code></span></td>
-<td>Stack position immediately below the saved return PC, the return PC remains at <code>sp + 1</code></td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, rebuilt by <span class="source-link"><code>store_process_arguments()</code></span>, saved by <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, and restored by <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>baf</code></span></td>
-<td>Base address of the interrupted PicoC function frame</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, rebuilt by <span class="source-link"><code>store_process_arguments()</code></span>, saved by <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, and restored by <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>cs</code></span></td>
-<td>Absolute code-segment base used for instruction addresses</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, saved by <span class="source-link"><code>dispatcher_switch_from_context()</code></span> and restored by <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ds</code></span></td>
-<td>Absolute data-segment base used for globals/static data</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, saved by <span class="source-link"><code>dispatcher_switch_from_context()</code></span> and restored by <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:73.86%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></li></ul></td><td><ul><li>General argument/result registers at the suspension point</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>sp</code></span></li></ul></td><td><ul><li>Below saved PC; PC at sp + 1</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>baf</code></span></li></ul></td><td><ul><li>Base address of the interrupted PicoC function frame</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>cs</code></span></li></ul></td><td><ul><li>Absolute code-segment base used for instruction addresses</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ds</code></span></li></ul></td><td><ul><li>Absolute data-segment base used for globals/static data</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8831,33 +6225,17 @@ struct ActivationRecord {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-4606 -->
-<div class="readme-list"><ul><li>Userspace timer preemption and yield switch immediately.</li>
-<li>sleep, blocking waitpid/read, and DMA load switch after recording their wait.</li>
-<li>Deferred timer or termination requests switch at syscall return when reschedule_requested is set.</li></ul></div>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
-
-# 6. Scheduling and context switching
-
-## 6.3 Saving the current process and selecting the next process (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The save function copies registers into the current PCB and preserves a state already changed by blocking or signal handling:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-list"><ul><li>Timer/yield → immediate switch</li>
+<li>Blocking call → save wait; switch</li>
+<li>Deferred request → switch on syscall return</li></ul></div>
 
 <!-- README_ASSET code-4618 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:20">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-4618" data-code-part="1">
 
+<!-- README_CODE_PART code-4618 lines=1-18 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8895,38 +6273,22 @@ void dispatcher_switch_from_context(int *caller_context) {
 
 # 6. Scheduling and context switching
 
-## 6.3 Saving the current process and selecting the next process (3)
+## 6.3 Saving the current process and selecting the next process (2)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET list-4642 -->
-<div class="readme-list"><ol start="1"><li>Obtain the current PCB.</li>
-<li>Copy six registers into activation; set activation.sp = caller_context + 6, leaving the saved PC on the stack.</li>
-<li>Change RUNNING to READY; preserve states already changed by blocking or signals.</li>
-<li>Start selection through dispatcher_start_next_process.</li></ol></div>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
-
-# 6. Scheduling and context switching
-
-## 6.3 Saving the current process and selecting the next process (4)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Before restoration, <span class="source-link"><code>prepare_process_termination()</code></span> can reject a candidate with a pending terminating signal. The loop retries selection. Device interrupts can wake a process while it waits:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-list"><ul><li>Find current PCB</li>
+<li>Save registers; SP = context + 6</li>
+<li>RUNNING → READY; retain blocking states</li>
+<li>Select next process</li></ul></div>
 
 <!-- README_ASSET code-4666 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:17">
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-4666" data-code-part="1">
 
+<!-- README_CODE_PART code-4666 lines=1-15 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -8961,16 +6323,16 @@ void dispatcher_start_next_process(void) {
 
 # 6. Scheduling and context switching
 
-## 6.3 Saving the current process and selecting the next process (5)
+## 6.3 Saving the current process and selecting the next process (3)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-4687 -->
-<div class="readme-list"><ol start="1"><li>Ask the scheduler for a candidate.</li>
-<li>While processes remain, retry when none is runnable or termination handling rejects a candidate. UART/DMA may wake a waiter.</li>
-<li>Switch to an accepted process; return only if the list is empty.</li></ol></div>
+<div class="readme-list"><ul><li>Ask scheduler for candidate</li>
+<li>Retry; interrupts can wake blocked processes</li>
+<li>Restore accepted process; empty list → return</li></ul></div>
 
 </div>
 
@@ -8986,12 +6348,14 @@ void dispatcher_start_next_process(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>dispatcher_switch_to_process()</code></span> updates the selected PCB's state and enters this naked restoration function. It loads the saved context and finishes with <code>RTI</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4705 -->
-<ReadmeVisual kind="code" :width="917.1999999999999" style="flex-grow:24">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="917.1999999999999" data-code-source="code-4705" data-code-part="1">
+
+<!-- README_CODE_PART code-4705 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -9006,6 +6370,18 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
     asm("LOADIN BAF SP 11");
     write_stack_heap_boundary_from_in1();
 
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="917.1999999999999" data-code-source="code-4705" data-code-part="2">
+
+<!-- README_CODE_PART code-4705 lines=12-22 -->
+<div class="readme-code">
+
+```c {lines:false}
     // Restores the remaining activation record while BAF still points to the process
     asm("LOADIN BAF CS 13");
     asm("LOADIN BAF DS 14");
@@ -9027,6 +6403,8 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#64-restoring-the-selected-process-and-returning-with-rti -->
@@ -9037,14 +6415,14 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-4733 -->
-<div class="readme-list"><ol start="1"><li>Read the PCB pointer into BAF and precomputed boundary into IN1.</li>
-<li>Install activation.sp before the user boundary so nested interrupts never apply it to the kernel stack.</li>
-<li>Write the boundary through the inline helper, which needs no C frame.</li>
-<li>Restore CS, DS, IN1, IN2, and ACC; restore BAF last because it holds the PCB pointer.</li>
-<li>RTI consumes PC at SP + 1. It resumes an interrupted instruction/syscall or starts a prepared process at CS.</li></ol></div>
+<div class="readme-list"><ul><li>BAF ← PCB; IN1 ← boundary</li>
+<li>Install saved SP before boundary</li>
+<li>Write boundary without C frame</li>
+<li>Restore registers; BAF last</li>
+<li>RTI → saved PC or initial entry</li></ul></div>
 
 </div>
 
@@ -9060,61 +6438,12 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4765 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-4765 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4765:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>dispatcher_switch_from_context(caller_context)</code></span></td>
-<td>Returns only if the process list becomes empty. Otherwise the dispatch path leaves through <code>RTI</code></td>
-<td>Copies <span class="source-link"><code>caller_context</code></span> into the current PCB's activation and changes only <span class="source-link"><code>RUNNING</code></span> to <span class="source-link"><code>READY</code></span></td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>dispatcher_start_next_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>yield()</code></span>, blocking <span class="source-link"><code>sleep()</code></span>, waiting <span class="source-link"><code>waitpid()</code></span>, blocking terminal <span class="source-link"><code>read()</code></span>, and DMA-backed <span class="source-link"><code>load()</code></span>, all through syscalls<br><strong>Hardware interrupts:</strong> userspace timer via <span class="source-link"><code>timer_interrupt_after_reschedule_request()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_reschedule_if_requested()</code></span>, <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>sleep_on_wait_queue()</code></span>, <span class="source-link"><code>start_dma_uart_receive()</code></span>, and the yield branch in <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dispatcher_request_reschedule(void)</code></span></td>
-<td>Returns no value</td>
-<td>Sets <span class="source-link"><code>reschedule_requested</code></span> after timer expiry or a terminating signal for the running process</td>
-<td>None</td>
-<td><strong>Hardware interrupts:</strong> timer through <span class="source-link"><code>timer_interrupt()</code></span> and <span class="source-link"><code>timer_interrupt_process()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>send_signal_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dispatcher_reschedule_if_requested(caller_context)</code></span></td>
-<td>Returns when no request is pending, otherwise returns only if dispatch finds an empty process list</td>
-<td>Sends the saved syscall frame into the dispatcher when a deferred request is pending</td>
-<td><span class="source-link"><code>dispatcher_switch_from_context()</code></span></td>
-<td><strong>System-call return:</strong> every normally returning syscall through <span class="source-link"><code>syscall_interrupt_return()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dispatcher_start_next_process(void)</code></span></td>
-<td>Leaves through <code>RTI</code> for a runnable process, waits while existing processes cannot run, or returns for an empty process list</td>
-<td>Repeatedly requests a scheduler choice, consumes deferred termination for a selected process, and starts dispatch</td>
-<td><span class="source-link"><code>scheduler_next_process()</code></span>, <span class="source-link"><code>first_process()</code></span>, <span class="source-link"><code>prepare_process_termination()</code></span>, <span class="source-link"><code>dispatcher_switch_to_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, <span class="source-link"><code>exit_process()</code></span>, <span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dispatcher_switch_to_process(process)</code></span></td>
-<td>Does not return normally</td>
-<td>Changes an old <span class="source-link"><code>RUNNING</code></span> process to <span class="source-link"><code>READY</code></span>, clears the reschedule request, updates <span class="source-link"><code>active_process</code></span>, marks the selected process <span class="source-link"><code>RUNNING</code></span>, and begins restoration</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>set_current_process()</code></span>, <span class="source-link"><code>process_stack_boundary()</code></span>, <span class="source-link"><code>dispatcher_jump_to_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_start_next_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dispatcher_jump_to_process(process, stack_boundary)</code></span></td>
-<td>Leaves through <code>RTI</code>, it has no normal C return</td>
-<td>Installs the selected process's <code>SP</code> and stack boundary, restores the other activation registers, then restores <code>PC</code> from the process stack</td>
-<td><span class="source-link"><code>write_stack_heap_boundary_from_in1()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_switch_to_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.13%" /><col style="width:10.63%" /><col style="width:15.18%" /><col style="width:43.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>dispatcher_switch_from_context()</code></li></ul></td><td><ul><li>RTI; C return only for empty list</li></ul></td><td><ul><li>Save activation; select; restore process</li></ul></td><td><ul><li><code>yield()</code></li><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>read()</code></li><li><code>load()</code></li><li><code>timer_interrupt_after_reschedule_request()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9132,11 +6461,10 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The cycle distinguishes waiting for an event from waiting for CPU time:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-4793 -->
-<ReadmeVisual kind="image" :width="1024" style="flex-grow:16">
+<ReadmeVisual kind="image" :width="980">
 
 <img src="/readme/blocking-cycle.svg" alt="Waiting cycle: sleep() joins a wait queue with PCB state BLOCKED, wakeup() removes the waiter and sets state READY, then the scheduler selects the process and the dispatcher resumes it with state RUNNING." />
 
@@ -9156,42 +6484,16 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-4802 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4802 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4802:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Blocking event</th>
-<th>Wait queue</th>
-<th>Wakeup event</th>
-</tr>
-</thead><tbody><tr>
-<td>A process calls <span class="source-link"><code>sleep(queue)</code></span> through a syscall</td>
-<td>Caller-supplied <span class="source-link"><code>wait_queue</code></span></td>
-<td>Another process calls <span class="source-link"><code>wakeup(queue)</code></span> through a syscall, waking one waiter</td>
-</tr>
-<tr>
-<td>A parent calls <span class="source-link"><code>waitpid(child_pid)</code></span> while the child is still running</td>
-<td>Child PCB's embedded <span class="source-link"><code>waiters</code></span></td>
-<td>Child <span class="source-link"><code>exit(status)</code></span> or <span class="source-link"><code>kill_process(child, signal)</code></span> reaches <span class="source-link"><code>terminate_process(child, status)</code></span>, which delivers status and wakes the parent through <span class="source-link"><code>wake_parent_waiting_for_process()</code></span></td>
-</tr>
-<tr>
-<td>A held lock makes <span class="source-link"><code>mutex_lock(m)</code></span> call <span class="source-link"><code>sleep(&amp;m-&gt;waiters)</code></span></td>
-<td>Mutex's embedded <span class="source-link"><code>waiters</code></span></td>
-<td><span class="source-link"><code>mutex_unlock(m)</code></span> releases the lock and calls <span class="source-link"><code>wakeup(&amp;m-&gt;waiters)</code></span></td>
-</tr>
-<tr>
-<td>A terminal <span class="source-link"><code>read()</code></span> finds no input in <span class="source-link"><code>begin_terminal_read()</code></span></td>
-<td><span class="source-link"><code>Terminal.input_waiters</code></span></td>
-<td>A UART byte triggers <span class="source-link"><code>handle_uart_interrupt()</code></span>, then <span class="source-link"><code>complete_pending_terminal_read()</code></span> delivers input and makes the reader ready</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start_dma_uart_receive()</code></span> starts a transfer during process loading</td>
-<td>Global <span class="source-link"><code>dma_waiters</code></span></td>
-<td>DMA completion triggers <span class="source-link"><code>handle_dma_interrupt()</code></span>, which calls <span class="source-link"><code>wakeup_wait_queue()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.61%" /><col style="width:37.75%" /><col style="width:28.63%" /></colgroup><thead><tr><th>Blocking event</th><th>Wait queue</th><th>Wakeup event</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>sleep(queue)</li></ul></td><td><ul><li>Caller-supplied <span class="source-link"><code>wait_queue</code></span></li></ul></td><td><ul><li>wakeup(queue)</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Parent waitpid(child)</li></ul></td><td><ul><li>Child PCB waiters</li></ul></td><td><ul><li>Child exit or termination</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Contended mutex_lock</li></ul></td><td><ul><li>Mutex waiters</li></ul></td><td><ul><li>Mutex unlock</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Terminal read without input</li></ul></td><td><ul><li><span class="source-link"><code>Terminal.input_waiters</code></span></li></ul></td><td><ul><li>UART byte arrival</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>DMA-backed process load</li></ul></td><td><ul><li>Global <span class="source-link"><code>dma_waiters</code></span></li></ul></td><td><ul><li>DMA completion</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9209,12 +6511,12 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The definition shows the endpoints. The links between them live in PCBs:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4823 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4823" data-code-part="1">
 
+<!-- README_CODE_PART code-4823 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -9242,27 +6544,28 @@ struct wait_queue {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
-<!-- README_ASSET table-4830 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4830 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4830:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>head</code></span></td>
-<td>First blocked PCB to wake, or <code>NULL</code> when empty</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span> for child waiters, <span class="source-link"><code>initialize_terminal()</code></span> for terminal input, <span class="source-link"><code>wait_queue_init()</code></span> for userspace queues, or <span class="source-link"><code>initialize_dma()</code></span> for DMA, maintained by <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>enqueue_terminal_reader()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, and <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>tail</code></span></td>
-<td>Last blocked PCB, allowing constant-time append, also <code>NULL</code> when empty</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span> for child waiters, <span class="source-link"><code>initialize_terminal()</code></span> for terminal input, <span class="source-link"><code>wait_queue_init()</code></span> for userspace queues, or <span class="source-link"><code>initialize_dma()</code></span> for DMA, maintained by <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>enqueue_terminal_reader()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, and <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.23%" /><col style="width:64.77%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>head</code></span></li></ul></td><td><ul><li>First blocked PCB</li><li>Empty → NULL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>tail</code></span></li></ul></td><td><ul><li>Last blocked PCB</li><li>O(1) append; empty → NULL</li></ul></td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
+
+<!-- README_ASSET table-4845 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4845:1,2,3,4,5,6,7,8,9">
+
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:55.64%" /><col style="width:44.36%" /></colgroup><thead><tr><th>Field / storage</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span>, in <span class="source-link"><code>request</code></span> on the parent's userspace stack</li></ul></td><td><ul><li>Exact requested child PID</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span>, in the same stack-local request</li></ul></td><td><ul><li>Pointer to stack-local status result</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>wait_queue.head + wait_queue.tail</li></ul></td><td><ul><li>FIFO endpoints; O(1) append; NULL when empty</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiters</code></span>, embedded in each kernel-heap PCB</li></ul></td><td><ul><li>Other processes waiting for this child</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_status_ptr</code></span>, pointer stored in the waiting parent's kernel-heap PCB</li></ul></td><td><ul><li>Parent's suspended stack-local status</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_queue_ptr</code></span>, pointer stored in every kernel-heap PCB</li></ul></td><td><ul><li>Queue containing this PCB or NULL</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.wait_next</code></span>, embedded in every kernel-heap PCB</li></ul></td><td><ul><li>Intrusive successor; one active queue</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.state</code></span> and <span class="source-link"><code>ProcessControlBlock.stopped_from_state</code></span>, in the PCB</li></ul></td><td><ul><li>BLOCKED/runnable/STOPPED + completed wait</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>Child PCB: parent_pid</li><li>exit_status + stop_signal</li></ul></td><td><ul><li>Parent validation + retained child state</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9280,112 +6583,10 @@ struct wait_queue {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4845 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field and containing storage</th>
-<th>Meaning and why it exists</th>
-<th>Used by and important relationships</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>WaitPidRequest.pid</code></span>, in <span class="source-link"><code>request</code></span> on the parent's userspace stack</td>
-<td>Exact child PID requested by the public API. It prevents another child's state change from completing this wait.</td>
-<td>Set by <span class="source-link"><code>waitpid()</code></span>. Read by <span class="source-link"><code>wait_for_process_by_pid()</code></span>, which also checks the child's <span class="source-link"><code>parent_pid</code></span>. The kernel does not retain this field after blocking.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>WaitPidRequest.status</code></span>, in the same stack-local request</td>
-<td>Points to the separate stack-local <span class="source-link"><code>status</code></span> result. The indirection lets the kernel use one request argument for both PID and result storage.</td>
-<td>Set to <code>&amp;status</code> by <span class="source-link"><code>waitpid()</code></span>. Immediate paths write through it. The blocking path copies its value into the parent PCB's <span class="source-link"><code>waiting_status_ptr</code></span>. Neither the request nor status is allocated on the kernel heap.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wait_queue.head</code></span> and <span class="source-link"><code>wait_queue.tail</code></span>, embedded in an owner or stored as a global/userspace object</td>
-<td>First and last PCB in a FIFO. <span class="source-link"><code>tail</code></span> makes append constant-time. Both are <code>NULL</code> when empty.</td>
-<td>Initialized by each queue owner. Maintained by <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, and <span class="source-link"><code>remove_from_wait_queue()</code></span>. The nodes are PCBs linked through <span class="source-link"><code>wait_next</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessControlBlock.waiters</code></span>, embedded in each kernel-heap PCB</td>
-<td>Queue of other processes waiting for this process to stop or terminate. It is queue ownership, not the queue containing this process.</td>
-<td>Initialized empty by <span class="source-link"><code>create_process()</code></span>. The target child is found from the PID and its address <code>&amp;child-&gt;waiters</code> is passed to <span class="source-link"><code>sleep_on_wait_queue()</code></span>. Drained by <span class="source-link"><code>notify_process_stopped()</code></span> or <span class="source-link"><code>wake_parent_waiting_for_process()</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessControlBlock.waiting_status_ptr</code></span>, pointer stored in the waiting parent's kernel-heap PCB</td>
-<td>Reaches the <code>status</code> integer in the suspended parent's userspace <span class="source-link"><code>waitpid()</code></span> frame. It exists because the child may finish while that call is not executing.</td>
-<td>Initialized to <code>NULL</code> by <span class="source-link"><code>create_process()</code></span>. Set from <span class="source-link"><code>WaitPidRequest.status</code></span> by <span class="source-link"><code>wait_for_process_by_pid()</code></span>. Written and cleared through the parent PCB by <span class="source-link"><code>wake_parent_waiting_for_process()</code></span> or <span class="source-link"><code>notify_process_stopped()</code></span>.</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#72-wait-queues-and-pcb-links -->
-
-# 7. Blocking, wait queues, signals, and mutexes
-
-## 7.2 Wait queues and PCB links (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4845 rows=6-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field and containing storage</th>
-<th>Meaning and why it exists</th>
-<th>Used by and important relationships</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>ProcessControlBlock.waiting_queue_ptr</code></span>, pointer stored in every kernel-heap PCB</td>
-<td>Back-reference to the one queue currently containing this PCB, or <code>NULL</code>. It lets code unlink a blocked process without already knowing whether the owner is a child, mutex, terminal, or DMA subsystem.</td>
-<td>Set on insertion and cleared on wake/removal. <span class="source-link"><code>remove_process()</code></span> follows it through <span class="source-link"><code>remove_from_wait_queue()</code></span> before freeing the PCB. This prevents a later wakeup from following a dangling PCB pointer. It is also used when terminal reads are stopped or resumed.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessControlBlock.wait_next</code></span>, embedded in every kernel-heap PCB</td>
-<td>Intrusive link to the next PCB in whichever wait queue contains this process. One field is sufficient because a blocked process can join only one queue at a time.</td>
-<td>Initialized to <code>NULL</code> by <span class="source-link"><code>create_process()</code></span>. Linked through the old queue tail by <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>. Traversed by <span class="source-link"><code>remove_from_wait_queue()</code></span>. Cleared on wake/removal. It is independent of global-list <span class="source-link"><code>next</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessControlBlock.state</code></span> and <span class="source-link"><code>ProcessControlBlock.stopped_from_state</code></span>, in the PCB</td>
-<td>Record whether the waiter is <span class="source-link"><code>BLOCKED</code></span>, runnable, or visibly <span class="source-link"><code>STOPPED</code></span>, including whether a stopped wait completed.</td>
-<td>Enqueue changes <span class="source-link"><code>state</code></span> to <span class="source-link"><code>BLOCKED</code></span>. <span class="source-link"><code>wakeup_wait_queue()</code></span> changes an ordinary waiter to <span class="source-link"><code>READY</code></span>, or keeps <code>state == STOPPED</code> and changes <span class="source-link"><code>stopped_from_state</code></span> to <span class="source-link"><code>READY</code></span> so <span class="source-link"><code>continue_process()</code></span> can resume it correctly.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessControlBlock.parent_pid</code></span>, <span class="source-link"><code>ProcessControlBlock.exit_status</code></span>, and <span class="source-link"><code>ProcessControlBlock.stop_signal</code></span>, in the child PCB</td>
-<td>Verify that only the parent can wait and retain the child state needed by immediate/zombie/stopped <span class="source-link"><code>waitpid</code></span> paths.</td>
-<td>Initialized by <span class="source-link"><code>create_process()</code></span>. Read by <span class="source-link"><code>wait_for_process_by_pid()</code></span>. Termination writes <span class="source-link"><code>exit_status</code></span>, stopping writes <span class="source-link"><code>stop_signal</code></span>, and later collection reads the corresponding value.</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#72-wait-queues-and-pcb-links -->
-
-# 7. Blocking, wait queues, signals, and mutexes
-
-## 7.2 Wait queues and PCB links (5)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Here PCB A is the child and embeds the queue. B, C, and D illustrate intrusive waiter links. Normal <span class="source-link"><code>waitpid()</code></span> allows only A's parent to wait, but the queue representation supports several entries:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-4879 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -9418,7 +6619,9 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p><span class="source-link"><code>sleep(queue)</code></span> waits on an existing queue. It sets <span class="source-link"><code>BLOCKED</code></span>, saves the activation, and dispatches. It is not a timed delay. <span class="source-link"><code>wakeup(queue)</code></span> removes at most the FIFO head and makes it ready. A stopped waiter remains stopped until <span class="source-link"><code>SIGCONT</code></span>, with <span class="source-link"><code>stopped_from_state</code></span> updated to <span class="source-link"><code>READY</code></span>. Wakeup itself does not switch processes.</p></div>
+<div class="readme-list"><ul><li>sleep → FIFO queue + BLOCKED</li>
+<li>wakeup → remove head; mark READY</li>
+<li>Queue references PCBs; owns no allocations</li></ul></div>
 
 </div>
 
@@ -9432,12 +6635,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The complete wrapper shows both stack objects. Neither needs heap allocation:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4917 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4917" data-code-part="1">
 
+<!-- README_CODE_PART code-4917 lines=1-10 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -9467,159 +6670,28 @@ int waitpid(int pid) {
 
 # 7. Blocking, wait queues, signals, and mutexes · 7.2 Wait queues and PCB links
 
-## 7.2.3 Wait queue function reference (1)
+## 7.2.3 Wait queue function reference
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-4957 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4957 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4957:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Public/library operation</th>
-<th>Syscall and kernel call path</th>
-<th>Completion path</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>sleep(wq)</code></span></td>
-<td><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></td>
-<td>An event owner reaches <span class="source-link"><code>wakeup_wait_queue(wq)</code></span>, often through <span class="source-link"><code>wakeup(wq)</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wakeup(wq)</code></span></td>
-<td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></td>
-<td>Clears the removed PCB's intrusive membership fields and makes it <span class="source-link"><code>READY</code></span>, or records completion beneath <span class="source-link"><code>STOPPED</code></span>.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waitpid(pid)</code></span></td>
-<td><span class="source-link"><code>SYSCALL_WAITPID</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wait_for_process_by_pid(request, caller_context)</code></span> → the same <span class="source-link"><code>sleep_on_wait_queue()</code></span> used by <span class="source-link"><code>sleep</code></span></td>
-<td>Child termination calls <span class="source-link"><code>wake_parent_waiting_for_process()</code></span>, which writes the status and calls the same <span class="source-link"><code>wakeup_wait_queue()</code></span> used by public <span class="source-link"><code>wakeup</code></span>. Child stopping uses <span class="source-link"><code>notify_process_stopped()</code></span> and that same wake primitive.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.23%" /><col style="width:49.63%" /><col style="width:33.14%" /></colgroup><thead><tr><th>Public/library operation</th><th>Syscall and kernel call path</th><th>Completion path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>sleep(wq)</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></li></ul></td><td><ul><li>An event owner reaches <span class="source-link"><code>wakeup_wait_queue(wq)</code></span>, often through <span class="source-link"><code>wakeup(wq)</code></span>.</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>wakeup(wq)</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></li></ul></td><td><ul><li>Clear links; READY or completed beneath STOPPED</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid(pid)</code></span></li></ul></td><td><ul><li>WAITPID → validate child → sleep_on_wait_queue</li></ul></td><td><ul><li>Child exits/stops → status write</li><li>Same FIFO wakeup primitive</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-4966 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4966:1,2,3,5">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#723-wait-queue-function-reference -->
-
-# 7. Blocking, wait queues, signals, and mutexes · 7.2 Wait queues and PCB links
-
-## 7.2.3 Wait queue function reference (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4966 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>wait_for_process_by_pid(request, caller_context)</code></span></td>
-<td>Returns <code>true</code> after an immediate invalid, zombie, or stopped result. The normal blocking path switches away and resumes userspace with the successful <code>IN2 = 1</code> preset by <span class="source-link"><code>syscall_interrupt()</code></span>. The source-level <code>false</code> fallback is reached only if dispatch returns instead of restoring a process.</td>
-<td>Validates the parent-child relationship. Immediately collects a zombie or stopped status. Otherwise copies <code>request-&gt;status</code> into the parent PCB and blocks it on <code>&amp;child-&gt;waiters</code>.</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>sleep_on_wait_queue()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>waitpid()</code></span> through <span class="source-link"><code>SYSCALL_WAITPID</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sleep_on_wait_queue(queue, caller_context)</code></span></td>
-<td>Returns no value. Normally dispatch leaves through <code>RTI</code> and the saved userspace context resumes after a later wakeup. A C return is possible only if dispatch finds an empty process list.</td>
-<td>Links the current PCB to <code>queue</code>, changes it to <span class="source-link"><code>BLOCKED</code></span>, saves its activation, and dispatches another process.</td>
-<td><span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>sleep()</code></span> through <span class="source-link"><code>SYSCALL_SLEEP</code></span>. <span class="source-link"><code>waitpid()</code></span> through <span class="source-link"><code>wait_for_process_by_pid()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span>, <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wakeup_wait_queue(queue)</code></span></td>
-<td><code>false</code> when empty. <code>true</code> after waking one FIFO head.</td>
-<td>Advances <span class="source-link"><code>head</code></span>, fixes <span class="source-link"><code>tail</code></span>, clears the removed PCB's <span class="source-link"><code>wait_next</code></span> and <span class="source-link"><code>waiting_queue_ptr</code></span>, and makes it ready or records a completed wait under <span class="source-link"><code>STOPPED</code></span>.</td>
-<td>None</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>wakeup()</code></span> through <span class="source-link"><code>SYSCALL_WAKEUP</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>handle_syscall()</code></span>, <span class="source-link"><code>handle_dma_interrupt()</code></span>, <span class="source-link"><code>notify_process_stopped()</code></span>, <span class="source-link"><code>wake_parent_waiting_for_process()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>enqueue_current_process_on_wait_queue(queue)</code></span></td>
-<td>Returns no value.</td>
-<td>Appends the current PCB in constant time, sets its <span class="source-link"><code>waiting_queue_ptr</code></span>, clears its <span class="source-link"><code>wait_next</code></span>, and changes it to <span class="source-link"><code>BLOCKED</code></span>.</td>
-<td><span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>sleep()</code></span> and <span class="source-link"><code>waitpid()</code></span> through <span class="source-link"><code>sleep_on_wait_queue()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>sleep_on_wait_queue()</code></span>, <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>start_dma_uart_receive()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>remove_from_wait_queue(process)</code></span></td>
-<td>Returns no value. No change when <code>waiting_queue_ptr == NULL</code> or the PCB is not found.</td>
-<td>Follows the PCB's queue back-reference, finds its predecessor, reconnects the intrusive list, fixes queue endpoints, and clears membership fields. This is the arbitrary-member removal path, unlike FIFO wakeup.</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>remove_process()</code></span>, <span class="source-link"><code>complete_pending_terminal_read()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span>, <span class="source-link"><code>suspend_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_has_waiting_parent(process)</code></span></td>
-<td><code>true</code> when the target process's queue contains a PCB whose PID equals its <span class="source-link"><code>parent_pid</code></span>. Otherwise <code>false</code>.</td>
-<td>Traverses <code>process-&gt;waiters</code> through <span class="source-link"><code>wait_next</code></span> without mutation. The result tells termination whether status delivery permits immediate child removal.</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>terminate_process()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#723-wait-queue-function-reference -->
-
-# 7. Blocking, wait queues, signals, and mutexes · 7.2 Wait queues and PCB links
-
-## 7.2.3 Wait queue function reference (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-4966 rows=8-9 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>wake_parent_waiting_for_process(process, status)</code></span></td>
-<td>Returns no value.</td>
-<td>Drains the process's waiter queue. For its parent PCB, writes through <span class="source-link"><code>waiting_status_ptr</code></span> and clears that pointer before waking.</td>
-<td><span class="source-link"><code>wakeup_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>terminate_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>notify_process_stopped(process)</code></span></td>
-<td>Returns no value.</td>
-<td>Drains the stopped process's waiter queue, writes <code>128 + stop_signal</code> through each non-<code>NULL</code> <span class="source-link"><code>waiting_status_ptr</code></span>, clears it, and wakes each waiter.</td>
-<td><span class="source-link"><code>wakeup_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>stop_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.28%" /><col style="width:19.08%" /><col style="width:16.34%" /><col style="width:27.30%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>wait_for_process_by_pid()</code></li></ul></td><td><ul><li>Completion flag; userspace IN2 = 1</li></ul></td><td><ul><li>Validate child; collect or block</li></ul></td><td><ul><li><code>waitpid()</code></li><li><code>SYSCALL_WAITPID</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>sleep_on_wait_queue()</code></li></ul></td><td><ul><li>No value; later resumes via RTI</li></ul></td><td><ul><li>Enqueue caller; BLOCKED; dispatch</li></ul></td><td><ul><li><code>sleep()</code></li><li><code>SYSCALL_SLEEP</code></li><li><code>waitpid()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>wakeup_wait_queue()</code></li></ul></td><td><ul><li>true if woke; false if empty</li></ul></td><td><ul><li>Wake FIFO head</li></ul></td><td><ul><li><code>wakeup()</code></li><li><code>SYSCALL_WAKEUP</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>enqueue_current_process_on_wait_queue()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Link current PCB into FIFO</li></ul></td><td><ul><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>sleep_on_wait_queue()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9633,121 +6705,39 @@ int waitpid(int pid) {
 
 # 7. Blocking, wait queues, signals, and mutexes · 7.3 Process signals
 
-## 7.3.1 Supported signals and fixed actions (1)
+## 7.3.1 Supported signals and fixed actions
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-4990 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-4990 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4990:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>pending_termination_signal</code></span></td>
-<td><span class="source-link"><code>SIGINT</code></span>/<span class="source-link"><code>SIGKILL</code></span> deferred while the target is the running process</td>
-<td>First initialized to 0 by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>send_signal_to_process()</code></span>, consumed by <span class="source-link"><code>prepare_process_termination()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stop_signal</code></span></td>
-<td>Identifies the signal reported for the current stopped state</td>
-<td>First initialized to 0 by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>stop_process()</code></span> and the input-ownership check in <span class="source-link"><code>continue_process()</code></span>, read by <span class="source-link"><code>notify_process_stopped()</code></span> and <span class="source-link"><code>wait_for_process_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stopped_from_state</code></span></td>
-<td>State reconsidered on <span class="source-link"><code>SIGCONT</code></span></td>
-<td>First initialized to <span class="source-link"><code>READY</code></span> by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>stop_process()</code></span>, <span class="source-link"><code>wakeup_wait_queue()</code></span>, and <span class="source-link"><code>resume_pending_terminal_read()</code></span>, read by <span class="source-link"><code>continue_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>parent_death_signal</code></span></td>
-<td>Signal delivered when the parent terminates</td>
-<td>First initialized by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>set_parent_death_signal()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td>
-<td>Terminal request retained across any stop while the read is pending</td>
-<td>First initialized to <code>NULL</code>/0 by <span class="source-link"><code>create_process()</code></span>, set by <span class="source-link"><code>begin_terminal_read()</code></span>, consumed by <span class="source-link"><code>complete_pending_terminal_read()</code></span> or <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:55.09%" /><col style="width:44.91%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>pending_termination_signal</code></span></li></ul></td><td><ul><li>Deferred SIGINT/SIGKILL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>stop_signal</code></span></li></ul></td><td><ul><li>Current stop signal</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>stopped_from_state</code></span></li></ul></td><td><ul><li>State reconsidered on SIGCONT</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Signal delivered when parent dies</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Retained terminal buffer + count</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>POSIX / Linux signal 0</b><span>The null signal probes existence and permission without delivery. PicoOS checks only existence, has no user permissions or process-group PID forms, and rejects zombies.</span></aside>
+<!-- README_ASSET table-5004 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5004:1,2,3,4,5,6,7">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#731-supported-signals-and-fixed-actions -->
-
-# 7. Blocking, wait queues, signals, and mutexes · 7.3 Process signals
-
-## 7.3.1 Supported signals and fixed actions (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5004 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Number</th>
-<th>Name</th>
-<th>Kernel action</th>
-<th>Reported status/state</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td>Probe</td>
-<td>Validates that a non-zombie PID exists</td>
-<td>No change</td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td><span class="source-link"><code>SIGINT</code></span></td>
-<td>Terminates the target</td>
-<td>Exit status 130</td>
-</tr>
-<tr>
-<td style="text-align:right">9</td>
-<td><span class="source-link"><code>SIGKILL</code></span></td>
-<td>Terminates the target</td>
-<td>Exit status 137</td>
-</tr>
-<tr>
-<td style="text-align:right">18</td>
-<td><span class="source-link"><code>SIGCONT</code></span></td>
-<td>Resumes a stopped target</td>
-<td><span class="source-link"><code>READY</code></span>, or <span class="source-link"><code>BLOCKED</code></span> if its original wait is still active</td>
-</tr>
-<tr>
-<td style="text-align:right">19</td>
-<td><span class="source-link"><code>SIGSTOP</code></span></td>
-<td>Stops the target</td>
-<td><span class="source-link"><code>STOPPED</code></span>, status 147</td>
-</tr>
-<tr>
-<td style="text-align:right">20</td>
-<td><span class="source-link"><code>SIGTSTP</code></span></td>
-<td>Stops the target</td>
-<td><span class="source-link"><code>STOPPED</code></span>, status 148</td>
-</tr>
-<tr>
-<td style="text-align:right">21</td>
-<td><span class="source-link"><code>SIGTTIN</code></span></td>
-<td>Stops the target, generated when a background process reads the terminal</td>
-<td><span class="source-link"><code>STOPPED</code></span>, status 149</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.79%" /><col style="width:19.55%" /><col style="width:35.17%" /><col style="width:29.50%" /></colgroup><thead><tr><th>Number</th><th>Name</th><th>Kernel action</th><th>Reported status/state</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>Probe</li></ul></td><td><ul><li>Validates that a non-zombie PID exists</li></ul></td><td><ul><li>No change</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>SIGINT</code></span></li></ul></td><td><ul><li>Terminates the target</li></ul></td><td><ul><li>Exit status 130</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>9</li></ul></td><td><ul><li><span class="source-link"><code>SIGKILL</code></span></li></ul></td><td><ul><li>Terminates the target</li></ul></td><td><ul><li>Exit status 137</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>18</li></ul></td><td><ul><li><span class="source-link"><code>SIGCONT</code></span></li></ul></td><td><ul><li>Resumes a stopped target</li></ul></td><td><ul><li>READY / original BLOCKED wait</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>19</li></ul></td><td><ul><li><span class="source-link"><code>SIGSTOP</code></span></li></ul></td><td><ul><li>Stops the target</li></ul></td><td><ul><li>STOPPED</li><li>Status: 147</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>20</li></ul></td><td><ul><li><span class="source-link"><code>SIGTSTP</code></span></li></ul></td><td><ul><li>Stops the target</li></ul></td><td><ul><li>STOPPED</li><li>Status: 148</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>21</li></ul></td><td><ul><li><span class="source-link"><code>SIGTTIN</code></span></li></ul></td><td><ul><li>Stop background terminal reader</li></ul></td><td><ul><li>STOPPED</li><li>Status: 149</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
+<aside class="context-note"><b>POSIX / Linux: signal 0</b><ul><li>Probe without signal delivery</li>
+<li>PicoOS: existence only; rejects zombies</li></ul></aside>
 
 </div>
 
@@ -9761,8 +6751,10 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Stopping records <span class="source-link"><code>stop_signal</code></span> and <span class="source-link"><code>stopped_from_state</code></span>, sets <span class="source-link"><code>STOPPED</code></span>, and reports the stopped status to a waiting parent. <span class="source-link"><code>WIFSTOPPED()</code></span> recognizes all three stop signals. Terminal reads detach from their queue but retain the buffer and count. <span class="source-link"><code>SIGCONT</code></span> makes an ordinary stopped process ready. An unfinished nonterminal wait instead returns to <span class="source-link"><code>BLOCKED</code></span>.</p>
-<p>A background reader receives <span class="source-link"><code>SIGTTIN</code></span> even when input is buffered. The kernel retains its read request without queueing it. Foreground ownership and <span class="source-link"><code>SIGCONT</code></span> are needed to resume that read. <span class="source-link"><code>8.4 Foreground input ownership and terminal-generated signals</code></span> follows this case.</p></div>
+<div class="readme-list"><ul><li>Stop saves previous state + signal</li>
+<li>STOPPED processes stay in process list</li>
+<li>Continue restores prior state</li>
+<li>Terminal read also needs input ownership</li></ul></div>
 
 </div>
 
@@ -9776,8 +6768,10 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Normal exit and signal termination reach <span class="source-link"><code>terminate_process()</code></span>. Normal exit uses the application's status, while signals use <code>128 + signal_number</code>. <span class="source-link"><code>kill.bin</code></span> defaults to <span class="source-link"><code>SIGKILL</code></span> and yields after an accepted request. <span class="source-link"><code>4.3.2.2 Recording termination status</code></span> covers exception and unload statuses.</p>
-<p><code>Ctrl+C</code> sends <span class="source-link"><code>SIGINT</code></span> through the UART handler to the foreground target. A noncurrent target can terminate immediately. For the current running process, <span class="source-link"><code>pending_termination_signal</code></span> and a reschedule request defer it until dispatch. <span class="source-link"><code>prepare_process_termination()</code></span> consumes that signal before the process can be selected again.</p></div>
+<div class="readme-list"><ul><li>Current target: defer until dispatch</li>
+<li>Waiting parent: status + wakeup + removal</li>
+<li>Otherwise: retain status as ZOMBIE</li>
+<li>Ctrl+C → shell resumes with 130</li></ul></div>
 
 </div>
 
@@ -9791,8 +6785,12 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>PicoOS gives its supported signals fixed stop, continue, or termination actions.</p>
-<p>Stopping and continuing change the PCB state immediately. Termination of the currently executing process is deferred until dispatch so it can be removed safely before resuming.</p></div><aside class="context-note"><b>Unix signal handling</b><span>Unix/Linux allow catching or ignoring SIGINT, SIGTSTP, and SIGTTIN, but not SIGKILL or SIGSTOP. PicoOS gives all supported signals fixed actions.</span></aside>
+<div class="readme-list"><ul><li>PicoOS: fixed signal actions</li>
+<li>Stop/continue update state immediately</li>
+<li>Current-process termination waits for dispatch</li></ul></div>
+<aside class="context-note"><b>Unix signal handling</b><ul><li>SIGINT/TSTP/TTIN: catch or ignore</li>
+<li>SIGKILL/STOP: cannot catch</li>
+<li>PicoOS: all actions fixed</li></ul></aside>
 
 </div>
 
@@ -9806,75 +6804,13 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5072 rows=1-8 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-5072 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5072:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>send_signal_by_pid(request)</code></span></td>
-<td><code>0</code> on delivery/probe, <code>-1</code> for an invalid signal, missing PID, or zombie</td>
-<td>Finds target, signal 0 only checks existence</td>
-<td><span class="source-link"><code>signal_number_is_valid()</code></span>, <span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>kill()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>set_parent_death_signal(request)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> for an unsupported option or invalid signal</td>
-<td>Changes current PCB parent-death setting</td>
-<td><span class="source-link"><code>signal_number_is_valid()</code></span>, <span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>prctl()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>send_signal_to_process(process, signal_number)</code></span></td>
-<td>Returns no value</td>
-<td>Continues, stops, terminates, or defers running-target termination and requests a safe reschedule</td>
-<td><span class="source-link"><code>signal_number_is_valid()</code></span>, <span class="source-link"><code>continue_process()</code></span>, <span class="source-link"><code>stop_process()</code></span>, <span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>dispatcher_request_reschedule()</code></span>, <span class="source-link"><code>kill_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>handle_terminal_signal_character()</code></span>, <span class="source-link"><code>orphan_and_signal_children()</code></span>, <span class="source-link"><code>send_signal_by_pid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>kill_process(process, signal_number)</code></span></td>
-<td>Returns no value</td>
-<td>Calls the general termination path with that termination signal's status</td>
-<td><span class="source-link"><code>terminate_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>prepare_process_termination()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stop_process(process, signal_number)</code></span></td>
-<td>Returns no value</td>
-<td>Saves signal/prior state, changes to <span class="source-link"><code>STOPPED</code></span>, reports to waiters</td>
-<td><span class="source-link"><code>suspend_pending_terminal_read()</code></span>, <span class="source-link"><code>notify_process_stopped()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>send_signal_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>continue_process(process)</code></span></td>
-<td>Returns no value</td>
-<td>Resumes ordinary stops, a pending terminal read additionally requires input ownership</td>
-<td><span class="source-link"><code>process_has_terminal_input()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>send_signal_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>prepare_process_termination(process)</code></span></td>
-<td><code>true</code> when no termination is pending, <code>false</code> after applying deferred termination</td>
-<td>Applies deferred termination</td>
-<td><span class="source-link"><code>kill_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>dispatcher_start_next_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.71%" /><col style="width:16.76%" /><col style="width:28.01%" /><col style="width:17.52%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>send_signal_by_pid()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Validate PID; probe or deliver</li></ul></td><td><ul><li><code>kill()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>set_parent_death_signal()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Configure signal on parent death</li></ul></td><td><ul><li><code>prctl()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9892,12 +6828,14 @@ int waitpid(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>mutex_init()</code></span> initializes both fields before use. <span class="source-link"><code>mutex_lock()</code></span> retries <span class="source-link"><code>testset()</code></span> after each wakeup. These are the complete library functions:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5100 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:29">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-5100" data-code-part="1">
+
+<!-- README_CODE_PART code-5100 lines=1-14 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -9915,6 +6853,18 @@ void mutex_init(struct mutex *m) {
     wait_queue_init(&(m->waiters));
     return;
 }
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-5100" data-code-part="2">
+
+<!-- README_CODE_PART code-5100 lines=15-27 -->
+<div class="readme-code">
+
+```c {lines:false}
 
 void mutex_lock(struct mutex *m) {
     while (testset(&(m->lock))) {
@@ -9938,6 +6888,8 @@ void mutex_unlock(struct mutex *m) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#74-mutexes-with-test-and-set-and-wait-queues -->
@@ -9948,11 +6900,10 @@ void mutex_unlock(struct mutex *m) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The flowchart shows acquisition and unlock. Wakeup grants another chance to test the lock, rather than transferring ownership:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-5137 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TD
@@ -9981,75 +6932,23 @@ flowchart TD
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
-<!-- README_ASSET table-5151 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5151 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5151:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Attribute</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>lock</code></span></td>
-<td>False when unlocked, <code>TSL</code> stores true and returns the old value</td>
-<td>First initialized by <span class="source-link"><code>mutex_init()</code></span>, tested/set by <span class="source-link"><code>testset()</code></span> from <span class="source-link"><code>mutex_lock()</code></span>, cleared by <span class="source-link"><code>mutex_unlock()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waiters</code></span></td>
-<td>Embedded FIFO of contending PCBs</td>
-<td>First initialized by <span class="source-link"><code>mutex_init()</code></span> through <span class="source-link"><code>wait_queue_init()</code></span>, passed to <span class="source-link"><code>sleep()</code></span> and <span class="source-link"><code>wakeup()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.52%" /><col style="width:67.48%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>lock</code></span></li></ul></td><td><ul><li>Unlocked=false; TSL returns old, stores true</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>waiters</code></span></li></ul></td><td><ul><li>Embedded FIFO of waiting parents</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-5156 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5156:1,2,3,4">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#74-mutexes-with-test-and-set-and-wait-queues -->
-
-# 7. Blocking, wait queues, signals, and mutexes
-
-## 7.4 Mutexes with test-and-set and wait queues (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5156 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>testset(lock_addr)</code></span></td>
-<td>Returns the previous lock value while atomically storing true</td>
-<td>None, uses RETI <code>TSL</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_init(m)</code></span></td>
-<td>No value, clears the lock and initializes the queue</td>
-<td>None</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_lock(m)</code></span></td>
-<td>No value, returns after acquiring the lock, sleeping and retrying while it is held</td>
-<td><span class="source-link"><code>SYSCALL_SLEEP</code></span> through <span class="source-link"><code>sleep()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_unlock(m)</code></span></td>
-<td>No value, clears the lock and makes at most one waiter eligible</td>
-<td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> through <span class="source-link"><code>wakeup()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.32%" /><col style="width:46.69%" /><col style="width:23.99%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>testset()</code></li></ul></td><td><ul><li>Atomic old value; store 1</li></ul></td><td><ul><li>TSL; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>mutex_init()</code></li></ul></td><td><ul><li>Clear lock + initialize wait queue</li></ul></td><td><ul><li>None</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>mutex_lock()</code></li></ul></td><td><ul><li>Acquire; sleep/retry on contention</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>mutex_unlock()</code></li></ul></td><td><ul><li>Clear lock; wake one contender</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10067,12 +6966,12 @@ flowchart TD
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>file_descriptors</code></span> points to a <span class="source-link"><code>FileDescriptorTable</code></span>. Its <span class="source-link"><code>entries</code></span> points to an eight-element <span class="source-link"><code>FileDescriptor</code></span> array, indexed by descriptor number. These declarations show both allocations:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5182 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-5182" data-code-part="1">
 
+<!-- README_CODE_PART code-5182 lines=1-10 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10092,7 +6991,9 @@ struct FileDescriptorTable {
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Unix comparison</b><span>Unix descriptors can share an open-file description. PicoOS copies paths and scalar state into independent entries; copied file offsets subsequently diverge.</span></aside>
+</div>
+<aside class="context-note"><b>Unix comparison</b><ul><li>Unix: shared open-file descriptions</li>
+<li>PicoOS: independent copied entries/offsets</li></ul></aside>
 
 </div>
 
@@ -10106,57 +7007,19 @@ struct FileDescriptorTable {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5206 rows=1-8 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5206 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5206:1,2,3,4,5,6,7,8">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Index</th>
-<th>Initial or conventional use</th>
-<th>Availability to <span class="source-link"><code>open()</code></span></th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td><span class="source-link"><code>STDIN_FILENO</code></span>, initially terminal input</td>
-<td>Reused if closed</td>
-</tr>
-<tr>
-<td style="text-align:right">1</td>
-<td><span class="source-link"><code>STDOUT_FILENO</code></span>, initially terminal output</td>
-<td>Reused if closed</td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td><span class="source-link"><code>STDERR_FILENO</code></span>, initially terminal error output</td>
-<td>Reused if closed</td>
-</tr>
-<tr>
-<td style="text-align:right">3</td>
-<td>Free initially, first additional opened file or device</td>
-<td>Available</td>
-</tr>
-<tr>
-<td style="text-align:right">4</td>
-<td>Free initially, second additional opened file or device</td>
-<td>Available</td>
-</tr>
-<tr>
-<td style="text-align:right">5</td>
-<td>Reserved shell save slot for stdin during <code>&lt;</code></td>
-<td>Never returned by <span class="source-link"><code>open()</code></span></td>
-</tr>
-<tr>
-<td style="text-align:right">6</td>
-<td>Reserved shell save slot for stdout during <code>&gt;</code> or <code>&gt;&gt;</code></td>
-<td>Never returned by <span class="source-link"><code>open()</code></span></td>
-</tr>
-<tr>
-<td style="text-align:right">7</td>
-<td>Reserved shell save slot for stderr during <code>2&gt;</code> or <code>2&gt;&gt;</code></td>
-<td>Never returned by <span class="source-link"><code>open()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:38.71%" /><col style="width:35.15%" /></colgroup><thead><tr><th>Index</th><th>Initial or conventional use</th><th>Availability to open()</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>Standard input</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li>Standard output</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li>Standard error</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li>General inherited slot</li></ul></td><td><ul><li>Available</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li>General inherited slot</li></ul></td><td><ul><li>Available</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>5</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>6</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>7</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10174,11 +7037,10 @@ struct FileDescriptorTable {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Inheritance always copies 0–2. It copies 3–4 only when their <span class="source-link"><code>kind</code></span> is <span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span>, and skips 5–7. Each entry and path is independent, unlike Unix shared open-file descriptions.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-5221 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -10213,107 +7075,28 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-5247 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5247 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5247:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>FileDescriptor.kind</code></span></td>
-<td>Integer constant, not an enum: <span class="source-link"><code>FILE_DESCRIPTOR_FREE</code></span> = 0, <span class="source-link"><code>FILE_DESCRIPTOR_STDIN</code></span> = 1, <span class="source-link"><code>FILE_DESCRIPTOR_STDOUT</code></span> = 2, <span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span> = 3, and <span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span> = 4. The three standard kinds preserve stream identity. Every explicit open, including a device path, uses <span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span>. Slots 3–4 are inherited only for this last kind.</td>
-<td>First initialized by <span class="source-link"><code>initialize_file_descriptor()</code></span>, read by <span class="source-link"><code>inherit_file_descriptors()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, and <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>FileDescriptor.flags</code></span></td>
-<td>Integer bit field containing the read/write mode and create, truncate, or append choices. It decides whether later reads and writes are allowed.</td>
-<td>First initialized by <span class="source-link"><code>initialize_file_descriptor()</code></span>, set by <span class="source-link"><code>open_file_descriptor()</code></span>, read by <span class="source-link"><code>file_descriptor_can_read()</code></span> and <span class="source-link"><code>file_descriptor_can_write()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>FileDescriptor.offset</code></span></td>
-<td>Per-entry logical byte position, initialized to 0. Regular reads and successful writes advance it, append writes replace it with the resulting end position, and <span class="source-link"><code>lseek()</code></span> can replace it.</td>
-<td>First initialized by <span class="source-link"><code>initialize_file_descriptor()</code></span>, changed by <span class="source-link"><code>read_regular_file()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span>, and <span class="source-link"><code>seek_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>FileDescriptor.path</code></span></td>
-<td>Kernel-owned normalized absolute PicoOS path, or <code>NULL</code> for a free entry. Exact terminal/null paths select device behavior before ordinary-file dispatch.</td>
-<td>First initialized to <code>NULL</code> by <span class="source-link"><code>initialize_file_descriptor()</code></span>, standard paths assigned by <span class="source-link"><code>create_file_descriptor_table()</code></span>, copied by <span class="source-link"><code>copy_file_descriptor()</code></span>, and freed by close/destruction</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>FileDescriptorTable.entries</code></span></td>
-<td>Owned eight-entry array of descriptor state</td>
-<td>First allocated by <span class="source-link"><code>create_file_descriptor_table()</code></span>, copied by <span class="source-link"><code>inherit_file_descriptors()</code></span>, indexed by I/O, and freed by <span class="source-link"><code>destroy_file_descriptor_table()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.35%" /><col style="width:56.65%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.kind</code></span></li></ul></td><td><ul><li>FREE/STDIN/STDOUT/STDERR/FILE identity</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.flags</code></span></li></ul></td><td><ul><li>Access + create/truncate/append bits</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.offset</code></span></li></ul></td><td><ul><li>Independent logical byte position</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.path</code></span></li></ul></td><td><ul><li>Owned normalized path or NULL</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptorTable.entries</code></span></li></ul></td><td><ul><li>Owned array of eight descriptors</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-5258 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5258:1,2,3,4,5,6">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#81-per-process-file-descriptor-table -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.1 Per-process file-descriptor table (5)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5258 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Descriptor case</th>
-<th><span class="source-link"><code>kind</code></span></th>
-<th><span class="source-link"><code>path</code></span></th>
-<th>Read/write behavior</th>
-</tr>
-</thead><tbody><tr>
-<td>Initial standard input</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_STDIN</code></span></td>
-<td><code>/device/terminal.dev</code></td>
-<td>Read-only, consumes the global terminal ring and may block</td>
-</tr>
-<tr>
-<td>Initial standard output</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_STDOUT</code></span></td>
-<td><code>/device/terminal.dev</code></td>
-<td>Write-only, sends ordinary UART output to emulator stdout</td>
-</tr>
-<tr>
-<td>Initial standard error</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span></td>
-<td><code>/device/terminal.dev</code></td>
-<td>Write-only, selects emulator stderr for the bytes, then restores emulator stdout</td>
-</tr>
-<tr>
-<td>Opened regular file</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td>
-<td>Normalized absolute path</td>
-<td>Access flags gate I/O, <code>read-range</code> and <code>write-at</code> use the saved offset, while <code>file-size</code> supports existence checks, append, and <span class="source-link"><code>SEEK_END</code></span>, and <span class="source-link"><code>write</code></span> creates or truncates</td>
-</tr>
-<tr>
-<td>Explicitly opened terminal device</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td>
-<td><code>/device/terminal.dev</code></td>
-<td>Access flags gate I/O, reads use the terminal ring and writes use emulator stdout because the kind is not <span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span></td>
-</tr>
-<tr>
-<td>Explicitly opened null device</td>
-<td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td>
-<td><code>/device/null.dev</code></td>
-<td>Reads return 0, writes discard bytes and return the requested count</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.04%" /><col style="width:25.64%" /><col style="width:23.75%" /><col style="width:31.56%" /></colgroup><thead><tr><th>Descriptor case</th><th>kind</th><th>path</th><th>Read/write behavior</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Initial standard input</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDIN</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Ring input; may block</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Initial standard output</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDOUT</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>UART → stdout</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Initial standard error</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Select stderr; restore stdout</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Opened regular file</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li>Normalized absolute path</li></ul></td><td><ul><li>Flags + saved offset; host requests</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Explicitly opened terminal device</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Ring reads; UART stdout writes</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Explicitly opened null device</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li><code>/device/null.dev</code></li></ul></td><td><ul><li>Read → 0; write → count</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10331,12 +7114,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">One global <span class="source-link"><code>Terminal</code></span> supplies input for every descriptor naming the device. The definition and field table describe its ring and reader queue:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5286 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:9">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-5286" data-code-part="1">
 
+<!-- README_CODE_PART code-5286 lines=1-7 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10367,42 +7150,16 @@ struct Terminal {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5296 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5296 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5296:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>Terminal.input_buffer</code></span></td>
-<td>Embedded ring storage</td>
-<td>First written by <span class="source-link"><code>enqueue_terminal_byte()</code></span>, read by <span class="source-link"><code>pop_terminal_byte()</code></span> (only occupied cells are meaningful)</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Terminal.input_head</code></span></td>
-<td>Index of next unread byte to consume</td>
-<td>First initialized by <span class="source-link"><code>initialize_terminal()</code></span>, advanced only by <span class="source-link"><code>pop_terminal_byte()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Terminal.input_tail</code></span></td>
-<td>Index of next insertion</td>
-<td>First initialized by <span class="source-link"><code>initialize_terminal()</code></span>, advanced by <span class="source-link"><code>enqueue_terminal_byte()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Terminal.input_count</code></span></td>
-<td>Distinguishes full from empty when indices match</td>
-<td>First initialized by <span class="source-link"><code>initialize_terminal()</code></span>, read and changed by <span class="source-link"><code>enqueue_terminal_byte()</code></span>, <span class="source-link"><code>copy_terminal_bytes()</code></span>, and <span class="source-link"><code>pop_terminal_byte()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Terminal.input_waiters</code></span></td>
-<td>Generic blocking queue containing the active foreground reader while it waits for input</td>
-<td>First initialized by <span class="source-link"><code>initialize_terminal()</code></span>, <span class="source-link"><code>begin_terminal_read()</code></span> and <span class="source-link"><code>resume_pending_terminal_read()</code></span> queue readers, completion/suspension remove them</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.16%" /><col style="width:50.84%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_buffer</code></span></li></ul></td><td><ul><li>Embedded receive ring</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_head</code></span></li></ul></td><td><ul><li>Next unread byte</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_tail</code></span></li></ul></td><td><ul><li>Next insertion cell</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_count</code></span></li></ul></td><td><ul><li>Occupied count; distinguishes full/empty</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_waiters</code></span></li></ul></td><td><ul><li>Foreground readers awaiting input</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10420,11 +7177,12 @@ struct Terminal {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-5351 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-5351" data-code-part="1">
 
+<!-- README_CODE_PART code-5351 lines=1-2 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10437,8 +7195,9 @@ read(STDIN_FILENO, buffer, 16);
 </ReadmeVisual>
 
 <!-- README_ASSET code-5359 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:10">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-5359" data-code-part="1">
 
+<!-- README_CODE_PART code-5359 lines=1-8 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10470,11 +7229,12 @@ request.complete = false;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-5374 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-5374" data-code-part="1">
 
+<!-- README_CODE_PART code-5374 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10494,8 +7254,9 @@ if (is_terminal_device_path(descriptor->path)) {
 </ReadmeVisual>
 
 <!-- README_ASSET code-5390 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="607.6" data-code-source="code-5390" data-code-part="1">
 
+<!-- README_CODE_PART code-5390 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10528,12 +7289,12 @@ dispatcher_switch_from_context(caller_context);
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The PCB retains the buffer rather than the <span class="source-link"><code>IoRequest</code></span>. Every ordinary UART byte enters the ring first, then this delivery code completes a pending read. <span class="source-link"><code>9.1 Memory layout, allocation sources, and lifetimes</code></span> lists possible buffer locations:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5406 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-5406" data-code-part="1">
 
+<!-- README_CODE_PART code-5406 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -10568,36 +7329,24 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-5430 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5430 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5430:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Situation</th>
-<th style="text-align:right">Saved <span class="source-link"><code>foreground_process_target</code></span> value</th>
-<th>Ordinary input</th>
-<th><code>Ctrl+C</code>/<code>Ctrl+Z</code></th>
-</tr>
-</thead><tbody><tr>
-<td>Before shell registration</td>
-<td style="text-align:right"><code>0</code></td>
-<td>No process passes the ownership check, bytes are buffered, while <span class="source-link"><code>terminal_input_process()</code></span> uses the current PCB only as a possible pending-read completion target</td>
-<td>Consumed without signal delivery</td>
-</tr>
-<tr>
-<td>Shell prompt, including while background work runs</td>
-<td style="text-align:right">Negative shell process ID</td>
-<td>Delivered to the shell</td>
-<td>Consumed without signal delivery, so the shell is not terminated or stopped</td>
-</tr>
-<tr>
-<td>Foreground child runs or resumes through <code>fg</code></td>
-<td style="text-align:right">Positive child process ID</td>
-<td>Delivered to the child</td>
-<td>Delivered to the child as <span class="source-link"><code>SIGINT</code></span> or <span class="source-link"><code>SIGTSTP</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.80%" /><col style="width:34.20%" /><col style="width:20.19%" /><col style="width:21.81%" /></colgroup><thead><tr><th>Situation</th><th>Saved foreground_process_target value</th><th>Ordinary input</th><th>Ctrl+C / Ctrl+Z</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Before shell registration</li></ul></td><td><ul><li><code>0</code></li></ul></td><td><ul><li>Buffer; fallback completion target</li></ul></td><td><ul><li>Consume; no signal</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Shell prompt, including while background work runs</li></ul></td><td><ul><li>Negative shell process ID</li></ul></td><td><ul><li>Shell input</li></ul></td><td><ul><li>Consume; protect shell</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Foreground child / fg</li></ul></td><td><ul><li>Positive child process ID</li></ul></td><td><ul><li>Child input</li></ul></td><td><ul><li>SIGINT / SIGTSTP</li></ul></td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
+
+<!-- README_ASSET table-5441 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5441:1,2,3,4">
+
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.65%" /><col style="width:41.11%" /><col style="width:36.24%" /></colgroup><thead><tr><th>Input byte</th><th>Detection and action</th><th>Buffered?</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>3 (<code>Ctrl+C</code>)</li></ul></td><td><ul><li>Foreground SIGINT</li></ul></td><td><ul><li>Never buffered</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>26 (<code>Ctrl+Z</code>)</li></ul></td><td><ul><li>Foreground SIGTSTP</li></ul></td><td><ul><li>Never buffered</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>4 (<code>Ctrl+D</code>)</li></ul></td><td><ul><li>Ordinary ring byte; user handles EOF</li></ul></td><td><ul><li>Stored; dropped only when full</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Any other byte</li></ul></td><td><ul><li>Enqueue; complete pending read</li></ul></td><td><ul><li>Stored unless full; waiter may consume</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10615,116 +7364,12 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5441 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5470 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5470:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Input byte</th>
-<th>Detection and action</th>
-<th>Buffered?</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">3 (<code>Ctrl+C</code>)</td>
-<td><span class="source-link"><code>handle_uart_interrupt()</code></span> passes it to <span class="source-link"><code>handle_terminal_signal_character()</code></span>, which sends <span class="source-link"><code>SIGINT</code></span> to a valid positive foreground target</td>
-<td>No, always consumed</td>
-</tr>
-<tr>
-<td style="text-align:right">26 (<code>Ctrl+Z</code>)</td>
-<td>The same path sends <span class="source-link"><code>SIGTSTP</code></span></td>
-<td>No, always consumed</td>
-</tr>
-<tr>
-<td style="text-align:right">4 (<code>Ctrl+D</code>)</td>
-<td>Not special to the kernel, follows the ordinary byte path into the ring</td>
-<td>Stored as ordinary value 4 when space exists, dropped if the ring is full</td>
-</tr>
-<tr>
-<td style="text-align:right">Any other byte</td>
-<td><span class="source-link"><code>enqueue_terminal_byte()</code></span> stores it when space exists and <span class="source-link"><code>complete_pending_terminal_read()</code></span> may deliver it</td>
-<td>Stored unless the ring is full, an already pending read consumes available bytes immediately after insertion</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#84-foreground-input-ownership-and-terminal-generated-signals -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.4 Foreground input ownership and terminal-generated signals (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5470 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>set_foreground_process(pid)</code></span></td>
-<td><code>0</code> for PID 0 or an existing direct child, <code>-1</code> otherwise</td>
-<td>PID 0 saves the negative current-process ID to <span class="source-link"><code>foreground_process_target</code></span>, giving the caller input without terminal-generated signals, a child PID saves that positive process ID, giving the child input and those signals</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>find_process_by_pid()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>set_foreground_process()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>continue_process(process)</code></span></td>
-<td>Returns no value</td>
-<td>Resumes ordinary stops, a pending terminal read additionally requires input ownership</td>
-<td><span class="source-link"><code>process_has_terminal_input()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>send_signal_to_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>terminal_input_owner_id(void)</code></span></td>
-<td><code>0</code> for a saved 0, otherwise the positive process ID represented by the saved positive or negative value</td>
-<td>Reads <span class="source-link"><code>foreground_process_target</code></span> and removes its sign to identify the input owner</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>process_has_terminal_input()</code></span>, <span class="source-link"><code>terminal_input_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_has_terminal_input(process)</code></span></td>
-<td><code>true</code> only for the PCB whose process ID matches the represented input owner</td>
-<td>Checks terminal-input ownership regardless of whether <span class="source-link"><code>foreground_process_target</code></span> contains a positive or negative process ID</td>
-<td><span class="source-link"><code>terminal_input_owner_id()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>continue_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>terminal_input_process(void)</code></span></td>
-<td>Represented input-owner PCB, or current PCB when 0 is saved or the represented process cannot be used</td>
-<td>Selects the PCB whose pending read the UART handler may try to complete, the fallback does not itself grant read ownership</td>
-<td><span class="source-link"><code>terminal_input_owner_id()</code></span>, <span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_uart_interrupt()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>handle_terminal_signal_character(value)</code></span></td>
-<td><code>true</code> when it consumed <code>Ctrl+C</code>/<code>Ctrl+Z</code>, otherwise <code>false</code></td>
-<td>Sends the mapped signal when <span class="source-link"><code>foreground_process_target</code></span> contains a positive process ID, a saved 0 or negative process ID suppresses delivery while still consuming the byte</td>
-<td><span class="source-link"><code>find_process_by_pid()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_uart_interrupt()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.90%" /><col style="width:14.52%" /><col style="width:20.31%" /><col style="width:32.27%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>set_foreground_process()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Select shell or child input owner</li></ul></td><td><ul><li><code>set_foreground_process()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10742,27 +7387,13 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5491 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5491 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5491:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Device path</th>
-<th>Role</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><code>/device/terminal.dev</code></td>
-<td>The terminal device. It is the initial path for standard input, output, and error, reads use the global terminal input ring and may block, writes go to UART output, and seeking fails.</td>
-<td><span class="source-link"><code>create_file_descriptor_table()</code></span>, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><code>/device/null.dev</code></td>
-<td>The null device. Reads return EOF immediately, writes report success after discarding their bytes, and seeking fails.</td>
-<td><span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.46%" /><col style="width:55.54%" /></colgroup><thead><tr><th>Device path</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Global ring input; UART output; no seek</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>/device/null.dev</code></li></ul></td><td><ul><li>Immediate EOF; discard writes; no seek</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10780,182 +7411,13 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5506 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-5506 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5506:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>close_file_descriptor(file_descriptor)</code></span></td>
-<td><code>0</code> on close, <code>-1</code> for an invalid or already free descriptor</td>
-<td>Frees the path and resets the selected entry</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>file_descriptor_is_valid()</code></span>, <span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>initialize_file_descriptor()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>fclose()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>duplicate_file_descriptor(request)</code></span></td>
-<td>Target descriptor, <code>-1</code> for out-of-range descriptors or a free source, panics on allocation failure</td>
-<td>Replaces any valid target slot 0–7 with an independent copy</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>file_descriptor_is_valid()</code></span>, <span class="source-link"><code>copy_file_descriptor()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>dup2()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>create_file_descriptor_table(void)</code></span></td>
-<td>New table, panics if kernel allocation fails</td>
-<td>Allocates table/entries and gives standard descriptors terminal paths</td>
-<td><span class="source-link"><code>kmalloc()</code></span>, <span class="source-link"><code>initialize_file_descriptor()</code></span>, <span class="source-link"><code>copy_file_path()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>create_process()</code></span>, <span class="source-link"><code>inherit_file_descriptors()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>inherit_file_descriptors(source)</code></span></td>
-<td>Independent table copy, panics if kernel allocation fails</td>
-<td>Deep-copies 0–2 and <span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span> entries in 3–4, leaves every other nonstandard entry free, including reserved slots 5–7</td>
-<td><span class="source-link"><code>create_file_descriptor_table()</code></span>, <span class="source-link"><code>copy_file_descriptor()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>mark_process_ready_with_arguments()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>destroy_file_descriptor_table(table)</code></span></td>
-<td>Returns no value</td>
-<td>Frees paths, entry array, and table</td>
-<td><span class="source-link"><code>kfree()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>mark_process_ready_with_arguments()</code></span>, <span class="source-link"><code>remove_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>file_descriptor_is_valid(file_descriptor)</code></span></td>
-<td><code>true</code> for descriptor 0–7, including a currently free entry, otherwise <code>false</code></td>
-<td>Reads fixed descriptor-number range</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>close_file_descriptor()</code></span>, <span class="source-link"><code>duplicate_file_descriptor()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>file_descriptor_can_read(descriptor)</code></span>, <span class="source-link"><code>file_descriptor_can_write(descriptor)</code></span></td>
-<td>Boolean access permission</td>
-<td>Read descriptor access bits</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>is_terminal_device_path(path)</code></span>, <span class="source-link"><code>is_null_device_path(path)</code></span>, <span class="source-link"><code>is_device_path(path)</code></span></td>
-<td>Boolean path classification</td>
-<td>Recognize kernel device paths</td>
-<td><span class="source-link"><code>device_paths_match()</code></span>, <span class="source-link"><code>is_null_device_path()</code></span>, <span class="source-link"><code>is_terminal_device_path()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>is_device_path()</code></span>, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#87-terminal-buffer-and-pending-read-function-reference -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.7 Terminal-buffer and pending-read function reference
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5524 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>initialize_terminal(void)</code></span></td>
-<td>Returns no value</td>
-<td>Resets global ring and reader queue</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>main()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>kernel_terminal(void)</code></span></td>
-<td>Pointer to the global terminal</td>
-<td>No mutation</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_uart_interrupt()</code></span>, <span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span>, <span class="source-link"><code>suspend_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>pop_terminal_byte(terminal)</code></span></td>
-<td>Next byte, caller must ensure the ring is nonempty</td>
-<td>Advances head and decrements count</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>copy_terminal_bytes()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>copy_terminal_bytes(terminal, buffer, count)</code></span></td>
-<td>Number of bytes copied</td>
-<td>Pops terminal bytes into a process buffer</td>
-<td><span class="source-link"><code>pop_terminal_byte()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>complete_pending_terminal_read()</code></span>, <span class="source-link"><code>resume_pending_terminal_read()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>enqueue_terminal_byte(terminal, value)</code></span></td>
-<td>Returns no value</td>
-<td>Inserts at tail when space exists, drops the new byte without changing unread data when full</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_uart_interrupt()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>suspend_pending_terminal_read(process)</code></span></td>
-<td>Returns no value</td>
-<td>Detaches a stopped reader from active terminal waiters while retaining its PCB request</td>
-<td><span class="source-link"><code>kernel_terminal()</code></span>, <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>stop_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>begin_terminal_read(terminal, buffer, count, caller_context)</code></span></td>
-<td>Immediate available count, or a saved result on later resumption after blocking/stopping, it does not wait to fill <code>count</code></td>
-<td>Reads ring or fills pending fields, queues PCB, saves activation, and dispatches</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>process_has_terminal_input()</code></span>, <span class="source-link"><code>send_signal_to_process()</code></span>, <span class="source-link"><code>dispatcher_switch_from_context()</code></span>, <span class="source-link"><code>periphery_read_register()</code></span>, <span class="source-link"><code>interrupt_controller_disable_device()</code></span>, <span class="source-link"><code>interrupt_controller_assign_device()</code></span>, <span class="source-link"><code>copy_terminal_bytes()</code></span>, <span class="source-link"><code>enqueue_current_process_on_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>read_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>resume_pending_terminal_read(process)</code></span></td>
-<td>Returns no value</td>
-<td>With UART delivery temporarily disabled, fills a stopped foreground reader’s buffer immediately or requeues it, sets <span class="source-link"><code>ProcessControlBlock.stopped_from_state</code></span> for continuation</td>
-<td><span class="source-link"><code>kernel_terminal()</code></span>, <span class="source-link"><code>periphery_read_register()</code></span>, <span class="source-link"><code>interrupt_controller_disable_device()</code></span>, <span class="source-link"><code>copy_terminal_bytes()</code></span>, <span class="source-link"><code>remove_from_wait_queue()</code></span>, <span class="source-link"><code>interrupt_controller_assign_device()</code></span>, <span class="source-link"><code>enqueue_terminal_reader()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>continue_process()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>complete_pending_terminal_read(process, terminal)</code></span></td>
-<td>Returns no value</td>
-<td>Copies available input, writes saved <span class="source-link"><code>activation.in2</code></span>, clears pending fields, and marks the selected reader ready</td>
-<td><span class="source-link"><code>copy_terminal_bytes()</code></span>, <span class="source-link"><code>remove_from_wait_queue()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>handle_uart_interrupt()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>handle_uart_interrupt(void)</code></span></td>
-<td>Returns no value</td>
-<td>Acknowledges one byte, consumes a terminal signal character or offers ordinary input to the ring, then tries to complete the selected reader</td>
-<td><span class="source-link"><code>terminal_input_process()</code></span>, <span class="source-link"><code>kernel_terminal()</code></span>, <span class="source-link"><code>periphery_read_register()</code></span>, <span class="source-link"><code>periphery_write_register()</code></span>, <span class="source-link"><code>handle_terminal_signal_character()</code></span>, <span class="source-link"><code>enqueue_terminal_byte()</code></span>, <span class="source-link"><code>complete_pending_terminal_read()</code></span></td>
-<td><strong>Hardware interrupts:</strong> UART receive via <span class="source-link"><code>uart_interrupt()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.04%" /><col style="width:15.90%" /><col style="width:24.64%" /><col style="width:17.42%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>close_file_descriptor()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Release path; reset entry</li></ul></td><td><ul><li><code>close()</code></li><li><code>fclose()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>duplicate_file_descriptor()</code></li></ul></td><td><ul><li>Target FD / −1</li></ul></td><td><ul><li>Replace target with independent copy</li></ul></td><td><ul><li><code>dup2()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10973,47 +7435,30 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-5543 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5543 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5543:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Flag</th>
-<th style="text-align:right">Value</th>
-<th>Meaning in <span class="source-link"><code>OpenRequest.flags</code></span></th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>O_RDONLY</code></span></td>
-<td style="text-align:right">0</td>
-<td>Permit reads</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>O_WRONLY</code></span></td>
-<td style="text-align:right">1</td>
-<td>Permit writes</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>O_RDWR</code></span></td>
-<td style="text-align:right">2</td>
-<td>Permit reads and writes, <span class="source-link"><code>O_ACCMODE</code></span> = 3 extracts these two access bits</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>O_CREAT</code></span></td>
-<td style="text-align:right">64</td>
-<td>Allow a missing regular path to be created</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>O_TRUNC</code></span></td>
-<td style="text-align:right">512</td>
-<td>With writable access, create/empty the regular host file during open</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>O_APPEND</code></span></td>
-<td style="text-align:right">1024</td>
-<td>Resolve the current file size before every write and use it as that write's offset</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.74%" /><col style="width:21.20%" /><col style="width:56.06%" /></colgroup><thead><tr><th>Flag</th><th>Value</th><th>Meaning in OpenRequest.flags</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>O_RDONLY</code></span></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>Permit reads</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>O_WRONLY</code></span></li></ul></td><td><ul><li>1</li></ul></td><td><ul><li>Permit writes</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>O_RDWR</code></span></li></ul></td><td><ul><li>2</li></ul></td><td><ul><li>Read + write; O_ACCMODE extracts access bits</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>O_CREAT</code></span></li></ul></td><td><ul><li>64</li></ul></td><td><ul><li>Allow a missing regular path to be created</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>512</li></ul></td><td><ul><li>With writable access, create/empty the regular host file during open</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>1024</li></ul></td><td><ul><li>Every write uses current file end</li></ul></td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
+
+<!-- README_ASSET table-5565 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5565:1,2,3,4,5,6,7">
+
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.06%" /><col style="width:18.39%" /><col style="width:16.85%" /><col style="width:24.08%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Operation or mode</th><th>Descriptor flags/state</th><th>Offset handling</th><th>PicoOS functions</th><th>Host requests</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Open existing without truncation</li></ul></td><td><ul><li>Any valid access mode, no <span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>file_exists()</code></span></li></ul></td><td><ul><li>file-size verifies existing file</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Create missing file</li></ul></td><td><ul><li><span class="source-link"><code>O_CREAT</code></span> with any valid access mode</li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span></li></ul></td><td><ul><li>Failed file-size → write → restore stdout</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Truncate/overwrite open</li></ul></td><td><ul><li>Writable mode plus <span class="source-link"><code>O_TRUNC</code></span>, usually with <span class="source-link"><code>O_CREAT</code></span></li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span></li></ul></td><td><ul><li>write creates/truncates; restore stdout</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Read</li></ul></td><td><ul><li>Readable descriptor</li></ul></td><td><ul><li>Starts at saved offset, advances by returned bytes</li></ul></td><td><ul><li><span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>read_regular_file()</code></span></li></ul></td><td><ul><li>read-range; ≤1 KiB/syscall; 0 → EOF</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Ordinary overwrite/write</li></ul></td><td><ul><li>Writable regular descriptor without <span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>Uses saved offset, advances by requested count</li></ul></td><td><ul><li><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>write_uart_bytes()</code></span></li></ul></td><td><ul><li>write-at; optional literal-output; restore stdout</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Append write</li></ul></td><td><ul><li>Writable regular descriptor with <span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>Place at end; save resulting offset</li></ul></td><td><ul><li><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></li></ul></td><td><ul><li>file-size → write-at end → restore stdout</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Seek from end</li></ul></td><td><ul><li>Regular non-device descriptor</li></ul></td><td><ul><li>File size plus requested displacement becomes the new nonnegative offset</li></ul></td><td><ul><li><span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></li></ul></td><td><ul><li><code>file-size &lt;path&gt;</code>, no data transfer</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11031,147 +7476,15 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5565 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-5608 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5608:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Operation or mode</th>
-<th>Descriptor flags/state</th>
-<th>Offset handling</th>
-<th>PicoOS functions</th>
-<th>RETI emulator host requests and result</th>
-</tr>
-</thead><tbody><tr>
-<td>Open existing without truncation</td>
-<td>Any valid access mode, no <span class="source-link"><code>O_TRUNC</code></span></td>
-<td>Initializes 0</td>
-<td><span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>file_exists()</code></span></td>
-<td><code>file-size &lt;path&gt;</code> verifies that the regular file is readable by the host service, the contents are unchanged</td>
-</tr>
-<tr>
-<td>Create missing file</td>
-<td><span class="source-link"><code>O_CREAT</code></span> with any valid access mode</td>
-<td>Initializes 0</td>
-<td><span class="source-link"><code>open_file_descriptor()</code></span></td>
-<td><code>file-size &lt;path&gt;</code> returns failure, then <code>write &lt;path&gt;</code>, <code>write stdout</code>, the emulator creates/truncates the path while selecting and restoring its output destination</td>
-</tr>
-<tr>
-<td>Truncate/overwrite open</td>
-<td>Writable mode plus <span class="source-link"><code>O_TRUNC</code></span>, usually with <span class="source-link"><code>O_CREAT</code></span></td>
-<td>Initializes 0</td>
-<td><span class="source-link"><code>open_file_descriptor()</code></span></td>
-<td><code>write &lt;path&gt;</code>, <code>write stdout</code>, the file is created if needed and emptied immediately</td>
-</tr>
-<tr>
-<td>Read</td>
-<td>Readable descriptor</td>
-<td>Starts at saved offset, advances by returned bytes</td>
-<td><span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>read_regular_file()</code></span></td>
-<td><code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> returns a count and up to 1 KiB per syscall, zero bytes is EOF</td>
-</tr>
-<tr>
-<td>Ordinary overwrite/write</td>
-<td>Writable regular descriptor without <span class="source-link"><code>O_APPEND</code></span></td>
-<td>Uses saved offset, advances by requested count</td>
-<td><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>write_uart_bytes()</code></span></td>
-<td><code>write-at &lt;offset&gt; &lt;path&gt;</code>, optional <code>literal-output &lt;count&gt;</code>, data bytes, <code>write stdout</code>, existing bytes outside the written range remain</td>
-</tr>
-<tr>
-<td>Append write</td>
-<td>Writable regular descriptor with <span class="source-link"><code>O_APPEND</code></span></td>
-<td>Ignores the prior offset for placement, saves file size plus requested count afterward</td>
-<td><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></td>
-<td><code>file-size &lt;path&gt;</code>, <code>write-at &lt;size&gt; &lt;path&gt;</code>, optional <code>literal-output &lt;count&gt;</code>, data bytes, <code>write stdout</code>, a missing file must first have been created by the open sequence</td>
-</tr>
-<tr>
-<td>Seek from end</td>
-<td>Regular non-device descriptor</td>
-<td>File size plus requested displacement becomes the new nonnegative offset</td>
-<td><span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></td>
-<td><code>file-size &lt;path&gt;</code>, no data transfer</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.8 Opening, reading, writing, and seeking (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5608 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>open_file_descriptor(request)</code></span></td>
-<td>Descriptor, or <code>-1</code> for invalid path/mode, no free entry, or a missing file without create/truncate</td>
-<td>Allocates a path and changes a free entry to a file or device</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>free_file_descriptor()</code></span>, <span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>copy_file_path()</code></span>, <span class="source-link"><code>is_device_path()</code></span>, <span class="source-link"><code>kfree()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>file_exists()</code></span><br><strong>Host requests:</strong> <code>file-size &lt;path&gt;</code> for existence, <code>write &lt;path&gt;</code> then <code>write stdout</code> for create/truncate</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>open()</code></span>, <span class="source-link"><code>fopen()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_file_descriptor(request, caller_context)</code></span></td>
-<td>Count, <code>0</code> at EOF, or <code>-1</code> for an invalid request, unreadable descriptor, or failed host range request</td>
-<td>Advances regular-file offset, or changes terminal queue/activation state</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>file_descriptor_is_valid()</code></span>, <span class="source-link"><code>file_descriptor_can_read()</code></span>, <span class="source-link"><code>is_terminal_device_path()</code></span>, <span class="source-link"><code>begin_terminal_read()</code></span>, <span class="source-link"><code>kernel_terminal()</code></span>, <span class="source-link"><code>is_null_device_path()</code></span>, <span class="source-link"><code>read_regular_file()</code></span><br><strong>Host request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for a regular file</td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>fgetc()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>write_file_descriptor(request)</code></span></td>
-<td>Count, or <code>-1</code> for an invalid/unwritable descriptor or failed append-size request</td>
-<td>Routes UART output, applies the request's <span class="source-link"><code>IoRequest.protect_uart_control</code></span> choice, and advances the descriptor offset</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>file_descriptor_is_valid()</code></span>, <span class="source-link"><code>file_descriptor_can_write()</code></span>, <span class="source-link"><code>is_null_device_path()</code></span>, <span class="source-link"><code>is_terminal_device_path()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>receive_file_size()</code></span>, <span class="source-link"><code>uart_send_file_write_command()</code></span>, <span class="source-link"><code>write_uart_bytes()</code></span><br><strong>Host requests:</strong> optional <code>file-size &lt;path&gt;</code> for append, <code>write-at &lt;offset&gt; &lt;path&gt;</code> and <code>write stdout</code> for a regular file, <code>write stderr</code> and <code>write stdout</code> for terminal stderr, optional <code>literal-output &lt;count&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>write_without_uart_escape_check()</code></span>, <span class="source-link"><code>fputc()</code></span>, <span class="source-link"><code>fputs()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span><br><strong>Kernel functions:</strong> <span class="source-link"><code>write_process_exception_message()</code></span>, <span class="source-link"><code>list_processes()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>seek_file_descriptor(request)</code></span></td>
-<td>New offset, or <code>-1</code> for invalid descriptor/origin/device/negative result</td>
-<td>Replaces a regular-file descriptor offset</td>
-<td><span class="source-link"><code>current_process()</code></span>, <span class="source-link"><code>file_descriptor_is_valid()</code></span>, <span class="source-link"><code>is_device_path()</code></span>, <span class="source-link"><code>receive_file_size()</code></span><br><strong>Host request:</strong> <code>file-size &lt;path&gt;</code> for <span class="source-link"><code>SEEK_END</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>lseek()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>free_file_descriptor(table)</code></span></td>
-<td>Lowest free slot in 0–4, or <code>-1</code> when all ordinary slots are occupied</td>
-<td>Reads descriptor kinds without changing the table, slots 5–7 are reserved and never considered</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>open_file_descriptor()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>write_uart_bytes(buffer, count, protect_uart_control)</code></span></td>
-<td>Returns no value</td>
-<td>When protection is enabled, scans for <code>&lt;ESC&gt;</code> and starts a counted literal-output region if found, then sends exactly <code>count</code> bytes to the selected host destination</td>
-<td><span class="source-link"><code>uart_send_literal_output_command()</code></span>, <span class="source-link"><code>uart_print_character()</code></span><br><strong>Host request:</strong> optional <code>literal-output &lt;count&gt;</code></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>write_file_descriptor()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.14%" /><col style="width:18.85%" /><col style="width:21.19%" /><col style="width:36.82%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open_file_descriptor()</code></li></ul></td><td><ul><li>Lowest free FD / −1</li></ul></td><td><ul><li>Open path; choose lowest free slot</li></ul></td><td><ul><li><code>open()</code></li><li><code>fopen()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>read_file_descriptor()</code></li></ul></td><td><ul><li>Byte count / −1</li></ul></td><td><ul><li>Read file or terminal; may block</li></ul></td><td><ul><li><code>read()</code></li><li><code>fgetc()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>write_file_descriptor()</code></li></ul></td><td><ul><li>Byte count / −1</li></ul></td><td><ul><li>Route output; advance saved offset</li></ul></td><td><ul><li><code>write()</code></li><li><code>write_without_uart_escape_check()</code></li><li><code>fputc()</code></li><li><code>fputs()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>seek_file_descriptor()</code></li></ul></td><td><ul><li>Offset / −1</li></ul></td><td><ul><li>Replace logical file offset</li></ul></td><td><ul><li><code>lseek()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11185,192 +7498,41 @@ process->state = PROCESS_STATE_READY;
 
 # 8. Terminal, file descriptors, and host filesystem
 
-## 8.9 PicoOS paths, working directories, and host operations (1)
+## 8.9 PicoOS paths, working directories, and host operations
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET table-5646 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5646 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5646:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Requested path</th>
-<th>Base and normalization</th>
-<th>Example result from current directory <code>/a/b</code></th>
-</tr>
-</thead><tbody><tr>
-<td>Relative child <code>dir</code></td>
-<td>Append to the PCB directory</td>
-<td><code>/a/b/dir</code></td>
-</tr>
-<tr>
-<td><code>.</code> or repeated separators</td>
-<td>Ignore <code>.</code> and empty segments</td>
-<td><code>/a/b</code></td>
-</tr>
-<tr>
-<td><code>..</code></td>
-<td>Remove one existing result segment, but never remove root</td>
-<td><code>/a</code>, from <code>/</code>, still <code>/</code></td>
-</tr>
-<tr>
-<td><code>../dir</code> and longer combinations</td>
-<td>Apply segments from left to right</td>
-<td><code>/a/dir</code></td>
-</tr>
-<tr>
-<td>Absolute <code>/dir</code></td>
-<td>Ignore the PCB directory and start at root</td>
-<td><code>/dir</code></td>
-</tr>
-<tr>
-<td>Empty or result at least <span class="source-link"><code>PATH_MAX</code></span> cells</td>
-<td>Reject before contacting the emulator</td>
-<td>Operation returns failure</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.97%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Requested path</th><th>Base and normalization</th><th>Example result from current directory /a/b</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Relative dir</li></ul></td><td><ul><li>Append to the PCB directory</li></ul></td><td><ul><li><code>/a/b/dir</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>. / repeated separators</li></ul></td><td><ul><li>Skip . + empty segments</li></ul></td><td><ul><li><code>/a/b</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>..</code></li></ul></td><td><ul><li>Remove one existing result segment, but never remove root</li></ul></td><td><ul><li><code>/a</code>, from <code>/</code>, still <code>/</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Parent/child combinations</li></ul></td><td><ul><li>Apply segments from left to right</li></ul></td><td><ul><li><code>/a/dir</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>Absolute <code>/dir</code></li></ul></td><td><ul><li>Ignore the PCB directory and start at root</li></ul></td><td><ul><li><code>/dir</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Empty or result at least <span class="source-link"><code>PATH_MAX</code></span> cells</li></ul></td><td><ul><li>Reject before contacting the emulator</li></ul></td><td><ul><li>Operation returns failure</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Host OS boundary</b><span>The emulator independently confines paths to its root. POSIX traversal refuses symlinks; Linux also uses RESOLVE_BENEATH, RESOLVE_NO_SYMLINKS, and RESOLVE_NO_XDEV. Windows rejects reparse points.</span></aside>
+<!-- README_ASSET table-5659 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5659:1,2,3,4,5,6,7">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#89-picoos-paths-working-directories-and-host-operations -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.9 PicoOS paths, working directories, and host operations (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5659 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>get_working_directory(request)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> when the stored directory is missing or the destination capacity is too small</td>
-<td>Copies the PCB directory into the caller buffer</td>
-<td><span class="source-link"><code>copy_working_directory()</code></span>, <span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>getcwd()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>change_working_directory(path)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> for an invalid path or host failure</td>
-<td>Validates host directory and replaces current PCB string</td>
-<td><span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>set_process_working_directory()</code></span>, <span class="source-link"><code>current_process()</code></span><br><strong>Host request:</strong> <code>is-directory &lt;path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>chdir()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>make_host_directory(path)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> on invalid path or host failure</td>
-<td>Normalizes and sends <span class="source-link"><code>mkdir</code></span>, no kernel table mutation</td>
-<td><span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>receive_word()</code></span><br><strong>Host request:</strong> <code>mkdir &lt;path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>mkdir()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_host_directory(request)</code></span></td>
-<td>Listing count, or <code>-1</code> for invalid request/host failure</td>
-<td>Writes host listing into caller buffer</td>
-<td><span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>uart_receive_string()</code></span><br><strong>Host request:</strong> <code>ls &lt;path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>opendir()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>unlink_host_file(path)</code></span>, <span class="source-link"><code>remove_host_directory(path)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> on invalid path or host failure</td>
-<td>Send bounded host unlink/rmdir requests</td>
-<td><span class="source-link"><code>request_host_path_operation()</code></span><br><strong>Host requests:</strong> <code>unlink &lt;path&gt;</code> or <code>rmdir &lt;path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>unlink()</code></span>, <span class="source-link"><code>rmdir()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>move_host_path(request)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> on invalid path or host failure</td>
-<td>Normalizes both paths and sends a two-path move request to the emulator</td>
-<td><span class="source-link"><code>build_process_path()</code></span>, <span class="source-link"><code>uart_print_character()</code></span>, <span class="source-link"><code>uart_print_string()</code></span>, <span class="source-link"><code>receive_word()</code></span><br><strong>Host request:</strong> <code>move &lt;old path&gt;\n&lt;new path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>move()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>touch_host_file(path)</code></span></td>
-<td><code>0</code> on success, <code>-1</code> on invalid path or host failure</td>
-<td>Sends a touch request to create a host file or update its timestamps</td>
-<td><span class="source-link"><code>request_host_path_operation()</code></span><br><strong>Host request:</strong> <code>touch &lt;path&gt;</code></td>
-<td><strong>Library functions:</strong> <span class="source-link"><code>touch()</code></span><br><strong>System calls:</strong> via <span class="source-link"><code>handle_syscall()</code></span></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>build_process_path(path, result, capacity)</code></span></td>
-<td><code>true</code> on a nonempty normalized path that fits, otherwise <code>false</code></td>
-<td>Writes an absolute PicoOS path, relative input starts from the current PCB directory, or from <code>/</code> before the first process exists</td>
-<td><span class="source-link"><code>append_path_segments()</code></span>, <span class="source-link"><code>current_process()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>change_working_directory()</code></span>, <span class="source-link"><code>load_process()</code></span>, <span class="source-link"><code>make_host_directory()</code></span>, <span class="source-link"><code>move_host_path()</code></span>, <span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>read_host_directory()</code></span>, <span class="source-link"><code>request_host_path_operation()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>system_relative_path(path)</code></span></td>
-<td>Pointer to the input path or the text after its leading <code>/</code></td>
-<td>Removes the leading <code>/</code> for program names and loading labels</td>
-<td>None</td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>begin_process_load()</code></span>, <span class="source-link"><code>finish_process_load()</code></span>, <span class="source-link"><code>list_processes()</code></span>, <span class="source-link"><code>load_process()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.04%" /><col style="width:16.15%" /><col style="width:28.14%" /><col style="width:17.67%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>get_working_directory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Copy current absolute path</li></ul></td><td><ul><li><code>getcwd()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>change_working_directory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Validate directory; replace current path</li></ul></td><td><ul><li><code>chdir()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>make_host_directory()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request host directory creation</li></ul></td><td><ul><li><code>mkdir()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>read_host_directory()</code></li></ul></td><td><ul><li>Listing count / error</li></ul></td><td><ul><li>Fetch directory listing</li></ul></td><td><ul><li><code>opendir()</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>unlink_host_file()</code></li><li><code>remove_host_directory()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request file removal</li></ul></td><td><ul><li><code>unlink()</code></li><li><code>rmdir()</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>move_host_path()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request move/rename</li></ul></td><td><ul><li><code>move()</code></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>touch_host_file()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Create file or update timestamps</li></ul></td><td><ul><li><code>touch()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#89-picoos-paths-working-directories-and-host-operations -->
-
-# 8. Terminal, file descriptors, and host filesystem
-
-## 8.9 PicoOS paths, working directories, and host operations (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5659 rows=11-11 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>set_process_working_directory(process, path)</code></span></td>
-<td>Returns no value</td>
-<td>Allocates a new kernel copy, frees old string, and replaces PCB pointer</td>
-<td><span class="source-link"><code>copy_process_path()</code></span>, <span class="source-link"><code>kfree()</code></span></td>
-<td><strong>Kernel functions:</strong> <span class="source-link"><code>change_working_directory()</code></span></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
+<aside class="context-note"><b>Host OS boundary</b><ul><li>Root confinement; reject symlinks</li>
+<li>Linux: RESOLVE_BENEATH/NO_SYMLINKS/NO_XDEV</li>
+<li>Windows: reject reparse points</li></ul></aside>
 
 </div>
 
@@ -11382,8 +7544,10 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>This chapter gathers the storage and references explained earlier. It distinguishes fields embedded in objects from separately allocated objects and shows who releases each allocation.</p>
-<p><em>Containment</em> means a field is part of an object. <em>Reference</em> means a pointer reaches another object. <em>Ownership</em> identifies responsibility for cleanup. A wait queue references PCBs without owning their allocations.</p></div>
+<div class="readme-list"><ul><li>Containment: embedded field</li>
+<li>Reference: pointer to another object</li>
+<li>Ownership: responsibility for cleanup</li>
+<li>Wait queues reference; do not own PCBs</li></ul></div>
 
 </div>
 
@@ -11397,78 +7561,21 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5696 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5696 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5696:1,2,3,4,5,6,7,8,9,10">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Object</th>
-<th>Storage and allocation</th>
-<th>References / access</th>
-<th>Lifetime or release</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>ProcessControlBlock</code></span>, the PCB</td>
-<td>One kernel-heap allocation per process via <span class="source-link"><code>create_process()</code></span></td>
-<td>Global list through <span class="source-link"><code>next</code></span>. Current pointer and queue links also reach these same PCBs</td>
-<td>Until <span class="source-link"><code>remove_process()</code></span>, possibly after a zombie period</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ActivationRecord</code></span>, child <span class="source-link"><code>waiters</code></span>, and PCB scalar/pointer fields</td>
-<td>Embedded in the PCB, no separate allocation</td>
-<td><span class="source-link"><code>activation</code></span> contains saved registers. <span class="source-link"><code>waiting_queue_ptr</code></span> references the queue containing this PCB</td>
-<td>PCB lifetime. Queue membership and pending-operation fields change during it</td>
-</tr>
-<tr>
-<td>Complete Process Payload</td>
-<td>One <span class="source-link"><code>PSDMalloc()</code></span> payload, including program sections, heap and stack reservation</td>
-<td>PCB <span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span>, relative <span class="source-link"><code>heap_start</code></span> and absolute saved register addresses</td>
-<td>Released with <span class="source-link"><code>PSDFree()</code></span> on PCB removal</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ProcessLoad</code></span> and copied path</td>
-<td>Separate kernel-heap allocations, plus a reserved Process Payload</td>
-<td>Loading caller's <span class="source-link"><code>pending_load</code></span>. <span class="source-link"><code>ProcessLoad.base_address</code></span> reaches the unfinished image</td>
-<td>Completion transfers the Process Payload to the new PCB and frees load metadata. Cancellation also frees the Process Payload</td>
-</tr>
-<tr>
-<td>PCB <span class="source-link"><code>binary_path</code></span> and <span class="source-link"><code>working_directory</code></span></td>
-<td>Separate kernel-heap strings via <span class="source-link"><code>copy_process_path()</code></span></td>
-<td>PCB pointers</td>
-<td>PCB removal. Changing directory replaces its string</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>FileDescriptorTable</code></span></td>
-<td>One kernel-heap wrapper allocation</td>
-<td><span class="source-link"><code>ProcessControlBlock.file_descriptors</code></span></td>
-<td>Table replacement or PCB removal</td>
-</tr>
-<tr>
-<td>Eight <span class="source-link"><code>FileDescriptor</code></span> entries</td>
-<td><strong>One separate contiguous kernel-heap array</strong>. Each descriptor is an element, not its own allocation and not embedded in the wrapper</td>
-<td>Table <span class="source-link"><code>entries</code></span> points to the array. Descriptor number selects an element</td>
-<td>Array lasts with table. Closing resets one element</td>
-</tr>
-<tr>
-<td>Descriptor <span class="source-link"><code>path</code></span> strings</td>
-<td>Separate kernel-heap copies, including standard terminal paths</td>
-<td>Each occupied descriptor references its own path</td>
-<td>Close, duplication/replacement, or table destruction</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Terminal</code></span></td>
-<td>Global <span class="source-link"><code>terminal</code></span> in kernel <code>.data</code>. Ring array and input wait queue are embedded</td>
-<td><span class="source-link"><code>kernel_terminal()</code></span> returns its address</td>
-<td>Whole kernel run</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>SharedMemoryEntry</code></span>, name, and <span class="source-link"><code>SharedMemoryAttachment</code></span> nodes</td>
-<td>Separate kernel-heap allocations</td>
-<td>Registry links entries. Each PCB links its attachments. Each attachment references one entry</td>
-<td>Attachment released at process removal. Name on unlink. Entry after unlink and final attachment release</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.07%" /><col style="width:22.42%" /><col style="width:27.13%" /><col style="width:27.37%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock</code></span>, the PCB</li></ul></td><td><ul><li>One kernel-heap allocation per process via <span class="source-link"><code>create_process()</code></span></li></ul></td><td><ul><li>Global list + current/queue pointers</li></ul></td><td><ul><li>Until <span class="source-link"><code>remove_process()</code></span>, possibly after a zombie period</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>ActivationRecord</code></span>, child <span class="source-link"><code>waiters</code></span>, and PCB scalar/pointer fields</li></ul></td><td><ul><li>Embedded in the PCB, no separate allocation</li></ul></td><td><ul><li>Saved activation + queue back-reference</li></ul></td><td><ul><li>PCB lifetime. Queue membership and pending-operation fields change during it</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Complete Process Payload</li></ul></td><td><ul><li>One <span class="source-link"><code>PSDMalloc()</code></span> payload, including program sections, heap and stack reservation</li></ul></td><td><ul><li>PCB base/size + heap + saved registers</li></ul></td><td><ul><li>Released with <span class="source-link"><code>PSDFree()</code></span> on PCB removal</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad</code></span> and copied path</li></ul></td><td><ul><li>Separate kernel-heap allocations, plus a reserved Process Payload</li></ul></td><td><ul><li>Loading caller's <span class="source-link"><code>pending_load</code></span>. <span class="source-link"><code>ProcessLoad.base_address</code></span> reaches the unfinished image</li></ul></td><td><ul><li>Completion transfers payload; cancellation frees it</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>PCB <span class="source-link"><code>binary_path</code></span> and <span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Separate kernel-heap strings via <span class="source-link"><code>copy_process_path()</code></span></li></ul></td><td><ul><li>PCB pointers</li></ul></td><td><ul><li>PCB removal. Changing directory replaces its string</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptorTable</code></span></li></ul></td><td><ul><li>One kernel-heap wrapper allocation</li></ul></td><td><ul><li><span class="source-link"><code>ProcessControlBlock.file_descriptors</code></span></li></ul></td><td><ul><li>Table replacement or PCB removal</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Eight <span class="source-link"><code>FileDescriptor</code></span> entries</li></ul></td><td><ul><li>Separate contiguous Kernel Heap array</li></ul></td><td><ul><li>entries pointer; indexed by descriptor number</li></ul></td><td><ul><li>Array lasts with table. Closing resets one element</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>Descriptor paths</li></ul></td><td><ul><li>Separate kernel-heap copies, including standard terminal paths</li></ul></td><td><ul><li>Each occupied descriptor references its own path</li></ul></td><td><ul><li>Close, duplication/replacement, or table destruction</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>Terminal</code></span></li></ul></td><td><ul><li>Kernel .data; embedded ring + wait queue</li></ul></td><td><ul><li><span class="source-link"><code>kernel_terminal()</code></span> returns its address</li></ul></td><td><ul><li>Whole kernel run</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry</code></span>, name, and <span class="source-link"><code>SharedMemoryAttachment</code></span> nodes</li></ul></td><td><ul><li>Separate kernel-heap allocations</li></ul></td><td><ul><li>Registry → entries; PCB → attachments → entry</li></ul></td><td><ul><li>Process removal; unlink + last reference</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11486,101 +7593,20 @@ process->state = PROCESS_STATE_READY;
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5696 rows=11-18 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5696 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5696:11,12,13,14,15,16,17,18,19">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Object</th>
-<th>Storage and allocation</th>
-<th>References / access</th>
-<th>Lifetime or release</th>
-</tr>
-</thead><tbody><tr>
-<td>Shared data</td>
-<td>Separate <span class="source-link"><code>PSDMalloc()</code></span> payload</td>
-<td>Entry <span class="source-link"><code>address</code></span>. Mapping returns the same absolute address to each process</td>
-<td>Entry destruction. The data is not tied to one mapper's image</td>
-</tr>
-<tr>
-<td>Kernel Heap and Process and Shared Data Heap <span class="source-link"><code>Heap</code></span> descriptors</td>
-<td>Two kernel <code>.data</code> globals</td>
-<td>Each <span class="source-link"><code>first_block</code></span> points into its own managed region</td>
-<td>Whole kernel run</td>
-</tr>
-<tr>
-<td>Per-process <span class="source-link"><code>process_heap</code></span> and <span class="source-link"><code>environ</code></span></td>
-<td>Process <code>.data</code> globals when the libraries are linked</td>
-<td>Descriptor reaches process-heap blocks. Environment pointer reaches the process's environment array</td>
-<td>Image lifetime. Environment contents can be replaced</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>BlockHeader</code></span></td>
-<td>Inside <strong>each managed heap</strong>, immediately before its payload. It is not separately allocated metadata</td>
-<td>Heap descriptor → first header → <span class="source-link"><code>next</code></span> header</td>
-<td>Split/merged by allocator. Outer heap headers and inner User Process Heap headers belong to different lists</td>
-</tr>
-<tr>
-<td>Userspace library objects, buffers, and caller-created mutexes/queues</td>
-<td>Process heap via <span class="source-link"><code>malloc()</code></span>, process <code>.data</code>, process stack, or mapped shared data according to the caller</td>
-<td>Examples include <span class="source-link"><code>DirectoryStream</code></span>, environment copies, and <span class="source-link"><code>mutex</code></span></td>
-<td>Caller/library controls lifetime. Any kernel-retained pointer must remain valid until completion</td>
-</tr>
-<tr>
-<td>Syscall requests and result cells</td>
-<td>Library wrappers use user-process stack locals. Kernel internal calls also use kernel-stack requests, e.g. <span class="source-link"><code>init_request</code></span> and <span class="source-link"><code>IoRequest</code></span></td>
-<td>Syscall pointer argument or direct function argument</td>
-<td>Call lifetime. Retained status/buffer addresses can outlast one syscall entry while the user call stays suspended</td>
-</tr>
-<tr>
-<td>Pending terminal-read state and destination</td>
-<td>Buffer pointer/count are PCB fields. Destination is caller storage, potentially stack, <code>.data</code>, heap, or shared data</td>
-<td><span class="source-link"><code>pending_terminal_read_buffer</code></span> and <span class="source-link"><code>pending_terminal_read_count</code></span></td>
-<td>Fields cleared at completion/cancellation. Caller buffer stays alive through the blocked call</td>
-</tr>
-<tr>
-<td>Kernel local variables and scratch buffers</td>
-<td>Live kernel stack frames in normal kernel calls, e.g. <span class="source-link"><code>absolute_path</code></span></td>
-<td>Parameters and local pointers</td>
-<td>Until return or context-switch abandonment of that kernel call chain</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
-
-# 9. Kernel data structures: relationships, storage, and lifetimes
-
-## 9.1 Memory layout, allocation sources, and lifetimes (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5696 rows=19-19 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Object</th>
-<th>Storage and allocation</th>
-<th>References / access</th>
-<th>Lifetime or release</th>
-</tr>
-</thead><tbody><tr>
-<td>Interrupt saved frames and handler locals</td>
-<td>The <strong>interrupted stack</strong>: process stack for a user interruption, kernel stack for a kernel interruption</td>
-<td><span class="source-link"><code>caller_context</code></span>. Saved PC remains at <span class="source-link"><code>activation.sp</code></span> + 1 after dispatch</td>
-<td>Until restoration. UART/DMA handlers retain the interrupted <code>SP</code>, so their kernel C locals can also occupy a user-process stack</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.09%" /><col style="width:29.63%" /><col style="width:34.50%" /><col style="width:18.77%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="11"><td class="table-key"><ul><li>Shared data</li></ul></td><td><ul><li>Separate <span class="source-link"><code>PSDMalloc()</code></span> payload</li></ul></td><td><ul><li>Same absolute address for every mapping</li></ul></td><td><ul><li>Entry destruction; independent of mapper image</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li>Kernel Heap and Process and Shared Data Heap <span class="source-link"><code>Heap</code></span> descriptors</li></ul></td><td><ul><li>Kernel .data globals</li></ul></td><td><ul><li>Each <span class="source-link"><code>first_block</code></span> points into its own managed region</li></ul></td><td><ul><li>Whole kernel run</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li>Per-process <span class="source-link"><code>process_heap</code></span> and <span class="source-link"><code>environ</code></span></li></ul></td><td><ul><li>Process <code>.data</code> globals when the libraries are linked</li></ul></td><td><ul><li>Process heap blocks + environment array</li></ul></td><td><ul><li>Image lifetime. Environment contents can be replaced</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader</code></span></li></ul></td><td><ul><li>In-region header immediately before payload</li></ul></td><td><ul><li>Descriptor → first → next header</li></ul></td><td><ul><li>Allocator splits/merges; inner/outer lists separate</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li>Userspace library objects, buffers, and caller-created mutexes/queues</li></ul></td><td><ul><li>Caller chooses heap/data/stack/shared storage</li></ul></td><td><ul><li>DirectoryStream, environment, mutex</li></ul></td><td><ul><li>Caller lifetime; retain until kernel completion</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li>Syscall requests and result cells</li></ul></td><td><ul><li>Stack-local request; user/kernel</li></ul></td><td><ul><li>Syscall pointer argument or direct function argument</li></ul></td><td><ul><li>Suspended call preserves retained result/buffer</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li>Pending terminal-read state and destination</li></ul></td><td><ul><li>PCB retains caller buffer + count</li></ul></td><td><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span> and <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Clear fields; preserve buffer through blocked call</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><ul><li>Kernel local variables and scratch buffers</li></ul></td><td><ul><li>Live kernel stack frames in normal kernel calls, e.g. <span class="source-link"><code>absolute_path</code></span></li></ul></td><td><ul><li>Parameters and local pointers</li></ul></td><td><ul><li>Until return or context-switch abandonment of that kernel call chain</li></ul></td></tr>
+<tr data-source-row="19"><td class="table-key"><ul><li>Interrupt saved frames and handler locals</li></ul></td><td><ul><li>Interrupted process or kernel stack</li></ul></td><td><ul><li>Saved frame; PC at activation.sp + 1</li></ul></td><td><ul><li>Until restore; UART/DMA borrow same stack</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11594,15 +7620,14 @@ process->state = PROCESS_STATE_READY;
 
 # 9. Kernel data structures: relationships, storage, and lifetimes
 
-## 9.2 Containment and reference relationships (1)
+## 9.2 Containment and reference relationships
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Nested boxes show containment, and arrows identify pointer fields. The dotted terminal edge means path-based selection, rather than a pointer:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-stacked">
 
 <!-- README_ASSET mermaid-5729 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -11650,25 +7675,8 @@ flowchart LR
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#92-containment-and-reference-relationships -->
-
-# 9. Kernel data structures: relationships, storage, and lifetimes
-
-## 9.2 Containment and reference relationships (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Call-local requests are separate from those persistent objects. This diagram uses <span class="source-link"><code>WaitPidRequest</code></span> to show the wrapper's stack objects:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET mermaid-5776 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -11706,77 +7714,28 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5816 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5816 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-5816:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Global</th>
-<th>Type</th>
-<th>Stored value / referenced structure and role</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>process_list_head</code></span></td>
-<td><code>struct ProcessControlBlock *</code></td>
-<td>First PCB, or <code>NULL</code>. It is the starting point for process lookup and scheduling</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_list_tail</code></span></td>
-<td><code>struct ProcessControlBlock *</code></td>
-<td>Final PCB, or <code>NULL</code>. Appending sets the old tail's <span class="source-link"><code>next</code></span> then updates this pointer</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>active_process</code></span></td>
-<td><code>struct ProcessControlBlock *</code></td>
-<td>Selected/current PCB returned by <span class="source-link"><code>current_process()</code></span>. It is also the scheduler's position in the list. Initially <code>NULL</code>. Removal may replace it with the preceding PCB, so it does not always designate a <span class="source-link"><code>RUNNING</code></span> process</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>next_process_id</code></span></td>
-<td><code>int</code></td>
-<td>Next ID assigned by <span class="source-link"><code>create_process()</code></span>, initially 1. It is not a process count or PCB pointer</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>kernel_heap</code></span></td>
-<td><span class="source-link"><code>struct Heap</code></span></td>
-<td>Embedded descriptor whose first-block pointer reaches the kernel heap</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>process_shared_data_heap</code></span></td>
-<td><span class="source-link"><code>struct Heap</code></span></td>
-<td>Descriptor for the larger Process and Shared Data Heap allocator. It is not a user's local heap</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>terminal</code></span></td>
-<td><code>struct Terminal</code></td>
-<td>Contains the 128-cell ring, three ring indices/count fields, and embedded input wait queue. It is shared by all terminal descriptors</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shared_memory_list_head</code></span></td>
-<td><code>struct SharedMemoryEntry *</code></td>
-<td>First named entry or first unlinked entry that is still used. The registry follows <span class="source-link"><code>SharedMemoryEntry.next</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>next_shared_memory_id</code></span></td>
-<td><code>int</code></td>
-<td>Next registry ID, initially 1. It is independent of process IDs</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dma_waiters</code></span></td>
-<td><span class="source-link"><code>struct wait_queue</code></span></td>
-<td>Standalone queue whose endpoints reference PCBs waiting for UART DMA completion</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dma_initialized</code></span></td>
-<td><code>bool</code></td>
-<td>Initially false. It prevents reinitializing the DMA queue after setup</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>reschedule_requested</code></span></td>
-<td><code>bool</code></td>
-<td>Deferred timer-rescheduling flag. It is set by <span class="source-link"><code>dispatcher_request_reschedule()</code></span> and cleared on process selection</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>process_list_head</code></span></li></ul></td><td><ul><li>First PCB or NULL; traversal starts here</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>process_list_tail</code></span></li></ul></td><td><ul><li>Final PCB or NULL; O(1) append</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>active_process</code></span></li></ul></td><td><ul><li>Current PCB + scheduler scan position</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>next_process_id</code></span></li></ul></td><td><ul><li>Next PID; initial 1</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>kernel_heap</code></span></li></ul></td><td><ul><li>Embedded descriptor whose first-block pointer reaches the kernel heap</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>process_shared_data_heap</code></span></li></ul></td><td><ul><li>Outer Process/Shared Data Heap descriptor</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>terminal</code></span></li></ul></td><td><ul><li>128-cell ring + indices/count + wait queue</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>shared_memory_list_head</code></span></li></ul></td><td><ul><li>Registry head; includes unlinked live entries</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>next_shared_memory_id</code></span></li></ul></td><td><ul><li>Next shared-memory ID; independent of PID</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>dma_waiters</code></span></li></ul></td><td><ul><li>Standalone DMA wait queue; PCB endpoints</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>dma_initialized</code></span></li></ul></td><td><ul><li>Initially false. It prevents reinitializing the DMA queue after setup</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>reschedule_requested</code></span></li></ul></td><td><ul><li>Deferred switch flag; cleared on selection</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>foreground_process_target</code></span></li></ul></td><td><ul><li>0: unregistered</li><li>Positive: input + signals</li><li>Negative: input; suppress signals</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_device_isrs</code></span></li></ul></td><td><ul><li>Timer/DMA/UART indices {1,4,2}</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_device_priorities</code></span></li></ul></td><td><ul><li>Timer/DMA/UART priorities <code>{1, 1, 2}</code> used during controller initialization</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>loading_bar_enabled</code></span></li></ul></td><td><ul><li>Image-local loading-bar setting; initially true</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_vector_table</code></span></li></ul></td><td><ul><li>Five ISR addresses in .ivt</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11794,64 +7753,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5816 rows=13-17 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Global</th>
-<th>Type</th>
-<th>Stored value / referenced structure and role</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>foreground_process_target</code></span></td>
-<td><code>int</code></td>
-<td>Signed process ID for terminal control: 0 means no registered owner, positive ID permits terminal signal delivery, negative ID retains input ownership while suppressing that delivery. It is not a PCB pointer</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_device_isrs</code></span></td>
-<td><code>int[INTERRUPT_DEVICE_COUNT]</code> (3 entries)</td>
-<td>Timer/DMA/UART service-routine indices <code>{1, 4, 2}</code> copied into periphery configuration. They are not function pointers</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_device_priorities</code></span></td>
-<td><code>int[INTERRUPT_DEVICE_COUNT]</code> (3 entries)</td>
-<td>Timer/DMA/UART priorities <code>{1, 1, 2}</code> used during controller initialization</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>loading_bar_enabled</code></span></td>
-<td><code>bool</code></td>
-<td>Initially true. This kernel-image copy controls the init transfer. The separately linked bootloader and init images each have their own copy, as explained in <span class="source-link"><code>4.3.2.1.2 Loading-bar environment variable</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>interrupt_vector_table</code></span></td>
-<td><code>void (*[OS_INTERRUPT_VECTOR_COUNT])(void)</code> (5 entries)</td>
-<td><code>.ivt</code> array of syscall, timer, UART, exception and DMA handler addresses. The CPU reads these to enter kernel <code>.text</code></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#93-kernel-global-variables-and-process-list-roots -->
-
-# 9. Kernel data structures: relationships, storage, and lifetimes
-
-## 9.3 Kernel global variables and process-list roots (3)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">This example shows three roots into one PCB list. The current pointer can select any member. Empty lists have null endpoints, and a one-element list has the same head and tail:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-5840 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -11879,42 +7784,16 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5864 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5864 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5864:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Call path</th>
-<th>Request and queue storage</th>
-<th>Retained references and reason</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>sleep(wq)</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span></td>
-<td>Passes the existing queue address directly in <code>IN1</code>. The wrapper creates no request struct and no queue. The caller can supply a queue/mutex in a process stack frame, process <code>.data</code>, process heap, or shared data</td>
-<td>The PCB retains <span class="source-link"><code>waiting_queue_ptr</code></span>. Queue endpoints and <span class="source-link"><code>wait_next</code></span> link the PCB until wake/removal</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_lock()</code></span> → <span class="source-link"><code>sleep()</code></span></td>
-<td>Uses embedded <span class="source-link"><code>mutex.waiters</code></span>. The <span class="source-link">local-mutex test</span> puts the mutex in a user stack frame. The <span class="source-link">shared-mutex test</span> embeds it in shared data</td>
-<td>The kernel writes PCB pointers into that caller-owned queue. PicoOS has no address isolation</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waitpid()</code></span> → <span class="source-link"><code>wait_for_process_by_pid()</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span>, when blocking</td>
-<td>Both <span class="source-link"><code>request</code></span> and <span class="source-link"><code>status</code></span> are in the <strong>parent's user-process stack frame</strong>. The queue is the <strong>child's embedded <span class="source-link"><code>ProcessControlBlock.waiters</code></span></strong>, already within its kernel-heap PCB</td>
-<td><span class="source-link"><code>WaitPidRequest.status</code></span> is copied into the parent's <span class="source-link"><code>waiting_status_ptr</code></span>. The suspended frame stays alive for the later status write. The kernel does not retain the request pointer or call <span class="source-link"><code>kmalloc</code></span> here</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>begin_terminal_read()</code></span></td>
-<td>Uses embedded <span class="source-link"><code>terminal.input_waiters</code></span> in kernel <code>.data</code></td>
-<td>PCB retains caller buffer/count for delivery after an input interrupt</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start_dma_uart_receive()</code></span></td>
-<td>Uses standalone <span class="source-link"><code>dma_waiters</code></span> in kernel <code>.data</code></td>
-<td>Intrusive PCB links wait for completion. The persistent <span class="source-link"><code>ProcessLoad</code></span> record separately preserves the partial executable state</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.29%" /><col style="width:31.50%" /><col style="width:31.21%" /></colgroup><thead><tr><th>Call path</th><th>Request and queue storage</th><th>Retained references and reason</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>sleep(wq)</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span></li></ul></td><td><ul><li>Caller queue address directly in IN1</li></ul></td><td><ul><li>Retained queue pointer + intrusive PCB links</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>mutex_lock()</code></span> → <span class="source-link"><code>sleep()</code></span></li></ul></td><td><ul><li>Embedded mutex.waiters; stack or shared storage</li></ul></td><td><ul><li>Kernel writes PCB pointers into caller queue</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid()</code></span> → <span class="source-link"><code>wait_for_process_by_pid()</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span>, when blocking</li></ul></td><td><ul><li>Parent stack request/status; child's embedded waiters</li></ul></td><td><ul><li>Retain status pointer; suspended frame stays alive</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>begin_terminal_read()</code></span></li></ul></td><td><ul><li>Kernel-global terminal.input_waiters</li></ul></td><td><ul><li>PCB retains caller buffer/count for delivery after an input interrupt</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>start_dma_uart_receive()</code></span></li></ul></td><td><ul><li>Kernel-global dma_waiters</li></ul></td><td><ul><li>Intrusive wait links + persistent load progress</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11930,8 +7809,10 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Libraries give applications reusable process, memory, and I/O operations. Some run entirely in the user image. Others prepare syscalls for the kernel. This chapter follows one call, then lists the available interfaces.</p>
-<p>Syscalls avoid hardcoded kernel addresses, subject to the ABI requirements in <span class="source-link"><code>2.4 System-call interface and execution</code></span>. Standard library interfaces can make source portable across systems, without making compiled executables portable. PicoOS implements only the parameters and behavior documented here.</p></div>
+<div class="readme-list"><ul><li>Local library code or syscall wrapper</li>
+<li>Link dependencies into user image</li>
+<li>Source portability depends on interface</li>
+<li>PicoOS implements documented subset</li></ul></div>
 
 </div>
 
@@ -11945,32 +7826,15 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5902 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5902 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-5902:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>File</th>
-<th>Role</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>wait.header</code></span></td>
-<td>Declares <code>int waitpid(int pid);</code> and <code>bool WIFSTOPPED(int status);</code> for callers</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wait.picoc</code></span></td>
-<td>Defines both functions and the assembly helper <span class="source-link"><code>invoke_waitpid_syscall()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>libwait.picoc</code></span></td>
-<td>The compilation unit, containing <code>#include &quot;wait.picoc&quot;</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>common/syscall.header</code></span></td>
-<td>Defines <span class="source-link"><code>SYSCALL_WAITPID</code></span> and the shared <span class="source-link"><code>WaitPidRequest</code></span> structure used by the library and kernel</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.83%" /><col style="width:61.17%" /></colgroup><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>wait.header</code></span></li></ul></td><td><ul><li>Public waitpid declaration</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>wait.picoc</code></span></li></ul></td><td><ul><li>Implementation + syscall helper</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>libwait.picoc</code></span></li></ul></td><td><ul><li>Compilation unit links wait implementation</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>common/syscall.header</code></span></li></ul></td><td><ul><li>Shared request + selector declarations</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11988,12 +7852,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The shell includes the header and waits for its foreground child:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5911 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-5911" data-code-part="1">
 
+<!-- README_CODE_PART code-5911 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -12020,11 +7884,12 @@ last_command_exit_status = waitpid(pid);
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-5932 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-5932" data-code-part="1">
 
+<!-- README_CODE_PART code-5932 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -12039,8 +7904,9 @@ struct WaitPidRequest {
 </ReadmeVisual>
 
 <!-- README_ASSET code-5943 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-5943" data-code-part="1">
 
+<!-- README_CODE_PART code-5943 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -12059,7 +7925,9 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>PicoOS waitpid versus POSIX</b><span>PicoOS waitpid takes one PID and returns the child status. POSIX waitpid has a status output parameter and options. The internal syscall request still passes a status pointer.</span></aside>
+</div>
+<aside class="context-note"><b>waitpid / POSIX</b><ul><li>PicoOS: one PID; returns child status</li>
+<li>POSIX: output parameter + options</li></ul></aside>
 
 </div>
 
@@ -12073,12 +7941,12 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>syscall_interrupt()</code></span> saves registers and installs the kernel context. <span class="source-link"><code>handle_syscall()</code></span> then selects the wait branch:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-5970 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:8">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-5970" data-code-part="1">
 
+<!-- README_CODE_PART code-5970 lines=1-6 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -12104,124 +7972,30 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 # 10. Userspace libraries
 
-## 10.2 Library overview and dependencies (1)
+## 10.2 Library overview and dependencies
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-5997 rows=1-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-5997 -->
+<ReadmeVisual kind="table" :width="1440" class="inventory-grid library-grid">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library</th>
-<th>Main facilities</th>
-<th>Library or common code used</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>unistd</code></span></td>
-<td>Processes, descriptors, paths, and wait queues</td>
-<td><span class="source-link"><code>stdlib</code></span> for environment access</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fcntl</code></span></td>
-<td>Opening and creating files</td>
-<td><span class="source-link"><code>unistd</code></span> syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/wait</code></span></td>
-<td>Child waiting and stopped-status inspection</td>
-<td>Own syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex</code></span></td>
-<td>Atomic lock with a wait queue</td>
-<td><span class="source-link"><code>unistd</code></span> queue functions</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/mman</code></span></td>
-<td>Named shared memory</td>
-<td>Own syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dirent</code></span></td>
-<td>Directory streams</td>
-<td><span class="source-link"><code>unistd</code></span> and <span class="source-link"><code>stdlib</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stdlib</code></span></td>
-<td>Process heap, environment, conversion, and exit</td>
-<td><span class="source-link"><code>common/heap.picoc</code></span> included in its compilation unit</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>string</code></span></td>
-<td>String copying, comparison, and length</td>
-<td><span class="source-link"><code>common/string.picoc</code></span> included in its compilation unit</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>stdio</code></span></td>
-<td>Streams, formatting, and scanning</td>
-<td><span class="source-link"><code>common/decimal.picoc</code></span> included in its compilation unit and its own syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start</code></span></td>
-<td>Program entry and runtime initialization</td>
-<td><span class="source-link"><code>stdlib</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>schedule</code></span></td>
-<td>Voluntary scheduling</td>
-<td>Direct inline syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>signal</code></span></td>
-<td>Sending signals</td>
-<td>Own syscall helper</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#102-library-overview-and-dependencies -->
-
-# 10. Userspace libraries
-
-## 10.2 Library overview and dependencies (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-5997 rows=13-15 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library</th>
-<th>Main facilities</th>
-<th>Library or common code used</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>sys/prctl</code></span></td>
-<td>Parent-death signal setup</td>
-<td>Own syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/reboot</code></span></td>
-<td>Restart and power-off</td>
-<td><span class="source-link"><code>unistd</code></span> syscall helper</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/stat</code></span></td>
-<td>Directory creation</td>
-<td><span class="source-link"><code>unistd</code></span> syscall helper</td>
-</tr></tbody></table></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>unistd</code></span></li></ul><ul><li>Processes + descriptors</li><li>Paths + wait queues</li></ul><ul><li>stdlib: environment</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>fcntl</code></span></li></ul><ul><li>Open/create files</li></ul><ul><li>unistd syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/wait</code></span></li></ul><ul><li>Child wait/stop status</li></ul><ul><li>Own syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mutex</code></span></li></ul><ul><li>Atomic lock + wait queue</li></ul><ul><li>unistd wait queues</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/mman</code></span></li></ul><ul><li>Named shared memory</li></ul><ul><li>Own syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>dirent</code></span></li></ul><ul><li>Directory streams</li></ul><ul><li>unistd + stdlib</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>stdlib</code></span></li></ul><ul><li>Heap + environment</li><li>Conversion + exit</li></ul><ul><li>common/heap.picoc</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>string</code></span></li></ul><ul><li>Copy, compare, length</li></ul><ul><li>common/string.picoc</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>stdio</code></span></li></ul><ul><li>Streams, formatting, scanning</li></ul><ul><li>common/decimal.picoc</li><li>Syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>start</code></span></li></ul><ul><li>Entry + runtime initialization</li></ul><ul><li>stdlib</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>schedule</code></span></li></ul><ul><li>Voluntary scheduling</li></ul><ul><li>Inline syscall</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>signal</code></span></li></ul><ul><li>Signal delivery</li></ul><ul><li>Own syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/prctl</code></span></li></ul><ul><li>Parent-death signal</li></ul><ul><li>Own syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/reboot</code></span></li></ul><ul><li>Restart + power-off</li></ul><ul><li>unistd syscall helper</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/stat</code></span></li></ul><ul><li>Directory creation</li></ul><ul><li>unistd syscall helper</li></ul></div></div>
 
 </ReadmeVisual>
 
@@ -12239,52 +8013,18 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6036 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6036 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6036:1,2,3,4,5,6,7">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>invoke_syscall(number, argument)</code></span></td>
-<td>Result returned by the selected syscall in <code>IN2</code>. Internal bridge used by <span class="source-link"><code>unistd</code></span> and libraries that depend on it</td>
-<td>Forwards the supplied selector and argument. The wrapper rows in this section identify each concrete syscall and host request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>load(path)</code></span></td>
-<td>PID, or 0 on failure. Repeats bounded transfers and creates a process whose <span class="source-link"><code>ProcessControlBlock.state</code></span> is <span class="source-link"><code>PROCESS_STATE_NEW</code></span></td>
-<td><span class="source-link"><code>SYSCALL_LOAD_PROCESS</code></span> with <span class="source-link"><code>LoadProcessRequest</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code>, then one or more <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> requests</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>run(pid, arguments, environment)</code></span></td>
-<td>Whether the process was initialized and its <span class="source-link"><code>ProcessControlBlock.state</code></span> was changed from <span class="source-link"><code>PROCESS_STATE_NEW</code></span> to <span class="source-link"><code>PROCESS_STATE_READY</code></span>. A <code>NULL</code> environment selects the current <span class="source-link"><code>environ</code></span></td>
-<td><span class="source-link"><code>SYSCALL_RUN_PROCESS_WITH_ARGUMENTS</code></span> with <span class="source-link"><code>RunProcessRequest</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>unload(pid)</code></span></td>
-<td>Whether a non-current target was terminated and removed</td>
-<td><span class="source-link"><code>SYSCALL_UNLOAD_PROCESS</code></span> with the PID directly</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>list_processes(void)</code></span></td>
-<td>Prints every known PID and binary path</td>
-<td><span class="source-link"><code>SYSCALL_LIST_PROCESSES</code></span> with no request structure<br><strong>Host Requests through descriptor 1:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br>No <code>literal-output</code> request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>getpid(void)</code></span></td>
-<td>PID stored in the current <span class="source-link"><code>ProcessControlBlock</code></span></td>
-<td><span class="source-link"><code>SYSCALL_GETPID</code></span> with no request structure</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>set_foreground_process(pid)</code></span></td>
-<td>0 or <code>-1</code>. A direct child PID stores that positive value in <span class="source-link"><code>foreground_process_target</code></span> for input and terminal-generated signals. PID 0 stores the caller's negative PID for input without those signals</td>
-<td><span class="source-link"><code>SYSCALL_SET_FOREGROUND_PROCESS</code></span> with the PID directly</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.98%" /><col style="width:31.30%" /><col style="width:42.72%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>invoke_syscall()</code></li></ul></td><td><ul><li>Internal syscall bridge; result in IN2</li></ul></td><td><ul><li>Forward supplied selector + argument</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>load()</code></li></ul></td><td><ul><li>Load binary; return NEW child PID</li></ul></td><td><ul><li><code>LOAD_PROCESS</code></li><li>Host: <code>file-size</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>run()</code></li></ul></td><td><ul><li>Prepare child; mark READY</li></ul></td><td><ul><li><code>RUN_PROCESS_WITH_ARGUMENTS</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>unload()</code></li></ul></td><td><ul><li>Remove noncurrent process</li></ul></td><td><ul><li><code>UNLOAD_PROCESS</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>list_processes()</code></li></ul></td><td><ul><li>Print all PIDs + binary paths</li></ul></td><td><ul><li><code>LIST_PROCESSES</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>getpid()</code></li></ul></td><td><ul><li>Current process PID</li></ul></td><td><ul><li><code>GETPID</code></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>set_foreground_process()</code></li></ul></td><td><ul><li>Shell/child input owner</li></ul></td><td><ul><li><code>SET_FOREGROUND_PROCESS</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12302,47 +8042,17 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6056 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6056 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6056:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>read(file_descriptor, buffer, count)</code></span></td>
-<td>Number read or <code>-1</code>. Repeats bounded regular-file chunks and may wait for terminal input</td>
-<td><span class="source-link"><code>SYSCALL_READ</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for a regular-file descriptor</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>write(file_descriptor, buffer, count)</code></span></td>
-<td>Number written or <code>-1</code>. Protects arbitrary data from UART control parsing</td>
-<td><span class="source-link"><code>SYSCALL_WRITE</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br><code>literal-output &lt;count&gt;</code> before output containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>write_without_uart_escape_check(file_descriptor, buffer, count)</code></span></td>
-<td>Number written or <code>-1</code>. Skips the UART <code>&lt;ESC&gt;</code> scan and therefore requires a buffer known not to contain <code>&lt;ESC&gt;</code></td>
-<td><span class="source-link"><code>SYSCALL_WRITE</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br>No <code>literal-output</code> request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>close(file_descriptor)</code></span></td>
-<td>0 or <code>-1</code>. Releases the descriptor entry's path and state</td>
-<td><span class="source-link"><code>SYSCALL_CLOSE</code></span> with the descriptor directly</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dup2(old_file_descriptor, new_file_descriptor)</code></span></td>
-<td>New descriptor or <code>-1</code>. Copies the entry independently. Later inheritance depends on the target slot and copied descriptor kind</td>
-<td><span class="source-link"><code>SYSCALL_DUP2</code></span> with <span class="source-link"><code>Dup2Request</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>lseek(file_descriptor, offset, origin)</code></span></td>
-<td>New logical offset or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_LSEEK</code></span> with <span class="source-link"><code>SeekRequest</code></span><br><strong>Host Request:</strong> <code>file-size &lt;path&gt;</code> only for <span class="source-link"><code>SEEK_END</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.34%" /><col style="width:33.44%" /><col style="width:34.22%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>read()</code></li></ul></td><td><ul><li>Read bytes; return count or −1</li></ul></td><td><ul><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>write()</code></li></ul></td><td><ul><li>Write bytes; protect UART control</li></ul></td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>write_without_uart_escape_check()</code></li></ul></td><td><ul><li>Write known escape-free bytes</li></ul></td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>close()</code></li></ul></td><td><ul><li>Close descriptor; return 0 or −1</li></ul></td><td><ul><li><code>CLOSE</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>dup2()</code></li></ul></td><td><ul><li>Independent entry copy; return target</li></ul></td><td><ul><li><code>DUP2</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>lseek()</code></li></ul></td><td><ul><li>Set offset; return position or −1</li></ul></td><td><ul><li><code>LSEEK</code></li><li>Host: <code>file-size</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12360,27 +8070,13 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6071 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6071 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6071:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>chdir(path)</code></span></td>
-<td>0 or <code>-1</code>. Replaces <span class="source-link"><code>ProcessControlBlock.working_directory</code></span></td>
-<td><span class="source-link"><code>SYSCALL_CHDIR</code></span> with the path pointer directly<br><strong>Host Request:</strong> <code>is-directory &lt;path&gt;</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>getcwd(buffer, size)</code></span></td>
-<td>The supplied buffer, or <code>NULL</code> on failure</td>
-<td><span class="source-link"><code>SYSCALL_GETCWD</code></span> with <span class="source-link"><code>GetCwdRequest</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.33%" /><col style="width:44.34%" /><col style="width:31.33%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>chdir()</code></li></ul></td><td><ul><li>Change process working directory</li></ul></td><td><ul><li><code>CHDIR</code></li><li>Host: <code>is-directory</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>getcwd()</code></li></ul></td><td><ul><li>Copy directory; buffer or NULL</li></ul></td><td><ul><li><code>GETCWD</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12398,37 +8094,15 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6081 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6081 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6081:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>unlink(path)</code></span></td>
-<td>Host status for removing a file</td>
-<td><span class="source-link"><code>SYSCALL_UNLINK</code></span> with the path pointer directly<br><strong>Host Request:</strong> <code>unlink &lt;path&gt;</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>rmdir(path)</code></span></td>
-<td>Host status for removing an empty directory</td>
-<td><span class="source-link"><code>SYSCALL_RMDIR</code></span> with the path pointer directly<br><strong>Host Request:</strong> <code>rmdir &lt;path&gt;</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>move(old_path, new_path)</code></span></td>
-<td>Host status for moving or renaming a file or directory</td>
-<td><span class="source-link"><code>SYSCALL_MOVE</code></span> with <span class="source-link"><code>MoveRequest</code></span><br><strong>Host Request:</strong> <code>move &lt;old path&gt;\n&lt;new path&gt;</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>touch(path)</code></span></td>
-<td>Host status for creating a file or updating its timestamps</td>
-<td><span class="source-link"><code>SYSCALL_TOUCH</code></span> with the path pointer directly<br><strong>Host Request:</strong> <code>touch &lt;path&gt;</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.49%" /><col style="width:42.50%" /><col style="width:32.01%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>unlink()</code></li></ul></td><td><ul><li>Remove file; return host status</li></ul></td><td><ul><li><code>UNLINK</code></li><li>Host: <code>unlink</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>rmdir()</code></li></ul></td><td><ul><li>Remove empty directory</li></ul></td><td><ul><li><code>RMDIR</code></li><li>Host: <code>rmdir</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>move()</code></li></ul></td><td><ul><li>Move/rename path</li></ul></td><td><ul><li><code>MOVE</code></li><li>Host: <code>move</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>touch()</code></li></ul></td><td><ul><li>Create or update timestamps</li></ul></td><td><ul><li><code>TOUCH</code></li><li>Host: <code>touch</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12446,32 +8120,14 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6094 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6094 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6094:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>wait_queue_init(wq)</code></span></td>
-<td>Initializes <span class="source-link"><code>wait_queue.head</code></span> and <span class="source-link"><code>wait_queue.tail</code></span> to <code>NULL</code></td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sleep(wq)</code></span></td>
-<td>Sets the process's <span class="source-link"><code>ProcessControlBlock.state</code></span> to <span class="source-link"><code>PROCESS_STATE_BLOCKED</code></span> and places it on the queue</td>
-<td><span class="source-link"><code>SYSCALL_SLEEP</code></span> with the queue pointer directly</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>wakeup(wq)</code></span></td>
-<td>Wakes at most the process at the FIFO head</td>
-<td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> with the queue pointer directly</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.01%" /><col style="width:25.58%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>wait_queue_init()</code></li></ul></td><td><ul><li>Clear FIFO head + tail</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>sleep()</code></li></ul></td><td><ul><li>Queue caller; suspend execution</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>wakeup()</code></li></ul></td><td><ul><li>Wake at most one waiter</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12489,27 +8145,13 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6106 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6106 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6106:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>open(path, flags)</code></span></td>
-<td>Lowest free descriptor or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_OPEN</code></span> with <span class="source-link"><code>OpenRequest</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code> for every nontruncating regular open. After failure with <span class="source-link"><code>O_CREAT</code></span>, or for <span class="source-link"><code>O_TRUNC</code></span>, the requests are <code>write &lt;path&gt;</code> then <code>write stdout</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>creat(path)</code></span></td>
-<td>Equivalent to an open for writing, creation, and truncation</td>
-<td>Calls <span class="source-link"><code>open()</code></span>, which uses <span class="source-link"><code>SYSCALL_OPEN</code></span><br><strong>Host Requests:</strong> <code>write &lt;path&gt;</code>, then <code>write stdout</code> for a regular path</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.57%" /><col style="width:36.28%" /><col style="width:43.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open()</code></li></ul></td><td><ul><li>Lowest free descriptor; −1 on error</li></ul></td><td><ul><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>creat()</code></li></ul></td><td><ul><li>Write + create + truncate</li></ul></td><td><ul><li><code>OPEN</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12527,27 +8169,13 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6117 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6117 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6117:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>waitpid(pid)</code></span></td>
-<td>Exact child's exit or stopped status, or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_WAITPID</code></span> with <span class="source-link"><code>WaitPidRequest</code></span>. Waiting may suspend its stack frame</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>WIFSTOPPED(status)</code></span></td>
-<td>Whether status represents <span class="source-link"><code>SIGSTOP</code></span>, <span class="source-link"><code>SIGTSTP</code></span>, or <span class="source-link"><code>SIGTTIN</code></span></td>
-<td>No syscall</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.72%" /><col style="width:46.72%" /><col style="width:26.56%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>waitpid()</code></li></ul></td><td><ul><li>Child exit/stopped status; −1 on error</li></ul></td><td><ul><li><code>WAITPID</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>WIFSTOPPED()</code></li></ul></td><td><ul><li>Test stopped-status encoding</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12565,37 +8193,15 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6127 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6127 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6127:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>testset(lock_addr)</code></span></td>
-<td>Atomically writes 1 and returns the old lock value</td>
-<td>No syscall, one RETI <code>TSL</code> instruction</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_init(m)</code></span></td>
-<td>Clears lock and initializes embedded wait queue</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_lock(m)</code></span></td>
-<td>Acquires the lock. Contenders wait instead of spinning</td>
-<td>Uses <span class="source-link"><code>testset()</code></span>, then <span class="source-link"><code>SYSCALL_SLEEP</code></span> through <span class="source-link"><code>sleep()</code></span> when the lock is held</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mutex_unlock(m)</code></span></td>
-<td>Clears the lock and wakes one contender</td>
-<td>Uses <span class="source-link"><code>SYSCALL_WAKEUP</code></span> through <span class="source-link"><code>wakeup()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.72%" /><col style="width:45.37%" /><col style="width:25.91%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>testset()</code></li></ul></td><td><ul><li>Atomic old value; store 1</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>mutex_init()</code></li></ul></td><td><ul><li>Clear lock + initialize wait queue</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>mutex_lock()</code></li></ul></td><td><ul><li>Acquire; sleep/retry on contention</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>mutex_unlock()</code></li></ul></td><td><ul><li>Clear lock; wake one contender</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12613,32 +8219,14 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6144 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6144 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6144:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>shm_open(name, size)</code></span></td>
-<td>Existing or new shared-memory ID, or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_SHM_OPEN</code></span> with <span class="source-link"><code>ShmOpenRequest</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mmap(shared_memory_id)</code></span></td>
-<td>Shared absolute address or <code>NULL</code>. Creates a <span class="source-link"><code>SharedMemoryAttachment</code></span> for the calling process</td>
-<td><span class="source-link"><code>SYSCALL_MMAP</code></span> with the ID directly</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shm_unlink(name)</code></span></td>
-<td>0 or <code>-1</code>. Removes the name and requests deferred destruction</td>
-<td><span class="source-link"><code>SYSCALL_SHM_UNLINK</code></span> with the name pointer directly</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.45%" /><col style="width:44.62%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>shm_open()</code></li></ul></td><td><ul><li>Named entry ID or −1</li></ul></td><td><ul><li><code>SHM_OPEN</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>mmap()</code></li></ul></td><td><ul><li>Attach; shared address or NULL</li></ul></td><td><ul><li><code>MMAP</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>shm_unlink()</code></li></ul></td><td><ul><li>Unlink name; defer destruction</li></ul></td><td><ul><li><code>SHM_UNLINK</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12656,12 +8244,12 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>dirent</code></span> fetches a listing once and parses it in userspace. A <span class="source-link"><code>DirectoryStream</code></span> owns the buffer and reuses an embedded result entry:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6156 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6156" data-code-part="1">
 
+<!-- README_CODE_PART code-6156 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -12696,90 +8284,26 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
-<!-- README_ASSET table-6174 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6174 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6174:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>DirectoryStream.contents</code></span></td>
-<td>Owned 512-cell listing buffer</td>
-<td>First allocated by <span class="source-link"><code>opendir()</code></span> and filled by <span class="source-link"><code>read_host_directory()</code></span>, parsed by <span class="source-link"><code>readdir()</code></span> and freed by <span class="source-link"><code>closedir()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>DirectoryStream.length</code></span></td>
-<td>Received listing length, excluding its terminator</td>
-<td>First initialized by <span class="source-link"><code>opendir()</code></span>, bounds reads in <span class="source-link"><code>readdir()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>DirectoryStream.offset</code></span></td>
-<td>Position of the next listing record</td>
-<td>First initialized to 0 by <span class="source-link"><code>opendir()</code></span>, advanced by <span class="source-link"><code>readdir()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>DirectoryStream.entry</code></span></td>
-<td>Embedded result reused for each directory entry</td>
-<td>First populated by <span class="source-link"><code>readdir()</code></span>, its returned pointer stays valid only while the stream exists and its contents change on the next read</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dirent.d_type</code></span></td>
-<td>Directory or regular-file type</td>
-<td>First initialized by <span class="source-link"><code>readdir()</code></span> from the record’s leading character</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>dirent.d_name</code></span></td>
-<td>Terminated name, limited to 127 characters</td>
-<td>First initialized by <span class="source-link"><code>readdir()</code></span>, long names are truncated</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:45.77%" /><col style="width:54.23%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.contents</code></span></li></ul></td><td><ul><li>Owned 512-cell listing buffer</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.length</code></span></li></ul></td><td><ul><li>Listing length without terminator</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.offset</code></span></li></ul></td><td><ul><li>Next listing record</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.entry</code></span></li></ul></td><td><ul><li>Embedded, reused directory-entry result</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>dirent.d_type</code></span></li></ul></td><td><ul><li>Directory or regular-file type</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>dirent.d_name</code></span></li></ul></td><td><ul><li>Terminated name; 127-character limit</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-6186 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6186:1,2,3">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
-
-# 10. Userspace libraries · 10.2 Library overview and dependencies
-
-## 10.2.6 dirent: directory streams (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-6186 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>opendir(path)</code></span></td>
-<td>Stream pointer, or <code>NULL</code> for a null path or listing failure. Allocates the stream and buffer. Allocation failure terminates the process in PicoOS</td>
-<td><span class="source-link"><code>SYSCALL_READ_DIRECTORY</code></span> with <span class="source-link"><code>ReadDirectoryRequest</code></span><br><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through <span class="source-link"><code>malloc()</code></span> on allocation failure<br><strong>Host Requests:</strong> <code>ls &lt;path&gt;</code><br>For the heap-full message, <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>readdir(directory)</code></span></td>
-<td>Pointer to the reused <span class="source-link"><code>entry</code></span>, or <code>NULL</code> at end/for a null stream</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>closedir(directory)</code></span></td>
-<td><code>0</code> after freeing buffer/stream, <code>-1</code> for a null stream</td>
-<td>No syscall</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.43%" /><col style="width:30.15%" /><col style="width:48.42%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>opendir()</code></li></ul></td><td><ul><li>Allocate stream + fetch listing</li></ul></td><td><ul><li><code>READ_DIRECTORY</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>ls</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>readdir()</code></li></ul></td><td><ul><li>Reuse entry; NULL at end</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>closedir()</code></li></ul></td><td><ul><li>Free buffer + stream</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12797,42 +8321,16 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6206 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6206 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6206:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>require_process_heap_allocation(memory, size)</code></span></td>
-<td>Returns <code>memory</code>. A <code>NULL</code> result for a positive size terminates the process</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> only for a failed positive allocation<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>init_process_heap(void)</code></span></td>
-<td>Initializes <span class="source-link"><code>process_heap</code></span> over the region recorded in the current <span class="source-link"><code>ProcessControlBlock</code></span></td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_START</code></span> and <span class="source-link"><code>SYSCALL_PROCESS_HEAP_SIZE</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>malloc(size)</code></span></td>
-<td>Pointer to a first-fit allocation. Returns <code>NULL</code> for a nonpositive size. A failed positive allocation terminates the process</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through <span class="source-link"><code>require_process_heap_allocation()</code></span> only on failure<br><strong>Host Requests:</strong> The heap-full diagnostic requests listed above</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>realloc(ptr, size)</code></span></td>
-<td>Resized or moved pointer. Size 0 frees the block and returns <code>NULL</code>. A failed positive allocation terminates the process</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through <span class="source-link"><code>require_process_heap_allocation()</code></span> only on failure<br><strong>Host Requests:</strong> The heap-full diagnostic requests listed above</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>free(ptr)</code></span></td>
-<td>Releases and coalesces a process-heap block</td>
-<td>No syscall</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.67%" /><col style="width:31.39%" /><col style="width:32.94%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>require_process_heap_allocation()</code></li></ul></td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>init_process_heap()</code></li></ul></td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>malloc()</code></li></ul></td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>realloc()</code></li></ul></td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>free()</code></li></ul></td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12850,22 +8348,12 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6220 rows=1-1 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6220 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6220:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>atoi(text)</code></span></td>
-<td>Converts optional sign and decimal characters</td>
-<td>No syscall</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.86%" /><col style="width:38.86%" /><col style="width:35.28%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>atoi()</code></li></ul></td><td><ul><li>Convert signed decimal text</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12879,109 +8367,27 @@ struct DirectoryStream {
 
 # 10. Userspace libraries · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
-## 10.2.7.3 Environment operations in `env.picoc` (1)
+## 10.2.7.3 Environment operations in `env.picoc`
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6230 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6230 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-6230:1,2,3,4,5,6,7,8,9,10,11,12">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>getenv(name)</code></span></td>
-<td>Pointer to value within matching <code>NAME=value</code> string, or <code>NULL</code></td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>current_environment(void)</code></span></td>
-<td>Current process-global <span class="source-link"><code>environ</code></span> pointer</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>copy_environment_variable(variable)</code></span></td>
-<td>Pointer to an allocated copy. A failed positive allocation terminates the process</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through <span class="source-link"><code>malloc()</code></span> only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>store_environment_variable(variable, name_length)</code></span></td>
-<td>0 after replacing or adding an entry. A failed positive reallocation terminates the process</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through <span class="source-link"><code>realloc()</code></span> only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>initialize_environment(environment)</code></span></td>
-<td>Creates <span class="source-link"><code>environ</code></span> and copies the initial strings. Used internally during process startup</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through allocation helpers only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>setenv(name, value, overwrite)</code></span></td>
-<td>0 on success or when overwrite is disabled for an existing name. Allocates or replaces one owned string</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through allocation helpers only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>unsetenv(name)</code></span></td>
-<td>0. Frees a matching string and compacts the pointer array</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>putenv(variable)</code></span></td>
-<td>0 after copying and storing <code>NAME=value</code>, or <code>-1</code> when <code>=</code> is missing</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through allocation helpers only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>clearenv(void)</code></span></td>
-<td>0. Frees all strings but retains an empty array</td>
-<td>No syscall</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#10273-environment-operations-in-envpicoc -->
-
-# 10. Userspace libraries · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
-
-## 10.2.7.3 Environment operations in `env.picoc` (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-6230 rows=10-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>clone_environment(void)</code></span></td>
-<td>Deep process-heap copy of the current environment. Exposed to applications but not used by PicoOS programs</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through allocation helpers only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>destroy_environment(environment)</code></span></td>
-<td>Frees a cloned array and its strings</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>restore_environment(environment)</code></span></td>
-<td>0 after recreating current <span class="source-link"><code>environ</code></span>, or <code>-1</code> for an invalid entry</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> through allocation helpers only on failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>getenv()</code></li></ul></td><td><ul><li>Value pointer or NULL</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>current_environment()</code></li></ul></td><td><ul><li>Process-global environ pointer</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>copy_environment_variable()</code></li></ul></td><td><ul><li>Allocate string copy</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>store_environment_variable()</code></li></ul></td><td><ul><li>Add/replace environment entry</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>initialize_environment()</code></li></ul></td><td><ul><li>Copy inherited environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>setenv()</code></li></ul></td><td><ul><li>Add/replace NAME=value</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><ul><li><code>unsetenv()</code></li></ul></td><td><ul><li>Remove entry; compact pointer array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>putenv()</code></li></ul></td><td><ul><li>Copy NAME=value; require =</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><code>clearenv()</code></li></ul></td><td><ul><li>Free strings; retain empty array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><code>clone_environment()</code></li></ul></td><td><ul><li>Deep-copy environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><code>destroy_environment()</code></li></ul></td><td><ul><li>Free cloned strings + array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><code>restore_environment()</code></li></ul></td><td><ul><li>Recreate current environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -12999,22 +8405,12 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6255 rows=1-1 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6255 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6255:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>exit(status)</code></span></td>
-<td>Terminates the current process and does not normally return</td>
-<td><span class="source-link"><code>SYSCALL_EXIT</code></span> with the status directly</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.93%" /><col style="width:46.14%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>exit()</code></li></ul></td><td><ul><li>Terminate with status; no return</li></ul></td><td><ul><li><code>EXIT</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13032,42 +8428,16 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6266 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6266 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6266:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>strcpy(destination, source)</code></span></td>
-<td>Copies a terminated string and returns the destination</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strcat(destination, source)</code></span></td>
-<td>Appends a terminated string and returns the destination</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strcmp(left, right)</code></span></td>
-<td>Difference between the first unequal cells, or 0 for equal strings</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strncmp(left, right, count)</code></span></td>
-<td>Comparison limited to <code>count</code> cells. Returns a negative value, zero, or a positive value</td>
-<td>No syscall</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strlen(string)</code></span></td>
-<td>Number of cells before the terminator</td>
-<td>No syscall</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.27%" /><col style="width:43.89%" /><col style="width:32.84%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>strcpy()</code></li></ul></td><td><ul><li>Copy terminated string; return destination</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>strcat()</code></li></ul></td><td><ul><li>Append string; return destination</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>strcmp()</code></li></ul></td><td><ul><li>First unequal cell difference</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>strncmp()</code></li></ul></td><td><ul><li>Compare at most count cells</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>strlen()</code></li></ul></td><td><ul><li>Cells before terminator</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13085,12 +8455,12 @@ struct DirectoryStream {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>stdio</code></span> builds streams and formatting on descriptors. A <span class="source-link"><code>PicoFile</code></span> stores only the descriptor number:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6280 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6280" data-code-part="1">
 
+<!-- README_CODE_PART code-6280 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13117,22 +8487,12 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6291 rows=1-1 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6291 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6291:1">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Field</th>
-<th>Meaning</th>
-<th>Used by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>PicoFile.file_descriptor</code></span></td>
-<td>Entry number in the current process’s descriptor table</td>
-<td>First initialized by <span class="source-link"><code>prepare_standard_streams()</code></span> for standard streams and <span class="source-link"><code>fopen()</code></span> for extra streams, used by <span class="source-link"><code>fgetc()</code></span>, <span class="source-link"><code>fputc()</code></span>, <span class="source-link"><code>fputs()</code></span>, and <span class="source-link"><code>fclose()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.79%" /><col style="width:50.21%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>PicoFile.file_descriptor</code></span></li></ul></td><td><ul><li>Current process descriptor number</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13146,113 +8506,33 @@ struct PicoFile {
 
 # 10. Userspace libraries · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
 
-## 10.2.9.1 Streams and output in `stdio.picoc` (1)
+## 10.2.9.1 Streams and output in `stdio.picoc`
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6304 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6304 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-6304:1,2,3,4,5,6,7,8,9,10,11,12">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>standard_input(void)</code></span></td>
-<td>Address of the process-global input stream</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> only on first stream preparation. No host request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>standard_output(void)</code></span></td>
-<td>Address of the process-global output stream</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> only on first stream preparation. No host request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>standard_error(void)</code></span></td>
-<td>Address of the process-global error stream</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> only on first stream preparation. No host request</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fopen(path, mode)</code></span></td>
-<td>One of five stream slots or <code>NULL</code>. Supports <code>r</code>, <code>w</code>, <code>a</code>, and <code>+</code></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation<br><span class="source-link"><code>SYSCALL_OPEN</code></span> with <span class="source-link"><code>OpenRequest</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code> for a nontruncating regular open<br><code>write &lt;path&gt;</code>, then <code>write stdout</code> for truncation or creation after a failed existence check</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fclose(stream)</code></span></td>
-<td>0 on close, or <code>-1</code> for an invalid stream or descriptor. Releases an additional stream slot</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation<br><span class="source-link"><code>SYSCALL_CLOSE</code></span> with the descriptor directly</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fgetc(stream)</code></span></td>
-<td>Read character or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation<br><span class="source-link"><code>SYSCALL_READ</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for a regular-file stream</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fputc(character, stream)</code></span></td>
-<td>Written character or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation<br><span class="source-link"><code>SYSCALL_WRITE</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br><code>literal-output &lt;count&gt;</code> before output containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fputs(text, stream)</code></span></td>
-<td>Written count or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation<br><span class="source-link"><code>SYSCALL_WRITE</code></span> with <span class="source-link"><code>IoRequest</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br><code>literal-output &lt;count&gt;</code> before output containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>write_decimal(stream, value)</code></span></td>
-<td>Count written, or <code>-1</code> if writing a digit fails. Internal formatting helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation and <span class="source-link"><code>SYSCALL_WRITE</code></span> through <span class="source-link"><code>fputc()</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br>No <code>literal-output</code> request because decimal output contains no <code>&lt;ESC&gt;</code></td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div><aside class="context-note"><b>Variadic ABI</b><span>printf and fprintf find variadic arguments using the same stack-frame convention as ordinary PicoC calls.</span></aside>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#10291-streams-and-output-in-stdiopicoc -->
-
-# 10. Userspace libraries · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
-
-## 10.2.9.1 Streams and output in `stdio.picoc` (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-6304 rows=10-12 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>format_stream(stream, format, argument_base, first_argument)</code></span></td>
-<td>Formatted count, or <code>-1</code> if output fails. Internal formatting helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation and <span class="source-link"><code>SYSCALL_WRITE</code></span> through <span class="source-link"><code>fputc()</code></span> or <span class="source-link"><code>fputs()</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br><code>literal-output &lt;count&gt;</code> before an output value containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>fprintf(stream, format, ...)</code></span></td>
-<td>Written count or <code>-1</code></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation and <span class="source-link"><code>SYSCALL_WRITE</code></span> through <span class="source-link"><code>format_stream()</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for regular files<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr<br><code>literal-output &lt;count&gt;</code> before an output value containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>printf(format, ...)</code></span></td>
-<td>Written count or <code>-1</code> to <span class="source-link"><code>stdout</code></span></td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first preparation and <span class="source-link"><code>SYSCALL_WRITE</code></span> through <span class="source-link"><code>format_stream()</code></span><br><strong>Host Requests:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> when descriptor 1 is a regular file<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> when descriptor 1 is a copied terminal-stderr entry<br><code>literal-output &lt;count&gt;</code> before an output value containing <code>&lt;ESC&gt;</code>, except for the null device</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>standard_input()</code></li></ul></td><td><ul><li>Process-global stdin stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>standard_output()</code></li></ul></td><td><ul><li>Process-global stdout stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>standard_error()</code></li></ul></td><td><ul><li>Process-global stderr stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>fopen()</code></li></ul></td><td><ul><li>Stream slot or NULL; r/w/a/+</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>fclose()</code></li></ul></td><td><ul><li>Close + release stream slot</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>CLOSE</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>fgetc()</code></li></ul></td><td><ul><li>Character or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><ul><li><code>fputc()</code></li></ul></td><td><ul><li>Written character or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>fputs()</code></li></ul></td><td><ul><li>Written count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><code>write_decimal()</code></li></ul></td><td><ul><li>Print decimal; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><code>format_stream()</code></li></ul></td><td><ul><li>Format arguments; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><code>fprintf()</code></li></ul></td><td><ul><li>Formatted stream output; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><code>printf()</code></li></ul></td><td><ul><li>Formatted stdout output; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
+<aside class="context-note"><b>Variadic ABI</b><ul><li>printf/fprintf: stack-based arguments</li>
+<li>Same PicoC frame convention</li></ul></aside>
 
 </div>
 
@@ -13266,42 +8546,16 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6331 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6331 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6331:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>read_input(void)</code></span></td>
-<td>Returns the saved pushback character when present, otherwise reads one character from <span class="source-link"><code>stdin</code></span>. Internal scanning helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first stream preparation and <span class="source-link"><code>SYSCALL_READ</code></span> through <span class="source-link"><code>fgetc()</code></span> when no character is saved<br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> when descriptor 0 is a regular file</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>skip_whitespace(void)</code></span></td>
-<td>Consumes whitespace and saves the first following character. Internal scanning helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first stream preparation and <span class="source-link"><code>SYSCALL_READ</code></span> through <span class="source-link"><code>read_input()</code></span><br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> when descriptor 0 is a regular file</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_decimal(target)</code></span></td>
-<td>Whether a signed decimal value was read into <code>target</code>. Internal scanning helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first stream preparation and <span class="source-link"><code>SYSCALL_READ</code></span> through <span class="source-link"><code>read_input()</code></span><br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> when descriptor 0 is a regular file</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_string(target)</code></span></td>
-<td>Whether a nonempty, whitespace-delimited string was read into <code>target</code>. Internal scanning helper</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first stream preparation and <span class="source-link"><code>SYSCALL_READ</code></span> through <span class="source-link"><code>read_input()</code></span><br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> when descriptor 0 is a regular file</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>scanf(format, ...)</code></span></td>
-<td>Number of assigned arguments</td>
-<td><span class="source-link"><code>SYSCALL_FILE_DESCRIPTORS_AVAILABLE</code></span> on first stream preparation and <span class="source-link"><code>SYSCALL_READ</code></span> through the scanning helpers above<br><strong>Host Request:</strong> <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> when descriptor 0 is a regular file</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.13%" /><col style="width:36.72%" /><col style="width:44.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>read_input()</code></li></ul></td><td><ul><li>Pushback character or stdin byte</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>skip_whitespace()</code></li></ul></td><td><ul><li>Skip spaces; save following character</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>read_decimal()</code></li></ul></td><td><ul><li>Parse signed decimal into target</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>read_string()</code></li></ul></td><td><ul><li>Parse nonempty whitespace-delimited string</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>scanf()</code></li></ul></td><td><ul><li>Number of assigned arguments</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13319,27 +8573,13 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6346 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6346 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6346:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>_start(argc, first_argument)</code></span></td>
-<td>Entry point without a generated stack frame. Calls <span class="source-link"><code>start_process()</code></span></td>
-<td>Through <span class="source-link"><code>start_process()</code></span>, <span class="source-link"><code>SYSCALL_PROCESS_HEAP_START</code></span>, <span class="source-link"><code>SYSCALL_PROCESS_HEAP_SIZE</code></span>, and <span class="source-link"><code>SYSCALL_EXIT</code></span><br><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> on environment allocation failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start_process(argc, argv)</code></span></td>
-<td>Initializes the heap and environment, calls the application entry function, then exits with its status</td>
-<td><span class="source-link"><code>SYSCALL_PROCESS_HEAP_START</code></span>, <span class="source-link"><code>SYSCALL_PROCESS_HEAP_SIZE</code></span>, and <span class="source-link"><code>SYSCALL_EXIT</code></span><br><span class="source-link"><code>SYSCALL_PROCESS_HEAP_FULL</code></span> on environment allocation failure<br><strong>Host Requests for the heap-full message:</strong> <code>write-at &lt;offset&gt; &lt;path&gt;</code>, then <code>write stdout</code> for a regular descriptor 1<br>Optional <code>file-size &lt;path&gt;</code> before append<br><code>write stderr</code>, then <code>write stdout</code> for terminal stderr</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.17%" /><col style="width:29.67%" /><col style="width:49.16%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>_start()</code></li></ul></td><td><ul><li>Naked entry → start_process</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>start_process()</code></li></ul></td><td><ul><li>Initialize heap + environment</li><li>main → exit(status)</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13357,48 +8597,16 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6358 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6358 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6358:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Library</th>
-<th>Library function</th>
-<th>Return value / status and purpose</th>
-<th>Syscalls / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>schedule</code></span></td>
-<td><span class="source-link"><code>yield(void)</code></span></td>
-<td>Voluntarily saves the current activation and schedules another runnable process</td>
-<td><span class="source-link"><code>SYSCALL_YIELD</code></span> with no request structure</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>signal</code></span></td>
-<td><span class="source-link"><code>kill(pid, signal_number)</code></span></td>
-<td>0 or <code>-1</code>. Signal 0 only probes existence</td>
-<td><span class="source-link"><code>SYSCALL_KILL</code></span> with <span class="source-link"><code>KillRequest</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/prctl</code></span></td>
-<td><span class="source-link"><code>prctl(option, argument)</code></span></td>
-<td>0 or <code>-1</code>. Supports <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></td>
-<td><span class="source-link"><code>SYSCALL_PRCTL</code></span> with <span class="source-link"><code>PrctlRequest</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/reboot</code></span></td>
-<td><span class="source-link"><code>reboot(command)</code></span></td>
-<td>Does not return for <span class="source-link"><code>REBOOT_CMD_RESTART</code></span> or <span class="source-link"><code>REBOOT_CMD_POWER_OFF</code></span>. Returns <code>-1</code> for any other command</td>
-<td><span class="source-link"><code>SYSCALL_REBOOT</code></span> for restart or <span class="source-link"><code>SYSCALL_SHUTDOWN</code></span> for power-off<br><strong>Host Requests after firmware restart:</strong> <code>load kernel/kernel.bin</code> from the bootloader, then <code>load /system/init.bin</code> from kernel startup<br>None for power-off</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sys/stat</code></span></td>
-<td><span class="source-link"><code>mkdir(path)</code></span></td>
-<td>0 on success, or <code>-1</code> for an invalid path or host failure</td>
-<td><span class="source-link"><code>SYSCALL_MKDIR</code></span> with the path pointer directly<br><strong>Host Request:</strong> <code>mkdir &lt;path&gt;</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.80%" /><col style="width:24.62%" /><col style="width:41.30%" /><col style="width:16.28%" /></colgroup><thead><tr><th>Library</th><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>schedule</code></span></li></ul></td><td><ul><li><span class="source-link"><code>yield(void)</code></span></li></ul></td><td><ul><li>Voluntarily saves the current activation and schedules another runnable process</li></ul></td><td><ul><li><code>YIELD</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>signal</code></span></li></ul></td><td><ul><li><span class="source-link"><code>kill(pid, signal_number)</code></span></li></ul></td><td><ul><li>0 / −1</li><li>Signal 0: existence probe</li></ul></td><td><ul><li><code>KILL</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>sys/prctl</code></span></li></ul></td><td><ul><li><span class="source-link"><code>prctl(option, argument)</code></span></li></ul></td><td><ul><li>0 or <code>-1</code>. Supports <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></li></ul></td><td><ul><li><code>PRCTL</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>sys/reboot</code></span></li></ul></td><td><ul><li><span class="source-link"><code>reboot(command)</code></span></li></ul></td><td><ul><li>Restart/power-off: no return; otherwise −1</li></ul></td><td><ul><li><code>REBOOT</code></li><li><code>SHUTDOWN</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>sys/stat</code></span></li></ul></td><td><ul><li><span class="source-link"><code>mkdir(path)</code></span></li></ul></td><td><ul><li>0 success; −1 path/host error</li></ul></td><td><ul><li><code>MKDIR</code></li><li>Host: <code>mkdir</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13414,10 +8622,10 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-6386 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 %%{init: {"sequence": {"height": 90}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
@@ -13461,42 +8669,16 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6428 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6428 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6428:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Component</th>
-<th>Startup implementation</th>
-<th>Execution path</th>
-</tr>
-</thead><tbody><tr>
-<td>Bootloader</td>
-<td>Custom naked <span class="source-link"><code>_start(void)</code></span>, defined in the bootloader itself</td>
-<td>Sets the initial registers, then jumps to <span class="source-link"><code>boot_main()</code></span></td>
-</tr>
-<tr>
-<td>Kernel</td>
-<td>Default PicoC compiler-generated <span class="source-link"><code>_start</code></span>, linked without <code>-C</code></td>
-<td>Calls kernel <span class="source-link"><code>main()</code></span> and halts if it returns</td>
-</tr>
-<tr>
-<td>Init process</td>
-<td><span class="source-link"><code>libstart</code></span>, selected with <code>-C library/start/libstart.picoc</code></td>
-<td><span class="source-link"><code>_start()</code></span> → <span class="source-link"><code>start_process()</code></span> → init <span class="source-link"><code>main()</code></span> → <span class="source-link"><code>exit()</code></span> if it returns</td>
-</tr>
-<tr>
-<td>Shell</td>
-<td>The same <span class="source-link"><code>libstart</code></span> selection</td>
-<td><span class="source-link"><code>_start()</code></span> → <span class="source-link"><code>start_process()</code></span> → shell <span class="source-link"><code>main()</code></span> → <span class="source-link"><code>exit()</code></span></td>
-</tr>
-<tr>
-<td>User applications</td>
-<td>The same <span class="source-link"><code>libstart</code></span> selection</td>
-<td><span class="source-link"><code>_start()</code></span> → <span class="source-link"><code>start_process()</code></span> → the application's <code>main</code> → <span class="source-link"><code>exit()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.39%" /><col style="width:35.21%" /><col style="width:40.40%" /></colgroup><thead><tr><th>Component</th><th>Startup implementation</th><th>Execution path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Bootloader</li></ul></td><td><ul><li>Explicit naked _start</li></ul></td><td><ul><li>boot_main → load kernel → jump</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Kernel</li></ul></td><td><ul><li>Generated default _start</li></ul></td><td><ul><li>main → init subsystems → dispatch</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Init process</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Shell</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>User applications</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13514,40 +8696,14 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6447 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-6447 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6447:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Bootloader function</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>_start(void)</code></span></td>
-<td>Does not return</td>
-<td>Establishes EPROM <code>CS</code>/<code>DS</code> and a temporary stack at the top of SRAM</td>
-<td>Jumps to <span class="source-link"><code>boot_main()</code></span></td>
-<td><strong>Machine entry:</strong> PC 0 at boot. Kernel <span class="source-link"><code>reboot()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>boot_main(void)</code></span></td>
-<td>Jumps into the kernel on success, halts on a missing or undersized image</td>
-<td>Requests <span class="source-link"><code>kernel/kernel.bin</code></span>, consumes the five header words, and copies the payload to SRAM</td>
-<td><span class="source-link"><code>uart_send_host_request()</code></span>, <span class="source-link"><code>receive_word()</code></span>, <span class="source-link"><code>uart_print_string()</code></span>, <span class="source-link"><code>uart_print_loading_bar_label()</code></span>, <span class="source-link"><code>receive_words_to_sram()</code></span>, jumps to <span class="source-link"><code>start_loaded_kernel()</code></span><br><strong>Host request:</strong> <code>load kernel/kernel.bin</code></td>
-<td><strong>Bootloader functions:</strong> <span class="source-link"><code>_start()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>start_loaded_kernel(void)</code></span></td>
-<td>Does not return</td>
-<td>Adds the SRAM base to the header's code/data/stack offsets, replaces the boot stack, and sets kernel <code>CS</code>, <code>DS</code>, <code>SP</code>, and <code>BAF</code></td>
-<td>Jumps to the generated kernel <span class="source-link"><code>_start</code></span>, which calls <span class="source-link"><code>main()</code></span></td>
-<td><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.89%" /><col style="width:18.30%" /><col style="width:18.05%" /><col style="width:19.64%" /><col style="width:18.12%" /></colgroup><thead><tr><th>Bootloader function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Called by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>_start(void)</code></span></li></ul></td><td><ul><li>Naked entry → start_process</li></ul></td><td><ul><li>Install EPROM CS/DS + temporary SRAM stack</li></ul></td><td><ul><li>Jumps to <span class="source-link"><code>boot_main()</code></span></li></ul></td><td><ul><li><strong>Machine entry:</strong> PC 0 at boot. Kernel <span class="source-link"><code>reboot()</code></span></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>boot_main(void)</code></span></li></ul></td><td><ul><li>Load kernel; install segments; transfer control</li></ul></td><td><ul><li>Read five-word header; copy kernel payload</li></ul></td><td><ul><li>UART host load; receive words</li><li>Copy to SRAM; jump to kernel</li></ul></td><td><ul><li><strong>Bootloader functions:</strong> <span class="source-link"><code>_start()</code></span></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>start_loaded_kernel(void)</code></span></li></ul></td><td><ul><li>Does not return</li></ul></td><td><ul><li>Relative → absolute segments; replace boot stack</li></ul></td><td><ul><li>Jumps to the generated kernel <span class="source-link"><code>_start</code></span>, which calls <span class="source-link"><code>main()</code></span></li></ul></td><td><ul><li><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -13565,12 +8721,12 @@ sequenceDiagram
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The initial entry establishes the segments and temporary stack before any ordinary PicoC call frames are needed:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6456 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:13">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6456" data-code-part="1">
 
+<!-- README_CODE_PART code-6456 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13605,12 +8761,14 @@ void _start(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>boot_main()</code></span> requests <span class="source-link"><code>kernel/kernel.bin</code></span>, reads its header, and loads only the payload at <span class="source-link"><code>SRAM_BASE</code></span>. The first five payload words are <code>.ivt</code>, followed by code and data. <span class="source-link"><code>receive_words_to_sram()</code></span> selects polling or DMA:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6474 -->
-<ReadmeVisual kind="code" :width="814" style="flex-grow:44">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="814" data-code-source="code-6474" data-code-part="1">
+
+<!-- README_CODE_PART code-6474 lines=1-21 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13635,6 +8793,18 @@ void boot_main(void) {
     code_start = receive_word();
     data_start = receive_word();
     receive_word(); // Discards heap_start because the kernel uses memory_constants.header
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="814" data-code-source="code-6474" data-code-part="2">
+
+<!-- README_CODE_PART code-6474 lines=22-42 -->
+<div class="readme-code">
+
+```c {lines:false}
     receive_word(); // Discards heap_size because the kernel uses memory_constants.header
     stack_start = receive_word();
     if (stack_start == -1) {
@@ -13666,6 +8836,8 @@ void boot_main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#111-loading-the-kernel-from-the-eprom-bootloader -->
@@ -13676,12 +8848,12 @@ void boot_main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>start_loaded_kernel()</code></span> still runs in EPROM. It adds the SRAM base to the header offsets, installs kernel registers, and writes <code>CS</code> to <code>PC</code>:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6522 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:22">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6522" data-code-part="1">
 
+<!-- README_CODE_PART code-6522 lines=1-20 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13725,11 +8897,12 @@ void start_loaded_kernel(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1050 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-1050" data-code-part="1">
 
+<!-- README_CODE_PART code-1050 lines=1-4 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13757,12 +8930,14 @@ void _start(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Kernel <span class="source-link"><code>main()</code></span> initializes allocators, terminal and process state, DMA, and interrupt routing before loading init and scheduling it:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6561 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:26">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-6561" data-code-part="1">
+
+<!-- README_CODE_PART code-6561 lines=1-12 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13778,6 +8953,18 @@ int main(void) {
     initialize_shared_memory();
     if (dma_is_active()) {
         initialize_dma();
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-6561" data-code-part="2">
+
+<!-- README_CODE_PART code-6561 lines=13-24 -->
+<div class="readme-code">
+
+```c {lines:false}
     }
     interrupt_controller_initialize();
     init_pid = load_process("system/init.bin", loading_bar_enabled);
@@ -13800,6 +8987,8 @@ int main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1121-loading-init-and-entering-normal-execution -->
@@ -13810,12 +8999,12 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>shutdown()</code></span> stops with <code>JUMP 0</code> without freeing objects first. <span class="source-link"><code>reboot()</code></span> disables device interrupts, clears the timer and stack boundary, and sets <code>PC = 0</code> to rerun the EPROM bootloader. Their implementations are:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6612 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:17">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6612" data-code-part="1">
 
+<!-- README_CODE_PART code-6612 lines=1-15 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13850,15 +9039,16 @@ void reboot(void) {
 
 # 11. Complete startup: bootloader, kernel, init, shell, and user applications
 
-## 11.3 Init process (1)
+## 11.3 Init process
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1072 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1072" data-code-part="1">
 
+<!-- README_CODE_PART code-1072 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13871,25 +9061,10 @@ void reboot(void) {
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#113-init-process -->
-
-# 11. Complete startup: bootloader, kernel, init, shell, and user applications
-
-## 11.3 Init process (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-1081 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:18">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1081" data-code-part="1">
 
+<!-- README_CODE_PART code-1081 lines=1-16 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -13929,32 +9104,20 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6648 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6648 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6648:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Component</th>
-<th>Responsibility</th>
-</tr>
-</thead><tbody><tr>
-<td>Kernel <span class="source-link"><code>main()</code></span></td>
-<td>Initialize kernel state and devices, load PID 1, prepare its first execution, and dispatch</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Init</code></span></td>
-<td>Read environment configuration, load and start a shell, wait for it, and load a new shell afterward</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>Shell</code></span></td>
-<td>Read commands, find and load applications, redirect input/output, and manage foreground execution</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.19%" /><col style="width:68.81%" /></colgroup><thead><tr><th>Component</th><th>Responsibility</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel <span class="source-link"><code>main()</code></span></li></ul></td><td><ul><li>Initialize subsystems + dispatch</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>Init</code></span></li></ul></td><td><ul><li>Configure environment; supervise shell</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>Shell</code></span></li></ul></td><td><ul><li>Terminal ownership + command execution</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Init / PID 1</b><span>Init is the userspace supervisor: configure the environment, start a shell, wait for it, then start another session. Kernel initialization and dispatch remain kernel jobs.</span></aside>
+</div>
+<aside class="context-note"><b>Init / PID 1</b><ul><li>Environment → shell → wait → repeat</li>
+<li>Userspace supervisor</li></ul></aside>
 
 </div>
 
@@ -13968,32 +9131,14 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6666 rows=1-3 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6666 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6666:1,2,3">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Init function</th>
-<th>Return value / status</th>
-<th>Library functions</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>init_write_error(text)</code></span></td>
-<td>No value</td>
-<td><span class="source-link"><code>write()</code></span> sends the diagnostic to standard error without changing persistent init state</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_environment(void)</code></span></td>
-<td><code>true</code> when the complete file was read into the environment, <code>false</code> after an allocation, file, size, or syntax failure</td>
-<td><span class="source-link"><code>malloc()</code></span>, <span class="source-link"><code>open()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>setenv()</code></span>, and <span class="source-link"><code>free()</code></span>, changes the process-global <span class="source-link"><code>environ</code></span> array</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>main(void)</code></span></td>
-<td>Returns status 1 when setup or shell launch fails, otherwise does not return</td>
-<td><span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, and exact-child <span class="source-link"><code>waitpid()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.04%" /><col style="width:28.98%" /><col style="width:37.99%" /></colgroup><thead><tr><th>Init function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>init_write_error(text)</code></span></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>write → stderr diagnostic</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>read_environment(void)</code></span></li></ul></td><td><ul><li>Read /config environment</li></ul></td><td><ul><li>Read config; setenv; release buffers</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>main(void)</code></span></li></ul></td><td><ul><li>Setup/launch failure → 1; otherwise supervises</li></ul></td><td><ul><li><span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, and exact-child <span class="source-link"><code>waitpid()</code></span></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14011,12 +9156,14 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">After configuration, init repeatedly loads, starts, and waits for one shell:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6681 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:34">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-6681" data-code-part="1">
+
+<!-- README_CODE_PART code-6681 lines=1-16 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14036,6 +9183,18 @@ int main(void) {
             return 1;
         }
     }
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-6681" data-code-part="2">
+
+<!-- README_CODE_PART code-6681 lines=17-32 -->
+<div class="readme-code">
+
+```c {lines:false}
 
     while (true) {
         shell_pid = load("./user/shell.bin");
@@ -14062,21 +9221,24 @@ int main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1134-shell-startup -->
 
 # 11. Complete startup: bootloader, kernel, init, shell, and user applications · 11.3 Init process
 
-## 11.3.4 Shell startup (1)
+## 11.3.4 Shell startup
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1072 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1072" data-code-part="1">
 
+<!-- README_CODE_PART code-1072 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14089,25 +9251,10 @@ int main(void) {
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1134-shell-startup -->
-
-# 11. Complete startup: bootloader, kernel, init, shell, and user applications · 11.3 Init process
-
-## 11.3.4 Shell startup (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-1081 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:18">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1081" data-code-part="1">
 
+<!-- README_CODE_PART code-1081 lines=1-16 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14143,15 +9290,16 @@ void _start(int argc, char *first_argument) {
 
 # 11. Complete startup: bootloader, kernel, init, shell, and user applications · 11.3 Init process
 
-## 11.3.5 Loading user applications (1)
+## 11.3.5 Loading user applications
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-1072 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1072" data-code-part="1">
 
+<!-- README_CODE_PART code-1072 lines=1-3 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14164,25 +9312,10 @@ void _start(int argc, char *first_argument) {
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1135-loading-user-applications -->
-
-# 11. Complete startup: bootloader, kernel, init, shell, and user applications · 11.3 Init process
-
-## 11.3.5 Loading user applications (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-1081 repeated -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:18">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-1081" data-code-part="1">
 
+<!-- README_CODE_PART code-1081 lines=1-16 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14222,8 +9355,10 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>The shell's <code>exit</code> ends a session, letting init load another shell. <span class="source-link"><code>poweroff.bin</code></span> halts the system, and <span class="source-link"><code>reboot.bin</code></span> starts it again from EPROM. Since <span class="source-link"><code>waitpid()</code></span> also reports stops, stopping the shell itself can make init begin another session.</p>
-<p><span class="source-link"><code>init</code></span> lives under <span class="source-link"><code>system</code></span> because it implements system policy. It is not exposed through the normal <code>PATH=/user</code> command directory.</p></div>
+<div class="readme-list"><ul><li>exit → end session; init restarts shell</li>
+<li>poweroff → halt; reboot → EPROM</li>
+<li>Stopped shell can trigger new session</li>
+<li>Init in /system; commands in /user</li></ul></div>
 
 </div>
 
@@ -14237,8 +9372,11 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>PID 1 has no special signal protection. Removing init releases its resources, makes its children parentless, and sends their configured parent-death signals. The kernel does not restart init; children that avoid termination can survive.</p>
-<p>Normal final exit halts when no processes remain. Signal-driven removal of the last candidate has a dispatcher limitation: a pointer to the freed PCB can reach restoration, so killing the init tree does not guarantee clean shutdown.</p></div>
+<div class="readme-list"><ul><li>PID 1 has no signal protection</li>
+<li>Kernel releases init resources</li>
+<li>Children orphaned + parent-death signals</li>
+<li>Survivors continue; init never restarted</li>
+<li>Final-candidate deletion: dispatcher limitation</li></ul></div>
 
 </div>
 
@@ -14252,56 +9390,21 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6793 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6793 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-6793:1,2,3,4,5,6,7,8,9,10">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Global</th>
-<th>Meaning and storage</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>last_command_exit_status</code></span></td>
-<td>One integer used for <code>$?</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>last_background_process_id</code></span></td>
-<td>Most recently tracked background/stopped PID used for <code>$!</code>, <code>fg</code>, and <code>bg</code></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell_executable_path</code></span></td>
-<td>Embedded scratch buffer for one <code>PATH</code> candidate</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell_pipe_left_command</code></span>, <span class="source-link"><code>shell_pipe_right_command</code></span>, <span class="source-link"><code>shell_pipe_path</code></span></td>
-<td>Embedded command and temporary-path storage for one two-command pipeline</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>command_history</code></span></td>
-<td>Embedded ring containing at most eight recent commands, only consecutive duplicates are suppressed</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>command_history_draft</code></span></td>
-<td>Current unfinished line preserved while navigating history</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell_line_erase_sequence</code></span></td>
-<td>Embedded scratch array holding one batched terminal erase sequence</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell_input_buffer</code></span></td>
-<td>Up to 128 input bytes retained across command lines so one <span class="source-link"><code>read()</code></span> can drain the kernel terminal ring</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>command_history_start</code></span>, <span class="source-link"><code>command_history_count</code></span></td>
-<td>History ring indices/count</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>shell_input_index</code></span>, <span class="source-link"><code>shell_input_count</code></span></td>
-<td>Next retained input byte and number of valid bytes in <span class="source-link"><code>shell_input_buffer</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>last_command_exit_status</code></span></li></ul></td><td><ul><li>$? status integer</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>last_background_process_id</code></span></li></ul></td><td><ul><li>Background/stopped PID</li><li>Used by $!, fg, bg</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>shell_executable_path</code></span></li></ul></td><td><ul><li>Embedded scratch buffer for one <code>PATH</code> candidate</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>shell_pipe_left_command</code></span>, <span class="source-link"><code>shell_pipe_right_command</code></span>, <span class="source-link"><code>shell_pipe_path</code></span></li></ul></td><td><ul><li>Embedded command and temporary-path storage for one two-command pipeline</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>command_history</code></span></li></ul></td><td><ul><li>Eight-command ring; skip consecutive duplicates</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>command_history_draft</code></span></li></ul></td><td><ul><li>Current unfinished line preserved while navigating history</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>shell_line_erase_sequence</code></span></li></ul></td><td><ul><li>Embedded scratch array holding one batched terminal erase sequence</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>shell_input_buffer</code></span></li></ul></td><td><ul><li>Retain up to 128 read-ahead bytes</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>command_history_start</code></span>, <span class="source-link"><code>command_history_count</code></span></li></ul></td><td><ul><li>History ring indices/count</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>shell_input_index</code></span>, <span class="source-link"><code>shell_input_count</code></span></li></ul></td><td><ul><li>Next retained byte + valid byte count</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14319,11 +9422,10 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The current command is an 80-cell local array in <span class="source-link"><code>main()</code></span>. Descriptor state lives in the PCB's kernel table. Reserved slots 5–7 save standard streams during redirection. The declaration below shows that <span class="source-link"><code>shell_input_buffer</code></span> is an array in the user image:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-6811 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -14363,48 +9465,13 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6850 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-6850 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6850:1,2">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Buffer state</th>
-<th>Cell 0</th>
-<th>Cell 1</th>
-<th>Cell 2</th>
-<th>Cell 3</th>
-<th>Cell 4</th>
-<th>Cell 5</th>
-<th>Cell 6</th>
-<th style="text-align:right"><span class="source-link"><code>shell_input_index</code></span></th>
-<th style="text-align:right"><span class="source-link"><code>shell_input_count</code></span></th>
-</tr>
-</thead><tbody><tr>
-<td>After <span class="source-link"><code>read()</code></span></td>
-<td><code>p</code></td>
-<td><code>w</code></td>
-<td><code>d</code></td>
-<td><code>\n</code></td>
-<td><code>l</code></td>
-<td><code>s</code></td>
-<td><code>\n</code></td>
-<td style="text-align:right">0</td>
-<td style="text-align:right">7</td>
-</tr>
-<tr>
-<td>After <span class="source-link"><code>read_line()</code></span> returns <code>pwd</code></td>
-<td><code>p</code></td>
-<td><code>w</code></td>
-<td><code>d</code></td>
-<td><code>\n</code></td>
-<td><code>l</code></td>
-<td><code>s</code></td>
-<td><code>\n</code></td>
-<td style="text-align:right">4</td>
-<td style="text-align:right">7</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.17%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:16.27%" /><col style="width:16.27%" /></colgroup><thead><tr><th>Buffer state</th><th>Cell 0</th><th>Cell 1</th><th>Cell 2</th><th>Cell 3</th><th>Cell 4</th><th>Cell 5</th><th>Cell 6</th><th>shell_input_index</th><th>shell_input_count</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>After <span class="source-link"><code>read()</code></span></li></ul></td><td><ul><li><code>p</code></li></ul></td><td><ul><li><code>w</code></li></ul></td><td><ul><li><code>d</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li><code>l</code></li></ul></td><td><ul><li><code>s</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>7</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>After <span class="source-link"><code>read_line()</code></span> returns <code>pwd</code></li></ul></td><td><ul><li><code>p</code></li></ul></td><td><ul><li><code>w</code></li></ul></td><td><ul><li><code>d</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li><code>l</code></li></ul></td><td><ul><li><code>s</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li>4</li></ul></td><td><ul><li>7</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14422,12 +9489,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This helper consumes buffered characters before making another read:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6859 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:19">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6859" data-code-part="1">
 
+<!-- README_CODE_PART code-6859 lines=1-17 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14468,62 +9535,20 @@ int read_shell_character(char *character) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6881 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6881 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6881:1,2,3,4,5,6,7,8,9">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Shell function</th>
-<th>Return value / status</th>
-<th>Library functions</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>read_shell_character(character)</code></span></td>
-<td>1 after returning one byte, 0 at EOF, or the negative <span class="source-link"><code>read()</code></span> error</td>
-<td>Refills <span class="source-link"><code>shell_input_buffer</code></span> with one <span class="source-link"><code>read()</code></span> and returns retained bytes one at a time across command lines</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>read_line(buffer, capacity)</code></span></td>
-<td>Command length, or <code>-1</code> at EOF</td>
-<td>Calls <span class="source-link"><code>read_shell_character()</code></span>, batches consecutive printable echoes through <span class="source-link"><code>flush_shell_line_echo()</code></span>, flushes them before editing controls, edits the stack buffer, and updates history-navigation state</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>remember_shell_command(command)</code></span></td>
-<td>No value</td>
-<td><span class="source-link"><code>strcmp()</code></span> and <span class="source-link"><code>strcpy()</code></span>, mutates the global eight-entry history ring and skips consecutive duplicates</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>expand_variables(arguments, result, capacity)</code></span></td>
-<td>Expanded buffer (truncated to capacity minus one), or <code>NULL</code> for a null input</td>
-<td>Uses <span class="source-link"><code>getenv()</code></span> and the <code>$?</code>/<code>$!</code> globals while preserving quotes for argument parsing, expansion also occurs inside single quotes</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>load_from_path(name)</code></span></td>
-<td>Loaded PID, or 0</td>
-<td>Reads <code>PATH</code> with <span class="source-link"><code>getenv()</code></span>, builds candidates, and calls <span class="source-link"><code>load()</code></span> in order</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>run_process(pid, arguments, background, stdin_path, stdout_path, append_stdout, stderr_path, append_stderr)</code></span></td>
-<td><code>true</code> when <span class="source-link"><code>run()</code></span> succeeds, otherwise <code>false</code></td>
-<td><span class="source-link"><code>run()</code></span>, <span class="source-link"><code>WIFSTOPPED()</code></span>, <span class="source-link"><code>open()</code></span>, <span class="source-link"><code>dup2()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span>, and <span class="source-link"><code>waitpid()</code></span>, changes <code>$?</code>/<code>$!</code> state</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>continue_background_process(foreground)</code></span></td>
-<td><code>true</code> when the tracked process was continued, otherwise <code>false</code></td>
-<td><span class="source-link"><code>kill()</code></span> and, for <code>fg</code>, <span class="source-link"><code>set_foreground_process()</code></span> and <span class="source-link"><code>waitpid()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>eval(command)</code></span></td>
-<td><code>false</code> only for <code>exit</code>, otherwise <code>true</code></td>
-<td>Selects a built-in or external execution path</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>main(argc, argv)</code></span></td>
-<td>Shell exit status</td>
-<td><span class="source-link"><code>prctl()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span>, <span class="source-link"><code>lseek()</code></span>, <span class="source-link"><code>unsetenv()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>read_line()</code></span>, and <span class="source-link"><code>eval()</code></span>, closes 3–7 at startup and owns the interactive or redirected-input execution path</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.94%" /><col style="width:20.26%" /><col style="width:35.80%" /></colgroup><thead><tr><th>Shell function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>read_shell_character(character)</code></span></li></ul></td><td><ul><li>1 byte; 0 EOF; negative error</li></ul></td><td><ul><li>Refill once; consume retained bytes</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>read_line(buffer, capacity)</code></span></li></ul></td><td><ul><li>Length; −1 EOF</li></ul></td><td><ul><li>Batch echoes; edit line; navigate history</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>remember_shell_command(command)</code></span></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>strcmp/strcpy; update eight-entry ring</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>expand_variables(arguments, result, capacity)</code></span></li></ul></td><td><ul><li>Expanded buffer; bounded length; NULL on null</li></ul></td><td><ul><li>getenv + $?/$!; retain quote bytes</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>load_from_path(name)</code></span></li></ul></td><td><ul><li>Loaded PID, or 0</li></ul></td><td><ul><li>Search PATH; load candidates in order</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>run_process(pid, arguments, background, stdin_path, stdout_path, append_stdout, stderr_path, append_stderr)</code></span></li></ul></td><td><ul><li><code>true</code> when <span class="source-link"><code>run()</code></span> succeeds, otherwise <code>false</code></li></ul></td><td><ul><li>Redirect; run; foreground/wait; update statuses</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>continue_background_process(foreground)</code></span></li></ul></td><td><ul><li><code>true</code> when the tracked process was continued, otherwise <code>false</code></li></ul></td><td><ul><li><span class="source-link"><code>kill()</code></span> and, for <code>fg</code>, <span class="source-link"><code>set_foreground_process()</code></span> and <span class="source-link"><code>waitpid()</code></span></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>eval(command)</code></span></li></ul></td><td><ul><li><code>false</code> only for <code>exit</code>, otherwise <code>true</code></li></ul></td><td><ul><li>Selects a built-in or external execution path</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>main(argc, argv)</code></span></li></ul></td><td><ul><li>Shell exit status</li></ul></td><td><ul><li>Initialize ownership; close scratch; command loop</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14541,67 +9566,21 @@ int read_shell_character(char *character) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6900 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6900 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-6900:1,2,3,4,5,6,7,8,9,10">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Input</th>
-<th>Shell behavior</th>
-<th>Implementation</th>
-</tr>
-</thead><tbody><tr>
-<td>Line feed or carriage return</td>
-<td>Echo one newline and finish the command</td>
-<td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>shell_write_character()</code></span> and ends its loop</td>
-</tr>
-<tr>
-<td>Backspace (8) or Delete (127)</td>
-<td>Remove one buffered character and erase it visually</td>
-<td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with <code>length - 1</code></td>
-</tr>
-<tr>
-<td><code>Ctrl+U</code> (21)</td>
-<td>Erase the complete current line</td>
-<td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with retained length 0</td>
-</tr>
-<tr>
-<td><code>Ctrl+V</code> (22)</td>
-<td>Ignore the byte because PicoOS has no literal-next-character mode</td>
-<td>It matches no <span class="source-link"><code>read_line()</code></span> branch and is below the printable range, so it is not appended</td>
-</tr>
-<tr>
-<td><code>Ctrl+W</code> (23)</td>
-<td>Erase trailing whitespace and the previous word</td>
-<td><span class="source-link"><code>read_line()</code></span> finds the retained prefix, then calls <span class="source-link"><code>erase_shell_line_suffix()</code></span></td>
-</tr>
-<tr>
-<td>Up arrow (<code>ESC [ A</code> or <code>ESC O A</code>)</td>
-<td>Move toward older entries in the eight-command history ring</td>
-<td><span class="source-link"><code>read_line()</code></span> decodes the sequence, then calls <span class="source-link"><code>navigate_command_history(..., 1)</code></span></td>
-</tr>
-<tr>
-<td>Down arrow (<code>ESC [ B</code> or <code>ESC O B</code>)</td>
-<td>Move toward newer entries and finally restore the draft</td>
-<td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>navigate_command_history(..., -1)</code></span></td>
-</tr>
-<tr>
-<td>Left/right arrows (<code>ESC [ C/D</code> or <code>ESC O C/D</code>)</td>
-<td>Consume the escape sequence but do not move the cursor</td>
-<td><span class="source-link"><code>read_line()</code></span> sets <span class="source-link"><code>process_character</code></span> to <code>false</code> without changing the line</td>
-</tr>
-<tr>
-<td>Tab</td>
-<td>Append one space if room remains</td>
-<td><span class="source-link"><code>read_line()</code></span> converts it to a space, then calls <span class="source-link"><code>append_shell_line_character()</code></span></td>
-</tr>
-<tr>
-<td>Printable byte</td>
-<td>Append it if room remains</td>
-<td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>append_shell_line_character()</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Line feed or carriage return</li></ul></td><td><ul><li>Echo one newline and finish the command</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>shell_write_character()</code></span> and ends its loop</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Backspace (8) or Delete (127)</li></ul></td><td><ul><li>Remove one buffered character and erase it visually</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with <code>length - 1</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>Ctrl+U</code> (21)</li></ul></td><td><ul><li>Erase the complete current line</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with retained length 0</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>Ctrl+V</code> (22)</li></ul></td><td><ul><li>Ignore the byte because PicoOS has no literal-next-character mode</li></ul></td><td><ul><li>No matching branch; discarded</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>Ctrl+W</code> (23)</li></ul></td><td><ul><li>Erase trailing whitespace and the previous word</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> finds the retained prefix, then calls <span class="source-link"><code>erase_shell_line_suffix()</code></span></li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li>Up: ESC [ A / ESC O A</li></ul></td><td><ul><li>Move toward older entries in the eight-command history ring</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> decodes the sequence, then calls <span class="source-link"><code>navigate_command_history(..., 1)</code></span></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Down: ESC [ B / ESC O B</li></ul></td><td><ul><li>Move toward newer entries and finally restore the draft</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>navigate_command_history(..., -1)</code></span></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>Left/right: ESC [ C/D / ESC O C/D</li></ul></td><td><ul><li>Consume the escape sequence but do not move the cursor</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> sets <span class="source-link"><code>process_character</code></span> to <code>false</code> without changing the line</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>Tab</li></ul></td><td><ul><li>Append one space if room remains</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> converts it to a space, then calls <span class="source-link"><code>append_shell_line_character()</code></span></li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li>Printable byte</li></ul></td><td><ul><li>Append it if room remains</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>append_shell_line_character()</code></span></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14619,12 +9598,12 @@ int read_shell_character(char *character) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">These excerpts distinguish history navigation from ordinary editing:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-6915 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:21">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-6915" data-code-part="1">
 
+<!-- README_CODE_PART code-6915 lines=1-19 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14667,52 +9646,18 @@ if (character == SHELL_CTRL_U) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6958 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6958 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-6958:1,2,3,4,5,6,7">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Stage</th>
-<th>Result</th>
-<th>What changed</th>
-</tr>
-</thead><tbody><tr>
-<td>Input</td>
-<td><code>echo.bin &quot;hello $NAME ($?)&quot; &gt; result.txt &amp;</code></td>
-<td>Nothing yet</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strip_background_operator()</code></span></td>
-<td><code>echo.bin &quot;hello $NAME ($?)&quot; &gt; result.txt</code> and <span class="source-link"><code>background</code></span> set to <code>true</code></td>
-<td>Removed only the trailing <code>&amp;</code> and adjacent whitespace</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>strip_command_redirections()</code></span></td>
-<td>Command prefix <code>echo.bin &quot;hello $NAME ($?)&quot;</code><br><span class="source-link"><code>stdout_path</code></span> points at <code>result.txt</code></td>
-<td>Parsed the final <code>&gt;</code> suffix and terminated the command before it. The path is not expanded</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>command_arguments()</code></span></td>
-<td>Name <code>echo.bin</code><br>Raw arguments <code>&quot;hello $NAME ($?)&quot;</code></td>
-<td>Replaced the separator after the name with <code>\0</code> and returned a pointer to the remainder</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>load_from_path()</code></span></td>
-<td>Loaded <code>/user/echo.bin</code>, returning a <span class="source-link"><code>NEW</code></span> PID</td>
-<td>Used <code>PATH</code>. This step does <strong>not</strong> copy descriptors</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>expand_variables()</code></span></td>
-<td><code>&quot;hello Ada (0)&quot;</code></td>
-<td>Replaced <code>$NAME</code> and <code>$?</code>, deliberately retaining quote bytes</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>run()</code></span></td>
-<td>Child <span class="source-link"><code>argv[1]</code></span> is <code>hello Ada (0)</code></td>
-<td>Kernel run setup removed matching quotes while building <span class="source-link"><code>argv</code></span>, inherited the temporarily redirected descriptors, and made the child <span class="source-link"><code>READY</code></span></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.40%" /><col style="width:31.28%" /><col style="width:38.33%" /></colgroup><thead><tr><th>Stage</th><th>Result</th><th>What changed</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Input</li></ul></td><td><ul><li>Original command + redirection + &amp;</li></ul></td><td><ul><li>Nothing yet</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>strip_background_operator()</code></span></li></ul></td><td><ul><li>Trailing &amp; removed; background=true</li></ul></td><td><ul><li>Removed only the trailing <code>&amp;</code> and adjacent whitespace</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>strip_command_redirections()</code></span></li></ul></td><td><ul><li>Command prefix + stdout_path</li></ul></td><td><ul><li>Split final &gt;; path stays unexpanded</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>command_arguments()</code></span></li></ul></td><td><ul><li>Separated name + raw arguments</li></ul></td><td><ul><li>Terminate name; retain raw argument suffix</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>load_from_path()</code></span></li></ul></td><td><ul><li>/user/echo.bin; NEW PID</li></ul></td><td><ul><li>Used <code>PATH</code>. This step does <strong>not</strong> copy descriptors</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>expand_variables()</code></span></li></ul></td><td><ul><li>&quot;hello Ada (0)&quot;; quotes retained</li></ul></td><td><ul><li>Replaced <code>$NAME</code> and <code>$?</code>, deliberately retaining quote bytes</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>run()</code></span></li></ul></td><td><ul><li>argv[1] = hello Ada (0)</li></ul></td><td><ul><li>Strip matching quotes; inherit FDs; READY</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -14730,62 +9675,20 @@ if (character == SHELL_CTRL_U) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6992 rows=1-9 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-6992 -->
+<ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Built-in</th>
-<th>Behavior</th>
-<th>Library functions / host requests</th>
-</tr>
-</thead><tbody><tr>
-<td><code>exit</code></td>
-<td>Accepts no argument and returns false from <span class="source-link"><code>eval()</code></span>, ending this shell session</td>
-<td>No immediate syscall, <span class="source-link"><code>libstart</code></span> later calls <span class="source-link"><code>exit(main_result)</code></span></td>
-</tr>
-<tr>
-<td><code>eval COMMAND</code></td>
-<td>Recursively evaluates the remaining text in the same shell state</td>
-<td>Re-enters <span class="source-link"><code>eval()</code></span>, resulting command calls apply normally</td>
-</tr>
-<tr>
-<td><code>export NAME=value</code></td>
-<td>Expands the complete assignment and stores/replaces the variable</td>
-<td><span class="source-link"><code>getenv</code></span> during expansion and <span class="source-link"><code>setenv(..., true)</code></span></td>
-</tr>
-<tr>
-<td><code>cd DIRECTORY</code></td>
-<td>Changes this shell PCB's working-directory string after host validation</td>
-<td><span class="source-link"><code>chdir()</code></span><br><strong>Host request:</strong> <code>is-directory &lt;absolute-path&gt;</code></td>
-</tr>
-<tr>
-<td><code>load PATH</code></td>
-<td>Loads a binary but leaves its PCB in <span class="source-link"><code>NEW</code></span></td>
-<td><span class="source-link"><code>load()</code></span><br><strong>Host requests:</strong> <code>file-size &lt;path&gt;</code>, then <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for the header and executable payload</td>
-</tr>
-<tr>
-<td><code>run PID [ARGUMENTS]</code></td>
-<td>Starts a previously loaded PCB, supports <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&gt;&gt;</code>, <code>2&gt;</code>, and <code>2&gt;&gt;</code></td>
-<td><span class="source-link"><code>run()</code></span>, and possibly <span class="source-link"><code>open()</code></span>/<span class="source-link"><code>dup2()</code></span>/<span class="source-link"><code>close()</code></span>, <span class="source-link"><code>set_foreground_process()</code></span>, <span class="source-link"><code>waitpid()</code></span><br><strong>Host requests when opening redirections:</strong> <code>file-size &lt;path&gt;</code> for input/append existence checks, or <code>write &lt;path&gt;</code> followed by <code>write stdout</code> to create/truncate output</td>
-</tr>
-<tr>
-<td><code>unload PID</code></td>
-<td>Terminates/removes the selected non-current process</td>
-<td><span class="source-link"><code>unload()</code></span></td>
-</tr>
-<tr>
-<td><code>fg</code></td>
-<td>Makes the most recently tracked PID foreground, sends <span class="source-link"><code>SIGCONT</code></span>, and waits</td>
-<td><span class="source-link"><code>set_foreground_process</code></span>, <span class="source-link"><code>kill</code></span>, <span class="source-link"><code>waitpid</code></span></td>
-</tr>
-<tr>
-<td><code>bg</code></td>
-<td>Sends <span class="source-link"><code>SIGCONT</code></span> to the most recently tracked PID without waiting</td>
-<td><span class="source-link"><code>kill()</code></span></td>
-</tr></tbody></table></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><code>exit</code></li></ul><ul><li>End current session</li></ul><ul><li>libstart → exit(main_result)</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>eval COMMAND</code></li></ul><ul><li>Recursively evaluate command; same shell state</li></ul><ul><li>eval; normal command APIs</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>export NAME=value</code></li></ul><ul><li>Expand assignment; update environment</li></ul><ul><li>getenv/setenv</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>cd DIRECTORY</code></li></ul><ul><li>Validate path; change shell directory</li></ul><ul><li>chdir; host directory check</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>load PATH</code></li></ul><ul><li>Load binary → NEW PCB</li></ul><ul><li>load; host file-size + read-range</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>run PID [ARGUMENTS]</code></li></ul><ul><li>Run child; background + redirection</li></ul><ul><li>Redirect → run → wait → restore</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>unload PID</code></li></ul><ul><li>Remove noncurrent process</li></ul><ul><li>unload</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>fg</code></li></ul><ul><li>Continue job; foreground; wait</li></ul><ul><li>Foreground ownership; SIGCONT; waitpid</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><code>bg</code></li></ul><ul><li>Continue job in background</li></ul><ul><li>kill(SIGCONT)</li></ul></div></div>
 
 </ReadmeVisual>
 
@@ -14803,12 +9706,12 @@ if (character == SHELL_CTRL_U) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This excerpt shows descriptor restoration before ownership transfer, followed by waiting and ownership reset:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7019 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:21">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-7019" data-code-part="1">
 
+<!-- README_CODE_PART code-7019 lines=1-19 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14851,12 +9754,12 @@ if (!started) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>set_foreground_process()</code> stores the child PID for a positive argument. Argument zero instead stores the shell's negative PID:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7044 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:19">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-7044" data-code-part="1">
 
+<!-- README_CODE_PART code-7044 lines=1-17 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -14897,88 +9800,25 @@ int set_foreground_process(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7116 rows=1-8 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-7116 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7116:1,2,3,4,5,6,7,8">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">Descriptor</th>
-<th>1. Initial shell</th>
-<th>2. After opening <code>OUT</code> as 3, then saving 1 as 6</th>
-<th>3. After installing 3 as 1 and closing 3</th>
-<th>4. Child after run setup</th>
-<th>5. Shell after restoring 6 as 1 and closing 6</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right">0</td>
-<td><code>T-in</code></td>
-<td><code>T-in</code></td>
-<td><code>T-in</code></td>
-<td>independent <code>T-in</code> copy</td>
-<td><code>T-in</code></td>
-</tr>
-<tr>
-<td style="text-align:right">1</td>
-<td><code>T-out</code></td>
-<td><code>T-out</code></td>
-<td><code>OUT</code></td>
-<td>independent <code>OUT</code> copy</td>
-<td><code>T-out</code></td>
-</tr>
-<tr>
-<td style="text-align:right">2</td>
-<td><code>T-err</code></td>
-<td><code>T-err</code></td>
-<td><code>T-err</code></td>
-<td>independent <code>T-err</code> copy</td>
-<td><code>T-err</code></td>
-</tr>
-<tr>
-<td style="text-align:right">3</td>
-<td>free</td>
-<td><code>OUT</code> opened here</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-</tr>
-<tr>
-<td style="text-align:right">4</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-</tr>
-<tr>
-<td style="text-align:right">5</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-<td>free because inheritance never examines it</td>
-<td>free</td>
-</tr>
-<tr>
-<td style="text-align:right">6</td>
-<td>free</td>
-<td>saved <code>T-out</code> copy</td>
-<td>saved <code>T-out</code> copy</td>
-<td>free because inheritance never examines it</td>
-<td>free</td>
-</tr>
-<tr>
-<td style="text-align:right">7</td>
-<td>free</td>
-<td>free</td>
-<td>free</td>
-<td>free because inheritance never examines it</td>
-<td>free</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.53%" /><col style="width:15.25%" /><col style="width:14.49%" /><col style="width:14.47%" /><col style="width:23.02%" /><col style="width:15.25%" /></colgroup><thead><tr><th>Descriptor</th><th>Initial shell</th><th>Open 3; save 1 → 6</th><th>3 → 1; close 3</th><th>Child after run</th><th>Restore 6 → 1; close 6</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li>T-in copy</li></ul></td><td><ul><li><code>T-in</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><code>T-out</code></li></ul></td><td><ul><li><code>T-out</code></li></ul></td><td><ul><li><code>OUT</code></li></ul></td><td><ul><li>OUT copy</li></ul></td><td><ul><li><code>T-out</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li>T-err copy</li></ul></td><td><ul><li><code>T-err</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li><code>OUT</code> opened here</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>5</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>6</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>saved <code>T-out</code> copy</li></ul></td><td><ul><li>saved <code>T-out</code> copy</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>7</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div><aside class="context-note"><b>Unix fork + exec / PicoOS load + run</b><span>A Unix shell redirects descriptors in a forked child before exec. PicoOS redirects its own table, runs the child with a copied snapshot, then restores itself. Lack of paging alone does not explain this choice.</span></aside>
+</div>
+<aside class="context-note"><b>fork + exec / load + run</b><ul><li>Unix: redirect forked child</li>
+<li>PicoOS: redirect shell; copy; restore</li></ul></aside>
 
 </div>
 
@@ -14992,11 +9832,10 @@ int set_foreground_process(int pid) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The arrows show how the snapshots are produced. Output is opened before stdout is saved, so open failure leaves the original table untouched:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7130 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TB
@@ -15058,12 +9897,12 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Descriptor inheritance happens in run setup, before the child is scheduled:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7176 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:22">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-7176" data-code-part="1">
 
+<!-- README_CODE_PART code-7176 lines=1-20 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15107,60 +9946,18 @@ bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7205 rows=1-7 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7205 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7205:1,2,3,4,5,6,7">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Shell form</th>
-<th>Opens/creates</th>
-<th>Copies and replacements before <span class="source-link"><code>run()</code></span></th>
-<th>Child endpoints and shell cleanup</th>
-</tr>
-</thead><tbody><tr>
-<td><code>COMMAND</code></td>
-<td>None</td>
-<td>None</td>
-<td>Child receives independent copies of 0–2 and opened-file entries in 3–4</td>
-</tr>
-<tr>
-<td><code>COMMAND &lt; IN</code></td>
-<td>Save 0 in reserved slot 5, close 0, then <span class="source-link"><code>open(IN, O_RDONLY)</code></span> must return 0</td>
-<td><span class="source-link"><code>dup2(0, 5)</code></span> saves current stdin</td>
-<td>Child reads <code>IN</code> on 0 but does not inherit slot 5, shell restores 5 to 0, then closes 5</td>
-</tr>
-<tr>
-<td><code>COMMAND &gt; OUT</code></td>
-<td><span class="source-link"><code>open(OUT, O_WRONLY | O_CREAT | O_TRUNC)</code></span>, normally temporary slot 3</td>
-<td><span class="source-link"><code>dup2(1, 6)</code></span> saves stdout, <span class="source-link"><code>dup2(temporary, 1)</code></span> installs <code>OUT</code>, close temporary</td>
-<td>Child writes <code>OUT</code> on 1 but does not inherit slot 6, shell restores 6 to 1, then closes 6</td>
-</tr>
-<tr>
-<td><code>COMMAND &gt;&gt; OUT</code></td>
-<td>Same, with <span class="source-link"><code>O_APPEND</code></span> instead of <span class="source-link"><code>O_TRUNC</code></span></td>
-<td>Same stdout operations</td>
-<td>Each child write appends using a <code>file-size</code> request</td>
-</tr>
-<tr>
-<td><code>COMMAND 2&gt; ERR</code> / <code>2&gt;&gt; ERR</code></td>
-<td>Open with the corresponding truncate/append flags</td>
-<td><span class="source-link"><code>dup2(2, 7)</code></span> saves stderr, <span class="source-link"><code>dup2(temporary, 2)</code></span> installs <code>ERR</code>, close temporary</td>
-<td>Child writes <code>ERR</code> on 2 but does not inherit slot 7, shell restores 7 to 2, then closes 7</td>
-</tr>
-<tr>
-<td><code>COMMAND &lt; IN &gt; OUT 2&gt; ERR</code></td>
-<td>Perform stdout, stderr, then stdin setup, append variants may replace either output operator</td>
-<td>Combines the operations above, using reserved slots 5, 6, and 7</td>
-<td>Child receives all redirected 0/1/2 endpoints but none of the saved originals, shell restores and closes every used save slot after <span class="source-link"><code>run()</code></span></td>
-</tr>
-<tr>
-<td><code>LEFT | RIGHT</code></td>
-<td>Create <code>.picoos-pipe-PID.tmp</code> through <code>LEFT &gt; temporary</code>, then open it through <code>RIGHT &lt; temporary</code></td>
-<td>Uses stdout save slot 6 for <code>LEFT</code> and stdin save slot 5 for <code>RIGHT</code>, no pipe descriptor kind exists</td>
-<td><code>LEFT</code> writes the host-backed file and exits before <code>RIGHT</code> reads it, each command's shell descriptors are restored, then the shell unlinks the temporary path</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.34%" /><col style="width:35.76%" /><col style="width:16.33%" /><col style="width:32.58%" /></colgroup><thead><tr><th>Shell form</th><th>Opens/creates</th><th>Copies and replacements before run()</th><th>Child endpoints and shell cleanup</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>COMMAND</code></li></ul></td><td><ul><li>None</li></ul></td><td><ul><li>None</li></ul></td><td><ul><li>Child: independent 0–2 + file slots 3–4</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>COMMAND &lt; IN</code></li></ul></td><td><ul><li>Save stdin → 5; open IN as 0</li></ul></td><td><ul><li><span class="source-link"><code>dup2(0, 5)</code></span> saves current stdin</li></ul></td><td><ul><li>Child reads 0; shell restores/closes 5</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>COMMAND &gt; OUT</code></li></ul></td><td><ul><li>Open OUT: write/create/truncate; temporary slot 3</li></ul></td><td><ul><li>Save 1 → 6; install OUT; close temporary</li></ul></td><td><ul><li>Child writes 1; shell restores/closes 6</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>COMMAND &gt;&gt; OUT</code></li></ul></td><td><ul><li>Same, with <span class="source-link"><code>O_APPEND</code></span> instead of <span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>Same stdout operations</li></ul></td><td><ul><li>Each child write appends using a <code>file-size</code> request</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>COMMAND 2&gt; ERR</code> / <code>2&gt;&gt; ERR</code></li></ul></td><td><ul><li>Open with the corresponding truncate/append flags</li></ul></td><td><ul><li>Save 2 → 7; install ERR; close temporary</li></ul></td><td><ul><li>Child writes 2; shell restores/closes 7</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>COMMAND &lt; IN &gt; OUT 2&gt; ERR</code></li></ul></td><td><ul><li>stdout → stderr → stdin; append optional</li></ul></td><td><ul><li>Combine save slots 5, 6, 7</li></ul></td><td><ul><li>Child gets endpoints; shell restores originals</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>LEFT | RIGHT</code></li></ul></td><td><ul><li>LEFT &gt; temporary; RIGHT &lt; temporary</li></ul></td><td><ul><li>Save stdout → 6; stdin → 5</li></ul></td><td><ul><li>LEFT exits → RIGHT reads → unlink temporary</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -15178,12 +9975,12 @@ bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">For <code>program &gt; file.txt</code>, <span class="source-link"><code>redirect_output()</code></span> saves stdout in slot 6 and installs a truncating output descriptor. These lines show rollback on partial failure:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-7232 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:17">
+<ReadmeVisual kind="code" :width="581.8" data-code-source="code-7232" data-code-part="1">
 
+<!-- README_CODE_PART code-7232 lines=1-15 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15208,26 +10005,10 @@ return true;
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
-
-# 12. Shell
-
-## 12.6 Input/output redirection (6)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">Input redirection saves stdin in slot 5, closes slot 0, and relies on lowest-free allocation to reopen the input there:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-7257 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:15">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7257" data-code-part="1">
 
+<!-- README_CODE_PART code-7257 lines=1-13 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15264,12 +10045,14 @@ return true;
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>run_pipeline()</code></span> builds <code>.picoos-pipe-&lt;shell PID&gt;.tmp</code> in the current directory. It adds output redirection to the left command and input redirection to the right, as this code shows:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7287 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:24">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-7287" data-code-part="1">
+
+<!-- README_CODE_PART code-7287 lines=1-11 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15284,6 +10067,18 @@ if (!insert_redirection(
         right_command,
         "<",
         shell_pipe_path,
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-7287" data-code-part="2">
+
+<!-- README_CODE_PART code-7287 lines=12-22 -->
+<div class="readme-code">
+
+```c {lines:false}
         find_output_redirection(right_command),
         shell_pipe_right_command
     )) {
@@ -15305,6 +10100,8 @@ unlink(shell_pipe_path);
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#127-sequential-file-backed-pipelines -->
@@ -15315,11 +10112,10 @@ unlink(shell_pipe_path);
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">For <code>LEFT | RIGHT &gt; OUT</code>, the rewrite and both complete descriptor snapshots are:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7314 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TB
@@ -15364,12 +10160,12 @@ flowchart TB
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This session creates input, runs one pipeline, displays the result, and removes the files. Use a writable directory. The shell removes its temporary file:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7369 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:6">
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-7369" data-code-part="1" style="flex:0 0 100px">
 
+<!-- README_CODE_PART code-7369 lines=1-4 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -15397,67 +10193,20 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7397 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7397 -->
+<ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Binary (source link)</th>
-<th>Behavior</th>
-<th>Library functions / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>shell.bin</code></span></td>
-<td>Interactive command interpreter that can read newline-separated commands from redirected stdin</td>
-<td><span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write_without_uart_escape_check()</code></span>, <span class="source-link"><code>lseek()</code></span>, <span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, <span class="source-link"><code>waitpid()</code></span>, <span class="source-link"><code>kill()</code></span>, <span class="source-link"><code>prctl()</code></span>, <span class="source-link"><code>getenv()</code></span>, <span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>strlen()</code></span>, <span class="source-link"><code>open()</code></span>, <span class="source-link"><code>dup2()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>unlink()</code></span>, <span class="source-link"><code>chdir()</code></span>, <span class="source-link"><code>getcwd()</code></span>. See <span class="source-link"><code>12. Shell</code></span> for the other calls<br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code> and <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for process loading and regular-file stdin<br><code>write &lt;path&gt;</code> then <code>write stdout</code> when creating/truncating redirected output<br><code>is-directory &lt;path&gt;</code> for <code>cd</code><br><code>unlink &lt;path&gt;</code> for the pipeline file<br>Shared output requests when its own descriptors require them</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>echo.bin</code></span></td>
-<td>Prints <span class="source-link"><code>argv[1..]</code></span> separated by spaces, converts <code>\n</code> inside an argument, and adds a newline</td>
-<td><span class="source-link"><code>printf()</code></span><br><strong>Host Requests:</strong> shared output requests only</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>count.bin</code></span></td>
-<td>Counts forever with an optional busy-loop delay and yields after each displayed value</td>
-<td><span class="source-link"><code>printf()</code></span>, <span class="source-link"><code>atoi()</code></span>, <span class="source-link"><code>yield()</code></span><br><strong>Host Requests:</strong> shared output requests only</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>cat.bin</code></span></td>
-<td>Copies named files or stdin to stdout, terminal stdin supports line editing</td>
-<td><span class="source-link"><code>open()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>lseek()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>unsetenv()</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code> on named-file open, <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for regular input, plus shared output requests</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>touch.bin</code></span></td>
-<td>Creates each named file or updates its timestamps while preserving contents</td>
-<td><span class="source-link"><code>touch()</code></span><br><strong>Host Request:</strong> <code>touch &lt;path&gt;</code><br>Shared output requests only for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>cp.bin</code></span></td>
-<td>Copies one file to another in 64-cell chunks</td>
-<td><span class="source-link"><code>open()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>close()</code></span>, <span class="source-link"><code>unsetenv()</code></span><br><strong>Host Requests:</strong> source <code>file-size &lt;path&gt;</code> and <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code><br>Destination <code>write &lt;path&gt;</code>, <code>write stdout</code>, then <code>write-at &lt;offset&gt; &lt;path&gt;</code> and <code>write stdout</code><br>Shared output requests for diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>mv.bin</code></span></td>
-<td>Moves or renames one file or directory</td>
-<td><span class="source-link"><code>move()</code></span><br><strong>Host Request:</strong> <code>move &lt;old path&gt;\n&lt;new path&gt;</code><br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>sed.bin</code></span></td>
-<td>Reads stdin and inserts, changes, appends, or substitutes text at selected lines</td>
-<td><span class="source-link"><code>lseek()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>malloc()</code></span>, <span class="source-link"><code>free()</code></span>, <span class="source-link"><code>unsetenv()</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code> for its <span class="source-link"><code>SEEK_END</code></span>, <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code> for regular stdin, plus shared output requests</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ps.bin</code></span></td>
-<td>Prints every process PID and canonical system-relative binary path</td>
-<td><span class="source-link"><code>list_processes()</code></span><br><strong>Host Requests:</strong> shared output requests only</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>ls.bin</code></span></td>
-<td>Lists <code>.</code> or one directory, hides dot entries by default, and supports <code>-a</code></td>
-<td><span class="source-link"><code>opendir()</code></span>, <span class="source-link"><code>readdir()</code></span>, <span class="source-link"><code>closedir()</code></span><br><strong>Host Request:</strong> <code>ls &lt;path&gt;</code><br>Shared output requests</td>
-</tr></tbody></table></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>shell.bin</code></span></li></ul><ul><li>Interpret commands; interactive or redirected</li></ul><ul><li>Process + descriptor + environment APIs</li><li>Host: load/read/output/directory requests</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>echo.bin</code></span></li></ul><ul><li>Join arguments; expand \n; newline</li></ul><ul><li>printf; descriptor-based output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>count.bin</code></span></li></ul><ul><li>Count + busy delay; yield</li></ul><ul><li>printf/atoi/yield; descriptor-based output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>cat.bin</code></span></li></ul><ul><li>Files/stdin → stdout; editing</li></ul><ul><li>open/read/write/lseek/close</li><li>Host: file-size/read-range/output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>touch.bin</code></span></li></ul><ul><li>Create file or update timestamps</li></ul><ul><li>touch; host touch</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>cp.bin</code></span></li></ul><ul><li>Copy file in 64-cell chunks</li></ul><ul><li>open/read/write/close</li><li>Host: read-range/write-at</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mv.bin</code></span></li></ul><ul><li>Move/rename file or directory</li></ul><ul><li>move; host move/rename</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sed.bin</code></span></li></ul><ul><li>Insert/change/append/substitute stdin lines</li></ul><ul><li>lseek/read/write; malloc/free</li><li>Host: file-size/read-range/output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>ps.bin</code></span></li></ul><ul><li>Print PIDs + binary paths</li></ul><ul><li>list_processes; descriptor-based output</li></ul></div></div>
 
 </ReadmeVisual>
 
@@ -15475,101 +10224,20 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7397 rows=11-18 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7397 -->
+<ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Binary (source link)</th>
-<th>Behavior</th>
-<th>Library functions / Host Requests</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>mkdir.bin</code></span></td>
-<td>Creates every supplied directory and reports individual failures</td>
-<td><span class="source-link"><code>mkdir()</code></span><br><strong>Host Request:</strong> <code>mkdir &lt;path&gt;</code> for each operand<br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>pwd.bin</code></span></td>
-<td>Prints <span class="source-link"><code>working_directory</code></span> from the current <span class="source-link"><code>ProcessControlBlock</code></span></td>
-<td><span class="source-link"><code>getcwd()</code></span><br><strong>Host Requests:</strong> shared output requests only</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>rm.bin</code></span></td>
-<td>Removes every supplied file and continues after errors</td>
-<td><span class="source-link"><code>unlink()</code></span><br><strong>Host Request:</strong> <code>unlink &lt;path&gt;</code> for each operand<br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>rmdir.bin</code></span></td>
-<td>Removes every supplied empty directory and continues after errors</td>
-<td><span class="source-link"><code>rmdir()</code></span><br><strong>Host Request:</strong> <code>rmdir &lt;path&gt;</code> for each operand<br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>kill.bin</code></span></td>
-<td>Sends <span class="source-link"><code>SIGKILL</code></span> by default, a named/numbered signal, or signal 0 as a PID probe</td>
-<td><span class="source-link"><code>kill()</code></span>, <span class="source-link"><code>atoi()</code></span>, <span class="source-link"><code>yield()</code></span><br><strong>Host Requests:</strong> none on success<br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>poweroff.bin</code></span></td>
-<td>Halts PicoOS</td>
-<td><span class="source-link"><code>reboot(REBOOT_CMD_POWER_OFF)</code></span><br><strong>Host Requests:</strong> none on shutdown<br>Shared output requests for help/diagnostics</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>reboot.bin</code></span></td>
-<td>Requests a kernel-controlled reboot</td>
-<td><span class="source-link"><code>reboot(REBOOT_CMD_RESTART)</code></span><br><strong>Host Requests after restart:</strong> <code>load kernel/kernel.bin</code>, then <code>load /system/init.bin</code><br>Shared output requests for help/diagnostics before a valid reboot</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>uname.bin</code></span></td>
-<td>Prints the PicoOS version stored in <span class="source-link"><code>config/os-release.txt</code></span></td>
-<td><span class="source-link"><code>open()</code></span>, <span class="source-link"><code>read()</code></span>, <span class="source-link"><code>write()</code></span>, <span class="source-link"><code>close()</code></span><br><strong>Host Requests:</strong> <code>file-size &lt;path&gt;</code>, <code>read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;</code>, plus shared output requests</td>
-</tr></tbody></table></div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#131-applications-library-calls-and-host-requests -->
-
-# 13. User applications and commands
-
-## 13.1 Applications, library calls, and host requests (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-7420 rows=1-2 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Kernel function (shared helper)</th>
-<th>Return value / status</th>
-<th>Effects</th>
-<th>Calls</th>
-<th>Called by</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>command_write(file_descriptor, text)</code></span></td>
-<td>No return value, the write result is ignored</td>
-<td>Counts the text and writes it to the selected descriptor, such as stdout or stderr, the call creates an <span class="source-link"><code>IoRequest</code></span> inside the library</td>
-<td><span class="source-link"><code>write()</code></span><br><strong>Host requests:</strong> descriptor-dependent <code>file-size</code>, <code>write-at</code>, <code>write stderr</code>, <code>write stdout</code>, and optional <code>literal-output</code> requests described in <span class="source-link"><code>8.8 Opening, reading, writing, and seeking</code></span></td>
-<td><strong>User applications:</strong> <span class="source-link"><code>cat_usage()</code></span>, <span class="source-link"><code>count_usage()</code></span>, <span class="source-link"><code>cp_usage()</code></span>, <span class="source-link"><code>edit_standard_input()</code></span>, <span class="source-link"><code>kill_write_usage()</code></span>, <span class="source-link"><code>ls_usage()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>mkdir_usage()</code></span>, <span class="source-link"><code>mv_usage()</code></span>, <span class="source-link"><code>poweroff_usage()</code></span>, <span class="source-link"><code>print_path_error()</code></span>, <span class="source-link"><code>ps_usage()</code></span>, <span class="source-link"><code>pwd_usage()</code></span>, <span class="source-link"><code>reboot_usage()</code></span>, <span class="source-link"><code>rm_usage()</code></span>, <span class="source-link"><code>rmdir_usage()</code></span>, <span class="source-link"><code>sed_usage()</code></span>, <span class="source-link"><code>shell_usage()</code></span>, <span class="source-link"><code>touch_usage()</code></span>, <span class="source-link"><code>uname_usage()</code></span>, <span class="source-link"><code>write_replacement()</code></span></td>
-</tr>
-<tr>
-<td><span class="source-link"><code>command_is_help(argument)</code></span></td>
-<td><code>true</code> for exactly <code>-h</code> or <code>--help</code>, <code>false</code> otherwise</td>
-<td>Reads the argument without changing it</td>
-<td>None</td>
-<td><strong>User applications:</strong> <span class="source-link"><code>eval()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span>, <span class="source-link"><code>main()</code></span></td>
-</tr></tbody></table></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>ls.bin</code></span></li></ul><ul><li>Directory listing; optional -a</li></ul><ul><li>opendir/readdir/closedir; host ls</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mkdir.bin</code></span></li></ul><ul><li>Create supplied directories</li></ul><ul><li>mkdir; host mkdir</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>pwd.bin</code></span></li></ul><ul><li>Print current working directory</li></ul><ul><li>getcwd; descriptor-based output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>rm.bin</code></span></li></ul><ul><li>Remove supplied files</li></ul><ul><li>unlink; host unlink</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>rmdir.bin</code></span></li></ul><ul><li>Remove supplied empty directories</li></ul><ul><li>rmdir; host rmdir</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>kill.bin</code></span></li></ul><ul><li>Deliver signal; 0 probes PID</li></ul><ul><li>kill/atoi/yield; diagnostics output</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>poweroff.bin</code></span></li></ul><ul><li>Halt PicoOS</li></ul><ul><li>reboot(POWER_OFF); no host request</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>reboot.bin</code></span></li></ul><ul><li>Restart bootloader + kernel</li></ul><ul><li>reboot(RESTART); host reloads kernel + init</li></ul></div>
+<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>uname.bin</code></span></li></ul><ul><li>Print installed PicoOS version</li></ul><ul><li>open/read/write/close</li><li>Host: file-size/read-range/output</li></ul></div></div>
 
 </ReadmeVisual>
 
@@ -15587,17 +10255,25 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-7434 -->
-<div class="readme-list"><ul><li>echo: expands literal \n, joins arguments with spaces, and adds a newline; no -n option; returns 0.</li>
-<li>count: optional nonnegative busy-loop delay, not milliseconds; yields after each printed value.</li>
-<li>cat: copies 64-cell chunks; preserves bytes for files and escapes nonprintable terminal bytes. Terminal input supports editing and Ctrl+D; failures return 1.</li>
-<li>touch accepts multiple paths; cp/mv need one source and destination. cp copies 64-cell chunks; mv uses one host move request. ps includes itself and zombies.</li>
-<li>sed reads seekable stdin into memory. Supports line insertion/change/append, pattern insertion, and first literal substitution per line; no path operand.</li>
-<li>ls supports one directory and -a. mkdir has no -p; rm has no force/recursive mode; rmdir removes empty directories. These three accept multiple paths.</li></ul></div>
+<div class="readme-list bullet-columns"><ul><li>echo: spaces + newline; expands \n<ul><li>No -n; returns 0</li></ul></li>
+<li>count: optional busy-loop delay<ul><li>Yield after each value</li></ul></li>
+<li>cat: files/stdin → stdout<ul><li>64-cell chunks; terminal editing + Ctrl+D</li></ul></li>
+<li>touch: multiple paths<ul><li>cp/mv: one source + destination</li>
+<li>cp: 64-cell chunks; ps includes zombies</li></ul></li>
+<li>sed: seekable stdin; no path operand<ul><li>Insert/change/append; first literal substitution</li></ul></li>
+<li>ls: one directory; -a<ul><li>mkdir: no -p; rm: nonrecursive</li>
+<li>rmdir: empty directories; multiple paths</li></ul></li>
+<li>kill: default SIGKILL; names/numbers<ul><li>Signal 0 probes; zombies rejected</li>
+<li>Accepted request → yield</li></ul></li>
+<li>poweroff: halt; reboot: restart<ul><li>uname: installed version</li>
+<li>All three: no operands</li></ul></li></ul></div>
 
-</div><aside class="context-note"><b>Familiar Unix commands, smaller interfaces</b><span>Names are familiar, but supported options differ. cd must be a shell built-in because it changes the shell's own working directory.</span></aside>
+</div>
+<aside class="context-note"><b>Unix command names</b><ul><li>Reduced option sets</li>
+<li>cd: built-in changes shell directory</li></ul></aside>
 
 </div>
 
@@ -15611,31 +10287,14 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET list-7434 -->
-<div class="readme-list"><ul><li>kill defaults to SIGKILL; accepts supported names or numbers, including probe 0. Probe rejects zombies; an accepted request is followed by yield.</li>
-<li>poweroff halts; reboot restarts bootloader/kernel without ending the emulator; uname prints the installed PicoOS version. These take no operands.</li></ul></div>
-
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1311-command-behavior-and-supported-options -->
-
-# 13. User applications and commands · 13.1 Applications, library calls, and host requests
-
-## 13.1.1 Command behavior and supported options (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7494 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:24">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-7494" data-code-part="1">
+
+<!-- README_CODE_PART code-7494 lines=1-11 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -15650,6 +10309,18 @@ PicoOS> count.bin 0 > /device/null.dev &
 PicoOS> ps.bin
 14 user/count.bin
 PicoOS> kill.bin SIGSTOP $!
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-7494" data-code-part="2">
+
+<!-- README_CODE_PART code-7494 lines=12-22 -->
+<div class="readme-code readme-terminal">
+
+```console {lines:false}
 PicoOS> kill.bin SIGCONT $!
 PicoOS> kill.bin $!
 PicoOS> kill.bin 0 $!
@@ -15671,6 +10342,8 @@ PicoOS> rmdir.bin demo
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1312-command-errors-and-exit-statuses -->
@@ -15681,8 +10354,11 @@ PicoOS> rmdir.bin demo
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>Commands write results to stdout and diagnostics to stderr. Multi-path commands continue after an individual error but retain failure status. The shell stores foreground exit status in <code>$?</code>, diagnoses parsing and process errors, and reports signal stops or termination by PID and name.</p>
-<p><span class="source-link"><code>cp.bin</code></span>, <span class="source-link"><code>sed.bin</code></span>, and <span class="source-link"><code>echo.bin</code></span> do not check every output failure. A zero status therefore does not guarantee complete output. <span class="source-link"><code>7.2.2 Child waiting with waitpid</code></span> explains child-status delivery.</p></div>
+<div class="readme-list"><ul><li>Results → stdout; diagnostics → stderr</li>
+<li>Multiple paths: continue; retain failure</li>
+<li>Foreground result stored in $?</li>
+<li>Signal status reported by PID/name</li>
+<li>Unchecked writes: success may hide truncation</li></ul></div>
 
 </div>
 
@@ -15696,11 +10372,10 @@ PicoOS> rmdir.bin demo
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The diagram shows category targets and expected-output sources. Boot, OS, and shell tests all execute the full startup chain:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7556 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TD
@@ -15733,11 +10408,10 @@ flowchart TD
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">A library class is one top-level <code>.picoc</code> file. Other classes use a directory of fixtures. These examples show one library and one OS class:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7577 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart TD
@@ -15765,67 +10439,21 @@ flowchart TD
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7591 rows=1-10 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7591 -->
+<ReadmeVisual kind="table" :width="1324" data-table-key="table-7591:1,2,3,4,5,6,7,8,9,10">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>File or generated file</th>
-<th>Role</th>
-<th>Test categories</th>
-</tr>
-</thead><tbody><tr>
-<td><span class="source-link"><code>test/*.picoc</code></span></td>
-<td>One top-level file is one Library test. Its opening comments declare emulator input, expected output, and linked <code>.reti_blocks</code> dependencies. The Library tests have no separate test-specific <code>.header</code> files.</td>
-<td>Library</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/input.txt</code></td>
-<td>Host-side UTF-8 text read by <span class="source-link"><code>run_os_tests.py</code></span>. Each line becomes one command or encoded key sequence sent to the shell after the runner sees <code>PicoOS&gt; </code>.</td>
-<td>Boot, OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/expected_output.txt</code></td>
-<td>Source-controlled UTF-8 output that the test expects after terminal output has been normalized.</td>
-<td>Boot, OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/launcher.picoc</code></td>
-<td>A test-specific user program that coordinates an OS test by loading, starting, waiting for, or checking other programs. Its presence alone does not classify a directory as an OS test.</td>
-<td>Every OS test and the <span class="source-link"><code>shell_exit_status_pid</code> Shell test</span></td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/&lt;program&gt;.picoc</code></td>
-<td>Optional test application or worker. Every <code>.picoc</code> file in the directory is compiled and assembled into a <code>.bin</code> file under <code>binary/test/&lt;name&gt;/</code>.</td>
-<td>OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/*.header</code></td>
-<td>Optional definitions shared by test programs. The current shared-memory mutex tests use this form.</td>
-<td>OS when needed</td>
-</tr>
-<tr>
-<td>Other <code>test/&lt;name&gt;/*.txt</code> source files</td>
-<td>Optional guest-visible data, command script, or expected-output variant used by the test. The runner copies these files below <code>binary/test/&lt;name&gt;/</code>.</td>
-<td>OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/raw_output.txt</code></td>
-<td>Generated complete RETI-Emulator stdout, including prompts, typed commands, control characters, and loading bars.</td>
-<td>Boot, OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;name&gt;/output.txt</code></td>
-<td>Generated readable output after prompt lines, loading bars, terminal cursor effects, and empty lines have been removed. This is the actual value used for comparison.</td>
-<td>Boot, OS, Shell</td>
-</tr>
-<tr>
-<td><code>test/&lt;library-name&gt;.input</code>, <code>.expected_output</code>, <code>.output</code>, <code>.error</code>, <span class="source-link"><code>.reti</code></span>, and compiler files</td>
-<td>Generated files derived from a top-level Library source. The <code>.input</code> and <code>.expected_output</code> values come from its first two metadata comments.</td>
-<td>Library</td>
-</tr></tbody></table></div>
+<div class="table-panels table-panels-two" v-pre><div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>test/*.picoc</li></ul></td><td><ul><li>Program + input/expected/link metadata</li></ul></td><td><ul><li>Library</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>input.txt</li></ul></td><td><ul><li>Prompt-driven commands + encoded keys</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>expected_output.txt</li></ul></td><td><ul><li>Source-controlled normalized expectation</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>launcher.picoc</li></ul></td><td><ul><li>OS coordination program</li></ul></td><td><ul><li>Every OS test and the <span class="source-link"><code>shell_exit_status_pid</code> Shell test</span></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>&lt;program&gt;.picoc</code></li></ul></td><td><ul><li>Optional applications/workers</li></ul></td><td><ul><li>OS, Shell</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li>*.header</li></ul></td><td><ul><li>Shared definitions</li></ul></td><td><ul><li>OS when needed</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li>Other source *.txt</li></ul></td><td><ul><li>Guest data, scripts, expected variants</li></ul></td><td><ul><li>OS, Shell</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li>raw_output.txt</li></ul></td><td><ul><li>Complete emulator stdout</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>output.txt</li></ul></td><td><ul><li>Normalized actual output</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li>Library build artifacts</li></ul></td><td><ul><li>Derived input/output/compiler artifacts</li></ul></td><td><ul><li>Library</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -15843,12 +10471,12 @@ flowchart TD
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">This complete library test declares no input, an expected newline, and a stdio dependency in its comments:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7615 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-7615" data-code-part="1">
 
+<!-- README_CODE_PART code-7615 lines=1-10 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15882,11 +10510,10 @@ int main() {
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The runner ignores trailing whitespace per line. A differing output, compiler or emulator error, missing output, or five-second timeout fails the test.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7640 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -15914,12 +10541,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">An OS class puts process orchestration in <code>launcher.picoc</code>. Classification requires that source and exactly this three-line input sequence:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-7656 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7656" data-code-part="1">
 
+<!-- README_CODE_PART code-7656 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -15932,26 +10559,10 @@ poweroff.bin
 
 </ReadmeVisual>
 
-</div>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1413-os-test-example -->
-
-# 14. Test system · 14.1 Library, OS, shell, and boot test categories
-
-## 14.1.3 OS test example (2)
-
-<div class="deck-content readme-slide">
-
-<div class="artifact-caption">The shell loads the launcher as PID 3 and waits for it. The launcher starts the application under test:</div>
-<div class="readme-artifacts artifact-single">
-
 <!-- README_ASSET code-7665 -->
-<ReadmeVisual kind="code" :width="917.1999999999999" style="flex-grow:16">
+<ReadmeVisual kind="code" :width="917.1999999999999" data-code-source="code-7665" data-code-part="1">
 
+<!-- README_CODE_PART code-7665 lines=1-14 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -15985,15 +10596,16 @@ int main(void) {
 
 # 14. Test system · 14.1 Library, OS, shell, and boot test categories
 
-## 14.1.3 OS test example (3)
+## 14.1.3 OS test example (2)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-7684 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:11">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7684" data-code-part="1">
 
+<!-- README_CODE_PART code-7684 lines=1-9 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -16013,8 +10625,9 @@ int main(void) {
 </ReadmeVisual>
 
 <!-- README_ASSET code-7698 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7698" data-code-part="1">
 
+<!-- README_CODE_PART code-7698 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16037,15 +10650,14 @@ process with pid 5 created
 
 # 14. Test system · 14.1 Library, OS, shell, and boot test categories
 
-## 14.1.3 OS test example (4)
+## 14.1.3 OS test example (3)
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">The complete path is therefore:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7706 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -16075,11 +10687,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-7732 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7732" data-code-part="1">
 
+<!-- README_CODE_PART code-7732 lines=1-2 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16092,8 +10705,9 @@ poweroff.bin
 </ReadmeVisual>
 
 <!-- README_ASSET code-7740 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:7">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7740" data-code-part="1">
 
+<!-- README_CODE_PART code-7740 lines=1-5 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16122,11 +10736,10 @@ process with pid 4 created
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Each command passes through shell parsing and execution. The runner waits for the next prompt before continuing. More complex classes can include private applications and data.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7752 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -16156,11 +10769,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-columns">
 
 <!-- README_ASSET code-7770 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7770" data-code-part="1">
 
+<!-- README_CODE_PART code-7770 lines=1-2 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16173,8 +10787,9 @@ poweroff.bin
 </ReadmeVisual>
 
 <!-- README_ASSET code-7777 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:5">
+<ReadmeVisual kind="code" :width="580" data-code-source="code-7777" data-code-part="1">
 
+<!-- README_CODE_PART code-7777 lines=1-3 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16201,11 +10816,10 @@ process with pid 4 created
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><code>make test-boot</code> selects this fixture. <code>reti_emulator -e</code> starts the EPROM bootloader, followed by kernel, init, and shell. The runner sends <code>echo.bin</code> and <span class="source-link"><code>poweroff.bin</code></span> after their prompts.</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET mermaid-7787 -->
-<ReadmeVisual kind="mermaid" :width="1024" style="flex-grow:10">
+<ReadmeVisual kind="mermaid" :width="980">
 
 ```mermaid
 flowchart LR
@@ -16236,47 +10850,15 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7810 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1440" style="flex-grow:10">
+<!-- README_ASSET table-7810 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7810:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Test representation</th>
-<th>Started by</th>
-<th>Input path</th>
-<th>Code that runs</th>
-<th>Output and pass condition</th>
-</tr>
-</thead><tbody><tr>
-<td>Top-level Library <code>.picoc</code> file</td>
-<td><span class="source-link"><code>run_sys_tests.sh</code></span>, then <span class="source-link"><code>run_lib_test_case.sh</code></span></td>
-<td><code>// in:</code> is extracted from the source and supplied by RETI-Emulator test mode</td>
-<td>The compiled test and declared library dependencies run with the generated <span class="source-link"><code>config/isrs.reti</code></span> test interrupt service routines, without PicoOS</td>
-<td>Emulator output in <code>&lt;name&gt;.output</code> is compared with the value extracted from <code>// expected:</code>. Trailing whitespace is removed per line. Compile, emulator, timeout, missing-file, or comparison failure prevents a pass.</td>
-</tr>
-<tr>
-<td>OS directory</td>
-<td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind os</code></td>
-<td>The runner waits for <code>PicoOS&gt; </code> before sending each decoded <code>input.txt</code> line to emulator stdin. The shell loads and runs <code>launcher.bin</code>.</td>
-<td>EPROM bootloader, kernel, Init, shell, launcher, and any worker or application binaries</td>
-<td>Complete stdout is saved as <code>raw_output.txt</code>. <span class="source-link"><code>normalize_os_output()</code></span> applies terminal cursor effects and removes prompts, typed commands, loading bars, and empty lines to produce <code>output.txt</code>. <span class="source-link"><code>outputs_match()</code></span> removes trailing whitespace from the complete expected and actual strings and requires equality.</td>
-</tr>
-<tr>
-<td>Shell directory</td>
-<td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind shell</code></td>
-<td>The same prompt-controlled <code>input.txt</code> path feeds shell commands and encoded keys.</td>
-<td>EPROM bootloader, kernel, Init, shell, and commands or test-local applications named by those lines</td>
-<td>The same <code>raw_output.txt</code>, normalized <code>output.txt</code>, and <code>expected_output.txt</code> comparison as an OS test.</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>test/boot/</code></span></td>
-<td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind boot</code></td>
-<td>The same prompt-controlled path sends <code>echo.bin hello world</code> and <span class="source-link"><code>poweroff.bin</code></span> from <code>input.txt</code></td>
-<td>EPROM bootloader, kernel, Init, shell, and release applications. There is no test-local binary.</td>
-<td>The same <code>raw_output.txt</code>, normalized <code>output.txt</code>, and <code>expected_output.txt</code> comparison as OS and Shell tests.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:14.77%" /><col style="width:20.63%" /><col style="width:14.80%" /><col style="width:35.15%" /><col style="width:14.65%" /></colgroup><thead><tr><th>Test representation</th><th>Started by</th><th>Input path</th><th>Code that runs</th><th>Output and pass condition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Top-level Library <code>.picoc</code> file</li></ul></td><td><ul><li><span class="source-link"><code>run_sys_tests.sh</code></span>, then <span class="source-link"><code>run_lib_test_case.sh</code></span></li></ul></td><td><ul><li>Source // in: → emulator</li></ul></td><td><ul><li>Test + libraries; no PicoOS</li></ul></td><td><ul><li>Output equals // expected; trim line endings</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>OS directory</li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind os</code></li></ul></td><td><ul><li>Prompt-driven input.txt → launcher</li></ul></td><td><ul><li>Boot/kernel/init/shell/launcher/workers</li></ul></td><td><ul><li>Raw → normalize terminal → compare expectation</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>Shell directory</li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind shell</code></li></ul></td><td><ul><li>Prompt-driven commands + keys</li></ul></td><td><ul><li>Boot/kernel/init/shell/commands</li></ul></td><td><ul><li>Same normalized comparison as OS tests</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>test/boot/</code></span></li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind boot</code></li></ul></td><td><ul><li>Prompt-driven boot commands</li></ul></td><td><ul><li>Boot/kernel/init/shell/release applications</li></ul></td><td><ul><li>Same normalized comparison as OS tests</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -16294,52 +10876,37 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7831 rows=1-8 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7831 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7831:1,2,3,4,5,6,7,8">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Command</th>
-<th>Tests run</th>
-</tr>
-</thead><tbody><tr>
-<td><code>make test</code></td>
-<td>Builds the release tree, then runs <code>make test-lib</code>, <code>make test-sys</code>, and <code>make test-boot</code>, in that order. With the default empty patterns, this is all 63 tests.</td>
-</tr>
-<tr>
-<td><code>make test-all</code></td>
-<td>Alias for <code>make test</code>.</td>
-</tr>
-<tr>
-<td><code>make test-lib</code></td>
-<td>The 13 top-level Library tests, or the subset selected by <code>TEST_PATTERN</code>.</td>
-</tr>
-<tr>
-<td><code>make test-sys</code></td>
-<td>Aggregate for <code>make test-os</code> followed by <code>make test-shell</code>. It does not invoke <code>make test-boot</code>.</td>
-</tr>
-<tr>
-<td><code>make test-os</code></td>
-<td>The 23 directories recognized by the exact <code>launcher.picoc</code> and three-line <code>input.txt</code> rule.</td>
-</tr>
-<tr>
-<td><code>make test-shell</code></td>
-<td>The 26 runnable non-Boot directories that do not match the OS rule.</td>
-</tr>
-<tr>
-<td><code>make test-boot</code></td>
-<td>Only <span class="source-link"><code>test/boot/</code></span>, using one emulator job. This target is called directly by <code>make test</code>, not by <code>make test-sys</code>.</td>
-</tr>
-<tr>
-<td><code>make test_not_passed</code></td>
-<td>Only Library source paths recorded in <span class="source-link"><code>config/not_passed_tests.txt</code></span> by the preceding Library run.</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.60%" /><col style="width:64.40%" /></colgroup><thead><tr><th>Command</th><th>Tests run</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>make test</code></li></ul></td><td><ul><li>Release build + Library/System/Boot</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>make test-all</code></li></ul></td><td><ul><li>Alias for make test</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>make test-lib</code></li></ul></td><td><ul><li>Library; TEST_PATTERN filters</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>make test-sys</code></li></ul></td><td><ul><li>OS then Shell; excludes Boot</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>make test-os</code></li></ul></td><td><ul><li>Directories matching OS classification</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>make test-shell</code></li></ul></td><td><ul><li>Runnable non-Boot/non-OS directories</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>make test-boot</code></li></ul></td><td><ul><li>Only test/boot; one emulator</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><code>make test_not_passed</code></li></ul></td><td><ul><li>Previously failed Library paths</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
+
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#15-use-in-operating-systems-and-real-time-operating-systems-lectures -->
+
+# 15. Use in operating-systems and real-time operating-systems lectures
+
+<div class="deck-content readme-slide">
+
+<div class="readme-list"><ul><li>Inspect source + live execution</li>
+<li>OS: processes, interrupts, memory, files</li>
+<li>RTOS: scheduling, queues, synchronization</li></ul></div>
 
 </div>
 
@@ -16353,40 +10920,17 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-7858 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7858 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7858:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Operating-systems lecture topic</th>
-<th>What students can inspect in PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Parent/child relationships and process loading</td>
-<td><span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, <span class="source-link"><code>ProcessControlBlock</code></span>, its <span class="source-link"><code>parent_pid</code></span>, process images, zombies, <span class="source-link"><code>waitpid()</code></span>, and cleanup</td>
-</tr>
-<tr>
-<td>Signals</td>
-<td><span class="source-link"><code>7.3 Process signals</code></span> in <span class="source-link"><code>ProcessControlBlock</code></span></td>
-</tr>
-<tr>
-<td>interrupt service routines tables and ISRs</td>
-<td>The IVT and interrupt service routines in <span class="source-link"><code>2.1 RETI interrupt entry and the interrupt service routine table</code></span>, the saved <span class="source-link"><code>ActivationRecord</code></span>, timer/UART handlers, and <code>RTI</code></td>
-</tr>
-<tr>
-<td>Software, hardware, and synchronous interrupts</td>
-<td>System calls, timer and UART interrupts, and CPU exceptions with their fixed exception entry</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></td>
-<td>Heap headers, first-fit allocation, block splitting, freeing, and merging adjacent free blocks</td>
-</tr>
-<tr>
-<td>Filesystem boundary</td>
-<td>Per-process file descriptors, descriptor inheritance, and UART host requests instead of an on-device filesystem</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.41%" /><col style="width:50.59%" /></colgroup><thead><tr><th>Operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Parent/child relationships and process loading</li></ul></td><td><ul><li>load/run; PCB parent; zombies; cleanup</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Signals</li></ul></td><td><ul><li>Signal fields + state changes</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>interrupt service routines tables and ISRs</li></ul></td><td><ul><li>IVT; saved activation; handlers; RTI</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Software, hardware, and synchronous interrupts</li></ul></td><td><ul><li>Syscalls, devices, synchronous exceptions</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></li></ul></td><td><ul><li>First fit; split; free; coalesce</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li>Filesystem boundary</li></ul></td><td><ul><li>Descriptors + UART host boundary</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -16404,11 +10948,12 @@ flowchart LR
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-7877 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-7877" data-code-part="1" style="flex:0 0 64px">
 
+<!-- README_CODE_PART code-7877 lines=1-2 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -16421,8 +10966,9 @@ $ reti_emulator -d -c -D program.debuginfo program.reti
 </ReadmeVisual>
 
 <!-- README_ASSET code-7885 -->
-<ReadmeVisual kind="code" :width="1037.6" style="flex-grow:4">
+<ReadmeVisual kind="code" :width="1037.6" class="command-strip" data-code-source="code-7885" data-code-part="1" style="flex:0 0 64px">
 
+<!-- README_CODE_PART code-7885 lines=1-2 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -16448,88 +10994,27 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-columns">
 
-<!-- README_ASSET table-7894 rows=1-6 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-7894 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7894:1,2,3,4,5,6">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Keys or option</th>
-<th>What students can inspect or do</th>
-</tr>
-</thead><tbody><tr>
-<td><code>c</code>, then <code>E</code> (<code>Enter again</code>)</td>
-<td>Continue execution and stop it at any point to see the RETI instruction of the kernel/PicoOS code currently being executed</td>
-</tr>
-<tr>
-<td><code>d</code> (<code>debug source</code>)</td>
-<td>Show the PicoC source code from which the current RETI instruction resulted</td>
-</tr>
-<tr>
-<td><code>A</code> (<code>Assign value</code>)</td>
-<td>Correct a wrong register or memory cell and continue without starting again</td>
-</tr>
-<tr>
-<td><code>r</code> (<code>restart</code>)</td>
-<td>Quickly restart the emulator</td>
-</tr>
-<tr>
-<td><code>S</code> / <code>R</code> (<code>Snapshot</code> / <code>Restore</code>)</td>
-<td>Save/restore emulator state to repeat a scheduler decision, system call, or interrupt</td>
-</tr>
-<tr>
-<td><code>e</code>, then <code>T</code></td>
-<td>Trigger and inspect an interrupt handler without waiting for a timer event or UART input</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.83%" /><col style="width:65.17%" /></colgroup><thead><tr><th>Keys or option</th><th>What students can inspect or do</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>c</code>, then <code>E</code> (<code>Enter again</code>)</li></ul></td><td><ul><li>Continue; stop anywhere; inspect instruction</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>d</code> (<code>debug source</code>)</li></ul></td><td><ul><li>PicoC source for current RETI instruction</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>A</code> (<code>Assign value</code>)</li></ul></td><td><ul><li>Edit register/memory; continue execution</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>r</code> (<code>restart</code>)</li></ul></td><td><ul><li>Restart emulator</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>S</code> / <code>R</code> (<code>Snapshot</code> / <code>Restore</code>)</li></ul></td><td><ul><li>Save/restore complete emulator state</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>e</code>, then <code>T</code></li></ul></td><td><ul><li>Trigger + inspect selected interrupt</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
-</div>
+<!-- README_ASSET table-7907 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-7907:1,2,3,4">
 
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#1511-inspecting-picoos-execution-in-the-reti-emulator -->
-
-# 15. Use in operating-systems and real-time operating-systems lectures · 15.1 Operating-systems topics
-
-## 15.1.1 Inspecting PicoOS execution in the RETI-Emulator (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET table-7907 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
-
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th style="text-align:right">SRAM address</th>
-<th style="text-align:right">Value</th>
-<th>Annotation in the debug TUI</th>
-</tr>
-</thead><tbody><tr>
-<td style="text-align:right"><code>8012</code></td>
-<td style="text-align:right"><code>3</code></td>
-<td><code>global current_pid@12</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>8179</code></td>
-<td style="text-align:right"><code>42</code></td>
-<td><code>var timeslice@0</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>8182</code></td>
-<td style="text-align:right"><code>9001</code></td>
-<td><code>return addr.</code></td>
-</tr>
-<tr>
-<td style="text-align:right"><code>8183</code></td>
-<td style="text-align:right"><code>7</code></td>
-<td><code>arg next_pid@0</code></td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.48%" /><col style="width:27.70%" /><col style="width:43.82%" /></colgroup><thead><tr><th>SRAM address</th><th>Value</th><th>Annotation in the debug TUI</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>8012</code></li></ul></td><td><ul><li><code>3</code></li></ul></td><td><ul><li><code>global current_pid@12</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>8179</code></li></ul></td><td><ul><li><code>42</code></li></ul></td><td><ul><li><code>var timeslice@0</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>8182</code></li></ul></td><td><ul><li><code>9001</code></li></ul></td><td><ul><li><code>return addr.</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>8183</code></li></ul></td><td><ul><li><code>7</code></li></ul></td><td><ul><li><code>arg next_pid@0</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -16547,12 +11032,14 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption"><span class="source-link"><code>test/exercise_sheet_4_heap/launcher.picoc</code></span> adapts OS exercise sheet 4. This complete test contrasts stack objects, aliases, and a heap allocation with its cleanup:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7930 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:35">
+<div class="code-columns">
 
+<ReadmeVisual kind="code" :width="680" data-code-source="code-7930" data-code-part="1">
+
+<!-- README_CODE_PART code-7930 lines=1-17 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -16573,6 +11060,18 @@ int main(void) {
 
     a = &(p2.x);
     p2.x = 7;
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="680" data-code-source="code-7930" data-code-part="2">
+
+<!-- README_CODE_PART code-7930 lines=18-33 -->
+<div class="readme-code">
+
+```c {lines:false}
     p2.y = 4;
 
     p1 = (struct point *)malloc(sizeof(struct point));
@@ -16599,6 +11098,8 @@ int main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
@@ -16609,11 +11110,12 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7992 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:8">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-7992" data-code-part="1">
 
+<!-- README_CODE_PART code-7992 lines=1-6 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -16623,19 +11125,6 @@ int main(void) {
     result = 0;
     return 0;
 }
-```
-
-</div>
-
-</ReadmeVisual>
-
-<!-- README_ASSET code-8003 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
-
-<div class="readme-code readme-terminal">
-
-```console {lines:false}
-$ picoc_compiler -c exercise.picoc
 ```
 
 </div>
@@ -16656,11 +11145,26 @@ $ picoc_compiler -c exercise.picoc
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-command-above">
+
+<!-- README_ASSET code-8003 -->
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-8003" data-code-part="1" style="flex:0 0 46px">
+
+<!-- README_CODE_PART code-8003 lines=1-1 -->
+<div class="readme-code readme-terminal">
+
+```console {lines:false}
+$ picoc_compiler -c exercise.picoc
+```
+
+</div>
+
+</ReadmeVisual>
 
 <!-- README_ASSET code-8010 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:12">
+<ReadmeVisual kind="code" :width="980" data-code-source="code-8010" data-code-part="1">
 
+<!-- README_CODE_PART code-8010 lines=1-10 -->
 <div class="readme-code">
 
 ```text {lines:false}
@@ -16680,9 +11184,26 @@ loop:
 
 </ReadmeVisual>
 
-<!-- README_ASSET code-8027 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+</div>
 
+</div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
+
+# 15. Use in operating-systems and real-time operating-systems lectures · 15.1 Operating-systems topics
+
+## 15.1.3 Editing and executing symbolic RETI assembly (3)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<!-- README_ASSET code-8027 -->
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-8027" data-code-part="1" style="flex:0 0 64px">
+
+<!-- README_CODE_PART code-8027 lines=1-2 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -16708,32 +11229,15 @@ $ reti_emulator -d -c exercise.reti
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-8039 rows=1-4 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-8039 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-8039:1,2,3,4">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>Real-time operating-systems lecture topic</th>
-<th>What students can inspect in PicoOS</th>
-</tr>
-</thead><tbody><tr>
-<td>Process states</td>
-<td>New, ready, running, blocked, stopped, and zombie entries in the <span class="source-link"><code>ProcessControlBlock</code></span> list, <span class="source-link"><code>4.3.2.3 Parent collection and final removal</code></span> explains why termination and removal are separate steps</td>
-</tr>
-<tr>
-<td>Scheduling and dispatching</td>
-<td>The scheduler chooses a ready process, the dispatcher saves and restores its activation record</td>
-</tr>
-<tr>
-<td><span class="source-link"><code>waitpid()</code></span>, <span class="source-link"><code>sleep()</code></span>, and <span class="source-link"><code>wakeup()</code></span></td>
-<td>A process blocks in a wait queue until a child, mutex, or other event wakes it</td>
-</tr>
-<tr>
-<td>Mutexes</td>
-<td><span class="source-link"><code>mutex_lock()</code></span> blocks a contending process and <span class="source-link"><code>mutex_unlock()</code></span> wakes a waiting process</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.94%" /><col style="width:64.06%" /></colgroup><thead><tr><th>Real-time operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Process states</li></ul></td><td><ul><li>NEW/READY/RUNNING/BLOCKED/STOPPED/ZOMBIE</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li>Scheduling and dispatching</li></ul></td><td><ul><li>Scheduler chooses; dispatcher saves/restores</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid()</code></span>, <span class="source-link"><code>sleep()</code></span>, and <span class="source-link"><code>wakeup()</code></span></li></ul></td><td><ul><li>Wait queues + event wakeup</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li>Mutexes</li></ul></td><td><ul><li>Sleep on contention; unlock wakes waiter</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -16751,12 +11255,12 @@ $ reti_emulator -d -c exercise.reti
 
 <div class="deck-content readme-slide">
 
-<div class="artifact-caption">Two workers map one <span class="source-link"><code>SharedState</code></span> and increment <span class="source-link"><code>workers</code></span>. Worker 1 yields while holding the mutex, letting worker 2 contend. This complete source shows mapping, locking, and yielding:</div>
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-8050 -->
-<ReadmeVisual kind="code" :width="1674" style="flex-grow:21">
+<ReadmeVisual kind="code" :width="1674" data-code-source="code-8050" data-code-part="1">
 
+<!-- README_CODE_PART code-8050 lines=1-19 -->
 <div class="readme-code">
 
 ```c {lines:false}
@@ -16797,9 +11301,15 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-explanation"><p>The author developed PicoOS's architecture and core concepts and performed substantial manual debugging, including building the PicoC source debugger for RETI.</p>
-<p>AI assisted with repetitive implementation whose approach was already understood, pointer calculations checked by the author, applications, tests, and build scripts. Planning, validation, and integration remained the author's responsibility; the source repository records the affected files.</p>
-<p>The project applies the University of Freiburg Academic Writing Guide's transparency principles to documenting this assistance.</p></div>
+<div class="readme-list bullet-columns"><ul><li>Core concepts + architecture: author</li>
+<li>Manual debugging; custom PicoC debugger</li>
+<li>GDB unavailable for RETI</li>
+<li>AI: repetitive, already-understood implementation</li>
+<li>Supporting applications, tests, build scripts</li>
+<li>Author checks calculations + integrates changes</li>
+<li>Freiburg guide: transparency principles</li>
+<li>GitHub Copilot; documented source-file usage</li>
+<li>Three semesters; beyond 18 ECTS</li></ul></div>
 
 </div>
 
@@ -16811,38 +11321,24 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET list-8127 -->
-<div class="readme-list"><ul><li>One physical address space: no MMU, hardware isolation, or virtual memory.</li>
-<li>Files reside on the host and are reached through UART.</li>
-<li>Eight descriptors per process; state is copied rather than shared through open-file descriptions.</li>
-<li>Lazy Round Robin scans cyclically instead of rotating a ready queue.</li>
-<li>Kernel execution is non-preemptive; rescheduling is deferred.</li>
-<li>Fixed/default heap and stack reservations; no dynamic stack growth.</li></ul></div>
-
-</div><aside class="context-note"><b>Scope</b><span>POSIX-like names support teaching comparisons; the implementation is an educational subset, not a conforming Unix environment.</span></aside>
-
-</div>
-
----
-
-<!-- SOURCE Pico-OS/README.md#17-limitations -->
-
-# 17. Limitations
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts artifact-single">
-
-<!-- README_ASSET list-8127 -->
-<div class="readme-list"><ul><li>Reduced formatting, scanning, shell parsing, and library interfaces.</li>
-<li>No implemented physical PicoOS RETI CPU or hardware timer. Instruction-count timing is reproducible, not exact elapsed time.</li>
-<li>No sound hardware or dedicated LCD; terminal and files come through the host.</li>
-<li>Static images: no dynamic loader, shared libraries, or dynamically linked libc.</li>
-<li>POSIX-like names without full POSIX semantics.</li></ul></div>
+<!-- README_ASSET list-8158 -->
+<div class="readme-list bullet-columns"><ul><li>No MMU, isolation, or virtual memory</li>
+<li>Host files via UART</li>
+<li>Eight descriptors; independent copied state</li>
+<li>Lazy Round Robin; cyclic scan</li>
+<li>Non-preemptive kernel; deferred switching</li>
+<li>Fixed heap/stack; no stack growth</li>
+<li>Reduced libraries, formatting, shell parsing</li>
+<li>Hardware unimplemented; instruction-count timing</li>
+<li>No sound/LCD; host terminal</li>
+<li>Static images; no dynamic linking</li>
+<li>POSIX-like names; reduced semantics</li></ul></div>
 
 </div>
+<aside class="context-note"><b>Scope</b><ul><li>Educational OS mechanisms</li>
+<li>POSIX-like interfaces; reduced behavior</li></ul></aside>
 
 </div>
 
@@ -16854,42 +11350,16 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-single">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-8164 rows=1-5 -->
-<ReadmeVisual kind="table" :width="1100" style="flex-grow:10">
+<!-- README_ASSET table-8195 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-8195:1,2,3,4,5">
 
-<div class="readme-table" v-pre><table><thead>
-<tr>
-<th>File byte offset</th>
-<th>Header word</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody><tr>
-<td><code>0x00</code></td>
-<td>Code start</td>
-<td>Offset of executable code within the loaded image</td>
-</tr>
-<tr>
-<td><code>0x04</code></td>
-<td>Data start</td>
-<td>Offset used to initialize the data-segment register</td>
-</tr>
-<tr>
-<td><code>0x08</code></td>
-<td>Heap start</td>
-<td>Start of the process heap within its allocated memory</td>
-</tr>
-<tr>
-<td><code>0x0c</code></td>
-<td>Heap size</td>
-<td>Number of cells reserved for the process heap, <code>ff ff ff ff</code> selects the kernel default</td>
-</tr>
-<tr>
-<td><code>0x10</code></td>
-<td>Stack start</td>
-<td>Initial stack offset, <code>ff ff ff ff</code> denotes automatic stack placement</td>
-</tr></tbody></table></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.10%" /><col style="width:27.10%" /><col style="width:45.80%" /></colgroup><thead><tr><th>File byte offset</th><th>Header word</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>0x00</code></li></ul></td><td><ul><li>Code start</li></ul></td><td><ul><li>Initial code/entry offset</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>0x04</code></li></ul></td><td><ul><li>Data start</li></ul></td><td><ul><li>Initial data offset</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>0x08</code></li></ul></td><td><ul><li>Heap start</li></ul></td><td><ul><li>Process heap start</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>0x0c</code></li></ul></td><td><ul><li>Heap size</li></ul></td><td><ul><li>Heap capacity; −1 → default</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>0x10</code></li></ul></td><td><ul><li>Stack start</li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -16905,11 +11375,12 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts artifact-pair">
+<div class="readme-artifacts layout-command-above">
 
-<!-- README_ASSET code-8178 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:4">
+<!-- README_ASSET code-8209 -->
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-8209" data-code-part="1" style="flex:0 0 64px">
 
+<!-- README_CODE_PART code-8209 lines=1-2 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}
@@ -16921,9 +11392,10 @@ $ hexyl -g 4 -s 20 -n 64 binary/user/echo.bin
 
 </ReadmeVisual>
 
-<!-- README_ASSET code-8189 -->
-<ReadmeVisual kind="code" :width="720" style="flex-grow:3">
+<!-- README_ASSET code-8220 -->
+<ReadmeVisual kind="code" :width="980" class="command-strip" data-code-source="code-8220" data-code-part="1" style="flex:0 0 46px">
 
+<!-- README_CODE_PART code-8220 lines=1-1 -->
 <div class="readme-code readme-terminal">
 
 ```console {lines:false}

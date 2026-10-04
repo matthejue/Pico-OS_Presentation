@@ -92,19 +92,27 @@ The current revision and update workflow are documented in
 The titles reproduce the README hierarchy: preceding heading levels are joined
 with middle dots in the main title, and the current heading is the subtitle.
 Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
-All README tables retain every column and row, including internal function
-references. Long tables continue across slides with their headers repeated.
+Function catalogs retain operations exposed through or called by a library,
+directly or through a syscall. Internal-only operations are omitted. Table
+descriptions use brief bullets; columns and widths are reviewed for readability.
 The title page contains a compact, seven-topic outline; there is no separate
-Contents slide. The full deck contains 374 slides. Slides load on demand to
+Contents slide. The full deck contains 314 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
 
-The slides contain all 345 substantive README artifacts: 109 complete code
-examples, 38 complete Mermaid diagrams, 136 tables, 32 images, one terminal
-recording, and 29 lists. Only the two README navigation lists are replaced by
-the prescribed title-page outline. Lists are summarized; code and diagram
-bodies are kept verbatim.
+The source inventory tracks 345 substantive README artifacts: 109 code
+examples, 38 Mermaid diagrams, 136 tables, 32 images, one terminal recording,
+and 29 lists. All code, diagrams, images, recordings, and substantive list
+items are represented. Tables retain the reviewed library-facing operations;
+ten internal-only function catalogs are omitted. The two README navigation
+lists are replaced by the prescribed title-page outline.
+
+Ordinary slide text and table descriptions use brief bullets. Code and diagram
+bodies stay complete. Long code examples split into balanced columns, with
+boxes filling their column width. Related assets share slides where they fit;
+application, library, and built-in catalogs use compact grids. The hardware
+slides include the setup, wiring, and README price estimates.
 
 SVGs in `public/readme/` are copied from the README assets. Styling changes
 their colors, font, and rectangle corners; their coordinates, paths, labels,
@@ -119,12 +127,15 @@ viewer. Large examples are never truncated to make them fit.
 
 The source-to-slide inventory is in
 [`docs/readme-coverage.json`](docs/readme-coverage.json). Its hashes, source
-lines, slide numbers, and table row ranges make omissions reviewable. Check it
+lines, slide numbers, retained/omitted table rows, and code-part counts make
+selection and placement reviewable. Check it
 with `yarn test:source` (or set `PRESENTATION_SOURCE` to a candidate README).
 
 The reconstruction script is `yarn rebuild:readme`. It combines the original
-README artifacts with reviewed list summaries, contextual notes, and prose in
-`config/readme-*.json`; `config/title-slide.md` preserves the title page.
+README artifacts with reviewed bullet summaries and contextual notes in
+`config/readme-*.json`. `config/readme-tables.mjs` and the table-cell and
+column-width configurations describe the reviewed tables;
+`config/title-slide.md` preserves the title page.
 Review those authored files whenever the source changes, then follow the
 validation and baseline workflow in [source review](docs/source-review.md).
 
@@ -205,7 +216,8 @@ PRESENTATION_URL=http://localhost:3032/selectable-text/ PRESENTATION_ROUTER=hist
 ```
 
 The check visits every slide and validates the summarized cover outline, source
-anchors, heading order, numbered subtitles, and content bounds. It rejects
+anchors, heading order, numbered subtitles, content bounds, full-width code
+boxes, and table-cell clipping. It rejects
 console/module/network errors, Slidev error fallbacks, missing diagrams, and
 Mermaid/XML error placeholders, and exercises enlargement, keyboard navigation,
 text selection, complete code in the enlarged viewer, scrolling through the

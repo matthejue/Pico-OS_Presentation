@@ -16,7 +16,8 @@ function measure() {
       return
     }
     const box = svg?.viewBox?.baseVal
-    nativeWidth.value = box?.width || img?.naturalWidth || props.width
+    const sourceWidth = box?.width || img?.naturalWidth || props.width
+    nativeWidth.value = sourceWidth
     nativeHeight.value = box?.height || img?.naturalHeight || content.value.scrollHeight
     if (box) {
       const host = content.value.querySelector('.mermaid')
@@ -24,7 +25,12 @@ function measure() {
       host.style.height = `${box.height}px`
     }
     const availableWidth = frame.value.clientWidth, availableHeight = frame.value.clientHeight
-    if (availableWidth && availableHeight) scale.value = Math.min(availableWidth / nativeWidth.value, availableHeight / nativeHeight.value)
+    if (availableWidth && availableHeight) {
+      scale.value = Math.min(availableWidth / sourceWidth, availableHeight / nativeHeight.value)
+      // Keep a complete code box flush with both edges of its column even
+      // when a long example is scaled to fit the available height.
+      if (props.kind === 'code') nativeWidth.value = availableWidth / scale.value
+    }
   })
 }
 onMounted(async () => {
