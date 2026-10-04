@@ -625,17 +625,19 @@ html.selectable-text .slidev-layout * {
 .readme-slide * { border-radius: 0 !important; }
 
 /* Reviewed composition: brief bullets and full-width code columns. */
-.readme-slide { gap: 0.7rem; }
+.readme-slide { gap: 0.7rem; justify-content: center; }
 .readme-artifacts { gap: 0.85rem; }
-.layout-columns, .artifact-columns, .code-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; flex: 1; min-height: 0; }
+.layout-columns, .artifact-columns, .code-columns { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 1rem; flex: 1; min-height: 0; }
 .layout-stacked { display: flex; flex-direction: column; }
-.layout-command-above { display: flex; flex-direction: column; }
+.layout-command-above, .layout-compact-stacked { display: flex; flex-direction: column; justify-content: center; }
+.layout-command-above > .readme-visual, .layout-command-above > .code-columns,
+.layout-compact-stacked > .readme-visual { flex: 0 1 auto; aspect-ratio: var(--source-aspect); }
 .layout-command-above > .readme-visual:first-child { flex: 0 0 auto; max-height: 120px; }
 .code-columns > .readme-visual { width: 100%; min-width: 0; }
 .layout-single > .code-columns { flex: 1; }
-.readme-visual[data-kind="code"] { justify-items: start; align-items: start; }
+.readme-visual[data-kind="code"] { justify-items: start; align-items: center; }
 .readme-code { width: 100%; }
-.readme-list { justify-content: flex-start; padding: 0.65rem 0; font-size: 1.05rem; }
+.readme-list { justify-content: center; padding: 0.65rem 0; font-size: 1.05rem; }
 .readme-list li { margin: 0.5rem 0; }
 .readme-list li ul { font-size: 0.88em; margin-top: 0.35rem; }
 .bullet-columns > ul { columns: 2; column-gap: 2rem; }
@@ -644,7 +646,7 @@ html.selectable-text .slidev-layout * {
 .context-note b { flex-basis: 10rem; }
 .context-note > ul { flex: 1; display: flex; flex-wrap: wrap; column-gap: 1.8rem; row-gap: 0.25rem; padding-left: 1rem; margin: 0; }
 .context-note li { margin: 0; }
-.table-panels-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.table-panels-two { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 24px; align-items: center; }
 .readme-table table { table-layout: fixed; }
 .readme-table th { font-size: 16px; line-height: 1.25; }
 .readme-table td, .readme-table th { padding: 8px 10px; overflow-wrap: normal; }

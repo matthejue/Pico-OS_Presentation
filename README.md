@@ -96,7 +96,7 @@ Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
 descriptions use brief bullets; columns and widths are reviewed for readability.
 The title page contains a compact, seven-topic outline; there is no separate
-Contents slide. The full deck contains 314 slides. Slides load on demand to
+Contents slide. The full deck contains 313 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -113,6 +113,15 @@ bodies stay complete. Long code examples split into balanced columns, with
 boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware
 slides include the setup, wiring, and README price estimates.
+
+Content is vertically centered within its slide or column. Command strips and
+their code examples stay together as one centered group. The RETI address map
+and its usage table share one slide.
+
+Column proportions follow the content. The hardware table gets more width than
+its short companion list; paired tables and code examples use compatible text
+sizes. All 76 column layouts have been reviewed at slide size. Their proportions
+and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
 
 SVGs in `public/readme/` are copied from the README assets. Styling changes
 their colors, font, and rectangle corners; their coordinates, paths, labels,

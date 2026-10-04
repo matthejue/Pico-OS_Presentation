@@ -12,6 +12,12 @@ const lists=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))
 const summaries=JSON.parse(await fs.readFile('config/readme-prose.json','utf8'))
 const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
 const tableWidths=JSON.parse(await fs.readFile('config/readme-table-widths.json','utf8'))
+const columnConfig=JSON.parse(await fs.readFile('config/readme-columns.json','utf8'))
+for(const [key,shares] of Object.entries(columnConfig.shares))
+ if(shares.length!==2||shares.some(n=>!Number.isFinite(n)||n<=0)||Math.abs(shares[0]+shares[1]-100)>0.01)throw Error('Invalid column shares: '+key)
+const columnShares=key=>columnConfig.shares[key]||[50,50]
+const columnAttributes=(key,extra='')=>`data-column-key="${key}" style="--readme-columns:minmax(0, ${columnShares(key)[0]}fr) minmax(0, ${columnShares(key)[1]}fr);${extra}"`
+const codeNeed=lines=>Math.max(420,...lines.map(l=>l.length*8.6+40))
 const cover=await fs.readFile('config/title-slide.md','utf8')
 const previous=await fs.readFile('slides.md','utf8')
 const oldInventory=JSON.parse(await fs.readFile('docs/readme-coverage.json','utf8'))
@@ -89,28 +95,30 @@ function renderTable(a) {
   return visual('table',html,a.id==='table-5997'?1440:1280,`inventory-grid${a.id==='table-5997'?' library-grid':''}`)
  }
  const chunks=a.tableColumns===2?balanced(a.compactRows,Math.ceil(a.compactRows.length/2)):[a.compactRows]
- const dims=chunks.map(rows=>widths(a,rows,a.tableColumns===2?650:1080))
+ const dims=chunks.map(rows=>widths(a,rows,a.tableColumns===2?650:columnConfig.tableWidths[a.id]||1080))
  // Both halves use the same column widths to make reading across them predictable.
  const maxWidth=Math.max(...dims.map(d=>d.width))
  const merged=widths(a,a.compactRows,maxWidth)
  const tableKey=a.id+':'+a.compactRows.map(r=>r.sourceRow).join(',')
  if(tableWidths[tableKey]?.length===merged.columns.length)merged.columns=tableWidths[tableKey]
  const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-source-row="${r.sourceRow}">${r.values.map((v,i)=>`<td${i===0?' class="table-key"':''}>${v.html.startsWith('<ul>')?v.html:`<ul><li>${v.html}</li></ul>`}</td>`).join('')}</tr>`).join('\n')}</tbody></table></div>`).join('\n')
- return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}" v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"`)
+ return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}"${chunks.length===2?' '+columnAttributes('table:'+tableKey):''} v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"`)
 }
 function renderCode(a) {
  const sourceLines=a.content.split('\n');if(sourceLines.at(-1)==='')sourceLines.pop()
  const cut=Math.ceil(sourceLines.length/2),parts=a.split?[sourceLines.slice(0,cut),sourceLines.slice(cut)]:[sourceLines]
  const language=a.language==='reti'?'text':a.language
- const width=Math.max(a.split?680:a.narrow?580:980,...parts.flatMap(lines=>lines.map(l=>l.length*8.6+40)))
+ const shares=columnShares('code:'+a.id)
+ const budget=a.split?Math.max(...parts.map((lines,i)=>codeNeed(lines)/(shares[i]/100))):0
+ const widths=a.split?shares.map(n=>budget*n/100):[a.nativeCodeWidth||Math.max(a.narrow?420:980,...sourceLines.map(l=>l.length*8.6+40))]
  let offset=0
  const boxes=parts.map((lines,i)=>{
   const start=offset+1;offset+=lines.length
   const partMarker=`<!-- README_CODE_PART ${a.id} lines=${start}-${offset} -->`
   const inner=`${partMarker}\n<div class="readme-code${a.language==='console'?' readme-terminal':''}">\n\n\`\`\`${language} {lines:false}\n${lines.join('\n')}\n\`\`\`\n\n</div>`
-  return visual('code',inner,width,a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${a.command?` style="flex:0 0 ${Math.round((a.codeLines*21+32)*0.86)}px"`:''}`)
+  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${a.command?` style="flex:0 0 ${Math.round((a.codeLines*21+32)*0.86)}px"`:''}`)
  })
- return a.split?`<div class="code-columns">\n\n${boxes.join('\n\n')}\n\n</div>`:boxes[0]
+ return a.split?`<div class="code-columns" ${columnAttributes('code:'+a.id,`--source-aspect:${(budget+24)/(parts[0].length*21+34)}`)}>\n\n${boxes.join('\n\n')}\n\n</div>`:boxes[0]
 }
 function render(a) {
  if(a.type==='code')return marker(a)+'\n'+renderCode(a)
@@ -164,17 +172,25 @@ for(const section of sections) {
  }
  const parts=originals.flatMap(prepare)
  let groups=compose(parts)
+ if(section.anchor==='reti-execution-model')groups=[{group:parts,layout:'compact-stacked'}]
  if(section.anchor==='intended-physical-hardware')groups=[{group:parts.filter(a=>a.type==='image'),layout:'single'},{group:parts.filter(a=>a.type==='list'||a.type==='table'),layout:'hardware'}]
  if(!groups.length && summaries[section.anchor] && !introOnly.has(section.anchor))groups=[{group:[],layout:'bullets'}]
  if(section.anchor==='picoos')groups.unshift({group:[],layout:'bullets'})
  if(!groups.length && !originals.length && section.paragraphs.length && !introOnly.has(section.anchor))throw Error('Missing reviewed prose bullets: '+section.anchor)
  groups.forEach(({group,layout},number)=>{
   let content
-  if(layout==='columns')for(const a of group)if(a.type==='code')a.narrow=true
+  const columnKey='assets:'+group.map(a=>a.id).join('+')
+  if(layout==='columns') {
+   for(const a of group)if(a.type==='code')a.narrow=true
+   if(group.every(a=>a.type==='code')) {
+    const shares=columnShares(columnKey),budget=Math.max(...group.map((a,i)=>codeNeed(a.content.trimEnd().split('\n'))/(shares[i]/100)))
+    group.forEach((a,i)=>a.nativeCodeWidth=budget*shares[i]/100)
+   }
+  }
   if(!group.length)content=`<div class="readme-list${summaries[section.anchor].length>6?' bullet-columns':''}">${bulletList(summaries[section.anchor])}</div>`
-  else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details"><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
+  else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
-  else content=`<div class="readme-artifacts layout-${layout}">\n\n${group.map(render).join('\n\n')}\n\n</div>`
+  else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
   const fact=number===0?facts[section.anchor]:null
   if(fact)content+=`\n<aside class="context-note"><b>${esc(fact[0])}</b>${bulletList(fact[1])}</aside>`
   pages.push({section,group,layout,content,number:groups.length>1?number+1:null})

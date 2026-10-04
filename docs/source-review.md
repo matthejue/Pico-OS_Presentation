@@ -1,10 +1,10 @@
 # Source review · 4 October 2026
 
 The presentation uses the README at PicoOS commit
-`4d1fa5047c14aa80121a76850b75c2c0319147f6`. The source README has no
-uncommitted changes. `.source/Pico-OS-README.md` stores its exact bytes;
+`4d1fa5047c14aa80121a76850b75c2c0319147f6`, including uncommitted edits to
+Contents link labels. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
-and slide count. The full deck has 314 slides; the short deck has 306.
+and slide count. The full deck has 313 slides; the short deck has 306.
 
 ## Content and composition
 
@@ -42,6 +42,17 @@ by side. Long code examples use two full-width column boxes, with the extra
 line in the left half when necessary. Command strips sit above their related
 code. Every original code line remains present, including split boundaries.
 
+Slide content is vertically centered, including code and lists within columns.
+Command strips and their examples form one centered group. The RETI execution
+model's address map and usage table share a single centered slide.
+
+All 76 column layouts were reviewed at slide size. Columns use unequal shares
+where the content benefits: the hardware details use 39% for the short list and
+61% for the table. Its text is about 75% larger than with the previous equal
+split. Paired code boxes and tables use compatible text sizes; split code keeps
+every original line. Four table-cell width profiles were adjusted to avoid tiny
+wrapped remainders after resizing.
+
 `docs/readme-coverage.json` maps each artifact to source lines, hashes, and slide
 placements. It records retained/omitted table rows, selected columns, list-item
 indices, and code-part counts. README comments requesting repeated startup,
@@ -69,8 +80,8 @@ and `short-version.md` in
 latest instructions taking precedence.
 
 Source changes are reviewed against the saved README bytes. The latest source
-delta concerns section 16, Use of AI in the project. Its slide bullets were
-updated alongside this revision of the deck's wording and composition.
+delta changes only Contents link labels; headings and substantive artifacts
+remain unchanged. The saved snapshot and dirty flag include these edits.
 
 `scripts/rebuild-from-readme.mjs` combines the original artifacts with reviewed
 `config/readme-lists.json`, `config/readme-prose.json`, and
@@ -79,6 +90,11 @@ in `config/readme-tables.mjs` and `config/readme-table-cells.json`; reviewed
 widths are in `config/readme-table-widths.json`. `config/title-slide.md` stores
 the unchanged cover. This is an artifact-based reconstruction with reviewed
 summaries and layouts, rather than a remap of old heading names.
+
+`config/readme-columns.json` records reviewed column shares and native widths
+for paired tables. SVG diagrams scale through their own viewBox so sequence
+labels and shapes render together correctly in Chromium; their layout remains
+unchanged.
 
 For future updates:
 
@@ -94,14 +110,14 @@ For future updates:
    numbered short-version choices from the relocated markers.
 
 Existing exclusions follow unchanged artifact hashes, even when source lines
-move. Their combined or split placements now occupy eight full-deck slides:
-3, 4, 6, 7, 8, 9, 12, and 13. Changed assets and layouts need review.
+move. Their combined or split placements now occupy seven full-deck slides:
+3, 4, 6, 7, 8, 9, and 12. Changed assets and layouts need review.
 
 ## Verification
 
 The full and short production builds passed. Browser checks passed across all
-314 slides in production, normal development, and selectable-text development.
-They cover source hierarchy, numbering, content bounds, full-width code boxes,
+313 slides in production, normal development, and selectable-text development.
+They cover source hierarchy, numbering, content bounds, vertical centering, full-width code boxes,
 table clipping, Mermaid/XML rendering, enlarged visuals, complete enlarged
 code, scrolling, text selection, navigation, and inline asciinema playback.
 All 117 table/grid pages were inspected; table widths and wording were adjusted

@@ -160,6 +160,19 @@ try {
         if (Math.abs(frame.left - stage.left) > 2 || Math.abs(frame.right - stage.right) > 2)
           found.push('Code box does not fill its slide or column width')
       }
+      for (const visual of element.querySelectorAll('.readme-visual')) {
+        const frame = visual.getBoundingClientRect()
+        const stage = visual.querySelector('.source-fit-stage').getBoundingClientRect()
+        if (Math.abs((frame.top + frame.bottom) - (stage.top + stage.bottom)) > 4)
+          found.push('Source visual is not vertically centered in its panel')
+      }
+      for (const group of element.querySelectorAll('.layout-command-above, .layout-compact-stacked')) {
+        const frame = group.getBoundingClientRect()
+        const stages = [...group.querySelectorAll('.source-fit-stage')].map(el => el.getBoundingClientRect())
+        const top = Math.min(...stages.map(r => r.top)), bottom = Math.max(...stages.map(r => r.bottom))
+        if (Math.abs((frame.top + frame.bottom) - (top + bottom)) > 6)
+          found.push('Related visuals are not vertically centered as a group')
+      }
       for (const cell of element.querySelectorAll('.readme-table th, .readme-table td')) {
         if (cell.scrollWidth > cell.clientWidth + 2)
           found.push(`Horizontally clipped table cell: ${cell.textContent.slice(0, 70)}`)
