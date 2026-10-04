@@ -83,16 +83,20 @@ To build the same archive locally, run `make package-static-presentation`.
 The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
 Each slide contains an invisible `SOURCE` comment that maps it back to a stable
-Pico-OS README heading. Source tracking and the future update workflow are
-documented in [`AGENTS.md`](AGENTS.md) and [`source-state.json`](source-state.json).
+Pico-OS README heading. The exact input bytes are saved in
+[`.source/Pico-OS-README.md`](.source/Pico-OS-README.md), with their commit, hash,
+dirty state, date, and slide count in [`source-state.json`](source-state.json).
+The current revision and update workflow are documented in
+[source review](docs/source-review.md).
 
 The titles reproduce the README hierarchy: preceding heading levels are joined
 with middle dots in the main title, and the current heading is the subtitle.
 Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
-Kernel function catalogs are omitted. Source inconsistencies resolved during
-the revision are recorded in [source review](docs/source-review.md).
+Function tables retain library-facing operations exposed through a syscall or
+direct linkage; internal-only function catalogs are omitted.
 The title page contains a compact, seven-topic outline; there is no separate
-Contents slide. This presentation choice is recorded in `AGENTS.md`.
+Contents slide. The full deck contains 256 slides. Slides load on demand to
+avoid rendering the entire diagram-heavy deck in the background.
 
 ## Enlarging visuals
 
@@ -149,6 +153,10 @@ In another terminal, run:
 ```sh
 node scripts/check-presentation.mjs
 ```
+
+While updating, set `PRESENTATION_SOURCE` to the exact candidate README path
+to validate its hierarchy before replacing the last successful source snapshot.
+After validation, save those exact bytes and refresh `source-state.json`.
 
 Also check both development launch variants, because successful production
 bundling does not guarantee that development imports load correctly. Start each

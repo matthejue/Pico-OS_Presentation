@@ -15,7 +15,9 @@ const shortSelection = parseSlideNumbers(
   'short-version-disabled-slides.txt',
 )
 const slides = markdown.split(/^---\s*$/m).slice(2)
-const primary = await readFile(new URL('../.source/Pico-OS-README.md', import.meta.url), 'utf8')
+// Validate a candidate against its exact source before replacing the last
+// successful source snapshot. Normal checks continue to use the saved baseline.
+const primary = await readFile(process.env.PRESENTATION_SOURCE || new URL('../.source/Pico-OS-README.md', import.meta.url), 'utf8')
 
 function headings(text) {
   let fenced = false
@@ -58,12 +60,13 @@ for (const { page, slide, source, anchor } of pages) {
     assert.equal(titles[1].title, source.title + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: subtitle`)
   }
 }
-assert.equal(JSON.parse(await readFile(new URL('../source-state.json', import.meta.url))).slideCount, pages.length)
+if (!process.env.PRESENTATION_SOURCE)
+  assert.equal(JSON.parse(await readFile(new URL('../source-state.json', import.meta.url))).slideCount, pages.length)
 const shortVersion = inspectSlides(markdown)
 assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees every source slide')
 assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')
 
-const expectedTopics = ['Toolchain extensions', 'Boot & kernel startup', 'Interrupts, system calls & exceptions', 'Processes, memory & I/O', 'Shell & user applications', 'Test system', 'Educational Value']
+const expectedTopics = ['Toolchain extensions', 'Interrupts, system calls & exceptions', 'Memory, processes & blocking', 'Boot & kernel startup', 'Shell & user applications', 'Test system', 'OS and RTOS usecases']
 assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover is the only contents overview')
 
 const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] })
@@ -97,6 +100,7 @@ try {
     await layout.waitFor({ state: 'visible' })
     await page.waitForTimeout(220)
     const expectedDiagrams = (pages[n - 1].slide.match(/^```mermaid/gm) || []).length
+    if (expectedDiagrams) await layout.locator('.mermaid').nth(expectedDiagrams - 1).waitFor({ timeout: 15000 })
     assert.equal(await layout.locator('.mermaid').count(), expectedDiagrams, `Slide ${n}: every expected diagram mounted`)
     for (const diagram of await layout.locator('.mermaid').all()) {
       await diagram.locator('svg').waitFor()
@@ -143,15 +147,21 @@ try {
       }
       return found
     })
-    if (issues.length) layoutIssues.push({ page: n, issues })
+    if (issues.length) {
+      layoutIssues.push({ page: n, issues })
+      console.log(`Layout ${n}: ${issues.join('; ')}`)
+    }
     if (n % 25 === 0) console.log(`Checked ${n}/${pages.length}: ${base}`)
   }
   assert.deepEqual(layoutIssues, [], 'Every slide fits its content area')
   assert.equal(await page.locator('svg[aria-roledescription="error"]').count(), 0, 'No Mermaid error SVGs left in the document')
 
-  const sampleSelectors = ['.mermaid', '.code-panel .slidev-code', '.compiler-showcase-code .slidev-code', '.shell-session .slidev-code', '.data-table', '.memory-visual', '.timeline']
+  const sampleSelectors = ['.mermaid', '.code-panel .slidev-code', '.compiler-showcase-code .slidev-code', '.shell-session .slidev-code', '.data-table', '.memory-visual', '.timeline', '.heap-hierarchy', '.heap-example', '.initial-stack', '.source-figure']
   for (const selector of sampleSelectors) {
-    const sample = pages.find(p => selector === '.mermaid' ? p.slide.includes('```mermaid') : p.slide.includes(selector.split(' ')[0].slice(1)))
+    const className = selector.split(' ')[0].slice(1)
+    const sample = pages.find(p => selector === '.mermaid'
+      ? p.slide.includes('```mermaid')
+      : [...p.slide.matchAll(/class="([^"]+)"/g)].some(match => match[1].split(/\s+/).includes(className)))
     assert.ok(sample, `Sample exists for ${selector}`)
     const layout = await navigate(sample.page)
     const target = layout.locator(selector).first()
@@ -268,7 +278,11 @@ try {
   const selectableRecordingLayout = await navigate(recordingSample.page)
   await selectableRecordingLayout.locator('.asciinema-recording-activation').click()
   await selectableRecordingLayout.locator('.asciinema-recording.is-active .ap-control-bar').waitFor({ state: 'visible' })
-  assert.ok(await page.locator('html').evaluate(el => el.classList.contains('selectable-text')), 'Recording plays inline in selectable-text mode')
+  assert.equal(
+    await page.locator('html').evaluate(el => el.classList.contains('selectable-text')),
+    routeBase.includes('/selectable-text/'),
+    'Recording playback preserves the selected presentation mode',
+  )
   assert.deepEqual(errors, [], 'No browser runtime errors')
   console.log(`Verified ${pages.length} slides: source hierarchy, numbering, rendering, zoom, local recording playback, selection, and navigation.`)
 } finally {

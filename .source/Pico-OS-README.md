@@ -1,30 +1,28 @@
 # PicoOS
+[\[↓ TOC\]](#contents)
 
-PicoOS is a small educational operating system for the RETI teaching CPU. It
-was developed as a master’s project to make central operating-system mechanisms
-visible in a compact codebase: bootloading, interrupt vectors and service
-routines, process creation and termination, scheduling and dispatching, wait
-queues, signals, memory allocation, shared memory, file descriptors, and a
-minimal userspace.
+PicoOS is a small educational operating system for the RETI teaching CPU. This
+repository contains its bootloader, kernel, userspace, and tests. The README
+explains how they work together, using the source code as a guide.
 
-The current userspace contains **14 distinct libraries**, including the startup
-library in [`library/`](library/), and **18 user applications** in
-[`user/`](user/), including the [shell](user/shell.picoc). The kernel exposes
-**38 implemented syscalls**; [the syscall overview](#43-system-call-path)
-explains their selector numbers and subsystem connections.
+To try PicoOS, start with [`Build and run`](#build-and-run). To study its design,
+follow the numbered chapters in the [contents](#contents). For source builds
+and development, see the [development workflow](documentation/development_workflow.md).
 
-The project deliberately does not imitate the scale of Linux or claim POSIX
-conformance. There is no virtual memory, MMU, process isolation, disk, or
-on-device filesystem. All code and data use one physical 32-bit address space,
-and filesystem operations are forwarded over UART to the RETI-Emulator host.
-The small scope is intentional: a reader can connect a userspace call to its
-interrupt entry, kernel data-structure changes, and eventual context switch.
+PicoOS has **15 libraries**, **18 user applications** including the [`shell`](user/shell.picoc),
+and **37 syscalls**. See [`10.2 Library overview and dependencies`](#102-library-overview-and-dependencies), [`13.1 Applications, library calls, and host requests`](#131-applications-library-calls-and-host-requests), and [`2.4.2.1.1 System-call groups`](#24211-system-call-groups) for their interfaces.
 
-This README is a report on what was implemented and how the main parts fit
-together. It emphasizes kernel state, ownership, and lifecycle rather than
-walking through every function statement by statement.
+[POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap01.html)
+standardizes Unix interfaces and command behavior, including processes,
+signals, files, terminals, shared memory, and shells. PicoOS borrows familiar
+names and conventions from it, but implements only a small subset and does
+not claim conformance. All code and data share one physical address space,
+without an MMU or process isolation. Files live on the emulator host, reached
+through UART. This small scope makes it possible to follow a library call
+through the kernel and into a context switch.
 
-PicoOS is developed together with two sibling projects:
+PicoOS works with two sibling projects. Together they turn PicoC source into
+an executing operating system:
 
 - [PicoC-Compiler](../PicoC-Compiler/README.md) compiles the PicoC subset of C,
   links multiple translation units, lays out interrupt, code, and data
@@ -35,56 +33,172 @@ PicoOS is developed together with two sibling projects:
 - PicoOS provides the EPROM bootloader, kernel, libraries, init process, shell,
   user programs, and tests
 
-The following diagram follows source files through assembly and runtime loading.
-The bootloader loads the kernel; the kernel loader later loads user programs.
+The build-and-boot diagram follows the bootloader into EPROM and the kernel
+into SRAM. The compiler links RETI programs, and the emulator assembles the
+kernel binary and runs the bootloader. Reusable `.reti_blocks` and `.st` files
+can be linked with source files. The optional `-k eprom` and `-k sram` headers
+supply compile-time memory constants.
 
-```mermaid
-flowchart LR
-    SRC["PicoOS .picoc sources"] --> CPL["PicoC-Compiler"]
-    CPL --> ASM["linked RETI assembly"]
-    CPL --> SEC[".sections and generated memory constants"]
-    ASM --> EMU["RETI-Emulator assembler/runtime"]
-    SEC --> EMU
-    EMU --> BIN["five-word header + encoded .bin payload"]
-    HOST["UART host service"] -->|serves .bin files| BOOT["EPROM bootloader / kernel process loader"]
-    BIN --> HOST
-    BOOT -->|copy payload| SRAM["kernel/process images in SRAM"]
-    SRAM --> K["PicoOS kernel and userspace"]
-```
+![PicoOS build and boot overview](documentation/images/picoos-build-boot.svg)
 
-The table below identifies what each part passes to the next, including runtime
-requests that are separate from the generated build files.
+`reti_emulator -e` loads the bootloader into EPROM. The bootloader then
+requests the kernel binary over UART, reads its header, and copies the
+payload into SRAM. [`1.1.8 Linked .sections metadata and the five-word binary header`](#118-linked-sections-metadata-and-the-five-word-binary-header) explains the binary format, and [`1.1.9 Generated memory constants for the bootloader and kernel`](#119-generated-memory-constants-for-the-bootloader-and-kernel) explains the
+generated memory headers.
+
+Each stage passes the following files or runtime requests to the next:
 
 | Producer | Contract | Consumer |
 | --- | --- | --- |
-| PicoC-Compiler | Linked `.reti`, `.sections`, generated memory headers, and `.debuginfo` | RETI-Emulator assembler/debugger and PicoOS low-level builds |
+| PicoC-Compiler | Linked [`.reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py), `.sections`, generated memory headers, and `.debuginfo` | RETI-Emulator assembler/debugger and PicoOS low-level builds |
 | RETI-Emulator assembler | Five-word layout header followed by encoded RETI words in `.bin` | EPROM bootloader and kernel process loader |
 | PicoOS libraries | Syscall number plus direct value/pointer or stack-local request structure | Interrupt entry, [`handle_syscall()`](kernel/syscall.picoc#L16), and the owning kernel subsystem |
 | Kernel subsystems | PCBs, activations, queues, descriptor/shared-memory state, and periphery-register writes | Scheduler/dispatcher and emulated RETI hardware |
 | PicoOS UART host request protocol | Bounded `<ESC>...<ESC>/` requests and big-endian responses | RETI-Emulator host file services, or a companion serial host on hardware |
 
-## Intended physical hardware
+## Build and run
+[\[↓ TOC\]](#contents)
 
-The intended physical setup uses an Alchitry Cu V2 FPGA board, two ISSI
-IS61WV25616BLL-10TLI SRAM chips, and a SparkFun Serial Basic USB-to-UART
-adapter. The prices below are the example parts-list prices used for this
-design, including VAT. They were last checked at DigiKey Germany on 12 August
-2026; component and shipping prices can change.
+The quickest way to run PicoOS is the ready-built archive attached to the
+[latest PicoOS release](https://github.com/matthejue/Pico-OS/releases/latest).
+Download [`pico-os-runtime.tar.gz`](pico-os-runtime.tar.gz), extract it into its own directory, enter that
+directory, and use the launcher for your platform. The archive expands its
+runtime files directly, without an extra top-level directory.
+
+```console
+$ curl -fLO https://github.com/matthejue/Pico-OS/releases/latest/download/pico-os-runtime.tar.gz
+$ mkdir pico-os-runtime
+$ tar -xzf pico-os-runtime.tar.gz -C pico-os-runtime
+$ cd pico-os-runtime
+$ ./start-picoos.sh
+```
+
+On Windows, extract the same archive and run [`./start-picoos.ps1`](./start-picoos.ps1) from
+PowerShell. On Android, use Termux and the shell launcher. The launchers search
+the archive directory and `PATH` for the tools. When the RETI Emulator or PicoC
+Compiler is absent, `start-picoos` offers to download a compatible release
+beside the archive files. The extracted directory becomes PicoOS `/`, so files
+created from PicoOS remain there. The emulator is required to run PicoOS. The
+compiler is included for related PicoC work.
+
+The launchers accept these options to select the emulator and terminal mode:
+
+| Behavior | Shell launcher | PowerShell launcher |
+| --- | --- | --- |
+| Use a specific emulator | `--reti-emulator PATH` | `-RetiEmulator PATH` |
+| Enable DMA loading | `--dma` or `-M` | `-Dma` or `-M` |
+| Run directly in the terminal | `--notui` or `-N` | `-NoTui` or `-N` |
+| Show help | `--help` or `-h` | `-Help` or `-h` |
+| Pass remaining emulator options | `-- EMULATOR_ARGS...` | `-- EMULATOR_ARGS...` |
+
+The launcher asks whether to enable DMA unless you already selected it on
+the command line. DMA copies incoming executable data into SRAM while the
+CPU can run other processes. [`4.3.1 Loading a process (load library call)`](#431-loading-a-process-load-library-call) compares DMA with polling, and [`2.7 DMA completion interrupt path`](#27-dma-completion-interrupt-path) follows
+the completion interrupt.
+
+On the first run, the launcher offers to download the
+[`picoos-cheatsheet.pdf`](https://github.com/matthejue/Pico-OS_Cheatsheet/releases/latest/download/picoos-cheatsheet.pdf).
+It records your choice in the archive README and leaves a download link there
+if you decline.
+
+To build or run a local kernel, follow the
+[development workflow](documentation/development_workflow.md).
+
+### Use the PicoOS shell
+[\[↓ TOC\]](#contents)
+
+The release launcher opens the Debug TUI by default. Press `c`, then Enter, to
+continue through bootloader, kernel, and init startup. Press capital `V` to
+open the raw UART terminal, where arrow keys, `Ctrl+C`, and `Ctrl+Z` reach
+PicoOS. `Ctrl+]` returns to the debugger. Lowercase `v` opens the normal
+terminal and Escape returns from it. Alternatively, start with `--notui` on
+the shell launcher or `-NoTui` on PowerShell to use the PicoOS terminal
+directly.
+
+At `PicoOS>`, run a program by its executable name or a path. The shell finds
+commands such as `echo.bin` in `/user`. This example replaces a phrase through
+a file-backed pipeline and writes the result to `topics.txt`:
+
+```console
+PicoOS> echo.bin "kernel\ncontext switcher\nscheduler" > input.txt
+PicoOS> cat.bin input.txt | sed.bin "s/context switcher/dispatcher/" > topics.txt
+PicoOS> cat.bin topics.txt
+kernel
+dispatcher
+scheduler
+```
+
+The shell runs the left command first, saves its output in a temporary file,
+and gives that file to the right command as standard input. `>` sends the
+right command's output to `topics.txt`. See [`12.7 Sequential file-backed pipelines`](#127-sequential-file-backed-pipelines) and [`12.6 Input/output redirection`](#126-inputoutput-redirection) for the details.
+
+### Release archive layout
+[\[↓ TOC\]](#contents)
+
+For each `v*` tag, the [release workflow](.github/workflows/build.yml) builds
+and verifies [`binary/`](binary/), then archives its contents as
+[`pico-os-runtime.tar.gz`](pico-os-runtime.tar.gz). This runtime contains the binaries, configuration,
+and launch scripts. The [development workflow](documentation/development_workflow.md#building-the-release-tree-and-archive)
+explains how to build it locally.
+
+The archive uses the extracted directory as PicoOS `/`. Host `/tmp` is not
+mounted. Use the emulator version offered by the launcher.
+
+The table locates each runtime component. Its links point to the generated
+files under [`binary/`](binary/):
+
+| Archive path | Contents and purpose |
+| --- | --- |
+| [`binary/README.md`](binary/README.md) | Short release-specific startup and host-filesystem instructions. It becomes [`README.md`](README.md) at the archive root. |
+| [`binary/start-picoos.sh`](binary/start-picoos.sh), [`binary/start-picoos.ps1`](binary/start-picoos.ps1) | Linux/macOS/Android and Windows launchers. They find or download the tools, select the boot and kernel metadata, and start the emulator. |
+| [`binary/download-tools.sh`](binary/download-tools.sh), [`binary/download-tools.ps1`](binary/download-tools.ps1) | Helpers used by the launcher to download matching released `picoc_compiler` and `reti_emulator` binaries when they are missing. |
+| [`binary/boot/`](binary/boot/) | [`bootloader.reti`](binary/boot/bootloader.reti), the RETI EPROM image built from [`bootloader.picoc`](boot/bootloader.picoc) that loads and starts the kernel. |
+| [`binary/kernel/`](binary/kernel/) | [`kernel.bin`](binary/kernel/kernel.bin), the loadable image built from [`kernel.picoc`](kernel/kernel.picoc), [`kernel.sections`](binary/kernel/kernel.sections), its linked memory-layout metadata, and [`kernel.debuginfo`](binary/kernel/kernel.debuginfo), its source/debug metadata. |
+| [`binary/system/`](binary/system/) | Loadable system-program binaries, currently [`init.bin`](system/init.picoc). |
+| [`binary/user/`](binary/user/) | Loadable PicoOS command binaries, including [`shell.bin`](user/shell.picoc) and the standard user commands built from [`user/`](user/). |
+| [`binary/config/`](binary/config/) | Runtime configuration copied from [`config/`](config/): the initial environment, emulator options, and PicoOS release version. |
+| [`binary/device/`](binary/device/) | `terminal.dev` and `null.dev` marker files. They represent PicoOS virtual device paths, they do not hold device data. |
+
+For the corresponding source-tree directories and local helper scripts, see
+[Repository layout](documentation/repository_layout.md).
+
+## Intended physical hardware
+[\[↓ TOC\]](#contents)
+
+The proposed hardware uses an Alchitry Cu V2 FPGA board, two ISSI
+IS61WV25616BLL-10TLI SRAM chips, and a SparkFun USB-to-UART adapter. The prices
+are the design's example parts list, checked at DigiKey Germany on 12 August
+2026, including VAT.
+
+The circuit connects the host, FPGA, and SRAM. Both SRAM chips receive the
+same address and control signals. Their 16-bit data buses form one 32-bit
+interface shared by the CPU and DMA. UART receives bytes, and a buffer groups
+four bytes into each DMA word:
+
+![Intended physical hardware: host, FPGA, and shared SRAM](documentation/images/intended-hardware.svg)
+
+UART receive-ready signals an interrupt for terminal input and host
+responses. During DMA reception, the buffer instead supplies complete words
+to DMA. The controller, buffer, and SRAM arbitration are FPGA logic described
+in [DMA connections](documentation/dma_connections.md).
 
 - **FPGA: [Alchitry Cu V2](https://www.digikey.de/short/8cmz0qnc) with Lattice
   iCE40-HX8K** ([board schematic](https://cdn.sparkfun.com/assets/2/f/9/9/3/CuSchematic.pdf),
   [FPGA datasheet](https://www.latticesemi.com/~/media/latticesemi/documents/datasheets/ice/ice40lphxfamilydatasheet.pdf)):
   **€55.66** (checked 12 August 2026). The FPGA implements the educational
-  32-bit CPU, interrupt controller, UART controller, and SRAM interface.
+  32-bit CPU, timer, interrupt controller, UART controller, DMA controller,
+  receive word buffer, and arbitrated SRAM interface.
 - **SRAM: two [ISSI
   IS61WV25616BLL-10TLI](https://www.digikey.de/short/075fh38w) chips**
   ([datasheet](https://www.issi.com/WW/pdf/61-64WV25616.pdf)):
   **2 × €5.80 = €11.60** (checked 12 August 2026). Each asynchronous SRAM is
   organized as 256K × 16 bits. Both chips share the FPGA’s 18 address lines,
   chip enable, output enable, write enable, and byte-enable control. One chip
-  connects its 16 data pins to CPU data bits 0–15 and the other to bits 16–31.
+  connects its 16 data pins to FPGA SRAM data bits 0–15 and the other to bits
+  16–31.
   Driving both chips with the same address and control signals therefore makes
-  them one 256K × 32-bit SRAM. It provides 2^18 = 262,144 individually
+  them one 256K × 32-bit SRAM shared by CPU and DMA accesses. It provides
+  2^18 = 262,144 individually
   addressable 32-bit words, addressed from 0 through 2^18 - 1. Each word holds
   four bytes, so the total is
   `262,144 words × 4 bytes = 1,048,576 bytes = 1 MiB`. For comparison, 2^18
@@ -99,45 +213,49 @@ design, including VAT. They were last checked at DigiKey Germany on 12 August
   and their grounds are connected. USB exposes the CH340C as a serial port on
   the host. The host and FPGA use the same baud rate and serial format, and
   UART transfers each request and response as a sequence of bytes.
+  UART receive-ready drives the FPGA interrupt controller for ordinary
+  interrupt-driven input. During an active DMA transfer, the receive buffer
+  instead supplies groups of four incoming bytes to the DMA controller.
 
 The example total is **€55.66 + 2 × €5.80 + €10.92 = €78.18 including VAT**.
 This excludes USB cables, wires, connectors, a printed circuit board, other
 interconnection hardware, and shipping. In the rest of this README, PCB means
 *process control block* unless the hardware context says otherwise.
 
-PicoOS has no resident storage device or filesystem. In emulator use, the UART
-host request protocol asks `reti_emulator` to access files in the host directory
-where it is running, with that directory exposed as PicoOS `/`; see [working directories and host operations](#96-working-directories-and-host-operations).
-On the physical FPGA, a companion host program must read
-the same requests from the USB serial port, perform the requested operations
-on the host filesystem, and return byte counts and file data over UART. This
-is how the same bootloader, kernel file interface, and user programs can work
-with either the emulator or a physical RETI implementation.
+The hardware setup has not been used yet. During development, the emulator
+provides UART and host file services. It exposes its launch directory as
+PicoOS `/` and prevents `..` or symbolic links from escaping that root.
 
-The generated binaries also show why 1 MiB is a plausible memory size for the
-project. The example sizes below come from the generated files currently in
-[`binary/`](binary/) and include each file’s five-word header. Sizes change
-with source code and compiler options:
+On hardware, a companion host program must serve the same requests over the
+USB serial port. [`1.2.3 UART host-service protocol`](#123-uart-host-service-protocol) shows that protocol, and [`8.9 PicoOS paths, working directories, and host operations`](#89-picoos-paths-working-directories-and-host-operations) explains PicoOS paths.
+
+The generated binaries give a sense of how much of the proposed 1 MiB SRAM
+they occupy. These sizes include the five-word header and come from the
+current files in [`binary/`](binary/):
 
 | Image | 32-bit words | Size |
 | --- | ---: | ---: |
-| [`kernel.bin`](binary/kernel/kernel.bin) ([`kernel.picoc`](kernel/kernel.picoc)) | 41,635 | 0.166540 MB |
-| [`init.bin`](binary/system/init.bin) ([`init.picoc`](system/init.picoc)) | 10,696 | 0.042784 MB |
-| [`shell.bin`](binary/user/shell.bin) ([`shell.picoc`](user/shell.picoc)) | 32,493 | 0.129972 MB |
-| [`cat.bin`](binary/user/cat.bin) ([`cat.picoc`](user/cat.picoc)) | 9,791 | 0.039164 MB |
-| [`echo.bin`](binary/user/echo.bin) ([`echo.picoc`](user/echo.picoc)) | 11,961 | 0.047844 MB |
+| [`kernel.bin`](binary/kernel/kernel.bin) ([`kernel.picoc`](kernel/kernel.picoc)) | 41,502 | 0.166008 MB |
+| [`init.bin`](binary/system/init.bin) ([`init.picoc`](system/init.picoc)) | 10,824 | 0.043296 MB |
+| [`shell.bin`](binary/user/shell.bin) ([`shell.picoc`](user/shell.picoc)) | 29,647 | 0.118588 MB |
+| [`cat.bin`](binary/user/cat.bin) ([`cat.picoc`](user/cat.picoc)) | 10,487 | 0.041948 MB |
+| [`echo.bin`](binary/user/echo.bin) ([`echo.picoc`](user/echo.picoc)) | 12,018 | 0.048072 MB |
 
-A conservative calculation can count the headers as if they also occupied
-SRAM. With the resident [`kernel.bin`](kernel/kernel.picoc), [`init.bin`](system/init.picoc), and [`shell.bin`](user/shell.picoc) images,
-`262,144 - (41,635 + 10,696 + 32,493) = 177,320` words remain. That space
-could hold `floor(177,320 / 9,791) = 18` copies of [`cat.bin`](user/cat.picoc). The loader
-actually keeps the five header words out of the copied program image. This is
-only an image-size comparison—a running process also needs heap and stack
-space—but it gives a useful scale for the available memory.
+Counting headers conservatively, the kernel, init, and shell leave
+`262,144 - (41,502 + 10,824 + 29,647) = 180,171` words, enough for 17 [`cat.bin`](user/cat.picoc)
+images. Running processes also need heap and stack space. The loader omits
+the five header words when copying each image to SRAM.
 
 ### RETI execution model
+[\[↓ TOC\]](#contents)
 
-RETI chooses an address space from the two highest address bits:
+RETI uses 32-bit word addresses. The top two bits select EPROM, peripherals,
+or SRAM, as shown below. SRAM spans both `10` and `11`, giving it half of the
+address space. These are address ranges, independent of installed capacity:
+
+![RETI address space with EPROM and periphery each occupying one quarter and SRAM occupying one half](documentation/images/reti-memory-map.svg)
+
+PicoOS uses the three regions as follows:
 
 | High bits | Address space | PicoOS use |
 | --- | --- | --- |
@@ -145,290 +263,240 @@ RETI chooses an address space from the two highest address bits:
 | `01` | Memory-mapped periphery | UART, interrupt controller, timer, stack boundary, exception cause, DMA |
 | `10` or `11` | SRAM | Interrupt table, kernel, process images, heaps, and stacks |
 
-PicoOS uses `0x80000000` as its SRAM base and configures 2^18 physical SRAM
-words. Kernel code is non-preemptive: a timer interrupt that interrupted
-kernel code records a pending reschedule and returns to that code. The request
-is consumed when the syscall next leaves the kernel, before its process resumes
-in userspace. A UART interrupt can briefly run while the kernel is waiting, but
-it returns to the interrupted kernel work. Kernel operations therefore do not
-overlap with another process’s kernel operations, so the kernel does not need
-internal locks.
-
-Executable loading and regular-file reads keep that kernel model while
-bounding its latency. Regular-file reads and process loading without DMA
-transfer at most 1 KiB of payload per syscall. Their wrappers can request the
-next chunk directly because
-a timer observed during the previous chunk is handled at that syscall's return
-boundary. With DMA, process loading starts one complete payload transfer and
-blocks its caller until the DMA completion interrupt wakes it.
-
-## Build and run
-
-The build expects `picoc_compiler`, `reti_emulator`, and `make` on `PATH`. The
-release-style boot path is:
-
-```console
-$ make bootload
-```
-
-This builds the bootloader, kernel, system programs, libraries, user programs,
-and device markers, then starts the RETI debugger with the EPROM bootloader.
-The command corresponds to:
-
-```console
-$ cd binary
-$ ../run_reti_emulator_isolated.sh -n 5 -e ./boot/bootloader.reti \
-    -d -c -O -r 262144 \
-    -S kernel/kernel.sections -D kernel/kernel.debuginfo
-```
-
-The options in this command select the boot image, memory size, and debugger
-metadata as summarized below. Run the command from [`binary/`](binary/) so
-runtime paths resolve to the release files.
-
-| Option | Role in `make bootload` |
-| --- | --- |
-| `-e` | Selects the EPROM bootloader image |
-| `-r` | Configures 2^18 SRAM cells |
-| `-d -c` | Opens the commented debug TUI |
-| `-S` / `-D` | Supplies the compiler-generated kernel layout and debug information |
-| `-O` | Supplies the modeled OS context from which the first dispatcher `RTI` can leave |
-| `-n 5` | Reserves five IVT entries that the bootloader later loads into SRAM |
-
-### Use the PicoOS shell
-
-Readers who want to use the shell instead of inspecting startup state have two
-paths:
-
-- Run `make bootload-notui` to omit `-d` and connect the terminal directly to PicoOS. It also accepts `DMA=1`.
-
-- Run `make bootload` for the debug-TUI path:
-
-  1. Choose `c`, then Enter, to continue execution.
-  2. Press capital `V` for the raw UART terminal when arrow keys, `Ctrl+C`, or `Ctrl+Z` must reach PicoOS; `Ctrl+]` returns to the debugger.
-  3. Press lowercase `v` for the normal terminal when those sequences are not needed; Escape returns from it.
-
-`make bootload-dma` adds DMA loading to the debug-TUI path.
-
-After startup, this short [shell](user/shell.picoc) session makes loading and
-running visible as separate steps. In a fresh session, init and the shell have
-PIDs 1 and 2, so loading [`echo.picoc`](user/echo.picoc)'s binary creates PID 3.
-Use the reported PID if other programs have already been loaded. Here `PicoOS>` is
-the PicoOS prompt, unlike the host shell's `$` in the build commands above.
-Loading-progress output is omitted from this transcript:
-
-```console
-PicoOS> load user/echo.bin
-process with pid 3 created
-PicoOS> run 3 hello PicoOS
-hello PicoOS
-```
-
-The first command creates a [`NEW`](kernel/process/process.header#L12) process; the second makes it ready and waits
-for its exit. [States and lifetime](#55-states-and-lifetime) connects these
-commands to the PCB transitions.
-
-These commands connect the generated bootloader, kernel `.sections` and
-`.debuginfo`, emulated memory/peripherals, UART host service, and the PicoOS
-userspace loaded after boot.
-
-The available tests comprise **12 library test classes, 23 OS test classes,
-and 28 shell test classes** in [`test/`](test/). Here a class means one
-standalone library source or one system-test directory, rather than each
-assertion inside it. [`run_sys_tests.sh`](run_sys_tests.sh) selects the standalone
-sources; [`run_os_tests.py`](run_os_tests.py) classifies OS and shell scenarios
-by their launcher and input script.
-
-The table below lists build commands and ways to select these test groups:
-
-| Command | Purpose |
-| --- | --- |
-| `make firmware` | Build the complete firmware/release tree |
-| `make release-tree` / `make release-archive` | Build the release tree or create the release archive |
-| `make clean-firmware` / `make rebuild-firmware` | Remove generated firmware files or rebuild them |
-| `make devices` | Add the terminal and null device markers under [`binary/device`](binary/device/) |
-| `make eprom` / `make kernel` | Build only the EPROM bootloader or kernel image |
-| `make system` / `make user` | Build the complete release tree, including system and user programs |
-| `make run-firmware` | Run the kernel image directly in the debug TUI |
-| `make run-kernel` | Rebuild and run the kernel image directly |
-| `make bootload-debug` | Rebuild bootloader and kernel with source/debug metadata, then boot through the debug TUI |
-| `make bootload-dma` | Boot through the debug TUI with DMA enabled |
-| `make bootload-notui` | Boot directly in the terminal without the debug TUI |
-| `make bootload-notui DMA=1` | Boot directly in the terminal with DMA enabled |
-| `make run-os OS_RUN_PATH=test/hello_world` | Run one configured OS scenario |
-| `make test` / `make test-fast` | Run all library, OS, and shell tests normally or with shared OS sessions |
-| `make test-lib` | Run the standalone library tests |
-| `make test-sys` / `make test-sys-fast` | Run OS feature and shell tests normally or with shared OS sessions |
-| `make test-os` | Run the OS feature tests |
-| `make test-shell` | Run the shell tests |
-| `make test-os-fast` / `make test-shell-fast` | Run only OS feature or shell tests with a shared boot |
-| `make test DMA=1` | Run the complete test workflow with emulator DMA enabled |
-| `make test-fast DMA=1` | Run the fast workflow with emulator DMA enabled |
-
-### Release archive layout
-
-`make release-archive` first rebuilds the generated [`binary/`](binary/)
-release tree, verifies that it contains only release files, and packages its
-contents as `pico-os-runtime.tar.gz`. The archive contains a complete PicoOS
-runtime and the scripts needed to start it in RETI-Emulator; it is not a copy
-of the source repository and contains no test fixtures, PicoC sources, or
-libraries.
-
-Both `make bootload` and the archive launchers start the emulator in the runtime directory.
-That directory becomes PicoOS `/`. Host `/tmp` is not mounted or added to directory listings.
-Use the updated RETI-Emulator together with the rebuilt PicoOS binaries.
-
-The following paths show where to find each runtime component in that archive;
-the links point to their generated locations under [`binary/`](binary/).
-
-| Archive path | Contents and purpose |
-| --- | --- |
-| [`binary/README.md`](binary/README.md) | Short release-specific startup and host-filesystem instructions. It becomes `README.md` at the archive root. |
-| [`binary/start-picoos.sh`](binary/start-picoos.sh), [`binary/start-picoos.ps1`](binary/start-picoos.ps1) | Linux/macOS/Android and Windows launchers. They find or download the tools, select the boot and kernel metadata, and start the emulator. |
-| [`binary/download-tools.sh`](binary/download-tools.sh), [`binary/download-tools.ps1`](binary/download-tools.ps1) | Download matching released `picoc_compiler` and `reti_emulator` binaries when they are not already available. |
-| [`binary/boot/`](binary/boot/) | `bootloader.reti`, the RETI EPROM image that loads and starts the kernel. |
-| [`binary/kernel/`](binary/kernel/) | [`kernel.bin`](kernel/kernel.picoc), the loadable kernel image; [`kernel.sections`](kernel/kernel.sections), its linked memory-layout metadata; and `kernel.debuginfo`, its source/debug metadata. |
-| [`binary/system/`](binary/system/) | Loadable system-program binaries, currently [`init.bin`](system/init.picoc). The test-only fast launcher is deliberately excluded. |
-| [`binary/user/`](binary/user/) | Loadable PicoOS command binaries, including [`shell.bin`](user/shell.picoc) and the standard user commands built from [`user/`](user/). |
-| [`binary/config/`](binary/config/) | Runtime configuration copied from [`config/`](config/): the initial environment, emulator options, and PicoOS release version. |
-| [`binary/device/`](binary/device/) | `terminal.dev` and `null.dev` marker files. They represent PicoOS virtual device paths; they do not hold device data. |
-
-For the corresponding source-tree directories and local helper scripts, see
-[Repository layout](documentation/repository_layout.md).
-
 ## Contents
 
-The chapters below follow the build and boot path into kernel mechanisms, then
-userspace and tests. Use the nested links to jump to a specific mechanism.
+The chapters explain the toolchain and kernel, then follow startup through
+init, the shell, and user applications. The final chapters cover testing,
+teaching uses, AI use, and limitations.
 
-1. [Toolchain extensions for PicoOS](#1-toolchain-extensions-for-picoos)
+1. [1. Toolchain extensions for PicoOS](#1-toolchain-extensions-for-picoos)
    - [1.1 PicoC-Compiler extensions](#11-picoc-compiler-extensions)
-     - [1.1.1 Extending the compilation pipeline](#111-extending-the-compilation-pipeline)
-     - [1.1.2 Separate compilation and linking](#112-separate-compilation-and-linking)
-     - [1.1.3 Linked `.sections` metadata](#113-linked-sections-metadata)
-     - [1.1.4 RETI pseudoinstructions](#114-reti-pseudoinstructions)
-       - [1.1.4.1 Interrupt-safe stack operations](#1141-interrupt-safe-stack-operations)
-       - [1.1.4.2 Loading 32-bit values](#1142-loading-32-bit-values)
-       - [1.1.4.3 Long jumps](#1143-long-jumps)
-       - [1.1.4.4 Expansion during linking](#1144-expansion-during-linking)
-     - [1.1.5 Generated `memory_constants.header` files](#115-generated-memory_constantsheader-files)
-     - [1.1.6 Custom userspace startup](#116-custom-userspace-startup)
-     - [1.1.7 Program sections and low-level functions](#117-program-sections-and-low-level-functions)
+      - [1.1.1 Compilation pipeline and compiler passes](#111-compilation-pipeline-and-compiler-passes)
+      - [1.1.2 Separate compilation, reusable artifacts, and linking](#112-separate-compilation-reusable-artifacts-and-linking)
+      - [1.1.3 System V ABI stack frames and call cleanup](#113-system-v-abi-stack-frames-and-call-cleanup)
+         - [1.1.3.1 Stack-frame layout and caller cleanup](#1131-stack-frame-layout-and-caller-cleanup)
+         - [1.1.3.2 Shared function epilogue and return values](#1132-shared-function-epilogue-and-return-values)
+         - [1.1.3.3 Naked functions without a generated frame](#1133-naked-functions-without-a-generated-frame)
+      - [1.1.4 Placing globals in .ivt with section("ivt")](#114-placing-globals-in-ivt-with-sectionivt)
+      - [1.1.5 Selecting a startup function with -C / --startup-source](#115-selecting-a-startup-function-with--c----startup-source)
+         - [1.1.5.1 Default compiler-generated _start](#1151-default-compiler-generated-_start)
+         - [1.1.5.2 PicoOS libstart startup sequence](#1152-picoos-libstart-startup-sequence)
+         - [1.1.5.3 Startup functions used by PicoOS images](#1153-startup-functions-used-by-picoos-images)
+      - [1.1.6 Program sections, interrupt table entries, and linker placement](#116-program-sections-interrupt-table-entries-and-linker-placement)
+      - [1.1.7 RETI pseudoinstructions](#117-reti-pseudoinstructions)
+         - [1.1.7.1 Interrupt-safe PUSH and POP](#1171-interrupt-safe-push-and-pop)
+         - [1.1.7.2 Loading 32-bit values with LOADI32](#1172-loading-32-bit-values-with-loadi32)
+         - [1.1.7.3 Long jumps with JUMP32](#1173-long-jumps-with-jump32)
+         - [1.1.7.4 Pseudoinstruction expansion during linking](#1174-pseudoinstruction-expansion-during-linking)
+      - [1.1.8 Linked .sections metadata and the five-word binary header](#118-linked-sections-metadata-and-the-five-word-binary-header)
+      - [1.1.9 Generated memory constants for the bootloader and kernel](#119-generated-memory-constants-for-the-bootloader-and-kernel)
    - [1.2 RETI-Emulator extensions](#12-reti-emulator-extensions)
-     - [1.2.1 Debugger and terminal views](#121-debugger-and-terminal-views)
-     - [1.2.2 Machine model and peripherals](#122-machine-model-and-peripherals)
-     - [1.2.3 UART host request protocol](#123-uart-host-request-protocol)
-2. [Bootloading and kernel startup](#2-bootloading-and-kernel-startup)
-   - [2.1 Loading the kernel](#21-loading-the-kernel)
-   - [2.2 Initializing the kernel](#22-initializing-the-kernel)
-     - [2.2.1 Kernel startup code](#221-kernel-startup-code)
-   - [2.3 Entering normal execution](#23-entering-normal-execution)
-3. [Kernel storage and ownership](#3-kernel-storage-and-ownership)
-   - [3.1 Storage and lifetime](#31-storage-and-lifetime)
-   - [3.2 Ownership connections](#32-ownership-connections)
-4. [Interrupts, system calls, and exceptions](#4-interrupts-system-calls-and-exceptions)
-   - [4.1 Interrupt vector table](#41-interrupt-vector-table)
-   - [4.2 Saved interrupt frame](#42-saved-interrupt-frame)
-   - [4.3 System-call path](#43-system-call-path)
-   - [4.4 Timer ISR and preemption](#44-timer-isr-and-preemption)
-   - [4.5 UART ISR](#45-uart-isr)
-   - [4.6 CPU exception path](#46-cpu-exception-path)
-   - [4.7 Important interrupt and exception functions](#47-important-interrupt-and-exception-functions)
-5. [Processes and the process table](#5-processes-and-the-process-table)
-   - [5.1 Global process table](#51-global-process-table)
-   - [5.2 Activation record](#52-activation-record)
-   - [5.3 Process control block](#53-process-control-block)
-   - [5.4 Process image and initial stack](#54-process-image-and-initial-stack)
-   - [5.5 States and lifetime](#55-states-and-lifetime)
-   - [5.6 Important process functions](#56-important-process-functions)
-6. [Blocking, waiting, synchronization, and signals](#6-blocking-waiting-synchronization-and-signals)
-   - [6.1 Wait queues](#61-wait-queues)
-     - [6.1.1 Sleeping and waking](#611-sleeping-and-waking)
-   - [6.2 `waitpid()` and saved wait state](#62-waitpid-and-saved-wait-state)
-   - [6.3 Signals inside the PCB](#63-signals-inside-the-pcb)
-   - [6.4 Important signal functions](#64-important-signal-functions)
-   - [6.5 Mutexes](#65-mutexes)
-7. [Scheduler and dispatcher](#7-scheduler-and-dispatcher)
-   - [7.1 Scheduler](#71-scheduler)
-   - [7.2 Saving and selecting](#72-saving-and-selecting)
-   - [7.3 Restoring](#73-restoring)
-8. [Memory management and shared memory](#8-memory-management-and-shared-memory)
-   - [8.1 Three uses of one heap implementation](#81-three-uses-of-one-heap-implementation)
-     - [8.1.1 Current kernel SRAM layout](#811-current-kernel-sram-layout)
-     - [8.1.2 Per-process linked layout](#812-per-process-linked-layout)
-   - [8.2 Heap and allocator functions](#82-heap-and-allocator-functions)
-   - [8.3 Shared-memory registry and attachments](#83-shared-memory-registry-and-attachments)
-     - [8.3.1 Shared-memory tests](#831-shared-memory-tests)
-9. [Terminal, file descriptors, and host filesystem](#9-terminal-file-descriptors-and-host-filesystem)
-   - [9.1 Per-process descriptor table](#91-per-process-descriptor-table)
-   - [9.2 Global terminal](#92-global-terminal)
-   - [9.3 Virtual device paths](#93-virtual-device-paths)
-   - [9.4 Descriptor and terminal functions](#94-descriptor-and-terminal-functions)
-   - [9.5 Opening, reading, writing, and seeking](#95-opening-reading-writing-and-seeking)
-   - [9.6 Working directories and host operations](#96-working-directories-and-host-operations)
-10. [Libraries and the userspace/kernel ABI](#10-libraries-and-the-userspacekernel-abi)
-    - [10.1 System-call request structures](#101-system-call-request-structures)
-      - [10.1.1 Process, wait, signal, and memory requests](#1011-process-wait-signal-and-memory-requests)
-      - [10.1.2 File and directory requests](#1012-file-and-directory-requests)
-    - [10.2 Implemented libraries](#102-implemented-libraries)
-      - [10.2.1 `unistd`, `fcntl`, waiting, and scheduling](#1021-unistd-fcntl-waiting-and-scheduling)
-      - [10.2.2 Signals, process control, shared memory, and mutexes](#1022-signals-process-control-shared-memory-and-mutexes)
-      - [10.2.3 Directories](#1023-directories)
-      - [10.2.4 Process heap, environment, strings, and exit](#1024-process-heap-environment-strings-and-exit)
-      - [10.2.5 Standard I/O](#1025-standard-io)
-      - [10.2.6 Startup library](#1026-startup-library)
-    - [10.3 Library organization and scope](#103-library-organization-and-scope)
-11. [Init process](#11-init-process)
-    - [11.1 Purpose and separation of responsibilities](#111-purpose-and-separation-of-responsibilities)
-    - [11.2 Startup sequence](#112-startup-sequence)
-      - [11.2.1 Init startup code](#1121-init-startup-code)
-    - [11.3 Configuration and environment](#113-configuration-and-environment)
-    - [11.4 Shell restart policy](#114-shell-restart-policy)
-12. [Shell](#12-shell)
-    - [12.1 Shell-owned data](#121-shell-owned-data)
-    - [12.2 Startup and main loop](#122-startup-and-main-loop)
-    - [12.3 Line editing and history](#123-line-editing-and-history)
-    - [12.4 Parsing and command execution](#124-parsing-and-command-execution)
-    - [12.5 Shell built-ins](#125-shell-built-ins)
-    - [12.6 Foreground, background, and signals](#126-foreground-background-and-signals)
-    - [12.7 Redirection and pipelines](#127-redirection-and-pipelines)
-    - [12.8 Shell-test support](#128-shell-test-support)
-13. [User applications](#13-user-applications)
-    - [13.1 Applications and their library use](#131-applications-and-their-library-use)
-    - [13.2 Command behavior and limitations](#132-command-behavior-and-limitations)
-    - [13.3 Errors and exit status](#133-errors-and-exit-status)
-14. [Use in operating-systems and real-time operating-systems lectures](#14-use-in-operating-systems-and-real-time-operating-systems-lectures)
-    - [14.1 Operating-systems topics](#141-operating-systems-topics)
-      - [14.1.1 Understanding PicoOS and the kernel step by step in the RETI-Emulator](#1411-understanding-picoos-and-the-kernel-step-by-step-in-the-reti-emulator)
-      - [14.1.2 Understanding the heap, malloc(), and free() with PicoOS](#1412-understanding-the-heap-malloc-and-free-with-picoos)
-      - [14.1.3 Symbolic assembly for students](#1413-symbolic-assembly-for-students)
-    - [14.2 Real-time operating-systems topics](#142-real-time-operating-systems-topics)
-15. [Test system](#15-test-system)
-    - [15.1 Test categories and repository integration](#151-test-categories-and-repository-integration)
-    - [15.2 Normal and fast execution](#152-normal-and-fast-execution)
-    - [15.3 Covered behavior](#153-covered-behavior)
-16. [Use of AI in the project](#16-use-of-ai-in-the-project)
-17. [Limitations](#17-limitations)
-- [Appendix: Inspecting `.bin` files with `hexyl`](#appendix-inspecting-bin-files-with-hexyl)
+      - [1.2.1 RETI machine model and memory-mapped peripherals](#121-reti-machine-model-and-memory-mapped-peripherals)
+      - [1.2.2 Atomic test-and-set with TSL](#122-atomic-test-and-set-with-tsl)
+      - [1.2.3 UART host-service protocol](#123-uart-host-service-protocol)
+      - [1.2.4 Debugger, source view, and terminal modes](#124-debugger-source-view-and-terminal-modes)
+1. [2. Interrupts, system calls, preemption, and exceptions](#2-interrupts-system-calls-preemption-and-exceptions)
+   - [2.1 RETI interrupt entry and the interrupt service routine table](#21-reti-interrupt-entry-and-the-interrupt-service-routine-table)
+   - [2.2 Interrupt-controller mappings and priorities](#22-interrupt-controller-mappings-and-priorities)
+      - [2.2.1 Interrupt-controller function reference](#221-interrupt-controller-function-reference)
+      - [2.2.2 Memory-mapped periphery function reference](#222-memory-mapped-periphery-function-reference)
+   - [2.3 Saved interrupt stack frame](#23-saved-interrupt-stack-frame)
+   - [2.4 System-call interface and execution](#24-system-call-interface-and-execution)
+      - [2.4.1 Syscall selectors and register convention](#241-syscall-selectors-and-register-convention)
+         - [2.4.1.1 Process, wait, signal, and memory request structures](#2411-process-wait-signal-and-memory-request-structures)
+         - [2.4.1.2 File and directory request structures](#2412-file-and-directory-request-structures)
+      - [2.4.2 System-call entry, execution, and return to userspace](#242-system-call-entry-execution-and-return-to-userspace)
+         - [2.4.2.1 Handle Syscall](#2421-handle-syscall)
+            - [2.4.2.1.1 System-call groups](#24211-system-call-groups)
+         - [2.4.2.2 Selecting the return path](#2422-selecting-the-return-path)
+         - [2.4.2.3 Stack-boundary helpers](#2423-stack-boundary-helpers)
+      - [2.4.3 System-call selection function reference](#243-system-call-selection-function-reference)
+   - [2.5 Timer interrupts and userspace preemption](#25-timer-interrupts-and-userspace-preemption)
+      - [2.5.1 Timer interrupt path](#251-timer-interrupt-path)
+      - [2.5.2 Kernel non-preemption and deferred rescheduling](#252-kernel-non-preemption-and-deferred-rescheduling)
+      - [2.5.3 Shell character delay for different timer intervals](#253-shell-character-delay-for-different-timer-intervals)
+   - [2.6 UART receive interrupt path](#26-uart-receive-interrupt-path)
+      - [2.6.1 Borrowed-stack entry and return](#261-borrowed-stack-entry-and-return)
+      - [2.6.2 UART nesting and interrupt priorities](#262-uart-nesting-and-interrupt-priorities)
+      - [2.6.3 Polled UART function reference](#263-polled-uart-function-reference)
+   - [2.7 DMA completion interrupt path](#27-dma-completion-interrupt-path)
+      - [2.7.1 DMA waiting and completion function reference](#271-dma-waiting-and-completion-function-reference)
+   - [2.8 CPU exceptions and runtime errors](#28-cpu-exceptions-and-runtime-errors)
+      - [2.8.1 CPU exception entry and registers](#281-cpu-exception-entry-and-registers)
+      - [2.8.2 Supported exceptions and allocation errors](#282-supported-exceptions-and-allocation-errors)
+      - [2.8.3 Exception and stack-boundary function reference](#283-exception-and-stack-boundary-function-reference)
+1. [3. Memory management and shared memory](#3-memory-management-and-shared-memory)
+   - [3.1 Heap block layout and allocation algorithm](#31-heap-block-layout-and-allocation-algorithm)
+   - [3.2 SRAM image and heap hierarchy](#32-sram-image-and-heap-hierarchy)
+   - [3.3 Kernel Heap](#33-kernel-heap)
+      - [3.3.1 Kernel Heap blocks and kernel objects](#331-kernel-heap-blocks-and-kernel-objects)
+      - [3.3.2 Kernel Heap allocator function reference](#332-kernel-heap-allocator-function-reference)
+   - [3.4 Process and Shared Data Heap](#34-process-and-shared-data-heap)
+      - [3.4.1 Process allocations](#341-process-allocations)
+      - [3.4.2 Shared Data allocations](#342-shared-data-allocations)
+      - [3.4.3 Process and Shared Data Heap allocator function reference](#343-process-and-shared-data-heap-allocator-function-reference)
+   - [3.5 User Process Heap](#35-user-process-heap)
+      - [3.5.1 Per-Process User Process Heap](#351-per-process-user-process-heap)
+      - [3.5.2 User Process Heap allocator function reference](#352-user-process-heap-allocator-function-reference)
+   - [3.6 Heap and allocator function reference](#36-heap-and-allocator-function-reference)
+      - [3.6.1 Common allocator linkage and function reference](#361-common-allocator-linkage-and-function-reference)
+      - [3.6.2 Reallocation decisions](#362-reallocation-decisions)
+      - [3.6.3 Allocation and repeated coalescing example](#363-allocation-and-repeated-coalescing-example)
+         - [3.6.3.1 Initial state and first-fit search](#3631-initial-state-and-first-fit-search)
+         - [3.6.3.2 Allocation splits D](#3632-allocation-splits-d)
+         - [3.6.3.3 Free D and merge its remainder](#3633-free-d-and-merge-its-remainder)
+         - [3.6.3.4 Free C and merge repeatedly at B](#3634-free-c-and-merge-repeatedly-at-b)
+1. [4. Processes and process lifecycle](#4-processes-and-process-lifecycle)
+   - [4.1 Process control block fields](#41-process-control-block-fields)
+      - [4.1.1 Process states and transitions](#411-process-states-and-transitions)
+      - [4.1.2 Global process list and current process](#412-global-process-list-and-current-process)
+         - [4.1.2.1 From PCBs to Process Payloads in SRAM](#4121-from-pcbs-to-process-payloads-in-sram)
+   - [4.2 Initial user process stack](#42-initial-user-process-stack)
+      - [4.2.1 User process stack placement](#421-user-process-stack-placement)
+      - [4.2.2 Initial argc, argv, and envp](#422-initial-argc-argv-and-envp)
+         - [4.2.2.1 Concrete initial-stack example](#4221-concrete-initial-stack-example)
+   - [4.3 Loading and starting a process](#43-loading-and-starting-a-process)
+      - [4.3.1 Loading a process (load library call)](#431-loading-a-process-load-library-call)
+         - [4.3.1.1 Load function reference](#4311-load-function-reference)
+      - [4.3.2 Starting a process (run library call)](#432-starting-a-process-run-library-call)
+         - [4.3.2.1 Parent-to-child inheritance](#4321-parent-to-child-inheritance)
+            - [4.3.2.1.1 Environment origin and propagation](#43211-environment-origin-and-propagation)
+            - [4.3.2.1.2 Loading-bar environment variable](#43212-loading-bar-environment-variable)
+         - [4.3.2.2 Recording termination status](#4322-recording-termination-status)
+         - [4.3.2.3 Parent collection and final removal](#4323-parent-collection-and-final-removal)
+         - [4.3.2.4 Run function reference](#4324-run-function-reference)
+   - [4.4 Process list, PCB metadata, and lifecycle function reference](#44-process-list-pcb-metadata-and-lifecycle-function-reference)
+1. [5. Shared Memory Entries and Mappings](#5-shared-memory-entries-and-mappings)
+   - [5.1 Named entries and per-process attachments](#51-named-entries-and-per-process-attachments)
+      - [5.1.1 Global shared-memory list and entry names](#511-global-shared-memory-list-and-entry-names)
+         - [5.1.1.1 From Shared Memory Entries to Shared Data Payloads in SRAM](#5111-from-shared-memory-entries-to-shared-data-payloads-in-sram)
+      - [5.1.2 Per-process attachment lists in SRAM](#512-per-process-attachment-lists-in-sram)
+   - [5.2 Mapping, unlinking, and deferred destruction](#52-mapping-unlinking-and-deferred-destruction)
+   - [5.3 Shared Memory function reference](#53-shared-memory-function-reference)
+1. [6. Scheduling and context switching](#6-scheduling-and-context-switching)
+   - [6.1 Scheduler implementation](#61-scheduler-implementation)
+      - [6.1.1 Algorithm and Round Robin comparison](#611-algorithm-and-round-robin-comparison)
+      - [6.1.2 Scheduler function reference](#612-scheduler-function-reference)
+   - [6.2 Saved process registers](#62-saved-process-registers)
+   - [6.3 Saving the current process and selecting the next process](#63-saving-the-current-process-and-selecting-the-next-process)
+   - [6.4 Restoring the selected process and returning with RTI](#64-restoring-the-selected-process-and-returning-with-rti)
+   - [6.5 Dispatcher function reference](#65-dispatcher-function-reference)
+1. [7. Blocking, wait queues, signals, and mutexes](#7-blocking-wait-queues-signals-and-mutexes)
+   - [7.1 Blocking and wakeup](#71-blocking-and-wakeup)
+   - [7.2 Wait queues and PCB links](#72-wait-queues-and-pcb-links)
+      - [7.2.1 Blocking with sleep and waking with wakeup](#721-blocking-with-sleep-and-waking-with-wakeup)
+      - [7.2.2 Child waiting with waitpid](#722-child-waiting-with-waitpid)
+      - [7.2.3 Wait queue function reference](#723-wait-queue-function-reference)
+   - [7.3 Process signals](#73-process-signals)
+      - [7.3.1 Supported signals and fixed actions](#731-supported-signals-and-fixed-actions)
+      - [7.3.2 Stopping and continuing a process](#732-stopping-and-continuing-a-process)
+      - [7.3.3 Termination, Ctrl-C, and parent collection](#733-termination-ctrl-c-and-parent-collection)
+      - [7.3.4 Fixed PicoOS signal actions compared with Unix](#734-fixed-picoos-signal-actions-compared-with-unix)
+      - [7.3.5 Signal function reference](#735-signal-function-reference)
+   - [7.4 Mutexes with test-and-set and wait queues](#74-mutexes-with-test-and-set-and-wait-queues)
+1. [8. Terminal, file descriptors, and host filesystem](#8-terminal-file-descriptors-and-host-filesystem)
+   - [8.1 Per-process file-descriptor table](#81-per-process-file-descriptor-table)
+   - [8.2 Global terminal input buffer](#82-global-terminal-input-buffer)
+   - [8.3 Blocking and completing terminal reads](#83-blocking-and-completing-terminal-reads)
+   - [8.4 Foreground input ownership and terminal-generated signals](#84-foreground-input-ownership-and-terminal-generated-signals)
+   - [8.5 Virtual terminal and null-device paths](#85-virtual-terminal-and-null-device-paths)
+   - [8.6 File-descriptor creation, inheritance, duplication, and cleanup](#86-file-descriptor-creation-inheritance-duplication-and-cleanup)
+   - [8.7 Terminal-buffer and pending-read function reference](#87-terminal-buffer-and-pending-read-function-reference)
+   - [8.8 Opening, reading, writing, and seeking](#88-opening-reading-writing-and-seeking)
+   - [8.9 PicoOS paths, working directories, and host operations](#89-picoos-paths-working-directories-and-host-operations)
+1. [9. Kernel data structures: relationships, storage, and lifetimes](#9-kernel-data-structures-relationships-storage-and-lifetimes)
+   - [9.1 Memory layout, allocation sources, and lifetimes](#91-memory-layout-allocation-sources-and-lifetimes)
+   - [9.2 Containment and reference relationships](#92-containment-and-reference-relationships)
+   - [9.3 Kernel global variables and process-list roots](#93-kernel-global-variables-and-process-list-roots)
+   - [9.4 Wait requests and queue storage](#94-wait-requests-and-queue-storage)
+1. [10. Userspace libraries](#10-userspace-libraries)
+   - [10.1 From a library call to the kernel: waitpid](#101-from-a-library-call-to-the-kernel-waitpid)
+      - [10.1.1 Header, implementation, and linking](#1011-header-implementation-and-linking)
+      - [10.1.2 Packing arguments and executing the syscall](#1012-packing-arguments-and-executing-the-syscall)
+      - [10.1.3 Interrupt entry, waiting, and return](#1013-interrupt-entry-waiting-and-return)
+   - [10.2 Library overview and dependencies](#102-library-overview-and-dependencies)
+      - [10.2.1 unistd: processes, descriptors, paths, and wait queues](#1021-unistd-processes-descriptors-paths-and-wait-queues)
+         - [10.2.1.1 Process operations in process.picoc](#10211-process-operations-in-processpicoc)
+         - [10.2.1.2 Descriptor operations in io.picoc](#10212-descriptor-operations-in-iopicoc)
+         - [10.2.1.3 Working-directory operations in working_directory.picoc](#10213-working-directory-operations-in-working_directorypicoc)
+         - [10.2.1.4 Path operations in file_removal.picoc](#10214-path-operations-in-file_removalpicoc)
+         - [10.2.1.5 Wait-queue operations in blocking.picoc](#10215-wait-queue-operations-in-blockingpicoc)
+      - [10.2.2 fcntl: opening and creating files](#1022-fcntl-opening-and-creating-files)
+      - [10.2.3 sys/wait: waiting for children](#1023-syswait-waiting-for-children)
+      - [10.2.4 mutex: locking and waking contenders](#1024-mutex-locking-and-waking-contenders)
+      - [10.2.5 sys/mman: named shared memory](#1025-sysmman-named-shared-memory)
+      - [10.2.6 dirent: directory streams](#1026-dirent-directory-streams)
+      - [10.2.7 stdlib: process heap, environment, conversion, and exit](#1027-stdlib-process-heap-environment-conversion-and-exit)
+         - [10.2.7.1 Heap operations in malloc.picoc](#10271-heap-operations-in-mallocpicoc)
+         - [10.2.7.2 Decimal conversion in atoi.picoc](#10272-decimal-conversion-in-atoipicoc)
+         - [10.2.7.3 Environment operations in env.picoc](#10273-environment-operations-in-envpicoc)
+         - [10.2.7.4 Process exit in exit.picoc](#10274-process-exit-in-exitpicoc)
+      - [10.2.8 string: copying, comparison, and length](#1028-string-copying-comparison-and-length)
+      - [10.2.9 stdio: streams, formatting, and scanning](#1029-stdio-streams-formatting-and-scanning)
+         - [10.2.9.1 Streams and output in stdio.picoc](#10291-streams-and-output-in-stdiopicoc)
+         - [10.2.9.2 Scanning in scanf.picoc](#10292-scanning-in-scanfpicoc)
+      - [10.2.10 start: entering and leaving a user program](#10210-start-entering-and-leaving-a-user-program)
+      - [10.2.11 Single-function libraries](#10211-single-function-libraries)
+1. [11. Complete startup: bootloader, kernel, init, shell, and user applications](#11-complete-startup-bootloader-kernel-init-shell-and-user-applications)
+   - [11.1 Loading the kernel from the EPROM bootloader](#111-loading-the-kernel-from-the-eprom-bootloader)
+   - [11.2 Kernel startup](#112-kernel-startup)
+      - [11.2.1 Loading init and entering normal execution](#1121-loading-init-and-entering-normal-execution)
+   - [11.3 Init process](#113-init-process)
+      - [11.3.1 Init responsibilities](#1131-init-responsibilities)
+      - [11.3.2 Initial environment configuration](#1132-initial-environment-configuration)
+      - [11.3.3 Loading, starting, and waiting for the shell](#1133-loading-starting-and-waiting-for-the-shell)
+      - [11.3.4 Shell startup](#1134-shell-startup)
+      - [11.3.5 Loading user applications](#1135-loading-user-applications)
+      - [11.3.6 Shell exit and restart policy](#1136-shell-exit-and-restart-policy)
+      - [11.3.7 When init terminates](#1137-when-init-terminates)
+1. [12. Shell](#12-shell)
+   - [12.1 Shell-owned state](#121-shell-owned-state)
+   - [12.2 Shell startup and command loop](#122-shell-startup-and-command-loop)
+   - [12.3 Interactive line editing and command history](#123-interactive-line-editing-and-command-history)
+   - [12.4 Command parsing, expansion, and execution](#124-command-parsing-expansion-and-execution)
+   - [12.5 Shell built-in commands](#125-shell-built-in-commands)
+      - [12.5.1 Foreground processes, background processes, and job-control signals](#1251-foreground-processes-background-processes-and-job-control-signals)
+   - [12.6 Input/output redirection](#126-inputoutput-redirection)
+   - [12.7 Sequential file-backed pipelines](#127-sequential-file-backed-pipelines)
+1. [13. User applications and commands](#13-user-applications-and-commands)
+   - [13.1 Applications, library calls, and host requests](#131-applications-library-calls-and-host-requests)
+      - [13.1.1 Command behavior and supported options](#1311-command-behavior-and-supported-options)
+      - [13.1.2 Command errors and exit statuses](#1312-command-errors-and-exit-statuses)
+1. [14. Test system](#14-test-system)
+   - [14.1 Library, OS, shell, and boot test categories](#141-library-os-shell-and-boot-test-categories)
+      - [14.1.1 Files that make up a test](#1411-files-that-make-up-a-test)
+      - [14.1.2 Library test example](#1412-library-test-example)
+      - [14.1.3 OS test example](#1413-os-test-example)
+      - [14.1.4 Shell test example](#1414-shell-test-example)
+      - [14.1.5 Boot test example](#1415-boot-test-example)
+   - [14.2 Test execution](#142-test-execution)
+      - [14.2.1 Make targets](#1421-make-targets)
+1. [15. Use in operating-systems and real-time operating-systems lectures](#15-use-in-operating-systems-and-real-time-operating-systems-lectures)
+   - [15.1 Operating-systems topics](#151-operating-systems-topics)
+      - [15.1.1 Inspecting PicoOS execution in the RETI-Emulator](#1511-inspecting-picoos-execution-in-the-reti-emulator)
+      - [15.1.2 Exploring userspace heap allocation](#1512-exploring-userspace-heap-allocation)
+      - [15.1.3 Editing and executing symbolic RETI assembly](#1513-editing-and-executing-symbolic-reti-assembly)
+   - [15.2 Real-time operating-systems topics](#152-real-time-operating-systems-topics)
+1. [16. Use of AI in the project](#16-use-of-ai-in-the-project)
+1. [17. Limitations](#17-limitations)
+- [Appendix: Inspecting .bin files with hexyl](#appendix-inspecting-bin-files-with-hexyl)
 
 # 1. Toolchain extensions for PicoOS
+[\[↑ TOC\]](#contents)
 
-The original teaching compiler and emulator were not sufficient to build,
-compile, and emulate PicoOS. A substantial part of the project was extending
-both existing tools so the OS could be written in PicoC, linked as complete
-programs, booted, and inspected as RETI output.
+The original teaching compiler and emulator ran standalone programs. PicoOS
+needed linking, loading, interrupts, and debugging support. This chapter
+explains the extensions that let us build and inspect the OS in PicoC and RETI.
 
-The detailed change histories are kept with the sibling projects in the
-[PicoC-Compiler feature history](https://github.com/matthejue/PicoC-Compiler/blob/linker_update/documentation/new_features_for_pico_os.md)
-and [RETI-Emulator feature history](https://github.com/matthejue/RETI-Emulator/blob/statemachine/documentation/new_features_for_pico_os.md).
-This chapter records the complete project-facing surface rather than only the
-few extensions that appear directly in kernel source.
+The sibling projects keep their detailed change histories in the
+[PicoC-Compiler feature history](../PicoC-Compiler/documentation/new_features_for_pico_os.md)
+and [RETI-Emulator feature history](../RETI-Emulator/documentation/new_features_for_pico_os.md).
 
 ## 1.1 PicoC-Compiler extensions
+[\[↑ TOC\]](#contents)
 
-PicoOS needs whole programs built from many files, headers that affect their
-inputs, a broader PicoC language, and control over final memory layout. The
-following compiler features were added to provide those capabilities.
+The compiler extensions support larger programs and give PicoOS control over
+entry points and memory layout. The table summarizes them:
 
 | Feature | Contribution used by PicoOS |
 | --- | --- |
@@ -436,16 +504,16 @@ following compiler features were added to provide those capabilities.
 | Preprocessing | `#include`, include paths, `#pragma once`, object-like macros, line splicing, dependency output, and optional syntax checking |
 | Multiple translation units | Per-file compilation, symbol merging, cross-file calls/globals, and final program-wide linking |
 | Reusable build artifacts | `.reti_blocks` and `.st` retain lowered code, symbols, data, startup, and debug metadata for later links |
-| Automatic artifact reuse | Source/header hashes and compiler options decide whether an unchanged unit can be reused; Make dependency files expose the same inputs |
+| Automatic artifact reuse | Source/header hashes and compiler options decide whether an unchanged compiled file can be reused, Make dependency files expose the same inputs |
 | Broader PicoC syntax | `typedef`, casts, mixed declarations/statements, postfix increment, array-size inference, and compile-time integer simplification |
 | Pointer support | Pointer returns, `void *`, typed pointer arithmetic, dereference/member conditions, and compatible forward/repeated struct declarations |
 | Function pointers | Declarations, arrays, assignments, indirect calls, and statically emitted function addresses |
-| Variadic functions | Variadic declarations and the documented System-V-style stack-frame locations used by [`printf()`](library/stdio/stdio.picoc#L351) and [`scanf()`](library/stdio/scanf.picoc#L112) |
+| Variadic functions | Variadic declarations and the documented System-V-style stack-frame locations used by [`printf()`](library/stdio/stdio.picoc#L354) and [`scanf()`](library/stdio/scanf.picoc#L112) |
 | String and character data | Escapes, inferred local arrays, global strings, deduplicated string literals, and linker-safe literal names |
 | Inline RETI assembly | `asm("...")`, linked labels inside assembly, and safe pseudoinstructions such as `LOADI32`, `JUMP32`, `PUSH`, and `POP` |
 | Low-level functions | `__attribute__((naked))` suppresses compiler prologue/epilogue code for startup and interrupt handlers |
-| Custom sections | `__attribute__((section("ivt")))` places selected globals or functions in `.ivt`; ordinary functions and globals use `.text` and `.data` |
-| Interrupt-vector entries | `IVTE` resolves handler pointers into tagged SRAM addresses |
+| Custom sections | `__attribute__((section("ivt")))` places selected globals or functions in `.ivt`, ordinary functions and globals use `.text` and `.data` |
+| interrupt service routines entries | `IVTE` resolves handler pointers into tagged SRAM addresses |
 | Runtime startup | Generated default entry or a replaceable custom `-C` startup such as PicoOS [`libstart`](library/start/libstart.picoc) |
 | Global initialization | `-O1` emits known scalar, string, struct, array, and function-pointer initializers directly into `.data` or an attributed `.ivt` |
 | Shared epilogues | All ordinary returns converge on one generated restore/return block |
@@ -456,15 +524,12 @@ following compiler features were added to provide those capabilities.
 | Inspectable intermediates | Preprocessed source and named RETI-block stages make the result of individual compiler passes visible |
 | Source trap and RETI `NOP` | `debug;` lowers to the emulator trap and inline `NOP` remains a real instruction |
 
-### 1.1.1 Extending the compilation pipeline
+### 1.1.1 Compilation pipeline and compiler passes
+[\[↑ TOC\]](#contents)
 
-These features required more than individual backend changes. The original
-compiler accepted one PicoC file and transformed it directly into one RETI
-program. It used Lark to parse the source and a transformer to create the
-PicoC AST; its [passes](https://github.com/matthejue/PicoC-Compiler/blob/master/src/passes.py)
-and [AST transformer](https://github.com/matthejue/PicoC-Compiler/blob/master/src/ast_transformers.py)
-show the following lowering sequence. The boxed final group runs once for that
-one input file and produces that file's RETI program.
+The original compiler parsed one PicoC file with Lark, built an AST, and
+lowered it into RETI. Its [passes](https://github.com/matthejue/PicoC-Compiler/blob/master/src/passes.py) and
+[AST transformer](https://github.com/matthejue/PicoC-Compiler/blob/master/src/ast_transformers.py) followed this sequence:
 
 ```mermaid
 flowchart LR
@@ -491,21 +556,17 @@ flowchart LR
     ast --> shrink --> blocks --> anf --> reti_blocks --> patch --> reti --> output
 ```
 
-For the added preprocessing, separate compilation, typing, and linking
-features, this pipeline was extended before and after the per-file passes.
-Preprocessing resolves includes, macros, and line splicing before parsing. The
-new symbol and typing passes check names, declarations, and types before
-ANF and RETI lowering. A final program-wide linker merges compiled units, their symbols, and
-startup code before resolving final addresses. The diagram below shows where
-these additions surround the per-file lowering sequence.
+The extended pipeline preprocesses includes and macros, checks symbols and
+types, and then lowers each file. The linker merges those results, inserts
+startup code, and resolves addresses. The yellow stages show the additions:
 
 ```mermaid
 flowchart LR
-    source["PicoC source"]
+    source["PicoC source files"]
 
     subgraph preprocessing["Preprocessing"]
-        preprocessor["Includes, macros, and line splicing"]
-        preprocessed["Preprocessed source"]
+        preprocessor["Includes, macros, and line splicing"]:::added
+        preprocessed["Preprocessed source"]:::added
     end
 
     subgraph frontend["Lexing and parsing"]
@@ -517,300 +578,474 @@ flowchart LR
     subgraph compilation["Per-file compilation passes"]
         shrink["picoc_shrink"]
         blocks["picoc_blocks"]
-        symbol["picoc_symbol"]
-        typing["picoc_typing"]
+        symbol["PicoC symbols<br/>picoc_symbol"]:::added
+        typing["PicoC typing<br/>picoc_typing"]:::added
         anf["picoc_anf"]
         reti_blocks["reti_blocks"]
     end
 
     subgraph linking["Program-wide linking passes"]
-        merge["Merge units, symbols, and startup"]
+        merge["Merge code / global symbols<br/>Insert startup code"]:::added
         patch["reti_patch"]
         reti["reti"]
     end
 
-    output["Flat linked RETI output"]
+    output["Linked RETI program"]
 
     source --> preprocessor --> preprocessed --> tokens --> parse_tree --> ast
     ast --> shrink --> blocks --> symbol --> typing --> anf --> reti_blocks
     reti_blocks --> merge --> patch --> reti --> output
+    classDef added fill:#fff2b2,stroke:#8a5a00,stroke-width:3px,color:#111
+    style preprocessing fill:#fff8dc,stroke:#8a5a00,stroke-width:3px,color:#111
 ```
 
-### 1.1.2 Separate compilation and linking
+### 1.1.2 Separate compilation, reusable artifacts, and linking
+[\[↑ TOC\]](#contents)
 
-PicoC separate compilation follows the familiar C object-file workflow. GCC
-and Clang use `-c` to turn one `.c` file, with its included `.h` headers, into
-an `.o` object file. Similarly, `picoc_compiler -c` turns one `.picoc` file,
-with its included `.header` files, into paired `.reti_blocks` and `.st` files.
-The former contains the lowered RETI blocks; the latter is a JSON symbol table
-used when later linking units. A conventional `.o` file stores its symbol table
-inside the object file instead. The illustrative commands below compare both
-compile-and-link workflows; the `example/` paths stand for your own source files.
+Separate compilation follows the C object-file workflow. GCC or Clang
+compiles a `.c` file into an `.o` file with `-c`. PicoC compiles a `.picoc`
+file into a `.reti_blocks` file and its `.st` symbol table. A conventional
+object file stores that table internally. The example builds [`libstring.picoc`](library/string/libstring.picoc)
+and [`basic_string.picoc`](test/basic_string.picoc), together with the test's [`libstdlib`](library/stdlib/libstdlib.picoc) and [`libstdio`](library/stdio/libstdio.picoc)
+dependencies. The equivalent C filenames illustrate the comparison:
 
 ```console
-$ gcc -c -O2 example/c/main.c example/c/math.c
-$ ls example/c
-main.c  main.h  main.o  math.c  math.h  math.o
+$ gcc -c -O2 libstring.c basic_string.c
+$ ls -1 basic_string.o libstring.o
+basic_string.o
+libstring.o
 
-$ picoc_compiler -c -O1 example/picoc/main.picoc example/picoc/math.picoc
-$ ls example/picoc
-main.header  main.picoc  main.reti_blocks  main.st  math.header  math.picoc  math.reti_blocks  math.st
+$ gcc -o basic_string basic_string.o libstring.o
+$ ls -1 basic_string
+basic_string
 
-$ gcc -o binary/c-example example/c/main.o example/c/math.o
-$ picoc_compiler -O1 -o binary/picoc-example.reti \
-    example/picoc/main.reti_blocks example/picoc/math.reti_blocks
-$ ls binary
-c-example  picoc-example.reti  picoc-example.sections
+$ picoc_compiler -c -O1 library/string/libstring.picoc test/basic_string.picoc \
+    library/stdlib/libstdlib.picoc library/stdio/libstdio.picoc
+$ ls -1 library/string/libstring.{reti_blocks,st} test/basic_string.{reti_blocks,st}
+library/string/libstring.reti_blocks
+library/string/libstring.st
+test/basic_string.reti_blocks
+test/basic_string.st
+
+$ picoc_compiler -O1 -o binary/basic_string.reti test/basic_string.reti_blocks \
+    library/string/libstring.reti_blocks library/stdlib/libstdlib.reti_blocks \
+    library/stdio/libstdio.reti_blocks
+$ ls -1 binary/basic_string.{reti,sections}
+binary/basic_string.reti
+binary/basic_string.sections
 ```
 
-The `-o` option selects the path and name of the linked executable: the native
-`binary/c-example` in the C command and the final linked RETI assembly
-`binary/picoc-example.reti` in the PicoC command. PicoC's paired artifacts
-keep the lowered code and linker metadata independently inspectable and
-reusable. The PicoC/RETI toolchain keeps the accompanying metadata in separate
-JSON-like files: `.st` holds linker symbols, `.sections` holds the linked
-layout, and `.debuginfo` holds source/debug data.
+In C, the linker consumes object files and their embedded symbol tables:
 
-### 1.1.3 Linked `.sections` metadata
+```mermaid
+flowchart TB
+    SRC["libstring.c + included .h headers"] --> COMPILE["gcc -c -O2 libstring.c"]
+    COMPILE --> OBJ["libstring.o"]
+    OBJ --> LINK["gcc -o basic_string libstring.o basic_string.o ..."]
+    MORE["basic_string.o, ..."] --> LINK
+    LINK --> OUT["basic_string<br/>executable binary"]
+```
 
-Each completed link step emits `program.reti` together with
-`program.sections`. The JSON-like `.sections` file records the linked relative
-locations of `.ivt`, `.text`, and `.data`, allowing RETI-Emulator to create the
-load header and allowing PicoOS to place an image and initialize its segments,
-heap, and stack correctly. A typical userspace file has this form:
+In PicoC, each `.reti_blocks` input needs its matching `.st` in the same
+directory. The compiler reads it automatically:
 
-```json
-{
-  "codesegment_start": 0,
-  "datasegment_start": 11595,
-  "heap_start": 11621,
-  "heap_size": 2000,
-  "stack_start": 14621
+```mermaid
+flowchart TB
+    SRC["libstring.picoc<br/>includes string.picoc / shared helpers"] --> COMPILE["picoc_compiler -c -O1 libstring.picoc"]
+    COMPILE --> OBJ["libstring.reti_blocks"]
+    COMPILE --> SYMBOLS["libstring.st<br/>JSON symbol table"]
+    OBJ --> LINK["picoc_compiler -O1 -o basic_string.reti<br/>libstring.reti_blocks basic_string.reti_blocks ..."]
+    SYMBOLS -.->|automatically read with libstring.reti_blocks| LINK
+    MORE["basic_string.reti_blocks, ..."] --> LINK
+    LINK --> RETI["basic_string.reti"]
+    LINK --> SECTIONS["basic_string.sections"]
+```
+
+`-o` names the linked output. PicoC keeps its metadata in separate files:
+`.st` for symbols, `.sections` for memory layout, and `.debuginfo` for debugging.
+
+### 1.1.3 System V ABI stack frames and call cleanup
+[\[↑ TOC\]](#contents)
+
+The [System V Application Binary Interface (ABI)](https://github.com/hjl-tools/x86-psABI/wiki/x86-64-psABI-1.0.pdf)
+defines how compiled code interoperates, including calling conventions and
+stack frames. PicoC adapts this general model to RETI. It does not implement
+the AMD64 ABI. The following frame and return rules let compiled functions,
+assembly wrappers, startup code, and interrupt handlers work together.
+
+#### 1.1.3.1 Stack-frame layout and caller cleanup
+[\[↑ TOC\]](#contents)
+
+The called function saves and restores `BAF`. Its caller pushes a generated
+continuation-block address and removes the argument cells after the return.
+For `func(arg1, arg2)`, the compiler evaluates and pushes `arg2` first, then
+`arg1`. This is the compiler's actual evaluation order, rather than a general
+C guarantee.
+
+The stack grows toward lower addresses. Bold rows show the current call,
+while italic rows show its caller's frame. `caller BAF` distinguishes the
+caller's frame pointer from the current `BAF`:
+
+| Address direction / position | Contents | Managed by |
+| --- | --- | --- |
+| **Higher addresses ↑** | *Earlier stack contents* | *Earlier calls* |
+| *`caller BAF + 3`* | *Caller function's argument* | *Caller's caller* |
+| *`caller BAF + 2`* | *Caller function's return address* | *Caller's caller* |
+| *`caller BAF + 1`* | *Frame pointer saved on entry to the caller* | *Caller function's own frame* |
+| *`caller BAF`* | *Caller function's local variable* | *Caller function's own frame* |
+| *`caller BAF - 1`* | *Temporary expression value retained across this call* | *Caller function's expression evaluation* |
+| **`BAF + 4`** | **Second argument (`arg2`)** | **Caller, for this call** |
+| **`BAF + 3`** | **First argument (`arg1`)** | **Caller, for this call** |
+| **`BAF + 2`** | **Return address to the caller's continuation block** | **Caller, for this call** |
+| **`BAF + 1`** | **Saved `caller BAF`** | **Current callee** |
+| **`BAF`** | **First local variable, if present** | **Current callee** |
+| **`BAF - 1`, ...** | **Further locals and temporary expression values** | **Current callee** |
+| **`SP`** | **Free cell immediately below occupied stack cells** | **Current stack boundary** |
+| **Lower addresses ↓** | **Direction of stack growth** | |
+
+One-cell arguments begin at `BAF + 3`. Arrays and structs passed by value
+occupy their full width, increasing later offsets accordingly. The temporary
+cell above the arguments can hold a value such as `left` while evaluating
+`left + func(arg1, arg2)`.
+
+This layout lets variadic functions walk arguments toward higher addresses
+without knowing their total count. [`printf()`](library/stdio/stdio.picoc#L354) starts after its format at
+`BAF + 4`, and [`fprintf()`](library/stdio/stdio.picoc#L346) after its stream and format at `BAF + 5`. [`1.1.7.1 Interrupt-safe PUSH and POP`](#1171-interrupt-safe-push-and-pop)
+explains interrupt-safe stack updates.
+
+#### 1.1.3.2 Shared function epilogue and return values
+[\[↑ TOC\]](#contents)
+
+Every ordinary function has one `<function>_epilogue` block. A return puts
+its value in `IN2` and jumps there to restore `BAF` and the return address.
+Keeping the result in `IN2` leaves `ACC` free for long jumps:
+
+```mermaid
+flowchart LR
+    return_a["return expression A"] --> epilogue["function_epilogue"]
+    return_b["return expression B"] --> epilogue
+    return_void["return"] --> epilogue
+    epilogue --> restore["Restore BAF"]
+    restore --> caller["Jump to saved return address"]
+```
+
+This example shows the callee returning a value and the caller cleaning up
+its argument:
+
+```c
+int add_one(int value) {
+    return value + 1;
+}
+
+int main(void) {
+    return add_one(41);
 }
 ```
 
-The following table explains the layout entries and which runtime addresses
-they determine; the optional ISR entry need not appear in a userspace file.
-
-| Entry | Meaning |
-| --- | --- |
-| `interrupt_service_routines_start` | Optional start of separately identified ISR code when the linked image contains it |
-| `codesegment_start` | Process-relative start loaded into `CS`; for a normal userspace image this is also its initial entry region |
-| `datasegment_start` | Process-relative start loaded into `DS` |
-| [`heap_start`](kernel/process/process.header#L36) | First cell after static data and first cell managed by the process-local heap |
-| [`heap_size`](kernel/process/process.header#L37) | Heap capacity in RETI cells; `-1` requests PicoOS's default |
-| `stack_start` | Highest process-relative stack cell; `-1` requests the kernel's default placement |
-
-The compiler creates this file only at the final link. A compile-only `-c`
-invocation instead creates reusable `.reti_blocks` and `.st` files because no
-complete program layout exists yet. Given `program.reti`, the emulator looks
-for `program.sections` automatically. `-S` is needed only for a differently
-named layout—for example when the EPROM bootloader is running while the TUI
-must display the kernel that will later occupy SRAM.
-
-For example, with the `.sections` values above, assembling an illustrative
-`program.reti` produces this five-word header:
+`-c` compiles without linking, `-v` adds pattern comments, and `-w` writes
+the pass results to files. Use these options to generate both representations:
 
 ```console
-$ reti_emulator -a program.reti
-$ hexyl -n 20 program.bin
-┌────────┬─────────────────────────┬─────────────────────────┬────────┬────────┐
-│00000000│ 00 00 00 00 00 00 2d 4b ┊ 00 00 2d 65 00 00 07 d0 │......-K┊..-e....│
-│00000010│ 00 00 39 1d             ┊                         │..9.    ┊        │
-└────────┴─────────────────────────┴─────────────────────────┴────────┴────────┘
+$ picoc_compiler -c -O1 -v -w normal-function.picoc
 ```
 
-When RETI-Emulator runs `-a program.reti`, it reads this metadata while
-assembling the RETI program and prepends the resulting five layout words to
-the encoded RETI words in `program.bin`. This example shows only those first
-20 bytes: five big-endian 32-bit words corresponding to the displayed
-`.sections` values. The [appendix](#appendix-inspecting-bin-files-with-hexyl)
-shows how to inspect other ranges of a `.bin` file.
+The `.picoc_anf` file is the last PicoC representation before RETI lowering:
 
-The linked section metadata is the contract between compiler, emulator,
-bootloader, and process loader. When the emulator assembles a program to
-`.bin`, it copies five values from `.sections` into a fixed big-endian header:
-
-| Word | Value | Use in PicoOS |
-| ---: | --- | --- |
-| 0 | `codesegment_start` | Initial code segment and entry point |
-| 1 | `datasegment_start` | Initial data segment |
-| 2 | [`heap_start`](kernel/process/process.header#L36) | Start of the userspace heap within a process image |
-| 3 | [`heap_size`](kernel/process/process.header#L37) | Configured heap size, or `-1` for the PicoOS default |
-| 4 | `stack_start` | Highest stack cell, or `-1` for the PicoOS default |
-
-The [`load` host request](#123-uart-host-request-protocol) supplies a
-bootloader with a total word count before this header and payload. The
-userspace process loader first obtains the byte count with `file-size`, then
-uses `read-range` to obtain the header and encoded payload. Both loaders
-consume the five header words and copy only the encoded RETI words to SRAM.
-The allocated process image therefore contains only the linked program and its
-heap/stack room. The combined transfer and loading sequence appears in
-[Process image and initial stack](#54-process-image-and-initial-stack).
-
-### 1.1.4 RETI pseudoinstructions
-
-The RETI hardware has no native stack instructions, its immediate fields are
-only 22 bits wide, and an ordinary `JUMP` contains only a relative 22-bit
-offset. The compiler therefore adds four pseudoinstructions to the RETI syntax
-used by generated `.reti_blocks` and PicoC `asm("...")` statements. They are
-represented in the normal RETI AST and replaced with concrete machine
-instructions during the final linking passes. The table summarizes the purpose
-and expansion size of each pseudoinstruction.
-
-| Pseudoinstruction | Purpose | Concrete size |
-| --- | --- | ---: |
-| `PUSH reg` | Reserves one stack cell and stores `reg` in it | 2 instructions |
-| `POP reg` | Loads the top stack cell into `reg` and releases it | 2 instructions |
-| `LOADI32 reg operand` | Loads a 32-bit literal, linked symbol, or `symbol +/- offset` | 3 instructions |
-| `JUMP32[relation] target` | Jumps to an immediate address or linked code label without the normal jump-range limit | 4--6 instructions when retained |
-
-`relation` is optional and uses the normal RETI conditions: `<`, `<=`, `>`,
-`>=`, `==`, `!=`, or `_NOP`. Thus `JUMP32 target` is unconditional, while
-`JUMP32== target` jumps only when `ACC` is zero; RETI compares `ACC` directly and has no
-separate condition-flags register. Numeric
-operands and targets are accepted directly; symbols and symbolic offsets are
-resolved only after all compilation units and sections have been combined.
-
-#### 1.1.4.1 Interrupt-safe stack operations
-
-The RETI stack grows toward lower addresses. `PUSH` moves `SP` before writing
-the new value, while `POP` reads the value before moving `SP` back:
-
-| Pseudoinstruction | Expansion |
-| --- | --- |
-| `PUSH ACC` | `SUBI SP 1`<br>`STOREIN SP ACC 1` |
-| `POP ACC` | `LOADIN SP ACC 1`<br>`ADDI SP 1` |
-
-This order matters in PicoOS because a hardware interrupt can occur between
-the two concrete instructions. On a push, the earlier `SP` update protects the
-new stack cell from the interrupt frame. On a pop, the later update keeps the
-still-needed cell protected until it has been read.
-
-The compiler uses these operations for function arguments, return addresses,
-and saved `BAF` values. PicoOS also uses them directly in naked startup and
-interrupt code to construct and restore the activation record shared by the
-compiler, interrupt handlers, and dispatcher. For example, an ISR can preserve
-registers without spelling out the indexed stack accesses:
-
-```c
-asm("PUSH ACC");
-asm("PUSH IN1");
-/* Handle the interrupt */
-asm("POP IN1");
-asm("POP ACC");
+```text
+_global_inits:
+add_one:
+  NewStackframe(Num('0'))
+  Exp(StackframeParam(Num('0')))
+  Exp(Num('1'))
+  Exp(BinOp(Stack(Num('2')), Add(), Stack(Num('1'))))
+  Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('add_one_epilogue')))
+add_one_epilogue:
+  RestoreStackframe()
+  RestoreReturnAddress()
+main:
+  NewStackframe(Num('0'))
+  // Call(Name('add_one'), [Num('41')])
+  Exp(Num('41'))
+  SaveReturnAddress(Name('main_cont.3'))
+  Exp(FunRef(Name('add_one')))
+  Exp(GoTo(Stack(Num('1'))))
+main_cont.3:
+  RemoveArguments(Num('1'))
+  Exp(IN2)
+  Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('main_epilogue')))
+main_epilogue:
+  RestoreStackframe()
+  RestoreReturnAddress()
 ```
 
-#### 1.1.4.2 Loading 32-bit values
-
-`LOADI32 reg operand` provides a full 32-bit value even though the concrete
-`LOADI` instruction has only a signed 22-bit immediate. After resolving a
-symbol, the linker divides the value into a signed upper 22-bit part and an
-unsigned lower 10-bit part, then always emits:
+The `.reti_blocks` output retains labels and pseudoinstructions. Pattern
+comments show the operation behind each sequence. Only the machine-specific
+`# @picoc-cache` line is omitted:
 
 ```reti
-LOADI reg upper_22_bits
-MULTI reg 1024
-ORI reg lower_10_bits
+  .ivt
+  .text
+add_one:
+  # NewStackframe(Num('0'))
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  # Exp(StackframeParam(Num('0')))
+  LOADIN BAF ACC 3
+  PUSH ACC
+  # Exp(Num('1'))
+  LOADI ACC 1
+  PUSH ACC
+  # Exp(BinOp(Stack(Num('2')), Add(), Stack(Num('1'))))
+  LOADIN SP ACC 2
+  LOADIN SP IN2 1
+  ADD ACC IN2
+  STOREIN SP ACC 2
+  ADDI SP 1
+  # Assign(IN2, Stack(Num('1')))
+  POP IN2
+  # Exp(GoTo(Name('add_one_epilogue')))
+  JUMP32 add_one_epilogue
+add_one_epilogue:
+  # RestoreStackframe()
+  MOVE BAF SP
+  POP BAF
+  # RestoreReturnAddress()
+  POP IN1
+  MOVE IN1 PC
+main:
+  # NewStackframe(Num('0'))
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  # // Call(Name('add_one'), [Num('41')])
+  # Exp(Num('41'))
+  LOADI ACC 41
+  PUSH ACC
+  # SaveReturnAddress(Name('main_cont.3'))
+  LOADI32 ACC main_cont.3
+  ADD ACC CS
+  PUSH ACC
+  # Exp(FunRef(Name('add_one')))
+  LOADI32 ACC add_one
+  ADD ACC CS
+  PUSH ACC
+  # Exp(GoTo(Stack(Num('1'))))
+  POP ACC
+  MOVE ACC PC
+main_cont.3:
+  # RemoveArguments(Num('1'))
+  ADDI SP 1
+  # Exp(IN2)
+  PUSH IN2
+  # Assign(IN2, Stack(Num('1')))
+  POP IN2
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_epilogue:
+  # RestoreStackframe()
+  MOVE BAF SP
+  POP BAF
+  # RestoreReturnAddress()
+  POP IN1
+  MOVE IN1 PC
+  .data
 ```
 
-The result is the original 32-bit bit pattern. This works for values such as
-the tagged SRAM base `-2147483648` as well as linked addresses. A code label is
-resolved relative to `CS`, so code that needs the absolute address adds `CS`
-afterward. PicoOS's bootloader uses exactly this sequence conceptually:
+[`NewStackframe`](../PicoC-Compiler/source/picoc_nodes.py#L754) saves `BAF` and reserves locals. The caller pushes a return
+address and transfers control. The callee puts its result in `IN2`, restores
+its frame, and returns. At `main_cont.3`, the caller removes the argument.
+The result survives both cleanup steps in `IN2`.
+
+#### 1.1.3.3 Naked functions without a generated frame
+[\[↑ TOC\]](#contents)
+
+`__attribute__((naked))` removes both the compiler-generated stack-frame
+prologue and the shared epilogue. `return;` emits no epilogue jump, while
+`return expression;` only evaluates the expression and places its value in
+`IN2`. A naked function must therefore provide its own register setup and
+return or control-transfer sequence.
+
+Here a normal `main` calls a naked function. `constant` supplies its own
+return sequence in assembly:
 
 ```c
-asm("LOADI32 ACC start_loaded_kernel");
-asm("ADD ACC CS");
-asm("MOVE ACC PC");
+__attribute__((naked))
+int constant(void) {
+    asm("LOADI IN2 7");
+    asm("LOADIN SP ACC 1");
+    asm("ADDI SP 1");
+    asm("MOVE ACC PC");
+}
+
+int main(void) {
+    return constant();
+}
 ```
 
-The same pseudoinstruction loads absolute segment and stack values generated
-in the generated [kernel](kernel/memory_constants.header) and
-[bootloader](boot/memory_constants.header) headers, and the compiler itself uses it when constructing
-function pointers and return addresses.
+Compile-only mode preserves the complete naked block and its surrounding
+sections:
 
-#### 1.1.4.3 Long jumps
-
-`JUMP32` avoids the signed 22-bit relative-offset limit of the hardware
-`JUMP`. For a symbolic target, the linker builds the target's `CS`-relative
-address in `ACC`, adds `CS`, and moves the absolute result into `PC`:
+```console
+$ picoc_compiler -c -O1 naked-function.picoc
+```
 
 ```reti
-LOADI ACC upper_22_bits
-MULTI ACC 1024
-ORI ACC lower_10_bits
-ADD ACC CS
-MOVE ACC PC
+  .ivt
+  .text
+constant:
+  LOADI IN2 7
+  LOADIN SP ACC 1
+  ADDI SP 1
+  MOVE ACC PC
+main:
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  LOADI32 ACC main_cont.2
+  ADD ACC CS
+  PUSH ACC
+  LOADI32 ACC constant
+  ADD ACC CS
+  PUSH ACC
+  POP ACC
+  MOVE ACC PC
+main_cont.2:
+  PUSH IN2
+  POP IN2
+  JUMP32 main_epilogue
+main_epilogue:
+  MOVE BAF SP
+  POP BAF
+  POP IN1
+  MOVE IN1 PC
+  .data
 ```
 
-A numeric target is treated as an absolute address, so its expansion omits
-`ADD ACC CS` and contains four instructions. A conditional form first emits a
-short jump with the opposite relation to skip over the long-jump sequence when
-the condition is false. It is therefore one instruction longer: six
-instructions for a symbolic target and five for an immediate target.
+`constant` begins with its assembly body and has no generated epilogue. Its
+last three instructions restore the return address and transfer control.
 
-Taken `JUMP32` operations use `ACC` as a scratch register. The compiler keeps
-function results in `IN2`, leaving `ACC` available for generated block and
-shared-epilogue jumps. It emits symbolic `JUMP32` nodes for ordinary PicoC
-control flow as well as accepting statements such as
-`asm("JUMP32 signal_epilogue");` in naked low-level code.
+Compile-only mode needs no `main`. Linking without one emits a warning and
+omits the generated `_start`, so the result has no normal entry point. This
+example includes `main` so it can run as a complete program.
 
-#### 1.1.4.4 Expansion during linking
+PicoOS uses naked functions for boot and userspace entry, interrupt handlers,
+and dispatcher restoration. Their assembly must match the stack layouts
+created by the compiler, hardware, or kernel.
 
-Expansion is split across the two final RETI-side passes so instruction and
-label positions remain correct:
+### 1.1.4 Placing globals in `.ivt` with `section("ivt")`
+[\[↑ TOC\]](#contents)
 
-1. `reti_patch` expands each `PUSH` and `POP`, removes an unconditional jump to
-   the immediately following block, and then records every block's concrete
-   instruction count and start position.
-2. `reti` resolves program-wide symbols, flattens the blocks, and expands
-   `LOADI32` and `JUMP32` using the now-final section and block addresses.
+The `section` attribute places a global or function in `.ivt`. PicoC accepts
+only `"ivt"` as an explicit section name. Ordinary functions use `.text`, and
+ordinary globals use `.data`.
 
-Because inline assembly is parsed into the same AST as compiler-generated
-RETI, these rules and symbolic resolution apply identically to both. No
-pseudoinstruction reaches the emulator or assembled binary.
+These two function-pointer tables contain the same handler. The attribute
+places only `ivt_table` in `.ivt`, at the beginning of the linked image:
 
-### 1.1.5 Generated [`memory_constants.header`](kernel/memory_constants.header) files
+```c
+void handler(void);
 
-The kernel and EPROM bootloader need their own absolute addresses before an
-ordinary runtime object can tell them where they are. The compiler option
-`-k sram` therefore generates [`kernel/memory_constants.header`](kernel/memory_constants.header),
-and `-k eprom` generates [`boot/memory_constants.header`](boot/memory_constants.header).
-These are compile-time interfaces, not tables allocated by PicoOS. The first
-table connects the kernel constants to the state they initialize or restore.
+__attribute__((section("ivt")))
+void (*ivt_table[1])(void) = {handler};
 
-| Kernel constant | Consumer and purpose |
-| --- | --- |
-| [`SRAM_BASE`](kernel/memory_constants.header#L1) | Converts process-relative linked addresses to the absolute SRAM address space |
-| [`SRAM_MAX_ADDRESS_IN_MEMORY_MAP`](kernel/memory_constants.header#L2) | Inclusive final configured SRAM cell; bounds the process-memory heap |
-| [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3), [`KERNEL_HEAP_SIZE`](kernel/memory_constants.header#L4) | Initialize the global [`kernel_heap`](kernel/kmalloc.picoc#L7) descriptor and define its stack boundary |
-| [`PROCESS_MEMORY_START`](kernel/memory_constants.header#L5) | First cell managed by the global [`process_memory_heap`](kernel/pmalloc.picoc#L7) for process images and shared data |
-| [`KERNEL_CS_START_ASM`](kernel/memory_constants.header#L6), [`KERNEL_DS_START_ASM`](kernel/memory_constants.header#L7) | Inline assembly fragments used when interrupt entries install kernel segments |
-| [`KERNEL_SP_START_ASM`](kernel/memory_constants.header#L8) | Inline assembly fragment that installs the linked kernel stack start |
-| [`KERNEL_CS_ACC_ASM`](kernel/memory_constants.header#L9) | Generated fragment for loading the kernel code base into `ACC`; currently unused by PicoOS source |
+void (*ordinary_table[1])(void) = {handler};
 
-The bootloader constants in the next table establish the temporary context
-used before the kernel image can supply its own segment and stack values.
+void handler(void) {
+}
 
-| Bootloader constant | Consumer and purpose |
-| --- | --- |
-| [`SRAM_MAX_ADDRESS`](boot/memory_constants.header#L1) | Final physical SRAM offset; fallback kernel stack offset when the loaded header contains -1 |
-| [`EPROM_DS_START_ASM`](boot/memory_constants.header#L2) | Loads the bootloader's linked EPROM data segment |
-| [`EPROM_STACK_START_ASM`](boot/memory_constants.header#L3) | Loads the absolute top-of-SRAM temporary stack |
+int main(void) {
+    return 0;
+}
+```
 
-Both [`kernel.sections`](kernel/kernel.sections) and the kernel header come from the same final linked
-layout. The header adds [`SRAM_BASE`](kernel/memory_constants.header#L1) where an absolute address is required;
-the `.sections` file retains program-relative values for loading and debug
-views. The bootloader reads the kernel's five-word binary header to load that
-image, but uses its own EPROM header before any kernel state exists.
+With `-O1`, known initializers become `IVTE` entries rather than startup
+stores. Compile-only output retains their labels and sections:
 
-### 1.1.6 Custom userspace startup
+```console
+$ picoc_compiler -c -O1 section-placement.picoc
+```
 
-When no custom startup source is selected, a linked program with a global
-`main` receives a compiler-generated `_start`. The following source-equivalent
-example shows its control flow; `Exit` represents the compiler's internal exit
-operation rather than a PicoC function that application code can call:
+The emitted `section-placement.reti_blocks` program body is:
+
+```reti
+  .ivt
+ivt_table:
+  IVTE handler
+  .text
+handler:
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  JUMP32 handler_epilogue
+handler_epilogue:
+  MOVE BAF SP
+  POP BAF
+  POP IN1
+  MOVE IN1 PC
+main:
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  LOADI ACC 0
+  PUSH ACC
+  POP IN2
+  JUMP32 main_epilogue
+main_epilogue:
+  MOVE BAF SP
+  POP BAF
+  POP IN1
+  MOVE IN1 PC
+  .data
+ordinary_table:
+  IVTE handler
+```
+
+The tables occupy different sections but point to the same handler. Link
+with annotations to see their resolved addresses:
+
+```console
+$ picoc_compiler -O1 -v -o section-placement.reti section-placement.picoc
+```
+
+The linked excerpt shows both entries and their handler. `# ...` marks
+omitted instructions:
+
+```reti
+# // Block('ivt_table', [])
+2147483668
+# ...
+# // Block('handler', [])
+# NewStackframe(Num('0'))
+SUBI SP 1
+STOREIN SP BAF 1
+MOVE SP BAF
+SUBI SP 0
+# ...
+# // Block('ordinary_table', [])
+2147483668
+```
+
+Here `handler` begins at image offset `20`. Both `IVTE` entries become
+`0x80000014`, the SRAM base plus that offset. With a one-word `.ivt`, `CS` is
+`SRAM_BASE + 1`, so the handler is also at `CS + 19`. `IVTE` creates pointers
+for an image loaded at the SRAM base. It does not relocate them to an
+arbitrary process-image address.
+
+### 1.1.5 Selecting a startup function with `-C` / `--startup-source`
+[\[↑ TOC\]](#contents)
+
+A linked program can use the generated entry point or a custom startup
+source. PicoOS supplies its own entry for each kind of image.
+
+#### 1.1.5.1 Default compiler-generated `_start`
+[\[↑ TOC\]](#contents)
+
+Without a custom entry, the compiler generates `_start` for a program with
+`main`. This source-equivalent example shows the flow. `Exit` is an internal
+compiler operation:
 
 ```c
 void _start(void) {
@@ -821,11 +1056,14 @@ void _start(void) {
 
 The generated entry runs any remaining global initializer code before calling
 `main`, then terminates with `LOADI ACC 0` and `JUMP 0` after `main` returns.
-The `-C PATH` / `--startup-source PATH` option instead links an additional
-PicoC or compiled `.reti_blocks` startup unit. If that unit defines `_start`,
-the compiler places it first in `.text` and uses it in place of the generated
-default; otherwise, the compiler still creates the default entry. Global
-initializer code precedes either form.
+
+#### 1.1.5.2 PicoOS `libstart` startup sequence
+[\[↑ TOC\]](#contents)
+
+`-C PATH` or `--startup-source PATH` links a startup source or `.reti_blocks`
+file. If it defines [`_start()`](library/start/start.picoc#L14), that function becomes the first in `.text`.
+Otherwise the compiler generates the default entry. Any remaining global
+initializers run before either entry body.
 
 PicoOS selects [`library/start/libstart.picoc`](library/start/libstart.picoc)
 for userspace with `-C library/start/libstart.picoc`. The wrapper records its
@@ -859,105 +1097,394 @@ void _start(int argc, char *first_argument) {
 }
 ```
 
-The naked [`_start()`](library/start/start.picoc#L14) sees the initial stack
-exactly as the kernel built it and treats
-[`&first_argument`](library/start/start.picoc#L14) as the start of `argv`.
-It passes that table to [`start_process()`](library/start/start.picoc#L7),
-which calls [`init_process_heap()`](library/stdlib/malloc.picoc#L18), clones
-the initial environment through
-[`initialize_environment()`](library/stdlib/env.picoc#L97), calls the
-application's `main`, and passes its result to
-[`exit()`](library/stdlib/exit.picoc#L3). The initial userspace stack is shown
-in [Process image and initial stack](#54-process-image-and-initial-stack).
+The naked [`_start()`](library/start/start.picoc#L14) reads the stack built by the kernel and passes [`argv`](kernel/process/process_arguments.picoc#L140)
+to [`start_process()`](library/start/start.picoc#L7). That helper initializes the heap and environment, calls
+[`main()`](library/start/start.picoc#L4), and sends its return value to [`exit()`](library/stdlib/exit.picoc#L3). Like the startup support
+supplied with `libc`, [`libstart`](library/start/libstart.picoc) prepares the runtime before the application
+runs. [`4.2 Initial user process stack`](#42-initial-user-process-stack) shows the initial stack.
 
-The following table distinguishes the entry used for each PicoOS image. The
-init process and shell are userspace programs, so they deliberately use the
-same startup path as every other system or user application.
+#### 1.1.5.3 Startup functions used by PicoOS images
+[\[↑ TOC\]](#contents)
+
+The table identifies each image's entry point. Init, the shell, and other
+applications share `libstart`. [`11. Complete startup: bootloader, kernel, init, shell, and user applications`](#11-complete-startup-bootloader-kernel-init-shell-and-user-applications) follows them through boot and startup.
 
 | Image | `_start` used | Next function |
 | --- | --- | --- |
 | EPROM bootloader | Its explicitly defined naked [`_start()`](boot/bootloader.picoc#L9), compiled as part of the bootloader without `-C` | [`boot_main()`](boot/bootloader.picoc#L41) |
 | SRAM kernel | Compiler-generated default `_start`, because the kernel is linked without `-C` | [`main()`](kernel/kernel.picoc#L31) |
 | Init process | [`libstart` `_start()`](library/start/start.picoc#L14), selected with `-C library/start/libstart.picoc` | [`main()`](system/init.picoc#L100) |
-| Shell | [`libstart` `_start()`](library/start/start.picoc#L14), selected with the same `-C` option | [`main()`](user/shell.picoc#L1577) |
-| Other system and user applications | [`libstart` `_start()`](library/start/start.picoc#L14), selected by the common userspace link rule | The application's `main` |
+| Shell | [`libstart` `_start()`](library/start/start.picoc#L14), selected with the same `-C` option | [`main()`](user/shell.picoc#L1448) |
+| User applications | [`libstart` `_start()`](library/start/start.picoc#L14), selected by the common userspace link rule | The application's `main` |
 
-### 1.1.7 Program sections and low-level functions
+### 1.1.6 Program sections, interrupt table entries, and linker placement
+[\[↑ TOC\]](#contents)
 
-The extended compilation and linking pipeline orders every linked image as
-`.ivt`, `.text`, then `.data`. These are regions of the final flat RETI
-program, not separate files. Their recorded boundaries are explained further
-in [Linked `.sections` metadata](#113-linked-sections-metadata).
+The linker orders each flat RETI image as `.ivt`, `.text`, then `.data`.
+These are regions within one program. The table shows what goes into them:
 
 | Section | Default contents and addressing | How source selects it |
 | --- | --- | --- |
-| `.ivt` | Interrupt-vector words and, when requested, low-level functions; it begins at image offset 0 and uses `CS`-relative global references | Add `__attribute__((section("ivt")))` to a global variable, function declaration, or function definition |
-| `.text` | `_start` followed by ordinary functions and their instructions; execution and code labels are relative to `CS` | This is the default for functions |
-| `.data` | Ordinary global and static storage, addressed relative to `DS` | This is the default for global and static variables |
+| `.ivt` | interrupt service routines words and, when requested, low-level functions, it begins at image offset 0 and uses `CS`-relative global references | Add `__attribute__((section("ivt")))` to a global variable, function declaration, or function definition |
+| `.text` | `_start` followed by ordinary functions and their instructions, execution and code labels are relative to `CS` | This is the default for functions |
+| `.data` | Ordinary global storage, addressed relative to `DS` | This is the default for global variables |
 
-The attribute string is `"ivt"` without a leading dot. The compiler currently
-supports this explicit section choice only for `.ivt`; it chooses `.text` and
-`.data` from whether a declaration is a function or stored data. For example,
-PicoOS places its global
-[`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L22)
-array at the beginning of the kernel image:
+With `-O1`, known global initializers become words in `.data` or the selected
+`.ivt`. Runtime-dependent initializers still execute at startup. The kernel
+uses this for its five [`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L24) pointers, which must be
+available immediately after loading. [`1.1.4 Placing globals in .ivt with section("ivt")`](#114-placing-globals-in-ivt-with-sectionivt) demonstrates placement, and [`2.1 RETI interrupt entry and the interrupt service routine table`](#21-reti-interrupt-entry-and-the-interrupt-service-routine-table)
+shows the complete table and interrupt entry.
+
+<!-- Presentation: Show the interrupt_vector_table PicoC code example from
+2.1 RETI interrupt entry and the interrupt service routine table here, rather than
+showing only the README cross-reference. -->
+
+Linked labels let inline assembly call C helpers after final placement.
+Those helpers follow the stack-frame rules in [`1.1.3 System V ABI stack frames and call cleanup`](#113-system-v-abi-stack-frames-and-call-cleanup).
+
+### 1.1.7 RETI pseudoinstructions
+[\[↑ TOC\]](#contents)
+
+RETI has no native stack instructions, and its immediate values and relative
+jumps are limited to 22 bits. The compiler provides these pseudoinstructions
+and expands them into hardware instructions during linking:
+
+| Pseudoinstruction | Purpose | Concrete size |
+| --- | --- | ---: |
+| `PUSH reg` | Reserves one stack cell and stores `reg` in it | 2 instructions |
+| `POP reg` | Loads the top stack cell into `reg` and releases it | 2 instructions |
+| `LOADI32 reg operand` | Loads a 32-bit literal, linked symbol, or `symbol +/- offset` | 3 instructions |
+| `JUMP32[relation] target` | Jumps to an immediate address or linked code label without the normal jump-range limit | 4--6 instructions when retained |
+
+`JUMP32` is unconditional unless followed by a relation such as `==` or `<`.
+Conditions compare `ACC` with zero. Numeric operands are accepted directly,
+while symbols are resolved after all files and sections have been combined.
+
+#### 1.1.7.1 Interrupt-safe `PUSH` and `POP`
+[\[↑ TOC\]](#contents)
+
+`SP` points to the free cell below the occupied stack. `PUSH` reserves a cell
+before writing it, and `POP` reads a cell before releasing it:
+
+| Pseudoinstruction | Expansion |
+| --- | --- |
+| `PUSH ACC` | `SUBI SP 1`<br>`STOREIN SP ACC 1` |
+| `POP ACC` | `LOADIN SP ACC 1`<br>`ADDI SP 1` |
+
+Starting with `SP = p`, a push first sets `SP = p - 1`, then stores at `p`.
+An intervening interrupt therefore uses the next free cell rather than
+overwriting the pushed value. A pop reads `p + 1` before increasing `SP`,
+keeping that value protected until it has been read.
+
+The compiler uses these operations for arguments, return addresses, and
+saved `BAF`. PicoOS also uses them in naked functions, for example to save
+registers in an ISR:
 
 ```c
-__attribute__((section("ivt")))
-void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
-    syscall_interrupt,
-    timer_interrupt,
-    uart_interrupt,
-    cpu_exception_interrupt,
-    dma_interrupt
-};
+asm("PUSH ACC");
+asm("PUSH IN1");
+/* Handle the interrupt */
+asm("POP IN1");
+asm("POP ACC");
 ```
 
-With `-O1`, compile-time-known initializers for global scalars, strings,
-structs, arrays, and function pointers are emitted directly as words in
-`.data`, or in `.ivt` when the declaration carries the section attribute.
-Runtime-dependent initializers still execute from startup code. Consequently,
-the five initialized function pointers in
-[`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L22)
-are already the first five words of the kernel payload when the binary is
-loaded into SRAM. The interrupt hardware can therefore read the vector table
-immediately, before any `_start` code has executed. `IVTE` and the final linker
-patch pass encode those function addresses with the correct SRAM tag.
+#### 1.1.7.2 Loading 32-bit values with `LOADI32`
+[\[↑ TOC\]](#contents)
 
-`__attribute__((naked))` suppresses the normal PicoC function prologue,
-shared epilogue, and automatic return. Startup functions need this before
-`BAF`/segments have been established, and ISRs need it so they can push the
-exact register order expected by the kernel activation layout and end with
-`RTI`. Linked labels inside inline assembly allow these low-level stubs to
-refer to normal C helpers after final placement. The result is a direct
-compiler-to-kernel contract: compiler frame/offset rules determine the saved
-interrupt frame, and the dispatcher restores the same layout.
+`LOADI32` builds a 32-bit value from a signed 22-bit immediate. The compiler
+splits the value into the upper 22 bits and the lower ten bits.
+
+Write the original bits as $b_{31},\ldots,b_0$. The upper field is interpreted
+as a signed two's-complement number, with its own sign bit at position `21`
+(original bit `31`):
+
+$$
+\mathrm{signed\_upper} = -b_{31}2^{21} + \sum_{j=0}^{20} b_{j+10}2^j,
+\qquad
+\mathrm{lower\_bits} = \sum_{j=0}^{9} b_j2^j.
+$$
+
+If bit `21` of `unsigned_upper` is set, subtract `2^22` to obtain its signed
+representation. Otherwise keep it unchanged. The result fits the signed
+22-bit range. The linker emits:
+
+```reti
+LOADI reg signed_upper
+MULTI reg 1024
+ORI reg lower_bits
+```
+
+The emulator sign-extends the `LOADI` immediate to 32 bits. Multiplication by
+`1024 = 2^10` moves the upper contribution into bits `31..10` and clears the
+ten low bits. `ORI` then inserts `lower_bits` into those low bits, reconstructing
+the original word. For `0x80000005`, `unsigned_upper = 2097152`,
+`signed_upper = -2097152`, and `lower_bits = 5`:
+
+```reti
+LOADI ACC -2097152
+MULTI ACC 1024
+ORI ACC 5
+```
+
+This also explains the tagged SRAM base `0x80000000`, represented in PicoC as
+`-2147483648`. Code labels are resolved relative to `CS`, so an absolute code
+address requires adding `CS` afterward. The bootloader uses this pattern:
+
+```c
+asm("LOADI32 ACC start_loaded_kernel");
+asm("ADD ACC CS");
+asm("MOVE ACC PC");
+```
+
+The same pseudoinstruction loads absolute segment and stack values from the
+generated [kernel](kernel/memory_constants.header) and
+[bootloader](boot/memory_constants.header) headers and constructs function
+addresses and continuation addresses.
+
+Signed and unsigned interpretations of the same operands produce identical
+low 32 product bits. Their high bits can differ. The
+[RISC-V multiplication specification](https://docs.riscv.org/reference/isa/v20240411/unpriv/m-st-ext.html#_multiplication_operations)
+uses one low-product instruction and separate high-product instructions for
+that reason.
+
+For this particular 22-bit field, `unsigned_upper` and `signed_upper` are equal
+when bit `21` is zero. Otherwise,
+$\mathrm{unsigned\_upper}-\mathrm{signed\_upper}=2^{22}$, so
+
+$$
+\mathrm{unsigned\_upper}\,2^{10} - \mathrm{signed\_upper}\,2^{10} = 2^{32}.
+$$
+
+The products differ by `2^32`, so either reconstructs the same word under
+modulo arithmetic. The current assembler requires a signed 22-bit `LOADI`
+operand, however, and rejects `2097152`. The conversion is needed for that
+interface.
+
+The emulator multiplies signed `int32_t` values. `signed_upper * 1024` stays
+within their range. Using the unsigned upper value would require unsigned or
+explicit modulo arithmetic. Overflowing signed multiplication in C is
+[undefined](https://open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf#page=94), even when the desired low bits are known.
+
+#### 1.1.7.3 Long jumps with `JUMP32`
+[\[↑ TOC\]](#contents)
+
+`JUMP32` reaches beyond the hardware's signed 22-bit relative range. For a
+symbolic target, it builds the target's `CS`-relative address in `ACC`, adds
+`CS`, and moves the result to `PC`. The bit split follows [`1.1.7.2 Loading 32-bit values with LOADI32`](#1172-loading-32-bit-values-with-loadi32):
+
+```reti
+LOADI ACC signed_upper
+MULTI ACC 1024
+ORI ACC lower_bits
+ADD ACC CS
+MOVE ACC PC
+```
+
+A numeric target is treated as an absolute address, so its expansion omits
+`ADD ACC CS` and contains four instructions. A conditional form first emits a
+short jump with the opposite relation to skip over the long-jump sequence when
+the condition is false. It is therefore one instruction longer: six
+instructions for a symbolic target and five for an immediate target.
+
+Long jumps use `ACC` as scratch space, so function results stay in `IN2`.
+The compiler uses `JUMP32` for ordinary control flow, and naked functions can
+use it in inline assembly.
+
+#### 1.1.7.4 Pseudoinstruction expansion during linking
+[\[↑ TOC\]](#contents)
+
+Linking separates instruction counting from address resolution. [`reti_patch`](../PicoC-Compiler/source/passes/linking/reti_patch_pass.py)
+expands `PUSH` and `POP`, patches large numeric immediates, and removes jumps
+to the immediately following block.
+
+It then records block positions using each pseudoinstruction's expanded
+size. `LOADI32` counts as three instructions, symbolic `JUMP32` as five, and
+numeric `JUMP32` as four. A condition adds one instruction. Comments count
+as zero.
+
+This strip shows why expanded sizes matter. The address of `done` depends
+on both preceding blocks:
+
+![Expanded code blocks and the jump to done](documentation/images/pseudoinstruction-blocks.svg)
+
+| Block | Symbolic instructions | Real instructions after expansion |
+| --- | --- | ---: |
+| `entry` | `PUSH BAF`, `LOADI32 ACC done`, `JUMP32 done` | `2 + 3 + 5 = 10` |
+| `work` | `PUSH ACC`, `POP IN1`, `LOADI32 ACC 7` | `2 + 2 + 3 = 7` |
+| `done` | `POP BAF` | `2` |
+
+Here `done` begins at offset `10 + 7 = 17`. The symbolic `JUMP32` loads `17`
+into `ACC` and adds `CS`. Counting each pseudoinstruction as just one word
+would instead place `done` at offset `6`, producing the wrong target.
+
+The final [`reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py) pass resolves labels and expands `LOADI32` and `JUMP32`.
+Counting their sizes first avoids needing a target address before the
+preceding blocks have been laid out. Numeric forms use the same expansion
+path for consistency.
+
+`PUSH` and `POP` can expand earlier because their operands do not depend on
+labels. Inline assembly follows the same rules. The emulator receives only
+concrete instructions.
+
+### 1.1.8 Linked `.sections` metadata and the five-word binary header
+[\[↑ TOC\]](#contents)
+
+A completed link emits [`program.reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py) and `program.sections`. The latter
+records the image layout used for loading and segment, heap, and stack setup.
+A typical userspace file looks like this:
+
+```json
+{
+  "codesegment_start": 0,
+  "datasegment_start": 11595,
+  "heap_start": 11621,
+  "heap_size": 2000,
+  "stack_start": 14621
+}
+```
+
+These entries determine the runtime addresses. Userspace images need not
+have an ISR entry:
+
+| Entry | Meaning |
+| --- | --- |
+| `interrupt_service_routines_start` | Optional start of separately identified ISR code when the linked image contains it |
+| `codesegment_start` | Process-relative start loaded into `CS`, for a normal userspace image this is also its initial entry region |
+| `datasegment_start` | Process-relative start loaded into `DS` |
+| [`heap_start`](kernel/process/process.header#L36) | First cell after static data and first cell managed by the process-local heap |
+| [`heap_size`](kernel/process/process.header#L37) | Heap capacity in RETI cells, `-1` requests PicoOS's default |
+| [`stack_start`](kernel/process/process_loader.picoc#L121) | Highest process-relative stack cell, `-1` requests the kernel's default placement |
+
+The compiler creates this file only at the final link. A compile-only `-c`
+invocation instead creates reusable `.reti_blocks` and `.st` files because no
+complete program layout exists yet.
+
+Run `reti_emulator -a program.reti` to assemble a loadable binary. It reads
+the matching `.sections` file and prepends five big-endian layout words.
+`-S PATH` selects another metadata file. The diagram shows both inputs:
+
+```mermaid
+flowchart TB
+    RETI["program.reti<br/>linked RETI instructions and data"] --> ASSEMBLE["reti_emulator -a program.reti"]
+    SECTIONS["program.sections<br/>linked layout metadata"] -->|automatically found beside program.reti| ASSEMBLE
+    ASSEMBLE --> BIN["program.bin<br/>five-word big-endian layout header<br/>encoded RETI instructions + data words"]
+```
+
+For example, with the `.sections` values above, assembling an illustrative
+[`program.reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py) produces this five-word header:
+
+```console
+$ reti_emulator -a program.reti
+$ hexyl -n 20 program.bin
+┌────────┬─────────────────────────┬─────────────────────────┬────────┬────────┐
+│00000000│ 00 00 00 00 00 00 2d 4b ┊ 00 00 2d 65 00 00 07 d0 │......-K┊..-e....│
+│00000010│ 00 00 39 1d             ┊                         │..9.    ┊        │
+└────────┴─────────────────────────┴─────────────────────────┴────────┴────────┘
+```
+
+These first 20 bytes encode the five displayed layout values. The appendix
+shows how to inspect other ranges.
+
+The loaders interpret those five header words in this order:
+
+| Word | Value | Use in PicoOS |
+| ---: | --- | --- |
+| 0 | `codesegment_start` | Initial code segment and entry point |
+| 1 | `datasegment_start` | Initial data segment |
+| 2 | [`heap_start`](kernel/process/process.header#L36) | Start of the User Process Heap within a Process Payload |
+| 3 | [`heap_size`](kernel/process/process.header#L37) | Configured heap size, or `-1` for the PicoOS default |
+| 4 | [`stack_start`](kernel/process/process_loader.picoc#L121) | Highest stack cell, or `-1` for the PicoOS default |
+
+The bootloader receives a word count followed by the header and payload
+through the [`load`](#123-uart-host-service-protocol) host request. The process loader uses `file-size` and
+`read-range`. Both consume the header and copy only the payload to SRAM.
+A Process Payload also reserves space for its heap and stack. [`4.3.1 Loading a process (load library call)`](#431-loading-a-process-load-library-call) follows
+the loading paths.
+
+### 1.1.9 Generated memory constants for the bootloader and kernel
+[\[↑ TOC\]](#contents)
+
+The kernel and bootloader need memory constants before runtime loading can
+supply them. `-k sram` generates [`kernel/memory_constants.header`](kernel/memory_constants.header), and
+`-k eprom` generates [`boot/memory_constants.header`](boot/memory_constants.header). This invocation writes
+only the header, named [`memory_constants.header`](kernel/memory_constants.header) in the `-o` directory. A
+subsequent compile includes it to build the executable.
+
+The current kernel header is shown below. Its values come from the linked
+kernel layout with a 4,096-cell heap and a 2,715-cell stack:
+
+```c
+#define SRAM_BASE (-2147483647 - 1) // -2^31
+#define SRAM_MAX_ADDRESS_IN_MEMORY_MAP -2147221505 // -2^31 + 2^18 - 1
+#define KERNEL_HEAP_START -2147442151 // -2^31 + heap_start
+#define KERNEL_HEAP_SIZE 4096 // heap_size
+#define PROCESS_MEMORY_START -2147435339 // -2^31 + stack_start + 1
+#define KERNEL_CS_START_ASM "LOADI32 CS -2147483643" // -2^31 + codesegment_start
+#define KERNEL_DS_START_ASM "LOADI32 DS -2147442882" // -2^31 + datasegment_start
+#define KERNEL_SP_START_ASM "LOADI32 SP -2147435340" // -2^31 + stack_start
+#define KERNEL_CS_ACC_ASM "LOADI32 ACC -2147483643" // -2^31 + codesegment_start
+```
+
+The table connects these constants to the state they initialize or restore.
+
+| Kernel constant | Consumer and purpose |
+| --- | --- |
+| [`SRAM_BASE`](kernel/memory_constants.header#L1) | Converts process-relative linked addresses to the absolute SRAM address space |
+| [`SRAM_MAX_ADDRESS_IN_MEMORY_MAP`](kernel/memory_constants.header#L2) | Inclusive final configured SRAM cell, bounds the Process and Shared Data Heap |
+| [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3), [`KERNEL_HEAP_SIZE`](kernel/memory_constants.header#L4) | Initialize the global [`kernel_heap`](kernel/kmalloc.picoc#L7) descriptor and define its stack boundary |
+| [`PROCESS_MEMORY_START`](kernel/memory_constants.header#L5) | First cell managed by the global [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7) for Process Payloads and Shared Data Payloads |
+| [`KERNEL_CS_START_ASM`](kernel/memory_constants.header#L6), [`KERNEL_DS_START_ASM`](kernel/memory_constants.header#L7) | Inline assembly fragments used when interrupt entries install kernel segments |
+| [`KERNEL_SP_START_ASM`](kernel/memory_constants.header#L8) | Inline assembly fragment that installs the linked kernel stack start |
+| [`KERNEL_CS_ACC_ASM`](kernel/memory_constants.header#L9) | Generated fragment for loading the kernel code base into `ACC`, currently unused by PicoOS source |
+
+The current bootloader header establishes the temporary context before the
+kernel image supplies its own segment and stack values. The code shows the
+generated format, and the following table explains its three constants:
+
+```c
+#define SRAM_MAX_ADDRESS 262143 // 2^18 - 1
+#define EPROM_DS_START_ASM "LOADI32 DS 3165" // datasegment_start
+#define EPROM_STACK_START_ASM "LOADI32 SP -2147221505" // -2^31 + 2^18 - 1
+```
+
+| Bootloader constant | Consumer and purpose |
+| --- | --- |
+| [`SRAM_MAX_ADDRESS`](boot/memory_constants.header#L1) | Final physical SRAM offset, fallback kernel stack offset when the loaded header contains -1 |
+| [`EPROM_DS_START_ASM`](boot/memory_constants.header#L2) | Loads the bootloader's linked EPROM data segment |
+| [`EPROM_STACK_START_ASM`](boot/memory_constants.header#L3) | Loads the absolute top-of-SRAM temporary stack |
+
+The kernel header and `.sections` describe the same linked layout. The
+header adds [`SRAM_BASE`](kernel/memory_constants.header#L1) for absolute addresses. `.sections` retains relative
+offsets. The bootloader uses its own header at entry, then reads the kernel
+binary's header to establish the kernel context.
+
+[`2.4.2 System-call entry, execution, and return to userspace`](#242-system-call-entry-execution-and-return-to-userspace) shows these constants installing kernel registers. [`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) locates the
+heap and stack, and [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti) shows the dispatcher restoring process registers.
 
 ## 1.2 RETI-Emulator extensions
+[\[↑ TOC\]](#contents)
 
-The compiler produces the linked images and metadata described above; the
-emulator assembles them, provides the RETI machine, and exposes the host
-services that PicoOS uses at runtime. The following extensions make that
-toolchain and runtime boundary visible.
+The emulator assembles the compiler's output, runs RETI, and provides the
+devices and host services PicoOS uses. These are its relevant extensions:
 
 | Feature | Contribution used by PicoOS |
 | --- | --- |
 | Plain execution output | Without the debugger, completed UART output is written directly to host stdout |
 | Commented assembly | Debug mode can show source-derived labels and comments beside instructions |
 | Atomic locking | `TSL` atomically returns a cell's old value and stores `1`, supporting the mutex library |
-| Structured loading | `.sections` distinguishes the vector table, ISR code, `.text`, `.data`, heap, and stack |
+| Structured loading | `.sections` distinguishes the interrupt service routine table, ISR code, `.text`, `.data`, heap, and stack |
 | Binary assembly | `--assemble program.reti` combines RETI words with the five layout header words in `program.bin` |
-| EPROM-only boot | `-e boot/bootloader.reti` starts reset execution without preloading a program into SRAM |
+| EPROM-only boot | `-e boot/bootloader.reti` starts CPU execution at the EPROM bootloader without preloading a program into SRAM |
 | Configurable SRAM | PicoOS selects 262,144 physical 32-bit cells while retaining the RETI tagged address space |
 | Memory-mapped periphery | UART, device mappings, priorities, timer interval, stack boundary, exception cause, and optional DMA occupy offsets 0–16 |
-| Interrupt controller | Timer, DMA through the custom device line, and UART have configurable vector mappings, priorities, pending state, and nesting behavior |
-| Direct memory access | Optional DMA copies UART words into SRAM for kernel, init, and later program loading; scheduled loads receive a completion interrupt |
-| Manual interrupts | The TUI can select and trigger an interrupt vector for inspection |
+| Interrupt controller | Timer, DMA through the custom device line, and UART have configurable ISR mappings, priorities, pending state, and nesting behavior |
+| Direct memory access | Optional DMA copies UART words into SRAM for kernel, init, and later program loading, scheduled loads receive a completion interrupt |
+| Manual interrupts | The TUI can select and trigger an interrupt service routines for inspection |
 | Runtime timer | An instruction-count interval produces repeatable userspace preemption and exposes the live counter in the TUI |
 | Raw-byte UART | Receive/send registers and status bits model byte delivery rather than line-oriented console input |
 | UART host services | The emulator parses bounded load, read, file-size, output, directory, and removal requests from the byte stream |
-| Normal and raw terminals | The normal view preserves host signal processing; raw mode forwards control and escape bytes needed by the shell |
-| CPU exceptions | Divide by zero, stack overflow, and illegal instructions enter fixed vector 3 and expose a cause value |
+| Normal and raw terminals | The normal view preserves host signal processing, raw mode forwards control and escape bytes needed by the shell |
+| CPU exceptions | Divide by zero, stack overflow, and illegal instructions enter interrupt service routine table entry 3 and expose a cause value |
 | Stack/heap protection | The active inclusive boundary is checked whenever an instruction attempts to decrease `SP` |
 | Runtime segment interpretation | Code/data/watch views follow live `CS` and `DS` after bootloading and context switches |
 | Source-level debugging | `.debuginfo` and preprocessed source provide globals, locals, arguments, calls, frames, and source positions |
@@ -965,84 +1492,162 @@ toolchain and runtime boundary visible.
 | Snapshots and restart | Complete CPU, memory, interrupt, UART, and peripheral state can be saved, restored repeatedly, or restarted |
 | Live inspection/editing | Windows can be selected, scrolled, centered, and edited while inspecting registers or memory |
 | Synthetic OS context | The initial debugger state can model the kernel/interrupt context needed before PicoOS's first `RTI` |
-| Explicit vector count | The emulator can reserve the five-entry IVT before the bootloader populates SRAM |
+| Explicit ISR table size | The emulator can reserve the five-entry IVT before the bootloader populates SRAM |
 | Isolated assembly runs | The repository wrapper keeps assembler processes from overwriting peripheral files belonging to an active OS instance |
 
-### 1.2.1 Debugger and terminal views
+### 1.2.1 RETI machine model and memory-mapped peripherals
+[\[↑ TOC\]](#contents)
 
-The debugger is the reader's main view of RETI state and PicoC source while
-PicoOS runs. The following recording demonstrates its execution controls,
-state views, source debugging, snapshots, and UART terminal:
+PicoOS accesses devices through ordinary loads, stores, and interrupt
+service routines. Periphery cell `n` is at `0x40000000 + n`. SRAM begins at
+`0x80000000`.
 
-[![asciicast](https://asciinema.org/a/1264549.svg)](https://asciinema.org/a/1264549)
+The emulator documentation calls the `01` region **periphery**. The map
+places this region between EPROM and SRAM:
 
-Selecting the thumbnail opens the recording on Asciinema. Its controls let a
-reader step, continue, restart, step an ISR, inspect or edit registers and
-memory, trigger an interrupt, save/restore snapshots, open source debugging,
-and enter normal or raw UART terminal mode. During continuous execution the
-terminal remains live and each delivered input byte can raise a UART hardware
-interrupt.
+![RETI address space with periphery between EPROM and SRAM](documentation/images/reti-periphery-memory-map.svg)
 
-The TUI follows live `CS`/`DS` as the bootloader installs the kernel and the
-dispatcher switches processes. Compiler `.debuginfo`, preprocessed source,
-labels, and `.sections` supply the source/section meaning that raw RETI words
-cannot contain themselves. The emulator can therefore show source frames and
-section-aware memory while still executing the same encoded words intended for
-hardware. The next section describes the machine state and peripherals behind
-these views.
+The address-space table distinguishes implemented registers from unused
+addresses:
 
-Normal terminal view `v` leaves host signal processing active and returns with
-Escape. Raw view `V` forwards control and escape bytes—including `Ctrl+C`,
-`Ctrl+Z`, and arrow-key sequences—and returns with `Ctrl+]`. Raw mode is the
-appropriate view for the PicoOS shell because these bytes drive terminal
-signals and command-history editing.
+| Address range | Top-bit prefix | RETI region | Implemented PicoOS use |
+| --- | --- | --- | --- |
+| `0x00000000..0x3fffffff` | `00` | EPROM | Bootloader code and data |
+| **`0x40000000..0x7fffffff`** | **`01`** | **Periphery** | **Offsets `0..16`, through `0x40000010`, are implemented memory-mapped registers** |
+| `0x80000000..0xffffffff` | `10` or `11` | SRAM | Kernel image, process images, heaps, stacks, and shared data |
 
-### 1.2.2 Machine model and peripherals
-
-The debugger views reflect the emulator's ordinary RETI instructions and
-memory-mapped devices; PicoOS reaches them through loads/stores and interrupt
-vectors rather than a special emulator API. Periphery offset `n` has address
-`0x40000000 + n`, while kernel/process code uses absolute SRAM addresses based
-at `0x80000000`. The register table below connects each offset to the device
-operation that kernel code can request or observe.
+Older maps called the middle region the UART area. UART still occupies
+cells 0–2, but the other peripherals now extend through cell 16. The table
+lists the implemented registers:
 
 | Offset | Register | Access and connection to PicoOS |
 | ---: | --- | --- |
 | 0 | UART send | Kernel/bootloader write the low byte and clear send-ready in offset 2 |
-| 1 | UART receive | Emulator writes an incoming byte; polling code or UART ISR reads it |
+| 1 | UART receive | Emulator writes an incoming byte, polling code or UART ISR reads it |
 | 2 | UART status | Bit 0 reports send-ready and bit 1 receive-ready |
-| 3–5 | Device-to-vector mappings | Timer, custom device, and UART select IVT indices; 255 disables a line |
+| 3–5 | Device-to-ISR mappings | Timer, custom device, and UART select IVT indices, 255 disables a line |
 | 6–8 | Device priorities | Interrupt controller selects the highest-priority pending device |
-| 9 | Timer interval | Instruction-count period; zero disables and a write restarts the counter |
-| 10 | Stack/heap boundary | Inclusive active lower stack limit; dispatcher rewrites it on every context switch |
+| 9 | Timer interval | Instruction-count period, zero disables and a write restarts the counter |
+| 10 | Stack/heap boundary | Inclusive active lower stack limit, dispatcher rewrites it on every context switch |
 | 11 | CPU exception cause | Read-only: none, divide by zero, stack overflow, or illegal instruction |
-| 12 | DMA active | Always present; `1` enables DMA and exposes offsets 13–16 |
+| 12 | DMA active | Always present, `1` enables DMA and exposes offsets 13–16 |
 | 13 | DMA source | Absolute UART receive address used by PicoOS |
 | 14 | DMA destination | Absolute SRAM destination address |
 | 15 | DMA word count | Number of complete 32-bit words to copy |
 | 16 | DMA status/control | `0` idle, write/read `1` for start/busy, `2` complete, `3` error |
 
-CPU exception vector 3 is fixed rather than configured through cells 3–8.
-The kernel initializes timer/DMA/UART mappings from its global arrays; the
-dispatcher connects each PCB's [`base_address`](kernel/process/process.header#L34), [`heap_start`](kernel/process/process.header#L36), and [`heap_size`](kernel/process/process.header#L37) to
-cell 10. This is a concrete example of a kernel data structure controlling an
-emulated hardware protection register.
+CPU exceptions enter service routine 3 directly. Startup configures the
+timer, DMA, and UART mappings. The dispatcher writes each process's
+`base_address + heap_start + heap_size - 1` to cell 10 as its stack boundary.
 
-### 1.2.3 UART host request protocol
+### 1.2.2 Atomic test-and-set with `TSL`
+[\[↑ TOC\]](#contents)
 
-UART transports bytes only. PicoOS and the emulator place the UART host
-request protocol on top of it. Every host request starts with escape byte 27
-and has the form `<ESC>operation arguments<ESC>/`. The table below lists the
-request forms and the host operation or response each one selects.
+`TSL S D i` atomically tests and sets a memory cell. It saves address `S + i`,
+reads the old value into `D`, and writes `1` to that address. No interrupt or
+process switch can occur between the read and write.
+
+The example uses a non-zero offset to distinguish the base from the target:
+
+```reti
+# Before: M[DS + 2] = 0
+TSL DS ACC 2
+# After:  ACC = 0 and M[DS + 2] = 1
+```
+
+The diagram shows four adjacent SRAM cells and the target at `DS + 2`
+changing from `0` to `1`. Addresses count 32-bit words, so offset `2` advances
+two cells, not two bytes:
+
+![TSL DS ACC 2 accessing adjacent SRAM word cells with the target changing from 0 to 1](documentation/images/tsl-memory-layout.svg)
+
+`D` receives the exact old word, including values other than `0` and `1`.
+Saving the address first lets `S` and `D` be the same register. Writing to
+`SP` can fail stack protection before the store, and writing to `PC` changes
+control flow. The example uses `ACC`, avoiding those special cases.
+
+`TSL` occupies mode `10` of RETI's Store, Move category. These fields encode
+`TSL DS ACC 2`:
+
+![TSL DS ACC 2 instruction fields](documentation/images/tsl-instruction-format.svg)
+
+The complete machine word is `0xAEC00002`. The immediate field `i` is a signed
+22-bit displacement, here `+2`.
+
+The register fields have different roles in neighboring modes. Here `S` is
+the address base and `D` receives the old value:
+
+| Type | Mode `M` | Assembly syntax | Operation |
+| --- | --- | --- | --- |
+| `10` | `00` | `STORE S i` | Store register `S` at the direct, DS-completed address |
+| `10` | `01` | `STOREIN D S i` | Store register `S` at address `D + i` |
+| `10` | `10` | `TSL S D i` | Return `M[S + i]` in `D`, then set that cell to `1` |
+| `10` | `11` | `MOVE S D` | Copy register `S` to register `D` |
+
+[`testset(lock_addr)`](library/mutex/mutex.picoc#L3) uses `TSL` with the lock address in `IN2`. [`mutex_lock(m)`](library/mutex/mutex.picoc#L18)
+uses the old value to decide whether it acquired the lock. [`7.4 Mutexes with test-and-set and wait queues`](#74-mutexes-with-test-and-set-and-wait-queues) explains the
+retry and wait-queue behavior, including its lost-wakeup limitation.
+
+### 1.2.3 UART host-service protocol
+[\[↑ TOC\]](#contents)
+
+On hardware, a host program serves PicoOS filesystem and terminal requests
+over the USB-to-UART connection. The diagram follows requests and responses
+through that connection:
+
+```mermaid
+flowchart LR
+    UART["RETI UART controller"] <-->|"UART bytes<br/>host requests / responses"| ADAPTER["UART-to-USB adapter"]
+    ADAPTER <-->|"USB connection<br/>host requests / responses"| SERVICE
+    subgraph HOST["Host operating system"]
+        SERVICE["Dedicated host-side service software<br/>interpret escape-sequence requests"]
+        TERMINAL["Terminal"]
+        FILES["Sandboxed host filesystem"]
+        SERVICE -->|normal UART output| TERMINAL
+        SERVICE -->|"host request: mkdir, touch, write, ..."| FILES
+        FILES -->|data or result for host response| SERVICE
+    end
+```
+
+During development, the emulator models UART and serves those requests
+directly:
+
+```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 20, "rankSpacing": 45, "wrappingWidth": 300}}}%%
+flowchart LR
+    subgraph HOST["Host operating system"]
+        direction LR
+        subgraph EMU["RETI-Emulator"]
+            direction LR
+            GUEST["PicoOS on<br/>emulated RETI"]
+            UART["Emulated UART<br/>controller"]
+            SERVICE["Built-in<br/>host-service parser"]
+            GUEST <-->|UART send / receive bytes| UART
+            UART <-->|host requests / responses| SERVICE
+        end
+        SERVICE -->|normal UART output| TERMINAL["Host terminal<br/>launches the emulator"]
+        SERVICE -->|sandboxed filesystem operation| FILES["Sandboxed host filesystem<br/>Launch directory = PicoOS /"]
+        FILES -->|data or result| SERVICE
+    end
+```
+
+The emulator's [`guest_filesystem.c`](../RETI-Emulator/source/guest_filesystem.c) uses its launch directory as PicoOS `/`.
+It normalizes `..` within that root and blocks symbolic-link escapes. Host
+requests read, create, and modify files within this sandbox.
+
+Requests have the form `<ESC>operation arguments<ESC>/`, with escape byte
+27. Ordinary bytes go to the terminal or selected output file. The table
+lists each request and response:
 
 | Request form | Result |
 | --- | --- |
-| `<ESC>load <path><ESC>/` | Big-endian word count followed by binary bytes; used by the bootloader |
+| `<ESC>load <path><ESC>/` | Big-endian word count followed by binary bytes, used by the bootloader |
 | `<ESC>read-range <offset> <count> <path><ESC>/` | Returned byte count followed by that file range |
 | `<ESC>file-size <path><ESC>/` | File size as one 32-bit value |
 | `<ESC>write <path><ESC>/` | Create/truncate a file and route following UART bytes to it |
 | `<ESC>write-at <offset> <path><ESC>/` | Preserve a file and route following UART bytes to the byte offset |
-| `<ESC>write stdout<ESC>/` / `stderr` | Restore a host standard output stream |
+| `<ESC>write stdout<ESC>/` / [`stderr`](library/stdio/stdio.header#L11) | Restore a host standard output stream |
+| `<ESC>literal-output <count><ESC>/` | Treat exactly the next `count` UART bytes as output data, even when they contain `<ESC>` |
 | `<ESC>pwd<ESC>/` | PicoOS root `/` as a length-prefixed string |
 | `<ESC>is-directory <path><ESC>/` | Directory test |
 | `<ESC>mkdir <path><ESC>/` | Create a directory |
@@ -1052,15 +1657,14 @@ request forms and the host operation or response each one selects.
 | `<ESC>move <old path>\n<new path><ESC>/` | Move or rename a file or directory |
 | `<ESC>touch <path><ESC>/` | Create a file or update its timestamps |
 
-These are fixed operations, not a generic host-command mechanism. The emulator
-debugger additionally shows RETI registers, EPROM, SRAM, periphery state, PicoC
-source, snapshots, and normal/raw UART terminals.
+The protocol provides fixed filesystem operations. Debugger commands are
+separate and inspect the emulated machine.
 
-Requests that return data receive it on the same UART stream. A `load` host
-request has the file-transfer form below. In this and the following diagram,
-`ESC` denotes the escape byte written as `<ESC>` in the request forms above:
+Replies arrive on the same UART stream. A [`load`](#123-uart-host-service-protocol) response contains a word
+count followed by file bytes. `ESC` below means byte 27:
 
 ```mermaid
+%%{init: {"sequence": {"wrap": false, "actorMargin": 60, "width": 180, "height": 45, "messageMargin": 25, "mirrorActors": false, "diagramMarginY": 35}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
 sequenceDiagram
     participant P as PicoOS loader
     participant H as RETI-Emulator host
@@ -1070,11 +1674,11 @@ sequenceDiagram
     H-->>P: complete file payload
 ```
 
-Other host requests use the response form that fits their operation. Ranged
-reads prefix a byte payload with its byte count, while metadata and status
-requests return one big-endian value without a payload:
+Ranged reads return a byte count and payload. Metadata and status requests
+return one big-endian value:
 
 ```mermaid
+%%{init: {"sequence": {"wrap": false, "actorMargin": 60, "width": 180, "height": 45, "messageMargin": 25, "mirrorActors": false, "diagramMarginY": 35}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
 sequenceDiagram
     participant P as PicoOS
     participant H as RETI-Emulator host
@@ -1088,214 +1692,70 @@ sequenceDiagram
     H-->>P: status value
 ```
 
-For `load`, the host returns the complete file length in words followed by the
-file bytes; `UINT32_MAX` represents failure. The EPROM bootloader and the
-kernel's initial [`init`](system/init.picoc) load consume this stream before scheduling exists. They
-copy it with DMA when register 12 reports DMA active and otherwise receive one
-word at a time. Later process loading combines `file-size` with `read-range`:
-the DMA path requests the complete payload, while the fallback uses independent
-1 KiB responses so another process can safely use the host request protocol between
-chunks. `read-range`, `file-size`, `pwd`, and `ls` begin their responses with a
-big-endian length/value.
-Output-selection requests are different: after `<ESC>write path<ESC>/` or
-`<ESC>write-at offset path<ESC>/`, ordinary subsequent UART bytes go to that
-host file until PicoOS sends `<ESC>write stdout<ESC>/` or selects stderr.
+For [`load`](#123-uart-host-service-protocol), `UINT32_MAX` signals failure. Boot and the initial init load use
+this complete-file stream. Later process loads use `file-size` and
+`read-range`, either as one DMA transfer or as 1 KiB polling chunks. Between
+chunks, other processes can use UART.
 
-This protocol is the boundary between PicoOS descriptor/path state and host
-files. The compiler creates RETI assembly and layout metadata; the emulator
-assembles and serves the resulting `.bin` files. The bootloader and process
-loader request them in their respective forms, and later kernel file operations
-use the same UART transport for bounded host services.
+[`write`](library/unistd/io.picoc#L32) and `write-at` select a host output file until `write stdout` or
+`write stderr` changes it. `literal-output` marks a byte count that must not
+be parsed as a request. Regular-file writes use it when data contains an
+escape byte.
 
-# 2. Bootloading and kernel startup
+PicoOS keeps descriptor and path state. The host stores the files, including
+the binaries requested by the bootloader and process loader.
 
-The toolchain produces the images and metadata used at runtime; this chapter
-follows those artifacts from reset through the first userspace dispatch. It
-also establishes the initialization order that later chapters rely on for
-kernel storage, interrupts, and processes.
+### 1.2.4 Debugger, source view, and terminal modes
+[\[↑ TOC\]](#contents)
 
-## 2.1 Loading the kernel
+The debugger shows RETI state alongside PicoC source. This recording
+demonstrates execution controls, snapshots, and the UART terminal:
 
-The EPROM bootloader in
-[`boot/bootloader.picoc`](boot/bootloader.picoc) has three important
-functions:
+[![asciicast](https://asciinema.org/a/1264549.svg)](https://asciinema.org/a/1264549)
 
-| Bootloader function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`_start()`](boot/bootloader.picoc#L9) | Does not return | Establishes EPROM `CS`/`DS` and a temporary stack at the top of SRAM | Jumps to [`boot_main()`](boot/bootloader.picoc#L41) |
-| [`boot_main()`](boot/bootloader.picoc#L41) | Jumps into the kernel on success; halts on a missing or undersized image | Requests `kernel/kernel.bin`, consumes the five header words, and copies the payload to SRAM | [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`uart_print_loading_bar_label()`](common/loading_bar.picoc#L6), [`receive_words_to_sram()`](common/sram_loader.picoc#L6); jumps to [`start_loaded_kernel()`](boot/bootloader.picoc#L21) |
-| [`start_loaded_kernel()`](boot/bootloader.picoc#L21) | Does not return | Adds the SRAM base to the header's code/data/stack offsets, replaces the boot stack, and installs kernel `CS`, `DS`, `SP`, and `BAF` | Jumps to the generated kernel entry, which calls [`main()`](kernel/kernel.picoc#L31) |
+Open the recording to see stepping, continuing, restarting, ISR inspection,
+register and memory editing, snapshots, source debugging, and terminal
+input. Each delivered input byte can raise a UART interrupt.
 
-The bootloader has no dynamic memory and no process structures. Its locals and
-call frames use the temporary SRAM stack. The loaded kernel image contains its
-interrupt table, code, and initialized globals. The sequence below follows the
-UART request and the final jump from EPROM into that SRAM image.
+The TUI displays all eight registers. Its code windows follow `PC`, its data
+window follows `DS`, and its stack window follows `SP`. These views track
+the bootloader, kernel, and selected process as their contexts change.
 
-```mermaid
-sequenceDiagram
-    participant CPU
-    participant EPROM as EPROM bootloader
-    participant UART
-    participant Host as RETI-Emulator host service
-    participant SRAM
-    participant Kernel
+The default watchobjects and available alternatives are:
 
-    CPU->>EPROM: Enter _start at reset
-    EPROM->>EPROM: Set EPROM segments and temporary SRAM stack
-    EPROM->>UART: Request kernel/kernel.bin
-    UART->>Host: Forward load request
-    Host-->>UART: Count, five header words, payload
-    UART-->>EPROM: Receive header and payload bytes
-    EPROM->>EPROM: Check the DMA active register
-    EPROM->>SRAM: Copy payload through DMA or one word at a time
-    EPROM->>CPU: Install kernel CS, DS, SP, and BAF
-    CPU->>Kernel: Jump to generated kernel _start
-```
+| View | Default tracking | Additional selection |
+| --- | --- | --- |
+| CPU registers | All eight current register values | Select a register to inspect or edit its value |
+| EEPROM / SRAM code | `PC`, in the matching address space | Assign another register or a direct memory address |
+| SRAM data | `DS` | Assign another register or a direct memory address |
+| SRAM stack | `SP` | Assign another register or a direct memory address |
+| Periphery | UART state | Cycle interrupt/timer, exception, and DMA views |
 
-## 2.2 Initializing the kernel
+Select a window with `Tab` or `Shift+Tab`, then press `a` to choose a register
+or address to follow. `j` and `k` scroll, and `C` centers the watchobject.
 
-The generated kernel entry calls
-[`int main(void)`](kernel/kernel.picoc#L31). Kernel initialization is deliberately
-ordered around allocation and ownership. The calls below establish the globals
-whose ownership is described in [Kernel storage and ownership](#3-kernel-storage-and-ownership):
+`.debuginfo`, preprocessed source, labels, and `.sections` connect addresses
+to PicoC. `PC` selects the source location, while frame metadata and `BAF`
+locate arguments, locals, and return addresses.
 
-### 2.2.1 Kernel startup code
+Normal terminal mode `v` keeps host signal processing active and exits with
+Escape. Raw mode `V` forwards control and escape bytes, including arrow
+keys, `Ctrl+C`, and `Ctrl+Z`. Use raw mode for the PicoOS shell and `Ctrl+]`
+to return to the debugger.
 
-The complete kernel entry below shows the dependencies between initialization
-steps: heap setup precedes allocation, and init must be ready before the timer
-and dispatcher start:
+# 2. Interrupts, system calls, preemption, and exceptions
+[\[↑ TOC\]](#contents)
 
-```c
-int main(void) {
-    int init_pid;
-    struct RunProcessRequest init_request;
+System calls bring library requests into the kernel. Timer and device
+interrupts report events independently of the running process. CPU exceptions
+report instructions that cannot complete safely. This chapter follows their
+entry, handling, and return paths.
 
-    activate_kernel_stack_boundary();
-    init_kernel_heap();
-    initialize_terminal();
-    initialize_process_table();
-    init_process_memory_heap();
-    initialize_shared_memory();
-    if (dma_is_active()) {
-        initialize_dma();
-    }
-    interrupt_controller_initialize();
-    init_pid = load_process("system/init.bin", loading_bar_enabled);
-    init_request.pid = init_pid;
-    init_request.arguments = NULL;
-    init_request.environment = NULL;
-    if (mark_process_ready_with_arguments(&init_request)) {
-        interrupt_controller_activate_timer();
-        dispatcher_start_next_process();
-    }
-    return 0;
-}
-```
+## 2.1 RETI interrupt entry and the interrupt service routine table
+[\[↑ TOC\]](#contents)
 
-[`init_request`](kernel/kernel.picoc#L33) is a kernel-stack object, not a
-persistent process-table entry.
-[`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241)
-consumes it to build init's process stack and change its PCB from [`NEW`](kernel/process/process.header#L12) to
-[`READY`](kernel/process/process.header#L13).
-
-The order in the code matters: the kernel heap must exist before PCB and
-descriptor allocation, and interrupt mappings must exist before the timer is
-activated. [`load_process()`](kernel/process/process_loader.picoc#L305) creates
-init's image and PCB; run setup supplies its initial arguments and environment
-before the dispatcher can enter it.
-
-## 2.3 Entering normal execution
-
-There is no ordinary infinite loop in [`main()`](kernel/kernel.picoc#L31). A successful dispatch leaves
-the kernel through `RTI`. If all existing processes are blocked, the
-dispatcher waits in kernel context until an interrupt makes one runnable. The
-following table connects the entry and machine-control functions to their
-initialization or shutdown effects.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`main()`](kernel/kernel.picoc#L31) | Returns `0` only if dispatch does not take control | Initializes kernel heaps, terminal, process table, shared-memory registry, DMA, and interrupt registers; loads and makes PID 1 ready | [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11), [`init_kernel_heap()`](kernel/kmalloc.picoc#L17), [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14), [`initialize_process_table()`](kernel/process/process.picoc#L21), [`init_process_memory_heap()`](kernel/pmalloc.picoc#L9), [`initialize_shared_memory()`](kernel/shared_memory.picoc#L9), [`dma_is_active()`](common/dma.picoc#L17), [`initialize_dma()`](kernel/dma.picoc#L9), [`interrupt_controller_initialize()`](kernel/interrupt_controller.picoc#L41), [`load_process()`](kernel/process/process_loader.picoc#L305), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`interrupt_controller_activate_timer()`](kernel/interrupt_controller.picoc#L34), [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) |
-| [`shutdown()`](kernel/kernel.picoc#L15) | Does not return | Stops execution in the current instruction; allocated objects remain because the machine stops | — |
-| [`reboot()`](kernel/kernel.picoc#L19) | Does not return | Disables hardware interrupts and stack protection, then jumps to the EPROM bootloader | [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`periphery_write_register()`](kernel/periphery.picoc#L11) |
-
-# 3. Kernel storage and ownership
-
-After startup has created the kernel's global state, the important question is
-which memory region owns each object and when that object can disappear. These
-rules connect process, descriptor, wait-queue, allocator, and shared-memory
-behavior throughout the later chapters.
-
-## 3.1 Storage and lifetime
-
-The most important implementation distinction is not the C type but where an
-object lives and who releases it. “The process table,” for example, is not one
-allocated table. It is a set of global list pointers plus separately allocated
-PCB nodes. The table below separates static, embedded, kernel-heap, and
-process-memory storage so readers can see which operation releases each object.
-
-| Object | Where it lives | Allocation | Main access path | Lifetime |
-| --- | --- | --- | --- | --- |
-| Process-list head/tail/current/PID counter | Kernel `.data` globals | Static | [`first_process()`](kernel/process/process.picoc#L28), [`current_process()`](kernel/process/process.picoc#L61), [`find_process_by_pid()`](kernel/process/process.picoc#L161) | Whole kernel run |
-| One [`struct Process`](kernel/process/process.header#L31) PCB | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) | Linked from [`process_list_head`](kernel/process/process.picoc#L16) | Load until removal/reaping |
-| Process image: code, data, userspace heap, stack | Process-memory arena | [`pmalloc()`](kernel/pmalloc.picoc#L20) | PCB [`base_address`](kernel/process/process.header#L34) and absolute pointers | Load until PCB removal |
-| Process activation | Embedded in PCB | Part of PCB | [`process->activation`](kernel/process/process.header#L40) | Same as PCB |
-| Pending process load | Kernel heap plus reserved process-memory region | [`kmalloc()`](kernel/kmalloc.picoc#L23) and [`pmalloc()`](kernel/pmalloc.picoc#L20) | Loading PCB [`pending_load`](kernel/process/process.header#L68) | Until completion, failure, or loader removal |
-| Binary path and working directory | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) copies | PCB pointers | Same as PCB, replaceable directory |
-| File-descriptor table and entry array | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) | [`current_process()`](kernel/process/process.picoc#L61) → [`file_descriptors`](kernel/process/process.header#L42) | Same as PCB |
-| Regular-file descriptor path | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) copy | Descriptor [`path`](kernel/filesystem/file_descriptor.header#L18) | Close, replacement, or PCB removal |
-| Kernel terminal and 128-cell ring | Kernel `.data` global | Static | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) | Whole kernel run |
-| Wait-queue object | Embedded in PCB, terminal, or userspace mutex; DMA queue is a kernel global | No queue allocation | Owner field/address, or [`dma_waiters`](kernel/dma.picoc#L6) | Same as owner; DMA queue lasts for the kernel run |
-| Shared-memory registry head and next ID | Kernel `.data` globals | Static | Internal find helpers | Whole kernel run |
-| Shared-memory entry/name | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) | Registry linked list | Until unlinked and unused |
-| Shared-memory data region | Process-memory arena | [`pmalloc()`](kernel/pmalloc.picoc#L20) | Entry [`address`](kernel/shared_memory.header#L11) | Until entry destruction |
-| Per-process shared-memory attachment | Kernel heap | [`kmalloc()`](kernel/kmalloc.picoc#L23) | PCB attachment list | Mapping until process removal |
-| Kernel/process-memory heap descriptors | Kernel `.data` globals | Static | [`kmalloc()`](kernel/kmalloc.picoc#L23)/[`pmalloc()`](kernel/pmalloc.picoc#L20) | Whole kernel run |
-| Heap block headers | Inside managed heap region | Written by allocator | Linked from [`struct Heap`](common/heap.header#L11) | Split/merged dynamically |
-| Syscall request objects | Usually userspace stack | Local struct | Pointer in `IN1` | One wrapper call; the kernel never retains the request pointer |
-| Interrupt saved frame | Interrupted process stack | Register pushes and return cell | [`caller_context`](kernel/dispatcher.picoc#L71) | Until return/copy |
-| Interrupt vector table | Kernel `.ivt` section | Linked static array | CPU vector lookup | Whole kernel run |
-
-Kernel-heap metadata and process/shared data regions use different allocators.
-[`kfree()`](kernel/kmalloc.picoc#L38) releases PCBs, names, paths, tables, and attachment nodes.
-[`pfree()`](kernel/pmalloc.picoc#L47) releases complete process images and shared-memory data regions. No
-kernel object is allocated with userspace [`malloc()`](library/stdlib/malloc.picoc#L35).
-
-## 3.2 Ownership connections
-
-The diagram below traces ownership and references behind the storage categories in
-the preceding table. Kernel globals anchor the process list; each PCB owns its
-process image and kernel-side state, while a shared-memory attachment refers to
-a registry entry that owns the shared data region. Embedded activation records
-and wait queues are released with their PCB rather than separately. Solid
-arrows mean ownership or list linkage; dotted arrows mean a reference to shared
-state. A terminal descriptor selects the global terminal by its kind; it does
-not own the terminal or contain a terminal pointer.
-
-```mermaid
-flowchart TD
-    G["kernel globals<br/>head, tail, active"] --> P1["PCB<br/>kmalloc"]
-    P1 --> P2["next PCB<br/>kmalloc"]
-    P1 --> I1["process image<br/>pmalloc"]
-    P1 --> F1["descriptor table<br/>kmalloc"]
-    P1 --> A1["activation record<br/>embedded"]
-    P1 --> W1["wait queue<br/>embedded"]
-    P1 --> S1["attachments<br/>kmalloc"]
-    S1 -. references .-> SE["shared entry<br/>kmalloc"]
-    SE --> SM["shared-memory data<br/>pmalloc"]
-    F1 -. "stdin/stdout/stderr kind selects device behavior" .-> T["global Terminal<br/>kernel .data"]
-```
-
-# 4. Interrupts, system calls, and exceptions
-
-The ownership rules above describe the state that the kernel changes. This
-chapter shows the controlled entries that make those changes: software system
-calls, hardware interrupts, and synchronous CPU exceptions.
-
-## 4.1 Interrupt vector table
-
-The linked kernel has five vector cells at the beginning of SRAM. The array
-below defines their order, and the following table connects each entry to the
-software instruction or hardware source that invokes it:
+The first five SRAM cells hold the kernel's interrupt service routine table.
+The array and table below connect each entry to its source:
 
 ```c
 __attribute__((section("ivt")))
@@ -1308,24 +1768,132 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 };
 ```
 
-| Vector | Entry | Source |
+| Index | Entry | Source |
 | ---: | --- | --- |
-| 0 | [`syscall_interrupt()`](interrupt_service_routines/isrs.picoc#L74) | Software `INT 0` from userspace |
-| 1 | [`timer_interrupt()`](interrupt_service_routines/isrs.picoc#L68) | Timer device |
-| 2 | [`uart_interrupt()`](interrupt_service_routines/os_isrs.picoc#L195) | UART receive device |
-| 3 | [`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L171) | Fixed synchronous CPU exception vector |
-| 4 | [`dma_interrupt()`](interrupt_service_routines/os_isrs.picoc#L233) | DMA completion on the hardware custom-device line |
+| 0 | [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105) | Software `INT 0` from userspace |
+| 1 | [`timer_interrupt()`](interrupt_service_routines/os_isrs.picoc#L33) | Timer device |
+| 2 | [`uart_interrupt()`](interrupt_service_routines/os_isrs.picoc#L196) | UART receive device |
+| 3 | [`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L172) | Fixed synchronous CPU exception entry |
+| 4 | [`dma_interrupt()`](interrupt_service_routines/os_isrs.picoc#L234) | DMA completion on the hardware custom-device line |
 
-An `INT` automatically saves only the interrupted return PC. Each ISR
-explicitly saves any general registers it needs. `RTI` reloads the PC from
-`SP + 1`, increments `SP`, and advances execution.
+[`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L24) contains function pointers of type `void (*)(void)`.
+The linker encodes each handler's SRAM address. Interrupt entry loads that
+address into `PC`, without a C call or generated stack frame.
 
-The interrupt controller has two static global arrays in kernel `.data`.
-[`interrupt_device_isrs[]`](kernel/interrupt_controller.picoc#L3) maps timer/DMA/UART to `1/4/2`, and
-[`interrupt_device_priorities[]`](kernel/interrupt_controller.picoc#L9) assigns `1/1/2`. Initialization reads these
-arrays and writes periphery registers 3–8; neither array uses [`kmalloc()`](kernel/kmalloc.picoc#L23).
+This excerpt connects the first entry to [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105). Its `naked`
+attribute lets it save registers before any generated code could change them.
+[`2.4.2 System-call entry, execution, and return to userspace`](#242-system-call-entry-execution-and-return-to-userspace) gives the complete body:
 
-## 4.2 Saved interrupt frame
+```c
+__attribute__((naked))
+void syscall_interrupt(void) {
+    // ...
+}
+```
+
+Interrupt entry automatically saves only a return PC on the active stack.
+For software `INT 0`, this is the address of that instruction. For hardware
+interrupts and CPU exceptions, the emulator saves the address one instruction
+before the instruction to resume or retry. Each ISR explicitly saves any
+general registers it needs. `RTI` reloads the PC from `SP + 1`, increments
+`SP`, and advances `PC` by one. It does not restore `CS`, `DS`, or the general
+registers, so the return stub or dispatcher must restore them first.
+
+## 2.2 Interrupt-controller mappings and priorities
+[\[↑ TOC\]](#contents)
+
+`interrupt_device_isrs[]` maps timer, DMA, and UART to entries `1`, `4`,
+and `2`. `interrupt_device_priorities[]` gives them priorities `1`, `1`, and
+`2`. UART can interrupt timer or DMA handling. Equal-priority events wait.
+
+Startup first disables each device, then writes its configured mapping and
+priority. The timer starts after init is ready, with a 5,000-instruction
+interval:
+
+```c
+int interrupt_device_isrs[INTERRUPT_DEVICE_COUNT] = {
+    1,                            // INTERRUPT_DEVICE_INTTIMER (index 0)
+    4,                            // INTERRUPT_DEVICE_DMA (index 1)
+    2                             // INTERRUPT_DEVICE_UART (index 2)
+};
+
+int interrupt_device_priorities[INTERRUPT_DEVICE_COUNT] = {
+    1, // INTERRUPT_DEVICE_INTTIMER (index 0)
+    1, // INTERRUPT_DEVICE_DMA (index 1)
+    2  // INTERRUPT_DEVICE_UART (index 2)
+};
+
+void interrupt_controller_initialize(void) {
+    int device = 0;
+    int interrupt_index;
+    int priority;
+
+    while (device < INTERRUPT_DEVICE_COUNT) {
+        interrupt_controller_disable_device(device);
+        interrupt_index = interrupt_device_isrs[device];
+        priority = interrupt_device_priorities[device];
+
+        if (interrupt_index != INTERRUPT_CONTROLLER_DISABLED) {
+            interrupt_controller_assign_device(device, interrupt_index, priority);
+        }
+
+        device = device + 1;
+    }
+}
+```
+
+The two three-cell arrays reside in kernel `.data`. They hold table indices
+and priorities. The separate [`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L24) in `.ivt` holds the
+actual handler pointers.
+
+The memory map locates these arrays within the kernel image. Arrows show
+where their values are written in the interrupt controller. [`1.2.1 RETI machine model and memory-mapped peripherals`](#121-reti-machine-model-and-memory-mapped-peripherals) describes
+the peripheral registers:
+
+![SRAM initialization arrays and six interrupt-controller cells in the ReTI memory map](documentation/images/interrupt-controller-initialization.svg)
+
+[`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23) writes mapping `255` and priority
+`0`. [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59) then writes the configured index
+and priority. The table traces each array entry to its register:
+
+| Device / array index | Mapping source → periphery cell | Priority source → periphery cell |
+| --- | --- | --- |
+| Timer / `0` | `interrupt_device_isrs[0] = 1` → `0x40000003` | `interrupt_device_priorities[0] = 1` → `0x40000006` |
+| DMA on custom line / `1` | `interrupt_device_isrs[1] = 4` → `0x40000004` | `interrupt_device_priorities[1] = 1` → `0x40000007` |
+| UART / `2` | `interrupt_device_isrs[2] = 2` → `0x40000005` | `interrupt_device_priorities[2] = 2` → `0x40000008` |
+
+[`9.3 Kernel global variables and process-list roots`](#93-kernel-global-variables-and-process-list-roots) lists the globals and their storage. Terminal reads temporarily disable
+UART delivery when inspecting the input buffer to prevent a race with its ISR.
+
+### 2.2.1 Interrupt-controller function reference
+[\[↑ TOC\]](#contents)
+
+The controller functions in
+[`kernel/interrupt_controller.picoc`](kernel/interrupt_controller.picoc) use
+the memory-mapped helpers in the next subsection. This table connects the
+controller's global mapping arrays to the register writes they produce.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`interrupt_controller_initialize(void)`](kernel/interrupt_controller.picoc#L41) | Returns no value | Rewrites timer, DMA, and UART mappings and priorities in periphery registers 3–8 from [`interrupt_device_isrs`](kernel/interrupt_controller.picoc#L3) and [`interrupt_device_priorities`](kernel/interrupt_controller.picoc#L9) | [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59) | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+| [`interrupt_controller_assign_device(device, interrupt_index, priority)`](kernel/interrupt_controller.picoc#L59) | Returns no value | Writes one device's interrupt service routine-table index and priority | [`interrupt_controller_device_to_isr_register()`](kernel/interrupt_controller.picoc#L15), [`interrupt_controller_device_to_priority_register()`](kernel/interrupt_controller.picoc#L19), [`periphery_write_register()`](kernel/periphery.picoc#L11) | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`interrupt_controller_initialize()`](kernel/interrupt_controller.picoc#L41), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
+| [`interrupt_controller_disable_device(device)`](kernel/interrupt_controller.picoc#L23) | Returns no value | Writes mapping 255 and priority 0 for one device | [`interrupt_controller_device_to_isr_register()`](kernel/interrupt_controller.picoc#L15), [`interrupt_controller_device_to_priority_register()`](kernel/interrupt_controller.picoc#L19), [`periphery_write_register()`](kernel/periphery.picoc#L11) | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`interrupt_controller_initialize()`](kernel/interrupt_controller.picoc#L41), [`reboot()`](kernel/kernel.picoc#L19), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
+| [`interrupt_controller_activate_timer(void)`](kernel/interrupt_controller.picoc#L34) | Returns no value | Writes the 5,000-instruction interval to periphery register 9 | [`periphery_write_register()`](kernel/periphery.picoc#L11) | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+
+### 2.2.2 Memory-mapped periphery function reference
+[\[↑ TOC\]](#contents)
+
+Functions in [`kernel/periphery.picoc`](kernel/periphery.picoc) perform the
+actual reads and writes. Their callers show that the same access layer also
+serves stack protection, CPU exceptions, and UART handling.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`periphery_read_register(register_index)`](kernel/periphery.picoc#L5) | Returns the selected periphery value | Reads one memory-mapped periphery cell, changes no kernel state | None | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`handle_cpu_exception()`](kernel/exception.picoc#L70), [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
+| [`periphery_write_register(register_index, value)`](kernel/periphery.picoc#L11) | Returns no value | Writes one memory-mapped periphery cell | None | **Kernel functions:** [`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22), [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11), [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213), [`interrupt_controller_activate_timer()`](kernel/interrupt_controller.picoc#L34), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59), [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`reboot()`](kernel/kernel.picoc#L19) |
+
+## 2.3 Saved interrupt stack frame
+[\[↑ TOC\]](#contents)
 
 System calls and process timer preemption create the same process-stack frame.
 [`caller_context`](kernel/dispatcher.picoc#L71) points to its free cell:
@@ -1345,19 +1913,168 @@ System calls and process timer preemption create the same process-stack frame.
 embedded activation and records [`activation.sp`](kernel/process/process.header#L25) = [`caller_context`](kernel/dispatcher.picoc#L71) + 6. The
 return PC remains at [`activation.sp`](kernel/process/process.header#L25) + 1 for the later `RTI`.
 
-## 4.3 System-call path
+Saved user-stack registers and return PCs can be corrupted by a process.
+[Linux saves syscall context on the kernel stack](https://github.com/torvalds/linux/blob/master/arch/x86/entry/entry_64.S).
+RETI entry and `RTI` use the active `SP`, with no banked kernel stack pointer
+or dedicated scratch register. Switching safely would require extra bootstrap
+storage and nested-interrupt handling. PicoOS has no memory isolation, so
+processes can overwrite either stack and kernel memory.
 
-Userspace wrappers place the syscall number in `ACC`, one integer or request
-pointer in `IN1`, and execute `INT 0`. After `RTI`, `IN2` contains the syscall
-result, matching the normal PicoC function-return convention. The naked entry
-saves the process registers, disables the process boundary while changing
-stacks, installs kernel segments and the kernel stack, and calls the normal C
-dispatcher. The complete
-[`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L104) entry,
-[`syscall_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L143)
-continuation, and
-[`syscall_interrupt_restore()`](interrupt_service_routines/os_isrs.picoc#L158)
-restoration stub are:
+## 2.4 System-call interface and execution
+[\[↑ TOC\]](#contents)
+
+A library wrapper passes a syscall selector and arguments to the installed
+kernel. [`handle_syscall()`](kernel/syscall.picoc#L16) chooses the implementation. This avoids embedding
+kernel function addresses in user programs.
+
+Kernel functions can move without changing the wrapper. Compatibility still
+depends on selectors, register conventions, request layouts, and argument
+and result meanings. Together these form the syscall ABI. Changing it can
+require rebuilding libraries or programs.
+
+[POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap01.html)
+addresses source portability rather than binary portability. A library can
+implement a standard interface using a different kernel's syscalls. PicoOS
+uses some POSIX-like names but also differs in signatures and behavior.
+[`10.1 From a library call to the kernel: waitpid`](#101-from-a-library-call-to-the-kernel-waitpid) follows one wrapper, [`waitpid()`](library/sys/wait/wait.picoc#L14), through this boundary.
+
+The register convention comes first, followed by the request structures
+used when a call needs several arguments.
+
+### 2.4.1 Syscall selectors and register convention
+[\[↑ TOC\]](#contents)
+
+A syscall wrapper places its selector in `ACC` and a value or pointer in
+`IN1`, then executes `INT 0`. On return, `IN2` holds the result, matching the
+PicoC return convention in [`1.1.3 System V ABI stack frames and call cleanup`](#113-system-v-abi-stack-frames-and-call-cleanup).
+
+For multiple arguments, the wrapper fills a request structure on its stack
+and passes its absolute address in `IN1`. [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) shows this for [`waitpid()`](library/sys/wait/wait.picoc#L14).
+
+<!-- Presentation: Copy the waitpid code example from Section 7.2.2 directly
+into the slides here. Do not merely link to it or jump between sections. -->
+
+The declarations in [`common/syscall.header`](common/syscall.header) and [`common/file.header`](common/file.header) define
+these requests. The field tables below explain their contents:
+
+```c
+struct LoadProcessRequest { char *path; bool show_loading_bar; };
+struct RunProcessRequest { int pid; char *arguments; char **environment; };
+struct WaitPidRequest { int pid; int *status; };
+struct KillRequest { int pid; int signal_number; };
+struct PrctlRequest { int option; int argument; };
+struct ShmOpenRequest { char *name; size_t size; };
+struct GetCwdRequest { char *buffer; int size; };
+struct ReadDirectoryRequest { char *path; char *buffer; int capacity; };
+struct MoveRequest { char *old_path; char *new_path; };
+
+struct OpenRequest { char *path; int flags; };
+struct IoRequest {
+    int file_descriptor;
+    char *buffer;
+    int count;
+    bool protect_uart_control;
+    bool show_loading_bar;
+    int transferred;
+    int loading_bar_update;
+    bool complete;
+};
+struct SeekRequest {
+    int file_descriptor;
+    int offset;
+    int origin;
+};
+struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
+```
+
+Requests live in the wrapper's stack frame until it returns, including any
+time spent suspended. The kernel reads them during the syscall and does not
+retain the request pointer. [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) compares their lifetime with kernel objects.
+
+#### 2.4.1.1 Process, wait, signal, and memory request structures
+[\[↑ TOC\]](#contents)
+
+Each wrapper initializes its request before entering the kernel. The table
+shows how process, wait, signal, and memory fields are used. Kernel startup
+also creates a [`RunProcessRequest`](common/syscall.header#L55) for init:
+
+| Field | Meaning | Used by |
+| --- | --- | --- |
+| [`LoadProcessRequest.path`](common/syscall.header#L51) | Path of the `.bin` image | First initialized by [`load()`](library/unistd/process.picoc#L17), passed through [`SYSCALL_LOAD_PROCESS`](common/syscall.header#L8), the loader normalizes it and the PCB receives its own [`kmalloc()`](kernel/kmalloc.picoc#L23) path copy |
+| [`LoadProcessRequest.show_loading_bar`](common/syscall.header#L52) | Whether UART transfer progress should be printed | First initialized by [`load()`](library/unistd/process.picoc#L17), read only during loading, derived from [`PICOOS_LOADING_BAR`](common/loading_bar.header#L5) |
+| [`RunProcessRequest.pid`](common/syscall.header#L56) | PID of an existing process in state [`NEW`](kernel/process/process.header#L12) | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init), passed through [`SYSCALL_RUN_PROCESS_WITH_ARGUMENTS`](common/syscall.header#L9), identifies the process whose PCB state becomes [`READY`](kernel/process/process.header#L13) |
+| [`RunProcessRequest.arguments`](common/syscall.header#L57) | Space/tab-separated argument string, or `NULL` | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init), copied into the child's initial process stack, the pointer itself is not retained |
+| [`RunProcessRequest.environment`](common/syscall.header#L58) | Null-terminated array of `NAME=value` pointers | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init), strings and pointer table are copied into the child's initial stack |
+| [`WaitPidRequest.pid`](common/syscall.header#L62) | Exact child PID | First initialized by [`waitpid()`](library/sys/wait/wait.picoc#L14), passed through [`SYSCALL_WAITPID`](common/syscall.header#L13), used to find and validate the child |
+| [`WaitPidRequest.status`](common/syscall.header#L63) | Address of caller's status cell | First initialized by [`waitpid()`](library/sys/wait/wait.picoc#L14), immediate status destination or copied into the waiting parent's [`waiting_status_ptr`](kernel/process/process.header#L44) while blocked |
+| [`KillRequest.pid`](common/syscall.header#L67) | Target process | First initialized by [`kill()`](library/signal/signal.picoc#L14), passed through [`SYSCALL_KILL`](common/syscall.header#L16), lookup only, not retained |
+| [`KillRequest.signal_number`](common/syscall.header#L68) | Signal to deliver, 0 probes existence | First initialized by [`kill()`](library/signal/signal.picoc#L14), may change target state or defer termination, but the request is not retained |
+| [`PrctlRequest.option`](common/syscall.header#L73) | Currently only [`PR_SET_PDEATHSIG`](common/prctl.header#L3) | First initialized by [`prctl()`](library/sys/prctl/prctl.picoc#L14), passed through [`SYSCALL_PRCTL`](common/syscall.header#L17), selects the supported operation |
+| [`PrctlRequest.argument`](common/syscall.header#L75) | Signal number, or 0 to disable | First initialized by [`prctl()`](library/sys/prctl/prctl.picoc#L14), copied into current PCB [`parent_death_signal`](kernel/process/process.header#L59) |
+| [`ShmOpenRequest.name`](common/syscall.header#L79) | Name used to find an entry in the kernel's shared-memory linked list | First initialized by [`shm_open()`](library/sys/mman/mman.picoc#L15), passed through [`SYSCALL_SHM_OPEN`](common/syscall.header#L26), a new entry receives a [`kmalloc()`](kernel/kmalloc.picoc#L23) copy |
+| [`ShmOpenRequest.size`](common/syscall.header#L80) | Requested shared region size in RETI cells | First initialized by [`shm_open()`](library/sys/mman/mman.picoc#L15), used only when creating a name, an existing entry is not resized |
+
+#### 2.4.1.2 File and directory request structures
+[\[↑ TOC\]](#contents)
+
+File and directory wrappers initialize the fields needed for their
+operation. The table follows those values into the kernel:
+
+| Field | Meaning | Used by |
+| --- | --- | --- |
+| [`OpenRequest.path`](common/file.header#L27) | Relative or absolute PicoOS path to a host-backed file or kernel device | First initialized by [`open()`](library/fcntl/fcntl.picoc#L5) or [`fopen()`](library/stdio/stdio.picoc#L125), passed through [`SYSCALL_OPEN`](common/syscall.header#L31), normalized and copied into the selected descriptor |
+| [`OpenRequest.flags`](common/file.header#L28) | Access mode plus [`O_CREAT`](common/file.header#L13), [`O_TRUNC`](common/file.header#L14), or [`O_APPEND`](common/file.header#L15) | First initialized by [`open()`](library/fcntl/fcntl.picoc#L5) or [`fopen()`](library/stdio/stdio.picoc#L125), copied into the descriptor, create/truncate decide open requests and append changes later write positioning |
+| [`IoRequest.file_descriptor`](common/file.header#L32) | Entry number in the current PCB’s eight-entry table | First initialized by [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), or stdio I/O wrappers, passed through [`SYSCALL_READ`](common/syscall.header#L32) or [`SYSCALL_WRITE`](common/syscall.header#L33) |
+| [`IoRequest.buffer`](common/file.header#L33) | Userspace destination for read or source for write | First initialized by [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), or stdio I/O wrappers, used directly during the call, for a blocked terminal read the caller's PCB temporarily retains the destination pointer |
+| [`IoRequest.count`](common/file.header#L34) | Maximum cells to read or exact cells to write | First initialized by [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), or stdio I/O wrappers, validated before transfer, retained in terminal pending state only while stdin is blocked |
+| [`IoRequest.protect_uart_control`](common/file.header#L35) | Whether a write must scan for `<ESC>` and protect a matching buffer with `literal-output <count>` | First initialized to `true` by [`write()`](library/unistd/io.picoc#L32), [`fputc()`](library/stdio/stdio.picoc#L204), and [`fputs()`](library/stdio/stdio.picoc#L229), initialized to `false` by [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), [`read()`](library/unistd/io.picoc#L6), [`fgetc()`](library/stdio/stdio.picoc#L178), [`write_process_exception_message()`](kernel/exception.picoc#L29), and [`list_processes()`](kernel/process/process.picoc#L32), read by [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+| [`IoRequest.show_loading_bar`](common/file.header#L36) | Whether a host-file read shows progress | First initialized by [`read()`](library/unistd/io.picoc#L6), write wrappers, or stdio I/O wrappers, [`read()`](library/unistd/io.picoc#L6) derives this from the environment, writes set it false |
+| [`IoRequest.transferred`](common/file.header#L37) | Bytes already copied by earlier chunks of the same [`read()`](library/unistd/io.picoc#L6) | First initialized to 0 by [`read()`](library/unistd/io.picoc#L6) (or stdio input), updated by [`read()`](library/unistd/io.picoc#L6) and read by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) as the next buffer position |
+| [`IoRequest.loading_bar_update`](common/file.header#L38) | Next total byte count that redraws read progress | First initialized by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) after the first successful range response, retained and updated for subsequent chunks |
+| [`IoRequest.complete`](common/file.header#L39) | Whether [`read()`](library/unistd/io.picoc#L6) should return instead of invoking another chunk | First initialized to false by [`read()`](library/unistd/io.picoc#L6), set by [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) or [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) on completion/error |
+| [`SeekRequest.file_descriptor`](common/file.header#L43) | Regular-file descriptor to reposition | First initialized by [`lseek()`](library/unistd/io.picoc#L66), passed through [`SYSCALL_LSEEK`](common/syscall.header#L35) |
+| [`SeekRequest.offset`](common/file.header#L44) | Signed displacement | First initialized by [`lseek()`](library/unistd/io.picoc#L66), combined with [`SEEK_SET`](common/file.header#L17), current descriptor offset, or host file size |
+| [`SeekRequest.origin`](common/file.header#L45) | [`SEEK_SET`](common/file.header#L17), [`SEEK_CUR`](common/file.header#L18), or [`SEEK_END`](common/file.header#L19) | First initialized by [`lseek()`](library/unistd/io.picoc#L66), selects the base for the new descriptor offset |
+| [`Dup2Request.old_file_descriptor`](common/file.header#L49) | Descriptor to copy | First initialized by [`dup2()`](library/unistd/io.picoc#L58), [`SYSCALL_DUP2`](common/syscall.header#L36) leaves the source entry unchanged |
+| [`Dup2Request.new_file_descriptor`](common/file.header#L50) | Entry to replace | First initialized by [`dup2()`](library/unistd/io.picoc#L58), the target receives an independent copy of the source fields and path |
+| [`GetCwdRequest.buffer`](common/syscall.header#L84) | Userspace destination | First initialized by [`getcwd()`](library/unistd/working_directory.picoc#L11), passed through [`SYSCALL_GETCWD`](common/syscall.header#L40), receives the selected directory copy |
+| [`GetCwdRequest.size`](common/syscall.header#L85) | Destination capacity | First initialized by [`getcwd()`](library/unistd/working_directory.picoc#L11), prevents copying a path that does not fit |
+| [`ReadDirectoryRequest.path`](common/syscall.header#L89) | Directory to list | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8), passed through [`SYSCALL_READ_DIRECTORY`](common/syscall.header#L42), normalized for the host request |
+| [`ReadDirectoryRequest.buffer`](common/syscall.header#L90) | Userspace listing buffer | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8), receives `d name\n` / `- name\n` records from the host |
+| [`ReadDirectoryRequest.capacity`](common/syscall.header#L91) | Maximum returned cells | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8), bounds the UART response and copy |
+| [`MoveRequest.old_path`](common/syscall.header#L95) | Existing file or directory | First initialized by [`move()`](library/unistd/file_removal.picoc#L12), normalized and sent as the first [`move`](library/unistd/file_removal.picoc#L12) host request path |
+| [`MoveRequest.new_path`](common/syscall.header#L96) | New file or directory path | First initialized by [`move()`](library/unistd/file_removal.picoc#L12), normalized and sent as the second [`move`](library/unistd/file_removal.picoc#L12) host request path |
+
+[`load()`](library/unistd/process.picoc#L17) and regular-file [`read()`](library/unistd/io.picoc#L6) reuse their requests across chunks.
+A blocked terminal read instead saves its destination and count in the PCB.
+The buffer must remain valid until completion. See [`8.3 Blocking and completing terminal reads`](#83-blocking-and-completing-terminal-reads) for terminal reads
+and [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) for the retained child-status pointer.
+
+Single-value calls pass their argument directly in `IN1`, for example a PID,
+descriptor, shared-memory ID, path, or wait-queue pointer.
+
+### 2.4.2 System-call entry, execution, and return to userspace
+[\[↑ TOC\]](#contents)
+
+`INT 0` saves its PC on the process stack and enters [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105).
+The ISR installs the kernel context and calls [`handle_syscall()`](kernel/syscall.picoc#L16). The diagram
+follows the request through execution and either direct restoration or
+scheduling. [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path) explains that choice:
+
+```mermaid
+flowchart LR
+    ENTRY["Save context and enter kernel<br/>syscall_interrupt<br/>write_stack_heap_boundary_from_in1<br/>activate_kernel_stack_boundary"] --> HANDLE["Execute operation<br/>handle_syscall"]
+    HANDLE -->|returns normally| RETURN["Save result and check rescheduling<br/>syscall_interrupt_return<br/>caller_context[4] = IN2<br/>dispatcher_reschedule_if_requested"]
+    RETURN --> CHECK{"reschedule_requested?"}
+    CHECK -->|false| RESTORE["Restore caller and return with RTI<br/>syscall_interrupt_restore<br/>activate_current_process_stack_boundary"]
+    CHECK -->|true| DISPATCH["Dispatcher<br/>Select a process and return with RTI"]
+    HANDLE -->|blocks, yields, or exits| DISPATCH
+    HANDLE -->|shutdown or reboot| SYSTEM["Halt or restart"]
+```
+
+These naked routines manage registers and stacks explicitly. `BAF` holds
+the saved-frame pointer while kernel `CS`, `DS`, and `SP` are active. The
+macros come from [`kernel/memory_constants.header`](kernel/memory_constants.header), described in [`1.1.9 Generated memory constants for the bootloader and kernel`](#119-generated-memory-constants-for-the-bootloader-and-kernel):
 
 ```c
 __attribute__((naked))
@@ -1374,9 +2091,9 @@ void syscall_interrupt(void) {
     asm("MOVE SP BAF");
     asm("LOADI IN1 0");
     write_stack_heap_boundary_from_in1();
-    asm(KERNEL_CS_START_ASM);
-    asm(KERNEL_DS_START_ASM);
-    asm(KERNEL_SP_START_ASM);
+    asm(KERNEL_CS_START_ASM); // LOADI32 CS -2147483643
+    asm(KERNEL_DS_START_ASM); // LOADI32 DS -2147442882
+    asm(KERNEL_SP_START_ASM); // LOADI32 SP -2147435340
     activate_kernel_stack_boundary();
 
     // Builds the handle_syscall arguments from the saved context
@@ -1393,7 +2110,7 @@ void syscall_interrupt(void) {
     // Calls handle_syscall and returns through syscall_interrupt_return
     asm("LOADI32 ACC syscall_interrupt_return");
     asm("ADD ACC CS");
-    asm("PUSH ACC"); // Return address: syscall restoration stub
+    asm("PUSH ACC"); // Return address: syscall return continuation
     asm("LOADI32 ACC handle_syscall");
     asm("ADD ACC CS");
     asm("MOVE ACC PC");
@@ -1428,85 +2145,324 @@ void syscall_interrupt_restore(void) {
 }
 ```
 
-[`handle_syscall()`](kernel/syscall.picoc#L16) implements **38 syscalls** in the
-continuous selector range **0–37**. Every selector in that range reaches a kernel
-operation. The declarations in [`common/syscall.header`](common/syscall.header)
-and the branches in [`handle_syscall()`](kernel/syscall.picoc#L16) keep related
-operations adjacent; the groups are organizational and do not affect dispatch.
+[`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105) prepares
+the kernel call in these steps:
 
-The following sequence connects the assembly above to the C syscall handler
-and the scheduling decision at return. It shows a call whose subsystem returns
-normally; a blocking syscall instead saves its frame and dispatches from inside
-the subsystem, as shown in [Sleeping and waking](#611-sleeping-and-waking).
+1. Save `ACC`, `IN1`, `IN2`, `BAF`, `CS`, and `DS` on the user-process stack.
+   Together with the automatically saved PC, these form the context in
+   [`2.3 Saved interrupt stack frame`](#23-saved-interrupt-stack-frame).
+2. Copy `SP` to `BAF` to preserve the
+   [`caller_context`](kernel/dispatcher.picoc#L71) pointer while switching stacks.
+3. Set `IN1 = 0` and call
+   [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2) to
+   disable the old limit. Load kernel `CS`, `DS`, and `SP`, then call
+   [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11). The old
+   process limit would reject the lower kernel `SP`. Both helpers are explained
+   in [`2.4.2.3 Stack-boundary helpers`](#2423-stack-boundary-helpers).
+4. Push the context pointer, argument, and selector onto the kernel stack.
+   Read the argument from the saved `IN1` and the selector from the saved
+   `ACC`, pushing each before reusing `IN2`.
+5. Set saved `IN2` to the default result `1`, so an operation that switches
+   processes can later resume successfully. An operation such as DMA loading
+   can replace this saved result before switching.
+6. Push [`syscall_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L144)
+   as the C return address and transfer control to
+   [`handle_syscall()`](kernel/syscall.picoc#L16). Its C epilogue restores `BAF`
+   to the context pointer before returning.
+
+Only the call arguments are copied to the kernel stack. The interrupted
+register values remain on the user-process stack.
+
+[`syscall_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L144)
+handles a normally returning kernel operation:
+
+1. Store the result from `IN2` in `caller_context[4]` before a reschedule can
+   move that context into the PCB's
+   [`activation.in2`](kernel/process/process.header#L23).
+2. Pass the context pointer to
+   [`dispatcher_reschedule_if_requested()`](kernel/dispatcher.picoc#L14), using
+   [`syscall_interrupt_restore()`](interrupt_service_routines/os_isrs.picoc#L159)
+   as its return address.
+3. Continue to restoration if the helper returns. If
+   [`reschedule_requested`](kernel/dispatcher.picoc#L8) is true, the helper
+   enters the dispatcher instead, as shown in the decision diagram above. The
+   complete helper is in
+   [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path).
+
+[`syscall_interrupt_restore()`](interrupt_service_routines/os_isrs.picoc#L159)
+resumes the caller when no switch was requested:
+
+1. Copy `BAF` to `SP` to select the saved user-process frame and discard the
+   kernel scratch call frames.
+2. Call [`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22)
+   to replace the kernel limit with the caller's limit. Kernel `CS` and `DS`
+   remain active while this helper reads the current PCB. Its temporary call
+   uses free space below the saved registers.
+3. Pop `DS`, `CS`, `BAF`, `IN2`, `IN1`, and `ACC`, including the saved syscall
+   result. `RTI` then consumes the saved PC, restores the pre-interrupt `SP`,
+   and resumes at the instruction after `INT 0`.
+
+#### 2.4.2.1 Handle Syscall
+[\[↑ TOC\]](#contents)
+
+[`handle_syscall()`](kernel/syscall.picoc#L16) selects the operation with an `if`/`else if` chain. It
+passes simple values directly and casts request pointers to their declared
+types. This excerpt shows both forms and a call needing the saved context:
+
+```c
+int handle_syscall(int syscall_number, int argument, int *caller_context) {
+    if (syscall_number == SYSCALL_SHUTDOWN) {
+        shutdown();
+        return 1;
+    } else if (syscall_number == SYSCALL_REBOOT) {
+        reboot();
+        return 1;
+    } else if (syscall_number == SYSCALL_LOAD_PROCESS) {
+        return load_process_chunk(
+            ((struct LoadProcessRequest *)argument)->path,
+            ((struct LoadProcessRequest *)argument)->show_loading_bar,
+            caller_context
+        );
+    } else if (syscall_number == SYSCALL_RUN_PROCESS_WITH_ARGUMENTS) {
+        return mark_process_ready_with_arguments((struct RunProcessRequest *)argument);
+    } else if (syscall_number == SYSCALL_LIST_PROCESSES) {
+        list_processes();
+        return 1;
+    } else if (syscall_number == SYSCALL_UNLOAD_PROCESS) {
+        return unload_process_by_pid(argument);
+    }
+
+    // ...
+
+    return 0;
+}
+```
+
+The dispatch rules are:
+
+1. Match a `SYSCALL_*` selector and call its kernel function, passing the
+   saved context when needed.
+2. Return the function's result in `IN2`, or `0` for an unknown selector.
+   Blocking, yielding, or terminating calls may switch processes before
+   reaching this return.
+
+##### 2.4.2.1.1 System-call groups
+[\[↑ TOC\]](#contents)
+
+PicoOS implements **37 syscalls**, declared in [`common/syscall.header`](common/syscall.header) and
+selected by [`handle_syscall()`](kernel/syscall.picoc#L16). The groups below organize them by subsystem:
+
+The `Kernel functions` column identifies the implementation reached by each
+group. [`2.4.1 Syscall selectors and register convention`](#241-syscall-selectors-and-register-convention) defines the argument convention and requests.
+
+| Group | Syscalls, in declaration order | Kernel functions |
+| --- | --- | --- |
+| System control | Shutdown, reboot | [`shutdown()`](kernel/kernel.picoc#L15), [`reboot()`](kernel/kernel.picoc#L19) |
+| Process management | Load, run, list, unload, exit, exact-child wait, PID query, terminal ownership, signal delivery, parent-death setting | [`load_process_chunk()`](kernel/process/process_loader.picoc#L292), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`list_processes()`](kernel/process/process.picoc#L32), [`unload_process_by_pid()`](kernel/process/process.picoc#L328), [`exit_process()`](kernel/process/process.picoc#L430), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), [`current_process()`](kernel/process/process.picoc#L62), [`set_foreground_process()`](kernel/signal.picoc#L148), [`send_signal_by_pid()`](kernel/signal.picoc#L108), [`set_parent_death_signal()`](kernel/signal.picoc#L137) |
+| Scheduling | Queue sleep, queue wakeup, yield | [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) |
+| Process and shared memory | Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink | [`process_heap_start()`](kernel/process/process.picoc#L418), [`process_heap_size()`](kernel/process/process.picoc#L424), [`handle_process_heap_full_exception()`](kernel/exception.picoc#L82), [`open_shared_memory()`](kernel/shared_memory.picoc#L92), [`map_shared_memory()`](kernel/shared_memory.picoc#L130), [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) |
+| Descriptors and I/O | Descriptor availability, open, read, write, close, seek, duplicate, direct UART byte send | Descriptor availability returns 1 directly, [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L146), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268), [`duplicate_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L163), [`send_byte_over_uart()`](kernel/uart_hardware.picoc#L9) |
+| Paths and directories | Change/get working directory, make/read directory, unlink file, remove directory, move path, touch file | [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156), [`make_host_directory()`](kernel/filesystem/host_filesystem.picoc#L177), [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187), [`unlink_host_file()`](kernel/filesystem/host_filesystem.picoc#L208), [`remove_host_directory()`](kernel/filesystem/host_filesystem.picoc#L212), [`move_host_path()`](kernel/filesystem/host_filesystem.picoc#L216), [`touch_host_file()`](kernel/filesystem/host_filesystem.picoc#L234) |
+
+#### 2.4.2.2 Selecting the return path
+[\[↑ TOC\]](#contents)
+
+A returning syscall saves its result, then checks [`reschedule_requested`](kernel/dispatcher.picoc#L8).
+This flag records whether the dispatcher should select a process before
+returning to userspace.
+
+These helpers set the flag and act on it. The second helper enters the
+dispatcher directly when the flag is set:
+
+```c
+bool reschedule_requested = false;
+
+void dispatcher_request_reschedule(void) {
+    reschedule_requested = true;
+}
+
+void dispatcher_reschedule_if_requested(int *caller_context) {
+    if (reschedule_requested) {
+        dispatcher_switch_from_context(caller_context);
+    }
+}
+```
+
+[`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10) sets `reschedule_requested = true`.
+Repeated requests keep it set. This saves no context and switches no process.
+
+[`dispatcher_reschedule_if_requested()`](kernel/dispatcher.picoc#L14) returns if the flag is clear.
+Otherwise it passes [`caller_context`](kernel/dispatcher.picoc#L71) to [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71).
+The saved syscall result becomes [`activation.in2`](kernel/process/process.header#L23) and survives the switch.
+
+A timer interrupt during kernel work sets the flag. A terminating signal
+for the current process also sets it and records [`pending_termination_signal`](kernel/process/process.header#L63).
+The dispatcher handles that termination at a safe point. See [`2.5.2 Kernel non-preemption and deferred rescheduling`](#252-kernel-non-preemption-and-deferred-rescheduling).
+
+After selection, this helper clears the flag, sets the current process, and
+passes its stack boundary to the restoration routine in [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti):
+
+```c
+void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
+    if (current_process() != NULL && current_process()->state == PROCESS_STATE_RUNNING) {
+        current_process()->state = PROCESS_STATE_READY;
+    }
+
+    reschedule_requested = false;
+    set_current_process(process);
+    process->state = PROCESS_STATE_RUNNING;
+
+    dispatcher_jump_to_process(process, process_stack_boundary(process));
+}
+```
+
+[`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) completes
+selection in these steps:
+
+1. If the outgoing process's [`state`](kernel/process/process.header#L33) is
+   [`PROCESS_STATE_RUNNING`](kernel/process/process.header#L14), change it to
+   [`PROCESS_STATE_READY`](kernel/process/process.header#L13).
+2. Clear [`reschedule_requested`](kernel/dispatcher.picoc#L8), make the
+   selected PCB the current process through
+   [`set_current_process()`](kernel/process/process.picoc#L66), and set its
+   [`state`](kernel/process/process.header#L33) to
+   [`PROCESS_STATE_RUNNING`](kernel/process/process.header#L14).
+3. Compute its limit with [`process_stack_boundary(process)`](kernel/exception.picoc#L18)
+   and call [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21).
+   That routine restores the selected process and finishes with `RTI`.
+
+Blocking, yielding, and exiting can dispatch inside [`handle_syscall()`](kernel/syscall.picoc#L16).
+Those paths restore a selected PCB's registers. Direct syscall restoration
+uses the caller's saved stack frame.
+
+The flag check and `RTI` are not atomic. A timer after the check leaves its
+request pending until a later scheduling point. A timer in userspace enters
+the dispatcher directly.
+
+#### 2.4.2.3 Stack-boundary helpers
+[\[↑ TOC\]](#contents)
+
+Switching stacks also changes the protection boundary in periphery cell
+`0x4000000a`. It is the lowest allowed free `SP`. Zero disables checking.
+Instructions that decrease `SP` below the limit fail, while automatic
+interrupt entry bypasses the check so an exhausted stack can report its fault.
+
+Kernel `SP` lies below the process boundary. Entry disables that limit,
+loads kernel `SP`, then installs the kernel limit. UART, DMA, and the timer
+branch for kernel work retain the interrupted stack and boundary.
+
+The inline writer in [`common/periphery_asm.header`](common/periphery_asm.header#L2) uses `IN1` without a C
+call frame. It can disable protection even on an almost exhausted stack.
+It clobbers `ACC`, which resumable entries have already saved:
+
+```c
+static inline void write_stack_heap_boundary_from_in1(void) {
+    asm("LOADI ACC 1048576");
+    asm("MULTI ACC 1024");
+    asm("STOREIN ACC IN1 10");
+}
+```
+
+The writer builds the periphery base in `ACC` and stores `IN1` in cell 10.
+Entry uses it with zero. The dispatcher uses it with the selected process's
+boundary after restoring `SP`.
+
+The C helpers in [`kernel/exception.picoc`](kernel/exception.picoc#L11) need ordinary call space, so
+entry installs kernel `SP` before calling them:
+
+```c
+void activate_kernel_stack_boundary(void) {
+    periphery_write_register(
+        STACK_HEAP_BOUNDARY_REGISTER,
+        KERNEL_HEAP_START + KERNEL_HEAP_SIZE - 1
+    );
+}
+
+int process_stack_boundary(struct ProcessControlBlock *process) {
+    return process->base_address + process->heap_start + process->heap_size - 1;
+}
+
+void activate_current_process_stack_boundary(void) {
+    periphery_write_register(
+        STACK_HEAP_BOUNDARY_REGISTER,
+        process_stack_boundary(current_process())
+    );
+}
+```
+
+[`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11) writes
+`KERNEL_HEAP_START + KERNEL_HEAP_SIZE - 1`, the final kernel-heap cell,
+through [`periphery_write_register()`](kernel/periphery.picoc#L11).
+
+[`process_stack_boundary(process)`](kernel/exception.picoc#L18) returns
+`base_address + heap_start + heap_size - 1` from the supplied PCB.
+
+[`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22) obtains the current PCB,
+computes its limit, and writes it. It changes protection without moving
+`SP` or scheduling.
+
+Direct syscall return reinstalls the caller's boundary. Scheduled return
+restores `SP` and writes the selected process's boundary in
+[`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21). Borrowed-stack handlers retain the existing
+limit.
+
+[`6.3 Saving the current process and selecting the next process`](#63-saving-the-current-process-and-selecting-the-next-process) shows saving the outgoing activation, and [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti) shows restoring the
+selected process. [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path) covers the selection helper.
+
+### 2.4.3 System-call selection function reference
+[\[↑ TOC\]](#contents)
+
+The C entry in [`kernel/syscall.picoc`](kernel/syscall.picoc) connects the ABI
+and saved caller context to the subsystem functions grouped above.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`handle_syscall(syscall_number, argument, caller_context)`](kernel/syscall.picoc#L16) | Returns the selected operation's result for immediate calls. Calls that switch processes leave through the saved interrupt frame. Exit, shutdown, and reboot do not return normally. | Selects one of 37 kernel operations and may change process, scheduler, memory, descriptor, or host-filesystem state | The kernel functions in [`2.4.2.1.1 System-call groups`](#24211-system-call-groups) | **System-call entry:** [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105) after userspace executes `INT 0` |
+
+## 2.5 Timer interrupts and userspace preemption
+[\[↑ TOC\]](#contents)
+
+Startup activates the timer with a 5,000-instruction interval after init
+is ready. This counts emulated instructions rather than wall-clock time.
+[`2.5.3 Shell character delay for different timer intervals`](#253-shell-character-delay-for-different-timer-intervals) explains the choice.
+
+### 2.5.1 Timer interrupt path
+[\[↑ TOC\]](#contents)
+
+The timer schedules immediately after interrupting userspace and defers
+scheduling after interrupting kernel work. This diagram follows both paths.
+`c` is the saved-frame pointer from [`2.3 Saved interrupt stack frame`](#23-saved-interrupt-stack-frame):
 
 ```mermaid
-sequenceDiagram
-    participant U as Userspace wrapper
-    participant I as syscall_interrupt
-    participant K as handle_syscall
-    participant S as Kernel subsystem
-    participant R as syscall_interrupt_return
-    participant D as Dispatcher
-    participant X as syscall_interrupt_restore
-
-    U->>I: INT 0 with selector in ACC and argument in IN1
-    I->>I: Save frame and install kernel context
-    I->>K: Pass selector, argument, caller_context
-    K->>S: Call selector's kernel function
-    S-->>K: Return result
-    K-->>R: Return through assembly continuation
-    R->>R: Store result in saved IN2
-    R->>D: dispatcher_reschedule_if_requested(caller_context)
-    alt Timer requested rescheduling
-        D->>D: Save activation and select next process
-        D-->>U: RTI when caller is selected again
-    else No pending reschedule
-        D-->>X: Return through restoration continuation
-        X-->>U: Restore registers and boundary, RTI
-    end
+flowchart LR
+    ENTRY["timer_interrupt<br/>Save six registers; load kernel CS/DS"] --> CHECK{"saved PC − kernel DS ≥ 0?"}
+    CHECK -->|no: kernel execution| REQUEST_K["dispatcher_request_reschedule<br/>reschedule_requested = true"]
+    REQUEST_K --> RETURN["timer_interrupt_kernel_return<br/>Six POPs + RTI"]
+    RETURN -->|syscall returns later| LATER["Same kernel work continues<br/>syscall_interrupt_return saves IN2"]
+    RETURN -->|kernel work dispatches directly| SELECT
+    LATER --> PENDING{"dispatcher_reschedule_if_requested(c)<br/>reschedule_requested?"}
+    PENDING -->|false| DIRECT["syscall_interrupt_restore<br/>Resume calling process with RTI"]
+    PENDING -->|true| DISPATCH["dispatcher_switch_from_context(c)<br/>Save process activation"]
+    CHECK -->|yes: user process| PROCESS["timer_interrupt_process<br/>BAF = c; kernel SP + boundary"]
+    PROCESS --> REQUEST_P["dispatcher_request_reschedule<br/>reschedule_requested = true"]
+    REQUEST_P --> AFTER["timer_interrupt_after_reschedule_request<br/>dispatcher_switch_from_context(c)"]
+    AFTER --> DISPATCH
+    DISPATCH --> SELECT["dispatcher_start_next_process<br/>→ dispatcher_switch_to_process<br/>reschedule_requested = false"]
+    SELECT --> RESTORE["dispatcher_jump_to_process<br/>Restore activation + boundary; RTI"]
 ```
-Immediate syscalls replace the saved `IN2` with the C return value. Before
-restoring the other registers, the return stub checks whether a timer requested
-rescheduling while the kernel was running. A pending request dispatches from
-the saved frame; otherwise the stub restores the process boundary and executes
-`RTI`. Saved `ACC` remains the syscall number, while saved `IN2` carries the
-result through either path.
 
-The userspace [`load()`](library/unistd/process.picoc#L17) and regular-file [`read()`](library/unistd/io.picoc#L6) wrappers repeat chunk syscalls
-while work remains without explicitly yielding. Blocking, yielding, exiting,
-deferred timer scheduling, and deferred termination may save or replace the
-activation and dispatch another process instead.
+The entry distinguishes them using the saved PC. This diagram isolates the
+implemented `>=` test:
 
-The selector table groups the implemented calls by subsystem. Its
-`Kernel functions` column identifies the entry points reached by each group;
-[the ABI chapter](#10-libraries-and-the-userspacekernel-abi) describes the
-individual request structures.
+```mermaid
+flowchart LR
+    LOAD["LOADIN SP ACC 7<br/>ACC = saved PC"] --> SUBTRACT["SUB ACC DS<br/>DS = kernel .data start"]
+    SUBTRACT --> CHECK{"JUMP32>= timer_interrupt_process<br/>saved PC − kernel DS ≥ 0?"}
+    CHECK -->|yes: user process| PROCESS["timer_interrupt_process<br/>Select fresh kernel stack"]
+    CHECK -->|no: kernel execution| KERNEL["Request reschedule<br/>Keep interrupted stack"]
+```
 
-| Group | Selectors | Purpose, in selector order | Kernel functions |
-| --- | --- | --- | --- |
-| System control | 0–1 | Shutdown, reboot | [`shutdown()`](kernel/kernel.picoc#L15), [`reboot()`](kernel/kernel.picoc#L19) |
-| Process management | 2–12 | Load, run, list, unload, exit, exact-child wait, PID query, test-process reset, terminal ownership, signal delivery, parent-death setting | [`load_process_chunk()`](kernel/process/process_loader.picoc#L292), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`list_processes()`](kernel/process/process.picoc#L32), [`unload_process_by_pid()`](kernel/process/process.picoc#L327), [`exit_process()`](kernel/process/process.picoc#L450), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368), [`current_process()`](kernel/process/process.picoc#L61), [`remove_test_processes()`](kernel/process/process.picoc#L347), [`set_foreground_process()`](kernel/signal.picoc#L146), [`send_signal_by_pid()`](kernel/signal.picoc#L106), [`set_parent_death_signal()`](kernel/signal.picoc#L135) |
-| Scheduling | 13–15 | Queue sleep, queue wakeup, yield | [`sleep_on_wait_queue()`](kernel/process/process.picoc#L410), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) |
-| Process memory | 16–21 | Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink | [`process_heap_start()`](kernel/process/process.picoc#L438), [`process_heap_size()`](kernel/process/process.picoc#L444), [`handle_process_heap_full_exception()`](kernel/exception.picoc#L81), [`open_shared_memory()`](kernel/shared_memory.picoc#L92), [`map_shared_memory()`](kernel/shared_memory.picoc#L130), [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) |
-| Descriptors and I/O | 22–29 | Descriptor availability, open, read, write, close, seek, duplicate, direct UART byte send | Selector 22 returns 1 directly; [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213), [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L143), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L260), [`duplicate_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L160), [`send_byte_over_uart()`](kernel/uart_hardware.picoc#L9) |
-| Paths and directories | 30–37 | Change/get working directory, make/read directory, unlink file, remove directory, move path, touch file | [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156), [`make_host_directory()`](kernel/filesystem/host_filesystem.picoc#L177), [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187), [`unlink_host_file()`](kernel/filesystem/host_filesystem.picoc#L208), [`remove_host_directory()`](kernel/filesystem/host_filesystem.picoc#L212), [`move_host_path()`](kernel/filesystem/host_filesystem.picoc#L216), [`touch_host_file()`](kernel/filesystem/host_filesystem.picoc#L234) |
-
-Multi-argument calls use stack-local request structures such as
-[`LoadProcessRequest`](common/syscall.header#L51), [`RunProcessRequest`](common/syscall.header#L56), [`WaitPidRequest`](common/syscall.header#L62), [`KillRequest`](common/syscall.header#L67),
-[`ShmOpenRequest`](common/syscall.header#L79), [`OpenRequest`](common/file.header#L26), [`IoRequest`](common/file.header#L31), and
-[`SeekRequest`](common/file.header#L41). The kernel reads them through the absolute pointer in `IN1`.
-They are not persistent kernel objects unless a subsystem explicitly copies a
-referenced value, such as a path or shared-memory name.
-
-## 4.4 Timer ISR and preemption
-
-The timer is mapped to vector 1 with priority 1 and activated with an interval
-of 1000 instructions after init becomes ready. The complete
-[`timer_interrupt()`](interrupt_service_routines/os_isrs.picoc#L33) entry,
-[`timer_interrupt_kernel_return()`](interrupt_service_routines/os_isrs.picoc#L62),
-[`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L74), and
-[`timer_interrupt_after_reschedule_request()`](interrupt_service_routines/os_isrs.picoc#L91)
-continuations are:
+The entry and its three continuations implement those paths:
 
 ```c
 __attribute__((naked))
@@ -1518,17 +2474,18 @@ void timer_interrupt(void) {
     asm("PUSH BAF");
     asm("PUSH CS");
     asm("PUSH DS");
-    // SP is saved later. From then on, its value is called old_sp
+    // SP now addresses the free cell below DS, CS, BAF, IN2, IN1 and ACC
 
     // Uses kernel segments because an interrupt can arrive during entry or return
-    asm(KERNEL_CS_START_ASM);
-    asm(KERNEL_DS_START_ASM);
+    asm(KERNEL_CS_START_ASM); // LOADI32 CS -2147483643
+    asm(KERNEL_DS_START_ASM); // LOADI32 DS -2147442882
 
-    // Process interrupts must leave the nearly exhausted process stack before
-    // calling kernel functions. Kernel interrupts keep their live kernel stack
-    asm("LOADIN SP ACC 7"); // Interrupted PC above the six saved registers
-    asm("SUB ACC DS");
-    asm("JUMP32>= timer_interrupt_process");
+    // Six saved registers put the automatic return PC at SP + 7.
+    // DS is now kernel .data's start: kernel code is below it, process code above.
+    // Test saved PC because CS may still be changing on kernel entry/return.
+    asm("LOADIN SP ACC 7"); // Saved return PC at SP + 7
+    asm("SUB ACC DS"); // Saved PC minus the kernel .data start
+    asm("JUMP32>= timer_interrupt_process"); // Nonnegative: process context
 
     asm("LOADI32 ACC timer_interrupt_kernel_return");
     asm("ADD ACC CS");
@@ -1540,7 +2497,7 @@ void timer_interrupt(void) {
 
 __attribute__((naked))
 void timer_interrupt_kernel_return(void) {
-    // The pending request is consumed when this kernel work returns to a process
+    // The request stays pending while the interrupted kernel instructions resume
     asm("POP DS");
     asm("POP CS");
     asm("POP BAF");
@@ -1552,11 +2509,11 @@ void timer_interrupt_kernel_return(void) {
 
 __attribute__((naked))
 void timer_interrupt_process(void) {
-    // BAF keeps old_sp while loading kernel CS, DS and SP
+    // BAF preserves caller_context while SP switches to the kernel stack
     asm("MOVE SP BAF");
     asm("LOADI IN1 0");
     write_stack_heap_boundary_from_in1();
-    asm(KERNEL_SP_START_ASM);
+    asm(KERNEL_SP_START_ASM); // LOADI32 SP -2147435340
     activate_kernel_stack_boundary();
 
     asm("LOADI32 ACC timer_interrupt_after_reschedule_request");
@@ -1581,37 +2538,198 @@ void timer_interrupt_after_reschedule_request(void) {
 }
 ```
 
-After saving six registers, the entry reads the interrupted `PC` seven cells
-above `SP` and compares it with the kernel data-segment boundary. It does this
-before building a call frame: [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10)
-needs stack space, and calling it while `SP` still referred to an almost-full
-process stack could cross that process's stack/heap boundary after kernel `CS`
-and `DS` were already active. The resulting fault would then appear to be a
-kernel stack overflow instead of the intended user-process stack overflow.
+[`timer_interrupt()`](interrupt_service_routines/os_isrs.picoc#L33) chooses
+between immediate and deferred scheduling in these steps:
 
-For a userspace interruption, [`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L74)
-preserves the process frame in `BAF`, disables its boundary while changing
-stacks, installs `KERNEL_SP_START_ASM`, and activates the kernel boundary before
-requesting rescheduling. Its continuation then passes the preserved frame to
-[`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71). For a kernel
-interruption, [`timer_interrupt_kernel_return()`](interrupt_service_routines/os_isrs.picoc#L62)
-keeps the live kernel stack, restores the saved registers, and executes `RTI`.
+1. Save `ACC`, `IN1`, `IN2`, `BAF`, `CS`, and `DS` on the interrupted stack.
+   Automatic entry has already saved the return PC, which is now at `SP + 7`.
+2. Load kernel `CS` and `DS` for the ISR's code and global data. Keep the
+   interrupted `SP` until the saved PC identifies the execution context.
+3. Execute `LOADIN SP ACC 7`, `SUB ACC DS`, and
+   `JUMP32>= timer_interrupt_process`. This loads the saved PC, subtracts the
+   start of kernel `.data`, and branches on a nonnegative result. The layout
+   below explains the comparison:
 
-If the timer interrupted userspace, its process activation is saved and goes
-through the scheduler immediately. If it interrupted kernel code, that code
-resumes directly and the pending request is consumed by the next syscall-return
-path. This keeps kernel execution non-preemptive without losing a time slice
-that expires inside a syscall.
+   ![Kernel execution below kernel DS and user-process execution strictly above it](documentation/images/timer-pc-memory-layout.svg)
 
-## 4.5 UART ISR
+Kernel `.text` is below kernel `DS`. User images are above it, in the
+Process and Shared Data Heap. The subtraction therefore distinguishes valid
+code addresses without overflow in the configured `2^18`-word SRAM.
 
-UART is mapped to vector 2 at the higher priority 2. The naked vector entry
-temporarily enters kernel code, calls [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L214), and restores
-the exact interrupted context. The C portion is:
+Equality also takes the userspace branch, but kernel `DS` is a data address,
+not a normal code location. Testing saved PC handles entry and restore
+windows where `CS` is changing.
+
+4. For a saved PC below kernel `DS`, keep the stack, request rescheduling,
+   and use [`timer_interrupt_kernel_return()`](interrupt_service_routines/os_isrs.picoc#L63). Otherwise continue through
+   [`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L75).
+
+[`timer_interrupt_kernel_return()`](interrupt_service_routines/os_isrs.picoc#L63)
+resumes the interrupted kernel work in these steps:
+
+1. Pop `DS`, `CS`, `BAF`, `IN2`, `IN1`, and `ACC` from the interrupted stack.
+   The request helper has already restored `SP` to the saved frame. This path
+   never replaced active `BAF` with that frame pointer, so it needs no
+   `MOVE BAF SP` or boundary change.
+2. Execute `RTI` to resume the interrupted kernel instructions. The pending
+   [`reschedule_requested`](kernel/dispatcher.picoc#L8) flag is checked at a
+   later scheduling point, as explained in
+   [`2.5.2 Kernel non-preemption and deferred rescheduling`](#252-kernel-non-preemption-and-deferred-rescheduling).
+
+[`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L75)
+prepares an immediate process switch in these steps:
+
+1. Copy the saved-frame pointer from `SP` to `BAF`, preserving the outgoing
+   process context while changing stacks. Kernel `CS` and `DS` are already active.
+2. Set `IN1 = 0`, call
+   [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2),
+   load kernel `SP`, and call
+   [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11). This makes
+   space for kernel calls without comparing kernel `SP` against the process's
+   old limit. The helpers are explained in
+   [`2.4.2.3 Stack-boundary helpers`](#2423-stack-boundary-helpers).
+3. Call [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10),
+   setting [`reschedule_requested`](kernel/dispatcher.picoc#L8) to `true`.
+   Use [`timer_interrupt_after_reschedule_request()`](interrupt_service_routines/os_isrs.picoc#L92)
+   as the return address.
+
+[`timer_interrupt_after_reschedule_request()`](interrupt_service_routines/os_isrs.picoc#L92)
+passes the saved process to the dispatcher in these steps:
+
+1. Push the context pointer held in `BAF` and a dummy return address of `0`
+   to prepare the C call.
+2. Transfer control to
+   [`dispatcher_switch_from_context(caller_context)`](kernel/dispatcher.picoc#L71).
+   It copies the saved registers into the current PCB's
+   [`activation`](kernel/process/process.header#L40), then starts process
+   selection. The selected process's restoration is described in
+   [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti).
+   This path switches directly, so it needs neither a pending-request check
+   nor a direct restoration of the old process's boundary.
+
+The kernel has no PCB of its own. Kernel execution includes syscalls, device
+handlers, and the dispatcher's wait loop. Resetting its stack during a timer
+interrupt would overwrite suspended call frames.
+
+### 2.5.2 Kernel non-preemption and deferred rescheduling
+[\[↑ TOC\]](#contents)
+
+Deferring a process switch lets a kernel operation finish before another
+process enters the kernel. Device interrupts can still run during that work.
+
+A timer during kernel execution requests a later switch and returns to the
+interrupted work. Syscall return checks the flag before resuming userspace,
+subject to the timing window in [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path). UART handlers also return to the
+interrupted operation. This serializes processes' kernel calls, while shared
+terminal state still needs protection against UART interrupts.
+
+Blocking, yielding, or termination can dispatch before the syscall return
+check. Selection clears the flag. If all processes are blocked, the
+dispatcher waits until an interrupt makes one runnable.
+
+Polling loads and regular-file reads transfer at most 1 KiB per syscall.
+Returning between chunks allows a pending timer request to schedule another
+process. DMA loading starts one payload transfer and blocks its caller until
+completion.
+
+### 2.5.3 Shell character delay for different timer intervals
+[\[↑ TOC\]](#contents)
+
+Shorter timer intervals give processes more frequent turns but spend more
+time switching. The following measurements time shell character delay while
+an endless empty loop is running:
+
+![Measured character delay for each timer interrupt interval](documentation/images/timer_interval_measurements.png)
+
+**PicoOS uses 5,000 instructions**. In these measurements, its character delay
+was close to 10,000, with less potential waiting between turns. Shorter
+intervals added switching overhead. See
+[Shell input latency and timer interval](documentation/shell_input_latency.md)
+for the method and results.
+
+## 2.6 UART receive interrupt path
+[\[↑ TOC\]](#contents)
+
+UART reception enters service routine 2 at priority 2. It handles one byte
+and resumes the interrupted context. The diagram follows the choice between
+a terminal signal and ordinary input:
+
+```mermaid
+flowchart LR
+    ENTRY["uart_interrupt<br/>Save registers and load kernel CS/DS"] --> HANDLE["handle_uart_interrupt<br/>Read and acknowledge byte"]
+    HANDLE --> SIGNAL{"handle_terminal_signal_character<br/>Recognized control character?"}
+    SIGNAL -->|yes| RETURN["uart_interrupt_return<br/>Restore context and execute RTI"]
+    SIGNAL -->|no| INPUT["enqueue_terminal_byte<br/>complete_pending_terminal_read"]
+    INPUT --> RETURN
+```
+
+The naked entry and return keep the interrupted stack:
+
+```c
+__attribute__((naked))
+void uart_interrupt(void) {
+    // Saves the interrupted context while the kernel transfers one input byte
+    asm("PUSH ACC");
+    asm("PUSH IN1");
+    asm("PUSH IN2");
+    asm("PUSH BAF");
+    asm("PUSH CS");
+    asm("PUSH DS");
+
+    // BAF keeps the interrupted stack while the handler uses kernel segments
+    // Keeping SP avoids overwriting a suspended kernel call frame when all
+    // processes are blocked and the dispatcher is waiting for an interrupt
+    asm("MOVE SP BAF");
+    asm(KERNEL_CS_START_ASM); // LOADI32 CS -2147483643
+    asm(KERNEL_DS_START_ASM); // LOADI32 DS -2147442882
+
+    asm("LOADI32 ACC uart_interrupt_return");
+    asm("ADD ACC CS");
+    asm("PUSH ACC");
+    asm("LOADI32 ACC handle_uart_interrupt");
+    asm("ADD ACC CS");
+    asm("MOVE ACC PC");
+}
+
+__attribute__((naked))
+void uart_interrupt_return(void) {
+    // Restores the context that was active before the UART interrupt
+    asm("MOVE BAF SP");
+    asm("POP DS");
+    asm("POP CS");
+    asm("POP BAF");
+    asm("POP IN2");
+    asm("POP IN1");
+    asm("POP ACC");
+    asm("RTI");
+}
+```
+
+[`uart_interrupt()`](interrupt_service_routines/os_isrs.picoc#L196) enters the
+handler in these steps:
+
+1. Save `ACC`, `IN1`, `IN2`, `BAF`, `CS`, and `DS`, preserving the interrupted
+   context alongside its automatically saved PC.
+2. Keep the saved-frame pointer in `BAF` and load kernel `CS` and `DS`.
+   Retain the interrupted `SP` and boundary so nested kernel calls remain intact.
+3. Push [`uart_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L221)
+   as the return address and transfer control to
+   [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213).
+
+[`uart_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L221)
+resumes the interrupted work in these steps:
+
+1. Copy `BAF` back to `SP` to select the saved frame after the C handler returns.
+2. Pop `DS`, `CS`, `BAF`, `IN2`, `IN1`, and `ACC`.
+3. Execute `RTI` to resume the interrupted instruction stream. This return
+   does not query the scheduling flag or switch processes.
+
+The complete C handler below acknowledges the byte before deciding whether it
+is a signal character or ordinary terminal input:
 
 ```c
 void handle_uart_interrupt(void) {
-    struct Process *process = terminal_input_process();
+    struct ProcessControlBlock *process = terminal_input_process();
     struct Terminal *terminal = kernel_terminal();
     int value;
     int status;
@@ -1632,20 +2750,234 @@ void handle_uart_interrupt(void) {
 }
 ```
 
-The ISR acknowledges one byte. `Ctrl+C` becomes [`SIGINT`](common/signal.header#L4) and `Ctrl+Z` becomes
-[`SIGTSTP`](common/signal.header#L8) for the foreground process. Any other byte enters the global terminal
-ring; if the foreground process is waiting, the handler copies into that
-process's pending read buffer, writes the result into its saved
-[`activation.in2`](kernel/process/process.header#L23), and wakes it.
+[`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) handles
+that byte in these steps:
 
-## 4.6 CPU exception path
+1. Obtain the input process through
+   [`terminal_input_process()`](kernel/signal.picoc#L178) and the
+   global terminal through [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22).
+2. Read the low byte from the receive register, read UART status, and write
+   status with [`UART_RECEIVE_READY`](kernel/filesystem/terminal.picoc#L10)
+   set to acknowledge the byte.
+3. Call [`handle_terminal_signal_character()`](kernel/signal.picoc#L192).
+   `Ctrl+C` sends [`SIGINT`](common/signal.header#L4), while `Ctrl+Z` sends
+   [`SIGTSTP`](common/signal.header#L8). Return immediately if the character
+   was handled as a signal.
+4. Offer an ordinary byte to the terminal ring through
+   [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49). A full ring drops
+   the new byte. Then call
+   [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182)
+   to copy available bytes to a waiting foreground reader, set its saved
+   [`activation.in2`](kernel/process/process.header#L23), and make it runnable.
+   The ring and overflow policy are explained in
+   [`8.2 Global terminal input buffer`](#82-global-terminal-input-buffer).
 
-Divide-by-zero, stack overflow, and illegal instruction set cause register 11
-and enter vector 3. The exception ISR retains the interrupted code segment long
-enough to identify a kernel or process fault, then loads the kernel context.
-The complete
-[`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L171)
-entry is:
+### 2.6.1 Borrowed-stack entry and return
+[\[↑ TOC\]](#contents)
+
+UART and DMA save registers and call their handlers on the interrupted
+stack. Calls use free space below the saved frame. Resetting kernel `SP`
+could overwrite suspended kernel calls.
+
+The existing stack limit remains active. A fault inside either handler is
+classified as a kernel exception once kernel `CS` has been installed, even
+when the handler is borrowing a user stack.
+
+The timer's kernel return uses the same register restoration but needs no
+`MOVE BAF SP`. Direct syscall return additionally changes the stack boundary,
+as shown in [`2.4.2 System-call entry, execution, and return to userspace`](#242-system-call-entry-execution-and-return-to-userspace).
+
+### 2.6.2 UART nesting and interrupt priorities
+[\[↑ TOC\]](#contents)
+
+The emulator allows only a strictly higher-priority hardware interrupt to
+nest inside an active handler. Software `INT 0` does not establish a hardware
+priority. With timer and DMA at `1` and UART at `2`, the result is:
+
+| Event | Context already executing | Result |
+| --- | --- | --- |
+| UART receive | Syscall, with no hardware handler active | UART runs immediately and returns to the same syscall work |
+| UART receive | Timer or DMA handler | UART priority `2` nests over priority `1`, then restores the interrupted handler |
+| Timer expiration | UART handler | Priority `1` waits in the emulator's pending-handler queue until UART returns |
+| DMA completion | UART handler | Priority `1` waits in that queue until UART returns |
+| Timer expiration | DMA handler | Equal priority waits until DMA returns |
+| DMA completion | Timer handler | Equal priority waits until timer completes its `RTI` path |
+| Another UART byte | UART handler or an already pending UART byte | The terminal input queue keeps it until the active byte's ISR completes |
+
+A pending timer runs after UART returns. It schedules a resumed user process
+or requests a later switch for kernel work. UART itself restores the
+interrupted context. It may wake a reader or send a terminal signal.
+
+`Ctrl+C` targeting the current process records [`pending_termination_signal`](kernel/process/process.header#L63)
+and requests scheduling. `Ctrl+Z` changes the process state without setting
+that flag. CPU selection enforces either change at the next scheduling point.
+[`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path) describes the request helpers.
+
+Lower or equal priorities wait. The timer keeps one expiration outstanding,
+DMA latches completion, and UART retains one byte while later terminal bytes
+queue on the host. Mapping UART to `255` leaves them queued. This differs
+from the kernel ring's full-buffer policy, which drops new bytes. The
+emulator reports pending-handler queue overflow explicitly.
+
+### 2.6.3 Polled UART function reference
+[\[↑ TOC\]](#contents)
+
+The interrupt path above handles terminal input. The target-specific functions
+in [`kernel/uart_hardware.picoc`](kernel/uart_hardware.picoc) provide the
+separate polled UART path used by kernel and directly linked common code.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`send_byte_over_uart(value)`](kernel/uart_hardware.picoc#L9) | Returns no value | Sends the low byte through UART register 0 and polls UART status, changes no kernel structure | [`switch_to_periphery_address_space()`](kernel/uart_hardware.picoc#L1) | **Library functions:** [`send_byte_over_uart()`](library/stdio/stdio.picoc#L19) through the direct-UART syscall<br>**Shared/Common functions:** [`uart_print_character()`](common/uart_protocol.picoc#L21), linked directly to the kernel implementation<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`receive_byte_over_uart(void)`](kernel/uart_hardware.picoc#L24) | Returns one received byte | Polls UART status and reads UART register 1, changes no kernel structure | [`switch_to_periphery_address_space()`](kernel/uart_hardware.picoc#L1) | **Shared/Common functions:** [`receive_word()`](common/uart_protocol.picoc#L7), linked directly to the kernel implementation<br>**Kernel functions:** [`drain_process_bytes()`](kernel/process/process_loader.picoc#L62), [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90), [`uart_receive_string()`](kernel/filesystem/host_filesystem.picoc#L10) |
+
+## 2.7 DMA completion interrupt path
+[\[↑ TOC\]](#contents)
+
+DMA completion enters service routine 4 and wakes the waiting loader. The
+loader checks success or failure when it next runs. This diagram follows
+delivery and wakeup:
+
+```mermaid
+flowchart LR
+    PENDING["DMA completion/error latched<br/>Mapping enabled"] --> PRIORITY{"No active hardware ISR<br/>or strictly higher priority?"}
+    PRIORITY -->|no| WAIT["Pending-handler queue<br/>Retry after active ISR returns"]
+    PRIORITY -->|yes| ENTRY["dma_interrupt<br/>Save registers; keep SP; kernel CS/DS"]
+    WAIT --> PRIORITY
+    ENTRY --> HANDLE["handle_dma_interrupt<br/>wakeup_wait_queue(&dma_waiters)"]
+    HANDLE --> QUEUE{"dma_waiters.head != NULL?"}
+    QUEUE -->|yes| WAKE["Remove FIFO head<br/>End its DMA wait"]
+    QUEUE -->|no| RETURN["dma_interrupt_return<br/>Restore interrupted context; RTI"]
+    WAKE --> RETURN
+```
+
+The entry and return borrow the interrupted stack. The C handler wakes a
+waiter and leaves process selection to the dispatcher:
+
+```c
+__attribute__((naked))
+void dma_interrupt(void) {
+    // Saves the interrupted context while the kernel completes the DMA wait
+    asm("PUSH ACC");
+    asm("PUSH IN1");
+    asm("PUSH IN2");
+    asm("PUSH BAF");
+    asm("PUSH CS");
+    asm("PUSH DS");
+
+    // BAF keeps the interrupted stack while the handler uses kernel segments
+    asm("MOVE SP BAF");
+    asm(KERNEL_CS_START_ASM); // LOADI32 CS -2147483643
+    asm(KERNEL_DS_START_ASM); // LOADI32 DS -2147442882
+
+    asm("LOADI32 ACC dma_interrupt_return");
+    asm("ADD ACC CS");
+    asm("PUSH ACC");
+    asm("LOADI32 ACC handle_dma_interrupt");
+    asm("ADD ACC CS");
+    asm("MOVE ACC PC");
+}
+
+__attribute__((naked))
+void dma_interrupt_return(void) {
+    // Restores the context that was active before the DMA interrupt
+    asm("MOVE BAF SP");
+    asm("POP DS");
+    asm("POP CS");
+    asm("POP BAF");
+    asm("POP IN2");
+    asm("POP IN1");
+    asm("POP ACC");
+    asm("RTI");
+}
+
+void handle_dma_interrupt(void) {
+    wakeup_wait_queue(&dma_waiters);
+}
+```
+
+[`dma_interrupt()`](interrupt_service_routines/os_isrs.picoc#L234) enters
+the C handler in these steps:
+
+1. Save `ACC`, `IN1`, `IN2`, `BAF`, `CS`, and `DS` on the interrupted stack.
+2. Keep the saved-frame pointer in `BAF` and load kernel `CS` and `DS` so the
+   handler can access [`dma_waiters`](kernel/dma.picoc#L6). Preserve `SP` and
+   the active boundary to protect suspended kernel calls.
+3. Push [`dma_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L257)
+   as the return address and transfer control to
+   [`handle_dma_interrupt()`](kernel/dma.picoc#L40).
+
+[`handle_dma_interrupt()`](kernel/dma.picoc#L40) calls [`wakeup_wait_queue(&dma_waiters)`](kernel/process/process.picoc#L395). It removes
+the FIFO head, clears its wait links, and makes it ready. For a stopped
+process, it records that state in [`stopped_from_state`](kernel/process/process.header#L62). An empty queue is
+unchanged.
+
+[`dma_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L257)
+resumes the interrupted work in these steps:
+
+1. Copy `BAF` back to `SP` to select the saved frame after the C handler returns.
+2. Pop `DS`, `CS`, `BAF`, `IN2`, `IN1`, and `ACC`.
+3. Execute `RTI`, without querying the reschedule flag or dispatching a process.
+   The stack and boundary behavior matches
+   [`2.6.1 Borrowed-stack entry and return`](#261-borrowed-stack-entry-and-return).
+
+[`initialize_dma()`](kernel/dma.picoc#L9) initializes [`dma_waiters`](kernel/dma.picoc#L6). [`start_dma_uart_receive()`](kernel/dma.picoc#L18)
+accepts one transfer when DMA is active and idle with no waiter. It saves
+the continuation result, queues the caller, programs DMA, and dispatches.
+Completion makes the caller runnable.
+
+DMA and the timer have equal priority, so they wait for each other's handler.
+UART can interrupt either. DMA can interrupt a syscall and then return to it.
+[`2.6.2 UART nesting and interrupt priorities`](#262-uart-nesting-and-interrupt-priorities) explains nesting and pending events.
+
+### 2.7.1 DMA waiting and completion function reference
+[\[↑ TOC\]](#contents)
+
+The functions in [`kernel/dma.picoc`](kernel/dma.picoc) connect process
+loading to the DMA registers and the completion path described above.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`initialize_dma(void)`](kernel/dma.picoc#L9) | Returns no value | Initializes [`dma_waiters`](kernel/dma.picoc#L6) and sets [`dma_initialized`](kernel/dma.picoc#L7) once when DMA is active, otherwise changes nothing | [`dma_is_active()`](common/dma.picoc#L17) | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31), [`start_dma_uart_receive()`](kernel/dma.picoc#L18) |
+| [`start_dma_uart_receive(destination, word_count, caller_context)`](kernel/dma.picoc#L18) | Returns `false` when DMA is unavailable, busy, or already has a waiter. Successful setup does not return through the current kernel call. The process later resumes from its saved interrupt frame with [`SYSCALL_LOAD_PROCESS_CONTINUE`](common/syscall.header#L48). | Stores the continuation result in the saved syscall frame, blocks the caller on [`dma_waiters`](kernel/dma.picoc#L6), starts a UART-to-SRAM transfer, and switches processes | [`dma_is_active()`](common/dma.picoc#L17), [`initialize_dma()`](kernel/dma.picoc#L9), [`dma_transfer_status()`](common/dma.picoc#L21), [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`start_dma_uart_transfer()`](common/dma.picoc#L25), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109) |
+| [`handle_dma_interrupt(void)`](kernel/dma.picoc#L40) | Returns no value | Wakes the first process whose PCB is queued on [`dma_waiters`](kernel/dma.picoc#L6) | [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) | **Hardware interrupts:** DMA completion via [`dma_interrupt()`](interrupt_service_routines/os_isrs.picoc#L234) |
+
+## 2.8 CPU exceptions and runtime errors
+[\[↑ TOC\]](#contents)
+
+CPU exceptions report instructions that cannot continue. Allocators report
+heap exhaustion separately. The kernel either terminates the affected
+process or halts the system, depending on where the failure occurred.
+
+### 2.8.1 CPU exception entry and registers
+[\[↑ TOC\]](#contents)
+
+Division or modulo by zero, stack overflow, and illegal instructions enter
+service routine 3 directly, bypassing device mappings and priorities. The
+diagram shows why the faulting context does not resume:
+
+```mermaid
+flowchart LR
+    ENTRY["cpu_exception_interrupt<br/>Preserve old CS and select kernel context"] --> HANDLE["handle_cpu_exception<br/>Read cause and compare old CS with kernel CS"]
+    HANDLE --> KERNEL{"Old CS equals kernel CS?"}
+    KERNEL -->|yes| PANIC["Print kernel panic"] --> HALT["shutdown<br/>JUMP 0"]
+    KERNEL -->|no| EXIT["Print process error<br/>exit_process with exception status"]
+    EXIT --> NEXT["dispatcher_start_next_process<br/>Wait for a runnable process"]
+    NEXT --> SELECT{"Process selected?"}
+    SELECT -->|no processes remain| HALT
+    SELECT -->|yes| RESTORE["dispatcher_jump_to_process<br/>Restore selected process and execute RTI"]
+```
+
+The two periphery registers below control protection and report the cause.
+They connect the emulator's fault detection to the kernel handler:
+
+| Register | Written by | Contents and use |
+| ---: | --- | --- |
+| 10, [`STACK_HEAP_BOUNDARY_REGISTER`](kernel/exception.header#L5) | PicoOS | `0` disables stack protection. Any other value is the active boundary, the emulator raises a stack-overflow exception when an instruction decreases `SP` to a value below it. [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11) writes [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3) + [`KERNEL_HEAP_SIZE`](kernel/memory_constants.header#L4) − 1. A process boundary is [`base_address`](kernel/process/process.header#L34) + [`heap_start`](kernel/process/process.header#L36) + [`heap_size`](kernel/process/process.header#L37) − 1. |
+| 11, [`CPU_EXCEPTION_CAUSE_REGISTER`](kernel/exception.header#L6) | RETI CPU/emulator | `0` means no exception has been recorded, `1` means division or modulo by zero, `2` means stack overflow, and `3` means illegal instruction. Guest writes are ignored. [`handle_cpu_exception()`](kernel/exception.picoc#L70) reads this value after exception entry. |
+
+Exception entry saves the faulting PC minus one. The naked handler abandons
+that context, so it does not save the other registers:
 
 ```c
 __attribute__((naked))
@@ -1654,9 +2986,9 @@ void cpu_exception_interrupt(void) {
     asm("MOVE CS BAF");
     asm("LOADI IN1 0");
     write_stack_heap_boundary_from_in1();
-    asm(KERNEL_CS_START_ASM);
-    asm(KERNEL_DS_START_ASM);
-    asm(KERNEL_SP_START_ASM);
+    asm(KERNEL_CS_START_ASM); // LOADI32 CS -2147483643
+    asm(KERNEL_DS_START_ASM); // LOADI32 DS -2147442882
+    asm(KERNEL_SP_START_ASM); // LOADI32 SP -2147435340
     activate_kernel_stack_boundary();
 
     // A zero difference identifies an exception raised in kernel code
@@ -1673,8 +3005,27 @@ void cpu_exception_interrupt(void) {
 }
 ```
 
-The normal C policy in
-[`handle_cpu_exception()`](kernel/exception.picoc#L69) is:
+[`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L172)
+prepares the exception handler in these steps:
+
+1. Preserve the interrupted `CS` value in `BAF`. Here `BAF` temporarily holds
+   a value used for classification, rather than a saved-frame pointer.
+2. Set `IN1 = 0` and call
+   [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2).
+   Load kernel `CS`, `DS`, and `SP`, then call
+   [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11). Even a
+   kernel fault resets `SP`, because the interrupted stack may be exhausted
+   and its call frames will not be resumed. The helpers are explained in
+   [`2.4.2.3 Stack-boundary helpers`](#2423-stack-boundary-helpers).
+3. Subtract kernel `CS` from the preserved old `CS` and push the difference
+   as the C handler's argument. The boundary helper preserves the old value
+   across its ordinary C call.
+4. Push a dummy return address of `0` and transfer control to
+   [`handle_cpu_exception()`](kernel/exception.picoc#L70). This handler halts
+   or terminates the process, so it never returns through that address.
+
+The C handler below implements the two outcomes using the supplied CS
+comparison and the cause register:
 
 ```c
 void handle_cpu_exception(int interrupted_kernel_cs_difference) {
@@ -1690,119 +3041,460 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 }
 ```
 
-A user fault prints through descriptor 1 and terminates only the current
-process. A kernel fault prints directly over UART and halts. Process heap
-exhaustion is not a CPU exception; userspace invokes syscall 18, which calls
-[`handle_process_heap_full_exception()`](kernel/exception.picoc#L81). Kernel-heap exhaustion calls
-[`panic_kernel_heap_full()`](kernel/exception.picoc#L88).
+[`handle_cpu_exception()`](kernel/exception.picoc#L70) handles the fault in
+these steps:
 
-Periphery register 10 protects the active heap/stack boundary:
+1. Read [`CPU_EXCEPTION_CAUSE_REGISTER`](kernel/exception.header#L6), then
+   determine whether the interrupted CS difference is zero.
+2. Call [`print_cpu_exception_message()`](kernel/exception.picoc#L44). A kernel
+   message goes directly over UART, while a process message uses descriptor 1.
+3. For interrupted kernel `CS`, call [`shutdown()`](kernel/kernel.picoc#L15)
+   and halt with `JUMP 0`.
+4. Otherwise call [`exit_process(PROCESS_EXIT_STATUS_EXCEPTION)`](kernel/process/process.picoc#L430).
+   It reaches [`terminate_process()`](kernel/process/process.picoc#L304),
+   records [`exit_status`](kernel/process/process.header#L60), changes
+   [`state`](kernel/process/process.header#L33) to
+   [`PROCESS_STATE_ZOMBIE`](kernel/process/process.header#L17), and removes
+   the PCB immediately when no parent needs to collect it.
+5. Enter [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55).
+   The selected process resumes through the steps in
+   [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti).
+   If the process list becomes empty, selection returns and
+   [`exit_process()`](kernel/process/process.picoc#L430) shuts down. The
+   faulting process's saved PC and registers are never restored.
 
-- kernel boundary: [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3) + [`KERNEL_HEAP_SIZE`](kernel/memory_constants.header#L4) − 1
-- process boundary: [`base_address`](kernel/process/process.header#L34) + [`heap_start`](kernel/process/process.header#L36) + [`heap_size`](kernel/process/process.header#L37) − 1
+Exceptions classify the context by interrupted `CS`. The timer instead uses
+saved PC. During entry or restoration these can disagree. A borrowed-stack
+UART or DMA handler has kernel `CS` and therefore takes the panic path.
 
-The dispatcher installs the selected process boundary before `RTI`. Interrupt
-entries temporarily disable the old boundary while changing stacks.
+Exception entry discards the old stack and dispatches directly after
+termination. Process heap exhaustion enters through a syscall but also
+terminates the process instead of returning.
 
-## 4.7 Important interrupt and exception functions
+### 2.8.2 Supported exceptions and allocation errors
+[\[↑ TOC\]](#contents)
 
-The entries below separate returned status, state changes, and direct calls so
-the interrupt boundary can be followed into the owning subsystem.
+The table lists CPU exceptions and allocator failures. Rejected arguments,
+missing files, and invalid images return normal failure values:
 
-| Kernel function | Return value / status | Effects | Calls |
+| Condition | Trigger | Entry or reported cause | PicoOS handling |
 | --- | --- | --- | --- |
-| [`periphery_read_register()`](kernel/periphery.picoc#L5) | Returns the selected periphery value | Reads one memory-mapped periphery cell; changes no kernel structure | — |
-| [`periphery_write_register()`](kernel/periphery.picoc#L11) | Returns no value | Changes one memory-mapped periphery cell | — |
-| [`interrupt_controller_initialize()`](kernel/interrupt_controller.picoc#L41) | Returns no value | Rewrites timer, DMA, and UART mappings/priorities in periphery registers 3–8 from [`interrupt_device_isrs`](kernel/interrupt_controller.picoc#L3) and [`interrupt_device_priorities`](kernel/interrupt_controller.picoc#L9) | [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59) |
-| [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59) | Returns no value | Writes one device vector and priority | [`periphery_write_register()`](kernel/periphery.picoc#L11), [`interrupt_controller_device_to_isr_register()`](kernel/interrupt_controller.picoc#L15), [`interrupt_controller_device_to_priority_register()`](kernel/interrupt_controller.picoc#L19) |
-| [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23) | Returns no value | Writes mapping 255 and priority 0 for one device | [`periphery_write_register()`](kernel/periphery.picoc#L11), [`interrupt_controller_device_to_isr_register()`](kernel/interrupt_controller.picoc#L15), [`interrupt_controller_device_to_priority_register()`](kernel/interrupt_controller.picoc#L19) |
-| [`interrupt_controller_activate_timer()`](kernel/interrupt_controller.picoc#L34) | Returns no value | Writes the 1000-instruction timer interval | [`periphery_write_register()`](kernel/periphery.picoc#L11) |
-| [`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11) | Returns no value | Selects the kernel heap end in periphery register 10 | [`periphery_write_register()`](kernel/periphery.picoc#L11) |
-| [`process_stack_boundary()`](kernel/exception.picoc#L18) | Returns one PCB's absolute heap end | Reads the process [`base_address`](kernel/process/process.header#L34), [`heap_start`](kernel/process/process.header#L36), and [`heap_size`](kernel/process/process.header#L37) | — |
-| [`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22) | Returns no value | Writes the current PCB boundary to periphery register 10 | [`periphery_write_register()`](kernel/periphery.picoc#L11), [`process_stack_boundary()`](kernel/exception.picoc#L18), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`handle_cpu_exception()`](kernel/exception.picoc#L69) | Does not return normally | Reads exception cause; shuts down for a kernel fault or terminates the current PCB for a process fault | [`periphery_read_register()`](kernel/periphery.picoc#L5), [`print_cpu_exception_message()`](kernel/exception.picoc#L43), [`shutdown()`](kernel/kernel.picoc#L15), [`exit_process()`](kernel/process/process.picoc#L450) |
-| [`handle_process_heap_full_exception()`](kernel/exception.picoc#L81) | Does not return normally | Writes a diagnostic through descriptor 1 and terminates the current PCB | [`write_process_exception_message()`](kernel/exception.picoc#L29), [`exit_process()`](kernel/process/process.picoc#L450) |
-| [`panic_kernel_heap_full()`](kernel/exception.picoc#L88) | Does not return | Writes a UART diagnostic and shuts down | [`uart_print_string()`](common/uart_protocol.picoc#L73), [`shutdown()`](kernel/kernel.picoc#L15) |
-| [`handle_syscall()`](kernel/syscall.picoc#L16) | Selector-dependent result; may not return through this activation | Delegates to the process, wait, signal, memory, file, or directory subsystem; may mutate, block, dispatch, or terminate | See the `Kernel functions` column in [System-call path](#43-system-call-path) |
-| [`send_byte_over_uart()`](kernel/uart_hardware.picoc#L9) | Returns no value | Polls UART state and transmits the low byte; changes no kernel structure | [`switch_to_periphery_address_space()`](kernel/uart_hardware.picoc#L1) |
-| [`receive_byte_over_uart()`](kernel/uart_hardware.picoc#L24) | Returns one received byte | Polls UART state and returns one byte; changes no kernel structure | [`switch_to_periphery_address_space()`](kernel/uart_hardware.picoc#L1) |
+| Division or modulo by zero | A RETI `DIV`, `DIVI`, `MOD`, or `MODI` instruction has a zero divisor | CPU exception cause `1`, interrupt service routine table entry 3 | [`handle_cpu_exception()`](kernel/exception.picoc#L70) reports division by zero. It terminates the current process with exception status for a userspace fault, or reports a kernel panic and shuts down for a kernel fault. |
+| Stack overflow | An instruction decreases `SP` below the active boundary in periphery register 10 | CPU exception cause `2`, interrupt service routine table entry 3 | [`handle_cpu_exception()`](kernel/exception.picoc#L70) reports process stack overflow and terminates that process, or reports kernel stack overflow and shuts down. |
+| Illegal instruction | The fetched word is not a valid RETI instruction, or instruction decoding reaches an unsupported opcode | CPU exception cause `3`, interrupt service routine table entry 3 | [`handle_cpu_exception()`](kernel/exception.picoc#L70) reports an illegal instruction and applies the process-or-kernel policy above. The message helper also treats any unexpected cause value as illegal instruction. |
+| Process heap full | [`malloc()`](library/stdlib/malloc.picoc#L35) or [`realloc()`](library/stdlib/malloc.picoc#L42) cannot satisfy a positive-size allocation | [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8) invokes the process-heap-full syscall | [`handle_process_heap_full_exception()`](kernel/exception.picoc#L82) reports `Process terminated: heap full` through descriptor 1 and terminates the current process with exception status. |
+| Kernel heap full | [`kmalloc()`](kernel/kmalloc.picoc#L23) or [`krealloc()`](kernel/kmalloc.picoc#L31) cannot satisfy a positive-size allocation | [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9) calls the panic handler directly | [`panic_kernel_heap_full()`](kernel/exception.picoc#L89) writes `Kernel panic: kernel heap full` directly over UART and shuts down. |
+| Process and Shared Data Heap exhausted | [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) cannot reserve a contiguous Process Payload or Shared Data Payload | Returns [`PSDMALLOC_INVALID_START`](kernel/psdmalloc.header#L3), no CPU exception is raised | [`begin_process_load()`](kernel/process/process_loader.picoc#L109) and [`load_process()`](kernel/process/process_loader.picoc#L305) report `error: not enough process memory` and fail the load. [`open_shared_memory()`](kernel/shared_memory.picoc#L92) frees the new entry and returns `-1`. The running process and kernel continue. |
 
-# 5. Processes and the process table
+### 2.8.3 Exception and stack-boundary function reference
+[\[↑ TOC\]](#contents)
 
-Interrupt and syscall handling ultimately operates on a current process and
-its saved machine state. This chapter defines the PCB, process image, and
-state transitions that the scheduler, dispatcher, and resource subsystems
-share.
+Functions in [`kernel/exception.picoc`](kernel/exception.picoc) manage the
+active stack boundary and decide whether a fault terminates a process or the
+kernel. The table also includes the two heap-exhaustion handlers implemented in
+that file.
 
-## 5.1 Global process table
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`handle_process_heap_full_exception(void)`](kernel/exception.picoc#L82) | Does not return normally | Writes a diagnostic through descriptor 1 and terminates the current process with exception status | [`write_process_exception_message()`](kernel/exception.picoc#L29), [`exit_process()`](kernel/process/process.picoc#L430) | **Library functions:** [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8) through the process-heap-full syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`activate_kernel_stack_boundary(void)`](kernel/exception.picoc#L11) | Returns no value | Writes the kernel heap end to periphery register 10 | [`periphery_write_register()`](kernel/periphery.picoc#L11) | **System-call entry:** [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105)<br>**Hardware interrupts:** timer via [`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L75)<br>**CPU exceptions:** [`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L172)<br>**Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+| [`process_stack_boundary(process)`](kernel/exception.picoc#L18) | Returns the process's absolute heap end | Reads [`base_address`](kernel/process/process.header#L34), [`heap_start`](kernel/process/process.header#L36), and [`heap_size`](kernel/process/process.header#L37), changes no state | None | **Kernel functions:** [`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) |
+| [`activate_current_process_stack_boundary(void)`](kernel/exception.picoc#L22) | Returns no value | Writes the current process boundary to periphery register 10 | [`current_process()`](kernel/process/process.picoc#L62), [`process_stack_boundary()`](kernel/exception.picoc#L18), [`periphery_write_register()`](kernel/periphery.picoc#L11) | **System-call return:** [`syscall_interrupt_restore()`](interrupt_service_routines/os_isrs.picoc#L159) |
+| [`handle_cpu_exception(interrupted_kernel_cs_difference)`](kernel/exception.picoc#L70) | Does not return normally | Reads register 11, terminates the current process for a process fault or shuts down for a kernel fault | [`periphery_read_register()`](kernel/periphery.picoc#L5), [`print_cpu_exception_message()`](kernel/exception.picoc#L44), [`shutdown()`](kernel/kernel.picoc#L15), [`exit_process()`](kernel/process/process.picoc#L430) | **CPU exceptions:** [`cpu_exception_interrupt()`](interrupt_service_routines/os_isrs.picoc#L172) |
+| [`panic_kernel_heap_full(void)`](kernel/exception.picoc#L89) | Does not return | Writes a UART kernel-panic message and shuts down | [`uart_print_string()`](common/uart_protocol.picoc#L73), [`shutdown()`](kernel/kernel.picoc#L15) | **Kernel functions:** [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9) |
 
-The process table is a singly linked list, not an array and not one
-[`kmalloc()`](kernel/kmalloc.picoc#L23) allocation. These four definitions in
-[`kernel/process/process.picoc`](kernel/process/process.picoc) are globals in
-kernel `.data`:
+# 3. Memory management and shared memory
+[\[↑ TOC\]](#contents)
 
-```c
-struct Process *process_list_head = NULL;
-struct Process *process_list_tail = NULL;
-struct Process *active_process = NULL;
-int next_process_id = 1;
-```
+PicoOS manages one physical SRAM address space with a common allocator.
+This chapter explains its block list and the three heaps that store kernel
+objects, process payloads, and userspace allocations.
 
-[`process_list_head`](kernel/process/process.picoc#L16) is the traversal entry,
-[`process_list_tail`](kernel/process/process.picoc#L17) makes append cheap,
-[`active_process`](kernel/process/process.picoc#L18) is the PCB whose activation
-is currently in the CPU, and [`next_process_id`](kernel/process/process.picoc#L19)
-supplies monotonically increasing PIDs. Each linked
-[`struct Process`](kernel/process/process.header#L31) PCB is separately allocated
-with [`kmalloc()`](kernel/kmalloc.picoc#L23). [`first_process()`](kernel/process/process.picoc#L28)
-and [`current_process()`](kernel/process/process.picoc#L61) provide access to the
-important globals.
+## 3.1 Heap block layout and allocation algorithm
+[\[↑ TOC\]](#contents)
 
-The scheduler scans this same list. There is no separate ready queue. Blocking
-queues use a different intrusive link inside each PCB, so [`next`](kernel/process/process.header#L53) remains
-available for process-table order.
-
-## 5.2 Activation record
-
-The [`struct ActivationRecord`](kernel/process/process.header#L21) is embedded
-in the PCB. The definition below fixes the register order used by assembly;
-the following attribute table explains who initializes and later uses each value:
+[`Heap.first_block`](common/heap.header#L12) starts the allocator's list. Each [`BlockHeader`](common/heap.header#L5) describes
+the payload immediately after it. The definition and field table show how
+the allocator uses them:
 
 ```c
-struct ActivationRecord {
-    int in1;
-    int in2;
-    int acc;
-    int sp;
-    int baf;
-    int cs;
-    int ds;
+struct BlockHeader {
+    int size;
+    bool free;
+    struct BlockHeader *next;
+};
+
+struct Heap {
+    struct BlockHeader *first_block;
 };
 ```
 
-| Attribute | Meaning | Used by |
+[`Heap`](common/heap.header#L11) stores a pointer to the first header, separate from the managed
+region. [`heap_init_region()`](common/heap.picoc#L49) creates the initial free block. Allocation uses
+first fit and may split a block. Freeing merges adjacent free blocks.
+Reallocation can resize in place or move the payload.
+
+Every header occupies three cells for [`size`](common/heap.header#L6), [`free`](common/heap.header#L7), and [`next`](common/heap.header#L8). This
+four-block example shows physical adjacency and the header-pointer chain:
+
+![One contiguous heap with Block Headers A–D and adjacent payloads, rooted at Heap.first_block](documentation/images/memory-generic-heap.svg)
+
+The links point to headers. Merging free neighbors combines their payloads
+and the intervening header into one larger payload.
+
+| Field | Meaning | Used by |
 | --- | --- | --- |
-| [`in1`](kernel/process/process.header#L22), [`in2`](kernel/process/process.header#L23), [`acc`](kernel/process/process.header#L24) | General argument/result registers at the suspension point | First initialized by [`create_process()`](kernel/process/process.picoc#L88); saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
-| [`sp`](kernel/process/process.header#L25) | Free cell immediately below the saved return PC on the process stack | First initialized by [`create_process()`](kernel/process/process.picoc#L88); rebuilt by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
-| [`baf`](kernel/process/process.header#L26) | Base address of the interrupted PicoC function frame | First initialized by [`create_process()`](kernel/process/process.picoc#L88); rebuilt by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
-| [`cs`](kernel/process/process.header#L27) | Absolute code-segment base used for instruction addresses | First initialized by [`create_process()`](kernel/process/process.picoc#L88); saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
-| [`ds`](kernel/process/process.header#L28) | Absolute data-segment base used for globals/static data | First initialized by [`create_process()`](kernel/process/process.picoc#L88); saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`BlockHeader.size`](common/heap.header#L6) | Number of usable cells after this header, excluding the header itself | First initialized by [`heap_init_region()`](common/heap.picoc#L49), read by [`heap_alloc_from()`](common/heap.picoc#L65), read/changed by [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), and [`heap_realloc_from()`](common/heap.picoc#L87) |
+| [`BlockHeader.free`](common/heap.header#L7) | Whether the associated cells may satisfy an allocation | First initialized by [`heap_init_region()`](common/heap.picoc#L49), initialized for new split headers by [`heap_split_block()`](common/heap.picoc#L14), read/changed by [`heap_alloc_from()`](common/heap.picoc#L65), changed by [`heap_free_from()`](common/heap.picoc#L146), read by [`heap_realloc_from()`](common/heap.picoc#L87) and [`heap_merge_free_blocks()`](common/heap.picoc#L30) |
+| [`BlockHeader.next`](common/heap.header#L8) | Address of the next in-region header, or `NULL`. Splitting inserts and merging removes links | First initialized by [`heap_init_region()`](common/heap.picoc#L49), read by [`heap_alloc_from()`](common/heap.picoc#L65), read/changed by [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), and [`heap_realloc_from()`](common/heap.picoc#L87) |
+| [`Heap.first_block`](common/heap.header#L12) | First header in the managed region, the descriptor owns no separate block array | First initialized by [`heap_init_region()`](common/heap.picoc#L49), read by [`heap_alloc_from()`](common/heap.picoc#L65) and [`heap_merge_free_blocks()`](common/heap.picoc#L30). Reallocation/freeing reach it through these functions |
 
-These are the RETI registers required to resume a process.
-[`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) fills the
-record from an interrupt frame.
-[`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) reads it by fixed
-PCB offsets and restores the registers. It is not a pointer to a stack frame
-and is not allocated separately.
+[`3.6.3 Allocation and repeated coalescing example`](#363-allocation-and-repeated-coalescing-example)
+follows these sizes and links through an allocation and two frees.
 
-## 5.3 Process control block
+## 3.2 SRAM image and heap hierarchy
+[\[↑ TOC\]](#contents)
 
-The current PCB layout below groups the image, activation, resource pointers,
-and wait/signal state in one object. The following attribute table connects
-those fields to their initializers and consumers:
+The Kernel Heap follows the linked Kernel Image, then comes the Kernel
+Stack. The Process and Shared Data Heap uses the remaining SRAM. Each Process
+Payload contains its own User Process Heap. Sizes count 32-bit RETI cells.
+
+A [`ProcessControlBlock`](kernel/process/process.header#L31) manages a separate Process Payload. A
+[`SharedMemoryEntry`](kernel/shared_memory.header#L8) manages shared data, with [`SharedMemoryAttachment`](kernel/shared_memory.header#L17) records
+for mappings. [`4. Processes and process lifecycle`](#4-processes-and-process-lifecycle) and [`5. Shared Memory Entries and Mappings`](#5-shared-memory-entries-and-mappings) explain their lifecycles. The table locates the heap
+descriptors that manage these allocations:
+
+| Heap context | Descriptor storage | Managed payloads | Interface |
+| --- | --- | --- | --- |
+| Kernel Heap | [`kernel_heap`](kernel/kmalloc.picoc#L7), a [`struct Heap`](common/heap.header#L11) global in kernel `.data` | PCBs, copied paths, descriptor tables, [`SharedMemoryEntry`](kernel/shared_memory.header#L8), [`SharedMemoryAttachment`](kernel/shared_memory.header#L17), and other kernel objects | [`kmalloc()`](kernel/kmalloc.picoc#L23) / [`kfree()`](kernel/kmalloc.picoc#L38) |
+| Process and Shared Data Heap | [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7), a [`struct Heap`](common/heap.header#L11) global in kernel `.data` | Complete Process Payloads and Shared Data Payloads | [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) / [`PSDFree()`](kernel/psdmalloc.picoc#L47) |
+| User Process Heap | [`process_heap`](library/stdlib/malloc.picoc#L6), a [`struct Heap`](common/heap.header#L11) global in that process's `.data` | Allocations made by that process and its linked libraries | [`malloc()`](library/stdlib/malloc.picoc#L35) / [`free()`](library/stdlib/malloc.picoc#L49) |
+
+The overview marks all three heaps in orange. In the Kernel Heap, PCB 1
+and a shared-memory entry point to their allocations in the outer heap.
+Process Payloads contain an image, heap, and stack. Shared Data Payloads
+contain shared cells. Headers link neighboring blocks independently of
+the kernel's process and shared-memory lists:
+
+The expanded Process Payload shows its inner heap. Its headers are separate
+from the outer header that manages the whole payload. Only `.ivt`, `.text`,
+and `.data` belong to the linked User Process Image.
+
+![Continuous SRAM with the Kernel Heap, Process and Shared Data Heap, and nested User Process Heap highlighted by orange outlines and grouping bands, four blocks per heap, concrete kernel payload examples, and a dashed expansion of Process Payload A into its image, heap, and stack](documentation/images/memory-sram-overview.svg)
+
+These current offsets come from [`kernel/kernel.sections`](kernel/kernel.sections) and
+[`kernel/memory_constants.header`](kernel/memory_constants.header). They are relative to [`SRAM_BASE`](kernel/memory_constants.header#L1) and change
+when the kernel is rebuilt:
+
+| Larger part | SRAM offset | Section or region | Contents |
+| --- | ---: | --- | --- |
+| Kernel Image | `0..4` | `.ivt` | Five interrupt service routine addresses |
+| Kernel Image | `5..40765` | `.text` | Kernel code, including interrupt service routines |
+| Kernel Image | `40766..41496` | `.data` | Kernel globals, including both kernel-managed heap descriptors and list roots |
+| Kernel runtime reservation | `41497..45592` | Kernel Heap | 4096 cells, including in-region block headers |
+| Kernel runtime reservation | `45593..48308` | Kernel Stack | Stack grows toward lower addresses from the initial free `SP` cell |
+| After the Kernel region | `48309..262143` | Process and Shared Data Heap | Outer blocks for Process Payloads and Shared Data Payloads |
+
+The bootloader consumes the binary header separately from the Kernel Image.
+[`init_kernel_heap()`](kernel/kmalloc.picoc#L17) initializes the reserved kernel heap, and
+[`init_process_shared_data_heap()`](kernel/psdmalloc.picoc#L9) initializes the range from
+[`PROCESS_MEMORY_START`](kernel/memory_constants.header#L5) through [`SRAM_MAX_ADDRESS_IN_MEMORY_MAP`](kernel/memory_constants.header#L2).
+[`activate_kernel_stack_boundary()`](kernel/exception.picoc#L11) protects the final kernel-heap cell.
+
+The loader reads each process's image offsets from its binary header. The
+table connects them to PCB addresses:
+
+| Process Payload part | Relative address | Runtime role |
+| --- | --- | --- |
+| Optional `.ivt` | Before [`code_start`](kernel/process/process_loader.picoc#L117) when present | Process-local attributed data, ordinary PicoOS user images normally omit it |
+| `.text` | [`code_start`](kernel/process/process_loader.picoc#L117) | [`create_process()`](kernel/process/process.picoc#L89) adds [`base_address`](kernel/process/process.header#L34) to initialize [`activation.cs`](kernel/process/process.header#L27) |
+| `.data` | [`data_start`](kernel/process/process_loader.picoc#L118) | Added to [`base_address`](kernel/process/process.header#L34) for [`activation.ds`](kernel/process/process.header#L28), contains global data such as [`process_heap`](library/stdlib/malloc.picoc#L6) |
+| User Process Heap | [`heap_start`](kernel/process/process.header#L36) through `heap_start + heap_size - 1` | Contains its own [`BlockHeader`](common/heap.header#L5) chain and library allocations. Its final cell is the stack boundary |
+| User Process Stack | First cell beyond the heap through [`effective_stack_start`](kernel/process/process_loader.picoc#L122) | Holds initial arguments, environment strings, return PC, and later call frames. Grows toward lower addresses |
+
+[`base_address`](kernel/process/process.header#L34) is absolute, while [`heap_start`](kernel/process/process.header#L36) is relative to it.
+[`process_heap_start()`](kernel/process/process.picoc#L418) adds them, and [`process_heap_size()`](kernel/process/process.picoc#L424) returns the size.
+[`libstart`](library/start/libstart.picoc) uses both to initialize the user heap. [`4.2.1 User process stack placement`](#421-user-process-stack-placement) explains stack
+reservation, and [`4.2.2 Initial argc, argv, and envp`](#422-initial-argc-argv-and-envp) shows startup contents.
+
+## 3.3 Kernel Heap
+[\[↑ TOC\]](#contents)
+
+The Kernel Heap stores kernel objects separately from the process and
+shared-data payloads they manage. [`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) locates it in SRAM.
+
+### 3.3.1 Kernel Heap blocks and kernel objects
+[\[↑ TOC\]](#contents)
+
+The kernel-global [`kernel_heap.first_block`](common/heap.header#L12) points to the first header
+at [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3). Each object occupies a separate allocation.
+
+[`create_process()`](kernel/process/process.picoc#L89) uses [`kmalloc()`](kernel/kmalloc.picoc#L23) for its PCB and [`copy_process_path()`](kernel/process/process.picoc#L70)
+for the PCB-owned path string. [`open_shared_memory()`](kernel/shared_memory.picoc#L92) allocates its entry
+here too. [`base_address`](kernel/process/process.header#L34) and [`address`](kernel/shared_memory.header#L11) point into the outer heap instead.
+
+### 3.3.2 Kernel Heap allocator function reference
+[\[↑ TOC\]](#contents)
+
+These functions select [`kernel_heap`](kernel/kmalloc.picoc#L7) and call the common allocator. Failed
+positive-size requests invoke the kernel panic policy:
+
+| Kernel / Library Function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`kmalloc(size)`](kernel/kmalloc.picoc#L23) (Kernel only) | Payload pointer, `NULL` for nonpositive size, panics if a positive request has no fit | Allocates through the list rooted at [`kernel_heap`](kernel/kmalloc.picoc#L7)'s [`first_block`](common/heap.header#L12), may insert a split header and marks the selected block allocated | [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9), [`heap_alloc_from()`](common/heap.picoc#L65) | **Kernel functions:** [`copy_shared_memory_name()`](kernel/shared_memory.picoc#L27), [`open_shared_memory()`](kernel/shared_memory.picoc#L92), [`map_shared_memory()`](kernel/shared_memory.picoc#L130), [`copy_process_path()`](kernel/process/process.picoc#L70), [`create_process()`](kernel/process/process.picoc#L89), [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`copy_file_path()`](kernel/filesystem/file_descriptor.picoc#L6), [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35) |
+| [`krealloc(ptr, size)`](kernel/kmalloc.picoc#L31) (Kernel only) | Original/replacement payload pointer, `NULL` after freeing on nonpositive size, panics on positive-size failure | Resizes a Kernel Heap block, a null pointer requests a new allocation. Currently unused | [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9), [`heap_realloc_from()`](common/heap.picoc#L87) | None |
+| [`kfree(ptr)`](kernel/kmalloc.picoc#L38) (Kernel only) | Returns no value | Marks the preceding [`BlockHeader.free`](common/heap.header#L7) true and coalesces free neighbors throughout the Kernel Heap. A null pointer has no effect | [`heap_free_from()`](common/heap.picoc#L146) | **Kernel functions:** [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69), [`open_shared_memory()`](kernel/shared_memory.picoc#L92), [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151), [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172), [`free_process_load()`](kernel/process/process_loader.picoc#L71), [`remove_process()`](kernel/process/process.picoc#L209), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`set_process_working_directory()`](kernel/filesystem/host_filesystem.picoc#L128), [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82), [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L118), [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L146) |
+| [`init_kernel_heap(void)`](kernel/kmalloc.picoc#L17) (Kernel only) | Returns no value | Initializes [`kernel_heap`](kernel/kmalloc.picoc#L7) over [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3) and [`KERNEL_HEAP_SIZE`](kernel/memory_constants.header#L4), creating one free block | [`heap_init_region()`](common/heap.picoc#L49) | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+| [`require_kernel_heap_allocation(memory, size)`](kernel/kmalloc.picoc#L9) (Kernel only) | Returns the unchanged pointer, or does not return if a positive request failed | Converts a failed positive Kernel Heap allocation into a kernel panic | [`panic_kernel_heap_full()`](kernel/exception.picoc#L89) | **Kernel functions:** [`kmalloc()`](kernel/kmalloc.picoc#L23), [`krealloc()`](kernel/kmalloc.picoc#L31) |
+
+## 3.4 Process and Shared Data Heap
+[\[↑ TOC\]](#contents)
+
+[`process_shared_data_heap`](kernel/psdmalloc.picoc#L7) manages the region after the Kernel Stack. It
+allocates complete Process Payloads and Shared Data Payloads. Their kernel
+metadata remains in the Kernel Heap.
+
+### 3.4.1 Process allocations
+[\[↑ TOC\]](#contents)
+
+[`PSDMalloc()`](kernel/psdmalloc.picoc#L20) returns the payload's absolute address. A PCB records it in
+[`base_address`](kernel/process/process.header#L34) and keeps the requested cell count in [`size`](kernel/process/process.header#L35). The actual block
+may be slightly larger if its remainder is too small to split.
+
+[`4.1.2.1 From PCBs to Process Payloads in SRAM`](#4121-from-pcbs-to-process-payloads-in-sram) shows PCB pointers reaching these payloads. The PCB's [`next`](kernel/process/process.header#L53) links
+process records, independently of the allocator's header chain.
+
+[`load_process()`](kernel/process/process_loader.picoc#L305) and [`begin_process_load()`](kernel/process/process_loader.picoc#L109) reserve payloads with
+[`PSDMalloc()`](kernel/psdmalloc.picoc#L20). [`remove_process()`](kernel/process/process.picoc#L209) releases the whole image, heap, and stack
+with [`PSDFree(base_address)`](kernel/psdmalloc.picoc#L47). Userspace [`free()`](library/stdlib/malloc.picoc#L49) releases only an inner
+heap allocation.
+
+### 3.4.2 Shared Data allocations
+[\[↑ TOC\]](#contents)
+
+[`open_shared_memory()`](kernel/shared_memory.picoc#L92) also calls [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) and stores the address in
+[`SharedMemoryEntry.address`](kernel/shared_memory.header#L11). Its entry and name are separate Kernel Heap
+allocations.
+
+[`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) shows that pointer reaching the Shared Data Payload.
+[`shared_memory_list_head`](kernel/shared_memory.picoc#L6) and the entries' [`next`](kernel/shared_memory.header#L14) links form an independent
+registry, and each [`name`](kernel/shared_memory.header#L9) points to a copied Kernel Heap string.
+
+A shared entry can have several process mappings, while a PCB manages one
+process. Shared data has no nested user heap. [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69)
+releases it with [`PSDFree()`](kernel/psdmalloc.picoc#L47). [`5. Shared Memory Entries and Mappings`](#5-shared-memory-entries-and-mappings) explains when destruction is allowed.
+
+### 3.4.3 Process and Shared Data Heap allocator function reference
+[\[↑ TOC\]](#contents)
+
+These functions select [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7). They return absolute
+integer addresses, with [`PSDMALLOC_INVALID_START`](kernel/psdmalloc.header#L3) for failure:
+
+[`load()`](library/unistd/process.picoc#L17) and [`shm_open()`](library/sys/mman/mman.picoc#L15) reach these allocations through syscalls.
+[`mmap()`](library/sys/mman/mman.picoc#L23) adds a Kernel Heap attachment record to an existing shared region.
+
+| Kernel / Library Function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`PSDMalloc(size)`](kernel/psdmalloc.picoc#L20) (Kernel only) | Absolute payload address, or [`PSDMALLOC_INVALID_START`](kernel/psdmalloc.header#L3) (`-1`) for nonpositive size or no fit | Allocates a complete Process Payload or shared-data region through [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7), converts the common payload pointer to an integer address | [`heap_alloc_from()`](common/heap.picoc#L65) | **Kernel functions:** [`open_shared_memory()`](kernel/shared_memory.picoc#L92), [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`load_process()`](kernel/process/process_loader.picoc#L305) |
+| [`PSDRealloc(start, size)`](kernel/psdmalloc.picoc#L31) (Kernel only) | Absolute original/replacement payload address, or [`PSDMALLOC_INVALID_START`](kernel/psdmalloc.header#L3) (`-1`) for nonpositive size or no fit | Resizes an outer allocation. An invalid start requests a new allocation. Nonpositive size releases an existing block, failed positive growth preserves it. Currently unused | [`heap_realloc_from()`](common/heap.picoc#L87) | None |
+| [`PSDFree(start)`](kernel/psdmalloc.picoc#L47) (Kernel only) | Returns no value | Releases the outer block at the supplied payload address and coalesces free neighbors throughout [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7). An invalid start has no effect | [`heap_free_from()`](common/heap.picoc#L146) | **Kernel functions:** [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69), [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`init_process_shared_data_heap(void)`](kernel/psdmalloc.picoc#L9) (Kernel only) | Returns no value | Initializes [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7) over [`PROCESS_MEMORY_START`](kernel/memory_constants.header#L5) through [`SRAM_MAX_ADDRESS_IN_MEMORY_MAP`](kernel/memory_constants.header#L2), inclusive, creating one free block | [`heap_init_region()`](common/heap.picoc#L49) | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+
+## 3.5 User Process Heap
+[\[↑ TOC\]](#contents)
+
+Each process and its libraries allocate within that process's User Process
+Heap. The common allocator manages it inside the outer Process Payload.
+
+### 3.5.1 Per-Process User Process Heap
+[\[↑ TOC\]](#contents)
+
+[`process_heap`](library/stdlib/malloc.picoc#L6) resides in the process image's `.data`. [`init_process_heap()`](library/stdlib/malloc.picoc#L18)
+obtains the heap bounds through syscalls and initializes its first header.
+[`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) shows the inner block list between the image and stack.
+
+[`malloc()`](library/stdlib/malloc.picoc#L35),
+[`realloc()`](library/stdlib/malloc.picoc#L42), and
+[`free()`](library/stdlib/malloc.picoc#L49) call the shared allocator directly
+with this descriptor. They change the inner block chain, leaving the outer
+allocation in place.
+
+Each process has its own descriptor. Restoring [`activation.ds`](kernel/process/process.header#L28) selects that
+process's globals, including [`process_heap`](library/stdlib/malloc.picoc#L6). No shared userspace heap pointer
+is replaced during a context switch. [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti) shows the register restoration.
+
+### 3.5.2 User Process Heap allocator function reference
+[\[↑ TOC\]](#contents)
+
+These library functions use [`process_heap`](library/stdlib/malloc.picoc#L6) and call the allocator directly.
+Syscalls supply the initial bounds and handle allocation failure:
+
+| Kernel / Library Function | Return value / status | Effects | Calls | Syscalls | Called by |
+| --- | --- | --- | --- | --- | --- |
+| [`malloc(size)`](library/stdlib/malloc.picoc#L35) (Library only) | Payload pointer, `NULL` for nonpositive size, process-heap-full exception if a positive request has no fit | Allocates through the calling image's [`process_heap`](library/stdlib/malloc.picoc#L6), searches and updates blocks directly in library code | [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8), [`heap_alloc_from()`](common/heap.picoc#L65) | Process-heap-full on positive-size failure | **Library functions:** [`opendir()`](library/dirent/dirent.picoc#L8), [`copy_environment_variable()`](library/stdlib/env.picoc#L20), [`initialize_environment()`](library/stdlib/env.picoc#L97), [`setenv()`](library/stdlib/env.picoc#L126), [`clone_environment()`](library/stdlib/env.picoc#L205)<br>**User applications:** [`main()` in sed](user/sed.picoc#L67), [`read_environment()` in init](system/init.picoc#L19)<br>**Test programs (direct calls):** [`basic_heap_allocator_example.picoc`](test/basic_heap_allocator_example.picoc), [`basic_malloc.picoc`](test/basic_malloc.picoc), [`basic_free.picoc`](test/basic_free.picoc), [`basic_free_block_merging.picoc`](test/basic_free_block_merging.picoc), [`basic_realloc.picoc`](test/basic_realloc.picoc), [`basic_realloc_null_and_zero.picoc`](test/basic_realloc_null_and_zero.picoc), [`basic_string.picoc`](test/basic_string.picoc), [`exception_heap_full/heap_full.picoc`](test/exception_heap_full/heap_full.picoc), [`exercise_sheet_4_heap/launcher.picoc`](test/exercise_sheet_4_heap/launcher.picoc) |
+| [`realloc(ptr, size)`](library/stdlib/malloc.picoc#L42) (Library only) | Original/replacement payload pointer, `NULL` after freeing on nonpositive size, process-heap-full exception on positive-size failure | Resizes a User Process Heap block, a null pointer requests a new allocation. Calls the common implementation directly | [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8), [`heap_realloc_from()`](common/heap.picoc#L87) | Process-heap-full on positive-size failure | **Library functions:** [`store_environment_variable()`](library/stdlib/env.picoc#L67)<br>**Test programs (direct calls):** [`basic_realloc.picoc`](test/basic_realloc.picoc), [`basic_realloc_null_and_zero.picoc`](test/basic_realloc_null_and_zero.picoc) |
+| [`free(ptr)`](library/stdlib/malloc.picoc#L49) (Library only) | Returns no value | Releases and coalesces blocks only in the calling image's [`process_heap`](library/stdlib/malloc.picoc#L6). A null pointer has no effect | [`heap_free_from()`](common/heap.picoc#L146) | None | **Library functions:** [`opendir()`](library/dirent/dirent.picoc#L8), [`closedir()`](library/dirent/dirent.picoc#L66), [`store_environment_variable()`](library/stdlib/env.picoc#L67), [`unsetenv()`](library/stdlib/env.picoc#L157), [`clearenv()`](library/stdlib/env.picoc#L194), [`destroy_environment()`](library/stdlib/env.picoc#L230)<br>**User applications:** [`main()` in sed](user/sed.picoc#L67), [`read_environment()` in init](system/init.picoc#L19)<br>**Test programs (direct calls):** [`basic_heap_allocator_example.picoc`](test/basic_heap_allocator_example.picoc), [`basic_free.picoc`](test/basic_free.picoc), [`basic_free_block_merging.picoc`](test/basic_free_block_merging.picoc), [`basic_realloc.picoc`](test/basic_realloc.picoc), [`exercise_sheet_4_heap/launcher.picoc`](test/exercise_sheet_4_heap/launcher.picoc) |
+| [`init_process_heap(void)`](library/stdlib/malloc.picoc#L18) (Library only) | Returns no value | Gets the current process's absolute heap start and size, then initializes [`process_heap`](library/stdlib/malloc.picoc#L6) and its first free header | [`heap_init_region()`](common/heap.picoc#L49) | Process-heap-start, process-heap-size | **Library functions:** [`start_process()`](library/start/start.picoc#L7)<br>**Test programs (direct calls):** [`basic_heap_allocator_example.picoc`](test/basic_heap_allocator_example.picoc), [`basic_environment.picoc`](test/basic_environment.picoc), [`basic_malloc.picoc`](test/basic_malloc.picoc), [`basic_free.picoc`](test/basic_free.picoc), [`basic_free_block_merging.picoc`](test/basic_free_block_merging.picoc), [`basic_realloc.picoc`](test/basic_realloc.picoc), [`basic_realloc_null_and_zero.picoc`](test/basic_realloc_null_and_zero.picoc), [`basic_string.picoc`](test/basic_string.picoc) |
+| [`require_process_heap_allocation(memory, size)`](library/stdlib/malloc.picoc#L8) (Library only) | Returns the unchanged pointer, or terminates the process if a positive request failed | Invokes the process-heap-full syscall only when the common allocator returns `NULL` for a positive request | No C calls | Process-heap-full on positive-size failure | **Library functions:** [`malloc()`](library/stdlib/malloc.picoc#L35), [`realloc()`](library/stdlib/malloc.picoc#L42) |
+
+## 3.6 Heap and allocator function reference
+[\[↑ TOC\]](#contents)
+
+[`common/heap.picoc`](common/heap.picoc) implements the allocator. Its functions take a [`Heap`](common/heap.header#L11)
+without choosing the region or failure policy. [`3.3.2 Kernel Heap allocator function reference`](#332-kernel-heap-allocator-function-reference), [`3.4.3 Process and Shared Data Heap allocator function reference`](#343-process-and-shared-data-heap-allocator-function-reference), and [`3.5.2 User Process Heap allocator function reference`](#352-user-process-heap-allocator-function-reference)
+show the wrappers for each heap.
+
+### 3.6.1 Common allocator linkage and function reference
+[\[↑ TOC\]](#contents)
+
+The kernel links [`common/heap.picoc`](common/heap.picoc) directly. [`libstdlib`](library/stdlib/libstdlib.picoc#L1) includes it in
+user images. These arrows represent ordinary C calls within each target:
+
+```mermaid
+flowchart LR
+    subgraph K["Kernel target"]
+        KW["kmalloc / krealloc / kfree<br/>kernel_heap"] -->|direct calls| KC["common/heap.picoc<br/>heap_alloc_from / heap_realloc_from / heap_free_from"]
+        PW["PSDMalloc / PSDRealloc / PSDFree<br/>process_shared_data_heap"] -->|direct calls| KC
+    end
+    subgraph L["Each userspace target: libstdlib"]
+        LW["malloc / realloc / free<br/>process_heap in this image"] -->|direct calls| LC["same common/heap.picoc source<br/>heap_alloc_from / heap_realloc_from / heap_free_from"]
+    end
+```
+
+The table covers the common allocator. Sizes count cells. Free and realloc
+require a valid pointer from the supplied heap and recover its header by
+pointer arithmetic, without an ownership check:
+
+| Kernel / Library Function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`heap_init_region(heap, start, cell_count)`](common/heap.picoc#L49) (Shared/Common) | Returns no value | For a null heap, does nothing. For a null start or at most three cells, sets [`Heap.first_block`](common/heap.header#L12) to `NULL`. Otherwise writes one header with [`size`](common/heap.header#L6) = cell count minus three, [`free`](common/heap.header#L7) = true, [`next`](common/heap.header#L8) = `NULL`, and stores its address in the descriptor | None | **Library functions (directly linked):** [`init_process_heap()`](library/stdlib/malloc.picoc#L18)<br>**Kernel functions (directly linked):** [`init_kernel_heap()`](kernel/kmalloc.picoc#L17), [`init_process_shared_data_heap()`](kernel/psdmalloc.picoc#L9)<br>**Test programs (direct calls):** [`basic_heap_allocator_example.picoc`](test/basic_heap_allocator_example.picoc) |
+| [`heap_alloc_from(heap, size)`](common/heap.picoc#L65) (Shared/Common) | Payload pointer, or `NULL` for a null heap, nonpositive size, or no fit | Scans from [`Heap.first_block`](common/heap.header#L12) through [`next`](common/heap.header#L8), selects the first free block with enough payload cells, optionally splits it, sets [`free`](common/heap.header#L7) false, and returns the address immediately after the header | [`heap_split_block()`](common/heap.picoc#L14) | **Library functions (directly linked):** [`malloc()`](library/stdlib/malloc.picoc#L35)<br>**Kernel functions (directly linked):** [`kmalloc()`](kernel/kmalloc.picoc#L23), [`PSDMalloc()`](kernel/psdmalloc.picoc#L20)<br>**Shared/common functions (directly linked):** [`heap_realloc_from()`](common/heap.picoc#L87) |
+| [`heap_realloc_from(heap, ptr, size)`](common/heap.picoc#L87) (Shared/Common) | Original/replacement payload pointer, or `NULL` for a null heap, nonpositive size, or failed replacement allocation | With a valid heap, nonpositive size frees the block, a null pointer allocates. Otherwise shrinks/splits in place and coalesces, grows into only the immediate free neighbor if sufficient, or allocates/copies/frees. Failed replacement allocation preserves the old block | [`heap_free_from()`](common/heap.picoc#L146), [`heap_alloc_from()`](common/heap.picoc#L65), [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), [`heap_copy_cells()`](common/heap.picoc#L3) | **Library functions (directly linked):** [`realloc()`](library/stdlib/malloc.picoc#L42)<br>**Kernel functions (directly linked):** [`krealloc()`](kernel/kmalloc.picoc#L31), [`PSDRealloc()`](kernel/psdmalloc.picoc#L31) |
+| [`heap_free_from(heap, ptr)`](common/heap.picoc#L146) (Shared/Common) | Returns no value | For a null heap or pointer, does nothing. Otherwise finds the preceding header, sets [`free`](common/heap.header#L7) true, and scans the entire heap to coalesce consecutive free blocks. Does not erase payload contents | [`heap_merge_free_blocks()`](common/heap.picoc#L30) | **Library functions (directly linked):** [`free()`](library/stdlib/malloc.picoc#L49)<br>**Kernel functions (directly linked):** [`kfree()`](kernel/kmalloc.picoc#L38), [`PSDFree()`](kernel/psdmalloc.picoc#L47)<br>**Shared/common functions (directly linked):** [`heap_realloc_from()`](common/heap.picoc#L87) |
+| [`heap_split_block(block, size)`](common/heap.picoc#L14) (Shared/Common) | Returns no value | Splits only if [`size`](common/heap.header#L6) ≥ requested size + three header cells + one payload cell. Inserts a free header after the requested payload, links it to the old successor, then updates the original size and successor. Otherwise leaves the block unchanged. Does not change the original free flag | None | **Shared/common functions (directly linked):** [`heap_alloc_from()`](common/heap.picoc#L65), [`heap_realloc_from()`](common/heap.picoc#L87) |
+| [`heap_merge_free_blocks(heap)`](common/heap.picoc#L30) (Shared/Common) | Returns no value | For a null heap, does nothing. Scans from [`Heap.first_block`](common/heap.header#L12). When current and next are free, adds three header cells and the next payload to the current size, bypasses the next header, and rechecks the same current header. Advances only when the pair cannot merge | None | **Shared/common functions (directly linked):** [`heap_realloc_from()`](common/heap.picoc#L87), [`heap_free_from()`](common/heap.picoc#L146) |
+| [`heap_copy_cells(destination, source, count)`](common/heap.picoc#L3) (Shared/Common) | Returns no value | Copies count cells in increasing index order from source to destination. Used for the overlap between old payload size and requested replacement size | None | **Shared/common functions (directly linked):** [`heap_realloc_from()`](common/heap.picoc#L87) |
+
+### 3.6.2 Reallocation decisions
+[\[↑ TOC\]](#contents)
+
+For a valid block and positive size, this graph shows when realloc keeps
+the address or moves the payload. A failed move preserves the old block.
+A null pointer allocates, while a nonpositive size frees:
+
+```mermaid
+flowchart LR
+    R["Resize an existing block"] --> FIT{"Current payload large enough?"}
+    FIT -->|Yes| SHRINK["heap_split_block<br/>heap_merge_free_blocks"]
+    SHRINK --> SAME["Return original pointer"]
+    FIT -->|No| NEXT{"Immediate next block free and combined space enough?"}
+    NEXT -->|Yes| GROW["Absorb next header and payload<br/>heap_split_block"]
+    GROW --> SAME
+    NEXT -->|No| ALLOC["heap_alloc_from"]
+    ALLOC --> OK{"Allocation succeeded?"}
+    OK -->|No| KEEP["Return NULL<br/>Old block remains allocated"]
+    OK -->|Yes| COPY["heap_copy_cells<br/>heap_free_from old block"]
+    COPY --> NEW["Return replacement pointer"]
+```
+
+Growth absorbs at most one successor. Shrinking and freeing run the repeated
+merge scan illustrated next.
+
+### 3.6.3 Allocation and repeated coalescing example
+[\[↑ TOC\]](#contents)
+
+This 52-cell example follows an allocation and two frees. Yellow boxes are
+headers, blue payloads are allocated, and green payloads are free. Arrows
+show `next` links. The orange outline marks the changed block. Offsets count
+cells, although drawn widths are not proportional to sizes.
+
+#### 3.6.3.1 Initial state and first-fit search
+[\[↑ TOC\]](#contents)
+
+The four payloads have sizes 8, 4, 12, and 16. Including four three-cell
+headers gives `8 + 4 + 12 + 16 + 4 × 3 = 52` cells. Allocating all four and
+then freeing B and D produces this state:
+
+![Initial heap with allocated A, C and free B, D, linked from left to right](documentation/images/heap-01-initial.svg)
+
+For an 11-cell request, first fit skips allocated A, undersized B, and
+allocated C. Free D has 16 cells and is selected.
+
+#### 3.6.3.2 Allocation splits D
+[\[↑ TOC\]](#contents)
+
+D can split because `16 >= 11 + 3 + 1`. Its header stays at offset 33,
+[`size`](common/heap.header#L6) becomes 11, and [`free`](common/heap.header#L7) becomes false. The returned payload starts
+at offset 36:
+
+The remainder D′ gets a header at `36 + 11 = 47` and a two-cell payload.
+Its [`next`](common/heap.header#L8) is `NULL`, and D's [`next`](common/heap.header#L8) now points to it. A, B, and C stay put.
+
+![After allocation, D has eleven allocated payload cells and links to new free Header D′ with two payload cells](documentation/images/heap-02-allocated.svg)
+
+> **Note:** A 14-cell request cannot split D because the two-cell remainder
+> cannot hold a header and payload. It receives all 16 cells.
+
+#### 3.6.3.3 Free D and merge its remainder
+[\[↑ TOC\]](#contents)
+
+Freeing the payload recovers D's header and sets [`free`](common/heap.header#L7) to true. This is
+the intermediate state before merging:
+
+![D marked free with its eleven payload cells still separate from free D′ and its two payload cells](documentation/images/heap-03-d-marked-free.svg)
+
+The merge scan starts at A and reaches D/D′. Both are free, so D absorbs
+D′'s header and payload. Its size becomes `11 + 3 + 2 = 16`, and [`next`](common/heap.header#L8)
+becomes `NULL`. The absorbed header cells become usable payload space:
+
+![D restored to sixteen free payload cells after absorbing Header D′ and its two payload cells](documentation/images/heap-04-d-merged.svg)
+
+D has no successor, so the scan ends with the initial four-block layout.
+
+#### 3.6.3.4 Free C and merge repeatedly at B
+[\[↑ TOC\]](#contents)
+
+Freeing C's payload at offset 21 marks C free. B, C, and D are now adjacent
+free blocks:
+
+![C marked free, making B, C, and D consecutive free blocks after allocated A](documentation/images/heap-05-c-marked-free.svg)
+
+The scan reaches B/C and merges them. B's size becomes `4 + 3 + 12 = 19`,
+and its [`next`](common/heap.header#L8) becomes D:
+
+![First merge at B bypasses Header C and produces nineteen free payload cells followed by free D](documentation/images/heap-06-b-c-merged.svg)
+
+The scan stays at B and checks its new neighbor D. It merges again, giving
+B `19 + 3 + 16 = 38` payload cells and `next = NULL`. This is repeated
+iteration at one header:
+
+![Second merge at B bypasses Header D, leaving allocated A and a thirty-eight-cell free B with next equal to NULL](documentation/images/heap-07-b-d-merged.svg)
+
+The final list is A → B and still occupies `8 + 38 + 2 × 3 = 52` cells.
+A stays allocated, and [`Heap.first_block`](common/heap.header#L12) continues to point to it.
+
+The merge loop relies on headers being in contiguous address order.
+Rechecking after each merge combines an entire free run.
+[`basic_heap_allocator_example.picoc`](test/basic_heap_allocator_example.picoc) checks this example, including first
+fit, splitting, merging, and preserved data. The figures come from
+[`documentation/generate_heap_allocator_diagrams.py`](documentation/generate_heap_allocator_diagrams.py).
+
+# 4. Processes and process lifecycle
+[\[↑ TOC\]](#contents)
+
+The kernel records each process's identity, resources, and saved execution
+state in a PCB. This chapter connects those fields to loading, starting,
+waiting, and final removal.
+
+## 4.1 Process control block fields
+[\[↑ TOC\]](#contents)
+
+[`ProcessControlBlock`](kernel/process/process.header#L31) is the kernel's record for one process. Its definition
+and field table connect memory, resources, saved registers, and lifecycle
+bookkeeping to the functions that initialize and use them:
 
 ```c
-struct Process {
+struct ProcessControlBlock {
     int pid;
     int state;
     int base_address;
@@ -1816,8 +3508,8 @@ struct Process {
     int *waiting_status_ptr;
     struct wait_queue waiters;
     struct wait_queue *waiting_queue_ptr;
-    struct Process *wait_next;
-    struct Process *next;
+    struct ProcessControlBlock *wait_next;
+    struct ProcessControlBlock *next;
     struct SharedMemoryAttachment *shared_memory_attachments;
     int parent_pid;
     int parent_death_signal;
@@ -1833,145 +3525,70 @@ struct Process {
 
 | Attribute | Meaning | Used by |
 | --- | --- | --- |
-| [`pid`](kernel/process/process.header#L32) | Assigned from the global counter when the PCB is created; never changes | First initialized by [`create_process()`](kernel/process/process.picoc#L88); read by [`find_process_by_pid()`](kernel/process/process.picoc#L161) and [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368) |
-| [`state`](kernel/process/process.header#L33) | [`NEW`](kernel/process/process.header#L12), [`READY`](kernel/process/process.header#L13), [`RUNNING`](kernel/process/process.header#L14), [`BLOCKED`](kernel/process/process.header#L15), [`STOPPED`](kernel/process/process.header#L16), or [`ZOMBIE`](kernel/process/process.header#L17) | First initialized by [`create_process()`](kernel/process/process.picoc#L88); changed by [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), queue helpers, [`stop_process()`](kernel/signal.picoc#L36), [`continue_process()`](kernel/signal.picoc#L49), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43), and [`terminate_process()`](kernel/process/process.picoc#L303) |
-| [`base_address`](kernel/process/process.header#L34), [`size`](kernel/process/process.header#L35) | Absolute start and total cell count of the [`pmalloc()`](kernel/pmalloc.picoc#L20) process image | First initialized by [`create_process()`](kernel/process/process.picoc#L88); released by [`remove_process()`](kernel/process/process.picoc#L208) |
-| [`heap_start`](kernel/process/process.header#L36), [`heap_size`](kernel/process/process.header#L37) | Process-relative userspace heap start and cell count from the binary header/defaults | First initialized by [`create_process()`](kernel/process/process.picoc#L88); read by [`process_heap_start()`](kernel/process/process.picoc#L438), [`process_heap_size()`](kernel/process/process.picoc#L444), and [`process_stack_boundary()`](kernel/exception.picoc#L18) |
-| [`binary_path`](kernel/process/process.header#L38) | PCB-owned executable path; also copied to [`argv[0]`](kernel/process/process_arguments.picoc#L140) | First initialized by [`create_process()`](kernel/process/process.picoc#L88); copied by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), printed by [`list_processes()`](kernel/process/process.picoc#L32), freed by [`remove_process()`](kernel/process/process.picoc#L208) |
-| [`working_directory`](kernel/process/process.header#L39) | PCB-owned absolute PicoOS path, copied from the parent or initialized to `/` for PID 1 | First initialized by [`create_process()`](kernel/process/process.picoc#L88) through copying; read by [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), replaced by [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), freed by [`remove_process()`](kernel/process/process.picoc#L208) |
-| [`activation`](kernel/process/process.header#L40) | Embedded saved CPU context used by dispatcher and blocked syscall returns | First initialized by [`create_process()`](kernel/process/process.picoc#L88); updated by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), and [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183); restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
-| [`file_descriptors`](kernel/process/process.header#L42) | Kernel-heap descriptor table and entry array owned by this PCB | First initialized by [`create_process()`](kernel/process/process.picoc#L88) through [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35); inherited by [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241); destroyed by [`remove_process()`](kernel/process/process.picoc#L208) |
-| [`waiting_status_ptr`](kernel/process/process.header#L44) | Pointer into this process’s suspended userspace [`waitpid()`](library/sys/wait/wait.picoc#L14) frame | First initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L88); set by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368); written and cleared by [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L260) or [`notify_process_stopped()`](kernel/signal.picoc#L22) |
-| [`waiters`](kernel/process/process.header#L46) | Embedded FIFO queue of processes waiting for this process | First initialized by [`create_process()`](kernel/process/process.picoc#L88); filled by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368); drained by [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L260) or [`notify_process_stopped()`](kernel/signal.picoc#L22) |
-| [`waiting_queue_ptr`](kernel/process/process.header#L48), [`wait_next`](kernel/process/process.header#L51) | Queue containing this PCB and its intrusive successor link | First initialized by [`create_process()`](kernel/process/process.picoc#L88); maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L62), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) |
-| [`next`](kernel/process/process.header#L53) | Link in the global process list | First initialized/linked by [`create_process()`](kernel/process/process.picoc#L88); traversed by [`scheduler_next_process()`](kernel/scheduler.picoc#L12) and [`find_process_by_pid()`](kernel/process/process.picoc#L161); unlinked by [`remove_process()`](kernel/process/process.picoc#L208) |
-| [`shared_memory_attachments`](kernel/process/process.header#L55) | Head of kernel-heap mapping records owned by this PCB | First initialized by [`create_process()`](kernel/process/process.picoc#L88); extended by [`map_shared_memory()`](kernel/shared_memory.picoc#L130); released by [`remove_process()`](kernel/process/process.picoc#L208) through [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
-| [`parent_pid`](kernel/process/process.header#L57), [`parent_death_signal`](kernel/process/process.header#L59) | Creator PID and optional signal delivered when that parent terminates | First initialized by [`create_process()`](kernel/process/process.picoc#L88); parent-death setting changed by [`set_parent_death_signal()`](kernel/signal.picoc#L135); used by [`orphan_and_signal_children()`](kernel/process/process.picoc#L278) |
-| [`exit_status`](kernel/process/process.header#L60) | Status retained while the process is a zombie | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L88); set by [`terminate_process()`](kernel/process/process.picoc#L303); collected by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368) |
-| [`stop_signal`](kernel/process/process.header#L61), [`stopped_from_state`](kernel/process/process.header#L62), [`pending_termination_signal`](kernel/process/process.header#L63) | Signal state for stopped and deferred termination paths | First initialized by [`create_process()`](kernel/process/process.picoc#L88); used by [`stop_process()`](kernel/signal.picoc#L36), [`continue_process()`](kernel/signal.picoc#L49), [`send_signal_to_process()`](kernel/signal.picoc#L74), and [`prepare_process_termination()`](kernel/signal.picoc#L124) |
-| [`pending_terminal_read_buffer`](kernel/process/process.header#L65), [`pending_terminal_read_count`](kernel/process/process.header#L66) | Userspace request retained while a terminal read is blocked or stopped | First initialized to `NULL`/0 by [`create_process()`](kernel/process/process.picoc#L88); set by [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135); consumed by [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183) or [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85) |
-| [`pending_load`](kernel/process/process.header#L68) | Executable metadata, paths, progress, and reserved process-memory region while this process is between load chunks | First initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L88); set by [`begin_process_load()`](kernel/process/process_loader.picoc#L109); advanced by [`continue_process_load()`](kernel/process/process_loader.picoc#L227); cleared by [`finish_process_load()`](kernel/process/process_loader.picoc#L90) or [`cancel_process_load()`](kernel/process/process_loader.picoc#L76) |
+| [`pid`](kernel/process/process.header#L32) | Assigned from the global counter when the PCB is created, never changes | First initialized by [`create_process()`](kernel/process/process.picoc#L89), read by [`find_process_by_pid()`](kernel/process/process.picoc#L162) and [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`state`](kernel/process/process.header#L33) | [`NEW`](kernel/process/process.header#L12), [`READY`](kernel/process/process.header#L13), [`RUNNING`](kernel/process/process.header#L14), [`BLOCKED`](kernel/process/process.header#L15), [`STOPPED`](kernel/process/process.header#L16), or [`ZOMBIE`](kernel/process/process.header#L17) | First initialized by [`create_process()`](kernel/process/process.picoc#L89), changed by [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), queue helpers, [`stop_process()`](kernel/signal.picoc#L37), [`continue_process()`](kernel/signal.picoc#L50), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43), and [`terminate_process()`](kernel/process/process.picoc#L304) |
+| [`base_address`](kernel/process/process.header#L34), [`size`](kernel/process/process.header#L35) | Absolute start and requested cell count of the [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) Process Payload | First initialized by [`create_process()`](kernel/process/process.picoc#L89), released by [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`heap_start`](kernel/process/process.header#L36), [`heap_size`](kernel/process/process.header#L37) | Process-relative userspace heap start and cell count from the binary header/defaults | First initialized by [`create_process()`](kernel/process/process.picoc#L89), read by [`process_heap_start()`](kernel/process/process.picoc#L418), [`process_heap_size()`](kernel/process/process.picoc#L424), and [`process_stack_boundary()`](kernel/exception.picoc#L18) |
+| [`binary_path`](kernel/process/process.header#L38) | PCB-owned executable path without the leading `/`, it exists while the process is [`NEW`](kernel/process/process.header#L12), supplies the later [`argv[0]`](kernel/process/process_arguments.picoc#L184) copy, and remains the kernel's stable name for process listings | First initialized by [`create_process()`](kernel/process/process.picoc#L89), copied by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), printed by [`list_processes()`](kernel/process/process.picoc#L32), freed by [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`working_directory`](kernel/process/process.header#L39) | PCB-owned absolute PicoOS path, copied from the parent or initialized to `/` for PID 1 | First initialized by [`create_process()`](kernel/process/process.picoc#L89) through copying, read by [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), replaced by [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), freed by [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`activation`](kernel/process/process.header#L40) | Embedded saved CPU context needed later by the dispatcher, [`6.2 Saved process registers`](#62-saved-process-registers) explains its fields | First initialized by [`create_process()`](kernel/process/process.picoc#L89), later maintained by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182), and [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`file_descriptors`](kernel/process/process.header#L42) | Pointer to this process's descriptor table. [`9.2 Containment and reference relationships`](#92-containment-and-reference-relationships) shows the wrapper, entry array, and path references | First initialized by [`create_process()`](kernel/process/process.picoc#L89) through [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), inherited by [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), destroyed by [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`waiting_status_ptr`](kernel/process/process.header#L44) | Pointer into this process’s suspended userspace [`waitpid()`](library/sys/wait/wait.picoc#L14) frame | First initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L89), set by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), written and cleared by [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) or [`notify_process_stopped()`](kernel/signal.picoc#L23) |
+| [`waiters`](kernel/process/process.header#L46) | Embedded FIFO queue of processes waiting for this process | First initialized by [`create_process()`](kernel/process/process.picoc#L89), filled by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), drained by [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) or [`notify_process_stopped()`](kernel/signal.picoc#L23) |
+| [`waiting_queue_ptr`](kernel/process/process.header#L48), [`wait_next`](kernel/process/process.header#L51) | Queue containing this PCB and its intrusive successor link | First initialized by [`create_process()`](kernel/process/process.picoc#L89), maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L61), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) |
+| [`next`](kernel/process/process.header#L53) | Link in the global process list | First initialized/linked by [`create_process()`](kernel/process/process.picoc#L89), traversed by [`scheduler_next_process()`](kernel/scheduler.picoc#L12) and [`find_process_by_pid()`](kernel/process/process.picoc#L162), unlinked by [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`shared_memory_attachments`](kernel/process/process.header#L55) | Head of this process's mapping-record list. Each record references a shared-memory entry as shown in [`9.2 Containment and reference relationships`](#92-containment-and-reference-relationships) | First initialized by [`create_process()`](kernel/process/process.picoc#L89), extended by [`map_shared_memory()`](kernel/shared_memory.picoc#L130), released by [`remove_process()`](kernel/process/process.picoc#L209) through [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
+| [`parent_pid`](kernel/process/process.header#L57), [`parent_death_signal`](kernel/process/process.header#L59) | Creator PID and optional signal delivered when that parent terminates | First initialized by [`create_process()`](kernel/process/process.picoc#L89), parent-death setting changed by [`set_parent_death_signal()`](kernel/signal.picoc#L137), used by [`orphan_and_signal_children()`](kernel/process/process.picoc#L279) |
+| [`exit_status`](kernel/process/process.header#L60) | Status retained while the process is a zombie | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L89), set by [`terminate_process()`](kernel/process/process.picoc#L304), collected by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`stop_signal`](kernel/process/process.header#L61), [`stopped_from_state`](kernel/process/process.header#L62), [`pending_termination_signal`](kernel/process/process.header#L63) | Signal bookkeeping for stopped and deferred termination paths | First initialized by [`create_process()`](kernel/process/process.picoc#L89), used by [`stop_process()`](kernel/signal.picoc#L37), [`continue_process()`](kernel/signal.picoc#L50), [`send_signal_to_process()`](kernel/signal.picoc#L75), and [`prepare_process_termination()`](kernel/signal.picoc#L126) |
+| [`pending_terminal_read_buffer`](kernel/process/process.header#L65), [`pending_terminal_read_count`](kernel/process/process.header#L66) | Userspace request retained while a terminal read is blocked or stopped | First initialized to `NULL`/0 by [`create_process()`](kernel/process/process.picoc#L89), set by [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), consumed by [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182) or [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
+| [`pending_load`](kernel/process/process.header#L68) | Executable metadata, paths, progress, and reserved Process and Shared Data Heap region while this process is between load chunks | First initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L89), set by [`begin_process_load()`](kernel/process/process_loader.picoc#L109), advanced by [`continue_process_load()`](kernel/process/process_loader.picoc#L227), cleared by [`finish_process_load()`](kernel/process/process_loader.picoc#L90) or [`cancel_process_load()`](kernel/process/process_loader.picoc#L76) |
 
-The PCB is kernel metadata, but its address fields refer into the separate
-process image. Because RETI has no MMU, these are ordinary absolute pointers;
-there is no address translation or protection between processes.
+PCB address fields refer into a separate Process Payload. These are ordinary
+physical addresses, with no MMU translation or process isolation.
 
-## 5.4 Process image and initial stack
+[`8.9 PicoOS paths, working directories, and host operations`](#89-picoos-paths-working-directories-and-host-operations) explains [`working_directory`](kernel/process/process.header#L39), and [`8.1 Per-process file-descriptor table`](#81-per-process-file-descriptor-table) explains [`file_descriptors`](kernel/process/process.header#L42).
+[`binary_path`](kernel/process/process.header#L38) exists before `argv[0]` is copied to the stack and remains
+available to [`list_processes()`](kernel/process/process.picoc#L32) even if userspace changes `argv[0]`. [`4.2.2 Initial argc, argv, and envp`](#422-initial-argc-argv-and-envp)
+shows that stack copy.
 
-The boot-time [`load_process()`](kernel/process/process_loader.picoc#L305) and
-userspace [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) paths each
-allocate one contiguous region from the global process-memory heap. The diagram
-orders its regions from low to high addresses; the stack grows back toward the
-heap, whose end is protected by the active boundary register:
+### 4.1.1 Process states and transitions
+[\[↑ TOC\]](#contents)
 
-```mermaid
-flowchart LR
-    B["base_address"] --> C["code / .text"]
-    C --> D["globals / .data"]
-    D --> H["userspace heap<br/>BlockHeaders + allocations"]
-    H --> F["free stack space"]
-    F --> S["initial stack at high address<br/>stack grows downward"]
-```
-
-Before a process becomes ready,
-[`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) writes this layout
-directly into the high end of its image:
-
-| Order | Contents |
-| --- | --- |
-| 1 | Entry PC used by the first `RTI` |
-| 2 | [`argc`](kernel/process/process_arguments.picoc#L131) |
-| 3 | [`argv[]`](kernel/process/process_arguments.picoc#L140) pointers and terminating `NULL` |
-| 4 | [`envp[]`](kernel/process/process_arguments.picoc#L141) pointers and terminating `NULL` |
-| 5 | Copied binary path, arguments, and environment strings |
-
-All pointers in the tables are absolute SRAM addresses. [`argv[0]`](kernel/process/process_arguments.picoc#L140) points to a
-copy of [`binary_path`](kernel/process/process.header#L38); the supplied argument string supplies later entries;
-[`envp`](kernel/process/process_arguments.picoc#L141) begins immediately after [`argv[argc] == NULL`](kernel/process/process_arguments.picoc#L140). The entry cell contains
-[`activation.cs`](kernel/process/process.header#L27) - 1 because the first `RTI` advances to the real entry. The
-saved `SP` points to the free cell below it, while `BAF` is chosen so naked
-[`_start()`](library/start/start.picoc#L14) observes [`argc`](kernel/process/process_arguments.picoc#L131) and [`argv`](kernel/process/process_arguments.picoc#L140) in normal argument positions.
-
-Arguments and the initial environment are process-image data, not persistent
-kernel allocations. Userspace [`libstart`](library/start/libstart.picoc) later clones the environment into
-the process heap, so parent and child environment arrays become independent.
-
-Loading and starting are deliberately separate operations. The sequence below
-follows a successful userspace [`load()`](library/unistd/process.picoc#L17) through [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) and
-then [`run()`](library/unistd/process.picoc#L31) through [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241). It distinguishes
-DMA from the 1 KiB fallback; `ESC` is the host-request delimiter. Boot-time
-loading instead uses the continuous transfer in [Loading the kernel](#21-loading-the-kernel).
-
-```mermaid
-sequenceDiagram
-    participant C as Calling process
-    participant K as Kernel loader
-    participant H as UART host service
-    participant M as Process-memory heap
-    participant D as DMA / dispatcher
-    participant P as Process list
-
-    C->>K: load(path), syscall 2
-    K->>H: ESC file-size path ESC /
-    H-->>K: File byte count
-    K->>H: ESC read-range 0 20 path ESC /
-    H-->>K: Byte count + five header words
-    K->>K: Resolve heap/stack defaults
-    K->>M: pmalloc(complete image, heap, and stack region)
-    K->>K: Save pending_load in caller PCB
-    alt DMA enabled
-        K->>H: Request entire encoded payload at byte offset 20
-        H-->>K: Payload byte count
-        K->>D: Queue caller, start DMA, save activation, dispatch
-        H-->>D: Payload bytes through UART
-        D->>M: Copy encoded words into reserved image
-        D->>D: Completion ISR wakes caller
-        D-->>C: Resume later with internal continue result
-        C->>K: Repeat syscall 2 and check DMA completion
-    else Polling fallback
-        K-->>C: Internal continue result after setup
-        loop Until all encoded words have arrived
-            C->>K: Repeat syscall 2
-            K->>H: Request next payload range, at most 1 KiB
-            H-->>K: Byte count + payload bytes
-            K->>M: Copy chunk at base_address + progress
-            opt More payload remains
-                K-->>C: Internal continue result
-            end
-        end
-    end
-    K->>P: create_process allocates PCB, paths, descriptors and appends NEW
-    K-->>C: Return new PID
-    C->>K: run(pid, arguments, environment), syscall 3
-    K->>K: Inherit descriptors and store initial stack
-    K->>P: NEW to READY
-    K-->>C: Return success
-```
-If the binary header contains [`heap_size`](kernel/process/process.header#L37) == -1, PicoOS uses its 1000-cell
-default. If `stack_start == -1`, the highest stack offset becomes the first cell after
-the heap plus the 1000-cell default. Because that offset is inclusive, the
-allocated region has 1001 cells above the heap, including startup data. An explicit stack start is rejected if it
-overlaps the heap. These choices determine the size passed to [`pmalloc()`](kernel/pmalloc.picoc#L20);
-the loader does not allocate code, heap, and stack as separate blocks. The partial image belongs to the caller's PCB and is released when that PCB is
-removed; a retained zombie can therefore still own an unfinished load. A PCB for the new process is only
-created after the last chunk arrives.
-
-## 5.5 States and lifetime
-
-The table lists the six PCB states and their numeric values. The state diagram
-then shows the usual load/run, blocking, signal, and termination paths; removal
-ends the PCB's lifetime rather than assigning another state value.
+[`state`](kernel/process/process.header#L33) tells the scheduler and lifecycle functions whether a process can
+run, must wait, is stopped, or has finished. PicoOS uses these six values:
 
 | State | Numeric value | Meaning | Typical transition |
 | --- | --- | --- | --- |
-| [`NEW`](kernel/process/process.header#L12) | 0 | Complete image and PCB exist but initial run state is incomplete | Completed process load |
+| [`NEW`](kernel/process/process.header#L12) | 0 | Loaded image and PCB exist, but the final startup layout is not yet prepared | Completed process load |
 | [`READY`](kernel/process/process.header#L13) | 1 | Eligible for the scheduler | Run setup, queue wakeup, or [`SIGCONT`](common/signal.header#L6) |
 | [`RUNNING`](kernel/process/process.header#L14) | 2 | Activation is loaded into the CPU | Dispatcher |
 | [`BLOCKED`](kernel/process/process.header#L15) | 3 | PCB is linked into one wait queue | Terminal read, DMA completion wait, [`waitpid()`](library/sys/wait/wait.picoc#L14), or [`sleep()`](library/unistd/blocking.picoc#L9) |
 | [`STOPPED`](kernel/process/process.header#L16) | 4 | Suspended by [`SIGSTOP`](common/signal.header#L7), [`SIGTSTP`](common/signal.header#L8), or [`SIGTTIN`](common/signal.header#L9) | Signal subsystem |
-| [`ZOMBIE`](kernel/process/process.header#L17) | 5 | Terminated status retained for a parent | [`terminate_process()`](kernel/process/process.picoc#L303) |
+| [`ZOMBIE`](kernel/process/process.header#L17) | 5 | Terminated status retained for a parent | [`terminate_process()`](kernel/process/process.picoc#L304) |
+
+[`NEW`](kernel/process/process.header#L12) keeps a loaded process out of scheduling until [`run()`](library/unistd/process.picoc#L31) prepares its
+arguments, environment, descriptors, and stack. It also guards against
+starting twice. Another OS could use a startup flag or omit unstarted
+processes from its runnable collection instead.
+
+This guard applies to normal run setup. [`stop_process()`](kernel/signal.picoc#L37) accepts [`NEW`](kernel/process/process.header#L12), and
+[`continue_process()`](kernel/signal.picoc#L50) can then set [`READY`](kernel/process/process.header#L13). A stop/continue sequence can
+therefore expose an unstarted process to scheduling.
+
+[`scheduler_can_run()`](kernel/scheduler.picoc#L4) accepts [`READY`](kernel/process/process.header#L13) and [`RUNNING`](kernel/process/process.header#L14). This lets the current
+process run again if no other process is eligible. Being ready does not
+start execution immediately.
+
+[`ZOMBIE`](kernel/process/process.header#L17) retains the termination status while excluding the process from
+scheduling. [`4.3.2.2 Recording termination status`](#4322-recording-termination-status) and [`4.3.2.3 Parent collection and final removal`](#4323-parent-collection-and-final-removal) explain status delivery and final removal.
+
+The diagram follows normal startup, scheduling, waits, signals, and
+termination. Removal ends the PCB's lifetime. [`6. Scheduling and context switching`](#6-scheduling-and-context-switching) explains scheduling, and
+[`7. Blocking, wait queues, signals, and mutexes`](#7-blocking-wait-queues-signals-and-mutexes) explains blocking and signal suspension:
 
 ```mermaid
+%%{init: {"themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
 stateDiagram-v2
     [*] --> NEW: completed load
     NEW --> READY: run and build initial stack
@@ -1985,238 +3602,1404 @@ stateDiagram-v2
     STOPPED --> BLOCKED: SIGCONT while still queued
     STOPPED --> READY: SIGCONT when wait is satisfied
     STOPPED --> STOPPED: pending terminal read without input ownership
-    NEW --> ZOMBIE: termination
-    READY --> ZOMBIE: unload or fatal signal
+    NEW --> ZOMBIE: termination or unload
+    READY --> ZOMBIE: termination or signal
     RUNNING --> ZOMBIE: exit or fatal signal
     BLOCKED --> ZOMBIE: fatal signal
     STOPPED --> ZOMBIE: fatal signal
-    ZOMBIE --> [*]: waitpid collection or orphan cleanup
+    ZOMBIE --> [*]: collection, orphan cleanup, or unload
 ```
 
-Loading and starting are separate. Completing
-[`load_process()`](kernel/process/process_loader.picoc#L305) or
-[`load_process_chunk()`](kernel/process/process_loader.picoc#L292) creates a [`NEW`](kernel/process/process.header#L12) PCB.
-[`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) inherits descriptor values, writes the
-initial stack, and changes it to [`READY`](kernel/process/process.header#L13).
+### 4.1.2 Global process list and current process
+[\[↑ TOC\]](#contents)
 
-Creation first gives every PCB a new standard descriptor table. When a process
-later calls [`run()`](library/unistd/process.picoc#L31), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) deep-copies the
-running caller’s descriptor table, destroys the child's initial table, and
-installs the copy. PID 1 has no running caller and keeps its initial standard
-table. The parent PID and working directory, in contrast, are established when
-the image is loaded.
+PCB [`next`](kernel/process/process.header#L53) fields form the singly linked process list, also called the
+process table. [`first_process()`](kernel/process/process.picoc#L28) and [`current_process()`](kernel/process/process.picoc#L62) expose its head
+and current PCB. [`find_process_by_pid()`](kernel/process/process.picoc#L162) searches from the head.
 
-Termination first handles children, records status, changes the PCB to
-[`ZOMBIE`](kernel/process/process.header#L17), and wakes waiting parents. An orphan or a child whose parent was
-already waiting can be removed immediately. Otherwise the zombie retains its
-PCB, image, descriptor table, paths, and attachments until the parent collects
-it with [`waitpid()`](library/sys/wait/wait.picoc#L14).
+The roots reside in kernel `.data`. Each PCB is a separate Kernel Heap
+allocation. The tail and current pointers refer to members of the same list.
 
-Explicit unloading also removes an uncollected zombie; the test reset helper
-removes selected PCBs directly. Final removal unlinks the PCB from a wait queue and process list, releases
-shared-memory attachments and any pending process load, calls
-[`pfree()`](kernel/pmalloc.picoc#L47) on [`base_address`](kernel/process/process.header#L34),
-destroys the descriptor table, and frees PCB-owned strings and the PCB with
-[`kfree()`](kernel/kmalloc.picoc#L38).
+The upper view locates the allocations in SRAM. The lower view shows the
+same three PCBs, with the head at PCB 1, tail at PCB 3, and current pointer
+at PCB 2:
 
-## 5.6 Important process functions
+![Kernel globals and three linked PCBs in SRAM, followed by a process-list view of those same PCB objects with process_list_head, process_list_tail, and active_process pointing to PCB 1, PCB 3, and PCB 2](documentation/images/memory-process-list.svg)
 
-These functions manage the linked PCB list and its owned resources. The
-`Effects` column identifies the affected state; the `Calls` column lists the
-direct helpers that establish the next ownership or scheduling step.
+The directory allocation between PCB 1 and PCB 2 shows why process links
+are separate from allocator links. All roots point to PCB payloads. The
+allocation order and current process can change at runtime.
 
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`initialize_process_table()`](kernel/process/process.picoc#L21) | Returns no value | Resets process-list globals and the next PID | — |
-| [`create_process()`](kernel/process/process.picoc#L88) | Returns a PCB pointer; kernel-heap exhaustion halts the OS | Allocates and initializes a PCB, paths, descriptor table, embedded queues, and list link; copies the parent's working directory or uses `/` when there is no parent | [`kmalloc()`](kernel/kmalloc.picoc#L23), [`current_process()`](kernel/process/process.picoc#L61), [`copy_process_path()`](kernel/process/process.picoc#L69), [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35) |
-| [`first_process()`](kernel/process/process.picoc#L28), [`current_process()`](kernel/process/process.picoc#L61) | Return the head or active PCB, possibly `NULL` | Read process-list globals only | — |
-| [`set_current_process()`](kernel/process/process.picoc#L65) | Returns no value | Replaces the active PCB global | — |
-| [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`list_processes()`](kernel/process/process.picoc#L32) | Return a PCB or `NULL`; list function returns no value | Read/traverse the process list; the list function writes each PID/path through descriptor 1 | [`first_process()`](kernel/process/process.picoc#L28), [`uart_append_decimal()`](common/uart_protocol.picoc#L26), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213) |
-| [`remove_process()`](kernel/process/process.picoc#L208) | Returns no value | Final destructor: unlinks queues/list and releases image, attachments, descriptor table, strings, and PCB | [`remove_from_wait_queue()`](kernel/process/process.picoc#L175), [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172), [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`pfree()`](kernel/pmalloc.picoc#L47), [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L115), [`kfree()`](kernel/kmalloc.picoc#L38) |
-| [`orphan_and_signal_children()`](kernel/process/process.picoc#L278), [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L260) | Return no value | Update child parent fields or parent wait status/queue | [`remove_process()`](kernel/process/process.picoc#L208), [`send_signal_to_process()`](kernel/signal.picoc#L74), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415) |
-| [`terminate_process()`](kernel/process/process.picoc#L303), [`exit_process()`](kernel/process/process.picoc#L450), [`unload_process_by_pid()`](kernel/process/process.picoc#L327) | Termination returns no value; [`exit_process()`](kernel/process/process.picoc#L450) does not return normally; unload returns `true` on removal, `false` for a missing or current PID | Store status, make a PCB zombie, wake waiters, and remove it when permitted | [`orphan_and_signal_children()`](kernel/process/process.picoc#L278), [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`process_has_waiting_parent()`](kernel/process/process.picoc#L248), [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L260), [`remove_process()`](kernel/process/process.picoc#L208), [`terminate_process()`](kernel/process/process.picoc#L303), [`current_process()`](kernel/process/process.picoc#L61), [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55), [`shutdown()`](kernel/kernel.picoc#L15) |
-| [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368) | Returns `true` after immediate status/error collection; blocking dispatch normally resumes userspace with saved `IN2 = 1` | Collects status or records the caller's status pointer and blocks it on a child queue | [`current_process()`](kernel/process/process.picoc#L61), [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`remove_process()`](kernel/process/process.picoc#L208), [`sleep_on_wait_queue()`](kernel/process/process.picoc#L410) |
-| [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395), [`sleep_on_wait_queue()`](kernel/process/process.picoc#L410), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) | Enqueue/remove return no value; wake returns `false` for an empty queue and `true` after removing one waiter; sleep dispatches before resuming userspace | Maintain intrusive wait links and blocked/ready state | [`current_process()`](kernel/process/process.picoc#L61), [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) |
-| [`process_heap_start()`](kernel/process/process.picoc#L438), [`process_heap_size()`](kernel/process/process.picoc#L444) | Return current process's absolute heap start or heap size | Read current PCB memory fields only | [`current_process()`](kernel/process/process.picoc#L61) |
-| [`remove_test_processes()`](kernel/process/process.picoc#L347) | Returns no value | Removes all PCBs except PID 1, PID 2, and the caller; resets the next PID to 3 only when the caller is PID 2 | [`remove_process()`](kernel/process/process.picoc#L208) |
+[`initialize_process_table()`](kernel/process/process.picoc#L21) clears the roots and resets the PID counter.
+[`create_process()`](kernel/process/process.picoc#L89) allocates a PCB and appends it after the tail. The first
+PCB becomes both head and tail.
 
-The next table follows executable transfer, cleanup, and run setup. It shows
-when a reserved image becomes a PCB and when that PCB becomes runnable:
+[`process_list_head`](kernel/process/process.picoc#L16) starts lookup and scheduler wraparound.
+[`process_list_tail`](kernel/process/process.picoc#L17) lets creation append in O(1) time, without scanning the
+list. The scheduler itself does not use the tail.
 
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`load_process()`](kernel/process/process_loader.picoc#L305) | Returns PID, or 0 on failure | Resolves the boot-time path from PicoOS `/`, performs the continuous transfer, and creates a [`NEW`](kernel/process/process.header#L12) PCB | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7), [`drain_process_words()`](kernel/process/process_loader.picoc#L40), [`uart_print_loading_bar_label()`](common/loading_bar.picoc#L6), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121), [`loaded_process_stack_start()`](kernel/process/process_loader.picoc#L28), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`pmalloc()`](kernel/pmalloc.picoc#L20), [`receive_words_to_sram()`](common/sram_loader.picoc#L6), [`create_process()`](kernel/process/process.picoc#L88) |
-| [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) | Returns a positive PID on completion, 0 on failure, or [`SYSCALL_LOAD_PROCESS_CONTINUE`](common/syscall.header#L49) (-1) while work remains | Starts or advances the caller's load; DMA blocks for the full payload, polling receives at most 1 KiB per continuation; creates a [`NEW`](kernel/process/process.header#L12) PCB on completion | [`current_process()`](kernel/process/process.picoc#L61), [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`continue_process_load()`](kernel/process/process_loader.picoc#L227) |
-| [`cancel_process_load()`](kernel/process/process_loader.picoc#L76) | Returns no value | Cancels an active DMA load if necessary; clears the caller's pending-load pointer and frees the partial image, copied path, and metadata | [`dma_transfer_status()`](common/dma.picoc#L21), [`cancel_dma_transfer()`](common/dma.picoc#L32), [`pfree()`](kernel/pmalloc.picoc#L47), [`free_process_load()`](kernel/process/process_loader.picoc#L71) |
-| [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) | Returns no value | Writes initial stack/tables/strings into the image and sets activation [`sp`](kernel/process/process.header#L25)/[`baf`](kernel/process/process.header#L26) | [`process_argument_token_count()`](kernel/process/process_arguments.picoc#L14), [`process_environment_count()`](kernel/process/process_arguments.picoc#L89), [`process_string_cell_count()`](kernel/process/process_arguments.picoc#L103), [`process_argument_string_cell_count()`](kernel/process/process_arguments.picoc#L51), [`copy_process_string()`](kernel/process/process_arguments.picoc#L113), [`process_argument_is_space()`](kernel/process/process_arguments.picoc#L5), [`process_argument_is_quote()`](kernel/process/process_arguments.picoc#L9) |
-| [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) | Returns `true` after run setup; `false` for a missing PID or a PCB that is not [`NEW`](kernel/process/process.header#L12) | Installs inherited descriptors, stores startup data, and changes [`NEW`](kernel/process/process.header#L12) to [`READY`](kernel/process/process.header#L13) | [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`current_process()`](kernel/process/process.picoc#L61), [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99), [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L115), [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+Appending preserves creation order. [`scheduler_next_process()`](kernel/scheduler.picoc#L12) follows
+[`next`](kernel/process/process.header#L53) and wraps to the head.
 
-# 6. Blocking, waiting, synchronization, and signals
+The shared-memory registry inserts at its head because it does not need
+creation order. Both lists can link a node in O(1) time. This comparison
+covers linking, rather than allocation or lookup:
 
-Process states become most visible when work cannot continue immediately.
-The mechanisms here use PCB fields and intrusive queues to preserve a blocked
-operation, while signals add explicit stop, continue, and termination paths.
+| List | Insertion policy | Pointers and linking cost |
+| --- | --- | --- |
+| PCB list | [`create_process()`](kernel/process/process.picoc#L89) appends at the end | [`process_list_head`](kernel/process/process.picoc#L16) starts traversal, [`process_list_tail`](kernel/process/process.picoc#L17) makes append O(1). With only a head, append would take O(n) |
+| [`SharedMemoryEntry`](kernel/shared_memory.header#L8) registry | [`open_shared_memory()`](kernel/shared_memory.picoc#L92) prepends at the beginning | Sets the new entry's [`next`](kernel/shared_memory.header#L14) to [`shared_memory_list_head`](kernel/shared_memory.picoc#L6), then moves the head to the new entry. A head alone makes insertion O(1) |
 
-## 6.1 Wait queues
+A shared-memory tail would add maintenance without improving insertion.
+Name lookup and finding a predecessor for removal still require a scan.
 
-A [`struct wait_queue`](common/wait_queue.header#L5) contains only two PCB
-pointers. The definition and attribute table below show how those endpoints
-support FIFO insertion and removal:
+[`remove_process()`](kernel/process/process.picoc#L209) finds the PCB and predecessor, bypasses the node, and
+updates the head, tail, and current pointer as needed. [`4.3.2.3 Parent collection and final removal`](#4323-parent-collection-and-final-removal) explains
+resource cleanup. [`7.2 Wait queues and PCB links`](#72-wait-queues-and-pcb-links) covers its separate wait-queue link.
+
+The scheduler scans the process list directly. Wait queues use [`wait_next`](kernel/process/process.header#L51),
+leaving [`next`](kernel/process/process.header#L53) for list order. [`6.1.1 Algorithm and Round Robin comparison`](#611-algorithm-and-round-robin-comparison) explains scheduler traversal.
+
+#### 4.1.2.1 From PCBs to Process Payloads in SRAM
+[\[↑ TOC\]](#contents)
+
+[`base_address`](kernel/process/process.header#L34) connects each PCB to its Process Payload in the outer heap.
+That allocation contains the image, user heap, and stack described in [`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy).
+Its allocator header lies just before it.
+
+In this two-process example, PCB 1 and PCB 2 occupy Kernel Heap payloads A
+and C. Their green [`base_address`](kernel/process/process.header#L34) arrows reach the corresponding Process
+Payloads. The middle allocation holds shared data:
+
+![Complete SRAM with three blocks per heap and two kernel PCBs pointing through base_address to Process Payloads A and C](documentation/images/memory-process-payload-links.svg)
+
+[`create_process()`](kernel/process/process.picoc#L89) stores the [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) address in [`base_address`](kernel/process/process.header#L34).
+Adding code and data offsets gives [`activation.cs`](kernel/process/process.header#L27) and [`activation.ds`](kernel/process/process.header#L28).
+Adding [`heap_start`](kernel/process/process.header#L36) gives the user-heap address.
+
+## 4.2 Initial user process stack
+[\[↑ TOC\]](#contents)
+
+[`run()`](library/unistd/process.picoc#L31) completes the initial stack before setting [`state`](kernel/process/process.header#L33) to [`READY`](kernel/process/process.header#L13).
+After [`load()`](library/unistd/process.picoc#L17), the stack contains only a preliminary entry PC. [`4.3 Loading and starting a process`](#43-loading-and-starting-a-process) explains
+these two phases.
+
+### 4.2.1 User process stack placement
+[\[↑ TOC\]](#contents)
+
+The blue highlight locates one process's stack after its image and heap.
+Other processes have their own stacks in separate Process Payloads:
+
+![Complete SRAM expanded into Process Payload A, with both the payload and its User Process Stack highlighted by matching blue fills and thick blue borders](documentation/images/process-stack-placement.svg)
+
+[`base_address`](kernel/process/process.header#L34) starts the payload, and [`size`](kernel/process/process.header#L35) includes image, heap, and
+stack. Its highest stack cell is `base_address + size - 1`. Growth proceeds
+toward the heap, whose final cell forms the lower boundary.
+
+The binary header supplies the reservation. A heap size of `-1` selects
+[`DEFAULT_PROCESS_HEAP_CELLS`](kernel/process/process_loader.header#L6), currently 1000. A stack start of `-1` selects
+`heap_start + heap_size + DEFAULT_PROCESS_STACK_CELLS`, also currently 1000.
+Because this is the inclusive highest offset, it reserves 1001 cells beyond
+the heap. The loader rejects a stack start inside the heap and adds one to
+the effective offset for the allocation size.
+
+### 4.2.2 Initial `argc`, `argv`, and `envp`
+[\[↑ TOC\]](#contents)
+
+[`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) fills the high end of that reservation during
+run setup. These values belong to runtime stack storage, separate from the
+linked image copied during loading.
+
+[`argc`](kernel/process/process_arguments.picoc#L131) includes the executable path, and `envc` counts environment entries.
+These names describe the layout rather than additional PCB fields:
+
+| Name | Meaning | Calculation |
+| --- | --- | --- |
+| `startup_cell_count` | Number of cells needed for all startup values and strings | Sum shown below |
+| `entry_pc_address` | Address of the cell holding the entry PC | `base_address + size - startup_cell_count` |
+| `strings_start_address` | Address of the first copied string character | `entry_pc_address + argc + envc + 4` |
+| `highest_stack_address` | Address of the highest reserved stack cell | `base_address + size - 1` |
+
+Each ordinary row represents one 32-bit cell, even for a character. `...`
+stands for omitted cells:
+
+| Cell address | Stored value |
+| --- | --- |
+| **↑ Decreasing addresses** | **Lower addresses · stack grows ↑** |
+| `entry_pc_address` | Entry PC = [`activation.cs`](kernel/process/process.header#L27) minus 1 |
+| `entry_pc_address + 1` | [`argc`](kernel/process/process_arguments.picoc#L131) |
+| `entry_pc_address + 2` | [`argv[0]`](kernel/process/process_arguments.picoc#L184) |
+| `...` | `...` |
+| `entry_pc_address + argc + 2` | [`argv[argc] = NULL`](kernel/process/process_arguments.picoc#L180) |
+| `entry_pc_address + argc + 3` | [`envp[0]`](kernel/process/process_arguments.picoc#L225) |
+| `...` | `...` |
+| `entry_pc_address + argc + envc + 3` | [`envp[envc] = NULL`](kernel/process/process_arguments.picoc#L181) |
+| `strings_start_address` | First character of the copied [`binary_path`](kernel/process/process.header#L38) |
+| `strings_start_address + 1` | Next character of the path, or its `\0` terminator |
+| `...` | Remaining path, argument, and environment characters and `\0` terminators |
+| `highest_stack_address` | Last string's `\0` |
+| **↓ Increasing addresses** | **Higher addresses** |
+
+The pointers address copied strings on the child stack. `argv[0]` holds
+the executable path without its leading `/`, followed by arguments and
+`NAME=value` environment strings. Every string has a zero terminator, and
+each pointer array ends in `NULL`.
+
+[`argv`](kernel/process/process_arguments.picoc#L140) is the address of the first argument-pointer cell at
+`entry_pc_address + 2`. [`envp`](kernel/process/process_arguments.picoc#L141) begins at `argv + argc + 1`. Neither is an
+extra cell holding an array pointer.
+
+Setup uses the existing reservation without checking that all startup data
+fits above the heap. This calculation includes the entry PC, counts, pointer
+sentinels, and string terminators:
+
+```text
+startup_cell_count = 1 + 1 + argc + 1 + envc + 1
+    + cells(binary_path including its terminator)
+    + cells(all argument strings including their terminators)
+    + cells(all environment strings including their terminators)
+```
+
+Setup saves `activation.sp = entry_pc_address - 1` and
+`activation.baf = entry_pc_address - 2`. The first `RTI` consumes the entry
+PC. [`_start()`](library/start/start.picoc#L14) reads [`argc`](kernel/process/process_arguments.picoc#L131) at `BAF + 3` and [`argv`](kernel/process/process_arguments.picoc#L140) at `BAF + 4`.
+[`start_process()`](library/start/start.picoc#L7) finds [`envp`](kernel/process/process_arguments.picoc#L141) after [`argv`](kernel/process/process_arguments.picoc#L140), initializes the heap, and copies
+the environment into heap storage before calling `main()`.
+
+The comparison is the **System V ABI, Intel386 Architecture Processor
+Supplement, Process Initialization**, [Figure 3-31](https://refspecs.linuxbase.org/elf/abi386-4.pdf#page=54). PicoOS keeps its order of
+argument count, argument pointers, null sentinel, environment pointers, and
+null sentinel. RETI adds an entry-PC cell, uses word addresses and one cell
+per character, and omits the auxiliary vector. It also fixes string order,
+which the Intel386 ABI leaves unspecified. This is an adaptation, rather
+than Intel386 ABI compliance.
+
+[POSIX.1-2024 `exec`](https://pubs.opengroup.org/onlinepubs/9799919799/functions/exec.html) and [environment conventions](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap08.html) define the source-level
+arrays and `NAME=value` strings. They do not prescribe their physical stack
+layout. PicoOS shares these representations but uses separate [`load()`](library/unistd/process.picoc#L17) and
+[`run()`](library/unistd/process.picoc#L31) calls rather than POSIX `exec`.
+
+<!-- Presentation: mention the System V Intel386 initial-process-stack comparison,
+     distinguish POSIX source-level conventions, and explain the RETI adaptations. -->
+
+#### 4.2.2.1 Concrete initial-stack example
+[\[↑ TOC\]](#contents)
+
+Save this program as `add.picoc` and link it with [`libstart`](library/start/libstart.picoc) and [`libstdlib`](library/stdlib/libstdlib.picoc).
+It adds two arguments when environment variable `X` is `1`:
 
 ```c
-struct wait_queue {
-    struct Process *head;
-    struct Process *tail;
+#include "library/stdlib/stdlib.header"
+
+int main(int argc, char **argv) {
+    char *enabled = getenv("X");
+
+    if (argc == 3 && enabled != NULL && atoi(enabled) == 1) {
+        return atoi(argv[1]) + atoi(argv[2]);
+    }
+    return 0;
+}
+```
+
+The launcher passes `2`, `3`, and a null-terminated environment array. With
+successful loading and starting, [`waitpid()`](library/sys/wait/wait.picoc#L14) returns the result `5`:
+
+```c
+#include "library/unistd/unistd.header"
+#include "library/sys/wait/wait.header"
+
+int main(void) {
+    char *environment[3];
+    int pid = load("/add.bin");
+
+    environment[0] = "X=1";
+    environment[1] = "Y=0";
+    environment[2] = NULL;
+    run(pid, "2 3", environment);
+    return waitpid(pid);
+}
+```
+
+`argc = 3` and two environment entries occupy 29 startup cells. Thus
+`entry_pc_address = base_address + size - 29`. Read the rows in order. Each
+box is one cell labeled by its offset, and the pointer values stored there
+are absolute addresses:
+
+![Initial stack for add.bin with two arguments, 2 and 3, and two environment variables, X=1 and Y=0, showing cell offsets from entry_pc_address, absolute pointer targets by offset, both address directions, and continuation arrows between rows](documentation/images/process-initial-stack-example.svg)
+
+`SP` is saved one cell below the entry PC and `BAF` two cells below it.
+The last string terminator overwrites the preliminary entry PC at the top
+of the stack. The final entry PC now lies below [`argc`](kernel/process/process_arguments.picoc#L131).
+
+## 4.3 Loading and starting a process
+[\[↑ TOC\]](#contents)
+
+[`load()`](library/unistd/process.picoc#L17) receives a program, and [`run()`](library/unistd/process.picoc#L31) prepares it to execute. Their
+wrappers reach [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) and [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241).
+The dispatcher later restores the prepared activation, as shown in [`6.4 Restoring the selected process and returning with RTI`](#64-restoring-the-selected-process-and-returning-with-rti).
+
+### 4.3.1 Loading a process (`load` library call)
+[\[↑ TOC\]](#contents)
+
+Loading reserves memory, receives the image, and creates a process record.
+The main steps are:
+
+1. Resolve the path, read and validate the binary header, apply heap and
+   stack defaults, and reserve a Process Payload with [`PSDMalloc()`](kernel/psdmalloc.picoc#L20).
+2. Keep transfer progress in the caller's [`pending_load`](kernel/process/process.header#L68) while receiving
+   the image through polling or DMA.
+3. Call [`create_process()`](kernel/process/process.picoc#L89) to allocate and append a PCB with [`state`](kernel/process/process.header#L33) set
+   to [`NEW`](kernel/process/process.header#L12). It records the payload bounds, prepares segment registers and
+   a preliminary entry PC, and creates the initial descriptors and paths.
+   [`4.1 Process control block fields`](#41-process-control-block-fields) lists every initialized field.
+4. Clear [`pending_load`](kernel/process/process.header#L68), release temporary metadata, and return the child PID.
+
+Only the image words after the header are copied into the Process Payload.
+The user heap remains uninitialized until userspace startup.
+
+This first step follows the image from host storage through UART into SRAM.
+Dashed arrows show data movement, and solid arrows show stored pointers:
+
+![EPROM, the complete peripheral mapping, and SRAM with CPU-polling and DMA transfer paths into the newly allocated User Process Image, while the caller owns ProcessLoad](documentation/images/process-load-transfer.svg)
+
+Without DMA, [`begin_process_load()`](kernel/process/process_loader.picoc#L109) reads the file size and 20-byte header.
+[`continue_process_load()`](kernel/process/process_loader.picoc#L227) receives at most 256 words per request.
+[`receive_word()`](common/uart_protocol.picoc#L7) assembles four bytes into each SRAM word. The wrapper
+returns through userspace between chunks, allowing scheduling.
+
+With `--dma`, the header still uses polling. The payload arrives in one
+transfer, and the caller blocks on [`dma_waiters`](kernel/dma.picoc#L6). Completion wakes it. Its
+next load syscall checks the result and creates the child PCB. Rejected
+transfers free the partial allocation and return `0`. [`2.7 DMA completion interrupt path`](#27-dma-completion-interrupt-path) explains DMA.
+
+After reception, creation appends the PCB, advances [`next_process_id`](kernel/process/process.picoc#L19), and
+leaves [`state`](kernel/process/process.header#L33) set to [`NEW`](kernel/process/process.header#L12):
+
+![Completed load with the child PCB appended in the kernel heap, state NEW, fresh descriptors, initialized activation fields, and only one preliminary entry-PC cell on its stack](documentation/images/process-load-complete.svg)
+
+The stack now contains an entry PC at `base_address + size - 1`. Saved
+[`activation.sp`](kernel/process/process.header#L25) lies one cell below it, and [`activation.baf`](kernel/process/process.header#L26) points to it.
+No argument or environment layout exists yet. The remaining stack cells
+are uninitialized.
+
+[`ProcessLoad`](kernel/process/process_loader.picoc#L14) retains header values and transfer progress between syscalls.
+The table shows its fields. [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) describes its storage and lifetime:
+
+| Field | Meaning | Used by |
+| --- | --- | --- |
+| [`ProcessLoad.base_address`](kernel/process/process_loader.picoc#L15) | Absolute start of the reserved Process and Shared Data Heap region | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), used by [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227), [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90), and [`cancel_process_load(process)`](kernel/process/process_loader.picoc#L76) |
+| [`ProcessLoad.process_size`](kernel/process/process_loader.picoc#L16) | Total reserved cells for the User Process Image, User Process Heap, and User Process Stack | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), passed to [`create_process()`](kernel/process/process.picoc#L89) by [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90) |
+| [`ProcessLoad.code_start`](kernel/process/process_loader.picoc#L17), [`ProcessLoad.data_start`](kernel/process/process_loader.picoc#L18) | Linked code- and data-segment offsets from the binary header | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), passed to [`create_process()`](kernel/process/process.picoc#L89) by [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90) |
+| [`ProcessLoad.heap_start`](kernel/process/process_loader.picoc#L19), [`ProcessLoad.heap_size`](kernel/process/process_loader.picoc#L20) | Resolved userspace heap offset and cell count | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), passed to [`create_process()`](kernel/process/process.picoc#L89) by [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90) |
+| [`ProcessLoad.payload_word_count`](kernel/process/process_loader.picoc#L21) | Encoded program words after the five-word header | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), bounds both DMA and polling transfers in [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109) and [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) |
+| [`ProcessLoad.loaded_word_count`](kernel/process/process_loader.picoc#L22) | Words copied by the polling transfer so far | First initialized to 0 by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), advanced and checked by [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) |
+| [`ProcessLoad.loading_bar_update`](kernel/process/process_loader.picoc#L23) | Next word count at which progress output is redrawn | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), updated by [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) |
+| [`ProcessLoad.uses_dma`](kernel/process/process_loader.picoc#L24) | Whether the reserved image is being filled by one DMA transfer rather than polling chunks | First initialized to `false` and set to `true` by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), checked by [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) and [`cancel_process_load(process)`](kernel/process/process_loader.picoc#L76) |
+| [`ProcessLoad.path`](kernel/process/process_loader.picoc#L25) | Kernel-owned absolute binary path used by later range requests and copied into the completed PCB | First initialized by [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109), read by [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) and [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90), freed by [`free_process_load(load)`](kernel/process/process_loader.picoc#L71) |
+
+[`finish_process_load()`](kernel/process/process_loader.picoc#L90) creates the child and releases temporary load data.
+[`cancel_process_load()`](kernel/process/process_loader.picoc#L76) also cancels active DMA and releases the partial
+Process Payload. No child PCB exists until the transfer finishes.
+
+Boot-time init loading uses [`load_process()`](kernel/process/process_loader.picoc#L305) and a continuous [`load`](#123-uart-host-service-protocol)
+response. [`receive_words_to_sram()`](common/sram_loader.picoc#L6) polls UART or DMA completion because
+there is no running user caller to block. Both paths use [`create_process()`](kernel/process/process.picoc#L89).
+
+#### 4.3.1.1 Load function reference
+[\[↑ TOC\]](#contents)
+
+The table starts with the syscall-backed loader, then lists transfer
+helpers and the boot-time loader. [`4.3.2.4 Run function reference`](#4324-run-function-reference) covers run setup:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`load_process_chunk(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L292) | Positive PID when complete, 0 on failure, or [`SYSCALL_LOAD_PROCESS_CONTINUE`](common/syscall.header#L48) (-1) while work remains | Starts or resumes the caller-owned load. Successful completion creates a PCB with [`state`](kernel/process/process.header#L33) [`NEW`](kernel/process/process.header#L12) | [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`continue_process_load()`](kernel/process/process_loader.picoc#L227), [`current_process()`](kernel/process/process.picoc#L62)<br>**Host requests:** `file-size <path>` and `read-range <offset> <count> <path>` through helpers | **Library functions:** [`load()`](library/unistd/process.picoc#L17) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> |
+| [`load_process(path, show_loading_bar)`](kernel/process/process_loader.picoc#L305) | PID on success, 0 on rejected path, missing/short header, invalid stack placement, or exhausted process memory | Kernel boot-time continuous transfer. Reserves the Process Payload, receives the image, and creates the PCB | [`PSDMalloc()`](kernel/psdmalloc.picoc#L20), [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`create_process()`](kernel/process/process.picoc#L89), [`drain_process_words()`](kernel/process/process_loader.picoc#L40), [`loaded_process_stack_start()`](kernel/process/process_loader.picoc#L28), [`receive_word()`](common/uart_protocol.picoc#L7), [`receive_words_to_sram()`](common/sram_loader.picoc#L6), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121), [`uart_print_loading_bar_label()`](common/loading_bar.picoc#L6), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`uart_send_host_request()`](common/uart_protocol.picoc#L82)<br>**Host requests:** `load <path>` | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) in [`kernel/kernel.picoc`](kernel/kernel.picoc) |
+| [`begin_process_load(path, show_loading_bar, caller_context)`](kernel/process/process_loader.picoc#L109) | PID for an empty payload, continuation status after transfer setup, or 0 on path/header/allocation/transfer failure | Reads the header, reserves memory, allocates [`ProcessLoad`](kernel/process/process_loader.picoc#L14) and its path, sets [`caller.pending_load`](kernel/process/process.header#L68), initializes progress, and optionally starts blocking DMA | [`PSDMalloc()`](kernel/psdmalloc.picoc#L20), [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`copy_process_path()`](kernel/process/process.picoc#L70), [`current_process()`](kernel/process/process.picoc#L62), [`dma_is_active()`](common/dma.picoc#L17), [`drain_process_bytes()`](kernel/process/process_loader.picoc#L62), [`finish_process_load()`](kernel/process/process_loader.picoc#L90), [`kmalloc()`](kernel/kmalloc.picoc#L23), [`loaded_process_stack_start()`](kernel/process/process_loader.picoc#L28), [`receive_word()`](common/uart_protocol.picoc#L7), [`start_dma_uart_receive()`](kernel/dma.picoc#L18), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121), [`uart_print_loading_bar_label()`](common/loading_bar.picoc#L6), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`uart_send_file_range_command()`](common/uart_protocol.picoc#L90), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`uart_start_loading_bar()`](common/loading_bar.picoc#L43)<br>**Host requests:** `file-size <path>`, `read-range 0 20 <path>`, optional whole-payload `read-range 20 <count> <path>` | **Kernel functions:** [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) |
+| [`continue_process_load(owner)`](kernel/process/process_loader.picoc#L227) | PID on completion, continuation status while DMA is busy or polling work remains, or 0 on transfer failure | Checks DMA status or polls up to 256 payload words, advances [`loaded_word_count`](kernel/process/process_loader.picoc#L22) and progress, completes or cancels the load | [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`dma_transfer_status()`](common/dma.picoc#L21), [`drain_process_bytes()`](kernel/process/process_loader.picoc#L62), [`finish_process_load()`](kernel/process/process_loader.picoc#L90), [`receive_word()`](common/uart_protocol.picoc#L7), [`uart_send_file_range_command()`](common/uart_protocol.picoc#L90), [`uart_update_loading_bar()`](common/loading_bar.picoc#L58)<br>**Host requests:** Polling `read-range <offset> <count> <path>` | **Kernel functions:** [`load_process_chunk()`](kernel/process/process_loader.picoc#L292) |
+| [`finish_process_load(owner)`](kernel/process/process_loader.picoc#L90) | New PID | Creates the child PCB after transfer, clears [`owner.pending_load`](kernel/process/process.header#L68), and frees temporary load metadata and its copied path | [`create_process()`](kernel/process/process.picoc#L89), [`free_process_load()`](kernel/process/process_loader.picoc#L71), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`continue_process_load()`](kernel/process/process_loader.picoc#L227) |
+| [`create_process(base_address, size, code_start, data_start, heap_start, heap_size, binary_path)`](kernel/process/process.picoc#L89) | PCB pointer. Kernel-heap exhaustion halts the OS through allocation checks | Assigns PID and [`state`](kernel/process/process.header#L33) [`NEW`](kernel/process/process.header#L12), records memory fields, initializes [`activation`](kernel/process/process.header#L40), queues and signals, creates standard descriptors, copies paths and parent-derived metadata, writes the preliminary entry PC, and appends the PCB | [`copy_process_path()`](kernel/process/process.picoc#L70), [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), [`current_process()`](kernel/process/process.picoc#L62), [`kmalloc()`](kernel/kmalloc.picoc#L23) | **Kernel functions:** [`finish_process_load()`](kernel/process/process_loader.picoc#L90), [`load_process()`](kernel/process/process_loader.picoc#L305) |
+| [`copy_process_path(path)`](kernel/process/process.picoc#L70) | New kernel-owned string pointer | Allocates and copies a path including its terminator | [`kmalloc()`](kernel/kmalloc.picoc#L23) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`create_process()`](kernel/process/process.picoc#L89), [`set_process_working_directory()`](kernel/filesystem/host_filesystem.picoc#L128) |
+| [`loaded_process_stack_start(heap_start, heap_size, stack_start)`](kernel/process/process_loader.picoc#L28) | Highest process-relative stack offset, or [`PSDMALLOC_INVALID_START`](kernel/psdmalloc.header#L3) for overlap | Resolves the default highest stack offset or checks an explicit offset, no memory writes | None | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`load_process()`](kernel/process/process_loader.picoc#L305) |
+| [`cancel_process_load(process)`](kernel/process/process_loader.picoc#L76) | No return value | Cancels busy DMA if needed, clears [`process.pending_load`](kernel/process/process.header#L68), frees the partial Process Payload and temporary metadata | [`PSDFree()`](kernel/psdmalloc.picoc#L47), [`cancel_dma_transfer()`](common/dma.picoc#L32), [`dma_transfer_status()`](common/dma.picoc#L21), [`free_process_load()`](kernel/process/process_loader.picoc#L71) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`continue_process_load()`](kernel/process/process_loader.picoc#L227), [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`free_process_load(load)`](kernel/process/process_loader.picoc#L71) | No return value | Frees the temporary kernel-owned host path and [`ProcessLoad`](kernel/process/process_loader.picoc#L14) | [`kfree()`](kernel/kmalloc.picoc#L38) | **Kernel functions:** [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`finish_process_load()`](kernel/process/process_loader.picoc#L90) |
+| [`drain_process_words(payload_word_count, show_loading_bar)`](kernel/process/process_loader.picoc#L40) | No return value | Consumes a rejected continuous payload so UART remains synchronized, optionally reports progress | [`receive_word()`](common/uart_protocol.picoc#L7), [`uart_start_loading_bar()`](common/loading_bar.picoc#L43), [`uart_update_loading_bar()`](common/loading_bar.picoc#L58) | **Kernel functions:** [`load_process()`](kernel/process/process_loader.picoc#L305) |
+| [`drain_process_bytes(byte_count)`](kernel/process/process_loader.picoc#L62) | No return value | Consumes unexpected positive range-response data so UART remains synchronized | [`receive_byte_over_uart()`](kernel/uart_hardware.picoc#L24) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`continue_process_load()`](kernel/process/process_loader.picoc#L227) |
+
+The directly linked transfer helper is shared by bootloader and kernel:
+
+| Kernel / Library Function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`receive_words_to_sram(base_address, word_count, show_loading_bar)`](common/sram_loader.picoc#L6) (Shared/Common) | No return value | Receives word_count cells at base_address. Polls UART without DMA, otherwise starts DMA and busy-waits for its status, updates requested loading progress | [`dma_is_active()`](common/dma.picoc#L17), [`dma_transfer_status()`](common/dma.picoc#L21), [`receive_word()`](common/uart_protocol.picoc#L7), [`start_dma_uart_transfer()`](common/dma.picoc#L25), [`uart_start_loading_bar()`](common/loading_bar.picoc#L43), [`uart_update_loading_bar()`](common/loading_bar.picoc#L58) | **Kernel functions:** [`load_process()`](kernel/process/process_loader.picoc#L305)<br>**Bootloader functions:** [`boot_main()`](boot/bootloader.picoc#L41) |
+
+### 4.3.2 Starting a process (`run` library call)
+[\[↑ TOC\]](#contents)
+
+Starting finishes the process setup in this order:
+
+1. Pack the PID, raw arguments, and selected environment into a
+   [`RunProcessRequest`](common/syscall.header#L55). A `NULL` environment selects the caller's environment.
+2. Find the PCB and require [`state`](kernel/process/process.header#L33) to be [`NEW`](kernel/process/process.header#L12).
+3. Copy inheritable descriptors from the run caller.
+4. Copy arguments and environment strings to the child stack, build their
+   pointer arrays, and update [`activation.sp`](kernel/process/process.header#L25) and [`activation.baf`](kernel/process/process.header#L26).
+5. Set [`state`](kernel/process/process.header#L33) to [`READY`](kernel/process/process.header#L13) and return success.
+
+The figure highlights the new stack, descriptor table, and changed PCB
+fields. The heap remains reserved until userspace startup:
+
+![Run changes inside the same SRAM layout: inherited descriptor table, copied caller arguments and environment, new stack and activation pointers, and state NEW to READY](documentation/images/process-run-setup.svg)
+
+The shell separates the command name, expands variables, and passes the
+remaining argument string to [`run()`](library/unistd/process.picoc#L31). The kernel splits it on spaces and
+tabs, preserving quoted whitespace and removing matching quotes. It builds
+the pointer array itself. [`12.4 Command parsing, expansion, and execution`](#124-command-parsing-expansion-and-execution) explains shell parsing.
+
+The kernel copies the request's strings rather than retaining caller
+pointers. [`4.2.2 Initial argc, argv, and envp`](#422-initial-argc-argv-and-envp) shows the final layout and relocated entry PC.
+
+Setting [`READY`](kernel/process/process.header#L13) permits later scheduling. The call does not load the CPU
+registers immediately. On first dispatch, [`_start()`](library/start/start.picoc#L14) initializes the heap
+and environment before entering the application.
+
+#### 4.3.2.1 Parent-to-child inheritance
+[\[↑ TOC\]](#contents)
+
+Inheritance occurs during both loading and starting. PicoOS creates a new
+image rather than making a `fork()`-style memory copy. The table distinguishes
+copied values, independent allocations, and the selected environment:
+
+| Child field or resource | Source and time | Relationship to parent afterward |
+| --- | --- | --- |
+| [`parent_pid`](kernel/process/process.header#L57) | Loader's PID recorded by [`create_process()`](kernel/process/process.picoc#L89) during load completion | Identifies the parent until orphaning, not a shared PCB pointer |
+| [`working_directory`](kernel/process/process.header#L39) | Kernel-heap string copied by [`create_process()`](kernel/process/process.picoc#L89) | Independent path allocation, a later [`chdir()`](library/unistd/working_directory.picoc#L4) changes only its caller |
+| [`parent_death_signal`](kernel/process/process.header#L59) | Integer copied from the loader by [`create_process()`](kernel/process/process.picoc#L89) | Later [`prctl()`](library/sys/prctl/prctl.picoc#L14) changes only the caller and what its future children inherit |
+| [`file_descriptors`](kernel/process/process.header#L42) | Fresh standard table during loading, replaced during [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) with a deep copy from the current run caller | Table, entry fields, offsets, and path strings are independent. Standard slots 0–2 are copied, slots 3–4 are copied only for opened regular-file entries, and reserved shell save slots 5–7 remain free in the child |
+| Initial environment | [`run()`](library/unistd/process.picoc#L31) selects the caller's current environment for a `NULL` argument, or the explicitly supplied array | [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) copies strings to the child stack, then [`initialize_environment()`](library/stdlib/env.picoc#L97) copies them into the child's heap after dispatch |
+
+Solid arrows show stored pointers, and dashed arrows show copies at each
+phase. PCBs, paths, and descriptor tables are Kernel Heap allocations.
+[`8.6 File-descriptor creation, inheritance, duplication, and cleanup`](#86-file-descriptor-creation-inheritance-duplication-and-cleanup) explains descriptor copying:
+
+![Parent and child PCBs with independent directory strings and descriptor tables in contiguous kernel-heap blocks, distinguishing stored pointers from load-time and run-time copies](documentation/images/process-inheritance.svg)
+
+The loader supplies the parent PID, working directory, and parent-death
+setting at PCB creation. The run caller supplies descriptors and the default
+environment at starting. It need not be the recorded parent. Directory
+changes after load therefore leave the child's copy unchanged, while
+descriptor and environment changes before run affect inheritance. Shell
+redirections must be installed before [`run()`](library/unistd/process.picoc#L31).
+
+The child gets a new PID, activation, wait queues, and signal bookkeeping.
+Shared-memory attachments are not inherited. Init has parent PID `0`, no
+parent-death signal, directory `/`, and fresh standard descriptors.
+
+##### 4.3.2.1.1 Environment origin and propagation
+[\[↑ TOC\]](#contents)
+
+The kernel stores no environment pointer in the PCB. It starts init with
+null arguments and environment, giving it only `argv[0]` and an empty
+environment. Init then reads the configuration. [`11.2.1 Loading init and entering normal execution`](#1121-loading-init-and-entering-normal-execution) covers its first
+dispatch.
+
+Each image has its own [`environ`](library/stdlib/env.picoc#L4) global. [`start_process()`](library/start/start.picoc#L7) initializes it
+with an independent heap array. Init then reads up to 256 cells from
+[`config/environment.txt`](config/environment.txt) and parses `NAME=value` entries. Invalid input or
+file and allocation failures stop init startup.
+
+[`setenv()`](library/stdlib/env.picoc#L126) stores independent strings, so init can release the read buffer.
+The current file supplies `PATH=/user`. Init optionally adds
+[`PICOOS_LOADING_BAR`](common/loading_bar.header#L5) before starting the shell.
+
+[`run(shell_pid, NULL, NULL)`](library/unistd/process.picoc#L31) selects init's environment through
+[`current_environment()`](library/stdlib/env.picoc#L6). An explicit array replaces that default. The
+kernel's direct boot call bypasses this library selection, so init itself
+starts empty.
+
+Environment propagation makes two copies. First, [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125)
+copies pointers and strings onto the child stack and updates its saved
+stack registers. [`4.2.2 Initial argc, argv, and envp`](#422-initial-argc-argv-and-envp) shows the layout.
+
+At first dispatch, [`initialize_environment()`](library/stdlib/env.picoc#L97) copies that stack array and
+its strings into the child heap, then assigns [`environ`](library/stdlib/env.picoc#L4). Later environment
+changes affect neither the initial stack nor the parent's copies.
+
+The shell passes its environment to applications in the same way. The
+diagram follows unchanged values and branches that remove or replace them:
+
+```mermaid
+flowchart LR
+    K["Kernel<br/>no environment object"] -->|direct kernel start helper| I0["Init startup<br/>empty environment"]
+    C["config/environment.txt<br/>PATH=/user"] -->|read_environment and setenv| I["Init heap environment<br/>PATH=/user<br/>PICOOS_LOADING_BAR=true when enabled"]
+    I0 -->|read configuration| I
+    I -->|run shell, NULL environment| S["Shell heap environment<br/>independent copies"]
+    S -->|run child, NULL environment| U["Unchanged branch<br/>keeps inherited environment"]
+    U -->|run child, NULL environment| UC["Child receives<br/>unchanged values"]
+    S -->|run child, NULL environment| R["Removal branch<br/>unsetenv PICOOS_LOADING_BAR"]
+    R -->|run child, NULL environment| RC["Child receives PATH<br/>loading-bar variable absent"]
+    S -->|run child, NULL environment| M["Change branch<br/>setenv PATH, /user:/test, true"]
+    M -->|run child, NULL environment| MC["Child receives<br/>PATH=/user:/test"]
+```
+
+[`unsetenv("PICOOS_LOADING_BAR")`](library/stdlib/env.picoc#L157) removes and frees an entry.
+[`setenv("PATH", "/user:/test", true)`](library/stdlib/env.picoc#L126) replaces one. These changes affect the
+caller and children started afterward. Existing processes keep their copies.
+[`getenv()`](library/stdlib/env.picoc#L115) returns a pointer to the value or `NULL`. [`10.2.7.3 Environment operations in env.picoc`](#10273-environment-operations-in-envpicoc) covers the API.
+
+##### 4.3.2.1.2 Loading-bar environment variable
+[\[↑ TOC\]](#contents)
+
+The early boot flag [`loading_bar_enabled`](config/config.header#L5) makes init add
+[`PICOOS_LOADING_BAR=true`](common/loading_bar.header#L5). The shell and its applications inherit the entry.
+
+[`load()`](library/unistd/process.picoc#L17) and [`read()`](library/unistd/io.picoc#L6) test whether the variable is present. A value of
+`false` still enables bars. Remove the entry with [`unsetenv()`](library/stdlib/env.picoc#L157) to disable them.
+
+`cat.bin` removes its inherited entry before reading, keeping progress bars
+out of file contents. The constant names the environment variable:
+
+```c
+int main(int argc, char **argv) {
+    // ...
+    unsetenv(LOADING_BAR_ENVIRONMENT_VARIABLE);
+    // ...
+}
+```
+
+This affects only cat's environment. The shell can still show a bar while
+loading cat.
+
+#### 4.3.2.2 Recording termination status
+[\[↑ TOC\]](#contents)
+
+A child's [`exit_status`](kernel/process/process.header#L60) reaches the parent through [`waitpid()`](library/sys/wait/wait.picoc#L14). If the
+parent is waiting, the kernel writes to its saved status pointer before
+waking it. If termination comes first, the child remains a zombie until
+collection. The diagram compares both orders with status `7`:
+
+```mermaid
+%%{init: {"flowchart": {"wrappingWidth": 360, "rankSpacing": 30}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
+flowchart TB
+    subgraph WAIT_FIRST["Parent already waiting"]
+        direction LR
+        EXIT["Child PCB<br/>exit_status = 7"]
+        DELIVER["Parent stack<br/>status = 7"]
+        RESUME["waitpid<br/>returns 7"]
+        EXIT -->|copy| DELIVER
+        DELIVER -->|wake and schedule| RESUME
+    end
+    subgraph EXIT_FIRST["Child terminates first"]
+        direction LR
+        KEEP["Child PCB<br/>exit_status = 7<br/>state = ZOMBIE"]
+        COLLECT["Parent stack<br/>status = 7"]
+        RETURN["waitpid<br/>returns 7"]
+        KEEP -->|later waitpid copies| COLLECT
+        COLLECT -->|no blocking| RETURN
+    end
+    WAIT_FIRST ~~~ EXIT_FIRST
+    classDef waiting fill:#fff3d6,stroke:#b87800,color:#222;
+    classDef delivered fill:#e8f4e8,stroke:#39733b,color:#222;
+    class EXIT,KEEP waiting;
+    class DELIVER,RESUME,COLLECT,RETURN delivered;
+```
+
+The detailed handoff for a parent already waiting is:
+
+1. [`waitpid()`](library/sys/wait/wait.picoc#L14) puts its local status address in a [`WaitPidRequest`](common/syscall.header#L61).
+2. The kernel saves that address in the parent's [`waiting_status_ptr`](kernel/process/process.header#L44),
+   queues the parent on the child's [`waiters`](kernel/process/process.header#L46), and sets [`BLOCKED`](kernel/process/process.header#L15).
+3. Termination stores the child's [`exit_status`](kernel/process/process.header#L60) and sets [`ZOMBIE`](kernel/process/process.header#L17). It writes
+   the result through the parent's pointer, clears the wait links, and wakes
+   the parent.
+4. When the parent resumes, [`waitpid()`](library/sys/wait/wait.picoc#L14) returns the updated local value.
+   The child can already have been removed.
+
+If the child finished first, the kernel copies the retained status and
+removes it immediately, without blocking the parent.
+
+Only the recorded parent may collect a child. The kernel checks that
+relationship before reading the status or queuing the caller:
+
+- [`create_process()`](kernel/process/process.picoc#L89) records the loading
+  process's [`pid`](kernel/process/process.header#L32) in the new child's
+  [`parent_pid`](kernel/process/process.header#L57). It also initializes
+  [`waiting_status_ptr`](kernel/process/process.header#L44) to `NULL` and
+  [`waiters`](kernel/process/process.header#L46) to an empty queue.
+- [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) gets the
+  caller PCB from [`current_process()`](kernel/process/process.picoc#L62),
+  which reads the global [`active_process`](kernel/process/process.picoc#L18).
+  It finds the target using [`find_process_by_pid()`](kernel/process/process.picoc#L162),
+  which scans the global [`process_list_head`](kernel/process/process.picoc#L16)
+  through PCB [`next`](kernel/process/process.header#L53) links. The request
+  supplies only a target PID and result pointer, not the caller's identity.
+- The child's [`parent_pid`](kernel/process/process.header#L57) must equal
+  the caller's [`pid`](kernel/process/process.header#L32). If they differ, or
+  the target does not exist, the kernel writes `-1` through
+  [`WaitPidRequest.status`](common/syscall.header#L63) and completes the syscall.
+  [`waitpid()`](library/sys/wait/wait.picoc#L14) returns `-1` without blocking
+  or removing the target. Knowing another process's PID is insufficient.
+  [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261)
+  also checks the queued process's PID against the child's
+  [`parent_pid`](kernel/process/process.header#L57) before delivering a status.
+
+This is an API check. Without memory isolation, it cannot stop a program
+from overwriting kernel memory.
+
+[`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) shows the wrapper and stopped-parent case. [`7.3.1 Supported signals and fixed actions`](#731-supported-signals-and-fixed-actions) and [`2.8 CPU exceptions and runtime errors`](#28-cpu-exceptions-and-runtime-errors) cover
+signal and exception statuses. Explicit unloading forces removal.
+
+When a parent terminates, [`orphan_and_signal_children()`](kernel/process/process.picoc#L279) sets each direct
+child's [`parent_pid`](kernel/process/process.header#L57) to `0`. It removes zombie children and sends live
+children their configured [`parent_death_signal`](kernel/process/process.header#L59). PicoOS does not reparent
+them to init. Unix literature calls final collection and removal *reaping*.
+
+#### 4.3.2.3 Parent collection and final removal
+[\[↑ TOC\]](#contents)
+
+The order of [`waitpid()`](library/sys/wait/wait.picoc#L14) and child
+termination decides which kernel path deletes the child PCB. Deletion is not a
+later dispatcher task in either case.
+
+| Lifecycle order | Status handoff and child [`state`](kernel/process/process.header#L33) | Who deletes the child PCB, and when |
+| --- | --- | --- |
+| Parent calls [`waitpid()`](library/sys/wait/wait.picoc#L14) while child is alive | [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) links the parent PCB into the child's [`waiters`](kernel/process/process.header#L46) queue and blocks it. Child termination writes through the parent's [`waiting_status_ptr`](kernel/process/process.header#L44) and wakes it. | [`terminate_process()`](kernel/process/process.picoc#L304) calls [`remove_process()`](kernel/process/process.picoc#L209) directly after the status handoff because [`process_has_waiting_parent()`](kernel/process/process.picoc#L249) was true. Deletion occurs inside termination, not during later dispatch. For self-exit it precedes the [`exit_process()`](kernel/process/process.picoc#L430) dispatch. |
+| Child terminates before parent calls [`waitpid()`](library/sys/wait/wait.picoc#L14) | The complete child PCB remains allocated with [`state`](kernel/process/process.header#L33) set to [`ZOMBIE`](kernel/process/process.header#L17), retaining [`pid`](kernel/process/process.header#L32), [`parent_pid`](kernel/process/process.header#L57), [`exit_status`](kernel/process/process.header#L60), and owned resources. | The later syscall reaches [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), which copies [`exit_status`](kernel/process/process.header#L60) to the stack-local status and immediately calls [`remove_process()`](kernel/process/process.picoc#L209) before returning. |
+| No live parent remains | No future caller can collect the status. | [`terminate_process()`](kernel/process/process.picoc#L304) removes an orphan immediately. [`orphan_and_signal_children()`](kernel/process/process.picoc#L279) also removes children that were already zombies when their parent terminates. |
+
+PicoOS retains the full zombie PCB because it has no smaller status record.
+[`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) explains the suspended request and child-owned wait queue.
+
+Removal unlinks the PCB from both lists, releases shared-memory attachments,
+cancels unfinished loading, and frees the payload, descriptors, paths, and
+PCB. Until then, a zombie may retain a partial image it was loading. [`5.2 Mapping, unlinking, and deferred destruction`](#52-mapping-unlinking-and-deferred-destruction)
+explains the effect of releasing shared-memory attachments.
+
+#### 4.3.2.4 Run function reference
+[\[↑ TOC\]](#contents)
+
+The syscall-backed start helper appears first, followed by its parsing and
+stack-copying helpers. [`8.6 File-descriptor creation, inheritance, duplication, and cleanup`](#86-file-descriptor-creation-inheritance-duplication-and-cleanup) covers descriptor inheritance:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`mark_process_ready_with_arguments(request)`](kernel/process/process_arguments.picoc#L241) | true after setup, false for missing PID or [`state`](kernel/process/process.header#L33) other than [`NEW`](kernel/process/process.header#L12) | Copies current caller descriptors when present, writes the child stack, updates [`activation.sp`](kernel/process/process.header#L25) and [`activation.baf`](kernel/process/process.header#L26), then sets [`state`](kernel/process/process.header#L33) to [`READY`](kernel/process/process.header#L13). Init keeps its original table because no current process exists | [`current_process()`](kernel/process/process.picoc#L62), [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L118), [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99), [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) | **Library functions:** [`run()`](library/unistd/process.picoc#L31) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16), [`main()`](kernel/kernel.picoc#L31) in [`kernel/kernel.picoc`](kernel/kernel.picoc) |
+| <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> |
+| [`store_process_arguments(process, arguments, environment)`](kernel/process/process_arguments.picoc#L125) | No return value | Copies path, tokens, and selected NAME=value strings into the child User Process Stack, writes entry PC/count/arrays/NULL sentinels, and saves [`activation.sp`](kernel/process/process.header#L25) and [`activation.baf`](kernel/process/process.header#L26) | [`copy_process_string()`](kernel/process/process_arguments.picoc#L113), [`process_argument_is_quote()`](kernel/process/process_arguments.picoc#L9), [`process_argument_is_space()`](kernel/process/process_arguments.picoc#L5), [`process_argument_string_cell_count()`](kernel/process/process_arguments.picoc#L51), [`process_argument_token_count()`](kernel/process/process_arguments.picoc#L14), [`process_environment_count()`](kernel/process/process_arguments.picoc#L89), [`process_string_cell_count()`](kernel/process/process_arguments.picoc#L103) | **Kernel functions:** [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) |
+| [`process_argument_token_count(arguments)`](kernel/process/process_arguments.picoc#L14) | Number of argument tokens, 0 for NULL | Reads the raw string, treating space/tab outside matching quotes as separators | [`process_argument_is_quote()`](kernel/process/process_arguments.picoc#L9), [`process_argument_is_space()`](kernel/process/process_arguments.picoc#L5) | **Kernel functions:** [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`process_argument_string_cell_count(arguments)`](kernel/process/process_arguments.picoc#L51) | Copied argument characters plus one terminator per token, 0 for NULL | Counts the exact argument-string cells after matching quote removal | [`process_argument_is_quote()`](kernel/process/process_arguments.picoc#L9), [`process_argument_is_space()`](kernel/process/process_arguments.picoc#L5) | **Kernel functions:** [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`process_argument_is_space(value)`](kernel/process/process_arguments.picoc#L5) | true for space or tab, otherwise false | Classifies one input character, no writes | None | **Kernel functions:** [`process_argument_string_cell_count()`](kernel/process/process_arguments.picoc#L51), [`process_argument_token_count()`](kernel/process/process_arguments.picoc#L14), [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`process_argument_is_quote(value)`](kernel/process/process_arguments.picoc#L9) | true for single or double quote, otherwise false | Classifies one input character, no writes | None | **Kernel functions:** [`process_argument_string_cell_count()`](kernel/process/process_arguments.picoc#L51), [`process_argument_token_count()`](kernel/process/process_arguments.picoc#L14), [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`process_environment_count(environment)`](kernel/process/process_arguments.picoc#L89) | Number of entries before NULL, 0 for NULL array | Reads the selected environment pointer array | None | **Kernel functions:** [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`process_string_cell_count(value)`](kernel/process/process_arguments.picoc#L103) | Number of character cells including the zero terminator | Reads one null-terminated string | None | **Kernel functions:** [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+| [`copy_process_string(target, source)`](kernel/process/process_arguments.picoc#L113) | Address of the first cell after the copied zero terminator | Copies a string and its terminator to the destination stack area | None | **Kernel functions:** [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125) |
+
+## 4.4 Process list, PCB metadata, and lifecycle function reference
+[\[↑ TOC\]](#contents)
+
+These functions manage process metadata, list membership, termination, and
+removal. [`4.3.1.1 Load function reference`](#4311-load-function-reference) covers loading, [`4.3.2.4 Run function reference`](#4324-run-function-reference) covers starting, and [`7.2.3 Wait queue function reference`](#723-wait-queue-function-reference) covers
+wait queues:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`list_processes(void)`](kernel/process/process.picoc#L32) | No return value | Traverses the process list and writes each PID and stable binary path through descriptor 1 | [`first_process()`](kernel/process/process.picoc#L28), [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121), [`uart_append_decimal()`](common/uart_protocol.picoc#L26), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217)<br>**Host requests:** Output through a regular file uses `write-at <offset> <path>`, optional append `file-size <path>`, then `write stdout`. Terminal stderr uses `write stderr`, then `write stdout`. Terminal stdout or null needs no host request | **Library functions:** [`list_processes()`](library/unistd/process.picoc#L51) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16)<br>**User applications:** [`main()`](user/ps.picoc#L11) in [`user/ps.picoc`](user/ps.picoc) |
+| [`unload_process_by_pid(pid)`](kernel/process/process.picoc#L328) | true after removal, false for a missing or currently active PID | Terminates with success status and forces final removal, including an uncollected zombie | [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`remove_process()`](kernel/process/process.picoc#L209), [`terminate_process()`](kernel/process/process.picoc#L304) | **Library functions:** [`unload()`](library/unistd/process.picoc#L47) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`exit_process(status)`](kernel/process/process.picoc#L430) | Does not return normally | Terminates the current process and dispatches another process, shuts down if none remain | [`current_process()`](kernel/process/process.picoc#L62), [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55), [`shutdown()`](kernel/kernel.picoc#L15), [`terminate_process()`](kernel/process/process.picoc#L304) | **Library functions:** [`exit()`](library/stdlib/exit.picoc#L3) via the syscall<br>**Kernel functions:** [`handle_cpu_exception()`](kernel/exception.picoc#L70), [`handle_process_heap_full_exception()`](kernel/exception.picoc#L82), [`handle_syscall()`](kernel/syscall.picoc#L16)<br>**CPU exceptions:** through [`handle_cpu_exception()`](kernel/exception.picoc#L70) |
+| [`process_heap_start(void)`](kernel/process/process.picoc#L418) | Absolute current-process heap address | Adds [`base_address`](kernel/process/process.header#L34) to [`heap_start`](kernel/process/process.header#L36), no writes | [`current_process()`](kernel/process/process.picoc#L62) | **Library functions:** [`init_process_heap()`](library/stdlib/malloc.picoc#L18) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`process_heap_size(void)`](kernel/process/process.picoc#L424) | Current-process heap cell count | Reads [`heap_size`](kernel/process/process.header#L37), no writes | [`current_process()`](kernel/process/process.picoc#L62) | **Library functions:** [`init_process_heap()`](library/stdlib/malloc.picoc#L18) via the syscall<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> | <hr><hr> |
+| [`initialize_process_table(void)`](kernel/process/process.picoc#L21) | No return value | Clears head, tail, and [`active_process`](kernel/process/process.picoc#L18), resets [`next_process_id`](kernel/process/process.picoc#L19) to 1 | None | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) in [`kernel/kernel.picoc`](kernel/kernel.picoc) |
+| [`first_process(void)`](kernel/process/process.picoc#L28) | Head PCB pointer or NULL | Reads [`process_list_head`](kernel/process/process.picoc#L16) | None | **Kernel functions:** [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55), [`list_processes()`](kernel/process/process.picoc#L32) in [`kernel/process/process.picoc`](kernel/process/process.picoc), [`scheduler_next_process()`](kernel/scheduler.picoc#L12) |
+| [`current_process(void)`](kernel/process/process.picoc#L62) | Current PCB pointer or NULL | Reads [`active_process`](kernel/process/process.picoc#L18) | None | **Kernel functions:** [`activate_current_process_stack_boundary()`](kernel/exception.picoc#L22), [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L146), [`create_process()`](kernel/process/process.picoc#L89), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43), [`duplicate_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L163), [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`exit_process()`](kernel/process/process.picoc#L430), [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156), [`handle_syscall()`](kernel/syscall.picoc#L16), [`load_process_chunk()`](kernel/process/process_loader.picoc#L292), [`map_shared_memory()`](kernel/shared_memory.picoc#L130), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`process_heap_size()`](kernel/process/process.picoc#L424), [`process_heap_start()`](kernel/process/process.picoc#L418), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`scheduler_next_process()`](kernel/scheduler.picoc#L12), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268), [`send_signal_to_process()`](kernel/signal.picoc#L75), [`set_foreground_process()`](kernel/signal.picoc#L148) in [`kernel/signal.picoc`](kernel/signal.picoc), [`set_parent_death_signal()`](kernel/signal.picoc#L137), [`terminal_input_process()`](kernel/signal.picoc#L178), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+| [`set_current_process(process)`](kernel/process/process.picoc#L66) | No return value | Replaces [`active_process`](kernel/process/process.picoc#L18) | None | **Kernel functions:** [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) |
+| [`find_process_by_pid(pid)`](kernel/process/process.picoc#L162) | Matching PCB pointer or NULL | Traverses [`process_list_head`](kernel/process/process.picoc#L16) through PCB next | None | **Kernel functions:** [`handle_terminal_signal_character()`](kernel/signal.picoc#L192), [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`send_signal_by_pid()`](kernel/signal.picoc#L108), [`set_foreground_process()`](kernel/signal.picoc#L148) in [`kernel/signal.picoc`](kernel/signal.picoc), [`terminal_input_process()`](kernel/signal.picoc#L178), [`terminate_process()`](kernel/process/process.picoc#L304), [`unload_process_by_pid()`](kernel/process/process.picoc#L328), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`terminate_process(process, status)`](kernel/process/process.picoc#L304) | No return value, no effect for NULL or an existing zombie | Handles children, records [`exit_status`](kernel/process/process.header#L60), sets [`state`](kernel/process/process.header#L33) [`ZOMBIE`](kernel/process/process.header#L17), hands off status and wakes [`waiters`](kernel/process/process.header#L46), removes the PCB when no parent remains or its waiting parent received the status | [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`orphan_and_signal_children()`](kernel/process/process.picoc#L279), [`process_has_waiting_parent()`](kernel/process/process.picoc#L249), [`remove_process()`](kernel/process/process.picoc#L209), [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) | **Kernel functions:** [`exit_process()`](kernel/process/process.picoc#L430), [`kill_process()`](kernel/signal.picoc#L71), [`unload_process_by_pid()`](kernel/process/process.picoc#L328) |
+| [`remove_process(process)`](kernel/process/process.picoc#L209) | No return value, no effect when absent from the list | Unlinks queue and process-list membership, adjusts list roots, releases shared mappings, cancels partial loading, frees Process Payload, descriptor objects, PCB-owned strings and PCB | [`PSDFree()`](kernel/psdmalloc.picoc#L47), [`cancel_process_load()`](kernel/process/process_loader.picoc#L76), [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L118), [`kfree()`](kernel/kmalloc.picoc#L38), [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172), [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) | **Kernel functions:** [`orphan_and_signal_children()`](kernel/process/process.picoc#L279), [`terminate_process()`](kernel/process/process.picoc#L304), [`unload_process_by_pid()`](kernel/process/process.picoc#L328), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`orphan_and_signal_children(parent)`](kernel/process/process.picoc#L279) | No return value | Sets direct children [`parent_pid`](kernel/process/process.header#L57) to 0, removes existing zombies, signals live children when [`parent_death_signal`](kernel/process/process.header#L59) is nonzero | [`remove_process()`](kernel/process/process.picoc#L209), [`send_signal_to_process()`](kernel/signal.picoc#L75) | **Kernel functions:** [`terminate_process()`](kernel/process/process.picoc#L304) |
+| [`process_has_waiting_parent(process)`](kernel/process/process.picoc#L249) | true when the recorded parent is in the child [`waiters`](kernel/process/process.header#L46) queue, otherwise false | Scans the child [`waiters`](kernel/process/process.header#L46) queue through [`wait_next`](kernel/process/process.header#L51) | None | **Kernel functions:** [`terminate_process()`](kernel/process/process.picoc#L304) |
+| [`wake_parent_waiting_for_process(process, status)`](kernel/process/process.picoc#L261) | No return value | Writes the status through the parent [`waiting_status_ptr`](kernel/process/process.header#L44) when supplied, clears that pointer, and wakes all child [`waiters`](kernel/process/process.header#L46) | [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) | **Kernel functions:** [`terminate_process()`](kernel/process/process.picoc#L304) |
+
+# 5. Shared Memory Entries and Mappings
+[\[↑ TOC\]](#contents)
+
+Shared memory lets processes read and write the same physical cells.
+PicoOS allocates them in the Process and Shared Data Heap. A named kernel
+entry describes each region, and attachments record which processes map it.
+This chapter follows those records through mapping, unlinking, and cleanup.
+
+## 5.1 Named entries and per-process attachments
+[\[↑ TOC\]](#contents)
+
+[`SharedMemoryEntry`](kernel/shared_memory.header#L8) describes one region. [`SharedMemoryAttachment`](kernel/shared_memory.header#L17) records
+one mapping and belongs to the PCB's [`shared_memory_attachments`](kernel/process/process.header#L55) list. It
+references the entry without owning its data.
+
+The definitions and field tables show the metadata and pointers connecting
+these objects:
+
+```c
+struct SharedMemoryEntry {
+    char *name;
+    int id;
+    void *address;
+    int reference_count;
+    bool unlink_requested;
+    struct SharedMemoryEntry *next;
+};
+
+struct SharedMemoryAttachment {
+    struct SharedMemoryEntry *entry;
+    struct SharedMemoryAttachment *next;
+};
+```
+
+[`open_shared_memory()`](kernel/shared_memory.picoc#L92) allocates the entry, name, and shared data separately.
+[`map_shared_memory()`](kernel/shared_memory.picoc#L130) adds an attachment and increments [`reference_count`](kernel/shared_memory.header#L12).
+Every mapping receives the same absolute address. [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) compares their lifetimes.
+
+Attachments tell process cleanup which mapping references to release. Two
+processes mapping one region need one entry and two attachments. The
+attachments store no shared bytes.
+
+| Attribute | Meaning | Used by |
+| --- | --- | --- |
+| [`SharedMemoryEntry.name`](kernel/shared_memory.header#L9) | Kernel-owned lookup name, freed and set to `NULL` on unlink | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), read by [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45), freed by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) and [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
+| [`SharedMemoryEntry.id`](kernel/shared_memory.header#L10) | Numeric open/map handle | First initialized and returned by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), read by [`find_shared_memory_by_id()`](kernel/shared_memory.picoc#L57) for [`map_shared_memory()`](kernel/shared_memory.picoc#L130) |
+| [`SharedMemoryEntry.address`](kernel/shared_memory.header#L11) | Absolute start of the [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) shared-memory data region | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), returned by [`map_shared_memory()`](kernel/shared_memory.picoc#L130) and freed by [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
+| [`SharedMemoryEntry.reference_count`](kernel/shared_memory.header#L12) | Attachment count, not distinct PID count | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), changed by [`map_shared_memory()`](kernel/shared_memory.picoc#L130) and [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172), checked by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) |
+| [`SharedMemoryEntry.unlink_requested`](kernel/shared_memory.header#L13) | Defers destruction until the last attachment disappears | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), set by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) and checked by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
+| [`SharedMemoryEntry.next`](kernel/shared_memory.header#L14) | Link to the next entry in the kernel's linked list | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92), traversed by [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45) and [`find_shared_memory_by_id()`](kernel/shared_memory.picoc#L57), traversed and updated by [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
+
+The attachment table shows how a mapping records its contribution to the entry’s lifetime without
+owning the entry itself.
+
+| Attribute | Meaning | Used by |
+| --- | --- | --- |
+| [`SharedMemoryAttachment.entry`](kernel/shared_memory.header#L18) | Non-owning pointer to the linked-list entry whose reference count this mapping contributes to | First initialized by [`map_shared_memory()`](kernel/shared_memory.picoc#L130), read by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) to decrement the entry's count before freeing the attachment |
+| [`SharedMemoryAttachment.next`](kernel/shared_memory.header#L19) | Link in one PCB's [`shared_memory_attachments`](kernel/process/process.header#L55) list | First initialized by [`map_shared_memory()`](kernel/shared_memory.picoc#L130), traversed by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
+
+### 5.1.1 Global shared-memory list and entry names
+[\[↑ TOC\]](#contents)
+
+[`shared_memory_list_head`](kernel/shared_memory.picoc#L6) and entry [`next`](kernel/shared_memory.header#L14) fields form the shared-memory
+registry. Name and ID lookup walk this singly linked list.
+
+[`initialize_shared_memory()`](kernel/shared_memory.picoc#L9) clears the registry and initializes
+[`next_shared_memory_id`](kernel/shared_memory.picoc#L7). Creation uses that counter for new entries. [`9.3 Kernel global variables and process-list roots`](#93-kernel-global-variables-and-process-list-roots)
+lists the globals.
+
+Entries are inserted at the head, so linking takes O(1) time without a tail
+pointer. [`4.1.2 Global process list and current process`](#412-global-process-list-and-current-process) compares this with appending PCBs to the process list.
+
+The upper view locates two entries and their copied names in the Kernel
+Heap. The lower view shows the same registry. [`next`](kernel/shared_memory.header#L14) skips the name
+allocations, while each [`name`](kernel/shared_memory.header#L9) points to its own string:
+
+![The global shared-memory list head reaches two linked entries in SRAM, each with a name pointer to a separate string. The lower view repeats the same two entries as a linked list.](documentation/images/memory-shared-list.svg)
+
+#### 5.1.1.1 From Shared Memory Entries to Shared Data Payloads in SRAM
+[\[↑ TOC\]](#contents)
+
+[`address`](kernel/shared_memory.header#L11) points from the Kernel Heap entry to its Shared Data Payload.
+This parallels a PCB's [`base_address`](kernel/process/process.header#L34) in [`4.1.2.1 From PCBs to Process Payloads in SRAM`](#4121-from-pcbs-to-process-payloads-in-sram).
+
+The green arrows connect entries 1 and 2 to Shared Data Payloads A and C.
+The middle Process Payload shows that both kinds of data use the same outer
+heap:
+
+![Three blocks in each heap: Shared Memory Entries 1 and 2 point through address to Shared Data Payloads A and C. PCB 1 and Process Payload B provide context.](documentation/images/memory-shared-mappings.svg)
+
+[`open_shared_memory()`](kernel/shared_memory.picoc#L92) stores the [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) address, and
+[`map_shared_memory()`](kernel/shared_memory.picoc#L130) returns it unchanged. [`5.1.2 Per-process attachment lists in SRAM`](#512-per-process-attachment-lists-in-sram) shows mapping records.
+
+### 5.1.2 Per-process attachment lists in SRAM
+[\[↑ TOC\]](#contents)
+
+[`shared_memory_attachments`](kernel/process/process.header#L55) starts each PCB's mapping list. These two
+processes map the entries from [`5.1.1 Global shared-memory list and entry names`](#511-global-shared-memory-list-and-entry-names). The upper view shows their Kernel
+Heap allocations, and the lower view shows the same attachment lists:
+
+[`create_process()`](kernel/process/process.picoc#L89) starts the attachment list at `NULL`. Each mapping
+allocates a record with [`kmalloc()`](kernel/kmalloc.picoc#L23), sets [`entry`](kernel/shared_memory.header#L18), and inserts it at the
+head. The pictured PCBs, attachments, and entries occupy seven separate
+Kernel Heap allocations.
+
+PCB 1 maps both entries, and PCB 2 also maps Entry 1. Their [`reference_count`](kernel/shared_memory.header#L12)
+values are therefore 2 and 1. Process cleanup walks its attachment list
+and follows [`entry`](kernel/shared_memory.header#L18) to release each reference.
+
+![Two PCBs, three attachments and two shared entries in the Kernel Heap, followed by the same two per-process attachment lists with shared_memory_attachments, next and entry arrows. The Process and Shared Data Heap is one box.](documentation/images/memory-shared-attachments.svg)
+
+## 5.2 Mapping, unlinking, and deferred destruction
+[\[↑ TOC\]](#contents)
+
+Every [`mmap()`](library/sys/mman/mman.picoc#L23) adds an attachment and increments [`reference_count`](kernel/shared_memory.header#L12), even
+for repeated mappings by one process. PicoOS has no `munmap()`, so removal
+of the process releases them.
+
+[`shm_unlink()`](library/sys/mman/mman.picoc#L27) frees the name and requests destruction. Existing mappings
+and their addresses remain valid. The numeric ID remains usable while the
+entry exists, and opening the old name creates a new entry. With no mappings,
+unlink destroys the entry immediately.
+
+[`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) frees each attachment and decrements
+its entry's count. Destruction requires both an unlink request and a zero
+reference count.
+
+This timeline follows Entry 1: opening creates it, mapping adds references,
+unlinking removes its name, and process removal releases the references.
+The data stays allocated until both destruction conditions hold:
+
+![Shared-memory lifetime from left to right: shm_open creates Entry 1 with count 0, mmap in two processes raises the count to 2, shm_unlink removes the name while the count stays 2, removal of PCB 1 lowers it to 1, and removal of PCB 2 lowers it to 0 and frees the unlinked entry and its data.](documentation/images/memory-shared-destruction.svg)
+
+The conditions can occur in either order. A named region with no mappings
+stays allocated. Unlinking it later destroys it. The timeline omits PCB 1's
+other mapping, which is also released on removal.
+
+A retained zombie keeps its attachments. They are released at final PCB
+removal, as explained in [`4.3.2.3 Parent collection and final removal`](#4323-parent-collection-and-final-removal).
+
+The entry is also the registry node. [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) unlinks
+it, frees its data with [`PSDFree()`](kernel/psdmalloc.picoc#L47), and frees its metadata with [`kfree()`](kernel/kmalloc.picoc#L38).
+Freeing the already-null name is harmless. Freed cells become reusable
+without being erased.
+
+[`shm_open()`](library/sys/mman/mman.picoc#L15) returns an ID, and [`mmap()`](library/sys/mman/mman.picoc#L23) returns its address. This launcher
+shares one cell containing `7`, then waits for a worker to change it:
+
+```c
+// dependencies: ../../library/unistd/libunistd.reti_blocks ../../library/sys/wait/libwait.reti_blocks ../../library/sys/mman/libmman.reti_blocks
+
+#include "../../library/unistd/unistd.header"
+#include "../../library/sys/wait/wait.header"
+#include "../../library/sys/mman/mman.header"
+
+int main(void) {
+    int shared_memory_id;
+    int *shared_value;
+    int worker_pid;
+    int result = 1;
+
+    shared_memory_id = shm_open("shared-value", 1);
+    shared_value = (int *)mmap(shared_memory_id);
+    shared_value[0] = 7;
+
+    worker_pid = load("test/shared_value/worker.bin");
+    run(worker_pid, "shared-value", NULL);
+    waitpid(worker_pid);
+
+    if (shared_value[0] == 8) {
+        result = 0;
+    }
+    shm_unlink("shared-value");
+    return result;
+}
+```
+
+The worker opens the same name, maps the existing region, and changes
+`7` to `8`:
+
+```c
+// dependencies: ../../library/sys/mman/libmman.reti_blocks
+
+#include "../../library/sys/mman/mman.header"
+
+int main(int argc, char **argv) {
+    int shared_memory_id;
+    int *shared_value;
+
+    shared_memory_id = shm_open(argv[1], 1);
+    shared_value = (int *)mmap(shared_memory_id);
+    shared_value[0] = shared_value[0] + 1;
+    return 0;
+}
+```
+
+Worker removal releases its attachment. Unlinking removes the name, but the
+launcher's attachment keeps the data alive until the launcher is removed.
+
+Shared memory provides visibility, not mutual exclusion. [`15.2 Real-time operating-systems topics`](#152-real-time-operating-systems-topics)
+shows how a shared [`mutex`](library/mutex/mutex.header#L6) protects data accessed by more than one
+process.
+
+## 5.3 Shared Memory function reference
+[\[↑ TOC\]](#contents)
+
+These functions implement lookup, mapping, and deferred destruction.
+Syscall-backed operations come first, followed by lifecycle helpers:
+
+<table>
+<thead>
+<tr><th>Kernel function</th><th>Return value / status</th><th>Effects</th><th>Calls</th><th>Called by</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="kernel/shared_memory.picoc#L92"><code>open_shared_memory(request)</code></a></td><td>Existing/new ID, <code>-1</code> for a null request/name, a nonpositive new size, or insufficient Process and Shared Data Heap space</td><td>If the name already exists, returns its <a href="kernel/shared_memory.header#L10"><code>SharedMemoryEntry.id</code></a> without creating a structure. Otherwise creates a <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> and copied name with <a href="kernel/kmalloc.picoc#L23"><code>kmalloc()</code></a>, creates its data region with <a href="kernel/psdmalloc.picoc#L20"><code>PSDMalloc()</code></a>, and prepends the <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> to the kernel&#39;s linked list</td><td><a href="kernel/shared_memory.picoc#L45"><code>find_shared_memory_by_name()</code></a>, <a href="kernel/kmalloc.picoc#L23"><code>kmalloc()</code></a>, <a href="kernel/shared_memory.picoc#L27"><code>copy_shared_memory_name()</code></a>, <a href="kernel/psdmalloc.picoc#L20"><code>PSDMalloc()</code></a>, <a href="kernel/kmalloc.picoc#L38"><code>kfree()</code></a></td><td><strong>Library functions:</strong> <a href="library/sys/mman/mman.picoc#L15"><code>shm_open()</code></a><br><strong>Kernel functions (syscall dispatch):</strong> <a href="kernel/syscall.picoc#L16"><code>handle_syscall()</code></a></td></tr>
+<tr><td><a href="kernel/shared_memory.picoc#L130"><code>map_shared_memory(shared_memory_id)</code></a></td><td>Address, or <code>NULL</code> for an unknown ID or no current process</td><td>For every successful mapping, creates one <a href="kernel/shared_memory.header#L17"><code>SharedMemoryAttachment</code></a> with <a href="kernel/kmalloc.picoc#L23"><code>kmalloc()</code></a>, links it from the current PCB&#39;s <a href="kernel/process/process.header#L55"><code>shared_memory_attachments</code></a> field, points it at the existing <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a>, and increments that entry&#39;s count</td><td><a href="kernel/process/process.picoc#L62"><code>current_process()</code></a>, <a href="kernel/shared_memory.picoc#L57"><code>find_shared_memory_by_id()</code></a>, <a href="kernel/kmalloc.picoc#L23"><code>kmalloc()</code></a></td><td><strong>Library functions:</strong> <a href="library/sys/mman/mman.picoc#L23"><code>mmap()</code></a><br><strong>Kernel functions (syscall dispatch):</strong> <a href="kernel/syscall.picoc#L16"><code>handle_syscall()</code></a></td></tr>
+<tr><td><a href="kernel/shared_memory.picoc#L151"><code>unlink_shared_memory(name)</code></a></td><td><code>0</code> on unlink, <code>-1</code> for a null or unknown name</td><td>Frees the name and marks the existing <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> for removal, destroys that <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> immediately only when its mapping count is zero</td><td><a href="kernel/shared_memory.picoc#L45"><code>find_shared_memory_by_name()</code></a>, <a href="kernel/kmalloc.picoc#L38"><code>kfree()</code></a>, <a href="kernel/shared_memory.picoc#L69"><code>destroy_shared_memory_entry()</code></a></td><td><strong>Library functions:</strong> <a href="library/sys/mman/mman.picoc#L27"><code>shm_unlink()</code></a><br><strong>Kernel functions (syscall dispatch):</strong> <a href="kernel/syscall.picoc#L16"><code>handle_syscall()</code></a></td></tr>
+</tbody>
+<tbody>
+<tr><td colspan="5"><hr><hr></td></tr>
+<tr><td><a href="kernel/shared_memory.picoc#L9"><code>initialize_shared_memory(void)</code></a></td><td>Returns no value</td><td>Initializes the shared-memory list head and next ID</td><td>—</td><td><strong>Kernel functions:</strong> <a href="kernel/kernel.picoc#L31"><code>main()</code></a></td></tr>
+<tr><td><a href="kernel/shared_memory.picoc#L172"><code>release_process_shared_memory(process)</code></a></td><td>Returns no value</td><td>Walks one PCB&#39;s <a href="kernel/shared_memory.header#L17"><code>SharedMemoryAttachment</code></a> list, frees every <a href="kernel/shared_memory.header#L17"><code>SharedMemoryAttachment</code></a>, and decrements the referenced <a href="kernel/shared_memory.header#L12"><code>SharedMemoryEntry.reference_count</code></a>, destroys an unlinked <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> after its last attachment is released</td><td><a href="kernel/kmalloc.picoc#L38"><code>kfree()</code></a>, <a href="kernel/shared_memory.picoc#L69"><code>destroy_shared_memory_entry()</code></a></td><td><strong>Kernel functions:</strong> <a href="kernel/process/process.picoc#L209"><code>remove_process()</code></a></td></tr>
+<tr><td><a href="kernel/shared_memory.picoc#L69"><code>destroy_shared_memory_entry(entry)</code></a></td><td>Returns no value</td><td>Removes one <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> from the kernel&#39;s linked list, frees its <a href="kernel/shared_memory.header#L11"><code>SharedMemoryEntry.address</code></a> data region with <a href="kernel/psdmalloc.picoc#L47"><code>PSDFree()</code></a>, and frees the <a href="kernel/shared_memory.header#L8"><code>SharedMemoryEntry</code></a> and its name with <a href="kernel/kmalloc.picoc#L38"><code>kfree()</code></a></td><td><a href="kernel/psdmalloc.picoc#L47"><code>PSDFree()</code></a>, <a href="kernel/kmalloc.picoc#L38"><code>kfree()</code></a></td><td><strong>Kernel functions:</strong> <a href="kernel/shared_memory.picoc#L151"><code>unlink_shared_memory()</code></a>, <a href="kernel/shared_memory.picoc#L172"><code>release_process_shared_memory()</code></a></td></tr>
+</tbody>
+</table>
+
+# 6. Scheduling and context switching
+[\[↑ TOC\]](#contents)
+
+The scheduler chooses the next runnable process. The dispatcher saves the
+outgoing registers and restores the selected process. They share PCB
+information but have separate jobs.
+
+PicoOS represents states with integer constants. The scheduler accepts
+[`PROCESS_STATE_READY`](kernel/process/process.header#L13) and [`PROCESS_STATE_RUNNING`](kernel/process/process.header#L14), returning the selected
+process's PCB. The dispatcher uses its saved activation to resume execution.
+
+## 6.1 Scheduler implementation
+[\[↑ TOC\]](#contents)
+
+PicoOS schedules directly from the process list. The algorithm below
+explains that policy, followed by a function reference.
+
+### 6.1.1 Algorithm and Round Robin comparison
+[\[↑ TOC\]](#contents)
+
+PicoOS calls its policy *Lazy Round Robin*. It scans the list from [`4.1.2 Global process list and current process`](#412-global-process-list-and-current-process)
+starting after the current process, wraps at the tail, and examines each
+PCB at most once. It maintains no separate ready queue.
+
+[`scheduler_can_run()`](kernel/scheduler.picoc#L4) accepts [`READY`](kernel/process/process.header#L13) and [`RUNNING`](kernel/process/process.header#L14). It skips [`NEW`](kernel/process/process.header#L12),
+[`BLOCKED`](kernel/process/process.header#L15), [`STOPPED`](kernel/process/process.header#L16), and [`ZOMBIE`](kernel/process/process.header#L17).
+
+Continuously runnable processes receive cyclic turns. A textbook FIFO ready
+queue appends newly awakened processes at its tail. PicoOS leaves each PCB
+in its existing position, which can give that process an earlier turn.
+Selection also scans records that a ready queue would exclude.
+
+The 5,000-instruction timer dispatches from userspace and defers a switch
+from kernel work. Voluntary switches do not restart it. A selected process
+may therefore receive only the rest of the current interval, rather than
+a fresh quantum.
+
+This example has `P3` as the current process. It shows cyclic order and
+the extra traversal past non-runnable processes:
+
+```mermaid
+flowchart LR
+    P1["P1<br/>READY"] --> P2["P2<br/>BLOCKED"]
+    P2 --> P3["P3<br/>RUNNING<br/>current"]
+    P3 --> P4["P4<br/>STOPPED"]
+    P4 --> P5["P5<br/>READY"]
+```
+
+After `P3`, the scan skips `P4` and selects `P5`. The next scan wraps to
+`P1`. A textbook ready queue would select its head directly.
+
+With no runnable process, the scheduler returns `NULL`. The dispatcher
+retries while PCBs exist, allowing device interrupts to wake one. It can
+wait indefinitely if no event does so and returns when the list is empty.
+PicoOS has no idle process.
+
+This avoids maintaining a second queue at each state change. The cost is
+a worst-case O(number of PCBs) selection.
+
+The implementation separates the state check from the cyclic scan:
+
+```c
+bool scheduler_can_run(struct ProcessControlBlock *process) {
+    return process != NULL &&
+           (process->state == PROCESS_STATE_READY ||
+            // A still-current RUNNING process may be the only runnable process
+            // when scheduler_next_process() wraps around to it
+            process->state == PROCESS_STATE_RUNNING);
+}
+
+struct ProcessControlBlock *scheduler_next_process(void) {
+    struct ProcessControlBlock *start;
+    struct ProcessControlBlock *candidate;
+
+    if (first_process() == NULL) {
+        return NULL;
+    }
+    if (current_process() == NULL || current_process()->next == NULL) {
+        start = first_process();
+    } else {
+        start = current_process()->next;
+    }
+
+    candidate = start;
+    while (candidate != NULL) {
+        if (scheduler_can_run(candidate)) {
+            return candidate;
+        }
+        candidate = candidate->next;
+    }
+
+    candidate = first_process();
+    while (candidate != start) {
+        if (scheduler_can_run(candidate)) {
+            return candidate;
+        }
+        candidate = candidate->next;
+    }
+    return NULL;
+}
+```
+
+### 6.1.2 Scheduler function reference
+[\[↑ TOC\]](#contents)
+
+These two functions implement the policy. [`6.5 Dispatcher function reference`](#65-dispatcher-function-reference) covers the dispatcher:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`scheduler_can_run(process)`](kernel/scheduler.picoc#L4) | `true` for a non-`NULL` PCB whose state is [`READY`](kernel/process/process.header#L13) or [`RUNNING`](kernel/process/process.header#L14), otherwise `false` | Reads the candidate PCB's [`state`](kernel/process/process.header#L33) | None | **Kernel functions:** [`scheduler_next_process()`](kernel/scheduler.picoc#L12) |
+| [`scheduler_next_process(void)`](kernel/scheduler.picoc#L12) | PCB representing the first runnable process found during one cyclic scan, or `NULL` when the process list is empty or no process can run | Reads [`process_list_head`](kernel/process/process.picoc#L16), [`active_process`](kernel/process/process.picoc#L18), and PCB [`next`](kernel/process/process.header#L53) and [`state`](kernel/process/process.header#L33) fields, does not change process state | [`first_process()`](kernel/process/process.picoc#L28), [`current_process()`](kernel/process/process.picoc#L62), [`scheduler_can_run()`](kernel/scheduler.picoc#L4) | **Kernel functions:** [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) |
+
+## 6.2 Saved process registers
+[\[↑ TOC\]](#contents)
+
+Each PCB embeds an [`ActivationRecord`](kernel/process/process.header#L21) in [`activation`](kernel/process/process.header#L40). It preserves the
+registers needed to resume that process after a switch.
+
+Saving uses the PCB returned by [`current_process()`](kernel/process/process.picoc#L62). Restoration uses the
+PCB returned by the scheduler. The assembly reads fixed field offsets,
+so their order is part of the interface.
+
+The definition and table show the saved registers. [`9.2 Containment and reference relationships`](#92-containment-and-reference-relationships) places the
+activation within its PCB:
+
+```c
+struct ActivationRecord {
+    int in1;
+    int in2;
+    int acc;
+    int sp;
+    int baf;
+    int cs;
+    int ds;
 };
 ```
 
 | Attribute | Meaning | Used by |
 | --- | --- | --- |
-| [`head`](common/wait_queue.header#L6) | First blocked PCB to wake, or `NULL` when empty | First initialized by [`create_process()`](kernel/process/process.picoc#L88) for child waiters, [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14) for terminal input, [`wait_queue_init()`](library/unistd/blocking.picoc#L4) for userspace queues, or [`initialize_dma()`](kernel/dma.picoc#L9) for DMA; maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L62), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) |
-| [`tail`](common/wait_queue.header#L7) | Last blocked PCB, allowing constant-time append; also `NULL` when empty | First initialized by [`create_process()`](kernel/process/process.picoc#L88) for child waiters, [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14) for terminal input, [`wait_queue_init()`](library/unistd/blocking.picoc#L4) for userspace queues, or [`initialize_dma()`](kernel/dma.picoc#L9) for DMA; maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L62), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) |
+| [`in1`](kernel/process/process.header#L22), [`in2`](kernel/process/process.header#L23), [`acc`](kernel/process/process.header#L24) | General argument/result registers at the suspension point | First initialized by [`create_process()`](kernel/process/process.picoc#L89), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`sp`](kernel/process/process.header#L25) | Stack position immediately below the saved return PC, the return PC remains at `sp + 1` | First initialized by [`create_process()`](kernel/process/process.picoc#L89), rebuilt by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`baf`](kernel/process/process.header#L26) | Base address of the interrupted PicoC function frame | First initialized by [`create_process()`](kernel/process/process.picoc#L89), rebuilt by [`store_process_arguments()`](kernel/process/process_arguments.picoc#L125), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`cs`](kernel/process/process.header#L27) | Absolute code-segment base used for instruction addresses | First initialized by [`create_process()`](kernel/process/process.picoc#L89), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
+| [`ds`](kernel/process/process.header#L28) | Absolute data-segment base used for globals/static data | First initialized by [`create_process()`](kernel/process/process.picoc#L89), saved by [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) and restored by [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) |
 
-The remaining links live in each queued PCB: [`wait_next`](kernel/process/process.header#L51) selects the next
-waiter and [`waiting_queue_ptr`](kernel/process/process.header#L48) points back to the owning queue.
+The saved PC stays on the process stack at `activation.sp + 1`. During
+restoration, `BAF` holds the PCB pointer until the other registers are loaded.
+The dispatcher restores `SP` before installing the process boundary.
 
-The queue does not allocate list nodes. A blocked PCB supplies
-[`waiting_queue_ptr`](kernel/process/process.header#L48) and [`wait_next`](kernel/process/process.header#L51), so one process can be present in at most
-one queue. Queue locations include:
+## 6.3 Saving the current process and selecting the next process
+[\[↑ TOC\]](#contents)
 
-- [`process->waiters`](kernel/process/process.header#L46), embedded in a PCB for exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14)
-- [`terminal.input_waiters`](kernel/filesystem/terminal.header#L14), embedded in the global terminal
-- [`mutex.waiters`](library/mutex/mutex.header#L8), embedded in a userspace mutex, possibly in shared memory
-- [`dma_waiters`](kernel/dma.picoc#L6), a kernel global for a process awaiting DMA completion
+The save path preserves the outgoing process before selecting another one.
+The syscall and timer paths in [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path) and [`2.5.1 Timer interrupt path`](#251-timer-interrupt-path) lead here.
 
-The last case works because there is no address isolation: userspace passes the
-queue address to the kernel, which links PCB pointers through that memory.
+These entry paths provide the saved frame from [`2.3 Saved interrupt stack frame`](#23-saved-interrupt-stack-frame):
 
-[`sleep_on_wait_queue()`](kernel/process/process.picoc#L410) changes the current PCB to [`BLOCKED`](kernel/process/process.header#L15) and dispatches.
-[`wakeup_wait_queue()`](kernel/process/process.picoc#L415) wakes one FIFO entry. If a PCB is currently [`STOPPED`](kernel/process/process.header#L16), it
-remains stopped but records that its underlying blocking condition has ended.
+- Userspace timer preemption and [`yield()`](library/schedule/schedule.picoc#L4) switch immediately.
+- [`sleep()`](library/unistd/blocking.picoc#L9), a blocking [`waitpid()`](library/sys/wait/wait.picoc#L14) or terminal [`read()`](library/unistd/io.picoc#L6), and a DMA-backed
+  [`load()`](library/unistd/process.picoc#L17) switch after recording the wait.
+- A deferred timer or termination request switches at syscall return when
+  [`reschedule_requested`](kernel/dispatcher.picoc#L8) is set.
 
-For [`waitpid()`](library/sys/wait/wait.picoc#L14), the child owns the queue and the waiting parent owns
-[`waiting_status_ptr`](kernel/process/process.header#L44). That pointer targets a status object in the suspended
-parent’s process stack. Child stop or termination writes through the pointer,
-clears it, and wakes the parent. The graph below shows why these queues need
-no separately allocated nodes: each PCB supplies both its successor and its
-back-reference to the queue.
+A syscall can restore its caller directly, save it for a switch, or abandon
+it during termination. [`2.4.2 System-call entry, execution, and return to userspace`](#242-system-call-entry-execution-and-return-to-userspace) shows the shared entry and return paths.
+
+The save function copies registers into the current PCB and preserves a
+state already changed by blocking or signal handling:
+
+```c
+void dispatcher_switch_from_context(int *caller_context) {
+    struct ProcessControlBlock *process = current_process();
+
+    if (process != NULL) {
+        process->activation.sp = (int)(caller_context + 6);
+        process->activation.ds = caller_context[1];
+        process->activation.cs = caller_context[2];
+        process->activation.baf = caller_context[3];
+        process->activation.in2 = caller_context[4];
+        process->activation.in1 = caller_context[5];
+        process->activation.acc = caller_context[6];
+
+        if (process->state == PROCESS_STATE_RUNNING) {
+            process->state = PROCESS_STATE_READY;
+        }
+    }
+    dispatcher_start_next_process();
+}
+```
+
+[`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) saves a
+resumable process in these steps:
+
+1. Obtain the current PCB through [`current_process()`](kernel/process/process.picoc#L62).
+2. If it exists, copy the six saved registers to its
+   [`activation`](kernel/process/process.header#L40) and set
+   [`activation.sp`](kernel/process/process.header#L25) to `caller_context + 6`,
+   leaving the saved PC on the process stack.
+3. Change [`state`](kernel/process/process.header#L33) from
+   [`PROCESS_STATE_RUNNING`](kernel/process/process.header#L14) to
+   [`PROCESS_STATE_READY`](kernel/process/process.header#L13) when applicable.
+   Preserve a state already changed by blocking or signal handling.
+4. Call [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55).
+
+Blocking sets [`state`](kernel/process/process.header#L33) to [`BLOCKED`](kernel/process/process.header#L15) before dispatch. The save function changes
+only [`RUNNING`](kernel/process/process.header#L14) to [`READY`](kernel/process/process.header#L13), preserving that wait. [`7.2.1 Blocking with sleep and waking with wakeup`](#721-blocking-with-sleep-and-waking-with-wakeup) and [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) explain
+how wakeups make it runnable again.
+
+Timer preemption and [`yield()`](library/schedule/schedule.picoc#L4) leave the process [`RUNNING`](kernel/process/process.header#L14), so saving
+changes it to [`READY`](kernel/process/process.header#L13). A deferred request follows the same save path at
+syscall return. Selection clears the request, even if it selects the same
+process.
+
+Before restoration, [`prepare_process_termination()`](kernel/signal.picoc#L126) can reject a candidate
+with a pending terminating signal. The loop retries selection. Device
+interrupts can wake a process while it waits:
+
+```c
+void dispatcher_start_next_process(void) {
+    struct ProcessControlBlock *next_process = scheduler_next_process();
+
+    // Waits in kernel context when every process is blocked. A hardware
+    // interrupt can make one of them runnable without a separate idle process
+    while (first_process() != NULL &&
+           (next_process == NULL ||
+            !prepare_process_termination(next_process))) {
+        next_process = scheduler_next_process();
+    }
+
+    if (next_process != NULL) {
+        dispatcher_switch_to_process(next_process);
+    }
+}
+```
+
+[`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) selects the
+next context in these steps:
+
+1. Ask [`scheduler_next_process()`](kernel/scheduler.picoc#L12) for a candidate.
+2. While the process list is nonempty, retry if no candidate is runnable or
+   [`prepare_process_termination()`](kernel/signal.picoc#L126) rejects it.
+   UART or DMA can make a waiting process runnable while this kernel loop runs.
+3. Pass an accepted candidate to
+   [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43). If there
+   is no candidate and the process list is empty, return to the caller.
+
+[`6.1.1 Algorithm and Round Robin comparison`](#611-algorithm-and-round-robin-comparison) covers empty-list and no-runnable cases. [`2.4.2.2 Selecting the return path`](#2422-selecting-the-return-path) covers deferred
+requests.
+
+## 6.4 Restoring the selected process and returning with `RTI`
+[\[↑ TOC\]](#contents)
+
+[`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) updates the selected PCB's state and enters
+this naked restoration function. It loads the saved context and finishes
+with `RTI`:
+
+```c
+__attribute__((naked))
+void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_boundary) {
+    // Reads the process pointer and its precomputed stack boundary from the call frame
+    asm("LOADIN SP BAF 2");
+    asm("LOADIN SP IN1 3");
+
+    // Restores SP before the process boundary so an interrupt cannot compare the
+    // kernel stack against the process heap during this context-switch window
+    asm("LOADIN BAF SP 11");
+    write_stack_heap_boundary_from_in1();
+
+    // Restores the remaining activation record while BAF still points to the process
+    asm("LOADIN BAF CS 13");
+    asm("LOADIN BAF DS 14");
+    asm("LOADIN BAF IN1 8");
+    asm("LOADIN BAF IN2 9");
+    asm("LOADIN BAF ACC 10");
+    asm("LOADIN BAF BAF 12");
+
+    // Restores the saved program counter from the selected process's restored stack and resumes there
+    asm("RTI");
+}
+```
+
+[`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) restores the
+selected process in these steps:
+
+1. Read the PCB pointer into `BAF` and the precomputed stack boundary into
+   `IN1` from the kernel call's arguments.
+2. Load [`activation.sp`](kernel/process/process.header#L25) into `SP` before
+   changing the boundary. Reversing this order could make a nested interrupt
+   compare the still-active kernel stack against a user-process limit.
+3. Call [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2)
+   to install the selected process's limit. This inline helper has no C frame,
+   so it is usable after selecting the process stack. Its complete explanation
+   is in [`2.4.2.3 Stack-boundary helpers`](#2423-stack-boundary-helpers).
+4. Load `CS`, `DS`, `IN1`, `IN2`, and `ACC` from the selected PCB's
+   [`activation`](kernel/process/process.header#L40). Restore `BAF` last,
+   because it holds the PCB pointer while the other values are read.
+5. Execute `RTI` to read the saved PC from `SP + 1` on the selected process's
+   stack, increment `SP`, and advance `PC`. This resumes an interrupted user
+   instruction, continues after a software syscall, or starts a new process
+   whose prepared PC was `CS - 1`.
+
+The assembly relies on fixed PCB offsets. Registers come from [`activation`](kernel/process/process.header#L40),
+and PC comes from the process stack. Direct syscall return instead pops
+registers from the saved interrupt frame.
+
+Resumable switches save the outgoing activation first. Startup and
+termination begin directly with [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) because
+there is no outgoing context to preserve. Both use the same selection and
+restoration path.
+
+## 6.5 Dispatcher function reference
+[\[↑ TOC\]](#contents)
+
+The table covers all dispatcher functions and their roles in requesting a
+switch, selecting a process, saving context, and restoring execution:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`dispatcher_switch_from_context(caller_context)`](kernel/dispatcher.picoc#L71) | Returns only if the process list becomes empty. Otherwise the dispatch path leaves through `RTI` | Copies [`caller_context`](kernel/dispatcher.picoc#L71) into the current PCB's activation and changes only [`RUNNING`](kernel/process/process.header#L14) to [`READY`](kernel/process/process.header#L13) | [`current_process()`](kernel/process/process.picoc#L62), [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) | **Library functions:** [`yield()`](library/schedule/schedule.picoc#L4), blocking [`sleep()`](library/unistd/blocking.picoc#L9), waiting [`waitpid()`](library/sys/wait/wait.picoc#L14), blocking terminal [`read()`](library/unistd/io.picoc#L6), and DMA-backed [`load()`](library/unistd/process.picoc#L17), all through syscalls<br>**Hardware interrupts:** userspace timer via [`timer_interrupt_after_reschedule_request()`](interrupt_service_routines/os_isrs.picoc#L92)<br>**Kernel functions:** [`dispatcher_reschedule_if_requested()`](kernel/dispatcher.picoc#L14), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390), [`start_dma_uart_receive()`](kernel/dma.picoc#L18), and the yield branch in [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`dispatcher_request_reschedule(void)`](kernel/dispatcher.picoc#L10) | Returns no value | Sets [`reschedule_requested`](kernel/dispatcher.picoc#L8) after timer expiry or a terminating signal for the running process | None | **Hardware interrupts:** timer through [`timer_interrupt()`](interrupt_service_routines/os_isrs.picoc#L33) and [`timer_interrupt_process()`](interrupt_service_routines/os_isrs.picoc#L75)<br>**Kernel functions:** [`send_signal_to_process()`](kernel/signal.picoc#L75) |
+| [`dispatcher_reschedule_if_requested(caller_context)`](kernel/dispatcher.picoc#L14) | Returns when no request is pending, otherwise returns only if dispatch finds an empty process list | Sends the saved syscall frame into the dispatcher when a deferred request is pending | [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) | **System-call return:** every normally returning syscall through [`syscall_interrupt_return()`](interrupt_service_routines/os_isrs.picoc#L144) |
+| [`dispatcher_start_next_process(void)`](kernel/dispatcher.picoc#L55) | Leaves through `RTI` for a runnable process, waits while existing processes cannot run, or returns for an empty process list | Repeatedly requests a scheduler choice, consumes deferred termination for a selected process, and starts dispatch | [`scheduler_next_process()`](kernel/scheduler.picoc#L12), [`first_process()`](kernel/process/process.picoc#L28), [`prepare_process_termination()`](kernel/signal.picoc#L126), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) | **Kernel functions:** [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), [`exit_process()`](kernel/process/process.picoc#L430), [`main()`](kernel/kernel.picoc#L31) |
+| [`dispatcher_switch_to_process(process)`](kernel/dispatcher.picoc#L43) | Does not return normally | Changes an old [`RUNNING`](kernel/process/process.header#L14) process to [`READY`](kernel/process/process.header#L13), clears the reschedule request, updates [`active_process`](kernel/process/process.picoc#L18), marks the selected process [`RUNNING`](kernel/process/process.header#L14), and begins restoration | [`current_process()`](kernel/process/process.picoc#L62), [`set_current_process()`](kernel/process/process.picoc#L66), [`process_stack_boundary()`](kernel/exception.picoc#L18), [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) | **Kernel functions:** [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) |
+| [`dispatcher_jump_to_process(process, stack_boundary)`](kernel/dispatcher.picoc#L21) | Leaves through `RTI`, it has no normal C return | Installs the selected process's `SP` and stack boundary, restores the other activation registers, then restores `PC` from the process stack | [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2) | **Kernel functions:** [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) |
+
+# 7. Blocking, wait queues, signals, and mutexes
+[\[↑ TOC\]](#contents)
+
+A process blocks when it must wait for an event. Wait queues record that
+wait, signals can stop or terminate it, and mutexes use queues for
+contention. This chapter connects those operations to PCB state.
+
+## 7.1 Blocking and wakeup
+[\[↑ TOC\]](#contents)
+
+Blocking waits for an event, waking makes the process eligible for CPU time,
+and dispatching resumes its saved execution.
+
+> **Block → wake → run.** Waiting sets the PCB's [`state`](kernel/process/process.header#L33) to [`BLOCKED`](kernel/process/process.header#L15) and
+> dispatches another process. The event makes it [`READY`](kernel/process/process.header#L13). The scheduler
+> then decides when its saved execution resumes.
+
+The cycle distinguishes waiting for an event from waiting for CPU time:
+
+![Waiting cycle: sleep() joins a wait queue with PCB state BLOCKED, wakeup() removes the waiter and sets state READY, then the scheduler selects the process and the dispatcher resumes it with state RUNNING.](documentation/images/blocking-cycle.svg)
+
+[`sleep()`](library/unistd/blocking.picoc#L9) and [`wakeup()`](library/unistd/blocking.picoc#L19) use syscalls. Kernel events operate on queues
+directly. [`waiting_queue_ptr`](kernel/process/process.header#L48) identifies a process's queue, and [`wait_next`](kernel/process/process.header#L51)
+links the next waiter. A child embeds its parent's queue in [`waiters`](kernel/process/process.header#L46).
+
+The table pairs common blocking events with the event that completes each
+wait and the queue that connects them:
+
+| Blocking event | Wait queue | Wakeup event |
+| --- | --- | --- |
+| A process calls [`sleep(queue)`](library/unistd/blocking.picoc#L9) through a syscall | Caller-supplied [`wait_queue`](common/wait_queue.header#L5) | Another process calls [`wakeup(queue)`](library/unistd/blocking.picoc#L19) through a syscall, waking one waiter |
+| A parent calls [`waitpid(child_pid)`](library/sys/wait/wait.picoc#L14) while the child is still running | Child PCB's embedded [`waiters`](kernel/process/process.header#L46) | Child [`exit(status)`](library/stdlib/exit.picoc#L3) or [`kill_process(child, signal)`](kernel/signal.picoc#L71) reaches [`terminate_process(child, status)`](kernel/process/process.picoc#L304), which delivers status and wakes the parent through [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) |
+| A held lock makes [`mutex_lock(m)`](library/mutex/mutex.picoc#L18) call [`sleep(&m->waiters)`](library/unistd/blocking.picoc#L9) | Mutex's embedded [`waiters`](library/mutex/mutex.header#L8) | [`mutex_unlock(m)`](library/mutex/mutex.picoc#L25) releases the lock and calls [`wakeup(&m->waiters)`](library/unistd/blocking.picoc#L19) |
+| A terminal [`read()`](library/unistd/io.picoc#L6) finds no input in [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134) | [`Terminal.input_waiters`](kernel/filesystem/terminal.header#L14) | A UART byte triggers [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213), then [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182) delivers input and makes the reader ready |
+| [`start_dma_uart_receive()`](kernel/dma.picoc#L18) starts a transfer during process loading | Global [`dma_waiters`](kernel/dma.picoc#L6) | DMA completion triggers [`handle_dma_interrupt()`](kernel/dma.picoc#L40), which calls [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) |
+
+A child's stop event also wakes a waiting parent through
+[`notify_process_stopped()`](kernel/signal.picoc#L23). Signal-specific handling
+is described in [`7.3 Process signals`](#73-process-signals).
+
+## 7.2 Wait queues and PCB links
+[\[↑ TOC\]](#contents)
+
+[`wait_queue`](common/wait_queue.header#L5) stores the head and tail of a PCB FIFO. Its shared header
+defines the layout. Library wrappers invoke syscalls, while kernel
+functions in [`kernel/process/process.picoc`](kernel/process/process.picoc) maintain the links.
+
+The definition shows the endpoints. The links between them live in PCBs:
+
+```c
+struct wait_queue {
+    struct ProcessControlBlock *head;
+    struct ProcessControlBlock *tail;
+};
+```
+
+| Attribute | Meaning | Used by |
+| --- | --- | --- |
+| [`head`](common/wait_queue.header#L6) | First blocked PCB to wake, or `NULL` when empty | First initialized by [`create_process()`](kernel/process/process.picoc#L89) for child waiters, [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14) for terminal input, [`wait_queue_init()`](library/unistd/blocking.picoc#L4) for userspace queues, or [`initialize_dma()`](kernel/dma.picoc#L9) for DMA, maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L61), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) |
+| [`tail`](common/wait_queue.header#L7) | Last blocked PCB, allowing constant-time append, also `NULL` when empty | First initialized by [`create_process()`](kernel/process/process.picoc#L89) for child waiters, [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14) for terminal input, [`wait_queue_init()`](library/unistd/blocking.picoc#L4) for userspace queues, or [`initialize_dma()`](kernel/dma.picoc#L9) for DMA, maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L61), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) |
+
+Embedded [`waiters`](kernel/process/process.header#L46) fields are complete queue objects. DMA uses a standalone
+queue. The table identifies their owners:
+
+PicoOS's shared address space lets the kernel store PCB pointers in a
+userspace mutex queue. Child waiting instead uses a queue inside the child
+PCB. Its request and result are local to the parent's suspended call.
+[`9.4 Wait requests and queue storage`](#94-wait-requests-and-queue-storage) compares their storage.
+
+The field table brings together queue links and saved wait arguments:
+
+| Field and containing storage | Meaning and why it exists | Used by and important relationships |
+| --- | --- | --- |
+| [`WaitPidRequest.pid`](common/syscall.header#L62), in [`request`](library/sys/wait/wait.picoc#L16) on the parent's userspace stack | Exact child PID requested by the public API. It prevents another child's state change from completing this wait. | Set by [`waitpid()`](library/sys/wait/wait.picoc#L14). Read by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348), which also checks the child's [`parent_pid`](kernel/process/process.header#L57). The kernel does not retain this field after blocking. |
+| [`WaitPidRequest.status`](common/syscall.header#L63), in the same stack-local request | Points to the separate stack-local [`status`](library/sys/wait/wait.picoc#L15) result. The indirection lets the kernel use one request argument for both PID and result storage. | Set to `&status` by [`waitpid()`](library/sys/wait/wait.picoc#L14). Immediate paths write through it. The blocking path copies its value into the parent PCB's [`waiting_status_ptr`](kernel/process/process.header#L44). Neither the request nor status is allocated on the kernel heap. |
+| [`wait_queue.head`](common/wait_queue.header#L6) and [`wait_queue.tail`](common/wait_queue.header#L7), embedded in an owner or stored as a global/userspace object | First and last PCB in a FIFO. [`tail`](common/wait_queue.header#L7) makes append constant-time. Both are `NULL` when empty. | Initialized by each queue owner. Maintained by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), and [`remove_from_wait_queue()`](kernel/process/process.picoc#L176). The nodes are PCBs linked through [`wait_next`](kernel/process/process.header#L51). |
+| [`ProcessControlBlock.waiters`](kernel/process/process.header#L46), embedded in each kernel-heap PCB | Queue of other processes waiting for this process to stop or terminate. It is queue ownership, not the queue containing this process. | Initialized empty by [`create_process()`](kernel/process/process.picoc#L89). The target child is found from the PID and its address `&child->waiters` is passed to [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390). Drained by [`notify_process_stopped()`](kernel/signal.picoc#L23) or [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261). |
+| [`ProcessControlBlock.waiting_status_ptr`](kernel/process/process.header#L44), pointer stored in the waiting parent's kernel-heap PCB | Reaches the `status` integer in the suspended parent's userspace [`waitpid()`](library/sys/wait/wait.picoc#L14) frame. It exists because the child may finish while that call is not executing. | Initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L89). Set from [`WaitPidRequest.status`](common/syscall.header#L63) by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348). Written and cleared through the parent PCB by [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) or [`notify_process_stopped()`](kernel/signal.picoc#L23). |
+| [`ProcessControlBlock.waiting_queue_ptr`](kernel/process/process.header#L48), pointer stored in every kernel-heap PCB | Back-reference to the one queue currently containing this PCB, or `NULL`. It lets code unlink a blocked process without already knowing whether the owner is a child, mutex, terminal, or DMA subsystem. | Set on insertion and cleared on wake/removal. [`remove_process()`](kernel/process/process.picoc#L209) follows it through [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) before freeing the PCB. This prevents a later wakeup from following a dangling PCB pointer. It is also used when terminal reads are stopped or resumed. |
+| [`ProcessControlBlock.wait_next`](kernel/process/process.header#L51), embedded in every kernel-heap PCB | Intrusive link to the next PCB in whichever wait queue contains this process. One field is sufficient because a blocked process can join only one queue at a time. | Initialized to `NULL` by [`create_process()`](kernel/process/process.picoc#L89). Linked through the old queue tail by [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375). Traversed by [`remove_from_wait_queue()`](kernel/process/process.picoc#L176). Cleared on wake/removal. It is independent of global-list [`next`](kernel/process/process.header#L53). |
+| [`ProcessControlBlock.state`](kernel/process/process.header#L33) and [`ProcessControlBlock.stopped_from_state`](kernel/process/process.header#L62), in the PCB | Record whether the waiter is [`BLOCKED`](kernel/process/process.header#L15), runnable, or visibly [`STOPPED`](kernel/process/process.header#L16), including whether a stopped wait completed. | Enqueue changes [`state`](kernel/process/process.header#L33) to [`BLOCKED`](kernel/process/process.header#L15). [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) changes an ordinary waiter to [`READY`](kernel/process/process.header#L13), or keeps `state == STOPPED` and changes [`stopped_from_state`](kernel/process/process.header#L62) to [`READY`](kernel/process/process.header#L13) so [`continue_process()`](kernel/signal.picoc#L50) can resume it correctly. |
+| [`ProcessControlBlock.parent_pid`](kernel/process/process.header#L57), [`ProcessControlBlock.exit_status`](kernel/process/process.header#L60), and [`ProcessControlBlock.stop_signal`](kernel/process/process.header#L61), in the child PCB | Verify that only the parent can wait and retain the child state needed by immediate/zombie/stopped [`waitpid`](library/sys/wait/wait.picoc#L14) paths. | Initialized by [`create_process()`](kernel/process/process.picoc#L89). Read by [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348). Termination writes [`exit_status`](kernel/process/process.header#L60), stopping writes [`stop_signal`](kernel/process/process.header#L61), and later collection reads the corresponding value. |
+
+[`head`](common/wait_queue.header#L6) starts the [`wait_next`](kernel/process/process.header#L51) chain, and [`tail`](common/wait_queue.header#L7) points to its last PCB.
+Both are `NULL` for an empty queue. Queue owners initialize the endpoints,
+and [`create_process()`](kernel/process/process.picoc#L89) initializes PCB membership fields.
+
+Blocking appends the current PCB, sets [`waiting_queue_ptr`](kernel/process/process.header#L48) and [`wait_next`](kernel/process/process.header#L51),
+and changes [`state`](kernel/process/process.header#L33) to [`BLOCKED`](kernel/process/process.header#L15). The back-reference lets removal find its
+queue without already knowing the owner. It is separate from the PCB's
+own [`waiters`](kernel/process/process.header#L46).
+
+Wakeup and removal clear membership links. A stopped waiter keeps [`STOPPED`](kernel/process/process.header#L16)
+but records when its wait finishes. Terminal stops detach their read waiter,
+while other stopped waits stay linked. Final process removal clears any
+remaining membership. A retained zombie can stay linked until then.
+
+One queue can hold many PCBs, but a blocked process can join only one queue
+at a time. One [`wait_next`](kernel/process/process.header#L51) field is sufficient. It can still own a separate
+queue for its parent.
+
+Here PCB A is the child and embeds the queue. B, C, and D illustrate
+intrusive waiter links. Normal [`waitpid()`](library/sys/wait/wait.picoc#L14) allows only A's parent to wait,
+but the queue representation supports several entries:
 
 ```mermaid
 flowchart LR
-    Q["wait_queue"] -->|head| A["PCB A"]
-    A -->|wait_next| B["PCB B"]
-    B -->|wait_next| C["PCB C"]
-    C -->|wait_next| N["NULL"]
-    Q -->|tail| C
-    A -. waiting_queue_ptr .-> Q
-    B -. waiting_queue_ptr .-> Q
-    C -. waiting_queue_ptr .-> Q
-```
-
-### 6.1.1 Sleeping and waking
-
-[`sleep(queue)`](library/unistd/blocking.picoc#L9) is not a timed delay. It invokes [`SYSCALL_SLEEP`](common/syscall.header#L20), appends the
-current PCB to the supplied queue, changes it to [`BLOCKED`](kernel/process/process.header#L15), saves its
-activation, and dispatches. [`wakeup(queue)`](library/unistd/blocking.picoc#L19) invokes [`SYSCALL_WAKEUP`](common/syscall.header#L21) and
-removes at most the FIFO head. The woken PCB becomes [`READY`](kernel/process/process.header#L13), but the caller
-keeps running until normal scheduling occurs. If the waiter is also
-[`STOPPED`](kernel/process/process.header#L16), the kernel changes [`stopped_from_state`](kernel/process/process.header#L62) to [`READY`](kernel/process/process.header#L13) and leaves the
-visible state stopped until [`SIGCONT`](common/signal.header#L6). The sequence below shows an ordinary
-blocked waiter: waking it makes it eligible, while the dispatcher determines
-when its suspended call actually resumes.
-
-```mermaid
-sequenceDiagram
-    participant P as Process P
-    participant K as Syscall/kernel queue code
-    participant Q as wait_queue
-    participant D as Dispatcher
-    participant E as Event owner
-
-    P->>K: sleep(&queue), syscall 13
-    K->>Q: Append P using PCB.wait_next
-    K->>P: RUNNING to BLOCKED
-    K->>D: Save activation and select another process
-    E->>K: wakeup(&queue), syscall 14
-    K->>Q: Remove FIFO head and clear intrusive links
-    K->>P: BLOCKED to READY
-    D-->>P: Restore later when selected
-```
-
-## 6.2 [`waitpid()`](library/sys/wait/wait.picoc#L14) and saved wait state
-
-The public API waits for one exact child and has no options argument. Its
-stack-local [`struct WaitPidRequest`](common/syscall.header#L62) contains the target PID and a pointer to a
-stack-local status cell. If the child is already stopped or a zombie, the
-kernel writes the status immediately. Otherwise it stores the status pointer
-in the waiting parent's PCB, puts that parent on the child's embedded
-[`waiters`](kernel/process/process.header#L46) queue, and dispatches. The sequence below separates immediate status
-collection from a suspended wait and shows which process owns each saved value.
-
-```mermaid
-sequenceDiagram
-    participant W as Waiting parent W
-    participant WS as W waitpid stack frame
-    participant WP as W PCB
-    participant K as Kernel wait handling
-    participant TP as Target child T PCB
-    participant TQ as T.waiters queue
-
-    Note over WS: request.status points to local status
-    W->>K: waitpid(T), syscall 7
-    K->>TP: Verify T exists and T.parent_pid equals W.pid
-    alt T is already ZOMBIE
-        K->>WS: Copy T.exit_status
-        K->>TP: remove_process(T)
-        K-->>W: Return immediately
-    else T is STOPPED
-        K->>WS: Store stopped status
-        K-->>W: Return immediately
-    else T is NEW, READY, RUNNING, or BLOCKED
-        K->>WP: waiting_status_ptr = request.status
-        K->>TQ: Enqueue W on T.waiters
-        K->>WP: W becomes BLOCKED and its activation is saved
-        Note over K,TP: Later T stops or terminates
-        K->>TQ: Find W through T.waiters
-        K->>WS: Write status through W.waiting_status_ptr
-        K->>WP: Clear waiting_status_ptr
-        K->>TQ: Wake and unlink W
-        K->>WP: W becomes READY, or stays STOPPED with wait satisfied
-        opt T terminated and its parent collected the status
-            K->>TP: remove_process(T)
-        end
-        WP-->>W: Dispatcher eventually resumes waitpid
+    subgraph A["PCB A: process being waited on<br/>kernel heap"]
+        AW["waiters: embedded wait_queue"]
     end
+    AW -->|head| B["PCB B: waiting process<br/>kernel heap"]
+    B -->|wait_next| C["PCB C: waiting process<br/>kernel heap"]
+    C -->|wait_next| D["PCB D: waiting process<br/>kernel heap"]
+    D -->|wait_next| N["NULL"]
+    AW -->|tail| D
+    B -. waiting_queue_ptr .-> AW
+    C -. waiting_queue_ptr .-> AW
+    D -. waiting_queue_ptr .-> AW
 ```
 
-The request and status remain valid because the parent's userspace stack is
-suspended while it is blocked. [`waiting_status_ptr`](kernel/process/process.header#L44) is stored in the parent,
-whereas the queue is stored in the child. If the child exits before the call,
-it remains a [`ZOMBIE`](kernel/process/process.header#L17) with [`exit_status`](kernel/process/process.header#L60) until collected. Invalid PIDs and
-non-children produce `-1`. Exact-child waiting matters to init and the shell:
-a state change in another child must not complete the wrong wait.
+[`waiting_queue_ptr`](kernel/process/process.header#L48) points back to `&child->waiters`. No separate queue
+allocation is needed. [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) adds the request and result handoff.
 
-## 6.3 Signals inside the PCB
+### 7.2.1 Blocking with `sleep` and waking with `wakeup`
+[\[↑ TOC\]](#contents)
+
+[`sleep(queue)`](library/unistd/blocking.picoc#L9) waits on an existing queue. It sets [`BLOCKED`](kernel/process/process.header#L15), saves the
+activation, and dispatches. It is not a timed delay. [`wakeup(queue)`](library/unistd/blocking.picoc#L19) removes
+at most the FIFO head and makes it ready. A stopped waiter remains stopped
+until [`SIGCONT`](common/signal.header#L6), with [`stopped_from_state`](kernel/process/process.header#L62) updated to [`READY`](kernel/process/process.header#L13). Wakeup itself
+does not switch processes.
+
+### 7.2.2 Child waiting with `waitpid`
+[\[↑ TOC\]](#contents)
+
+[`waitpid()`](library/sys/wait/wait.picoc#L14) waits for one exact child, without an options argument. Its
+stack-local [`WaitPidRequest.status`](common/syscall.header#L63) points to a separate local result integer.
+If the child is stopped or a zombie, the kernel writes that result
+immediately. Otherwise the parent blocks on the child's queue.
+
+The complete wrapper shows both stack objects. Neither needs heap
+allocation:
+
+```c
+int waitpid(int pid) {
+    int status = 0;
+    struct WaitPidRequest request;
+
+    request.pid = pid;
+    request.status = &status;
+    while (!invoke_waitpid_syscall(SYSCALL_WAITPID, (int)&request)) {
+    }
+    return status;
+}
+```
+
+[`invoke_waitpid_syscall()`](library/sys/wait/wait.picoc#L4) passes `&request` in `IN1`. The kernel reads the
+PID and copies `request.status` into [`waiting_status_ptr`](kernel/process/process.header#L44) if blocking is
+needed. It retains the result pointer rather than the request address.
+The suspended frame keeps both locals alive. [`10.1.2 Packing arguments and executing the syscall`](#1012-packing-arguments-and-executing-the-syscall) shows the registers.
+
+Child termination writes through the parent's saved pointer and wakes it.
+An ordinary parent becomes [`READY`](kernel/process/process.header#L13). A stopped parent records the completed
+wait but stays stopped until continued. On resumption, [`waitpid()`](library/sys/wait/wait.picoc#L14) returns
+its updated local status.
+
+The immediate cases do not put the parent on a wait queue. The kernel either
+collects an existing zombie or reports an already stopped child before
+returning directly.
+
+Wakeup clears the parent's queue links. If the parent is removed first,
+[`remove_process()`](kernel/process/process.picoc#L209) uses [`waiting_queue_ptr`](kernel/process/process.header#L48) to unlink it before freeing the
+PCB, preventing a later wakeup from following freed memory.
+
+A child that exits first retains [`exit_status`](kernel/process/process.header#L60) until collection. Invalid
+PIDs and non-children return `-1`. Waiting for an exact child prevents init
+or the shell from completing the wrong wait.
+
+### 7.2.3 Wait queue function reference
+[\[↑ TOC\]](#contents)
+
+The table maps the library operations to their kernel queue primitives:
+
+| Public/library operation | Syscall and kernel call path | Completion path |
+| --- | --- | --- |
+| [`sleep(wq)`](library/unistd/blocking.picoc#L9) | [`SYSCALL_SLEEP`](common/syscall.header#L19) → [`handle_syscall()`](kernel/syscall.picoc#L16) → [`sleep_on_wait_queue(wq, caller_context)`](kernel/process/process.picoc#L390) → [`enqueue_current_process_on_wait_queue(wq)`](kernel/process/process.picoc#L375) | An event owner reaches [`wakeup_wait_queue(wq)`](kernel/process/process.picoc#L395), often through [`wakeup(wq)`](library/unistd/blocking.picoc#L19). |
+| [`wakeup(wq)`](library/unistd/blocking.picoc#L19) | [`SYSCALL_WAKEUP`](common/syscall.header#L20) → [`handle_syscall()`](kernel/syscall.picoc#L16) → [`wakeup_wait_queue(wq)`](kernel/process/process.picoc#L395) | Clears the removed PCB's intrusive membership fields and makes it [`READY`](kernel/process/process.header#L13), or records completion beneath [`STOPPED`](kernel/process/process.header#L16). |
+| [`waitpid(pid)`](library/sys/wait/wait.picoc#L14) | [`SYSCALL_WAITPID`](common/syscall.header#L13) → [`handle_syscall()`](kernel/syscall.picoc#L16) → [`wait_for_process_by_pid(request, caller_context)`](kernel/process/process.picoc#L348) → the same [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390) used by [`sleep`](library/unistd/blocking.picoc#L9) | Child termination calls [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261), which writes the status and calls the same [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) used by public [`wakeup`](library/unistd/blocking.picoc#L19). Child stopping uses [`notify_process_stopped()`](kernel/signal.picoc#L23) and that same wake primitive. |
+
+The function reference starts with syscall-backed operations, followed by
+queue and child-lifecycle helpers:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`wait_for_process_by_pid(request, caller_context)`](kernel/process/process.picoc#L348) | Returns `true` after an immediate invalid, zombie, or stopped result. The normal blocking path switches away and resumes userspace with the successful `IN2 = 1` preset by [`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105). The source-level `false` fallback is reached only if dispatch returns instead of restoring a process. | Validates the parent-child relationship. Immediately collects a zombie or stopped status. Otherwise copies `request->status` into the parent PCB and blocks it on `&child->waiters`. | [`current_process()`](kernel/process/process.picoc#L62), [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`remove_process()`](kernel/process/process.picoc#L209), [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390) | **Library functions:** [`waitpid()`](library/sys/wait/wait.picoc#L14) through [`SYSCALL_WAITPID`](common/syscall.header#L13)<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`sleep_on_wait_queue(queue, caller_context)`](kernel/process/process.picoc#L390) | Returns no value. Normally dispatch leaves through `RTI` and the saved userspace context resumes after a later wakeup. A C return is possible only if dispatch finds an empty process list. | Links the current PCB to `queue`, changes it to [`BLOCKED`](kernel/process/process.header#L15), saves its activation, and dispatches another process. | [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) | **Library functions:** [`sleep()`](library/unistd/blocking.picoc#L9) through [`SYSCALL_SLEEP`](common/syscall.header#L19). [`waitpid()`](library/sys/wait/wait.picoc#L14) through [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348)<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16), [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`wakeup_wait_queue(queue)`](kernel/process/process.picoc#L395) | `false` when empty. `true` after waking one FIFO head. | Advances [`head`](common/wait_queue.header#L6), fixes [`tail`](common/wait_queue.header#L7), clears the removed PCB's [`wait_next`](kernel/process/process.header#L51) and [`waiting_queue_ptr`](kernel/process/process.header#L48), and makes it ready or records a completed wait under [`STOPPED`](kernel/process/process.header#L16). | None | **Library functions:** [`wakeup()`](library/unistd/blocking.picoc#L19) through [`SYSCALL_WAKEUP`](common/syscall.header#L20)<br>**Kernel functions:** [`handle_syscall()`](kernel/syscall.picoc#L16), [`handle_dma_interrupt()`](kernel/dma.picoc#L40), [`notify_process_stopped()`](kernel/signal.picoc#L23), [`wake_parent_waiting_for_process()`](kernel/process/process.picoc#L261) |
+|  |  |  |  |  |
+| [`enqueue_current_process_on_wait_queue(queue)`](kernel/process/process.picoc#L375) | Returns no value. | Appends the current PCB in constant time, sets its [`waiting_queue_ptr`](kernel/process/process.header#L48), clears its [`wait_next`](kernel/process/process.header#L51), and changes it to [`BLOCKED`](kernel/process/process.header#L15). | [`current_process()`](kernel/process/process.picoc#L62) | **Library functions:** [`sleep()`](library/unistd/blocking.picoc#L9) and [`waitpid()`](library/sys/wait/wait.picoc#L14) through [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390)<br>**Kernel functions:** [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`start_dma_uart_receive()`](kernel/dma.picoc#L18) |
+| [`remove_from_wait_queue(process)`](kernel/process/process.picoc#L176) | Returns no value. No change when `waiting_queue_ptr == NULL` or the PCB is not found. | Follows the PCB's queue back-reference, finds its predecessor, reconnects the intrusive list, fixes queue endpoints, and clears membership fields. This is the arbitrary-member removal path, unlike FIFO wakeup. | None | **Kernel functions:** [`remove_process()`](kernel/process/process.picoc#L209), [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84), [`suspend_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L75) |
+| [`process_has_waiting_parent(process)`](kernel/process/process.picoc#L249) | `true` when the target process's queue contains a PCB whose PID equals its [`parent_pid`](kernel/process/process.header#L57). Otherwise `false`. | Traverses `process->waiters` through [`wait_next`](kernel/process/process.header#L51) without mutation. The result tells termination whether status delivery permits immediate child removal. | None | **Kernel functions:** [`terminate_process()`](kernel/process/process.picoc#L304) |
+| [`wake_parent_waiting_for_process(process, status)`](kernel/process/process.picoc#L261) | Returns no value. | Drains the process's waiter queue. For its parent PCB, writes through [`waiting_status_ptr`](kernel/process/process.header#L44) and clears that pointer before waking. | [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) | **Kernel functions:** [`terminate_process()`](kernel/process/process.picoc#L304) |
+| [`notify_process_stopped(process)`](kernel/signal.picoc#L23) | Returns no value. | Drains the stopped process's waiter queue, writes `128 + stop_signal` through each non-`NULL` [`waiting_status_ptr`](kernel/process/process.header#L44), clears it, and wakes each waiter. | [`wakeup_wait_queue()`](kernel/process/process.picoc#L395) | **Kernel functions:** [`stop_process()`](kernel/signal.picoc#L37) |
+
+## 7.3 Process signals
+[\[↑ TOC\]](#contents)
+
+Signals add stop, continue, and termination actions to ordinary waiting.
+PicoOS uses fixed actions, with their state stored in each PCB.
+
+### 7.3.1 Supported signals and fixed actions
+[\[↑ TOC\]](#contents)
 
 Signals have fixed kernel actions and cannot be caught or ignored. The small
 amount of per-process signal state is embedded in each PCB:
 
 | Attribute | Meaning | Used by |
 | --- | --- | --- |
-| [`pending_termination_signal`](kernel/process/process.header#L63) | [`SIGINT`](common/signal.header#L4)/[`SIGKILL`](common/signal.header#L5) deferred while the target is the running process | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L88); set by [`send_signal_to_process()`](kernel/signal.picoc#L74); consumed by [`prepare_process_termination()`](kernel/signal.picoc#L124) |
-| [`stop_signal`](kernel/process/process.header#L61) | Identifies the signal reported for the current stopped state | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L88); set by [`stop_process()`](kernel/signal.picoc#L36) and the input-ownership check in [`continue_process()`](kernel/signal.picoc#L49); read by [`notify_process_stopped()`](kernel/signal.picoc#L22) and [`wait_for_process_by_pid()`](kernel/process/process.picoc#L368) |
-| [`stopped_from_state`](kernel/process/process.header#L62) | State reconsidered on [`SIGCONT`](common/signal.header#L6) | First initialized to [`READY`](kernel/process/process.header#L13) by [`create_process()`](kernel/process/process.picoc#L88); set by [`stop_process()`](kernel/signal.picoc#L36), [`wakeup_wait_queue()`](kernel/process/process.picoc#L415), and [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85); read by [`continue_process()`](kernel/signal.picoc#L49) |
-| [`parent_death_signal`](kernel/process/process.header#L59) | Signal delivered when the parent terminates | First initialized by [`create_process()`](kernel/process/process.picoc#L88); set by [`set_parent_death_signal()`](kernel/signal.picoc#L135) |
-| [`pending_terminal_read_buffer`](kernel/process/process.header#L65), [`pending_terminal_read_count`](kernel/process/process.header#L66) | Terminal request retained across any stop while the read is pending | First initialized to `NULL`/0 by [`create_process()`](kernel/process/process.picoc#L88); set by [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135); consumed by [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183) or [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85) |
+| [`pending_termination_signal`](kernel/process/process.header#L63) | [`SIGINT`](common/signal.header#L4)/[`SIGKILL`](common/signal.header#L5) deferred while the target is the running process | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L89), set by [`send_signal_to_process()`](kernel/signal.picoc#L75), consumed by [`prepare_process_termination()`](kernel/signal.picoc#L126) |
+| [`stop_signal`](kernel/process/process.header#L61) | Identifies the signal reported for the current stopped state | First initialized to 0 by [`create_process()`](kernel/process/process.picoc#L89), set by [`stop_process()`](kernel/signal.picoc#L37) and the input-ownership check in [`continue_process()`](kernel/signal.picoc#L50), read by [`notify_process_stopped()`](kernel/signal.picoc#L23) and [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) |
+| [`stopped_from_state`](kernel/process/process.header#L62) | State reconsidered on [`SIGCONT`](common/signal.header#L6) | First initialized to [`READY`](kernel/process/process.header#L13) by [`create_process()`](kernel/process/process.picoc#L89), set by [`stop_process()`](kernel/signal.picoc#L37), [`wakeup_wait_queue()`](kernel/process/process.picoc#L395), and [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84), read by [`continue_process()`](kernel/signal.picoc#L50) |
+| [`parent_death_signal`](kernel/process/process.header#L59) | Signal delivered when the parent terminates | First initialized by [`create_process()`](kernel/process/process.picoc#L89), set by [`set_parent_death_signal()`](kernel/signal.picoc#L137) |
+| [`pending_terminal_read_buffer`](kernel/process/process.header#L65), [`pending_terminal_read_count`](kernel/process/process.header#L66) | Terminal request retained across any stop while the read is pending | First initialized to `NULL`/0 by [`create_process()`](kernel/process/process.picoc#L89), set by [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), consumed by [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182) or [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
 
-The subsystem also has global [`foreground_process_id`](kernel/signal.picoc#L10) and
-[`terminal_input_process_id`](kernel/signal.picoc#L11) integers in kernel `.data`. They are not PCB
-pointers; lookup validates that the process still exists.
+[`foreground_process_target`](kernel/signal.picoc#L12) selects terminal input ownership and signal
+delivery. [`8.4 Foreground input ownership and terminal-generated signals`](#84-foreground-input-ownership-and-terminal-generated-signals) explains its signed encoding and the [`SIGTTIN`](common/signal.header#L9) read path.
 
-Six signals are implemented. [`SIGINT`](common/signal.header#L4) and [`SIGKILL`](common/signal.header#L5) terminate; [`SIGSTOP`](common/signal.header#L7),
-[`SIGTSTP`](common/signal.header#L8), and [`SIGTTIN`](common/signal.header#L9) stop; and [`SIGCONT`](common/signal.header#L6) resumes a stopped process. Signal
-0 remains an existence probe for [`kill()`](library/signal/signal.picoc#L14) and performs no action. The table
-below maps the accepted numbers to their fixed actions and reported statuses.
+PicoOS implements six signals. Signal `0` is an additional existence probe
+for [`kill()`](library/signal/signal.picoc#L14). The table lists their actions and statuses:
 
 | Number | Name | Kernel action | Reported status/state |
 | ---: | --- | --- | --- |
@@ -2224,129 +5007,95 @@ below maps the accepted numbers to their fixed actions and reported statuses.
 | 2 | [`SIGINT`](common/signal.header#L4) | Terminates the target | Exit status 130 |
 | 9 | [`SIGKILL`](common/signal.header#L5) | Terminates the target | Exit status 137 |
 | 18 | [`SIGCONT`](common/signal.header#L6) | Resumes a stopped target | [`READY`](kernel/process/process.header#L13), or [`BLOCKED`](kernel/process/process.header#L15) if its original wait is still active |
-| 19 | [`SIGSTOP`](common/signal.header#L7) | Stops the target | [`STOPPED`](kernel/process/process.header#L16); status 147 |
-| 20 | [`SIGTSTP`](common/signal.header#L8) | Stops the target | [`STOPPED`](kernel/process/process.header#L16); status 148 |
-| 21 | [`SIGTTIN`](common/signal.header#L9) | Stops the target; generated when a background process reads the terminal | [`STOPPED`](kernel/process/process.header#L16); status 149 |
+| 19 | [`SIGSTOP`](common/signal.header#L7) | Stops the target | [`STOPPED`](kernel/process/process.header#L16), status 147 |
+| 20 | [`SIGTSTP`](common/signal.header#L8) | Stops the target | [`STOPPED`](kernel/process/process.header#L16), status 148 |
+| 21 | [`SIGTTIN`](common/signal.header#L9) | Stops the target, generated when a background process reads the terminal | [`STOPPED`](kernel/process/process.header#L16), status 149 |
 
-[`signal_number_is_valid()`](kernel/signal.picoc#L13) compares against those six named constants
-explicitly. A numeric value in a gap between them is not accepted merely
-because it lies within the implemented range. Signal 0 is handled separately by
-[`send_signal_by_pid()`](kernel/signal.picoc#L106) because it performs lookup without delivery.
+[`signal_number_is_valid()`](kernel/signal.picoc#L14) accepts only the six named constants.
+[`kill(pid, 0)`](library/signal/signal.picoc#L14) or `kill.bin 0 PID` probes existence without delivering a
+signal. It returns `0` for an existing non-zombie process and `-1` otherwise.
+The [`parent_death_signal`](kernel/process/process.header#L59) test uses this to check whether children survived.
 
-When a stop signal changes a PCB to [`STOPPED`](kernel/process/process.header#L16), the signal and prior state are
-retained in [`stop_signal`](kernel/process/process.header#L61) and [`stopped_from_state`](kernel/process/process.header#L62). The child-owned waiter queue
-is drained and each waiting process receives that signal's stopped status
-through its saved [`waiting_status_ptr`](kernel/process/process.header#L44). [`WIFSTOPPED()`](library/sys/wait/wait.picoc#L25) recognizes all three
-stopped statuses. If the process was blocked in a terminal read, it is detached
-from [`terminal.input_waiters`](kernel/filesystem/terminal.header#L14), but its userspace buffer and requested count stay
-in the PCB. This keeps the inactive reader out of the terminal's active wait
-queue without losing the suspended system call.
-[`SIGCONT`](common/signal.header#L6) returns an ordinary stopped process to [`READY`](kernel/process/process.header#L13); a process that was
-blocked and is still linked to its original wait queue returns to [`BLOCKED`](kernel/process/process.header#L15)
-instead, because continuing it does not satisfy that blocking operation.
+[POSIX](https://pubs.opengroup.org/onlinepubs/9799919799/functions/kill.html) calls signal `0` the *null signal*. [Linux `kill(2)`](https://man7.org/linux/man-pages/man2/kill.2.html) checks existence
+and permission without sending a signal. PicoOS keeps the existence check
+but has no identities, permissions, or process-group PID forms. It also
+rejects zombies, which POSIX counts as existing until collection.
 
-Termination of the currently [`RUNNING`](kernel/process/process.header#L14) PCB stores its signal in
-[`pending_termination_signal`](kernel/process/process.header#L63), because freeing the active interrupt-return
-context would be unsafe, and [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10) ensures that the
-next safe syscall-return boundary enters the dispatcher. Before a PCB is restored,
-[`prepare_process_termination()`](kernel/signal.picoc#L124) clears that value and terminates the process
-through [`kill_process()`](kernel/signal.picoc#L70), causing the dispatcher to select another PCB. The
-more general
-[`terminate_process(process, status)`](kernel/process/process.picoc#L303) still accepts a status because normal
-exit, exceptions, and unloading use different values. Other targets can be
-terminated immediately; stop and continue actions update their state directly.
-This value is only a safe-destruction handoff to the dispatcher, not a general
-queue: signal delivery never copies or replaces the process activation and
-never enters userspace code.
+### 7.3.2 Stopping and continuing a process
+[\[↑ TOC\]](#contents)
 
-Unlike Unix/Linux, PicoOS does not support catching or ignoring signals.
-Unix/Linux permits a process to catch and handle [`SIGINT`](common/signal.header#L4), while [`SIGKILL`](common/signal.header#L5)
-cannot be caught; this educational OS deliberately gives both the same fixed
-termination action. Unix/Linux likewise makes [`SIGSTOP`](common/signal.header#L7) uncatchable while
-[`SIGTSTP`](common/signal.header#L8) and [`SIGTTIN`](common/signal.header#L9) can normally be caught or ignored. PicoOS gives all
-three the same fixed stop action. The sequence below highlights the one
-deferred action: destroying a currently running target waits for dispatch,
-whereas stop and continue update PCB state immediately.
+Stopping records [`stop_signal`](kernel/process/process.header#L61) and [`stopped_from_state`](kernel/process/process.header#L62), sets [`STOPPED`](kernel/process/process.header#L16),
+and reports the stopped status to a waiting parent. [`WIFSTOPPED()`](library/sys/wait/wait.picoc#L25) recognizes
+all three stop signals. Terminal reads detach from their queue but retain
+the buffer and count. [`SIGCONT`](common/signal.header#L6) makes an ordinary stopped process ready.
+An unfinished nonterminal wait instead returns to [`BLOCKED`](kernel/process/process.header#L15).
 
-```mermaid
-sequenceDiagram
-    participant S as Signal source
-    participant K as Kernel signal code
-    participant P as Target PCB
-    participant D as Dispatcher
+A background reader receives [`SIGTTIN`](common/signal.header#L9) even when input is buffered. The
+kernel retains its read request without queueing it. Foreground ownership
+and [`SIGCONT`](common/signal.header#L6) are needed to resume that read. [`8.4 Foreground input ownership and terminal-generated signals`](#84-foreground-input-ownership-and-terminal-generated-signals) follows this case.
 
-    S->>K: kill(pid, signal) or kernel-generated signal
-    alt target is currently RUNNING and must terminate
-        K->>P: Store pending termination signal
-        K->>D: Request rescheduling at the safe return boundary
-        D->>K: prepare_process_termination(P)
-        K->>P: Terminate safely before restore
-    else other target or stop/continue action
-        K->>P: Terminate or update process state immediately
-    end
-```
+### 7.3.3 Termination, `Ctrl-C`, and parent collection
+[\[↑ TOC\]](#contents)
 
-Raw-terminal `Ctrl+C` and `Ctrl+Z` arrive as UART bytes 3 and 26. The UART ISR
-consumes them before ring-buffer insertion and resolves
-[`foreground_process_id`](kernel/signal.picoc#L10); byte 3 sends [`SIGINT`](common/signal.header#L4), while byte 26 sends
-[`SIGTSTP`](common/signal.header#L8). The shell changes this global before and after foreground waiting,
-so background work does not receive prompt-time terminal signals.
+Normal exit and signal termination reach [`terminate_process()`](kernel/process/process.picoc#L304). Normal exit
+uses the application's status, while signals use `128 + signal_number`.
+[`kill.bin`](user/kill.picoc#L69) defaults to [`SIGKILL`](common/signal.header#L5) and yields after an accepted request.
+[`4.3.2.2 Recording termination status`](#4322-recording-termination-status) covers exception and unload statuses.
 
-A terminal [`read()`](library/unistd/io.picoc#L6) first checks [`terminal_input_process_id`](kernel/signal.picoc#L11). If the caller is
-not the input owner, the kernel retains its buffer/count in the PCB and sends
-it [`SIGTTIN`](common/signal.header#L9) before the read can consume buffered input or claim the terminal
-wait queue. Input arrival does not select or continue any [`SIGTTIN`](common/signal.header#L9)-stopped
-process. The shell explicitly chooses its tracked job with `fg`, assigns
-foreground ownership first, and then sends [`SIGCONT`](common/signal.header#L6). Only then can the read
-consume buffered input or join the terminal wait queue until a byte arrives.
-A background [`SIGCONT`](common/signal.header#L6) leaves any pending terminal read stopped with
-[`SIGTTIN`](common/signal.header#L9), including a read that originally stopped through [`SIGSTOP`](common/signal.header#L7) or
-[`SIGTSTP`](common/signal.header#L8). This resume path briefly masks UART delivery around its ring check
-and queue insertion to prevent a lost wakeup.
+`Ctrl+C` sends [`SIGINT`](common/signal.header#L4) through the UART handler to the foreground target.
+A noncurrent target can terminate immediately. For the current running
+process, [`pending_termination_signal`](kernel/process/process.header#L63) and a reschedule request defer it
+until dispatch. [`prepare_process_termination()`](kernel/signal.picoc#L126) consumes that signal
+before the process can be selected again.
 
-## 6.4 Important signal functions
+If its parent is already waiting, termination delivers the status, wakes
+the parent, and removes the child. This is the usual foreground `Ctrl+C`
+case: the shell resumes with status `130` and reclaims terminal ownership.
 
-The following table connects signal validation and delivery to the PCB fields,
-terminal ownership, and deferred destruction described above.
+Otherwise the child retains [`exit_status`](kernel/process/process.header#L60) as a zombie until a later
+[`waitpid()`](library/sys/wait/wait.picoc#L14) collects it. [`4.3.2.3 Parent collection and final removal`](#4323-parent-collection-and-final-removal) explains final cleanup.
 
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`send_signal_by_pid()`](kernel/signal.picoc#L106) | `0` on delivery/probe; `-1` for an invalid signal, missing PID, or zombie | Finds target; signal 0 only checks existence | [`signal_number_is_valid()`](kernel/signal.picoc#L13), [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`send_signal_to_process()`](kernel/signal.picoc#L74) |
-| [`send_signal_to_process()`](kernel/signal.picoc#L74) | Returns no value | Continues, stops, terminates, or defers running-target termination and requests a safe reschedule | [`signal_number_is_valid()`](kernel/signal.picoc#L13), [`continue_process()`](kernel/signal.picoc#L49), [`stop_process()`](kernel/signal.picoc#L36), [`current_process()`](kernel/process/process.picoc#L61), [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10), [`kill_process()`](kernel/signal.picoc#L70) |
-| [`kill_process()`](kernel/signal.picoc#L70) | Returns no value | Calls the general termination path with that termination signal's status | [`terminate_process()`](kernel/process/process.picoc#L303) |
-| [`stop_process()`](kernel/signal.picoc#L36) | Returns no value | Saves signal/prior state, changes to [`STOPPED`](kernel/process/process.header#L16), reports to waiters | [`suspend_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L76), [`notify_process_stopped()`](kernel/signal.picoc#L22) |
-| [`continue_process()`](kernel/signal.picoc#L49) | Returns no value | Resumes ordinary stops; a pending terminal read additionally requires input ownership | [`process_has_terminal_input()`](kernel/signal.picoc#L166), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85) |
-| [`prepare_process_termination()`](kernel/signal.picoc#L124) | `true` when no termination is pending; `false` after applying deferred termination | Applies deferred termination | [`kill_process()`](kernel/signal.picoc#L70) |
-| [`set_parent_death_signal()`](kernel/signal.picoc#L135) | `0` on success; `-1` for an unsupported option or invalid signal | Changes current PCB parent-death setting | [`signal_number_is_valid()`](kernel/signal.picoc#L13), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`set_foreground_process()`](kernel/signal.picoc#L146) | `0` for PID 0 or an existing direct child; `-1` otherwise | PID 0 clears the foreground signal target and returns input ownership to the caller; a child PID sets both owner globals | [`current_process()`](kernel/process/process.picoc#L61), [`find_process_by_pid()`](kernel/process/process.picoc#L161) |
-| [`process_has_terminal_input()`](kernel/signal.picoc#L166) | `true` only for the input-owning PCB | Checks terminal-input ownership | — |
-| [`terminal_input_process()`](kernel/signal.picoc#L170) | Input-owning PCB or current PCB fallback | Resolves the input owner | [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`handle_terminal_signal_character()`](kernel/signal.picoc#L183) | `true` when it consumed `Ctrl+C`/`Ctrl+Z`; otherwise `false` | Maps terminal control bytes to foreground signals | [`find_process_by_pid()`](kernel/process/process.picoc#L161), [`send_signal_to_process()`](kernel/signal.picoc#L74) |
+### 7.3.4 Fixed PicoOS signal actions compared with Unix
+[\[↑ TOC\]](#contents)
 
-When a parent terminates, every direct child gets [`parent_pid`](kernel/process/process.header#L57) = 0. Zombie
-children are removed; live children receive their configured parent-death
-signal. New processes inherit [`parent_death_signal`](kernel/process/process.header#L59) from their parent, while
-[`prctl(PR_SET_PDEATHSIG, 0)`](library/sys/prctl/prctl.picoc#L14) disables it before further inheritance. This is
-part of [`terminate_process()`](kernel/process/process.picoc#L303), not a background reaper. Child status itself is
-communicated through the exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14) queue; there is no separate
-child-exit notification signal.
+Unix and Linux allow catching or ignoring [`SIGINT`](common/signal.header#L4), [`SIGTSTP`](common/signal.header#L8), and [`SIGTTIN`](common/signal.header#L9).
+[`SIGKILL`](common/signal.header#L5) and [`SIGSTOP`](common/signal.header#L7) cannot be caught. PicoOS instead gives fixed actions
+to all six signals. Termination of the current process waits for dispatch,
+while stop and continue update state immediately.
 
-## 6.5 Mutexes
+### 7.3.5 Signal function reference
+[\[↑ TOC\]](#contents)
 
-Userspace mutexes combine one lock cell with an embedded wait queue. Atomic
-`TSL` changes the lock from 0 to 1 while returning the old value. A contending
-process sleeps on the mutex queue instead of spinning; unlock clears the lock
-and wakes one waiter.
+The table connects validation, state changes, deferred termination, and
+parent-death settings to their functions:
 
-The mutex is userspace data, not a kernel-heap object. In a shared-memory data
-region, both its lock and queue are visible to all participants. The kernel
-still owns the PCBs linked through that queue.
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`send_signal_by_pid(request)`](kernel/signal.picoc#L108) | `0` on delivery/probe, `-1` for an invalid signal, missing PID, or zombie | Finds target, signal 0 only checks existence | [`signal_number_is_valid()`](kernel/signal.picoc#L14), [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`send_signal_to_process()`](kernel/signal.picoc#L75) | **Library functions:** [`kill()`](library/signal/signal.picoc#L14)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`set_parent_death_signal(request)`](kernel/signal.picoc#L137) | `0` on success, `-1` for an unsupported option or invalid signal | Changes current PCB parent-death setting | [`signal_number_is_valid()`](kernel/signal.picoc#L14), [`current_process()`](kernel/process/process.picoc#L62) | **Library functions:** [`prctl()`](library/sys/prctl/prctl.picoc#L14)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+|  |  |  |  |  |
+| [`send_signal_to_process(process, signal_number)`](kernel/signal.picoc#L75) | Returns no value | Continues, stops, terminates, or defers running-target termination and requests a safe reschedule | [`signal_number_is_valid()`](kernel/signal.picoc#L14), [`continue_process()`](kernel/signal.picoc#L50), [`stop_process()`](kernel/signal.picoc#L37), [`current_process()`](kernel/process/process.picoc#L62), [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10), [`kill_process()`](kernel/signal.picoc#L71) | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`handle_terminal_signal_character()`](kernel/signal.picoc#L192), [`orphan_and_signal_children()`](kernel/process/process.picoc#L279), [`send_signal_by_pid()`](kernel/signal.picoc#L108) |
+| [`kill_process(process, signal_number)`](kernel/signal.picoc#L71) | Returns no value | Calls the general termination path with that termination signal's status | [`terminate_process()`](kernel/process/process.picoc#L304) | **Kernel functions:** [`prepare_process_termination()`](kernel/signal.picoc#L126), [`send_signal_to_process()`](kernel/signal.picoc#L75) |
+| [`stop_process(process, signal_number)`](kernel/signal.picoc#L37) | Returns no value | Saves signal/prior state, changes to [`STOPPED`](kernel/process/process.header#L16), reports to waiters | [`suspend_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L75), [`notify_process_stopped()`](kernel/signal.picoc#L23) | **Kernel functions:** [`send_signal_to_process()`](kernel/signal.picoc#L75) |
+| [`continue_process(process)`](kernel/signal.picoc#L50) | Returns no value | Resumes ordinary stops, a pending terminal read additionally requires input ownership | [`process_has_terminal_input()`](kernel/signal.picoc#L173), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) | **Kernel functions:** [`send_signal_to_process()`](kernel/signal.picoc#L75) |
+| [`prepare_process_termination(process)`](kernel/signal.picoc#L126) | `true` when no termination is pending, `false` after applying deferred termination | Applies deferred termination | [`kill_process()`](kernel/signal.picoc#L71) | **Kernel functions:** [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) |
 
+Parent termination sets direct children's [`parent_pid`](kernel/process/process.header#L57) to `0`, removes
+zombie children, and signals live children when configured. Children inherit
+[`parent_death_signal`](kernel/process/process.header#L59). [`prctl(PR_SET_PDEATHSIG, 0)`](library/sys/prctl/prctl.picoc#L14) disables it. There is no
+background reaper or separate child-exit notification signal.
 
-The implementation below shows how [`mutex_lock()`](library/mutex/mutex.picoc#L18) retries [`testset()`](library/mutex/mutex.picoc#L3) after
-every wakeup. [`mutex_init()`](library/mutex/mutex.picoc#L12) must initialize both the lock and the embedded
-queue before another process uses the object. These are the complete mutex
-functions from [`library/mutex/mutex.picoc`](library/mutex/mutex.picoc):
+## 7.4 Mutexes with test-and-set and wait queues
+[\[↑ TOC\]](#contents)
+
+A mutex combines atomic `TSL` with a wait queue. Contention sleeps instead
+of spinning. Unlock clears the lock and wakes one waiter.
+
+In shared memory, participants see the same lock and queue. The linked
+PCBs remain kernel objects. [`9.4 Wait requests and queue storage`](#94-wait-requests-and-queue-storage) compares queue storage.
+
+[`mutex_init()`](library/mutex/mutex.picoc#L12) initializes both fields before use. [`mutex_lock()`](library/mutex/mutex.picoc#L18) retries
+[`testset()`](library/mutex/mutex.picoc#L3) after each wakeup. These are the complete library functions:
 
 ```c
 bool testset(bool *lock_addr) {
@@ -2378,521 +5127,57 @@ void mutex_unlock(struct mutex *m) {
 }
 ```
 
-The attribute table identifies the two pieces of shared state; the library
-function table then connects the operations above to the queue syscalls.
+[`testset()`](library/mutex/mutex.picoc#L3) returns the old lock value while atomically writing `1`.
+An old `0` means acquisition. An old `1` means contention. Its result uses
+the normal PicoC return register.
 
-| Attribute | Meaning | Used by |
-| --- | --- | --- |
-| [`lock`](library/mutex/mutex.header#L7) | False when unlocked; `TSL` stores true and returns the old value | First initialized by [`mutex_init()`](library/mutex/mutex.picoc#L12); tested/set by [`testset()`](library/mutex/mutex.picoc#L3) from [`mutex_lock()`](library/mutex/mutex.picoc#L18); cleared by [`mutex_unlock()`](library/mutex/mutex.picoc#L25) |
-| [`waiters`](library/mutex/mutex.header#L8) | Embedded FIFO of contending PCBs | First initialized by [`mutex_init()`](library/mutex/mutex.picoc#L12) through [`wait_queue_init()`](library/unistd/blocking.picoc#L4); passed to [`sleep()`](library/unistd/blocking.picoc#L9) and [`wakeup()`](library/unistd/blocking.picoc#L19) |
-
-| Library function | Return value / status and purpose | Syscalls |
-| --- | --- | --- |
-| [`testset()`](library/mutex/mutex.picoc#L3) | Returns the previous lock value while atomically storing true | None; uses RETI `TSL` |
-| [`mutex_init()`](library/mutex/mutex.picoc#L12) | No value; clears the lock and initializes the queue | None |
-| [`mutex_lock()`](library/mutex/mutex.picoc#L18) | No value; returns after acquiring the lock, sleeping and retrying while it is held | 11 through [`sleep()`](library/unistd/blocking.picoc#L9) |
-| [`mutex_unlock()`](library/mutex/mutex.picoc#L25) | No value; clears the lock and makes at most one waiter eligible | 12 through [`wakeup()`](library/unistd/blocking.picoc#L19) |
-
-Only the `TSL` operation itself is atomic. The failed test and subsequent
-[`sleep()`](library/unistd/blocking.picoc#L9) are separate: if the owner unlocks between them, the wakeup can occur
-before the contender joins the queue. The current implementation can therefore
-miss a wakeup under preemption. Also, waking a waiter does not hand it the lock;
-it must acquire the lock again when scheduled. The next chapter explains how
-the scheduler and dispatcher choose when that retry runs.
-
-# 7. Scheduler and dispatcher
-
-After a process blocks, yields, or exhausts its timer interval, the scheduler chooses a runnable
-[`Process`](kernel/process/process.header#L31) PCB. The dispatcher saves/restores CPU state and
-changes which PCB is current.
-
-## 7.1 Scheduler
-
-There is no scheduler object or ready queue.
-[`scheduler_next_process()`](kernel/scheduler.picoc#L12) reads the process list and active PCB. It
-begins after the current PCB, wraps once, and returns the first `READY` or still-current `RUNNING`
-PCB. Other states remain in the list but are skipped. The complete function below shows the two
-scans that preserve round-robin order without maintaining a separate ready queue.
-
-```c
-struct Process *scheduler_next_process(void) {
-    struct Process *start;
-    struct Process *candidate;
-
-    if (first_process() == NULL) {
-        return NULL;
-    }
-    if (current_process() == NULL || current_process()->next == NULL) {
-        start = first_process();
-    } else {
-        start = current_process()->next;
-    }
-
-    candidate = start;
-    while (candidate != NULL) {
-        if (scheduler_can_run(candidate)) {
-            return candidate;
-        }
-        candidate = candidate->next;
-    }
-
-    candidate = first_process();
-    while (candidate != start) {
-        if (scheduler_can_run(candidate)) {
-            return candidate;
-        }
-        candidate = candidate->next;
-    }
-    return NULL;
-}
-```
-
-Including `RUNNING` permits the current process to be selected again when it is the only runnable
-one.
-
-## 7.2 Saving and selecting
-
-Immediate timer preemption, deferred timer requests,
-[`yield()`](library/schedule/schedule.picoc#L4), terminal blocking, queues, and
-[`waitpid()`](library/sys/wait/wait.picoc#L14) eventually pass a saved frame to
-[`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71). The complete function below shows
-how it preserves the caller’s registers and leaves an already blocked or stopped state intact:
-
-```c
-void dispatcher_switch_from_context(int *caller_context) {
-    struct Process *process = current_process();
-
-    if (process != NULL) {
-        process->activation.sp = (int)(caller_context + 6);
-        process->activation.ds = caller_context[1];
-        process->activation.cs = caller_context[2];
-        process->activation.baf = caller_context[3];
-        process->activation.in2 = caller_context[4];
-        process->activation.in1 = caller_context[5];
-        process->activation.acc = caller_context[6];
-
-        if (process->state == PROCESS_STATE_RUNNING) {
-            process->state = PROCESS_STATE_READY;
-        }
-    }
-    dispatcher_start_next_process();
-}
-```
-
-Blocking code has already changed the PCB to `BLOCKED`, so that state remains. Timer preemption or
-[`yield()`](library/schedule/schedule.picoc#L4) reaches the dispatcher from `RUNNING`, which becomes
-`READY`. [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10) records timer expiry
-without switching inside the kernel, and
-[`dispatcher_reschedule_if_requested()`](kernel/dispatcher.picoc#L14) sends the syscall's saved
-frame through this same path at return. Selecting a process for dispatch clears the request, even if
-it is the same process again.
-
-[`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) schedules and calls
-[`prepare_process_termination()`](kernel/signal.picoc#L124) before running a PCB. Deferred
-termination can remove that PCB, requiring another pass. If processes exist but none is runnable,
-the loop repeatedly scans in kernel context until an interrupt makes one ready. If the process list
-is empty, [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) returns.
-
-## 7.3 Restoring
-
-[`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) updates old/new states and the
-global active pointer, then enters [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21).
-The complete restoration code below shows why this last step must be naked: it installs another
-process’s stack and finishes with `RTI`, without a normal function return.
-
-```c
-__attribute__((naked))
-void dispatcher_jump_to_process(struct Process *process, int stack_boundary) {
-    // Reads the process pointer and its precomputed stack boundary from the call frame
-    asm("LOADIN SP BAF 2");
-    asm("LOADIN SP IN1 3");
-
-    // Restores SP before the process boundary so an interrupt cannot compare the
-    // kernel stack against the process heap during this context-switch window
-    asm("LOADIN BAF SP 11");
-    write_stack_heap_boundary_from_in1();
-
-    // Restores the remaining activation record while BAF still points to the process
-    asm("LOADIN BAF CS 13");
-    asm("LOADIN BAF DS 14");
-    asm("LOADIN BAF IN1 8");
-    asm("LOADIN BAF IN2 9");
-    asm("LOADIN BAF ACC 10");
-    asm("LOADIN BAF BAF 12");
-
-    // Returns to the restored process context
-    asm("RTI");
-}
-```
-
-The fixed offsets are why [`activation`](kernel/process/process.header#L40) must remain at its
-defined PCB position. The helper restores `SP` before installing the process boundary, so an
-interrupt cannot compare the still-active kernel stack with the selected process's heap boundary.
-It then restores the remaining activation and leaves kernel code through `RTI`. The table below
-connects the scheduler and dispatcher functions to their state changes and direct calls.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`scheduler_next_process()`](kernel/scheduler.picoc#L12) | Runnable PCB, or `NULL` when none is runnable | Reads process-list and active-PCB globals | [`first_process()`](kernel/process/process.picoc#L28), [`current_process()`](kernel/process/process.picoc#L61), [`scheduler_can_run()`](kernel/scheduler.picoc#L4) |
-| [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10) | Returns no value | Sets [`reschedule_requested`](kernel/dispatcher.picoc#L8) after timer expiry | — |
-| [`dispatcher_reschedule_if_requested()`](kernel/dispatcher.picoc#L14) | Returns if no request is pending, or dispatch finds an empty process list | Dispatches from the syscall frame when a timer request is pending | [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) |
-| [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71) | Returns only if scheduling finds an empty process list; otherwise leaves through `RTI` | Copies the saved frame into PCB activation and may change `RUNNING` to `READY` | [`current_process()`](kernel/process/process.picoc#L61), [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) |
-| [`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55) | Leaves through `RTI` for a runnable PCB; spins while existing PCBs cannot run; returns for an empty list | Schedules, consumes deferred signal actions, and retries when a selected PCB has a pending termination signal | [`scheduler_next_process()`](kernel/scheduler.picoc#L12), [`first_process()`](kernel/process/process.picoc#L28), [`prepare_process_termination()`](kernel/signal.picoc#L124), [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) |
-| [`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43) | Does not return normally | Updates states, clears the reschedule request, and sets the active PCB | [`current_process()`](kernel/process/process.picoc#L61), [`set_current_process()`](kernel/process/process.picoc#L65), [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21), [`process_stack_boundary()`](kernel/exception.picoc#L18) |
-| [`dispatcher_jump_to_process()`](kernel/dispatcher.picoc#L21) | Leaves through `RTI` | Writes the stack boundary to periphery register 10 and restores activation | [`write_stack_heap_boundary_from_in1()`](common/periphery_asm.header#L2) |
-
-The sequence diagram follows an immediate switch from process A to a runnable process B through
-[`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71),
-[`dispatcher_start_next_process()`](kernel/dispatcher.picoc#L55), and
-[`dispatcher_switch_to_process()`](kernel/dispatcher.picoc#L43). The selection loop matters:
-[`prepare_process_termination()`](kernel/signal.picoc#L124) can reject the scheduler’s candidate
-before any registers are restored. Deferred timer requests enter this same path at
-[syscall return](#44-timer-isr-and-preemption).
-
-```mermaid
-sequenceDiagram
-    participant A as Process A
-    participant I as Interrupt/syscall handler
-    participant D as Dispatcher
-    participant S as Scheduler
-    participant G as Signal handling
-    participant B as Process B
-
-    A->>I: Timer preemption or switching syscall, save interrupt frame
-    I->>D: dispatcher_switch_from_context(frame)
-    D->>D: Save A activation, RUNNING becomes READY
-    D->>D: dispatcher_start_next_process()
-    loop Until a runnable candidate survives signal preparation
-        D->>S: scheduler_next_process()
-        S-->>D: Candidate PCB, or NULL
-        opt Candidate exists
-            D->>G: prepare_process_termination(candidate)
-            G-->>D: true to run, false after termination handling
-        end
-    end
-    D->>D: dispatcher_switch_to_process(B)
-    D->>D: Set active PCB and RUNNING, clear reschedule request
-    D->>D: dispatcher_jump_to_process(B, boundary)
-    D-->>B: Restore boundary/registers, RTI to PC on B stack
-```
-
-# 8. Memory management and shared memory
-
-The process and synchronization mechanisms need both private allocations and data that multiple
-processes can reach. This chapter first explains the common heap implementation, then shows how
-PicoOS applies it to kernel, process, and shared-memory storage.
-
-## 8.1 Three uses of one heap implementation
-
-The declarations below show the common allocator’s two structures: [`Heap`](common/heap.header#L11)
-locates the first [`BlockHeader`](common/heap.header#L5), and each header describes the payload
-immediately following it. The field table explains how those links change.
-
-```c
-struct BlockHeader {
-    int size;
-    bool free;
-    struct BlockHeader *next;
-};
-
-struct Heap {
-    struct BlockHeader *first_block;
-};
-```
-
-[`struct Heap`](common/heap.header#L11) is only an entry pointer. Each
-[`BlockHeader`](common/heap.header#L5) is stored inside the managed region immediately before its
-payload. Allocation performs a first-fit scan and may split a block. Free marks it and merges
-adjacent free blocks. Reallocation shrinks/splits, grows into a following free block, or
-allocates/copies/frees.
-
-| Field | Meaning | Used by |
-| --- | --- | --- |
-| [`BlockHeader.size`](common/heap.header#L6) | Number of usable cells after this header and before the next header | First initialized by [`heap_init_region()`](common/heap.picoc#L49); changed by [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), and [`heap_realloc_from()`](common/heap.picoc#L87) |
-| [`BlockHeader.free`](common/heap.header#L7) | Whether the associated cells may satisfy an allocation | First initialized by [`heap_init_region()`](common/heap.picoc#L49); initialized for split blocks by [`heap_split_block()`](common/heap.picoc#L14); read/changed by [`heap_alloc_from()`](common/heap.picoc#L65), [`heap_realloc_from()`](common/heap.picoc#L87), [`heap_free_from()`](common/heap.picoc#L146), and [`heap_merge_free_blocks()`](common/heap.picoc#L30) |
-| [`BlockHeader.next`](common/heap.header#L8) | Address of the next in-region header, or `NULL`; splitting inserts and merging removes links | First initialized by [`heap_init_region()`](common/heap.picoc#L49); changed by [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), and [`heap_realloc_from()`](common/heap.picoc#L87) |
-| [`Heap.first_block`](common/heap.header#L12) | First header in the managed region; the descriptor owns no separate block array | First initialized by [`heap_init_region()`](common/heap.picoc#L49); used by [`heap_alloc_from()`](common/heap.picoc#L65) and [`heap_merge_free_blocks()`](common/heap.picoc#L30); indirectly used by reallocation/freeing |
-
-The next table shows which descriptor and memory region each allocator uses. Allocator sizes are
-RETI memory cells. PicoC’s scalar values occupy one 32-bit cell, so no separate byte-alignment layer
-is needed in these heaps.
-
-| Heap instance | Descriptor location | Managed region | Contents |
-| --- | --- | --- | --- |
-| Kernel heap | Global [`kernel_heap`](kernel/kmalloc.picoc#L7) in kernel `.data` | Fixed region after kernel data | PCBs and kernel metadata |
-| Process-memory heap | Global [`process_memory_heap`](kernel/pmalloc.picoc#L7) in kernel `.data` | SRAM after kernel stack | Complete process images and shared-memory data regions |
-| One userspace heap per process | Global [`process_heap`](library/stdlib/malloc.picoc#L6) in that process’s `.data` | Heap range inside its image | Userspace allocations |
-
-“Global” is therefore relative to the linked program. Every process receives its own copy of the
-library’s [`process_heap`](library/stdlib/malloc.picoc#L6) global.
-
-### 8.1.1 Current kernel SRAM layout
-
-The checked-in [`kernel/memory_constants.header`](kernel/memory_constants.header) currently
-describes the offsets in the table below, relative to
-[`SRAM_BASE`](kernel/memory_constants.header#L1). They are generated values and move when linked
-kernel code/data sizes change:
-
-| SRAM offset | Region and ownership |
-| ---: | --- |
-| `0..4` | Five-cell kernel `.ivt` |
-| `5..40897` | Kernel `.text` beginning at [`KERNEL_CS_START_ASM`](kernel/memory_constants.header#L6) |
-| `40898..41629` | Kernel `.data`, including process-list pointers, terminal, registry heads, and heap descriptors |
-| `41630..45725` | 4096-cell kernel heap beginning at [`KERNEL_HEAP_START`](kernel/memory_constants.header#L3) |
-| `45726..48440` | Reserved room for the downward-growing kernel stack |
-| `48441` | Initial kernel `SP`, the free cell immediately below its first stack value |
-| `48442..262143` | Global process-memory heap beginning at [`PROCESS_MEMORY_START`](kernel/memory_constants.header#L5) |
-
-The interrupt boundary for kernel execution is the final kernel-heap cell. The process-memory heap
-shares its free-block list between complete process images and shared-memory data regions. The
-diagram follows increasing SRAM addresses and places both heaps relative to kernel code, data, and
-stack. Its arrows show memory order, not pointers or function calls.
-
-```mermaid
-flowchart LR
-    IVT["kernel .ivt"] --> KT["kernel .text"]
-    KT --> KD["kernel .data<br/>heap descriptors and registries"]
-    KD --> KH["kernel heap<br/>PCBs and metadata"]
-    KH --> KS["kernel stack space"]
-    KS --> PM["process-memory heap<br/>images + shared-memory data"]
-    PM --> END["end of SRAM"]
-```
-
-### 8.1.2 Per-process linked layout
-
-Inside one [`pmalloc()`](kernel/pmalloc.picoc#L20) process image, the `.sections`/binary header
-values have the relationship shown in the table below. These are linked offsets before the kernel
-adds the image’s absolute base. The first two links point to the loader’s corresponding
-[`code_start`](kernel/process/process_loader.picoc#L308) and
-[`data_start`](kernel/process/process_loader.picoc#L309) variables:
-
-| Relative address | Role |
-| --- | --- |
-| [`codesegment_start`](kernel/process/process_loader.picoc#L308) | Added to [`base_address`](kernel/process/process.header#L34) for initial `CS`/entry |
-| [`datasegment_start`](kernel/process/process_loader.picoc#L309) | Added to [`base_address`](kernel/process/process.header#L34) for `DS` |
-| [`heap_start`](kernel/process/process.header#L36) | First header of the process-global [`process_heap`](library/stdlib/malloc.picoc#L6) |
-| [`heap_start + heap_size - 1`](kernel/exception.picoc#L18) | Inclusive boundary installed in periphery register 10 |
-| [`stack_start`](kernel/process/process_loader.picoc#L121) | Initial free `SP`; the stack grows downward through the gap above the heap |
-
-The kernel relocates only by adding the image's absolute
-[`base_address`](kernel/process/process.header#L34) to these linked offsets. There is no MMU or
-later relocation. Compiler `.sections` data becomes the five-word `.bin` header in RETI-Emulator;
-the loader consumes that header to fill PCB fields and allocate the one complete image;
-[`libstart`](library/start/libstart.picoc) then asks the PCB-backed syscalls for the absolute heap
-range.
-
-## 8.2 Heap and allocator functions
-
-The table follows each allocator wrapper down to the common heap functions. Kernel-heap exhaustion
-panics; process-memory allocation instead returns
-[`PMALLOC_INVALID_START`](kernel/pmalloc.header#L3) (0), allowing a loader or shared-memory request
-to fail.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`heap_init_region()`](common/heap.picoc#L49) | Returns no value | Writes the initial free block and stores it in the heap descriptor | — |
-| [`heap_alloc_from()`](common/heap.picoc#L65) | Payload pointer, or `NULL` for invalid size/no fit | First-fit scan, optional split, marks block used | [`heap_split_block()`](common/heap.picoc#L14) |
-| [`heap_realloc_from()`](common/heap.picoc#L87) | Payload pointer, or `NULL` for invalid heap/no fit/nonpositive size | May split, merge/grow, move/copy, or free on nonpositive size; failed growth leaves the old allocation intact | [`heap_free_from()`](common/heap.picoc#L146), [`heap_alloc_from()`](common/heap.picoc#L65), [`heap_split_block()`](common/heap.picoc#L14), [`heap_merge_free_blocks()`](common/heap.picoc#L30), [`heap_copy_cells()`](common/heap.picoc#L3) |
-| [`heap_free_from()`](common/heap.picoc#L146) | Returns no value | Marks the preceding header free and merges adjacent blocks | [`heap_merge_free_blocks()`](common/heap.picoc#L30) |
-| [`init_kernel_heap()`](kernel/kmalloc.picoc#L17) | Returns no value | Initializes global kernel descriptor over the fixed kernel heap | [`heap_init_region()`](common/heap.picoc#L49) |
-| [`kmalloc()`](kernel/kmalloc.picoc#L23) | Kernel pointer; panics on positive allocation failure | Allocates from the kernel heap | [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9), [`heap_alloc_from()`](common/heap.picoc#L65) |
-| [`krealloc()`](kernel/kmalloc.picoc#L31) | Kernel pointer; panics on positive allocation failure | Reallocates a kernel-heap block | [`require_kernel_heap_allocation()`](kernel/kmalloc.picoc#L9), [`heap_realloc_from()`](common/heap.picoc#L87) |
-| [`kfree()`](kernel/kmalloc.picoc#L38) | Returns no value | Releases and merges a kernel-heap block | [`heap_free_from()`](common/heap.picoc#L146) |
-| [`init_process_memory_heap()`](kernel/pmalloc.picoc#L9) | Returns no value | Initializes the process-memory descriptor over remaining SRAM | [`heap_init_region()`](common/heap.picoc#L49) |
-| [`pmalloc()`](kernel/pmalloc.picoc#L20) | Absolute start, or [`PMALLOC_INVALID_START`](kernel/pmalloc.header#L3) (0) for invalid size/no fit | Allocates a process image or shared-data region | [`heap_alloc_from()`](common/heap.picoc#L65) |
-| [`prealloc()`](kernel/pmalloc.picoc#L31) | Absolute start, or [`PMALLOC_INVALID_START`](kernel/pmalloc.header#L3) (0) for invalid size/no fit | Reallocates a process-memory region | [`heap_realloc_from()`](common/heap.picoc#L87) |
-| [`pfree()`](kernel/pmalloc.picoc#L47) | Returns no value | Releases and merges a process-memory region | [`heap_free_from()`](common/heap.picoc#L146) |
-
-The decision graph follows [`heap_realloc_from()`](common/heap.picoc#L87) for a valid existing block
-and a positive requested size. It shows when the payload address stays the same and when allocation,
-copying, and freeing move it. A failed replacement allocation leaves the original block intact. A
-null input pointer instead uses ordinary allocation; a nonpositive size frees the block and returns
-`NULL`.
+The flowchart shows acquisition and unlock. Wakeup grants another chance
+to test the lock, rather than transferring ownership:
 
 ```mermaid
 flowchart TD
-    R["Resize an existing block"] --> FIT{"Current payload large enough?"}
-    FIT -->|Yes| SHRINK["heap_split_block<br/>heap_merge_free_blocks"]
-    SHRINK --> SAME["Return original pointer"]
-    FIT -->|No| NEXT{"Next block free and combined space enough?"}
-    NEXT -->|Yes| GROW["Absorb next header and payload<br/>heap_split_block"]
-    GROW --> SAME
-    NEXT -->|No| ALLOC["heap_alloc_from"]
-    ALLOC --> OK{"Allocation succeeded?"}
-    OK -->|No| KEEP["Return NULL<br/>Old block remains allocated"]
-    OK -->|Yes| COPY["heap_copy_cells<br/>heap_free_from old block"]
-    COPY --> NEW["Return replacement pointer"]
+    A["mutex_lock: call testset"] --> B{"Old lock value?"}
+    B -->|false| C["Lock changed from 0 to 1<br/>enter critical section"]
+    B -->|true| D["sleep on mutex.waiters"]
+    D --> E["Resume after wakeup and scheduling"]
+    E --> A
+    C --> F["mutex_unlock: clear lock, then call wakeup"]
+    F -.->|If a process is waiting| E
 ```
 
-The stack-boundary register catches stack growth into the configured heap, but there is no isolation
-between arbitrary process data accesses and other memory.
+The field table describes the shared state, followed by the library
+operations and their queue syscalls:
 
-## 8.3 Shared-memory registry and attachments
-
-The declarations below separate one named [`SharedMemoryEntry`](kernel/shared_memory.header#L8) from
-the [`SharedMemoryAttachment`](kernel/process/process.header#L10) records owned by its mapping
-processes. The two field tables explain the global registry first and each process’s attachment list
-second.
-
-```c
-struct SharedMemoryEntry {
-    char *name;
-    int id;
-    void *address;
-    int reference_count;
-    bool unlink_requested;
-    struct SharedMemoryEntry *next;
-};
-
-struct SharedMemoryAttachment {
-    struct SharedMemoryEntry *entry;
-    struct SharedMemoryAttachment *next;
-};
-```
-
-[`shared_memory_list_head`](kernel/shared_memory.picoc#L6) and
-[`next_shared_memory_id`](kernel/shared_memory.picoc#L7) are kernel globals. Each entry and name use
-[`kmalloc()`](kernel/kmalloc.picoc#L23). The data region uses
-[`pmalloc()`](kernel/pmalloc.picoc#L20) and lies beside process images. Mapping allocates an
-attachment with [`kmalloc()`](kernel/kmalloc.picoc#L23), links it into the current PCB, increments
-the count, and returns the same absolute data pointer to every mapper.
-
-| Field | Meaning | Used by |
+| Attribute | Meaning | Used by |
 | --- | --- | --- |
-| [`SharedMemoryEntry.name`](kernel/shared_memory.header#L9) | Kernel-owned lookup name; freed and set to `NULL` on unlink | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); read by [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45); freed by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) and [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
-| [`SharedMemoryEntry.id`](kernel/shared_memory.header#L10) | Numeric open/map handle | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); looked up by [`map_shared_memory()`](kernel/shared_memory.picoc#L130) |
-| [`SharedMemoryEntry.address`](kernel/shared_memory.header#L11) | Absolute start of the [`pmalloc()`](kernel/pmalloc.picoc#L20) shared-memory data region | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); returned by [`map_shared_memory()`](kernel/shared_memory.picoc#L130) and freed by [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
-| [`SharedMemoryEntry.reference_count`](kernel/shared_memory.header#L12) | Attachment count, not distinct PID count | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); changed by [`map_shared_memory()`](kernel/shared_memory.picoc#L130) and [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172); checked by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) |
-| [`SharedMemoryEntry.unlink_requested`](kernel/shared_memory.header#L13) | Defers destruction until the last attachment disappears | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); set by [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) and checked by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
-| [`SharedMemoryEntry.next`](kernel/shared_memory.header#L14) | Link in global registry | First initialized by [`open_shared_memory()`](kernel/shared_memory.picoc#L92); traversed by [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45), [`find_shared_memory_by_id()`](kernel/shared_memory.picoc#L57), and [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
+| [`lock`](library/mutex/mutex.header#L7) | False when unlocked, `TSL` stores true and returns the old value | First initialized by [`mutex_init()`](library/mutex/mutex.picoc#L12), tested/set by [`testset()`](library/mutex/mutex.picoc#L3) from [`mutex_lock()`](library/mutex/mutex.picoc#L18), cleared by [`mutex_unlock()`](library/mutex/mutex.picoc#L25) |
+| [`waiters`](library/mutex/mutex.header#L8) | Embedded FIFO of contending PCBs | First initialized by [`mutex_init()`](library/mutex/mutex.picoc#L12) through [`wait_queue_init()`](library/unistd/blocking.picoc#L4), passed to [`sleep()`](library/unistd/blocking.picoc#L9) and [`wakeup()`](library/unistd/blocking.picoc#L19) |
 
-The attachment table shows how a mapping records its contribution to the entry’s lifetime without
-owning the entry itself.
-
-| Field | Meaning | Used by |
+| Library function | Return value / status and purpose | Syscalls |
 | --- | --- | --- |
-| [`SharedMemoryAttachment.entry`](kernel/shared_memory.header#L18) | Non-owning pointer to the registry entry whose reference count this mapping contributes to | First initialized by [`map_shared_memory()`](kernel/shared_memory.picoc#L130); released by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
-| [`SharedMemoryAttachment.next`](kernel/shared_memory.header#L19) | Link in one PCB's [`shared_memory_attachments`](kernel/process/process.header#L55) list | First initialized by [`map_shared_memory()`](kernel/shared_memory.picoc#L130); traversed by [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) |
+| [`testset(lock_addr)`](library/mutex/mutex.picoc#L3) | Returns the previous lock value while atomically storing true | None, uses RETI `TSL` |
+| [`mutex_init(m)`](library/mutex/mutex.picoc#L12) | No value, clears the lock and initializes the queue | None |
+| [`mutex_lock(m)`](library/mutex/mutex.picoc#L18) | No value, returns after acquiring the lock, sleeping and retrying while it is held | [`SYSCALL_SLEEP`](common/syscall.header#L19) through [`sleep()`](library/unistd/blocking.picoc#L9) |
+| [`mutex_unlock(m)`](library/mutex/mutex.picoc#L25) | No value, clears the lock and makes at most one waiter eligible | [`SYSCALL_WAKEUP`](common/syscall.header#L20) through [`wakeup()`](library/unistd/blocking.picoc#L19) |
 
-Opening an existing name returns its ID and does not resize it. Unlink removes the name immediately.
-With no attachment the entry is destroyed; otherwise it survives by ID until release. The old ID can
-still be mapped while that entry exists, and opening the former name can create a new entry. Process
-removal decrements counts, frees attachments, and destroys eligible unlinked entries. The graph
-shows two PCBs pointing through their own attachments to one shared entry and data region; those two
-mappings account for its reference count of 2.
+Only `TSL` is atomic. Unlock can happen between a failed test and [`sleep()`](library/unistd/blocking.picoc#L9),
+waking nobody before the contender joins the queue. This lost wakeup can
+leave it blocked under preemption. A woken contender must test again when
+scheduled.
 
-```mermaid
-flowchart LR
-    P1["PCB A"] --> A1["attachment<br/>kmalloc"]
-    P2["PCB B"] --> A2["attachment<br/>kmalloc"]
-    A1 --> E["SharedMemoryEntry<br/>kmalloc<br/>count = 2"]
-    A2 --> E
-    E --> M["shared-memory data<br/>pmalloc"]
-    G["global registry head"] --> E
-```
+# 8. Terminal, file descriptors, and host filesystem
+[\[↑ TOC\]](#contents)
 
-The two-list design is important: the global registry answers name/ID lookup, while each PCB's
-attachment list records which reference counts must be released when that process disappears. There
-is no `munmap()` call, so every successful [`mmap(id)`](library/sys/mman/mman.picoc#L23) creates one
-attachment and one reference even if the same process maps the ID more than once. The sequence below
-follows [`shm_open()`](library/sys/mman/mman.picoc#L15),
-[`mmap()`](library/sys/mman/mman.picoc#L23), and [`shm_unlink()`](library/sys/mman/mman.picoc#L27)
-across two processes, then shows
-[`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) freeing the data only after the
-last attachment disappears.
+The kernel manages descriptors, paths, terminal input, and UART requests.
+The emulator host stores files. This chapter connects the process-local
+I/O state to terminal devices and host-backed operations.
 
-```mermaid
-sequenceDiagram
-    participant A as Process A
-    participant K as Shared-memory registry
-    participant KH as Kernel heap
-    participant PM as Process-memory heap
-    participant B as Process B
+## 8.1 Per-process file-descriptor table
+[\[↑ TOC\]](#contents)
 
-    A->>K: shm_open("counter", size), syscall 19
-    K->>KH: kmalloc entry and copied name
-    K->>PM: pmalloc shared cells
-    K-->>A: Numeric ID
-    A->>K: mmap(id), syscall 20
-    K->>KH: kmalloc attachment linked from A PCB
-    K-->>A: Same absolute address with references = 1
-    B->>K: shm_open("counter", size)
-    K-->>B: Existing ID and unchanged size
-    B->>K: mmap(id)
-    K->>KH: kmalloc attachment linked from B PCB
-    K-->>B: Same absolute address with references = 2
-    A->>K: shm_unlink("counter"), syscall 21
-    K->>KH: Free name and mark unlink requested
-    Note over K,PM: Entry and cells remain while references exist
-    A->>K: Process removal
-    K->>KH: Free A attachment and leave references = 1
-    B->>K: Process removal
-    K->>KH: Free B attachment and leave references = 0
-    K->>PM: pfree shared cells
-    K->>KH: kfree registry entry
-```
-
-The function table below identifies which kernel operations implement the lookup, attachment, and
-cleanup steps shown above.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`initialize_shared_memory()`](kernel/shared_memory.picoc#L9) | Returns no value | Resets the registry head and next ID | — |
-| [`open_shared_memory()`](kernel/shared_memory.picoc#L92) | Existing/new ID; `-1` for a null request/name, a nonpositive new size, or insufficient process memory | Finds an existing entry or allocates/prepends its entry, name, and data region | [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45), [`kmalloc()`](kernel/kmalloc.picoc#L23), [`copy_shared_memory_name()`](kernel/shared_memory.picoc#L27), [`pmalloc()`](kernel/pmalloc.picoc#L20), [`kfree()`](kernel/kmalloc.picoc#L38) |
-| [`map_shared_memory()`](kernel/shared_memory.picoc#L130) | Address, or `NULL` for an unknown ID or no current process | Adds a PCB attachment and increments its entry count | [`current_process()`](kernel/process/process.picoc#L61), [`find_shared_memory_by_id()`](kernel/shared_memory.picoc#L57), [`kmalloc()`](kernel/kmalloc.picoc#L23) |
-| [`unlink_shared_memory()`](kernel/shared_memory.picoc#L151) | `0` on unlink; `-1` for a null or unknown name | Frees the name, sets unlink flag, and may destroy the entry | [`find_shared_memory_by_name()`](kernel/shared_memory.picoc#L45), [`kfree()`](kernel/kmalloc.picoc#L38), [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
-| [`release_process_shared_memory()`](kernel/shared_memory.picoc#L172) | Returns no value | Clears PCB attachments, decrements counts, and destroys eligible entries | [`kfree()`](kernel/kmalloc.picoc#L38), [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) |
-| [`destroy_shared_memory_entry()`](kernel/shared_memory.picoc#L69) | Returns no value | Unlinks an entry, frees its data region and metadata | [`pfree()`](kernel/pmalloc.picoc#L47), [`kfree()`](kernel/kmalloc.picoc#L38) |
-
-Shared memory provides visibility, not mutual exclusion. The shared-memory mutual-exclusion test
-places a mutex and its queue in the shared data region.
-
-### 8.3.1 Shared-memory tests
-
-Three shared-memory test classes belong to the repository’s **23 OS test classes**:
-[`shared_memory`](test/shared_memory/), [`shared_memory_mutex`](test/shared_memory_mutex/), and
-[`shared_memory_mutual_exclusion`](test/shared_memory_mutual_exclusion/). The
-[test-system chapter](#15-test-system) explains their execution.
-
-The basic shared-memory scenario starts several worker processes with the same name and different
-array indices. Each calls [`shm_open()`](library/sys/mman/mman.picoc#L15) and
-[`mmap()`](library/sys/mman/mman.picoc#L23), writes one distinct cell, and exits. The launcher waits
-for them and observes all values through its own mapping, demonstrating that the returned addresses
-refer to the same physical data rather than copies.
-
-The mutual-exclusion scenario deliberately shares one value. The declaration from
-[`shared.header`](test/shared_memory_mutual_exclusion/shared.header) below shows how
-[`SharedState.value`](test/shared_memory_mutual_exclusion/shared.header#L6) and
-[`SharedState.mutex`](test/shared_memory_mutual_exclusion/shared.header#L7) occupy the same region:
-
-```c
-struct SharedState {
-    int value;
-    struct mutex mutex;
-};
-```
-
-The [`launcher`](test/shared_memory_mutual_exclusion/launcher.picoc#L44) creates a region of the
-size of [`SharedState`](test/shared_memory_mutual_exclusion/shared.header#L5), initializes the value
-and embedded mutex, and passes the numeric shared-memory ID to workers. The first
-[`worker`](test/shared_memory_mutual_exclusion/worker.picoc#L30) yields while holding the lock; the
-launcher disables the timer so this order is controlled by voluntary yields. The other worker's
-`TSL` sees the locked cell and its [`sleep()`](library/unistd/blocking.picoc#L9) queues that PCB on
-the shared embedded wait queue; [`mutex_unlock()`](library/mutex/mutex.picoc#L25) clears the cell
-and wakes it. This connects the process-memory allocation, per-PCB attachment records, atomic
-emulator instruction, kernel wait queues, scheduler, and dispatcher in one test.
-
-# 9. Terminal, file descriptors, and host filesystem
-
-PicoOS does not store file contents in SRAM. The kernel supplies process-local descriptor state,
-path normalization, terminal blocking, and the UART host request protocol; the emulator performs the
-actual host file operations.
-
-## 9.1 Per-process descriptor table
-
-Each PCB owns one table object and one eight-entry array, both allocated with
-[`kmalloc()`](kernel/kmalloc.picoc#L23). The declarations below show the table’s pointer and the
-fields of each entry:
+[`file_descriptors`](kernel/process/process.header#L42) points to a [`FileDescriptorTable`](kernel/filesystem/file_descriptor.header#L22). Its [`entries`](kernel/filesystem/file_descriptor.header#L23) points
+to an eight-element [`FileDescriptor`](kernel/filesystem/file_descriptor.header#L15) array, indexed by descriptor number.
+These declarations show both allocations:
 
 ```c
 struct FileDescriptor {
@@ -2907,39 +5192,96 @@ struct FileDescriptorTable {
 };
 ```
 
-The field table below explains the state stored in each
-[`FileDescriptor`](kernel/filesystem/file_descriptor.header#L14) and the array owned by
-[`FileDescriptorTable.entries`](kernel/filesystem/file_descriptor.header#L22). Valid descriptor
-numbers are 0–7, as defined by
-[`FILE_DESCRIPTOR_COUNT`](kernel/filesystem/file_descriptor.header#L6). A new table initializes 0 as
-read-only stdin, 1 as write-only stdout, and 2 as write-only stderr. All three store the special
-path `/device/terminal.dev`. Entries 3–7 begin free, although closing a standard descriptor allows a
-later open to reuse its number.
+[`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35) initializes all entries and assigns the
+three standard terminal streams. Run setup replaces it with an inherited
+copy, except for init. [`9.2 Containment and reference relationships`](#92-containment-and-reference-relationships) shows the allocation boundaries.
+
+The wrapper names the object that owns the array. Like [`Heap`](common/heap.header#L11), it adds
+indirection, but its [`entries`](kernel/filesystem/file_descriptor.header#L23) pointer never changes after construction.
+The source records no additional runtime requirement for that wrapper.
+
+[`FILE_DESCRIPTOR_COUNT`](kernel/filesystem/file_descriptor.header#L6) permits indices 0–7. Ordinary [`open()`](library/fcntl/fcntl.picoc#L5) searches
+only 0–4, leaving three slots for the shell's saved descriptors:
+
+| Index | Initial or conventional use | Availability to [`open()`](library/fcntl/fcntl.picoc#L5) |
+| ---: | --- | --- |
+| 0 | [`STDIN_FILENO`](common/file.header#L5), initially terminal input | Reused if closed |
+| 1 | [`STDOUT_FILENO`](common/file.header#L6), initially terminal output | Reused if closed |
+| 2 | [`STDERR_FILENO`](common/file.header#L7), initially terminal error output | Reused if closed |
+| 3 | Free initially, first additional opened file or device | Available |
+| 4 | Free initially, second additional opened file or device | Available |
+| 5 | Reserved shell save slot for stdin during `<` | Never returned by [`open()`](library/fcntl/fcntl.picoc#L5) |
+| 6 | Reserved shell save slot for stdout during `>` or `>>` | Never returned by [`open()`](library/fcntl/fcntl.picoc#L5) |
+| 7 | Reserved shell save slot for stderr during `2>` or `2>>` | Never returned by [`open()`](library/fcntl/fcntl.picoc#L5) |
+
+Inheritance always copies 0–2. It copies 3–4 only when their [`kind`](kernel/filesystem/file_descriptor.header#L16) is
+[`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13), and skips 5–7. Each entry and path is independent,
+unlike Unix shared open-file descriptions.
+
+```mermaid
+flowchart LR
+    subgraph PARENT["parent entries[0..7]"]
+        P02["0, 1, 2<br/>always copy"]
+        P34["3, 4<br/>copy only FILE kind"]
+        P57["5, 6, 7<br/>never examine"]
+    end
+    subgraph CHILD["new child table and array"]
+        C02["0, 1, 2<br/>deep copies"]
+        C34["3, 4<br/>FILE deep copies or FREE"]
+        C57["5, 6, 7<br/>FREE"]
+    end
+    P02 --> C02
+    P34 -->|"conditional"| C34
+    P57 -. "not inherited" .-> C57
+```
+
+[`free_file_descriptor()`](kernel/filesystem/filesystem.picoc#L27) selects the lowest free slot in 0–4. With standard
+streams open, two slots remain. Closing a standard stream makes its slot
+available too. Exhaustion returns `-1`. [`dup2()`](library/unistd/io.picoc#L58) can explicitly use 5–7.
+The shell closes nonstandard inherited descriptors at startup and releases
+its temporary saves after redirection. [`12.6 Input/output redirection`](#126-inputoutput-redirection) follows that sequence.
+
+[`kind`](kernel/filesystem/file_descriptor.header#L16), access flags, offset, and path all affect I/O. The field table
+shows their roles:
 
 | Field | Meaning | Used by |
 | --- | --- | --- |
-| [`FileDescriptor.kind`](kernel/filesystem/file_descriptor.header#L15) | Free, initial stdin/stdout/stderr, or explicitly opened file/device | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), called by [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35); read by [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) and [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213) |
-| [`FileDescriptor.flags`](kernel/filesystem/file_descriptor.header#L16) | Access mode plus create/truncate/append flags | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24); set by [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39); read by [`file_descriptor_can_read()`](kernel/filesystem/file_descriptor.picoc#L131) and [`file_descriptor_can_write()`](kernel/filesystem/file_descriptor.picoc#L137) |
-| [`FileDescriptor.offset`](kernel/filesystem/file_descriptor.header#L17) | Logical regular-file position; regular reads and successful writes advance it | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24); changed by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213), and [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L260) |
-| [`FileDescriptor.path`](kernel/filesystem/file_descriptor.header#L18) | Kernel-owned absolute path; an exact special path selects a kernel device | First initialized to `NULL` by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24); standard paths assigned by [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35); copied by [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82) and freed by close/destruction |
-| [`FileDescriptorTable.entries`](kernel/filesystem/file_descriptor.header#L22) | Owned eight-entry array of descriptor state | First allocated by [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35); copied by [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99), indexed by I/O, and freed by [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L115) |
+| [`FileDescriptor.kind`](kernel/filesystem/file_descriptor.header#L16) | Integer constant, not an enum: [`FILE_DESCRIPTOR_FREE`](kernel/filesystem/file_descriptor.header#L9) = 0, [`FILE_DESCRIPTOR_STDIN`](kernel/filesystem/file_descriptor.header#L10) = 1, [`FILE_DESCRIPTOR_STDOUT`](kernel/filesystem/file_descriptor.header#L11) = 2, [`FILE_DESCRIPTOR_STDERR`](kernel/filesystem/file_descriptor.header#L12) = 3, and [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13) = 4. The three standard kinds preserve stream identity. Every explicit open, including a device path, uses [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13). Slots 3–4 are inherited only for this last kind. | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), read by [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), and [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+| [`FileDescriptor.flags`](kernel/filesystem/file_descriptor.header#L17) | Integer bit field containing the read/write mode and create, truncate, or append choices. It decides whether later reads and writes are allowed. | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), set by [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), read by [`file_descriptor_can_read()`](kernel/filesystem/file_descriptor.picoc#L134) and [`file_descriptor_can_write()`](kernel/filesystem/file_descriptor.picoc#L140) |
+| [`FileDescriptor.offset`](kernel/filesystem/file_descriptor.header#L18) | Per-entry logical byte position, initialized to 0. Regular reads and successful writes advance it, append writes replace it with the resulting end position, and [`lseek()`](library/unistd/io.picoc#L66) can replace it. | First initialized by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), changed by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), and [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268) |
+| [`FileDescriptor.path`](kernel/filesystem/file_descriptor.header#L19) | Kernel-owned normalized absolute PicoOS path, or `NULL` for a free entry. Exact terminal/null paths select device behavior before ordinary-file dispatch. | First initialized to `NULL` by [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), standard paths assigned by [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), copied by [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82), and freed by close/destruction |
+| [`FileDescriptorTable.entries`](kernel/filesystem/file_descriptor.header#L23) | Owned eight-entry array of descriptor state | First allocated by [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), copied by [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99), indexed by I/O, and freed by [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L118) |
 
-Descriptor inheritance deep-copies the table, entries, and paths. Offsets are copied by value and
-later diverge; PicoOS has no Unix-style shared open-file descriptions. The terminal itself remains a
-kernel singleton; only its special path is copied into each applicable descriptor.
+The case table shows how [`kind`](kernel/filesystem/file_descriptor.header#L16) and path select behavior. There is no pipe
+kind because pipelines use temporary files:
 
-[`dup2()`](library/unistd/io.picoc#L45) copies scalar fields and the path into an independent entry.
-A source copy is allocated before the old target path is freed; duplicating a descriptor onto itself
-leaves it unchanged. Closing frees the path and resets every field. Destroying a table frees all
-paths, the entry array, and table, but never the global terminal.
+| Descriptor case | [`kind`](kernel/filesystem/file_descriptor.header#L16) | [`path`](kernel/filesystem/file_descriptor.header#L19) | Read/write behavior |
+| --- | --- | --- | --- |
+| Initial standard input | [`FILE_DESCRIPTOR_STDIN`](kernel/filesystem/file_descriptor.header#L10) | `/device/terminal.dev` | Read-only, consumes the global terminal ring and may block |
+| Initial standard output | [`FILE_DESCRIPTOR_STDOUT`](kernel/filesystem/file_descriptor.header#L11) | `/device/terminal.dev` | Write-only, sends ordinary UART output to emulator stdout |
+| Initial standard error | [`FILE_DESCRIPTOR_STDERR`](kernel/filesystem/file_descriptor.header#L12) | `/device/terminal.dev` | Write-only, selects emulator stderr for the bytes, then restores emulator stdout |
+| Opened regular file | [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13) | Normalized absolute path | Access flags gate I/O, `read-range` and `write-at` use the saved offset, while `file-size` supports existence checks, append, and [`SEEK_END`](common/file.header#L19), and [`write`](library/unistd/io.picoc#L32) creates or truncates |
+| Explicitly opened terminal device | [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13) | `/device/terminal.dev` | Access flags gate I/O, reads use the terminal ring and writes use emulator stdout because the kind is not [`FILE_DESCRIPTOR_STDERR`](kernel/filesystem/file_descriptor.header#L12) |
+| Explicitly opened null device | [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13) | `/device/null.dev` | Reads return 0, writes discard bytes and return the requested count |
 
-## 9.2 Global terminal
+Reads and writes validate flags and check device paths before regular-file
+I/O. Terminal writes use `STDERR` kind to select error output. Copying stderr
+to another index preserves that behavior, while opening the terminal at
+index 2 does not create a stderr-kind entry.
 
-Terminal input does not live in each descriptor table. One global
-[`Terminal`](kernel/filesystem/terminal.header#L9) instance,
-[`terminal`](kernel/filesystem/terminal.picoc#L12), is stored directly in kernel `.data`. The
-declaration and field table below show the ring buffer and its reader queue, which are shared by all
-descriptors that name this device:
+Copied offsets later diverge, rather than sharing a Unix open-file
+description. The kernel terminal remains one global object, selected by
+its special path.
+
+[`dup2()`](library/unistd/io.picoc#L58) copies fields and path before releasing the old target. A copy
+onto itself changes nothing. Close resets one entry. Table destruction
+frees paths, array, and wrapper. Zombies retain these until collection.
+
+## 8.2 Global terminal input buffer
+[\[↑ TOC\]](#contents)
+
+One global [`Terminal`](kernel/filesystem/terminal.header#L9) supplies input for every descriptor naming the device.
+The definition and field table describe its ring and reader queue:
 
 ```c
 struct Terminal {
@@ -2953,500 +5295,863 @@ struct Terminal {
 
 | Field | Meaning | Used by |
 | --- | --- | --- |
-| [`Terminal.input_buffer`](kernel/filesystem/terminal.header#L10) | Embedded ring storage; no [`kmalloc()`](kernel/kmalloc.picoc#L23) allocation | First written by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49); read by [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) (only occupied cells are meaningful) |
-| [`Terminal.input_head`](kernel/filesystem/terminal.header#L11) | Index of next byte to consume | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14); advanced by [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) and by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49) when full |
-| [`Terminal.input_tail`](kernel/filesystem/terminal.header#L12) | Index of next insertion | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14); advanced by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49) |
-| [`Terminal.input_count`](kernel/filesystem/terminal.header#L13) | Distinguishes full from empty when indices match | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14); read and changed by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), and [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) |
-| [`Terminal.input_waiters`](kernel/filesystem/terminal.header#L14) | Generic blocking queue containing the active foreground reader while it waits for input | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14); [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135) and [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85) queue readers; completion/suspension remove them |
+| [`Terminal.input_buffer`](kernel/filesystem/terminal.header#L10) | Embedded ring storage | First written by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49), read by [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) (only occupied cells are meaningful) |
+| [`Terminal.input_head`](kernel/filesystem/terminal.header#L11) | Index of next unread byte to consume | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14), advanced only by [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) |
+| [`Terminal.input_tail`](kernel/filesystem/terminal.header#L12) | Index of next insertion | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14), advanced by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49) |
+| [`Terminal.input_count`](kernel/filesystem/terminal.header#L13) | Distinguishes full from empty when indices match | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14), read and changed by [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), and [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) |
+| [`Terminal.input_waiters`](kernel/filesystem/terminal.header#L14) | Generic blocking queue containing the active foreground reader while it waits for input | First initialized by [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134) and [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) queue readers, completion/suspension remove them |
 
-The PicoC compiler does not implement usable `extern` variable declarations, so other kernel files
-cannot declare [`terminal`](kernel/filesystem/terminal.picoc#L12) directly.
-[`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) provides the pointer to the single
-global instance instead. When the ring is full, a new byte discards the oldest. A read copies as
-many available bytes as possible and need not fill the requested count.
+Kernel startup calls [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14). Descriptors select it by
+`/device/terminal.dev` rather than a pointer. [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) returns
+the object, while [`foreground_process_target`](kernel/signal.picoc#L12) identifies its input owner.
 
-Callers retrieve this pointer once and pass it to terminal helpers. This avoids extra
-[`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) calls when one helper invokes another.
+PicoC lacks usable `extern` variable declarations, so the accessor exposes
+the instance to other files. [`input_count`](kernel/filesystem/terminal.header#L13) distinguishes empty from full
+when [`input_head`](kernel/filesystem/terminal.header#L11) and [`input_tail`](kernel/filesystem/terminal.header#L12) coincide. Both indices wrap modulo 128,
+and all 128 cells are usable.
 
-The descriptor layer reaches this object through the virtual device paths described below. They skip
-host-file requests, unlike ordinary paths.
+A full ring drops the incoming byte and preserves older input. The ISR
+cannot block for space. There is no overflow counter or flow control.
+Reads return available bytes without waiting to fill the requested count.
 
-## 9.3 Virtual device paths
+The UART ISR is the insertion path. It reads and acknowledges one byte,
+handles signal characters, and otherwise enqueues it. It then tries to
+complete the input owner's pending read.
 
-The two special paths in the table below name kernel-provided devices. Other paths, including other
-names under `/device`, use normal host-file I/O. The release tree has matching marker files in
-[`binary/device/`](binary/device/) so the paths are visible to users; those files hold no device
-data and are not the device implementations.
-[`device_paths_match()`](kernel/filesystem/device.picoc#L3) compares the complete normalized path
-with the special device paths, so a relative runtime-tree marker path does not automatically select
-the device.
+The device paths below select this terminal behavior without host-file
+requests.
+
+## 8.3 Blocking and completing terminal reads
+[\[↑ TOC\]](#contents)
+
+A foreground read returns buffered input immediately. With an empty ring,
+it records the request in the PCB and blocks until UART input arrives.
+
+[`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134) masks UART delivery while saving the buffer and
+count and joining [`input_waiters`](kernel/filesystem/terminal.header#L14). This prevents a lost wakeup. It restores
+routing before dispatch. The UART ISR later copies bytes, saves the count
+in [`activation.in2`](kernel/process/process.header#L23), and wakes the reader.
+
+[`pending_terminal_read_buffer`](kernel/process/process.header#L65) points to the caller's actual destination.
+The Process Payload stays allocated during the wait. Completing the read
+clears pending fields and queue links and sets [`READY`](kernel/process/process.header#L13). When restored,
+the original syscall returns the saved count without being reissued.
+
+There is one input owner, so only its active read belongs in [`input_waiters`](kernel/filesystem/terminal.header#L14).
+Stopping detaches it. Each stopped reader still needs its own buffer and
+count for a later `fg`, even though it is absent from the queue.
+
+Background reads stop with [`SIGTTIN`](common/signal.header#L9), as explained
+in [`8.4 Foreground input ownership and terminal-generated signals`](#84-foreground-input-ownership-and-terminal-generated-signals).
+[`12.5.1 Foreground processes, background processes, and job-control signals`](#1251-foreground-processes-background-processes-and-job-control-signals)
+shows how the shell selects and resumes the job.
+
+For a concrete call, consider this PicoC source in a user process:
+
+```c
+char buffer[16];
+read(STDIN_FILENO, buffer, 16);
+```
+
+`buffer` occupies the caller's stack. Its physical address goes into the
+wrapper's local [`IoRequest`](common/file.header#L31), along with the requested count:
+
+```c
+request.file_descriptor = file_descriptor;
+request.buffer = (char *)buffer;
+request.count = count;
+request.protect_uart_control = false;
+request.show_loading_bar =
+    getenv(LOADING_BAR_ENVIRONMENT_VARIABLE) != NULL;
+request.transferred = 0;
+request.complete = false;
+```
+
+[`invoke_syscall()`](library/unistd/process.picoc#L7) passes the request address in `IN1`. The read syscall
+validates the descriptor and passes the destination buffer to
+[`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134):
+
+```c
+if (is_terminal_device_path(descriptor->path)) {
+    request->complete = true;
+    return begin_terminal_read(
+        kernel_terminal(),
+        request->buffer + request->transferred,
+        request->count - request->transferred,
+        caller_context
+    );
+}
+```
+
+Buffered input returns up to 16 bytes immediately. Terminal reads are not
+line-oriented. With an empty ring, this code saves the destination and
+count, queues the reader, and switches processes:
+
+```c
+process->pending_terminal_read_buffer = buffer;
+process->pending_terminal_read_count = count;
+enqueue_current_process_on_wait_queue(&(terminal->input_waiters));
+interrupt_controller_assign_device(
+    INTERRUPT_DEVICE_UART,
+    uart_interrupt_index,
+    uart_interrupt_priority
+);
+dispatcher_switch_from_context(caller_context);
+```
+
+The PCB retains the buffer rather than the [`IoRequest`](common/file.header#L31). Every ordinary
+UART byte enters the ring first, then this delivery code completes a
+pending read. [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) lists possible buffer locations:
+
+```c
+result = copy_terminal_bytes(
+    terminal,
+    process->pending_terminal_read_buffer,
+    process->pending_terminal_read_count
+);
+
+process->activation.in2 = result;
+process->pending_terminal_read_buffer = NULL;
+process->pending_terminal_read_count = 0;
+remove_from_wait_queue(process);
+process->state = PROCESS_STATE_READY;
+```
+
+Restoring [`activation`](kernel/process/process.header#L40) makes the syscall return that count. An empty-ring
+wait normally completes with one byte because the ISR delivers one at a time.
+
+## 8.4 Foreground input ownership and terminal-generated signals
+[\[↑ TOC\]](#contents)
+
+[`foreground_process_target`](kernel/signal.picoc#L12) combines input ownership with signal delivery.
+A positive PID receives both. A negative PID owns input but receives no
+terminal-generated signals. The table shows the shell's ownership changes:
+
+| Situation | Saved [`foreground_process_target`](kernel/signal.picoc#L12) value | Ordinary input | `Ctrl+C`/`Ctrl+Z` |
+| --- | ---: | --- | --- |
+| Before shell registration | `0` | No process passes the ownership check, bytes are buffered, while [`terminal_input_process()`](kernel/signal.picoc#L178) uses the current PCB only as a possible pending-read completion target | Consumed without signal delivery |
+| Shell prompt, including while background work runs | Negative shell process ID | Delivered to the shell | Consumed without signal delivery, so the shell is not terminated or stopped |
+| Foreground child runs or resumes through `fg` | Positive child process ID | Delivered to the child | Delivered to the child as [`SIGINT`](common/signal.header#L4) or [`SIGTSTP`](common/signal.header#L8) |
+
+`Ctrl+C` and `Ctrl+Z` arrive as bytes 3 and 26. The ISR consumes them
+before ring insertion and sends [`SIGINT`](common/signal.header#L4) or [`SIGTSTP`](common/signal.header#L8) to a positive target.
+Zero, a negative target, or a missing PID produces no signal. `Ctrl+D` is
+handled by cat instead, as this table distinguishes:
+
+| Input byte | Detection and action | Buffered? |
+| ---: | --- | --- |
+| 3 (`Ctrl+C`) | [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) passes it to [`handle_terminal_signal_character()`](kernel/signal.picoc#L192), which sends [`SIGINT`](common/signal.header#L4) to a valid positive foreground target | No, always consumed |
+| 26 (`Ctrl+Z`) | The same path sends [`SIGTSTP`](common/signal.header#L8) | No, always consumed |
+| 4 (`Ctrl+D`) | Not special to the kernel, follows the ordinary byte path into the ring | Stored as ordinary value 4 when space exists, dropped if the ring is full |
+| Any other byte | [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49) stores it when space exists and [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182) may deliver it | Stored unless the ring is full, an already pending read consumes available bytes immediately after insertion |
+
+The shell saves a positive child-process ID before foreground waiting and restores its own negative
+process ID afterward, so background work does not receive prompt-time terminal signals.
+
+Reads compare the caller with the target's magnitude. A nonowner receives
+[`SIGTTIN`](common/signal.header#L9) before consuming even buffered input. The shell's `fg` assigns
+ownership before continuing the process. Input arrival alone neither
+selects nor continues a stopped reader.
+
+The read remains suspended. `bg` leaves a pending reader stopped because
+it still lacks ownership. After `fg`, [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84)
+returns buffered input or queues the reader until a byte arrives. It masks
+UART around that check and insertion. The application need not retry.
+
+`Ctrl+D` is cat's EOF convention. Terminal-mode [`edit_standard_input()`](user/cat.picoc#L81)
+consumes byte 4, flushes its partial line, and exits. The kernel does not
+turn it into a zero-length read. Thus `cat.bin > file.txt` ends when cat
+recognizes it. Regular-file reads instead reach EOF when `read-range`
+returns zero bytes.
+
+These functions choose the input owner and translate terminal control
+bytes into signals:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`set_foreground_process(pid)`](kernel/signal.picoc#L148) | `0` for PID 0 or an existing direct child, `-1` otherwise | PID 0 saves the negative current-process ID to [`foreground_process_target`](kernel/signal.picoc#L12), giving the caller input without terminal-generated signals, a child PID saves that positive process ID, giving the child input and those signals | [`current_process()`](kernel/process/process.picoc#L62), [`find_process_by_pid()`](kernel/process/process.picoc#L162) | **Library functions:** [`set_foreground_process()`](library/unistd/process.picoc#L59)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+|  |  |  |  |  |
+| [`continue_process(process)`](kernel/signal.picoc#L50) | Returns no value | Resumes ordinary stops, a pending terminal read additionally requires input ownership | [`process_has_terminal_input()`](kernel/signal.picoc#L173), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) | **Kernel functions:** [`send_signal_to_process()`](kernel/signal.picoc#L75) |
+| [`terminal_input_owner_id(void)`](kernel/signal.picoc#L166) | `0` for a saved 0, otherwise the positive process ID represented by the saved positive or negative value | Reads [`foreground_process_target`](kernel/signal.picoc#L12) and removes its sign to identify the input owner | None | **Kernel functions:** [`process_has_terminal_input()`](kernel/signal.picoc#L173), [`terminal_input_process()`](kernel/signal.picoc#L178) |
+| [`process_has_terminal_input(process)`](kernel/signal.picoc#L173) | `true` only for the PCB whose process ID matches the represented input owner | Checks terminal-input ownership regardless of whether [`foreground_process_target`](kernel/signal.picoc#L12) contains a positive or negative process ID | [`terminal_input_owner_id()`](kernel/signal.picoc#L166) | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`continue_process()`](kernel/signal.picoc#L50) |
+| [`terminal_input_process(void)`](kernel/signal.picoc#L178) | Represented input-owner PCB, or current PCB when 0 is saved or the represented process cannot be used | Selects the PCB whose pending read the UART handler may try to complete, the fallback does not itself grant read ownership | [`terminal_input_owner_id()`](kernel/signal.picoc#L166), [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`current_process()`](kernel/process/process.picoc#L62) | **Kernel functions:** [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) |
+| [`handle_terminal_signal_character(value)`](kernel/signal.picoc#L192) | `true` when it consumed `Ctrl+C`/`Ctrl+Z`, otherwise `false` | Sends the mapped signal when [`foreground_process_target`](kernel/signal.picoc#L12) contains a positive process ID, a saved 0 or negative process ID suppresses delivery while still consuming the byte | [`find_process_by_pid()`](kernel/process/process.picoc#L162), [`send_signal_to_process()`](kernel/signal.picoc#L75) | **Kernel functions:** [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) |
+
+## 8.5 Virtual terminal and null-device paths
+[\[↑ TOC\]](#contents)
+
+Unlike a conventional device inode, these paths have no host-side device
+type. [`device_paths_match()`](kernel/filesystem/device.picoc#L3) recognizes their exact normalized names and
+selects kernel behavior. Other `/device` paths use ordinary host files:
+
+The release tree includes marker files so listings show the device names.
+Their text stores no device state. Reading those exact paths selects the
+device behavior, regardless of marker contents.
 
 | Device path | Role | Used by |
 | --- | --- | --- |
-| `/device/terminal.dev` | The terminal device. It is the initial path for standard input, output, and error; reads use the global terminal input ring and may block, writes go to UART output, and seeking fails. | [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L260) |
-| `/device/null.dev` | The null device. Reads return EOF immediately, writes report success after discarding their bytes, and seeking fails. | [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L260) |
+| `/device/terminal.dev` | The terminal device. It is the initial path for standard input, output, and error, reads use the global terminal input ring and may block, writes go to UART output, and seeking fails. | [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268) |
+| `/device/null.dev` | The null device. Reads return EOF immediately, writes report success after discarding their bytes, and seeking fails. | [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268) |
 
-If the input ring is empty during a foreground read,
-[`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135) briefly disables UART delivery to
-prevent a lost wakeup, stores buffer/count in the current PCB, enqueues it on
-[`input_waiters`](kernel/filesystem/terminal.header#L14), restores UART routing, and dispatches. A
-later UART ISR resolves the current input owner, copies bytes into that process's request, stores
-the result in [`process->activation.in2`](kernel/process/process.header#L23), clears its pending
-state, and wakes it.
+`echo.bin test > /device/terminal.dev` writes directly to UART. It sends no
+host-file write request. Redirecting to `/device/null.dev` reports the count
+and advances the logical offset without transmitting data.
 
-The shell transfers [`terminal_input_process_id`](kernel/signal.picoc#L11) between itself and one
-foreground child. Because there is only one input owner, at most that active reader belongs in
-[`input_waiters`](kernel/filesystem/terminal.header#L14); a stop signal detaches it from the queue.
-The queue is still useful for the normal block/wakeup and process-removal machinery, but it does not
-choose among stopped jobs. Per-process pending-read fields remain necessary because every stopped
-reader must retain the userspace destination and requested count until the shell later selects it
-with `fg`.
+## 8.6 File-descriptor creation, inheritance, duplication, and cleanup
+[\[↑ TOC\]](#contents)
 
-The sequence below shows [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135) for a
-foreground process: its request is stored in the PCB before dispatch, and
-[`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L214) calls
-[`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183) to make that specific
-reader ready. Background reads instead stop with [`SIGTTIN`](common/signal.header#L9), as explained
-in [section 12.6](#126-foreground-background-and-signals).
+The table shows descriptor creation, copying, replacement, and cleanup.
+The later I/O table covers operations that consume these entries:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`close_file_descriptor(file_descriptor)`](kernel/filesystem/file_descriptor.picoc#L146) | `0` on close, `-1` for an invalid or already free descriptor | Frees the path and resets the selected entry | [`current_process()`](kernel/process/process.picoc#L62), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L129), [`kfree()`](kernel/kmalloc.picoc#L38), [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24) | **Library functions:** [`close()`](library/unistd/io.picoc#L54), [`fclose()`](library/stdio/stdio.picoc#L155)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`duplicate_file_descriptor(request)`](kernel/filesystem/file_descriptor.picoc#L163) | Target descriptor, `-1` for out-of-range descriptors or a free source, panics on allocation failure | Replaces any valid target slot 0–7 with an independent copy | [`current_process()`](kernel/process/process.picoc#L62), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L129), [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82) | **Library functions:** [`dup2()`](library/unistd/io.picoc#L58)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+|  |  |  |  |  |
+| [`create_file_descriptor_table(void)`](kernel/filesystem/file_descriptor.picoc#L35) | New table, panics if kernel allocation fails | Allocates table/entries and gives standard descriptors terminal paths | [`kmalloc()`](kernel/kmalloc.picoc#L23), [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), [`copy_file_path()`](kernel/filesystem/file_descriptor.picoc#L6) | **Kernel functions:** [`create_process()`](kernel/process/process.picoc#L89), [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99) |
+| [`inherit_file_descriptors(source)`](kernel/filesystem/file_descriptor.picoc#L99) | Independent table copy, panics if kernel allocation fails | Deep-copies 0–2 and [`FILE_DESCRIPTOR_FILE`](kernel/filesystem/file_descriptor.header#L13) entries in 3–4, leaves every other nonstandard entry free, including reserved slots 5–7 | [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82) | **Kernel functions:** [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241) |
+| [`destroy_file_descriptor_table(table)`](kernel/filesystem/file_descriptor.picoc#L118) | Returns no value | Frees paths, entry array, and table | [`kfree()`](kernel/kmalloc.picoc#L38) | **Kernel functions:** [`mark_process_ready_with_arguments()`](kernel/process/process_arguments.picoc#L241), [`remove_process()`](kernel/process/process.picoc#L209) |
+| [`file_descriptor_is_valid(file_descriptor)`](kernel/filesystem/file_descriptor.picoc#L129) | `true` for descriptor 0–7, including a currently free entry, otherwise `false` | Reads fixed descriptor-number range | None | **Kernel functions:** [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L146), [`duplicate_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L163), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+| [`file_descriptor_can_read(descriptor)`](kernel/filesystem/file_descriptor.picoc#L134), [`file_descriptor_can_write(descriptor)`](kernel/filesystem/file_descriptor.picoc#L140) | Boolean access permission | Read descriptor access bits | None | **Kernel functions:** [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+| [`is_terminal_device_path(path)`](kernel/filesystem/device.picoc#L16), [`is_null_device_path(path)`](kernel/filesystem/device.picoc#L12), [`is_device_path(path)`](kernel/filesystem/device.picoc#L20) | Boolean path classification | Recognize kernel device paths | [`device_paths_match()`](kernel/filesystem/device.picoc#L3), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16) | **Kernel functions:** [`is_device_path()`](kernel/filesystem/device.picoc#L20), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268), [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+
+## 8.7 Terminal-buffer and pending-read function reference
+[\[↑ TOC\]](#contents)
+
+The following functions maintain the global input ring and the request saved
+while a terminal reader is blocked or stopped.
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`initialize_terminal(void)`](kernel/filesystem/terminal.picoc#L14) | Returns no value | Resets global ring and reader queue | None | **Kernel functions:** [`main()`](kernel/kernel.picoc#L31) |
+| [`kernel_terminal(void)`](kernel/filesystem/terminal.picoc#L22) | Pointer to the global terminal | No mutation | None | **Kernel functions:** [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213), [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84), [`suspend_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L75) |
+| [`pop_terminal_byte(terminal)`](kernel/filesystem/terminal.picoc#L26) | Next byte, caller must ensure the ring is nonempty | Advances head and decrements count | None | **Kernel functions:** [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35) |
+| [`copy_terminal_bytes(terminal, buffer, count)`](kernel/filesystem/terminal.picoc#L35) | Number of bytes copied | Pops terminal bytes into a process buffer | [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) | **Kernel functions:** [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182), [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L84) |
+| [`enqueue_terminal_byte(terminal, value)`](kernel/filesystem/terminal.picoc#L49) | Returns no value | Inserts at tail when space exists, drops the new byte without changing unread data when full | None | **Kernel functions:** [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) |
+| [`suspend_pending_terminal_read(process)`](kernel/filesystem/terminal.picoc#L75) | Returns no value | Detaches a stopped reader from active terminal waiters while retaining its PCB request | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) | **Kernel functions:** [`stop_process()`](kernel/signal.picoc#L37) |
+| [`begin_terminal_read(terminal, buffer, count, caller_context)`](kernel/filesystem/terminal.picoc#L134) | Immediate available count, or a saved result on later resumption after blocking/stopping, it does not wait to fill `count` | Reads ring or fills pending fields, queues PCB, saves activation, and dispatches | [`current_process()`](kernel/process/process.picoc#L62), [`process_has_terminal_input()`](kernel/signal.picoc#L173), [`send_signal_to_process()`](kernel/signal.picoc#L75), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L375) | **Kernel functions:** [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) |
+| [`resume_pending_terminal_read(process)`](kernel/filesystem/terminal.picoc#L84) | Returns no value | With UART delivery temporarily disabled, fills a stopped foreground reader’s buffer immediately or requeues it, sets [`ProcessControlBlock.stopped_from_state`](kernel/process/process.header#L62) for continuation | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`remove_from_wait_queue()`](kernel/process/process.picoc#L176), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L61) | **Kernel functions:** [`continue_process()`](kernel/signal.picoc#L50) |
+| [`complete_pending_terminal_read(process, terminal)`](kernel/filesystem/terminal.picoc#L182) | Returns no value | Copies available input, writes saved [`activation.in2`](kernel/process/process.header#L23), clears pending fields, and marks the selected reader ready | [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`remove_from_wait_queue()`](kernel/process/process.picoc#L176) | **Kernel functions:** [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L213) |
+| [`handle_uart_interrupt(void)`](kernel/filesystem/terminal.picoc#L213) | Returns no value | Acknowledges one byte, consumes a terminal signal character or offers ordinary input to the ring, then tries to complete the selected reader | [`terminal_input_process()`](kernel/signal.picoc#L178), [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`periphery_write_register()`](kernel/periphery.picoc#L11), [`handle_terminal_signal_character()`](kernel/signal.picoc#L192), [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49), [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L182) | **Hardware interrupts:** UART receive via [`uart_interrupt()`](interrupt_service_routines/os_isrs.picoc#L196) |
+
+## 8.8 Opening, reading, writing, and seeking
+[\[↑ TOC\]](#contents)
+
+[`OpenRequest.flags`](common/file.header#L28) selects access and creation behavior. The entry retains
+these in [`FileDescriptor.flags`](kernel/filesystem/file_descriptor.header#L17) for later I/O:
+
+| Flag | Value | Meaning in [`OpenRequest.flags`](common/file.header#L28) |
+| --- | ---: | --- |
+| [`O_RDONLY`](common/file.header#L9) | 0 | Permit reads |
+| [`O_WRONLY`](common/file.header#L10) | 1 | Permit writes |
+| [`O_RDWR`](common/file.header#L11) | 2 | Permit reads and writes, [`O_ACCMODE`](common/file.header#L12) = 3 extracts these two access bits |
+| [`O_CREAT`](common/file.header#L13) | 64 | Allow a missing regular path to be created |
+| [`O_TRUNC`](common/file.header#L14) | 512 | With writable access, create/empty the regular host file during open |
+| [`O_APPEND`](common/file.header#L15) | 1024 | Resolve the current file size before every write and use it as that write's offset |
+
+The kernel validates only the access value masked by
+[`O_ACCMODE`](common/file.header#L12). It stores other flag bits unchanged, but only
+[`O_CREAT`](common/file.header#L13), [`O_TRUNC`](common/file.header#L14), and
+[`O_APPEND`](common/file.header#L15) have implemented behavior.
+
+Opening normalizes the path, chooses a free descriptor, and copies the
+path. Writable [`O_TRUNC`](common/file.header#L14) creates or truncates immediately. Otherwise a
+missing file requires [`O_CREAT`](common/file.header#L13). The two device paths bypass host operations.
+
+These modes produce the following host requests. New descriptors start
+at offset zero. A protected write adds `literal-output` when data contains
+`<ESC>`:
+
+| Operation or mode | Descriptor flags/state | Offset handling | PicoOS functions | RETI emulator host requests and result |
+| --- | --- | --- | --- | --- |
+| Open existing without truncation | Any valid access mode, no [`O_TRUNC`](common/file.header#L14) | Initializes 0 | [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`file_exists()`](kernel/filesystem/filesystem.picoc#L18) | `file-size <path>` verifies that the regular file is readable by the host service, the contents are unchanged |
+| Create missing file | [`O_CREAT`](common/file.header#L13) with any valid access mode | Initializes 0 | [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39) | `file-size <path>` returns failure, then `write <path>`, `write stdout`, the emulator creates/truncates the path while selecting and restoring its output destination |
+| Truncate/overwrite open | Writable mode plus [`O_TRUNC`](common/file.header#L14), usually with [`O_CREAT`](common/file.header#L13) | Initializes 0 | [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39) | `write <path>`, `write stdout`, the file is created if needed and emptied immediately |
+| Read | Readable descriptor | Starts at saved offset, advances by returned bytes | [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150), [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) | `read-range <offset> <count> <path>` returns a count and up to 1 KiB per syscall, zero bytes is EOF |
+| Ordinary overwrite/write | Writable regular descriptor without [`O_APPEND`](common/file.header#L15) | Uses saved offset, advances by requested count | [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), [`write_uart_bytes()`](kernel/filesystem/filesystem.picoc#L195) | `write-at <offset> <path>`, optional `literal-output <count>`, data bytes, `write stdout`, existing bytes outside the written range remain |
+| Append write | Writable regular descriptor with [`O_APPEND`](common/file.header#L15) | Ignores the prior offset for placement, saves file size plus requested count afterward | [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13) | `file-size <path>`, `write-at <size> <path>`, optional `literal-output <count>`, data bytes, `write stdout`, a missing file must first have been created by the open sequence |
+| Seek from end | Regular non-device descriptor | File size plus requested displacement becomes the new nonnegative offset | [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L268), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13) | `file-size <path>`, no data transfer |
+
+Terminal reads can block, and null reads return EOF. Regular files use
+ranged requests of at most 1 KiB and advance the offset. The wrapper repeats
+until the requested count, EOF, or failure. An error after earlier chunks
+returns the transferred count. Otherwise it returns `-1`. Each syscall
+return permits deferred scheduling.
+
+Terminal stdout sends bytes directly. Terminal stderr selects `write stderr`
+and restores stdout afterward. Regular files use `write-at` with the path
+and offset for each write, then restore stdout. The host retains one global
+output destination rather than per-descriptor identities.
+
+[`write_uart_bytes()`](kernel/filesystem/filesystem.picoc#L195) protects data containing `<ESC>` with `literal-output`.
+Cat also displays nonprintable terminal output as `\xHH`, while file
+redirection preserves the original bytes.
+
+[`write_without_uart_escape_check()`](library/unistd/io.picoc#L43) skips the scan by clearing
+[`IoRequest.protect_uart_control`](common/file.header#L35). Use it only for data known to contain no
+escape byte. Arbitrary data requires [`write()`](library/unistd/io.picoc#L32).
+
+Regular writes overwrite at the current offset. [`O_APPEND`](common/file.header#L15) obtains the
+current file size before each write, overriding an earlier seek. Terminal
+and null writes also advance their logical offsets, but both reject seeking.
+
+Append uses separate `file-size` and `write-at` requests, so concurrent
+writers to one file are unsupported. Host reads acknowledge failures, but
+[`write`](library/unistd/io.picoc#L32) and `write-at` do not. A host write failure can therefore produce
+an emulator warning while PicoOS still reports success. Append can fail
+earlier on its acknowledged size request.
+
+PicoOS rejects invalid descriptors, access modes, paths, counts, and device
+seeks with `-1`. EOF returns `0`. The function table shows validation, offset
+changes, blocking, and host requests:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`open_file_descriptor(request)`](kernel/filesystem/filesystem.picoc#L39) | Descriptor, or `-1` for invalid path/mode, no free entry, or a missing file without create/truncate | Allocates a path and changes a free entry to a file or device | [`current_process()`](kernel/process/process.picoc#L62), [`free_file_descriptor()`](kernel/filesystem/filesystem.picoc#L27), [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`copy_file_path()`](kernel/filesystem/file_descriptor.picoc#L6), [`is_device_path()`](kernel/filesystem/device.picoc#L20), [`kfree()`](kernel/kmalloc.picoc#L38), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`file_exists()`](kernel/filesystem/filesystem.picoc#L18)<br>**Host requests:** `file-size <path>` for existence, `write <path>` then `write stdout` for create/truncate | **Library functions:** [`open()`](library/fcntl/fcntl.picoc#L5), [`fopen()`](library/stdio/stdio.picoc#L125)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`read_file_descriptor(request, caller_context)`](kernel/filesystem/filesystem.picoc#L150) | Count, `0` at EOF, or `-1` for an invalid request, unreadable descriptor, or failed host range request | Advances regular-file offset, or changes terminal queue/activation state | [`current_process()`](kernel/process/process.picoc#L62), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L129), [`file_descriptor_can_read()`](kernel/filesystem/file_descriptor.picoc#L134), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134), [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90)<br>**Host request:** `read-range <offset> <count> <path>` for a regular file | **Library functions:** [`read()`](library/unistd/io.picoc#L6), [`fgetc()`](library/stdio/stdio.picoc#L178)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`write_file_descriptor(request)`](kernel/filesystem/filesystem.picoc#L217) | Count, or `-1` for an invalid/unwritable descriptor or failed append-size request | Routes UART output, applies the request's [`IoRequest.protect_uart_control`](common/file.header#L35) choice, and advances the descriptor offset | [`current_process()`](kernel/process/process.picoc#L62), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L129), [`file_descriptor_can_write()`](kernel/filesystem/file_descriptor.picoc#L140), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13), [`uart_send_file_write_command()`](common/uart_protocol.picoc#L102), [`write_uart_bytes()`](kernel/filesystem/filesystem.picoc#L195)<br>**Host requests:** optional `file-size <path>` for append, `write-at <offset> <path>` and `write stdout` for a regular file, `write stderr` and `write stdout` for terminal stderr, optional `literal-output <count>` | **Library functions:** [`write()`](library/unistd/io.picoc#L32), [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), [`fputc()`](library/stdio/stdio.picoc#L204), [`fputs()`](library/stdio/stdio.picoc#L229)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16)<br>**Kernel functions:** [`write_process_exception_message()`](kernel/exception.picoc#L29), [`list_processes()`](kernel/process/process.picoc#L32) |
+| [`seek_file_descriptor(request)`](kernel/filesystem/filesystem.picoc#L268) | New offset, or `-1` for invalid descriptor/origin/device/negative result | Replaces a regular-file descriptor offset | [`current_process()`](kernel/process/process.picoc#L62), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L129), [`is_device_path()`](kernel/filesystem/device.picoc#L20), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13)<br>**Host request:** `file-size <path>` for [`SEEK_END`](common/file.header#L19) | **Library functions:** [`lseek()`](library/unistd/io.picoc#L66)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+|  |  |  |  |  |
+| [`free_file_descriptor(table)`](kernel/filesystem/filesystem.picoc#L27) | Lowest free slot in 0–4, or `-1` when all ordinary slots are occupied | Reads descriptor kinds without changing the table, slots 5–7 are reserved and never considered | None | **Kernel functions:** [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39) |
+| [`write_uart_bytes(buffer, count, protect_uart_control)`](kernel/filesystem/filesystem.picoc#L195) | Returns no value | When protection is enabled, scans for `<ESC>` and starts a counted literal-output region if found, then sends exactly `count` bytes to the selected host destination | [`uart_send_literal_output_command()`](common/uart_protocol.picoc#L112), [`uart_print_character()`](common/uart_protocol.picoc#L21)<br>**Host request:** optional `literal-output <count>` | **Kernel functions:** [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L217) |
+
+## 8.9 PicoOS paths, working directories, and host operations
+[\[↑ TOC\]](#contents)
+
+The emulator's launch directory becomes PicoOS `/`. Launchers select
+[`binary/`](binary/) or the extracted runtime directory. [`init_guest_filesystem()`](../RETI-Emulator/source/guest_filesystem.c#L113)
+retains that root. PicoOS [`chdir()`](library/unistd/working_directory.picoc#L4) changes only the caller's PCB, not the
+host working directory. PicoOS `/tmp` is a path within that root.
+
+PicoOS normalizes paths with [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92). The emulator checks
+them independently relative to its retained root. POSIX-host traversal
+refuses symbolic links. Linux additionally uses `RESOLVE_BENEATH`,
+`RESOLVE_NO_SYMLINKS`, and `RESOLVE_NO_XDEV`. Regular-file opens reject
+special files and multiple hard links. Windows rejects reparse points
+including junctions.
+
+All filesystem host requests use that sandbox. Root mutation is rejected.
+Explicit emulator inputs, debug metadata, logs, and configuration remain
+host-side features outside it.
+
+[`working_directory`](kernel/process/process.header#L39) is an owned Kernel Heap string. Init gets `/`, and
+children copy the loader's value at creation. A successful change allocates
+a replacement before freeing the old string. Final removal frees it. [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes)
+shows its lifetime.
+
+Normalization prepends the working directory for relative paths, removes
+repeated separators and `.`, clamps `..` at root, and enforces [`PATH_MAX`](common/file.header#L21).
+These cases use the same helper:
+
+| Requested path | Base and normalization | Example result from current directory `/a/b` |
+| --- | --- | --- |
+| Relative child `dir` | Append to the PCB directory | `/a/b/dir` |
+| `.` or repeated separators | Ignore `.` and empty segments | `/a/b` |
+| `..` | Remove one existing result segment, but never remove root | `/a`, from `/`, still `/` |
+| `../dir` and longer combinations | Apply segments from left to right | `/a/dir` |
+| Absolute `/dir` | Ignore the PCB directory and start at root | `/dir` |
+| Empty or result at least [`PATH_MAX`](common/file.header#L21) cells | Reject before contacting the emulator | Operation returns failure |
+
+[`chdir()`](library/unistd/working_directory.picoc#L4) sends `is-directory` for the normalized candidate. Only a zero
+response replaces the PCB's directory. Failure preserves the old value.
+The table distinguishes kernel-state copies from host operations:
+
+| Kernel function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`get_working_directory(request)`](kernel/filesystem/host_filesystem.picoc#L156) | `0` on success, `-1` when the stored directory is missing or the destination capacity is too small | Copies the PCB directory into the caller buffer | [`copy_working_directory()`](kernel/filesystem/host_filesystem.picoc#L135), [`current_process()`](kernel/process/process.picoc#L62) | **Library functions:** [`getcwd()`](library/unistd/working_directory.picoc#L11)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`change_working_directory(path)`](kernel/filesystem/host_filesystem.picoc#L163) | `0` on success, `-1` for an invalid path or host failure | Validates host directory and replaces current PCB string | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7), [`set_process_working_directory()`](kernel/filesystem/host_filesystem.picoc#L128), [`current_process()`](kernel/process/process.picoc#L62)<br>**Host request:** `is-directory <path>` | **Library functions:** [`chdir()`](library/unistd/working_directory.picoc#L4)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`make_host_directory(path)`](kernel/filesystem/host_filesystem.picoc#L177) | `0` on success, `-1` on invalid path or host failure | Normalizes and sends [`mkdir`](library/sys/stat/stat.picoc#L5), no kernel table mutation | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7)<br>**Host request:** `mkdir <path>` | **Library functions:** [`mkdir()`](library/sys/stat/stat.picoc#L5)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`read_host_directory(request)`](kernel/filesystem/host_filesystem.picoc#L187) | Listing count, or `-1` for invalid request/host failure | Writes host listing into caller buffer | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`uart_receive_string()`](kernel/filesystem/host_filesystem.picoc#L10)<br>**Host request:** `ls <path>` | **Library functions:** [`opendir()`](library/dirent/dirent.picoc#L8)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`unlink_host_file(path)`](kernel/filesystem/host_filesystem.picoc#L208), [`remove_host_directory(path)`](kernel/filesystem/host_filesystem.picoc#L212) | `0` on success, `-1` on invalid path or host failure | Send bounded host unlink/rmdir requests | [`request_host_path_operation()`](kernel/filesystem/host_filesystem.picoc#L198)<br>**Host requests:** `unlink <path>` or `rmdir <path>` | **Library functions:** [`unlink()`](library/unistd/file_removal.picoc#L4), [`rmdir()`](library/unistd/file_removal.picoc#L8)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`move_host_path(request)`](kernel/filesystem/host_filesystem.picoc#L216) | `0` on success, `-1` on invalid path or host failure | Normalizes both paths and sends a two-path move request to the emulator | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_print_character()`](common/uart_protocol.picoc#L21), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`receive_word()`](common/uart_protocol.picoc#L7)<br>**Host request:** `move <old path>\n<new path>` | **Library functions:** [`move()`](library/unistd/file_removal.picoc#L12)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+| [`touch_host_file(path)`](kernel/filesystem/host_filesystem.picoc#L234) | `0` on success, `-1` on invalid path or host failure | Sends a touch request to create a host file or update its timestamps | [`request_host_path_operation()`](kernel/filesystem/host_filesystem.picoc#L198)<br>**Host request:** `touch <path>` | **Library functions:** [`touch()`](library/unistd/file_removal.picoc#L20)<br>**System calls:** via [`handle_syscall()`](kernel/syscall.picoc#L16) |
+|  |  |  |  |  |
+| [`build_process_path(path, result, capacity)`](kernel/filesystem/host_filesystem.picoc#L92) | `true` on a nonempty normalized path that fits, otherwise `false` | Writes an absolute PicoOS path, relative input starts from the current PCB directory, or from `/` before the first process exists | [`append_path_segments()`](kernel/filesystem/host_filesystem.picoc#L37), [`current_process()`](kernel/process/process.picoc#L62) | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163), [`load_process()`](kernel/process/process_loader.picoc#L305), [`make_host_directory()`](kernel/filesystem/host_filesystem.picoc#L177), [`move_host_path()`](kernel/filesystem/host_filesystem.picoc#L216), [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39), [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187), [`request_host_path_operation()`](kernel/filesystem/host_filesystem.picoc#L198) |
+| [`system_relative_path(path)`](kernel/filesystem/host_filesystem.picoc#L121) | Pointer to the input path or the text after its leading `/` | Removes the leading `/` for program names and loading labels | None | **Kernel functions:** [`begin_process_load()`](kernel/process/process_loader.picoc#L109), [`finish_process_load()`](kernel/process/process_loader.picoc#L90), [`list_processes()`](kernel/process/process.picoc#L32), [`load_process()`](kernel/process/process_loader.picoc#L305) |
+| [`set_process_working_directory(process, path)`](kernel/filesystem/host_filesystem.picoc#L128) | Returns no value | Allocates a new kernel copy, frees old string, and replaces PCB pointer | [`copy_process_path()`](kernel/process/process.picoc#L70), [`kfree()`](kernel/kmalloc.picoc#L38) | **Kernel functions:** [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163) |
+
+[`getcwd()`](library/unistd/working_directory.picoc#L11) copies the PCB's stored
+directory through [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156)
+without a host request. The kernel returns a status integer, which the wrapper
+converts to the caller's buffer pointer on success.
+
+# 9. Kernel data structures: relationships, storage, and lifetimes
+[\[↑ TOC\]](#contents)
+
+This chapter gathers the storage and references explained earlier. It
+distinguishes fields embedded in objects from separately allocated objects
+and shows who releases each allocation.
+
+*Containment* means a field is part of an object. *Reference* means a pointer
+reaches another object. *Ownership* identifies responsibility for cleanup.
+A wait queue references PCBs without owning their allocations.
+
+## 9.1 Memory layout, allocation sources, and lifetimes
+[\[↑ TOC\]](#contents)
+
+The table locates objects in the SRAM regions from [`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) and distinguishes
+allocations from embedded fields. Pointer fields live with their containing
+objects, even when their targets are elsewhere. [`9.4 Wait requests and queue storage`](#94-wait-requests-and-queue-storage) expands wait storage:
+
+| Object | Storage and allocation | References / access | Lifetime or release |
+| --- | --- | --- | --- |
+| [`ProcessControlBlock`](kernel/process/process.header#L31), the PCB | One kernel-heap allocation per process via [`create_process()`](kernel/process/process.picoc#L89) | Global list through [`next`](kernel/process/process.header#L53). Current pointer and queue links also reach these same PCBs | Until [`remove_process()`](kernel/process/process.picoc#L209), possibly after a zombie period |
+| [`ActivationRecord`](kernel/process/process.header#L21), child [`waiters`](kernel/process/process.header#L46), and PCB scalar/pointer fields | Embedded in the PCB, no separate allocation | [`activation`](kernel/process/process.header#L40) contains saved registers. [`waiting_queue_ptr`](kernel/process/process.header#L48) references the queue containing this PCB | PCB lifetime. Queue membership and pending-operation fields change during it |
+| Complete Process Payload | One [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) payload, including program sections, heap and stack reservation | PCB [`base_address`](kernel/process/process.header#L34), [`size`](kernel/process/process.header#L35), relative [`heap_start`](kernel/process/process.header#L36) and absolute saved register addresses | Released with [`PSDFree()`](kernel/psdmalloc.picoc#L47) on PCB removal |
+| [`ProcessLoad`](kernel/process/process_loader.picoc#L14) and copied path | Separate kernel-heap allocations, plus a reserved Process Payload | Loading caller's [`pending_load`](kernel/process/process.header#L68). [`ProcessLoad.base_address`](kernel/process/process_loader.picoc#L15) reaches the unfinished image | Completion transfers the Process Payload to the new PCB and frees load metadata. Cancellation also frees the Process Payload |
+| PCB [`binary_path`](kernel/process/process.header#L38) and [`working_directory`](kernel/process/process.header#L39) | Separate kernel-heap strings via [`copy_process_path()`](kernel/process/process.picoc#L70) | PCB pointers | PCB removal. Changing directory replaces its string |
+| [`FileDescriptorTable`](kernel/filesystem/file_descriptor.header#L22) | One kernel-heap wrapper allocation | [`ProcessControlBlock.file_descriptors`](kernel/process/process.header#L42) | Table replacement or PCB removal |
+| Eight [`FileDescriptor`](kernel/filesystem/file_descriptor.header#L15) entries | **One separate contiguous kernel-heap array**. Each descriptor is an element, not its own allocation and not embedded in the wrapper | Table [`entries`](kernel/filesystem/file_descriptor.header#L23) points to the array. Descriptor number selects an element | Array lasts with table. Closing resets one element |
+| Descriptor [`path`](kernel/filesystem/file_descriptor.header#L19) strings | Separate kernel-heap copies, including standard terminal paths | Each occupied descriptor references its own path | Close, duplication/replacement, or table destruction |
+| [`Terminal`](kernel/filesystem/terminal.header#L9) | Global [`terminal`](kernel/filesystem/terminal.picoc#L12) in kernel `.data`. Ring array and input wait queue are embedded | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) returns its address | Whole kernel run |
+| [`SharedMemoryEntry`](kernel/shared_memory.header#L8), name, and [`SharedMemoryAttachment`](kernel/shared_memory.header#L17) nodes | Separate kernel-heap allocations | Registry links entries. Each PCB links its attachments. Each attachment references one entry | Attachment released at process removal. Name on unlink. Entry after unlink and final attachment release |
+| Shared data | Separate [`PSDMalloc()`](kernel/psdmalloc.picoc#L20) payload | Entry [`address`](kernel/shared_memory.header#L11). Mapping returns the same absolute address to each process | Entry destruction. The data is not tied to one mapper's image |
+| Kernel Heap and Process and Shared Data Heap [`Heap`](common/heap.header#L11) descriptors | Two kernel `.data` globals | Each [`first_block`](common/heap.header#L12) points into its own managed region | Whole kernel run |
+| Per-process [`process_heap`](library/stdlib/malloc.picoc#L6) and [`environ`](library/stdlib/env.picoc#L4) | Process `.data` globals when the libraries are linked | Descriptor reaches process-heap blocks. Environment pointer reaches the process's environment array | Image lifetime. Environment contents can be replaced |
+| [`BlockHeader`](common/heap.header#L5) | Inside **each managed heap**, immediately before its payload. It is not separately allocated metadata | Heap descriptor → first header → [`next`](common/heap.header#L8) header | Split/merged by allocator. Outer heap headers and inner User Process Heap headers belong to different lists |
+| Userspace library objects, buffers, and caller-created mutexes/queues | Process heap via [`malloc()`](library/stdlib/malloc.picoc#L35), process `.data`, process stack, or mapped shared data according to the caller | Examples include [`DirectoryStream`](library/dirent/dirent.header#L14), environment copies, and [`mutex`](library/mutex/mutex.header#L6) | Caller/library controls lifetime. Any kernel-retained pointer must remain valid until completion |
+| Syscall requests and result cells | Library wrappers use user-process stack locals. Kernel internal calls also use kernel-stack requests, e.g. [`init_request`](kernel/kernel.picoc#L33) and [`IoRequest`](kernel/process/process.picoc#L34) | Syscall pointer argument or direct function argument | Call lifetime. Retained status/buffer addresses can outlast one syscall entry while the user call stays suspended |
+| Pending terminal-read state and destination | Buffer pointer/count are PCB fields. Destination is caller storage, potentially stack, `.data`, heap, or shared data | [`pending_terminal_read_buffer`](kernel/process/process.header#L65) and [`pending_terminal_read_count`](kernel/process/process.header#L66) | Fields cleared at completion/cancellation. Caller buffer stays alive through the blocked call |
+| Kernel local variables and scratch buffers | Live kernel stack frames in normal kernel calls, e.g. [`absolute_path`](kernel/process/process_loader.picoc#L114) | Parameters and local pointers | Until return or context-switch abandonment of that kernel call chain |
+| Interrupt saved frames and handler locals | The **interrupted stack**: process stack for a user interruption, kernel stack for a kernel interruption | [`caller_context`](kernel/dispatcher.picoc#L71). Saved PC remains at [`activation.sp`](kernel/process/process.header#L25) + 1 after dispatch | Until restoration. UART/DMA handlers retain the interrupted `SP`, so their kernel C locals can also occupy a user-process stack |
+
+Syscall and userspace-timer entry switch to the kernel stack. UART and DMA
+borrow the interrupted stack, so kernel code's locals can live there too.
+Kernel metadata uses [`kmalloc()`](kernel/kmalloc.picoc#L23), while user synchronization objects can
+be referenced directly.
+
+## 9.2 Containment and reference relationships
+[\[↑ TOC\]](#contents)
+
+Nested boxes show containment, and arrows identify pointer fields. The
+dotted terminal edge means path-based selection, rather than a pointer:
 
 ```mermaid
-sequenceDiagram
-    participant P as Reading process
-    participant K as Descriptor/terminal code
-    participant T as Global Terminal
-    participant D as Dispatcher
-    participant U as UART ISR
-
-    P->>K: read(0, buffer, count), syscall 24
-    alt input_buffer contains bytes
-        K->>T: Pop up to count bytes
-        K-->>P: Return count immediately
-    else ring is empty
-        K->>P: Store pending buffer/count in PCB
-        K->>T: Enqueue P and mark it BLOCKED
-        K->>D: dispatcher_switch_from_context(frame), save activation
-        U->>T: Enqueue received byte
-        U->>P: Copy bytes and store result in activation.in2
-        U->>P: Clear PCB pending fields, detach from queue, mark READY
-        D-->>P: Restore later and return the saved result
+flowchart LR
+    subgraph PCB["ProcessControlBlock / PCB: one Kernel Heap allocation"]
+        P["PCB fields"]
+        A["activation: embedded ActivationRecord"]
+        W["waiters: embedded wait_queue<br/>other processes waiting for this process"]
     end
+    W -->|head| WA["first waiting PCB"]
+    WA -->|wait_next| WZ["last waiting PCB"]
+    W -->|tail| WZ
+    WA -->|waiting_queue_ptr| W
+    P -->|next| PN["next PCB in global process list"]
+    P -->|base_address| IMG["Process Payload: PSDMalloc<br/>User Process Image / User Process Heap / User Process Stack"]
+    A -->|"sp and baf"| ST["saved process stack frame and return PC<br/>inside that Process Payload"]
+    P -->|file_descriptors| FDT["FileDescriptorTable<br/>separate kmalloc allocation"]
+    subgraph ARRAY["one separate kmalloc allocation: FileDescriptor entries 0–7"]
+        FD["entries[fd]<br/>kind / flags / offset / path"]
+    end
+    FDT -->|entries| FD
+    FD -->|path| PATH["separate kmalloc path string"]
+    subgraph TERM["global Terminal object: kernel .data"]
+        TROOT["Terminal fields"]
+        INPUT["input_buffer[128]<br/>embedded ring storage"]
+        INPUTQ["input_waiters<br/>embedded wait_queue"]
+    end
+    TROOT -->|contains| INPUT
+    TROOT -->|contains| INPUTQ
+    INPUTQ -->|head / tail| READER["waiting reader PCB<br/>kernel heap"]
+    READER -->|waiting_queue_ptr| INPUTQ
+    PATH -. "terminal-device path selects" .-> TROOT
+    P -->|"binary_path / working_directory"| STR["separate kmalloc strings"]
+    P -->|pending_load| LOAD["ProcessLoad: kmalloc<br/>path copy and unfinished PSDMalloc Process Payload"]
+    P -->|shared_memory_attachments| ATT["SharedMemoryAttachment: kmalloc"]
+    ATT -->|next| ATT2["next attachment or NULL"]
+    ATT -->|entry| SE["SharedMemoryEntry: kmalloc"]
+    SE -->|next| SE2["next registry entry or NULL"]
+    SE -->|name| NAME["kmalloc name or NULL after unlink"]
+    SE -->|address| SH["shared data: PSDMalloc"]
+    P -->|waiting_queue_ptr| Q["queue currently containing this PCB<br/>may belong to another PCB, terminal, DMA, or userspace"]
+    P -->|wait_next| WP["next PCB in that wait queue or NULL"]
+    P -->|waiting_status_ptr| STATUS["parent's stack-local waitpid status<br/>inside its Process Payload, or NULL"]
+    P -->|pending_terminal_read_buffer| BUF["pending read destination<br/>caller stack, .data, heap, or shared data"]
 ```
 
-## 9.4 Descriptor and terminal functions
+Call-local requests are separate from those persistent objects. This
+diagram uses [`WaitPidRequest`](common/syscall.header#L61) to show the wrapper's stack objects:
 
-The table connects descriptor ownership to terminal input handling. Creation and copying use
-[`kmalloc()`](kernel/kmalloc.picoc#L23), whose failure policy is a kernel panic; the descriptor
-functions do not turn that allocation failure into a normal error.
+```mermaid
+flowchart LR
+    subgraph IMAGE["parent Process Payload: one PSDMalloc allocation"]
+        direction TB
+        DATA[".data<br/>library globals such as environ"]
+        HEAP["userspace heap<br/>malloc environment and application objects"]
+        subgraph FRAME["waitpid function frame: userspace stack"]
+            REQ["WaitPidRequest request<br/>pid and status pointer"]
+            RESULT["int status"]
+        end
+    end
+    REQ -->|status| RESULT
+    REQ -->|"&request through IN1"| ARG["handle_syscall argument<br/>pointer value in a kernel stack frame"]
+    ARG -->|read during syscall| WAIT["wait_for_process_by_pid<br/>kernel stack frame"]
+    PARENT["parent PCB<br/>kernel heap"] -->|waiting_status_ptr| RESULT
+    CHILD["child PCB<br/>kernel heap"] -->|contains| Q["waiters: embedded wait_queue"]
+    Q -->|head / tail| PARENT
+    PARENT -->|waiting_queue_ptr| Q
+```
 
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35) | New table; panics if kernel allocation fails | Allocates table/entries and gives standard descriptors terminal paths | [`kmalloc()`](kernel/kmalloc.picoc#L23), [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24), [`copy_file_path()`](kernel/filesystem/file_descriptor.picoc#L6) |
-| [`inherit_file_descriptors()`](kernel/filesystem/file_descriptor.picoc#L99) | Independent table copy; panics if kernel allocation fails | Deep-copies entries and paths | [`create_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L35), [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82) |
-| [`destroy_file_descriptor_table()`](kernel/filesystem/file_descriptor.picoc#L115) | Returns no value | Frees paths, entry array, and table | [`kfree()`](kernel/kmalloc.picoc#L38) |
-| [`close_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L143) | `0` on close; `-1` for an invalid descriptor | Frees path and resets selected entry | [`current_process()`](kernel/process/process.picoc#L61), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126), [`kfree()`](kernel/kmalloc.picoc#L38), [`initialize_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L24) |
-| [`duplicate_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L160) | Target descriptor; `-1` for out-of-range descriptors or a free source; panics on allocation failure | Replaces target with an independent copy | [`current_process()`](kernel/process/process.picoc#L61), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126), [`copy_file_descriptor()`](kernel/filesystem/file_descriptor.picoc#L82) |
-| [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126) | `true` for descriptor 0–7, including a currently free entry; otherwise `false` | Reads fixed descriptor-number range | — |
-| [`file_descriptor_can_read()`](kernel/filesystem/file_descriptor.picoc#L131), [`file_descriptor_can_write()`](kernel/filesystem/file_descriptor.picoc#L137) | Boolean access permission | Read descriptor access bits | — |
-| [`initialize_terminal()`](kernel/filesystem/terminal.picoc#L14) | Returns no value | Resets global ring and reader queue | — |
-| [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22) | Pointer to the global terminal | No mutation | — |
-| [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`is_device_path()`](kernel/filesystem/device.picoc#L20) | Boolean path classification | Recognize kernel device paths | [`device_paths_match()`](kernel/filesystem/device.picoc#L3), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16) |
-| [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) | Next byte; caller must ensure the ring is nonempty | Advances head and decrements count | — |
-| [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35) | Number of bytes copied | Pops terminal bytes into a process buffer | [`pop_terminal_byte()`](kernel/filesystem/terminal.picoc#L26) |
-| [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49) | Returns no value | Inserts at tail and may discard the oldest byte | — |
-| [`suspend_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L76) | Returns no value | Detaches a stopped reader from active terminal waiters while retaining its PCB request | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) |
-| [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135) | Immediate count, or a saved result on later resumption after blocking/stopping | Reads ring or fills pending fields, queues PCB, saves activation, and dispatches | [`current_process()`](kernel/process/process.picoc#L61), [`process_has_terminal_input()`](kernel/signal.picoc#L166), [`send_signal_to_process()`](kernel/signal.picoc#L74), [`dispatcher_switch_from_context()`](kernel/dispatcher.picoc#L71), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`enqueue_current_process_on_wait_queue()`](kernel/process/process.picoc#L395) |
-| [`resume_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L85) | Returns no value | With UART delivery temporarily disabled, fills a stopped foreground reader’s buffer immediately or requeues it; sets [`Process.stopped_from_state`](kernel/process/process.header#L62) for continuation | [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`interrupt_controller_disable_device()`](kernel/interrupt_controller.picoc#L23), [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`remove_from_wait_queue()`](kernel/process/process.picoc#L175), [`interrupt_controller_assign_device()`](kernel/interrupt_controller.picoc#L59), [`enqueue_terminal_reader()`](kernel/filesystem/terminal.picoc#L62) |
-| [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183) | Returns no value | Copies input, writes saved [`activation.in2`](kernel/process/process.header#L23), clears pending fields, and marks the selected reader ready | [`copy_terminal_bytes()`](kernel/filesystem/terminal.picoc#L35), [`remove_from_wait_queue()`](kernel/process/process.picoc#L175) |
-| [`handle_uart_interrupt()`](kernel/filesystem/terminal.picoc#L214) | Returns no value | Acknowledges byte, signals target, or mutates terminal/reader PCB | [`terminal_input_process()`](kernel/signal.picoc#L170), [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`periphery_read_register()`](kernel/periphery.picoc#L5), [`periphery_write_register()`](kernel/periphery.picoc#L11), [`handle_terminal_signal_character()`](kernel/signal.picoc#L183), [`enqueue_terminal_byte()`](kernel/filesystem/terminal.picoc#L49), [`complete_pending_terminal_read()`](kernel/filesystem/terminal.picoc#L183) |
+Passing a request address does not move it to the kernel stack. Only the
+status pointer is retained in the PCB. Kernel functions can also construct
+requests in their own frames, such as [`init_request`](kernel/kernel.picoc#L33) and the [`IoRequest`](common/file.header#L31)
+in [`list_processes()`](kernel/process/process.picoc#L32). Neither case needs a Kernel Heap allocation.
 
-## 9.5 Opening, reading, writing, and seeking
+`next` belongs to the process list, and [`wait_next`](kernel/process/process.header#L51) to a wait queue.
+A PCB's [`waiters`](kernel/process/process.header#L46) contains processes waiting for it. Its [`waiting_queue_ptr`](kernel/process/process.header#L48)
+identifies the queue containing that PCB. Both relationships can coexist.
 
-The flag table explains how [`OpenRequest.flags`](common/file.header#L28) selects access and
-creation behavior. Those choices remain in
-[`FileDescriptor.flags`](kernel/filesystem/file_descriptor.header#L16) and govern later I/O.
+Descriptor paths select devices, and [`parent_pid`](kernel/process/process.header#L57) stores an ID. Neither is
+a PCB or terminal pointer. Cleanup frees owned descriptor paths but only
+decrements shared-entry references, allowing other mappings to survive.
 
-| Flag | Meaning in [`OpenRequest.flags`](common/file.header#L28) |
+## 9.3 Kernel global variables and process-list roots
+[\[↑ TOC\]](#contents)
+
+These globals have static storage in kernel `.data`, except for the handler
+pointer array in `.ivt`. Macros and peripheral registers are not additional
+global allocations:
+
+| Global | Type | Stored value / referenced structure and role |
+| --- | --- | --- |
+| [`process_list_head`](kernel/process/process.picoc#L16) | `struct ProcessControlBlock *` | First PCB, or `NULL`. It is the starting point for process lookup and scheduling |
+| [`process_list_tail`](kernel/process/process.picoc#L17) | `struct ProcessControlBlock *` | Final PCB, or `NULL`. Appending sets the old tail's [`next`](kernel/process/process.header#L53) then updates this pointer |
+| [`active_process`](kernel/process/process.picoc#L18) | `struct ProcessControlBlock *` | Selected/current PCB returned by [`current_process()`](kernel/process/process.picoc#L62). It is also the scheduler's position in the list. Initially `NULL`. Removal may replace it with the preceding PCB, so it does not always designate a [`RUNNING`](kernel/process/process.header#L14) process |
+| [`next_process_id`](kernel/process/process.picoc#L19) | `int` | Next ID assigned by [`create_process()`](kernel/process/process.picoc#L89), initially 1. It is not a process count or PCB pointer |
+| [`kernel_heap`](kernel/kmalloc.picoc#L7) | [`struct Heap`](common/heap.header#L11) | Embedded descriptor whose first-block pointer reaches the kernel heap |
+| [`process_shared_data_heap`](kernel/psdmalloc.picoc#L7) | [`struct Heap`](common/heap.header#L11) | Descriptor for the larger Process and Shared Data Heap allocator. It is not a user's local heap |
+| [`terminal`](kernel/filesystem/terminal.picoc#L12) | `struct Terminal` | Contains the 128-cell ring, three ring indices/count fields, and embedded input wait queue. It is shared by all terminal descriptors |
+| [`shared_memory_list_head`](kernel/shared_memory.picoc#L6) | `struct SharedMemoryEntry *` | First named entry or first unlinked entry that is still used. The registry follows [`SharedMemoryEntry.next`](kernel/shared_memory.header#L14) |
+| [`next_shared_memory_id`](kernel/shared_memory.picoc#L7) | `int` | Next registry ID, initially 1. It is independent of process IDs |
+| [`dma_waiters`](kernel/dma.picoc#L6) | [`struct wait_queue`](common/wait_queue.header#L5) | Standalone queue whose endpoints reference PCBs waiting for UART DMA completion |
+| [`dma_initialized`](kernel/dma.picoc#L7) | `bool` | Initially false. It prevents reinitializing the DMA queue after setup |
+| [`reschedule_requested`](kernel/dispatcher.picoc#L8) | `bool` | Deferred timer-rescheduling flag. It is set by [`dispatcher_request_reschedule()`](kernel/dispatcher.picoc#L10) and cleared on process selection |
+| [`foreground_process_target`](kernel/signal.picoc#L12) | `int` | Signed process ID for terminal control: 0 means no registered owner, positive ID permits terminal signal delivery, negative ID retains input ownership while suppressing that delivery. It is not a PCB pointer |
+| [`interrupt_device_isrs`](kernel/interrupt_controller.picoc#L3) | `int[INTERRUPT_DEVICE_COUNT]` (3 entries) | Timer/DMA/UART service-routine indices `{1, 4, 2}` copied into periphery configuration. They are not function pointers |
+| [`interrupt_device_priorities`](kernel/interrupt_controller.picoc#L9) | `int[INTERRUPT_DEVICE_COUNT]` (3 entries) | Timer/DMA/UART priorities `{1, 1, 2}` used during controller initialization |
+| [`loading_bar_enabled`](config/config.header#L5) | `bool` | Initially true. This kernel-image copy controls the init transfer. The separately linked bootloader and init images each have their own copy, as explained in [`4.3.2.1.2 Loading-bar environment variable`](#43212-loading-bar-environment-variable) |
+| [`interrupt_vector_table`](interrupt_service_routines/os_isrs.picoc#L24) | `void (*[OS_INTERRUPT_VECTOR_COUNT])(void)` (5 entries) | `.ivt` array of syscall, timer, UART, exception and DMA handler addresses. The CPU reads these to enter kernel `.text` |
+
+This example shows three roots into one PCB list. The current pointer can
+select any member. Empty lists have null endpoints, and a one-element list
+has the same head and tail:
+
+```mermaid
+flowchart LR
+    H["process_list_head<br/>kernel .data"] --> A["PCB A<br/>kernel heap"]
+    A -->|next| B["PCB B<br/>kernel heap"]
+    B -->|next| C["PCB C<br/>kernel heap"]
+    C -->|next| N["NULL"]
+    T["process_list_tail<br/>kernel .data"] --> C
+    AP["active_process<br/>kernel .data"] --> B
+```
+
+Initialization clears the roots. Creation appends a PCB. Removal updates
+the affected roots before freeing it. The list has no separate array
+allocation.
+
+## 9.4 Wait requests and queue storage
+[\[↑ TOC\]](#contents)
+
+[`wait_queue`](common/wait_queue.header#L5) stores two PCB pointers. [`WaitPidRequest`](common/syscall.header#L61) supplies a child
+PID and result address. Direct sleeping needs no request structure, and
+neither primitive allocates a waiter node.
+
+The table follows each call to its queue and request storage. A queue must
+outlive every linked waiter, including when it is stack-local:
+
+| Call path | Request and queue storage | Retained references and reason |
+| --- | --- | --- |
+| [`sleep(wq)`](library/unistd/blocking.picoc#L9) → [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390) | Passes the existing queue address directly in `IN1`. The wrapper creates no request struct and no queue. The caller can supply a queue/mutex in a process stack frame, process `.data`, process heap, or shared data | The PCB retains [`waiting_queue_ptr`](kernel/process/process.header#L48). Queue endpoints and [`wait_next`](kernel/process/process.header#L51) link the PCB until wake/removal |
+| [`mutex_lock()`](library/mutex/mutex.picoc#L18) → [`sleep()`](library/unistd/blocking.picoc#L9) | Uses embedded [`mutex.waiters`](library/mutex/mutex.header#L8). The [local-mutex test](test/mutex_lock_unlock/mutex_lock_unlock.picoc#L7) puts the mutex in a user stack frame. The [shared-mutex test](test/shared_memory_mutex/shared.header#L5) embeds it in shared data | The kernel writes PCB pointers into that caller-owned queue. PicoOS has no address isolation |
+| [`waitpid()`](library/sys/wait/wait.picoc#L14) → [`wait_for_process_by_pid()`](kernel/process/process.picoc#L348) → [`sleep_on_wait_queue()`](kernel/process/process.picoc#L390), when blocking | Both [`request`](library/sys/wait/wait.picoc#L16) and [`status`](library/sys/wait/wait.picoc#L15) are in the **parent's user-process stack frame**. The queue is the **child's embedded [`ProcessControlBlock.waiters`](kernel/process/process.header#L46)**, already within its kernel-heap PCB | [`WaitPidRequest.status`](common/syscall.header#L63) is copied into the parent's [`waiting_status_ptr`](kernel/process/process.header#L44). The suspended frame stays alive for the later status write. The kernel does not retain the request pointer or call [`kmalloc`](kernel/kmalloc.picoc#L23) here |
+| [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L134) | Uses embedded [`terminal.input_waiters`](kernel/filesystem/terminal.header#L14) in kernel `.data` | PCB retains caller buffer/count for delivery after an input interrupt |
+| [`start_dma_uart_receive()`](kernel/dma.picoc#L18) | Uses standalone [`dma_waiters`](kernel/dma.picoc#L6) in kernel `.data` | Intrusive PCB links wait for completion. The persistent [`ProcessLoad`](kernel/process/process_loader.picoc#L14) record separately preserves the partial executable state |
+
+[`waitpid()`](library/sys/wait/wait.picoc#L14) uses the existing child PCB's embedded queue. Immediate error,
+stopped-child, and zombie-child cases write the status without queueing.
+[`7.2 Wait queues and PCB links`](#72-wait-queues-and-pcb-links) explains mutation and wakeup.
+
+# 10. Userspace libraries
+[\[↑ TOC\]](#contents)
+
+Libraries give applications reusable process, memory, and I/O operations.
+Some run entirely in the user image. Others prepare syscalls for the kernel.
+This chapter follows one call, then lists the available interfaces.
+
+Syscalls avoid hardcoded kernel addresses, subject to the ABI requirements
+in [`2.4 System-call interface and execution`](#24-system-call-interface-and-execution). Standard library interfaces can make source portable across systems,
+without making compiled executables portable. PicoOS implements only the
+parameters and behavior documented here.
+
+## 10.1 From a library call to the kernel: waitpid
+[\[↑ TOC\]](#contents)
+
+[`waitpid(pid)`](library/sys/wait/wait.picoc#L14) waits for one child and returns its exit or stopped status.
+This walkthrough connects its declaration, linked implementation, request,
+and kernel handler.
+
+### 10.1.1 Header, implementation, and linking
+[\[↑ TOC\]](#contents)
+
+A header declares how to call a function. A linked implementation supplies
+the code. PicoOS uses `.header` and `.picoc` in place of `.h` and `.c`.
+The wait library has these files:
+
+| File | Role |
 | --- | --- |
-| [`O_RDONLY`](common/file.header#L9), [`O_WRONLY`](common/file.header#L10), [`O_RDWR`](common/file.header#L11) | Two-bit access mode checked by later read/write calls |
-| [`O_CREAT`](common/file.header#L13) | Allows a missing path to be created |
-| [`O_TRUNC`](common/file.header#L14) | With writable access, sends `<ESC>write path<ESC>/` during open to create/empty the file |
-| [`O_APPEND`](common/file.header#L15) | Makes each regular-file write request the current file size and use it as its write offset |
+| [`wait.header`](library/sys/wait/wait.header) | Declares `int waitpid(int pid);` and `bool WIFSTOPPED(int status);` for callers |
+| [`wait.picoc`](library/sys/wait/wait.picoc) | Defines both functions and the assembly helper [`invoke_waitpid_syscall()`](library/sys/wait/wait.picoc#L4) |
+| [`libwait.picoc`](library/sys/wait/libwait.picoc) | The compilation unit, containing `#include "wait.picoc"` |
+| [`common/syscall.header`](common/syscall.header) | Defines [`SYSCALL_WAITPID`](common/syscall.header#L13) and the shared [`WaitPidRequest`](common/syscall.header#L61) structure used by the library and kernel |
 
-[`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39) normalizes a path against the
-current PCB’s working directory, selects the lowest free descriptor, allocates an absolute path
-copy, and fills that entry. [`O_TRUNC`](common/file.header#L14) with a writable mode asks the host
-to create/truncate immediately. Without [`O_TRUNC`](common/file.header#L14), a missing file is
-created only with [`O_CREAT`](common/file.header#L13). The `/device/terminal.dev` and
-`/device/null.dev` paths bypass these host-file operations and open their kernel devices directly.
-
-[`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) validates the entry and read
-mode. A descriptor whose path is `/device/terminal.dev` reads from the kernel terminal and may
-block. A read from `/device/null.dev` returns EOF. Any other file path sends independent ranged host
-requests of at most 1 KiB at [`descriptor->offset`](kernel/filesystem/file_descriptor.header#L17),
-copies returned bytes, and advances the offset. The userspace [`read()`](library/unistd/io.picoc#L6)
-wrapper repeats syscall 24 until the requested count, EOF, or an error. If an error follows
-successful chunks, it returns the count already transferred; it returns `-1` only when nothing was
-read. It does not need to yield between chunks because deferred timer requests are consumed when
-each syscall returns.
-
-[`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213) validates write mode. Stdout
-sends bytes directly. Stderr temporarily selects host stderr. A regular file sends
-`write-at <offset> <path>`, sends the requested bytes, restores stdout, and advances its offset.
-[`write_uart_bytes()`](kernel/filesystem/filesystem.picoc#L195) checks its buffer for `<ESC>` before
-transmission. If it finds one, it sends `literal-output <count>`, so the emulator treats exactly that
-many following bytes as data. The binary byte therefore cannot be mistaken for the start of a
-host-control frame, while ordinary text output needs no extra frame. Checking in-memory bytes is
-cheaper than transmitting that extra frame and waiting for the UART after each of its bytes,
-especially for small terminal writes.
-Without [`O_APPEND`](common/file.header#L15), the descriptor offset selects where bytes overwrite
-the file, so seeking affects both reads and writes. With [`O_APPEND`](common/file.header#L15), the
-kernel requests the current file size immediately before every write and uses that as the offset,
-regardless of an earlier seek. An explicitly opened `/device/terminal.dev` writes directly to
-terminal stdout. Writes to `/device/null.dev` report success without sending their bytes anywhere.
-Seeking is rejected for both devices.
-
-The `file-size` and `write-at` requests are separate, so concurrent modification of one host file by
-multiple PicoOS processes or host programs is unsupported: another writer could change the size
-between the two requests. The kernel function table below distinguishes descriptor validation,
-offset changes, and terminal blocking. Host creation and writing send commands without an
-acknowledgment, so their return values cannot report every host-side failure.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`open_file_descriptor()`](kernel/filesystem/filesystem.picoc#L39) | Descriptor, or `-1` for invalid path/mode, no free entry, or a missing file without create/truncate | Allocates a path and changes a free entry to a file or device | [`current_process()`](kernel/process/process.picoc#L61), [`free_file_descriptor()`](kernel/filesystem/filesystem.picoc#L27), [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`copy_file_path()`](kernel/filesystem/file_descriptor.picoc#L6), [`is_device_path()`](kernel/filesystem/device.picoc#L20), [`kfree()`](kernel/kmalloc.picoc#L38), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`file_exists()`](kernel/filesystem/filesystem.picoc#L18) |
-| [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) | Count, `0` at EOF, or `-1` for an invalid request, unreadable descriptor, or failed host range request | Advances regular-file offset, or changes terminal queue/activation state | [`current_process()`](kernel/process/process.picoc#L61), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126), [`file_descriptor_can_read()`](kernel/filesystem/file_descriptor.picoc#L131), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16), [`begin_terminal_read()`](kernel/filesystem/terminal.picoc#L135), [`kernel_terminal()`](kernel/filesystem/terminal.picoc#L22), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) |
-| [`write_file_descriptor()`](kernel/filesystem/filesystem.picoc#L213) | Count, or `-1` for an invalid/unwritable descriptor or failed append-size request | Routes UART output and advances regular-file offset | [`current_process()`](kernel/process/process.picoc#L61), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126), [`file_descriptor_can_write()`](kernel/filesystem/file_descriptor.picoc#L137), [`is_null_device_path()`](kernel/filesystem/device.picoc#L12), [`is_terminal_device_path()`](kernel/filesystem/device.picoc#L16), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13), [`uart_send_file_write_command()`](common/uart_protocol.picoc#L102), [`write_uart_bytes()`](kernel/filesystem/filesystem.picoc#L195), [`uart_send_literal_output_command()`](common/uart_protocol.picoc#L112) |
-| [`seek_file_descriptor()`](kernel/filesystem/filesystem.picoc#L260) | New offset, or `-1` for invalid descriptor/origin/device/negative result | Replaces a regular-file descriptor offset | [`current_process()`](kernel/process/process.picoc#L61), [`file_descriptor_is_valid()`](kernel/filesystem/file_descriptor.picoc#L126), [`is_device_path()`](kernel/filesystem/device.picoc#L20), [`receive_file_size()`](kernel/filesystem/filesystem.picoc#L13) |
-
-The sequence diagram follows one regular-file [`read()`](library/unistd/io.picoc#L6) through
-[`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) and
-[`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90). Each syscall returns one chunk; the
-wrapper owns [`IoRequest.transferred`](common/file.header#L36) and decides when to return the
-combined count to its caller.
-
-```mermaid
-sequenceDiagram
-    participant C as Application caller
-    participant A as Userspace read wrapper
-    participant K as Kernel descriptor code
-    participant U as Kernel UART helpers
-    participant E as RETI-Emulator
-    participant H as Host filesystem
-
-    C->>A: read(fd, buffer, count)
-    loop Until count, EOF, or error
-        A->>K: read chunk, syscall 24 with IoRequest
-        K->>K: Validate descriptor and remaining count
-        K->>U: Request at most 1 KiB at descriptor.offset
-        U->>E: ESC read-range offset chunk-count absolute-path ESC /
-        E->>H: Open, seek, and read the bounded range
-        H-->>E: Returned data
-        E-->>U: Big-endian returned count and bytes
-        U->>K: Copy at buffer + transferred
-        K->>K: Advance descriptor offset, update completion/progress fields
-        K-->>A: Chunk count and completion flag
-        A->>A: Add chunk count to transferred
-    end
-    A-->>C: Combined count, or -1 if the first chunk failed
-```
-
-## 9.6 Working directories and host operations
-
-The emulator's startup directory is PicoOS `/`. The launchers start it inside
-[`binary/`](binary/) or the extracted release directory, so `/kernel`, `/boot`, `/system`,
-`/user`, `/config`, and `/device` refer to directories there. Host `/tmp` is not mounted, and
-root listings have no artificial `tmp` entry. A PicoOS path `/tmp` refers only to an ordinary
-`tmp` directory inside the runtime, if one has been created.
-
-All UART filesystem commands use this boundary, including binary loading, reads, writes, directory
-listing, and moves. `..` stops at `/`. The emulator does not follow symlinks or Windows junctions
-and does not open hard-linked or special host files. The guest root cannot be removed or renamed
-through its PicoOS paths. Explicit emulator command-line inputs, such as boot assembly and debug metadata,
-still use host paths.
-
-Every PCB owns a kernel-heap absolute PicoOS working-directory string. PID 1 starts at `/`.
-A child receives its own copy of the parent’s current string. Changing directory validates a normalized path with the host
-before freeing the old copy and installing the new one. It never changes the emulator process’s
-actual working directory.
-
-Path normalization starts at `/`, prepends the current PCB directory for a relative path when a
-process is running, removes repeated separators and `.`, resolves `..` without moving above root,
-and enforces [`PATH_MAX`](common/file.header#L21). The table below shows which functions only copy
-kernel state and which request host validation or file operations.
-
-| Kernel function | Return value / status | Effects | Calls |
-| --- | --- | --- | --- |
-| [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92) | `true` on a nonempty normalized path that fits; otherwise `false` | Writes an absolute PicoOS path; relative input starts from the current PCB directory, or from `/` before the first process exists | [`append_path_segments()`](kernel/filesystem/host_filesystem.picoc#L37), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`system_relative_path()`](kernel/filesystem/host_filesystem.picoc#L121) | Pointer to the input path or the text after its leading `/` | Removes the leading `/` for program names and loading labels | — |
-| [`set_process_working_directory()`](kernel/filesystem/host_filesystem.picoc#L128) | Returns no value | Allocates a new kernel copy, frees old string, and replaces PCB pointer | [`copy_process_path()`](kernel/process/process.picoc#L69), [`kfree()`](kernel/kmalloc.picoc#L38) |
-| [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156) | `0` on success; `-1` when the stored directory is missing or the destination capacity is too small | Copies the PCB directory into the caller buffer | [`copy_working_directory()`](kernel/filesystem/host_filesystem.picoc#L135), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163) | `0` on success; `-1` for an invalid path or host failure | Validates host directory and replaces current PCB string | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7), [`set_process_working_directory()`](kernel/filesystem/host_filesystem.picoc#L128), [`current_process()`](kernel/process/process.picoc#L61) |
-| [`make_host_directory()`](kernel/filesystem/host_filesystem.picoc#L177) | `0` on success; `-1` on invalid path or host failure | Normalizes and sends `mkdir`; no kernel table mutation | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7) |
-| [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187) | Listing count, or `-1` for invalid request/host failure | Writes host listing into caller buffer | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`uart_receive_string()`](kernel/filesystem/host_filesystem.picoc#L10) |
-| [`unlink_host_file()`](kernel/filesystem/host_filesystem.picoc#L208), [`remove_host_directory()`](kernel/filesystem/host_filesystem.picoc#L212) | `0` on success; `-1` on invalid path or host failure | Send bounded host unlink/rmdir requests | [`request_host_path_operation()`](kernel/filesystem/host_filesystem.picoc#L198) |
-| [`move_host_path()`](kernel/filesystem/host_filesystem.picoc#L216) | `0` on success; `-1` on invalid path or host failure | Normalizes both paths and sends a two-path move request to the emulator | [`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92), [`uart_print_character()`](common/uart_protocol.picoc#L21), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`receive_word()`](common/uart_protocol.picoc#L7) |
-| [`touch_host_file()`](kernel/filesystem/host_filesystem.picoc#L234) | `0` on success; `-1` on invalid path or host failure | Sends a touch request to create a host file or update its timestamps | [`request_host_path_operation()`](kernel/filesystem/host_filesystem.picoc#L198) |
-
-The sequence contrasts [`chdir()`](library/unistd/working_directory.picoc#L4), which calls
-[`change_working_directory()`](kernel/filesystem/host_filesystem.picoc#L163) and validates with the
-host, with [`getcwd()`](library/unistd/working_directory.picoc#L11), which only copies stored state
-through [`get_working_directory()`](kernel/filesystem/host_filesystem.picoc#L156). The kernel
-returns a status integer; the [`getcwd()`](library/unistd/working_directory.picoc#L11) wrapper
-converts success to the caller’s buffer pointer.
-
-```mermaid
-sequenceDiagram
-    participant P as Process/library wrapper
-    participant K as Kernel path code
-    participant PCB as Current PCB
-    participant E as RETI-Emulator host service
-
-    P->>K: chdir(path), syscall 30
-    K->>PCB: Read current working_directory for relative normalization
-    K->>E: ESC is-directory absolute-path ESC /
-    E-->>K: 0 or failure
-    alt directory exists
-        K->>PCB: kmalloc new path, kfree old path, replace pointer
-        K-->>P: 0
-    else invalid directory
-        K-->>P: -1 without changing PCB
-    end
-    P->>K: getcwd(buffer, size), syscall 31
-    K->>PCB: Copy stored working_directory without a host request
-    K-->>P: 0, getcwd wrapper returns buffer
-```
-
-# 10. Libraries and the userspace/kernel ABI
-
-Public interfaces live under [`library`](library/); structures and constants shared with the kernel
-live under [`common`](common/); kernel-private structures remain under [`kernel`](kernel/). PicoC
-uses `.header` as its header extension. Familiar C/POSIX names describe the role of an interface,
-but do not imply complete compatibility. PicoOS implements **38 syscalls** in
-[`handle_syscall()`](kernel/syscall.picoc#L16) and **14 distinct libraries**, including the startup
-library. The [syscall table](#43-system-call-path) lists the continuous 0–37 selector range and its
-kernel functions; sections below explain the userspace requests and wrappers. The standalone test
-ISR uses selector 38 for its UART receive helper, outside the PicoOS kernel ABI.
-
-## 10.1 System-call request structures
-
-A system call has room for one integer argument in `IN1`. Wrappers that need several values
-therefore create a request structure in their current userspace stack frame, put its absolute
-address in `IN1`, put the selector in `ACC`, and execute `INT 0`. The structures are declared in
-[`common/syscall.header`](common/syscall.header) and [`common/file.header`](common/file.header). The
-declarations below show all request shapes; the following field tables describe initialization and
-use:
+The shell includes the header and waits for its foreground child:
 
 ```c
-struct LoadProcessRequest { char *path; bool show_loading_bar; };
-struct RunProcessRequest { int pid; char *arguments; char **environment; };
-struct WaitPidRequest { int pid; int *status; };
-struct KillRequest { int pid; int signal_number; };
-struct PrctlRequest { int option; int argument; };
-struct ShmOpenRequest { char *name; size_t size; };
-struct GetCwdRequest { char *buffer; int size; };
-struct ReadDirectoryRequest { char *path; char *buffer; int capacity; };
-struct MoveRequest { char *old_path; char *new_path; };
+#include "../library/sys/wait/wait.header"
 
-struct OpenRequest { char *path; int flags; };
-struct IoRequest {
-    int file_descriptor;
-    char *buffer;
-    int count;
-    bool show_loading_bar;
-    int transferred;
-    int loading_bar_update;
-    bool complete;
-};
-struct SeekRequest {
-    int file_descriptor;
-    int offset;
-    int origin;
-};
-struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
+last_command_exit_status = waitpid(pid);
 ```
 
-These request objects are not allocated with [`malloc()`](library/stdlib/malloc.picoc#L35),
-[`kmalloc()`](kernel/kmalloc.picoc#L23), or [`pmalloc()`](kernel/pmalloc.picoc#L20): they are
-ordinary locals in the caller's process stack. The kernel reads them synchronously through the
-absolute pointer. [`load()`](library/unistd/process.picoc#L17) and regular-file
-[`read()`](library/unistd/io.picoc#L6) keep their local request alive while their wrappers make
-repeated syscalls, but the kernel does not retain its pointer between calls. The important exception
-is the value of [`WaitPidRequest.status`](common/syscall.header#L64): when waiting blocks, the
-kernel copies that separate pointer into
-[`Process.waiting_status_ptr`](kernel/process/process.header#L44); the pointed-to status cell
-remains safe because the caller’s stack is suspended. A blocked or stopped terminal read similarly
-retains the destination buffer and count in the PCB, as shown in
-[section 9.3](#93-virtual-device-paths).
+Including the header does not supply the implementation. Compile
+[`libwait.picoc`](library/sys/wait/libwait.picoc) with `-c` to obtain `.reti_blocks` and `.st`, then link them
+into the application. The ordinary function call stays in that user image.
+Its syscall later crosses into the separately built kernel.
 
-### 10.1.1 Process, wait, signal, and memory requests
+Other libraries use umbrella sources and `// dependencies:` comments
+in the same way. [`1.1.2 Separate compilation, reusable artifacts, and linking`](#112-separate-compilation-reusable-artifacts-and-linking) shows linking commands, and [`1.1.5 Selecting a startup function with -C / --startup-source`](#115-selecting-a-startup-function-with--c----startup-source) explains `-C`
+startup selection.
 
-The table identifies each request field’s purpose. [`load()`](library/unistd/process.picoc#L17),
-[`run()`](library/unistd/process.picoc#L31), [`waitpid()`](library/sys/wait/wait.picoc#L14),
-[`kill()`](library/signal/signal.picoc#L14), [`prctl()`](library/sys/prctl/prctl.picoc#L14), and
-[`shm_open()`](library/sys/mman/mman.picoc#L15) first initialize every field of their respective
-local request before invoking the kernel. Kernel startup also constructs a
-[`RunProcessRequest`](common/syscall.header#L56) in [`main()`](kernel/kernel.picoc#L31) for init.
+### 10.1.2 Packing arguments and executing the syscall
+[\[↑ TOC\]](#contents)
 
-| Field | Meaning | Used by |
+The wrapper passes a child PID and a result destination using the shared
+request type:
+
+```c
+struct WaitPidRequest {
+    int pid;
+    int *status;
+};
+```
+
+[`request.pid`](common/syscall.header#L62) receives the argument, and [`request.status`](common/syscall.header#L63) points to a local
+integer. [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) gives the public wrapper. This helper passes its address
+into the kernel:
+
+```c
+int invoke_waitpid_syscall(int number, int argument) {
+    int result;
+
+    asm("LOADIN BAF ACC 3");
+    asm("LOADIN BAF IN1 4");
+    asm("INT 0");
+    asm("STOREIN BAF IN2 0");
+    return result;
+}
+```
+
+The first two loads put the selector in `ACC` and request address in `IN1`.
+`INT 0` enters the kernel. After return, `STOREIN` saves `IN2` in the helper's
+local result. The offsets follow [`1.1.3 System V ABI stack frames and call cleanup`](#113-system-v-abi-stack-frames-and-call-cleanup).
+
+The helper result says whether the wait completed. The child status is
+returned through [`WaitPidRequest.status`](common/syscall.header#L63). The wrapper retries on zero and
+then returns that status. Unlike POSIX [`waitpid`](https://pubs.opengroup.org/onlinepubs/9799919799/functions/wait.html), its public API has one
+argument and no options or output parameter.
+
+### 10.1.3 Interrupt entry, waiting, and return
+[\[↑ TOC\]](#contents)
+
+[`syscall_interrupt()`](interrupt_service_routines/os_isrs.picoc#L105) saves registers and installs the kernel context.
+[`handle_syscall()`](kernel/syscall.picoc#L16) then selects the wait branch:
+
+```c
+} else if (syscall_number == SYSCALL_WAITPID) {
+        return wait_for_process_by_pid(
+            (struct WaitPidRequest *)argument,
+            caller_context
+        );
+    }
+```
+
+The kernel validates the parent relationship. It returns an error, collects
+a zombie, reports a stopped child, or saves the result pointer and sleeps
+on the child's queue.
+
+Immediate completion follows direct syscall return. A blocked parent
+resumes through the dispatcher after wakeup. Both finish with `RTI` after
+`INT 0`. [`2.4.2 System-call entry, execution, and return to userspace`](#242-system-call-entry-execution-and-return-to-userspace) explains entry and return, and [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid) explains the wait.
+
+The suspended stack keeps request and result alive. Only the result pointer
+is retained in the PCB. [`2.4.1 Syscall selectors and register convention`](#241-syscall-selectors-and-register-convention) describes request lifetimes.
+
+## 10.2 Library overview and dependencies
+[\[↑ TOC\]](#contents)
+
+PicoOS provides **15 libraries** under [`library/`](library/). The table identifies their
+sources and link dependencies. [`common/`](common/) supplies shared code and
+declarations. A dependency adds code to the user image:
+
+| Library | Main facilities | Library or common code used |
 | --- | --- | --- |
-| [`LoadProcessRequest.path`](common/syscall.header#L52) | Path of the `.bin` image | First initialized by [`load()`](library/unistd/process.picoc#L17); [`load()`](library/unistd/process.picoc#L17) / syscall 2; the loader normalizes it and the PCB receives its own [`kmalloc()`](kernel/kmalloc.picoc#L23) path copy |
-| [`LoadProcessRequest.show_loading_bar`](common/syscall.header#L53) | Whether UART transfer progress should be printed | First initialized by [`load()`](library/unistd/process.picoc#L17); read only during loading; derived from `PICOOS_LOADING_BAR` |
-| [`RunProcessRequest.pid`](common/syscall.header#L57) | PID of an existing `NEW` PCB | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init); [`run()`](library/unistd/process.picoc#L31) / syscall 3; identifies the PCB changed to `READY` |
-| [`RunProcessRequest.arguments`](common/syscall.header#L58) | Space/tab-separated argument string, or `NULL` | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init); copied into the child's initial process stack; the pointer itself is not retained |
-| [`RunProcessRequest.environment`](common/syscall.header#L59) | Null-terminated array of `NAME=value` pointers | First initialized by [`run()`](library/unistd/process.picoc#L31) (or kernel [`main()`](kernel/kernel.picoc#L31) for init); strings and pointer table are copied into the child's initial stack |
-| [`WaitPidRequest.pid`](common/syscall.header#L63) | Exact child PID | First initialized by [`waitpid()`](library/sys/wait/wait.picoc#L14); [`waitpid()`](library/sys/wait/wait.picoc#L14) / syscall 7; used to find and validate the child |
-| [`WaitPidRequest.status`](common/syscall.header#L64) | Address of caller's status cell | First initialized by [`waitpid()`](library/sys/wait/wait.picoc#L14); immediate status destination or copied into the waiting parent's [`waiting_status_ptr`](kernel/process/process.header#L44) while blocked |
-| [`KillRequest.pid`](common/syscall.header#L68) | Target process | First initialized by [`kill()`](library/signal/signal.picoc#L14); [`kill()`](library/signal/signal.picoc#L14) / syscall 11; lookup only, not retained |
-| [`KillRequest.signal_number`](common/syscall.header#L69) | Signal to deliver; 0 probes existence | First initialized by [`kill()`](library/signal/signal.picoc#L14); may change target state or defer termination, but the request is not retained |
-| [`PrctlRequest.option`](common/syscall.header#L74) | Currently only [`PR_SET_PDEATHSIG`](common/prctl.header#L3) | First initialized by [`prctl()`](library/sys/prctl/prctl.picoc#L14); [`prctl()`](library/sys/prctl/prctl.picoc#L14) / syscall 12; selects the supported operation |
-| [`PrctlRequest.argument`](common/syscall.header#L76) | Signal number, or 0 to disable | First initialized by [`prctl()`](library/sys/prctl/prctl.picoc#L14); copied into current PCB [`parent_death_signal`](kernel/process/process.header#L59) |
-| [`ShmOpenRequest.name`](common/syscall.header#L80) | Name used in the global registry | First initialized by [`shm_open()`](library/sys/mman/mman.picoc#L15); [`shm_open()`](library/sys/mman/mman.picoc#L15) / syscall 19; a new entry receives a [`kmalloc()`](kernel/kmalloc.picoc#L23) copy |
-| [`ShmOpenRequest.size`](common/syscall.header#L81) | Requested shared region size in RETI cells | First initialized by [`shm_open()`](library/sys/mman/mman.picoc#L15); used only when creating a name; an existing entry is not resized |
+| [`unistd`](library/unistd/) | Processes, descriptors, paths, and wait queues | [`stdlib`](library/stdlib/) for environment access |
+| [`fcntl`](library/fcntl/) | Opening and creating files | [`unistd`](library/unistd/) syscall helper |
+| [`sys/wait`](library/sys/wait/) | Child waiting and stopped-status inspection | Own syscall helper |
+| [`mutex`](library/mutex/) | Atomic lock with a wait queue | [`unistd`](library/unistd/) queue functions |
+| [`sys/mman`](library/sys/mman/) | Named shared memory | Own syscall helper |
+| [`dirent`](library/dirent/) | Directory streams | [`unistd`](library/unistd/) and [`stdlib`](library/stdlib/) |
+| [`stdlib`](library/stdlib/) | Process heap, environment, conversion, and exit | [`common/heap.picoc`](common/heap.picoc) included in its compilation unit |
+| [`string`](library/string/) | String copying, comparison, and length | [`common/string.picoc`](common/string.picoc) included in its compilation unit |
+| [`stdio`](library/stdio/) | Streams, formatting, and scanning | [`common/decimal.picoc`](common/decimal.picoc) included in its compilation unit and its own syscall helper |
+| [`start`](library/start/) | Program entry and runtime initialization | [`stdlib`](library/stdlib/) |
+| [`schedule`](library/schedule/) | Voluntary scheduling | Direct inline syscall |
+| [`signal`](library/signal/) | Sending signals | Own syscall helper |
+| [`sys/prctl`](library/sys/prctl/) | Parent-death signal setup | Own syscall helper |
+| [`sys/reboot`](library/sys/reboot/) | Restart and power-off | [`unistd`](library/unistd/) syscall helper |
+| [`sys/stat`](library/sys/stat/) | Directory creation | [`unistd`](library/unistd/) syscall helper |
 
-### 10.1.2 File and directory requests
+The function tables list syscalls and conditional UART host requests.
+`file-size <path>`, for example, abbreviates the complete
+`<ESC>file-size <path><ESC>/` frame. These are host protocol operations,
+defined in [`1.2.3 UART host-service protocol`](#123-uart-host-service-protocol).
 
-The table traces file and directory arguments from userspace into the kernel.
-[`open()`](library/fcntl/fcntl.picoc#L5) and [`fopen()`](library/stdio/stdio.picoc#L125) initialize
-[`OpenRequest`](common/file.header#L26); [`read()`](library/unistd/io.picoc#L6) and
-[`write()`](library/unistd/io.picoc#L31) initialize the [`IoRequest`](common/file.header#L31) fields
-each operation uses. [`lseek()`](library/unistd/io.picoc#L53),
-[`dup2()`](library/unistd/io.picoc#L45), [`getcwd()`](library/unistd/working_directory.picoc#L11),
-[`opendir()`](library/dirent/dirent.picoc#L8), and [`move()`](library/unistd/file_removal.picoc#L12)
-initialize their corresponding request structures before the call.
+Output routing depends on the descriptor and flags. Terminal stdout and
+null output need no destination request. Redirected output can write files
+even when the function opens none itself. [`8.8 Opening, reading, writing, and seeking`](#88-opening-reading-writing-and-seeking) explains this routing.
 
-| Field | Meaning | Used by |
+### 10.2.1 unistd: processes, descriptors, paths, and wait queues
+[\[↑ TOC\]](#contents)
+
+[`unistd`](library/unistd/) provides process, descriptor, path, and wait-queue operations.
+The following tables follow its implementation files.
+
+#### 10.2.1.1 Process operations in `process.picoc`
+[\[↑ TOC\]](#contents)
+
+[`process.picoc`](library/unistd/process.picoc) contains the syscall bridge and operations for loading,
+starting, terminating, and querying processes:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`OpenRequest.path`](common/file.header#L27) | Relative or absolute PicoOS path to a host-backed file or kernel device | First initialized by [`open()`](library/fcntl/fcntl.picoc#L5) or [`fopen()`](library/stdio/stdio.picoc#L125); [`open()`](library/fcntl/fcntl.picoc#L5)/[`fopen()`](library/stdio/stdio.picoc#L125) and syscall 23; normalized and copied into the selected descriptor |
-| [`OpenRequest.flags`](common/file.header#L28) | Access mode plus [`O_CREAT`](common/file.header#L13), [`O_TRUNC`](common/file.header#L14), or [`O_APPEND`](common/file.header#L15) | First initialized by [`open()`](library/fcntl/fcntl.picoc#L5) or [`fopen()`](library/stdio/stdio.picoc#L125); copied into the descriptor; create/truncate decide open requests and append changes later write positioning |
-| [`IoRequest.file_descriptor`](common/file.header#L32) | Entry number in the current PCB’s eight-entry table | First initialized by [`read()`](library/unistd/io.picoc#L6)/[`write()`](library/unistd/io.picoc#L31) or stdio I/O wrappers; [`read()`](library/unistd/io.picoc#L6)/[`write()`](library/unistd/io.picoc#L31) and syscalls 24/25 |
-| [`IoRequest.buffer`](common/file.header#L33) | Userspace destination for read or source for write | First initialized by [`read()`](library/unistd/io.picoc#L6)/[`write()`](library/unistd/io.picoc#L31) or stdio I/O wrappers; used directly during the call; for a blocked terminal read the caller's PCB temporarily retains the destination pointer |
-| [`IoRequest.count`](common/file.header#L34) | Maximum cells to read or exact cells to write | First initialized by [`read()`](library/unistd/io.picoc#L6)/[`write()`](library/unistd/io.picoc#L31) or stdio I/O wrappers; validated before transfer; retained in terminal pending state only while stdin is blocked |
-| [`IoRequest.show_loading_bar`](common/file.header#L35) | Whether a host-file read shows progress | First initialized by [`read()`](library/unistd/io.picoc#L6)/[`write()`](library/unistd/io.picoc#L31) or stdio I/O wrappers; [`read()`](library/unistd/io.picoc#L6) derives this from the environment; writes set it false |
-| [`IoRequest.transferred`](common/file.header#L36) | Bytes already copied by earlier chunks of the same [`read()`](library/unistd/io.picoc#L6) | First initialized to 0 by [`read()`](library/unistd/io.picoc#L6) (or stdio input); updated by [`read()`](library/unistd/io.picoc#L6) and read by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) as the next buffer position |
-| [`IoRequest.loading_bar_update`](common/file.header#L37) | Next total byte count that redraws read progress | First initialized by [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) after the first successful range response; retained and updated for subsequent chunks |
-| [`IoRequest.complete`](common/file.header#L38) | Whether [`read()`](library/unistd/io.picoc#L6) should return instead of invoking another chunk | First initialized to false by [`read()`](library/unistd/io.picoc#L6); set by [`read_file_descriptor()`](kernel/filesystem/filesystem.picoc#L150) or [`read_regular_file()`](kernel/filesystem/filesystem.picoc#L90) on completion/error |
-| [`SeekRequest.file_descriptor`](common/file.header#L42) | Regular-file descriptor to reposition | First initialized by [`lseek()`](library/unistd/io.picoc#L53); [`lseek()`](library/unistd/io.picoc#L53) / syscall 27 |
-| [`SeekRequest.offset`](common/file.header#L43) | Signed displacement | First initialized by [`lseek()`](library/unistd/io.picoc#L53); combined with [`SEEK_SET`](common/file.header#L17), current descriptor offset, or host file size |
-| [`SeekRequest.origin`](common/file.header#L44) | [`SEEK_SET`](common/file.header#L17), [`SEEK_CUR`](common/file.header#L18), or [`SEEK_END`](common/file.header#L19) | First initialized by [`lseek()`](library/unistd/io.picoc#L53); selects the base for the new descriptor offset |
-| [`Dup2Request.old_file_descriptor`](common/file.header#L48) | Descriptor to copy | First initialized by [`dup2()`](library/unistd/io.picoc#L45); [`dup2()`](library/unistd/io.picoc#L45) / syscall 28; source entry remains unchanged |
-| [`Dup2Request.new_file_descriptor`](common/file.header#L49) | Entry to replace | First initialized by [`dup2()`](library/unistd/io.picoc#L45); the target receives an independent copy of the source fields/path |
-| [`GetCwdRequest.buffer`](common/syscall.header#L85) | Userspace destination | First initialized by [`getcwd()`](library/unistd/working_directory.picoc#L11); [`getcwd()`](library/unistd/working_directory.picoc#L11) / syscall 31; receives the selected directory copy |
-| [`GetCwdRequest.size`](common/syscall.header#L86) | Destination capacity | First initialized by [`getcwd()`](library/unistd/working_directory.picoc#L11); prevents copying a path that does not fit |
-| [`ReadDirectoryRequest.path`](common/syscall.header#L90) | Directory to list | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8); [`opendir()`](library/dirent/dirent.picoc#L8) / syscall 33; normalized for the host request |
-| [`ReadDirectoryRequest.buffer`](common/syscall.header#L91) | Userspace listing buffer | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8); receives `d name\n` / `- name\n` records from the host |
-| [`ReadDirectoryRequest.capacity`](common/syscall.header#L92) | Maximum returned cells | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8); bounds the UART response and copy |
-| [`MoveRequest.old_path`](common/syscall.header#L96) | Existing file or directory | First initialized by [`move()`](library/unistd/file_removal.picoc#L12); normalized and sent as the first `move` host request path |
-| [`MoveRequest.new_path`](common/syscall.header#L97) | New file or directory path | First initialized by [`move()`](library/unistd/file_removal.picoc#L12); normalized and sent as the second `move` host request path |
+| [`invoke_syscall(number, argument)`](library/unistd/process.picoc#L7) | Result returned by the selected syscall in `IN2`. Internal bridge used by [`unistd`](library/unistd/) and libraries that depend on it | Forwards the supplied selector and argument. The wrapper rows in this section identify each concrete syscall and host request |
+| [`load(path)`](library/unistd/process.picoc#L17) | PID, or 0 on failure. Repeats bounded transfers and creates a process whose [`ProcessControlBlock.state`](kernel/process/process.header#L33) is [`PROCESS_STATE_NEW`](kernel/process/process.header#L12) | [`SYSCALL_LOAD_PROCESS`](common/syscall.header#L8) with [`LoadProcessRequest`](common/syscall.header#L50)<br>**Host Requests:** `file-size <path>`, then one or more `read-range <offset> <count> <path>` requests |
+| [`run(pid, arguments, environment)`](library/unistd/process.picoc#L31) | Whether the process was initialized and its [`ProcessControlBlock.state`](kernel/process/process.header#L33) was changed from [`PROCESS_STATE_NEW`](kernel/process/process.header#L12) to [`PROCESS_STATE_READY`](kernel/process/process.header#L13). A `NULL` environment selects the current [`environ`](library/stdlib/env.picoc#L4) | [`SYSCALL_RUN_PROCESS_WITH_ARGUMENTS`](common/syscall.header#L9) with [`RunProcessRequest`](common/syscall.header#L55) |
+| [`unload(pid)`](library/unistd/process.picoc#L47) | Whether a non-current target was terminated and removed | [`SYSCALL_UNLOAD_PROCESS`](common/syscall.header#L11) with the PID directly |
+| [`list_processes(void)`](library/unistd/process.picoc#L51) | Prints every known PID and binary path | [`SYSCALL_LIST_PROCESSES`](common/syscall.header#L10) with no request structure<br>**Host Requests through descriptor 1:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>No `literal-output` request |
+| [`getpid(void)`](library/unistd/process.picoc#L55) | PID stored in the current [`ProcessControlBlock`](kernel/process/process.header#L31) | [`SYSCALL_GETPID`](common/syscall.header#L14) with no request structure |
+| [`set_foreground_process(pid)`](library/unistd/process.picoc#L59) | 0 or `-1`. A direct child PID stores that positive value in [`foreground_process_target`](kernel/signal.picoc#L12) for input and terminal-generated signals. PID 0 stores the caller's negative PID for input without those signals | [`SYSCALL_SET_FOREGROUND_PROCESS`](common/syscall.header#L15) with the PID directly |
 
-Single-argument calls do not need a request: PID selectors, descriptor close,
-[`mmap(id)`](library/sys/mman/mman.picoc#L23),
-[`shm_unlink(name)`](library/sys/mman/mman.picoc#L27), path-only operations, wait-queue pointers,
-and foreground-process selection pass the value or pointer directly in `IN1`.
+[`invoke_syscall(number, argument)`](library/unistd/process.picoc#L7) passes the selected operation in `ACC`
+and its argument in `IN1`. Its effects depend on that selector, just like
+the wait helper in [`10.1.2 Packing arguments and executing the syscall`](#1012-packing-arguments-and-executing-the-syscall).
 
-## 10.2 Implemented libraries
+#### 10.2.1.2 Descriptor operations in `io.picoc`
+[\[↑ TOC\]](#contents)
 
-The directory table groups all **14 libraries** by their facilities; the directory-stream and
-directory-creation row represents two distinct libraries. The repository also contains **12 library
-test classes**, each a top-level PicoC program in [`test`](test/), covering strings, environment,
-allocation, formatting, and scanning. Their standalone execution is described in the
-[test-system chapter](#15-test-system).
+[`io.picoc`](library/unistd/io.picoc) packs descriptor requests and repeats partial regular-file
+reads. The descriptor determines host routing:
 
-| Directory | Main facilities |
-| --- | --- |
-| [`library/unistd`](library/unistd/) | Read/write/close/dup2/lseek, directories, process load/run/unload, PID, sleep/wakeup |
-| [`library/fcntl`](library/fcntl/) | Open/create and descriptor flags |
-| [`library/sys/wait`](library/sys/wait/) | Exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14) and stopped-status test |
-| [`library/schedule`](library/schedule/) | Voluntary [`yield()`](library/schedule/schedule.picoc#L4) |
-| [`library/mutex`](library/mutex/) | Atomic test-and-set mutex with wait queue |
-| [`library/signal`](library/signal/) | Signal delivery through [`kill()`](library/signal/signal.picoc#L14) |
-| [`library/sys/prctl`](library/sys/prctl/) | Parent-death signal |
-| [`library/sys/mman`](library/sys/mman/) | Named shared memory |
-| [`library/dirent`](library/dirent/) and [`library/sys/stat`](library/sys/stat/) | Directory streams and creation |
-| [`library/stdlib`](library/stdlib/) | Userspace heap, environment, conversion, and exit |
-| [`library/string`](library/string/) | Basic memory/string functions |
-| [`library/stdio`](library/stdio/) | Descriptor-backed streams and small format/scan subset |
-| [`library/start`](library/start/) | Heap/environment initialization and application [`main`](library/start/start.picoc#L4) |
-
-Low-level wrappers package request structures and invoke `INT 0`. Pure userspace string,
-environment, formatting, and heap code does not call the kernel until it needs I/O or a process
-service.
-
-### 10.2.1 `unistd`, `fcntl`, waiting, and scheduling
-
-The table maps process, descriptor, and scheduling wrappers to their syscall selectors. Queue
-initialization and status inspection operate directly on userspace data and therefore need no
-syscall.
-
-| Library function | Return value / status and purpose | Syscalls |
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`load()`](library/unistd/process.picoc#L17) | PID, or 0; repeats bounded syscall 2 transfers and creates a `NEW` process | 2, [`LoadProcessRequest`](common/syscall.header#L51) |
-| [`run()`](library/unistd/process.picoc#L31) | Whether a `NEW` process was initialized and made `READY`; `NULL` environment means current [`environ`](library/stdlib/env.picoc#L4) | 3, [`RunProcessRequest`](common/syscall.header#L56) |
-| [`unload()`](library/unistd/process.picoc#L47) | Whether a non-current target was terminated/removed | 5, PID directly |
-| [`list_processes()`](library/unistd/process.picoc#L51) | Prints all known PIDs and binary paths | 4, no request |
-| [`getpid()`](library/unistd/process.picoc#L55) | Current PCB’s PID | 8, no request |
-| [`reset_processes()`](library/unistd/process.picoc#L59) | Test hook that removes non-system processes and resets related state | 9, no request |
-| [`set_foreground_process()`](library/unistd/process.picoc#L63) | 0 or `-1`; gives terminal input/signals to a direct child, or back to the shell for PID 0 | 10, PID directly |
-| [`read()`](library/unistd/io.picoc#L6) | Number read or `-1`; repeats bounded regular-file chunks and may block on stdin | 24, [`IoRequest`](common/file.header#L31) |
-| [`write()`](library/unistd/io.picoc#L31) | Number written or `-1` | 25, [`IoRequest`](common/file.header#L31) |
-| [`close()`](library/unistd/io.picoc#L41) | 0 or `-1`; releases the descriptor entry's path/state | 26, descriptor directly |
-| [`dup2()`](library/unistd/io.picoc#L45) | New descriptor or `-1`; independently copies the entry | 28, [`Dup2Request`](common/file.header#L47) |
-| [`lseek()`](library/unistd/io.picoc#L53) | New logical offset or `-1` | 27, [`SeekRequest`](common/file.header#L41) |
-| [`chdir()`](library/unistd/working_directory.picoc#L4) | 0 or `-1`; replaces current PCB working-directory string | 30, path pointer directly |
-| [`getcwd()`](library/unistd/working_directory.picoc#L11) | Buffer or `NULL` | 31, [`GetCwdRequest`](common/syscall.header#L84) |
-| [`int unlink(char *path)`](library/unistd/file_removal.picoc#L4) | Host status for removing a file | 34, path pointer directly |
-| [`int rmdir(char *path)`](library/unistd/file_removal.picoc#L8) | Host status for removing an empty directory | 35, path pointer directly |
-| [`int move(char *old_path, char *new_path)`](library/unistd/file_removal.picoc#L12) | Host status for moving or renaming a file or directory | 36, [`MoveRequest`](common/syscall.header#L95) |
-| [`int touch(char *path)`](library/unistd/file_removal.picoc#L20) | Host status for creating a file or updating its timestamps | 37, path pointer directly |
-| [`wait_queue_init()`](library/unistd/blocking.picoc#L4) | Initializes embedded [`wait_queue.head`](common/wait_queue.header#L6)/[`wait_queue.tail`](common/wait_queue.header#L7) locally | No syscall |
-| [`sleep()`](library/unistd/blocking.picoc#L9) | Blocks caller on the intrusive queue | 13, queue pointer directly |
-| [`wakeup()`](library/unistd/blocking.picoc#L19) | Wakes at most the FIFO head | 14, queue pointer directly |
-| [`open()`](library/fcntl/fcntl.picoc#L5) | Lowest free descriptor or `-1` | 23, [`OpenRequest`](common/file.header#L26) |
-| [`creat()`](library/fcntl/fcntl.picoc#L13) | Equivalent to write/create/truncate open | Calls [`open()`](library/fcntl/fcntl.picoc#L5) and therefore syscall 23 |
-| [`waitpid()`](library/sys/wait/wait.picoc#L14) | Exact child's exit/stopped status, or `-1` | 7, [`WaitPidRequest`](common/syscall.header#L62); may suspend its stack frame |
-| [`WIFSTOPPED()`](library/sys/wait/wait.picoc#L25) | Whether status represents [`SIGSTOP`](common/signal.header#L7), [`SIGTSTP`](common/signal.header#L8), or [`SIGTTIN`](common/signal.header#L9) | No syscall |
-| [`yield()`](library/schedule/schedule.picoc#L4) | Voluntarily saves the current activation and schedules | 15, no request |
+| [`read(file_descriptor, buffer, count)`](library/unistd/io.picoc#L6) | Number read or `-1`. Repeats bounded regular-file chunks and may wait for terminal input | [`SYSCALL_READ`](common/syscall.header#L32) with [`IoRequest`](common/file.header#L31)<br>**Host Request:** `read-range <offset> <count> <path>` for a regular-file descriptor |
+| [`write(file_descriptor, buffer, count)`](library/unistd/io.picoc#L32) | Number written or `-1`. Protects arbitrary data from UART control parsing | [`SYSCALL_WRITE`](common/syscall.header#L33) with [`IoRequest`](common/file.header#L31)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>`literal-output <count>` before output containing `<ESC>`, except for the null device |
+| [`write_without_uart_escape_check(file_descriptor, buffer, count)`](library/unistd/io.picoc#L43) | Number written or `-1`. Skips the UART `<ESC>` scan and therefore requires a buffer known not to contain `<ESC>` | [`SYSCALL_WRITE`](common/syscall.header#L33) with [`IoRequest`](common/file.header#L31)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>No `literal-output` request |
+| [`close(file_descriptor)`](library/unistd/io.picoc#L54) | 0 or `-1`. Releases the descriptor entry's path and state | [`SYSCALL_CLOSE`](common/syscall.header#L34) with the descriptor directly |
+| [`dup2(old_file_descriptor, new_file_descriptor)`](library/unistd/io.picoc#L58) | New descriptor or `-1`. Copies the entry independently. Later inheritance depends on the target slot and copied descriptor kind | [`SYSCALL_DUP2`](common/syscall.header#L36) with [`Dup2Request`](common/file.header#L48) |
+| [`lseek(file_descriptor, offset, origin)`](library/unistd/io.picoc#L66) | New logical offset or `-1` | [`SYSCALL_LSEEK`](common/syscall.header#L35) with [`SeekRequest`](common/file.header#L42)<br>**Host Request:** `file-size <path>` only for [`SEEK_END`](common/file.header#L19) |
 
-[`invoke_syscall(number, argument)`](library/unistd/process.picoc#L7) is the common assembly bridge
-used by most of these wrappers. It is an implementation helper, not an additional kernel operation:
-the [`number`](library/unistd/process.picoc#L7) already identifies the real syscall and
-[`argument`](library/unistd/process.picoc#L7) becomes `IN1`.
+#### 10.2.1.3 Working-directory operations in `working_directory.picoc`
+[\[↑ TOC\]](#contents)
 
-### 10.2.2 Signals, process control, shared memory, and mutexes
+[`working_directory.picoc`](library/unistd/working_directory.picoc) gets or changes the caller's PCB directory.
+Changing it validates the path with the host:
 
-The table connects signal and shared-memory wrappers to kernel operations. The mutex functions
-combine an atomic userspace instruction with the blocking and wakeup syscalls described in
-[section 6.5](#65-mutexes).
-
-| Library function | Return value / status and purpose | Syscalls |
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`kill()`](library/signal/signal.picoc#L14) | 0 or `-1`; signal 0 only probes existence | 11, [`KillRequest`](common/syscall.header#L67) |
-| [`prctl()`](library/sys/prctl/prctl.picoc#L14) | 0 or `-1`; supports [`PR_SET_PDEATHSIG`](common/prctl.header#L3) | 12, [`PrctlRequest`](common/syscall.header#L72) |
-| [`shm_open()`](library/sys/mman/mman.picoc#L15) | Existing/new shared-memory ID or `-1` | 19, [`ShmOpenRequest`](common/syscall.header#L79) |
-| [`mmap()`](library/sys/mman/mman.picoc#L23) | Shared absolute address or `NULL`; creates a PCB attachment | 20, ID directly |
-| [`shm_unlink()`](library/sys/mman/mman.picoc#L27) | 0 or `-1`; removes name and requests deferred destruction | 21, name pointer directly |
-| [`testset()`](library/mutex/mutex.picoc#L3) | Atomically writes 1 and returns the old lock value | No syscall; one RETI `TSL` instruction |
-| [`mutex_init()`](library/mutex/mutex.picoc#L12) | Clears lock and initializes embedded wait queue | No syscall |
-| [`mutex_lock()`](library/mutex/mutex.picoc#L18) | Acquires lock; contenders block instead of spinning | Uses [`testset()`](library/mutex/mutex.picoc#L3) and syscall 13 through [`sleep()`](library/unistd/blocking.picoc#L9) |
-| [`mutex_unlock()`](library/mutex/mutex.picoc#L25) | Clears lock and wakes one contender | Uses syscall 14 through [`wakeup()`](library/unistd/blocking.picoc#L19) |
+| [`chdir(path)`](library/unistd/working_directory.picoc#L4) | 0 or `-1`. Replaces [`ProcessControlBlock.working_directory`](kernel/process/process.header#L39) | [`SYSCALL_CHDIR`](common/syscall.header#L39) with the path pointer directly<br>**Host Request:** `is-directory <path>` |
+| [`getcwd(buffer, size)`](library/unistd/working_directory.picoc#L11) | The supplied buffer, or `NULL` on failure | [`SYSCALL_GETCWD`](common/syscall.header#L40) with [`GetCwdRequest`](common/syscall.header#L83) |
 
-[`kill()`](library/signal/signal.picoc#L14) builds [`KillRequest`](common/syscall.header#L67) as a
-local in the caller's userspace stack and passes its address synchronously to syscall 11. The kernel
-validates the signal and PID during that call and does not retain the request pointer. A
-self-directed [`SIGINT`](common/signal.header#L4) or [`SIGKILL`](common/signal.header#L5) stores
-[`pending_termination_signal`](kernel/process/process.header#L63) and can return from the syscall
-before termination is applied. At the next scheduling pass, including a deferred timer request at
-syscall return, the dispatcher consumes that value and does not restore the process again.
+#### 10.2.1.4 Path operations in `file_removal.picoc`
+[\[↑ TOC\]](#contents)
 
-[`struct mutex`](library/mutex/mutex.header#L6) contains a one-cell Boolean and a complete
-[`struct wait_queue`](common/wait_queue.header#L5). It is normal userspace data, not a kernel
-allocation. Placing it in a shared memory region lets all participating processes see both the lock
-cell and the queue object; the queue still links kernel-owned PCBs.
+[`file_removal.picoc`](library/unistd/file_removal.picoc) forwards path operations after kernel normalization:
 
-### 10.2.3 Directories
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`unlink(path)`](library/unistd/file_removal.picoc#L4) | Host status for removing a file | [`SYSCALL_UNLINK`](common/syscall.header#L43) with the path pointer directly<br>**Host Request:** `unlink <path>` |
+| [`rmdir(path)`](library/unistd/file_removal.picoc#L8) | Host status for removing an empty directory | [`SYSCALL_RMDIR`](common/syscall.header#L44) with the path pointer directly<br>**Host Request:** `rmdir <path>` |
+| [`move(old_path, new_path)`](library/unistd/file_removal.picoc#L12) | Host status for moving or renaming a file or directory | [`SYSCALL_MOVE`](common/syscall.header#L45) with [`MoveRequest`](common/syscall.header#L94)<br>**Host Request:** `move <old path>\n<new path>` |
+| [`touch(path)`](library/unistd/file_removal.picoc#L20) | Host status for creating a file or updating its timestamps | [`SYSCALL_TOUCH`](common/syscall.header#L46) with the path pointer directly<br>**Host Request:** `touch <path>` |
 
-The declarations below show why a directory stream needs no kernel descriptor:
-[`DirectoryStream`](library/dirent/dirent.header#L14) owns a listing buffer and reuses one embedded
-[`dirent`](library/dirent/dirent.header#L9) for each parsed result.
+#### 10.2.1.5 Wait-queue operations in `blocking.picoc`
+[\[↑ TOC\]](#contents)
+
+[`blocking.picoc`](library/unistd/blocking.picoc) initializes queues directly and uses syscalls for sleeping
+and waking:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`wait_queue_init(wq)`](library/unistd/blocking.picoc#L4) | Initializes [`wait_queue.head`](common/wait_queue.header#L6) and [`wait_queue.tail`](common/wait_queue.header#L7) to `NULL` | No syscall |
+| [`sleep(wq)`](library/unistd/blocking.picoc#L9) | Sets the process's [`ProcessControlBlock.state`](kernel/process/process.header#L33) to [`PROCESS_STATE_BLOCKED`](kernel/process/process.header#L15) and places it on the queue | [`SYSCALL_SLEEP`](common/syscall.header#L19) with the queue pointer directly |
+| [`wakeup(wq)`](library/unistd/blocking.picoc#L19) | Wakes at most the process at the FIFO head | [`SYSCALL_WAKEUP`](common/syscall.header#L20) with the queue pointer directly |
+
+### 10.2.2 fcntl: opening and creating files
+[\[↑ TOC\]](#contents)
+
+[`fcntl`](library/fcntl/) opens or creates descriptors. Device paths are handled inside the
+kernel:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`open(path, flags)`](library/fcntl/fcntl.picoc#L5) | Lowest free descriptor or `-1` | [`SYSCALL_OPEN`](common/syscall.header#L31) with [`OpenRequest`](common/file.header#L26)<br>**Host Requests:** `file-size <path>` for every nontruncating regular open. After failure with [`O_CREAT`](common/file.header#L13), or for [`O_TRUNC`](common/file.header#L14), the requests are `write <path>` then `write stdout` |
+| [`creat(path)`](library/fcntl/fcntl.picoc#L13) | Equivalent to an open for writing, creation, and truncation | Calls [`open()`](library/fcntl/fcntl.picoc#L5), which uses [`SYSCALL_OPEN`](common/syscall.header#L31)<br>**Host Requests:** `write <path>`, then `write stdout` for a regular path |
+
+### 10.2.3 sys/wait: waiting for children
+[\[↑ TOC\]](#contents)
+
+[`sys/wait`](library/sys/wait/) provides child waiting and a stopped-status test. [`10.1 From a library call to the kernel: waitpid`](#101-from-a-library-call-to-the-kernel-waitpid) follows
+the implementation. The table summarizes their results:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`waitpid(pid)`](library/sys/wait/wait.picoc#L14) | Exact child's exit or stopped status, or `-1` | [`SYSCALL_WAITPID`](common/syscall.header#L13) with [`WaitPidRequest`](common/syscall.header#L61). Waiting may suspend its stack frame |
+| [`WIFSTOPPED(status)`](library/sys/wait/wait.picoc#L25) | Whether status represents [`SIGSTOP`](common/signal.header#L7), [`SIGTSTP`](common/signal.header#L8), or [`SIGTTIN`](common/signal.header#L9) | No syscall |
+
+### 10.2.4 mutex: locking and waking contenders
+[\[↑ TOC\]](#contents)
+
+[`mutex`](library/mutex/) combines `TSL` with [`unistd`](library/unistd/) wait queues:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`testset(lock_addr)`](library/mutex/mutex.picoc#L3) | Atomically writes 1 and returns the old lock value | No syscall, one RETI `TSL` instruction |
+| [`mutex_init(m)`](library/mutex/mutex.picoc#L12) | Clears lock and initializes embedded wait queue | No syscall |
+| [`mutex_lock(m)`](library/mutex/mutex.picoc#L18) | Acquires the lock. Contenders wait instead of spinning | Uses [`testset()`](library/mutex/mutex.picoc#L3), then [`SYSCALL_SLEEP`](common/syscall.header#L19) through [`sleep()`](library/unistd/blocking.picoc#L9) when the lock is held |
+| [`mutex_unlock(m)`](library/mutex/mutex.picoc#L25) | Clears the lock and wakes one contender | Uses [`SYSCALL_WAKEUP`](common/syscall.header#L20) through [`wakeup()`](library/unistd/blocking.picoc#L19) |
+
+`mutex` contains a lock and embedded queue. Placing it in shared memory
+lets participants use both, while the queue references kernel-owned PCBs.
+[`7.4 Mutexes with test-and-set and wait queues`](#74-mutexes-with-test-and-set-and-wait-queues) explains acquisition and its lost-wakeup limitation.
+
+### 10.2.5 sys/mman: named shared memory
+[\[↑ TOC\]](#contents)
+
+[`sys/mman`](library/sys/mman/) opens shared regions by name, maps them by ID, and removes their
+names. [`5. Shared Memory Entries and Mappings`](#5-shared-memory-entries-and-mappings) explains deferred destruction:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`shm_open(name, size)`](library/sys/mman/mman.picoc#L15) | Existing or new shared-memory ID, or `-1` | [`SYSCALL_SHM_OPEN`](common/syscall.header#L26) with [`ShmOpenRequest`](common/syscall.header#L78) |
+| [`mmap(shared_memory_id)`](library/sys/mman/mman.picoc#L23) | Shared absolute address or `NULL`. Creates a [`SharedMemoryAttachment`](kernel/shared_memory.header#L17) for the calling process | [`SYSCALL_MMAP`](common/syscall.header#L27) with the ID directly |
+| [`shm_unlink(name)`](library/sys/mman/mman.picoc#L27) | 0 or `-1`. Removes the name and requests deferred destruction | [`SYSCALL_SHM_UNLINK`](common/syscall.header#L28) with the name pointer directly |
+
+### 10.2.6 dirent: directory streams
+[\[↑ TOC\]](#contents)
+
+[`dirent`](library/dirent/) fetches a listing once and parses it in userspace. A
+[`DirectoryStream`](library/dirent/dirent.header#L14) owns the buffer and reuses an embedded result entry:
 
 ```c
 struct dirent {
@@ -3462,66 +6167,115 @@ struct DirectoryStream {
 };
 ```
 
-[`DIR`](library/dirent/dirent.header#L21) is a userspace heap object.
-[`contents`](library/dirent/dirent.header#L15) points to a separately allocated 512-cell listing,
-[`length`](library/dirent/dirent.header#L16) is the returned host listing length,
-[`offset`](library/dirent/dirent.header#L17) is the next record, and embedded
-[`entry`](library/dirent/dirent.header#L18) is overwritten by every
-[`readdir()`](library/dirent/dirent.picoc#L40) call. Neither object is stored in the PCB or kernel
-descriptor table. The field table identifies who first fills each value and who consumes it; in
-particular, the embedded entry is first populated when a record is read.
+[`DIR`](library/dirent/dirent.header#L21) is a User Process Heap object. [`contents`](library/dirent/dirent.header#L15) points to a separate
+512-cell listing, and [`offset`](library/dirent/dirent.header#L17) selects the next record. [`readdir()`](library/dirent/dirent.picoc#L40) overwrites
+the embedded [`entry`](library/dirent/dirent.header#L18). The table identifies initialization and use:
 
 | Field | Meaning | Used by |
 | --- | --- | --- |
-| [`DirectoryStream.contents`](library/dirent/dirent.header#L15) | Owned 512-cell listing buffer | First allocated by [`opendir()`](library/dirent/dirent.picoc#L8) and filled by [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187); parsed by [`readdir()`](library/dirent/dirent.picoc#L40) and freed by [`closedir()`](library/dirent/dirent.picoc#L66) |
-| [`DirectoryStream.length`](library/dirent/dirent.header#L16) | Received listing length, excluding its terminator | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8); bounds reads in [`readdir()`](library/dirent/dirent.picoc#L40) |
-| [`DirectoryStream.offset`](library/dirent/dirent.header#L17) | Position of the next listing record | First initialized to 0 by [`opendir()`](library/dirent/dirent.picoc#L8); advanced by [`readdir()`](library/dirent/dirent.picoc#L40) |
-| [`DirectoryStream.entry`](library/dirent/dirent.header#L18) | Embedded result reused for each directory entry | First populated by [`readdir()`](library/dirent/dirent.picoc#L40); its returned pointer stays valid only while the stream exists and its contents change on the next read |
+| [`DirectoryStream.contents`](library/dirent/dirent.header#L15) | Owned 512-cell listing buffer | First allocated by [`opendir()`](library/dirent/dirent.picoc#L8) and filled by [`read_host_directory()`](kernel/filesystem/host_filesystem.picoc#L187), parsed by [`readdir()`](library/dirent/dirent.picoc#L40) and freed by [`closedir()`](library/dirent/dirent.picoc#L66) |
+| [`DirectoryStream.length`](library/dirent/dirent.header#L16) | Received listing length, excluding its terminator | First initialized by [`opendir()`](library/dirent/dirent.picoc#L8), bounds reads in [`readdir()`](library/dirent/dirent.picoc#L40) |
+| [`DirectoryStream.offset`](library/dirent/dirent.header#L17) | Position of the next listing record | First initialized to 0 by [`opendir()`](library/dirent/dirent.picoc#L8), advanced by [`readdir()`](library/dirent/dirent.picoc#L40) |
+| [`DirectoryStream.entry`](library/dirent/dirent.header#L18) | Embedded result reused for each directory entry | First populated by [`readdir()`](library/dirent/dirent.picoc#L40), its returned pointer stays valid only while the stream exists and its contents change on the next read |
 | [`dirent.d_type`](library/dirent/dirent.header#L10) | Directory or regular-file type | First initialized by [`readdir()`](library/dirent/dirent.picoc#L40) from the record’s leading character |
-| [`dirent.d_name`](library/dirent/dirent.header#L11) | Terminated name, limited to 127 characters | First initialized by [`readdir()`](library/dirent/dirent.picoc#L40); long names are truncated |
+| [`dirent.d_name`](library/dirent/dirent.header#L11) | Terminated name, limited to 127 characters | First initialized by [`readdir()`](library/dirent/dirent.picoc#L40), long names are truncated |
 
-The function table below shows that only opening needs a host listing request; subsequent reads
-parse the stored listing, and closing releases both allocations.
+Opening requests the listing, reading parses it, and closing frees it.
+Allocation failures follow the diagnostic path in [`10.2.7 stdlib: process heap, environment, conversion, and exit`](#1027-stdlib-process-heap-environment-conversion-and-exit):
 
-| Library function | Return value / status and purpose | Syscalls |
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`opendir()`](library/dirent/dirent.picoc#L8) | Stream pointer, or `NULL` for an invalid path/listing failure; allocates stream and buffer | 33, [`ReadDirectoryRequest`](common/syscall.header#L89); also uses [`malloc()`](library/stdlib/malloc.picoc#L35) |
-| [`readdir()`](library/dirent/dirent.picoc#L40) | Pointer to the reused [`entry`](library/dirent/dirent.header#L18), or `NULL` at end/for a null stream | No syscall |
-| [`closedir()`](library/dirent/dirent.picoc#L66) | `0` after freeing buffer/stream; `-1` for a null stream | No syscall |
-| [`mkdir()`](library/sys/stat/stat.picoc#L5) | `0` on success; `-1` on invalid path or host failure | 32, path pointer directly |
+| [`opendir(path)`](library/dirent/dirent.picoc#L8) | Stream pointer, or `NULL` for a null path or listing failure. Allocates the stream and buffer. Allocation failure terminates the process in PicoOS | [`SYSCALL_READ_DIRECTORY`](common/syscall.header#L42) with [`ReadDirectoryRequest`](common/syscall.header#L88)<br>[`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through [`malloc()`](library/stdlib/malloc.picoc#L35) on allocation failure<br>**Host Requests:** `ls <path>`<br>For the heap-full message, `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`readdir(directory)`](library/dirent/dirent.picoc#L40) | Pointer to the reused [`entry`](library/dirent/dirent.header#L18), or `NULL` at end/for a null stream | No syscall |
+| [`closedir(directory)`](library/dirent/dirent.picoc#L66) | `0` after freeing buffer/stream, `-1` for a null stream | No syscall |
 
-### 10.2.4 Process heap, environment, strings, and exit
+### 10.2.7 stdlib: process heap, environment, conversion, and exit
+[\[↑ TOC\]](#contents)
 
-Each linked process contains its own global [`Heap`](common/heap.header#L11) descriptor,
-[`process_heap`](library/stdlib/malloc.picoc#L6), and [`environ`](library/stdlib/env.picoc#L4) in
-that process's `.data`; these are not shared kernel globals. Environment arrays and `NAME=value`
-strings are allocated inside the process heap. The table below separates these local operations from
-heap setup and termination, which need kernel services.
+[`stdlib`](library/stdlib/) supplies the process heap, environment, conversion, and exit
+operations. Each image has its own [`process_heap`](library/stdlib/malloc.picoc#L6) and [`environ`](library/stdlib/env.picoc#L4) globals.
 
-| Library function | Return value / status and purpose | Syscalls |
+#### 10.2.7.1 Heap operations in `malloc.picoc`
+[\[↑ TOC\]](#contents)
+
+Failed positive allocations invoke [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25). The kernel
+prints through descriptor 1 and terminates the process. Redirected output
+can therefore issue host requests even during allocation or environment
+operations. The table includes that failure path:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`void init_process_heap(void)`](library/stdlib/malloc.picoc#L18) | Initializes [`process_heap`](library/stdlib/malloc.picoc#L6) over the PCB-described region | Syscalls 16 and 17 obtain absolute heap start and size |
-| [`void *malloc(int size)`](library/stdlib/malloc.picoc#L35) | First-fit allocation from [`process_heap`](library/stdlib/malloc.picoc#L6) | Pure userspace unless positive allocation fails, then syscall 18 terminates the process |
-| [`void *realloc(void *ptr, int size)`](library/stdlib/malloc.picoc#L42) | Resize/move using the shared heap implementation | Same failure policy as [`malloc()`](library/stdlib/malloc.picoc#L35) |
-| [`void free(void *ptr)`](library/stdlib/malloc.picoc#L49) | Releases and coalesces a process-heap block | No syscall |
-| [`int atoi(char *text)`](library/stdlib/atoi.picoc#L4) | Converts optional sign and decimal characters | No syscall |
-| [`char *getenv(char *name)`](library/stdlib/env.picoc#L115) | Pointer to value within matching `NAME=value` string, or `NULL` | No syscall |
-| [`char **current_environment(void)`](library/stdlib/env.picoc#L6) | Current process-global [`environ`](library/stdlib/env.picoc#L4) pointer | No syscall |
-| [`int setenv(char *name, char *value, bool overwrite)`](library/stdlib/env.picoc#L126) | Allocates/replaces one owned environment string | No syscall |
-| [`int unsetenv(char *name)`](library/stdlib/env.picoc#L157) | Frees one string and compacts pointer array | No syscall |
-| [`int putenv(char *variable)`](library/stdlib/env.picoc#L174) | Copies and stores one `NAME=value` entry | No syscall |
-| [`int clearenv(void)`](library/stdlib/env.picoc#L194) | Frees all strings but retains an empty array | No syscall |
-| [`char **clone_environment(void)`](library/stdlib/env.picoc#L205) | Deep process-heap copy used by shell tests | No syscall |
-| [`void destroy_environment(char **environment)`](library/stdlib/env.picoc#L230) | Frees a cloned array and its strings | No syscall |
-| [`int restore_environment(char **environment)`](library/stdlib/env.picoc#L243) | Clears and recreates current [`environ`](library/stdlib/env.picoc#L4) from a clone | No syscall |
-| [`void exit(int status)`](library/stdlib/exit.picoc#L3) | Terminates current process and does not normally return | Syscall 6, status directly |
-| [`strcpy`](library/string/string.picoc#L4), [`strcat`](library/string/string.picoc#L16) | Copy/append terminated strings | No syscall |
-| [`strcmp`](library/string/string.picoc#L34), [`strncmp`](library/string/string.picoc#L44), [`strlen`](library/string/string.picoc#L60) | Compare strings or count cells before `NUL` | No syscall |
+| [`require_process_heap_allocation(memory, size)`](library/stdlib/malloc.picoc#L8) | Returns `memory`. A `NULL` result for a positive size terminates the process | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) only for a failed positive allocation<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`init_process_heap(void)`](library/stdlib/malloc.picoc#L18) | Initializes [`process_heap`](library/stdlib/malloc.picoc#L6) over the region recorded in the current [`ProcessControlBlock`](kernel/process/process.header#L31) | [`SYSCALL_PROCESS_HEAP_START`](common/syscall.header#L23) and [`SYSCALL_PROCESS_HEAP_SIZE`](common/syscall.header#L24) |
+| [`malloc(size)`](library/stdlib/malloc.picoc#L35) | Pointer to a first-fit allocation. Returns `NULL` for a nonpositive size. A failed positive allocation terminates the process | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8) only on failure<br>**Host Requests:** The heap-full diagnostic requests listed above |
+| [`realloc(ptr, size)`](library/stdlib/malloc.picoc#L42) | Resized or moved pointer. Size 0 frees the block and returns `NULL`. A failed positive allocation terminates the process | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through [`require_process_heap_allocation()`](library/stdlib/malloc.picoc#L8) only on failure<br>**Host Requests:** The heap-full diagnostic requests listed above |
+| [`free(ptr)`](library/stdlib/malloc.picoc#L49) | Releases and coalesces a process-heap block | No syscall |
 
-### 10.2.5 Standard I/O
+#### 10.2.7.2 Decimal conversion in `atoi.picoc`
+[\[↑ TOC\]](#contents)
 
-The declaration below shows that a [`PicoFile`](library/stdio/stdio.header#L3) stores only a
-descriptor number. The function table then traces these stream operations to the descriptor ABI.
+[`atoi.picoc`](library/stdlib/atoi.picoc) converts text by reading the supplied string directly. It
+does not allocate memory or enter the kernel.
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`atoi(text)`](library/stdlib/atoi.picoc#L4) | Converts optional sign and decimal characters | No syscall |
+
+#### 10.2.7.3 Environment operations in `env.picoc`
+[\[↑ TOC\]](#contents)
+
+[`env.picoc`](library/stdlib/env.picoc) manages [`environ`](library/stdlib/env.picoc#L4). Creating or enlarging entries uses the process
+heap, including the failure path in [`10.2.7.1 Heap operations in malloc.picoc`](#10271-heap-operations-in-mallocpicoc):
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`getenv(name)`](library/stdlib/env.picoc#L115) | Pointer to value within matching `NAME=value` string, or `NULL` | No syscall |
+| [`current_environment(void)`](library/stdlib/env.picoc#L6) | Current process-global [`environ`](library/stdlib/env.picoc#L4) pointer | No syscall |
+| [`copy_environment_variable(variable)`](library/stdlib/env.picoc#L20) | Pointer to an allocated copy. A failed positive allocation terminates the process | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through [`malloc()`](library/stdlib/malloc.picoc#L35) only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`store_environment_variable(variable, name_length)`](library/stdlib/env.picoc#L67) | 0 after replacing or adding an entry. A failed positive reallocation terminates the process | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through [`realloc()`](library/stdlib/malloc.picoc#L42) only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`initialize_environment(environment)`](library/stdlib/env.picoc#L97) | Creates [`environ`](library/stdlib/env.picoc#L4) and copies the initial strings. Used internally during process startup | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through allocation helpers only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`setenv(name, value, overwrite)`](library/stdlib/env.picoc#L126) | 0 on success or when overwrite is disabled for an existing name. Allocates or replaces one owned string | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through allocation helpers only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`unsetenv(name)`](library/stdlib/env.picoc#L157) | 0. Frees a matching string and compacts the pointer array | No syscall |
+| [`putenv(variable)`](library/stdlib/env.picoc#L174) | 0 after copying and storing `NAME=value`, or `-1` when `=` is missing | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through allocation helpers only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`clearenv(void)`](library/stdlib/env.picoc#L194) | 0. Frees all strings but retains an empty array | No syscall |
+| [`clone_environment(void)`](library/stdlib/env.picoc#L205) | Deep process-heap copy of the current environment. Exposed to applications but not used by PicoOS programs | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through allocation helpers only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`destroy_environment(environment)`](library/stdlib/env.picoc#L230) | Frees a cloned array and its strings | No syscall |
+| [`restore_environment(environment)`](library/stdlib/env.picoc#L243) | 0 after recreating current [`environ`](library/stdlib/env.picoc#L4), or `-1` for an invalid entry | [`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) through allocation helpers only on failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+
+[`initialize_environment(environment)`](library/stdlib/env.picoc#L97) is declared internally by
+[`start.picoc`](library/start/start.picoc#L5), not in the public
+[`stdlib.header`](library/stdlib/stdlib.header).
+
+#### 10.2.7.4 Process exit in `exit.picoc`
+[\[↑ TOC\]](#contents)
+
+[`exit.picoc`](library/stdlib/exit.picoc) contains the terminating operation used both directly and
+when the application entry function returns.
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`exit(status)`](library/stdlib/exit.picoc#L3) | Terminates the current process and does not normally return | [`SYSCALL_EXIT`](common/syscall.header#L12) with the status directly |
+
+### 10.2.8 string: copying, comparison, and length
+[\[↑ TOC\]](#contents)
+
+[`string`](library/string/) operates directly on caller-provided memory. It allocates nothing
+and makes no syscalls. Sizes count RETI cells, and copies need room for
+the terminator:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`strcpy(destination, source)`](library/string/string.picoc#L4) | Copies a terminated string and returns the destination | No syscall |
+| [`strcat(destination, source)`](library/string/string.picoc#L16) | Appends a terminated string and returns the destination | No syscall |
+| [`strcmp(left, right)`](library/string/string.picoc#L34) | Difference between the first unequal cells, or 0 for equal strings | No syscall |
+| [`strncmp(left, right, count)`](library/string/string.picoc#L44) | Comparison limited to `count` cells. Returns a negative value, zero, or a positive value | No syscall |
+| [`strlen(string)`](library/string/string.picoc#L60) | Number of cells before the terminator | No syscall |
+
+### 10.2.9 stdio: streams, formatting, and scanning
+[\[↑ TOC\]](#contents)
+
+[`stdio`](library/stdio/) builds streams and formatting on descriptors. A [`PicoFile`](library/stdio/stdio.header#L3) stores
+only the descriptor number:
 
 ```c
 struct PicoFile {
@@ -3529,118 +6283,400 @@ struct PicoFile {
 };
 ```
 
-The process has three global standard stream objects, five global
-[`fopen`](library/stdio/stdio.picoc#L125) slots, a five-cell used/free array, and pointers used by
-the [`stdin`](library/stdio/stdio.header#L9), [`stdout`](library/stdio/stdio.header#L10), and
-[`stderr`](library/stdio/stdio.header#L11) macros. A [`FILE`](library/stdio/stdio.header#L7)
-contains only a descriptor—there is no userspace buffer, EOF flag, error flag, or shared open-file
-object. [`scanf()`](library/stdio/scanf.picoc#L112) separately uses the process-global
-[`has_unread_input`](library/stdio/scanf.picoc#L4) and
-[`unread_input`](library/stdio/scanf.picoc#L5) cells as a one-character pushback slot. The field
-table shows how stream preparation and opening supply the descriptor used by later I/O.
+Each image has standard stream objects, five additional stream slots, and
+usage flags. Streams have no private buffer or EOF/error flags. Scanning
+uses [`has_unread_input`](library/stdio/scanf.picoc#L4) and [`unread_input`](library/stdio/scanf.picoc#L5) for one-character pushback.
+The field table describes the descriptor stored in each stream:
 
 | Field | Meaning | Used by |
 | --- | --- | --- |
-| [`PicoFile.file_descriptor`](library/stdio/stdio.header#L4) | Entry number in the current process’s descriptor table | First initialized by [`prepare_standard_streams()`](library/stdio/stdio.picoc#L45) for standard streams and [`fopen()`](library/stdio/stdio.picoc#L125) for extra streams; used by [`fgetc()`](library/stdio/stdio.picoc#L178), [`fputc()`](library/stdio/stdio.picoc#L203), [`fputs()`](library/stdio/stdio.picoc#L227), and [`fclose()`](library/stdio/stdio.picoc#L155) |
+| [`PicoFile.file_descriptor`](library/stdio/stdio.header#L4) | Entry number in the current process’s descriptor table | First initialized by [`prepare_standard_streams()`](library/stdio/stdio.picoc#L45) for standard streams and [`fopen()`](library/stdio/stdio.picoc#L125) for extra streams, used by [`fgetc()`](library/stdio/stdio.picoc#L178), [`fputc()`](library/stdio/stdio.picoc#L204), [`fputs()`](library/stdio/stdio.picoc#L229), and [`fclose()`](library/stdio/stdio.picoc#L155) |
 
-The function table connects stream selection, formatting, and scanning to the syscalls that
-eventually perform the I/O.
+The following tables separate output and stream operations from scanning.
 
-| Library function | Return value / status and purpose | Syscalls |
+#### 10.2.9.1 Streams and output in `stdio.picoc`
+[\[↑ TOC\]](#contents)
+
+[`stdio.picoc`](library/stdio/stdio.picoc) prepares streams and performs descriptor I/O and formatting.
+First use calls [`prepare_standard_streams()`](library/stdio/stdio.picoc#L45), which queries descriptor
+availability once:
+
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
 | --- | --- | --- |
-| [`standard_input()`](library/stdio/stdio.picoc#L79), [`standard_output()`](library/stdio/stdio.picoc#L84), [`standard_error()`](library/stdio/stdio.picoc#L89) | Addresses of the three process-global stream objects | Syscall 22 only on lazy first preparation |
-| [`FILE *fopen(char *path, char *mode)`](library/stdio/stdio.picoc#L125) | One of five stream slots or `NULL`; supports `r`, `w`, `a`, and `+` | 23, [`OpenRequest`](common/file.header#L26) after mode-to-flag conversion |
-| [`int fclose(FILE *stream)`](library/stdio/stdio.picoc#L155) | `0` on close, or `-1` for an invalid stream/descriptor; releases an extra stream slot | 26, descriptor directly |
-| [`int fgetc(FILE *stream)`](library/stdio/stdio.picoc#L178) | Read character or `-1` | 24 with [`IoRequest`](common/file.header#L31); standalone stdin may use test-only UART selector 38 |
-| [`int fputc(int character, FILE *stream)`](library/stdio/stdio.picoc#L203) | Written character or `-1` | 25 with [`IoRequest`](common/file.header#L31); standalone stdout may use direct UART syscall 29 |
-| [`int fputs(char *text, FILE *stream)`](library/stdio/stdio.picoc#L227) | Written count or `-1` | 25 with [`IoRequest`](common/file.header#L31), or repeated syscall 29 in fallback mode |
-| [`int fprintf(FILE *stream, char *format, ...)`](library/stdio/stdio.picoc#L343) | Written count or `-1` | Formatting is userspace; output reduces to [`fputc()`](library/stdio/stdio.picoc#L203)/[`fputs()`](library/stdio/stdio.picoc#L227) |
-| [`int printf(char *format, ...)`](library/stdio/stdio.picoc#L351) | Written count or `-1` to [`stdout`](library/stdio/stdio.header#L10) | Same as [`fprintf()`](library/stdio/stdio.picoc#L343) |
-| [`int scanf(char *format, ...)`](library/stdio/scanf.picoc#L112) | Number of assigned arguments | Input reduces to [`fgetc(stdin)`](library/stdio/stdio.picoc#L178) |
+| [`standard_input(void)`](library/stdio/stdio.picoc#L79) | Address of the process-global input stream | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) only on first stream preparation. No host request |
+| [`standard_output(void)`](library/stdio/stdio.picoc#L84) | Address of the process-global output stream | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) only on first stream preparation. No host request |
+| [`standard_error(void)`](library/stdio/stdio.picoc#L89) | Address of the process-global error stream | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) only on first stream preparation. No host request |
+| [`fopen(path, mode)`](library/stdio/stdio.picoc#L125) | One of five stream slots or `NULL`. Supports `r`, `w`, `a`, and `+` | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation<br>[`SYSCALL_OPEN`](common/syscall.header#L31) with [`OpenRequest`](common/file.header#L26)<br>**Host Requests:** `file-size <path>` for a nontruncating regular open<br>`write <path>`, then `write stdout` for truncation or creation after a failed existence check |
+| [`fclose(stream)`](library/stdio/stdio.picoc#L155) | 0 on close, or `-1` for an invalid stream or descriptor. Releases an additional stream slot | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation<br>[`SYSCALL_CLOSE`](common/syscall.header#L34) with the descriptor directly |
+| [`fgetc(stream)`](library/stdio/stdio.picoc#L178) | Read character or `-1` | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation<br>[`SYSCALL_READ`](common/syscall.header#L32) with [`IoRequest`](common/file.header#L31)<br>**Host Request:** `read-range <offset> <count> <path>` for a regular-file stream |
+| [`fputc(character, stream)`](library/stdio/stdio.picoc#L204) | Written character or `-1` | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation<br>[`SYSCALL_WRITE`](common/syscall.header#L33) with [`IoRequest`](common/file.header#L31)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>`literal-output <count>` before output containing `<ESC>`, except for the null device |
+| [`fputs(text, stream)`](library/stdio/stdio.picoc#L229) | Written count or `-1` | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation<br>[`SYSCALL_WRITE`](common/syscall.header#L33) with [`IoRequest`](common/file.header#L31)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>`literal-output <count>` before output containing `<ESC>`, except for the null device |
+| [`write_decimal(stream, value)`](library/stdio/stdio.picoc#L259) | Count written, or `-1` if writing a digit fails. Internal formatting helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation and [`SYSCALL_WRITE`](common/syscall.header#L33) through [`fputc()`](library/stdio/stdio.picoc#L204)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>No `literal-output` request because decimal output contains no `<ESC>` |
+| [`format_stream(stream, format, argument_base, first_argument)`](library/stdio/stdio.picoc#L277) | Formatted count, or `-1` if output fails. Internal formatting helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation and [`SYSCALL_WRITE`](common/syscall.header#L33) through [`fputc()`](library/stdio/stdio.picoc#L204) or [`fputs()`](library/stdio/stdio.picoc#L229)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>`literal-output <count>` before an output value containing `<ESC>`, except for the null device |
+| [`fprintf(stream, format, ...)`](library/stdio/stdio.picoc#L346) | Written count or `-1` | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation and [`SYSCALL_WRITE`](common/syscall.header#L33) through [`format_stream()`](library/stdio/stdio.picoc#L277)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` for regular files<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr<br>`literal-output <count>` before an output value containing `<ESC>`, except for the null device |
+| [`printf(format, ...)`](library/stdio/stdio.picoc#L354) | Written count or `-1` to [`stdout`](library/stdio/stdio.header#L10) | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first preparation and [`SYSCALL_WRITE`](common/syscall.header#L33) through [`format_stream()`](library/stdio/stdio.picoc#L277)<br>**Host Requests:** `write-at <offset> <path>`, then `write stdout` when descriptor 1 is a regular file<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` when descriptor 1 is a copied terminal-stderr entry<br>`literal-output <count>` before an output value containing `<ESC>`, except for the null device |
 
-The legacy UART fallbacks support standalone library and compiler tests linked with
-`isrs.reti` from [`isrs.picoc`](interrupt_service_routines/isrs.picoc), allowing those tests to use
-[`printf()`](library/stdio/stdio.picoc#L351) and [`scanf()`](library/stdio/scanf.picoc#L112) without
-linking and booting the complete PicoOS kernel. PicoOS detects descriptor support through syscall
-22, then uses descriptor-backed standard I/O. The test-only receive selector 38 is outside the
-kernel's continuous 0–37 range.
+Formatting supports `%d`, `%c`, `%s`, and `%%`.
+[`1.1.3 System V ABI stack frames and call cleanup`](#113-system-v-abi-stack-frames-and-call-cleanup)
+gives the stack locations used for variadic arguments.
 
-Formatting supports `%d`, `%c`, `%s`, and `%%`; scanning supports `%d`, `%c`, `%s`, literal
-characters, and whitespace matching. The frame table below identifies the `BAF`-relative cells used
-to read variadic values because PicoC does not provide a standard `va_list` implementation.
+#### 10.2.9.2 Scanning in `scanf.picoc`
+[\[↑ TOC\]](#contents)
 
-| Frame cell | Meaning for the formatting functions |
-| ---: | --- |
-| `BAF + 1` | Saved caller `BAF` |
-| `BAF + 2` | Return address |
-| `BAF + 3` onward | Fixed arguments in declaration order |
-| `BAF + 4` | First extra argument of [`printf(format, ...)`](library/stdio/stdio.picoc#L351) |
-| `BAF + 5` | First extra argument of [`fprintf(stream, format, ...)`](library/stdio/stdio.picoc#L343) |
+[`scanf.picoc`](library/stdio/scanf.picoc) parses `%d`, `%c`, `%s`, literal characters, and
+whitespace. It reads through [`fgetc()`](library/stdio/stdio.picoc#L178) and uses
+[`has_unread_input`](library/stdio/scanf.picoc#L4) with
+[`unread_input`](library/stdio/scanf.picoc#L5) as one-character pushback state.
 
-The compiler's right-to-left argument pushing makes these cells contiguous; this is another direct
-dependency between the library implementation and the PicoC-Compiler calling convention.
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`read_input(void)`](library/stdio/scanf.picoc#L16) | Returns the saved pushback character when present, otherwise reads one character from [`stdin`](library/stdio/stdio.header#L9). Internal scanning helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first stream preparation and [`SYSCALL_READ`](common/syscall.header#L32) through [`fgetc()`](library/stdio/stdio.picoc#L178) when no character is saved<br>**Host Request:** `read-range <offset> <count> <path>` when descriptor 0 is a regular file |
+| [`skip_whitespace(void)`](library/stdio/scanf.picoc#L30) | Consumes whitespace and saves the first following character. Internal scanning helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first stream preparation and [`SYSCALL_READ`](common/syscall.header#L32) through [`read_input()`](library/stdio/scanf.picoc#L16)<br>**Host Request:** `read-range <offset> <count> <path>` when descriptor 0 is a regular file |
+| [`read_decimal(target)`](library/stdio/scanf.picoc#L40) | Whether a signed decimal value was read into `target`. Internal scanning helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first stream preparation and [`SYSCALL_READ`](common/syscall.header#L32) through [`read_input()`](library/stdio/scanf.picoc#L16)<br>**Host Request:** `read-range <offset> <count> <path>` when descriptor 0 is a regular file |
+| [`read_string(target)`](library/stdio/scanf.picoc#L83) | Whether a nonempty, whitespace-delimited string was read into `target`. Internal scanning helper | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first stream preparation and [`SYSCALL_READ`](common/syscall.header#L32) through [`read_input()`](library/stdio/scanf.picoc#L16)<br>**Host Request:** `read-range <offset> <count> <path>` when descriptor 0 is a regular file |
+| [`scanf(format, ...)`](library/stdio/scanf.picoc#L112) | Number of assigned arguments | [`SYSCALL_FILE_DESCRIPTORS_AVAILABLE`](common/syscall.header#L30) on first stream preparation and [`SYSCALL_READ`](common/syscall.header#L32) through the scanning helpers above<br>**Host Request:** `read-range <offset> <count> <path>` when descriptor 0 is a regular file |
 
-### 10.2.6 Startup library
+### 10.2.10 start: entering and leaving a user program
+[\[↑ TOC\]](#contents)
 
-[`library/start/libstart.picoc`](library/start/libstart.picoc) provides the
-compiler-selected boundary between the kernel-built initial stack and an
-ordinary userspace `main`. The earlier
-[Custom userspace startup](#116-custom-userspace-startup) section shows the
-complete source, the `-C` selection, the generated default it replaces, and
-the entry used by every PicoOS image. Within the library,
-[`start_process()`](library/start/start.picoc#L7) initializes
-[`process_heap`](library/stdlib/malloc.picoc#L6) before cloning the initial
-[`envp`](kernel/process/process_arguments.picoc#L141), then calls the
-application and forwards its result through
-[`exit()`](library/stdlib/exit.picoc#L3).
+[`start`](library/start/) supplies the `-C` entry point and the helper that prepares the
+runtime before calling `main`. It has no public header. [`1.1.5.2 PicoOS libstart startup sequence`](#1152-picoos-libstart-startup-sequence) gives its
+complete source:
 
-## 10.3 Library organization and scope
+| Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- |
+| [`_start(argc, first_argument)`](library/start/start.picoc#L14) | Entry point without a generated stack frame. Calls [`start_process()`](library/start/start.picoc#L7) | Through [`start_process()`](library/start/start.picoc#L7), [`SYSCALL_PROCESS_HEAP_START`](common/syscall.header#L23), [`SYSCALL_PROCESS_HEAP_SIZE`](common/syscall.header#L24), and [`SYSCALL_EXIT`](common/syscall.header#L12)<br>[`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) on environment allocation failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
+| [`start_process(argc, argv)`](library/start/start.picoc#L7) | Initializes the heap and environment, calls the application entry function, then exits with its status | [`SYSCALL_PROCESS_HEAP_START`](common/syscall.header#L23), [`SYSCALL_PROCESS_HEAP_SIZE`](common/syscall.header#L24), and [`SYSCALL_EXIT`](common/syscall.header#L12)<br>[`SYSCALL_PROCESS_HEAP_FULL`](common/syscall.header#L25) on environment allocation failure<br>**Host Requests for the heap-full message:** `write-at <offset> <path>`, then `write stdout` for a regular descriptor 1<br>Optional `file-size <path>` before append<br>`write stderr`, then `write stdout` for terminal stderr |
 
-An umbrella unit such as [`libstdio.picoc`](library/stdio/libstdio.picoc) includes its
-implementation parts, while `// dependencies:` records the separately compiled `.reti_blocks` units
-needed at link time. The compiler links these libraries with the program and selects custom startup
-through `-C`. This connects ordinary-looking PicoC headers/calls to the compiler’s
-[separate compilation and linking](#112-separate-compilation-and-linking).
+### 10.2.11 Single-function libraries
+[\[↑ TOC\]](#contents)
 
-The libraries intentionally remain small: values and sizes use RETI cells, streams are unbuffered
-descriptor wrappers, only five extra [`FILE`](library/stdio/stdio.header#L7) slots exist,
-formatting/scanning support a few conversions, [`waitpid()`](library/sys/wait/wait.picoc#L14) has no
-options, and the POSIX-like names do not promise POSIX corner cases. The request-structure ABI keeps
-the interrupt interface compact and visible at the cost of trusting pointers in the single physical
-address space.
+Five libraries expose one public function each: [`schedule`](library/schedule/), [`signal`](library/signal/),
+[`sys/prctl`](library/sys/prctl/), [`sys/reboot`](library/sys/reboot/), and [`sys/stat`](library/sys/stat/). Private assembly helpers are
+implementation details. This table groups the public interfaces:
 
-# 11. Init process
+| Library | Library function | Return value / status and purpose | Syscalls / Host Requests |
+| --- | --- | --- | --- |
+| [`schedule`](library/schedule/) | [`yield(void)`](library/schedule/schedule.picoc#L4) | Voluntarily saves the current activation and schedules another runnable process | [`SYSCALL_YIELD`](common/syscall.header#L21) with no request structure |
+| [`signal`](library/signal/) | [`kill(pid, signal_number)`](library/signal/signal.picoc#L14) | 0 or `-1`. Signal 0 only probes existence | [`SYSCALL_KILL`](common/syscall.header#L16) with [`KillRequest`](common/syscall.header#L66) |
+| [`sys/prctl`](library/sys/prctl/) | [`prctl(option, argument)`](library/sys/prctl/prctl.picoc#L14) | 0 or `-1`. Supports [`PR_SET_PDEATHSIG`](common/prctl.header#L3) | [`SYSCALL_PRCTL`](common/syscall.header#L17) with [`PrctlRequest`](common/syscall.header#L71) |
+| [`sys/reboot`](library/sys/reboot/) | [`reboot(command)`](library/sys/reboot/reboot.picoc#L5) | Does not return for [`REBOOT_CMD_RESTART`](library/sys/reboot/reboot.header#L3) or [`REBOOT_CMD_POWER_OFF`](library/sys/reboot/reboot.header#L4). Returns `-1` for any other command | [`SYSCALL_REBOOT`](common/syscall.header#L6) for restart or [`SYSCALL_SHUTDOWN`](common/syscall.header#L5) for power-off<br>**Host Requests after firmware restart:** `load kernel/kernel.bin` from the bootloader, then `load /system/init.bin` from kernel startup<br>None for power-off |
+| [`sys/stat`](library/sys/stat/) | [`mkdir(path)`](library/sys/stat/stat.picoc#L5) | 0 on success, or `-1` for an invalid path or host failure | [`SYSCALL_MKDIR`](common/syscall.header#L41) with the path pointer directly<br>**Host Request:** `mkdir <path>` |
 
-Once the kernel has loaded and dispatched its first process, userspace takes over session policy.
-Init connects the kernel's process-loading interface to the configured environment and the shell
-users interact with.
+Restart enters the EPROM bootloader again, which reloads the kernel and
+init. These are consequences of [`reboot()`](library/sys/reboot/reboot.picoc#L5), without a separate UART restart
+command. [`11. Complete startup: bootloader, kernel, init, shell, and user applications`](#11-complete-startup-bootloader-kernel-init-shell-and-user-applications) follows the boot sequence.
 
-## 11.1 Purpose and separation of responsibilities
+Signal requests are read synchronously. A self-directed terminating signal can return before the
+dispatcher applies termination. The actions and timing are explained in
+[`7.3 Process signals`](#73-process-signals).
 
-[`system/init.picoc`](system/init.picoc) is the first userspace image loaded by the kernel and
-becomes PID 1. It establishes the initial environment, repeatedly starts one shell, and waits for
-that exact shell. Keeping this policy in userspace prevents configuration and session behavior from
-becoming kernel mechanisms. The responsibility table separates kernel setup from init’s session
-policy and the shell’s command handling.
+# 11. Complete startup: bootloader, kernel, init, shell, and user applications
+[\[↑ TOC\]](#contents)
+
+Startup follows a loading chain: bootloader → kernel → init → shell →
+application. Each step places an image in memory before transferring
+execution to its entry point.
+
+The diagram connects that chain to memory. EPROM holds the bootloader,
+and SRAM holds its temporary stack and all later runtime state. The kernel
+comes from the host over UART, with DMA when enabled. Solid arrows show
+loading, and dotted arrows show register setup and control transfer:
+
+```mermaid
+%%{init: {"sequence": {"height": 45, "width": 110, "actorMargin": 15, "boxMargin": 5, "diagramMarginX": 10, "wrap": true}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
+sequenceDiagram
+    box rgb(232, 248, 248) EPROM
+        participant B as Bootloader<br/>.text and .data
+    end
+    box rgb(255, 248, 237) Kernel-reserved SRAM
+        participant K as Kernel image<br/>0–41496<br/>.ivt: 0–4<br/>.text from 5<br/>.data from 40766
+        participant KH as Kernel heap<br/>41497–45592
+        participant KS as Kernel stack<br/>45593–48308
+    end
+    box rgb(239, 252, 242) Process and Shared Data Heap
+        participant I as Init image<br/>libstart startup
+        participant SH as Shell image<br/>libstart startup
+        participant A as Application A<br/>libstart startup
+        participant C as Application B<br/>libstart startup
+    end
+    B->>K: boot_main loads the kernel payload at SRAM offset 0
+    B-->>KS: start_loaded_kernel sets SP and BAF from stack_start
+    B-->>K: MOVE CS PC transfers control to kernel _start
+    K->>KS: main calls activate_kernel_stack_boundary
+    K->>KH: main calls init_kernel_heap, then heap_init_region
+    K->>I: load_process loads init
+    I->>SH: init loads the shell
+    SH->>A: shell loads application A
+    SH->>C: shell loads application B
+```
+
+The offsets come from the current kernel layout. The bootloader starts
+with a temporary stack at SRAM offset `262143`. [`start_loaded_kernel()`](boot/bootloader.picoc#L21)
+replaces it with the kernel stack at `48308`. Kernel startup initializes
+heap cells `41497..45592` and installs `45592` as the stack boundary.
+
+The Process and Shared Data Heap starts at `48309`. It is managed by
+[`PSDMalloc()`](kernel/psdmalloc.picoc#L20), separately from the preceding Kernel Heap managed by [`kmalloc()`](kernel/kmalloc.picoc#L23).
+
+Init, the shell, and applications occupy separate Process Payloads, with
+PCBs in the Kernel Heap. Their allocation addresses vary. [`3.2 SRAM image and heap hierarchy`](#32-sram-image-and-heap-hierarchy) shows the
+full map, and [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) explains ownership.
+
+These entry functions have different jobs despite sharing the name `_start`:
+
+| Component | Startup implementation | Execution path |
+| --- | --- | --- |
+| Bootloader | Custom naked [`_start(void)`](boot/bootloader.picoc#L9), defined in the bootloader itself | Sets the initial registers, then jumps to [`boot_main()`](boot/bootloader.picoc#L41) |
+| Kernel | Default PicoC compiler-generated [`_start`](kernel/kernel.reti#L7), linked without `-C` | Calls kernel [`main()`](kernel/kernel.picoc#L31) and halts if it returns |
+| Init process | [`libstart`](library/start/libstart.picoc), selected with `-C library/start/libstart.picoc` | [`_start()`](library/start/start.picoc#L14) → [`start_process()`](library/start/start.picoc#L7) → init [`main()`](system/init.picoc#L100) → [`exit()`](library/stdlib/exit.picoc#L3) if it returns |
+| Shell | The same [`libstart`](library/start/libstart.picoc) selection | [`_start()`](library/start/start.picoc#L14) → [`start_process()`](library/start/start.picoc#L7) → shell [`main()`](user/shell.picoc#L1448) → [`exit()`](library/stdlib/exit.picoc#L3) |
+| User applications | The same [`libstart`](library/start/libstart.picoc) selection | [`_start()`](library/start/start.picoc#L14) → [`start_process()`](library/start/start.picoc#L7) → the application's `main` → [`exit()`](library/stdlib/exit.picoc#L3) |
+
+## 11.1 Loading the kernel from the EPROM bootloader
+[\[↑ TOC\]](#contents)
+
+The bootloader's naked [`_start()`](boot/bootloader.picoc#L9) sets EPROM `CS` and `DS` and a temporary
+SRAM stack, then jumps to [`boot_main()`](boot/bootloader.picoc#L41). It uses neither a generated entry
+nor userspace [`libstart`](library/start/libstart.picoc).
+
+These three functions implement loading and control transfer:
+
+<!-- TODO: Consider removing this function table once the prose and source examples are sufficient. -->
+
+| Bootloader function | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`_start(void)`](boot/bootloader.picoc#L9) | Does not return | Establishes EPROM `CS`/`DS` and a temporary stack at the top of SRAM | Jumps to [`boot_main()`](boot/bootloader.picoc#L41) | **Machine entry:** PC 0 at boot. Kernel [`reboot()`](kernel/kernel.picoc#L19) |
+| [`boot_main(void)`](boot/bootloader.picoc#L41) | Jumps into the kernel on success, halts on a missing or undersized image | Requests [`kernel/kernel.bin`](binary/kernel/kernel.bin), consumes the five header words, and copies the payload to SRAM | [`uart_send_host_request()`](common/uart_protocol.picoc#L82), [`receive_word()`](common/uart_protocol.picoc#L7), [`uart_print_string()`](common/uart_protocol.picoc#L73), [`uart_print_loading_bar_label()`](common/loading_bar.picoc#L6), [`receive_words_to_sram()`](common/sram_loader.picoc#L6), jumps to [`start_loaded_kernel()`](boot/bootloader.picoc#L21)<br>**Host request:** `load kernel/kernel.bin` | **Bootloader functions:** [`_start()`](boot/bootloader.picoc#L9) |
+| [`start_loaded_kernel(void)`](boot/bootloader.picoc#L21) | Does not return | Adds the SRAM base to the header's code/data/stack offsets, replaces the boot stack, and sets kernel `CS`, `DS`, `SP`, and `BAF` | Jumps to the generated kernel [`_start`](kernel/kernel.reti#L7), which calls [`main()`](kernel/kernel.picoc#L31) | **Bootloader functions:** [`boot_main()`](boot/bootloader.picoc#L41) |
+
+The initial entry establishes the segments and temporary stack before any
+ordinary PicoC call frames are needed:
+
+```c
+__attribute__((naked))
+void _start(void) {
+    asm("LOADI CS 0"); // Sets CS to the EPROM base
+    asm(EPROM_STACK_START_ASM); // LOADI32 SP eprom_stack_start
+    asm("MOVE SP BAF"); // BAF = eprom_stack_start
+    asm(EPROM_DS_START_ASM); // LOADI32 DS eprom_ds_start
+    asm("ADD DS CS"); // DS = CS + eprom_ds_start
+    asm("LOADI32 ACC boot_main"); // ACC = boot_main in EPROM
+    asm("ADD ACC CS"); // ACC = CS + boot_main
+    asm("MOVE ACC PC"); // JUMP to boot_main in EPROM
+}
+```
+
+[`boot_main()`](boot/bootloader.picoc#L41) requests [`kernel/kernel.bin`](binary/kernel/kernel.bin), reads its header, and loads
+only the payload at [`SRAM_BASE`](kernel/memory_constants.header#L1). The first five payload words are `.ivt`,
+followed by code and data. [`receive_words_to_sram()`](common/sram_loader.picoc#L6) selects polling or DMA:
+
+```c
+void boot_main(void) {
+    int code_start;
+    int data_start;
+    int stack_start;
+    int word_count;
+    int payload_word_count;
+
+    uart_send_host_request("load ", "kernel/kernel.bin");
+
+    word_count = receive_word();
+    if (word_count == -1) {
+        uart_print_string("error: could not load kernel\n");
+        asm("JUMP 0");
+    }
+    if (word_count < 5) {
+        uart_print_string("error: invalid kernel image\n");
+        asm("JUMP 0");
+    }
+    code_start = receive_word();
+    data_start = receive_word();
+    receive_word(); // Discards heap_start because the kernel uses memory_constants.header
+    receive_word(); // Discards heap_size because the kernel uses memory_constants.header
+    stack_start = receive_word();
+    if (stack_start == -1) {
+        stack_start = SRAM_MAX_ADDRESS;
+    }
+
+    payload_word_count = word_count - 5;
+    uart_print_loading_bar_label(
+        loading_bar_enabled,
+        "load ",
+        "kernel/kernel.bin"
+    );
+    receive_words_to_sram(
+        SRAM_BASE,
+        payload_word_count,
+        loading_bar_enabled
+    );
+    asm("LOADI32 ACC start_loaded_kernel"); // ACC = start_loaded_kernel
+    asm("ADD ACC CS"); // ACC = CS + start_loaded_kernel in EPROM
+    asm("MOVE ACC PC"); // JUMP to start_loaded_kernel in EPROM
+}
+```
+
+[`start_loaded_kernel()`](boot/bootloader.picoc#L21) still runs in EPROM. It adds the SRAM base to the
+header offsets, installs kernel registers, and writes `CS` to `PC`:
+
+```c
+__attribute__((naked))
+void start_loaded_kernel(void) {
+    // BAF points behind the kernel metadata
+    asm("LOADIN BAF ACC 0"); // ACC = code_start
+    asm("LOADIN BAF IN1 -1"); // IN1 = data_start
+    asm("LOADIN BAF IN2 -2"); // IN2 = stack_start
+
+    asm("LOADI32 CS -2147483648"); // -2^31, SRAM base
+    asm("MOVE CS DS"); // DS = SRAM base
+    asm("MOVE CS SP"); // SP = SRAM base
+
+    asm("ADD CS ACC"); // CS = SRAM base + code_start
+
+    asm("ADD DS IN1"); // DS = SRAM base + data_start
+
+    asm("ADD SP IN2"); // SP = SRAM base + stack_start
+    asm("MOVE SP BAF"); // BAF = SP
+
+    asm("MOVE CS PC"); // JUMP to CS
+}
+```
+
+`MOVE CS PC` enters the generated kernel [`_start`](kernel/kernel.reti#L7) at `0x80000005`. It is
+a jump without a bootloader return address. Changing segment registers
+alone does not transfer execution.
+
+## 11.2 Kernel startup
+[\[↑ TOC\]](#contents)
+
+The generated entry from [`1.1.5.1 Default compiler-generated _start`](#1151-default-compiler-generated-_start) calls kernel [`main()`](kernel/kernel.picoc#L31). Both execute from
+`.text`. Globals and constants occupy `.data`. [`kernel/kernel.reti`](kernel/kernel.reti#L7) shows
+the entry just after `.ivt`.
+
+<!-- Presentation generation: Reproduce the default compiler-generated _start source from 1.1.5.1 here, directly before kernel main. Show the main call and exit operation again at this presentation stage. Do not require navigation back to earlier presentation stages. -->
+
+Kernel [`main()`](kernel/kernel.picoc#L31) initializes allocators, terminal and process state, DMA,
+and interrupt routing before loading init and scheduling it:
+
+```c
+int main(void) {
+    int init_pid;
+    struct RunProcessRequest init_request;
+
+    activate_kernel_stack_boundary();
+    init_kernel_heap();
+    initialize_terminal();
+    initialize_process_table();
+    init_process_shared_data_heap();
+    initialize_shared_memory();
+    if (dma_is_active()) {
+        initialize_dma();
+    }
+    interrupt_controller_initialize();
+    init_pid = load_process("system/init.bin", loading_bar_enabled);
+    init_request.pid = init_pid;
+    init_request.arguments = NULL;
+    init_request.environment = NULL;
+    if (mark_process_ready_with_arguments(&init_request)) {
+        interrupt_controller_activate_timer();
+        dispatcher_start_next_process();
+    }
+    return 0;
+}
+```
+
+The globals reside in kernel `.data`, while [`init_request`](kernel/kernel.picoc#L33) is local to the
+kernel stack. It supplies the initial arguments to run setup. [`9.3 Kernel global variables and process-list roots`](#93-kernel-global-variables-and-process-list-roots) lists
+the globals.
+
+### 11.2.1 Loading init and entering normal execution
+[\[↑ TOC\]](#contents)
+
+[`load_process()`](kernel/process/process_loader.picoc#L305) allocates init's payload and creates PID 1. Its PCB stores
+the memory bounds and initial activation. Init gets directory `/`, no
+parent, `argv[0]`, and an empty environment.
+
+Run setup changes init from [`NEW`](kernel/process/process.header#L12) to [`READY`](kernel/process/process.header#L13). After timer activation, the
+dispatcher selects it, sets [`RUNNING`](kernel/process/process.header#L14), and restores its registers. `RTI`
+consumes the prepared PC and enters init's `libstart` entry. It does not
+call init's [`main()`](system/init.picoc#L100) directly.
+
+Successful dispatch leaves kernel [`main()`](kernel/kernel.picoc#L31) through `RTI`. Later interrupts
+and syscalls reenter the kernel. The dispatcher waits if no process is
+runnable. Failure to load or prepare init returns to the generated halt.
+
+[`shutdown()`](kernel/kernel.picoc#L15) stops with `JUMP 0` without freeing objects first. [`reboot()`](kernel/kernel.picoc#L19)
+disables device interrupts, clears the timer and stack boundary, and sets
+`PC = 0` to rerun the EPROM bootloader. Their implementations are:
+
+```c
+void shutdown(void) {
+    asm("JUMP 0");
+}
+
+void reboot(void) {
+    int device = 0;
+
+    while (device < INTERRUPT_DEVICE_COUNT) {
+        interrupt_controller_disable_device(device);
+        device = device + 1;
+    }
+    periphery_write_register(INTERRUPT_CONTROLLER_TIMER_INTERVAL_REGISTER, 0);
+    periphery_write_register(STACK_HEAP_BOUNDARY_REGISTER, 0);
+    asm("LOADI PC 0");
+}
+```
+
+Userspace selects these actions through [`reboot()`](library/sys/reboot/reboot.picoc#L5). Kernel failure paths
+and final-process exit can also halt. [`11.3.7 When init terminates`](#1137-when-init-terminates) describes the signal-path
+limitation.
+
+## 11.3 Init process
+[\[↑ TOC\]](#contents)
+
+Init uses the ordinary `libstart` entry from [`1.1.5.2 PicoOS libstart startup sequence`](#1152-picoos-libstart-startup-sequence). It prepares init's
+heap and environment, calls [`main()`](system/init.picoc#L100), and exits with its result.
+
+<!-- Presentation generation: Reproduce the libstart source from 1.1.5.2 here, directly before init's main/session loop. Show _start and start_process, including heap/environment initialization and exit(main(...)). Do not require navigation back to earlier presentation stages. -->
+
+### 11.3.1 Init responsibilities
+[\[↑ TOC\]](#contents)
+
+The kernel manages execution and resources. Init configures the userspace
+session and keeps a shell available. The table separates their jobs:
 
 | Component | Responsibility |
 | --- | --- |
-| Kernel [`main()`](kernel/kernel.picoc#L31) | Initialize global structures and devices, load PID 1, construct its first activation, and dispatch |
-| [`Init`](system/init.picoc#L100) | Read configuration, establish environment policy, load/run a shell, and restart it after a session |
-| [`Shell`](user/shell.picoc#L1577) | Read and edit commands, search `PATH`, launch programs, redirect output, and manage the foreground process |
+| Kernel [`main()`](kernel/kernel.picoc#L31) | Initialize kernel state and devices, load PID 1, prepare its first execution, and dispatch |
+| [`Init`](system/init.picoc#L100) | Read environment configuration, load and start a shell, wait for it, and load a new shell afterward |
+| [`Shell`](user/shell.picoc#L1448) | Read commands, find and load applications, redirect input/output, and manage foreground execution |
 
-## 11.2 Startup sequence
+Before any current process exists, the kernel resolves init's path from
+`/` and creates its own directory copy. No `pwd` host request is needed.
+Init otherwise uses ordinary libraries and syscalls.
 
-Init's responsibilities become a small startup path followed by a repeated shell session. The
-[startup code](#1121-init-startup-code) shows that handoff;
-[configuration](#113-configuration-and-environment) and [restart policy](#114-shell-restart-policy)
-explain the decisions around it.
+### 11.3.2 Initial environment configuration
+[\[↑ TOC\]](#contents)
 
-### 11.2.1 Init startup code
+[`read_environment()`](system/init.picoc#L19) reads [`config/environment.txt`](config/environment.txt) into a 257-cell buffer.
+It rejects files of 256 or more cells and parses newline or CRLF-separated
+`NAME=value` records with [`setenv()`](library/stdlib/env.picoc#L126). The file supplies `PATH=/user`, and
+init optionally adds [`PICOOS_LOADING_BAR`](common/loading_bar.header#L5). The table follows these calls:
 
-After the common userspace [`libstart`](library/start/libstart.picoc) code initializes init's local
-heap and environment and calls [`main()`](system/init.picoc#L100), init executes this complete
-startup/session loop:
+| Init function | Return value / status | Library functions |
+| --- | --- | --- |
+| [`init_write_error(text)`](system/init.picoc#L10) | No value | [`write()`](library/unistd/io.picoc#L32) sends the diagnostic to standard error without changing persistent init state |
+| [`read_environment(void)`](system/init.picoc#L19) | `true` when the complete file was read into the environment, `false` after an allocation, file, size, or syntax failure | [`malloc()`](library/stdlib/malloc.picoc#L35), [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`close()`](library/unistd/io.picoc#L54), [`setenv()`](library/stdlib/env.picoc#L126), and [`free()`](library/stdlib/malloc.picoc#L49), changes the process-global [`environ`](library/stdlib/env.picoc#L4) array |
+| [`main(void)`](system/init.picoc#L100) | Returns status 1 when setup or shell launch fails, otherwise does not return | [`setenv()`](library/stdlib/env.picoc#L126), [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), and exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14) |
+
+Missing, unreadable, oversized, or malformed configuration returns status
+`1`. Init loads the shell by direct path. Run setup copies its environment
+and descriptors, while loading already copied the directory.
+
+### 11.3.3 Loading, starting, and waiting for the shell
+[\[↑ TOC\]](#contents)
+
+After configuration, init repeatedly loads, starts, and waits for one shell:
 
 ```c
 int main(void) {
@@ -3677,550 +6713,1183 @@ int main(void) {
 }
 ```
 
-The helper [`read_environment()`](system/init.picoc#L19) is explained in
-[section 11.3](#113-configuration-and-environment). The sequence below connects the startup loop to
-kernel loading: [`load_process()`](kernel/process/process_loader.picoc#L305) loads init during boot,
-whereas the userspace [`load()`](library/unistd/process.picoc#L17) wrapper invokes
-[`load_process_chunk()`](kernel/process/process_loader.picoc#L292) for each shell. The latter uses
-bounded UART ranges, or DMA when enabled, as described in
-[section 5.6](#56-important-process-functions).
+[`waitpid()`](library/sys/wait/wait.picoc#L14) selects that exact shell. Loading uses the polling or DMA path
+from [`4.3.1 Loading a process (load library call)`](#431-loading-a-process-load-library-call), while [`11.3.2 Initial environment configuration`](#1132-initial-environment-configuration) explains configuration parsing.
 
-```mermaid
-sequenceDiagram
-    participant K as Kernel
-    participant Init as PID 1 / init
-    participant F as Kernel file/process services
-    participant H as RETI-Emulator host service
-    participant S as Shell child
+### 11.3.4 Shell startup
+[\[↑ TOC\]](#contents)
 
-    K->>F: load_process("system/init.bin", loading_bar_enabled)
-    F->>H: ESC load /system/init.bin ESC /
-    H-->>F: Header and encoded init program
-    F->>F: Create PID 1 with working directory /
-    K->>Init: Build initial stack, make READY, and dispatch
-    Init->>F: open/read ./config/environment.txt
-    F->>H: ESC file-size path ESC / and ESC read-range ... ESC /
-    H-->>F: Environment file contents
-    F-->>Init: Return data through read wrapper
-    Init->>Init: Parse NAME=value entries with setenv()
-    loop One shell session after another
-        Init->>F: load("./user/shell.bin")
-        F->>H: file-size and read-range for five-word header
-        loop Image transfer via chunked reads or DMA completion
-            F->>H: read-range for image bytes
-            H-->>F: Shell image data
-        end
-        F-->>Init: NEW child PID
-        Init->>F: run(pid, NULL, NULL)
-        F->>S: Copy environment/descriptors and make READY
-        Init->>F: waitpid(pid)
-        F-->>Init: Resume when that shell exits or stops
-    end
-```
+The dispatcher enters the shell through the same `libstart` sequence.
+It initializes its own heap and inherited environment before [`main()`](user/shell.picoc#L1448).
 
-The kernel creates init's PCB before any current process exists. Therefore
-[`build_process_path()`](kernel/filesystem/host_filesystem.picoc#L92) resolves the relative
-`system/init.bin` input from PicoOS `/` and sends `/system/init.bin` to the emulator. Since PID 1
-also has no parent from which to inherit a directory, [`create_process()`](kernel/process/process.picoc#L88)
-stores a [`kmalloc()`](kernel/kmalloc.picoc#L23) copy of `/` directly in
-[`Process.working_directory`](kernel/process/process.header#L39); no `pwd` request is needed. Init
-otherwise uses the same public libraries and syscalls as every other process.
+<!-- Presentation generation: Show the libstart source from 1.1.5.2 again at shell startup when this stage has its own presentation stage. Place it here rather than sending the audience back to the earlier startup presentation stage. -->
 
-## 11.3 Configuration and environment
+The shell sets up descriptors and terminal ownership, then reads commands
+while init waits. Returning from the shell lets init start another session.
+[`12.2 Shell startup and command loop`](#122-shell-startup-and-command-loop) follows the command loop.
 
-[`read_environment()`](system/init.picoc#L19) allocates a 257-cell buffer, opens
-[`config/environment.txt`](config/environment.txt) with
-[`open(O_RDONLY)`](library/fcntl/fcntl.picoc#L5), reads at most 256 cells (a file of 256 or more
-cells is rejected), closes the descriptor, and parses newline/CRLF-separated `NAME=value` records.
-Each valid record is copied into the process heap by
-[`setenv(name, value, true)`](library/stdlib/env.picoc#L126). The current configuration establishes
-`PATH=/user`; a build-time setting may additionally create `PICOOS_LOADING_BAR=true`. The function
-table relates configuration parsing and shell restarts to the libraries init uses.
+### 11.3.5 Loading user applications
+[\[↑ TOC\]](#contents)
 
-| Init function | Return value / status | Library functions |
-| --- | --- | --- |
-| [`init_write_error()`](system/init.picoc#L10) | No value | [`write()`](library/unistd/io.picoc#L31) sends the diagnostic to standard error without changing persistent init state |
-| [`read_environment()`](system/init.picoc#L19) | `true` when the complete file was installed; `false` after an allocation, file, size, or syntax failure | [`malloc()`](library/stdlib/malloc.picoc#L35), [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`close()`](library/unistd/io.picoc#L41), [`setenv()`](library/stdlib/env.picoc#L126), and [`free()`](library/stdlib/malloc.picoc#L49); changes the process-global [`environ`](library/stdlib/env.picoc#L4) array |
-| [`main()`](system/init.picoc#L100) | Returns status 1 when setup or shell launch fails; otherwise does not return | [`setenv()`](library/stdlib/env.picoc#L126), [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), and exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14) |
+External commands get new Process Payloads through [`load()`](library/unistd/process.picoc#L17). [`run_process()`](user/shell.picoc#L1034)
+prepares arguments, environment, and descriptors and makes them ready.
+Built-ins run inside the shell without loading an image.
 
-Missing, unreadable, oversized, or malformed environment input makes init report an error and return
-status 1. [`load()`](library/unistd/process.picoc#L17) is given the shell's direct path, not a
-`PATH` search. [`run(pid, NULL, NULL)`](library/unistd/process.picoc#L31) inherits init's current
-environment into the child’s stack, while the kernel copies init’s descriptor table. The working
-directory was already copied when the child was loaded.
+Applications also enter through `libstart` and exit with their `main`
+result. The shell waits for foreground work and keeps accepting commands
+for background work. [`12.4 Command parsing, expansion, and execution`](#124-command-parsing-expansion-and-execution) covers execution, and [`13. User applications and commands`](#13-user-applications-and-commands) lists the applications.
 
-## 11.4 Shell restart policy
+<!-- Presentation generation: Reproduce the libstart source from 1.1.5.2 directly at this application-startup stage in its presentation stage. Show the application's main call and the exit path here. Do not rely on navigation back to earlier presentation stages. -->
 
-Init blocks on [`waitpid()`](library/sys/wait/wait.picoc#L14) for
-[`shell_pid`](system/init.picoc#L101), not on an arbitrary child notification. Entering the shell
-built-in `exit` therefore ends one shell process; init collects it and loads a new shell.
-[`poweroff.bin`](user/poweroff.picoc#L12) invokes the kernel shutdown syscall and halts PicoOS,
-while [`reboot.bin`](user/reboot.picoc#L12) asks the kernel to disable active hardware state and
-jump back to the EPROM bootloader. Since [`waitpid()`](library/sys/wait/wait.picoc#L14) also reports
-a stopped child, explicitly stopping the shell itself can make init begin a new session; normal
-foreground job control targets the shell's children instead.
+### 11.3.6 Shell exit and restart policy
+[\[↑ TOC\]](#contents)
 
-Init and [`fast_os_test_launcher`](system/fast_os_test_launcher.picoc) live under
-[`system`](system/) because they implement system policy. They are not exposed through the normal
-`PATH=/user` command directory.
+The shell's `exit` ends a session, letting init load another shell.
+[`poweroff.bin`](user/poweroff.picoc#L12) halts the system, and [`reboot.bin`](user/reboot.picoc#L12) starts it again from
+EPROM. Since [`waitpid()`](library/sys/wait/wait.picoc#L14) also reports stops, stopping the shell itself
+can make init begin another session.
+
+[`init`](system/init.picoc) lives under [`system`](system/) because it implements
+system policy. It is not exposed through the normal `PATH=/user` command directory.
+
+### 11.3.7 When init terminates
+[\[↑ TOC\]](#contents)
+
+PID 1 has no special signal protection. [`kill`](user/kill.picoc) can terminate init,
+immediately or at dispatch if it is current.
+
+Init has no parent, so termination removes it immediately. Kernel cleanup
+releases its resources even though killing bypasses userspace cleanup.
+Shared data still follows the unlink and reference-count rules.
+
+Children become parentless and receive their configured parent-death signal.
+The shell sets [`SIGKILL`](common/signal.header#L5), and applications inherit it, so termination
+normally propagates. Children that change the setting can survive, and
+a shell killed before setting it can behave differently.
+
+The kernel does not restart init or its shell loop. Survivors can continue.
+If init returns on startup failure, [`exit_process()`](kernel/process/process.picoc#L430) halts when no
+processes remain.
+
+Signal-driven final-process removal has a dispatcher limitation. If
+[`prepare_process_termination()`](kernel/signal.picoc#L126) removes the last candidate, [`next_process`](kernel/dispatcher.picoc#L56)
+can still point to its freed PCB and reach restoration. Killing the whole
+init tree therefore does not guarantee clean shutdown. There is no
+special PID-1 panic or reboot policy.
 
 # 12. Shell
+[\[↑ TOC\]](#contents)
 
-The shell is init's interactive child and turns terminal input into userspace process operations.
-[`shell.picoc`](user/shell.picoc#L1577) is one of the **18 user applications** in [`user`](user/):
-the shell plus 17 standalone commands, listed in [section 13](#13-user-applications). It builds on
-the descriptor, signal, process, and library interfaces described above, then hands command
-execution to the applications in the next chapter.
+The shell turns terminal input into commands and process operations. It is
+one of **18 user applications**, alongside 17 standalone commands. This
+chapter follows its state, input handling, parsing, job control, and I/O.
 
-## 12.1 Shell-owned data
+## 12.1 Shell-owned state
+[\[↑ TOC\]](#contents)
 
-The shell is an ordinary process. Its persistent state is stored in globals in that shell image’s
-`.data`. The table below identifies the values retained between commands and the buffers used by
-command editing and pipelines:
+Persistent shell state lives in its image's `.data`. These globals survive
+between commands:
 
 | Global | Meaning and storage |
 | --- | --- |
-| [`last_command_exit_status`](user/shell.picoc#L30) | One integer used for `$?` |
-| [`last_background_process_id`](user/shell.picoc#L31) | Most recently tracked background/stopped PID used for `$!`, `fg`, and `bg` |
-| [`initial_shell_environment`](user/shell.picoc#L32) | Process-heap deep copy used to reset isolated shell tests |
-| [`initial_shell_working_directory`](user/shell.picoc#L33) | Embedded shell startup-directory copy used for test reset |
-| [`shell_executable_path`](user/shell.picoc#L34) | Embedded scratch buffer for one `PATH` candidate |
-| [`shell_pipe_left_command`](user/shell.picoc#L35), [`shell_pipe_right_command`](user/shell.picoc#L36), [`shell_pipe_path`](user/shell.picoc#L37) | Embedded command and temporary-path storage for one two-command pipeline |
-| [`command_history`](user/shell.picoc#L39) | Embedded ring containing at most eight recent commands; only consecutive duplicates are suppressed |
-| [`command_history_draft`](user/shell.picoc#L42) | Current unfinished line preserved while navigating history |
-| [`command_history_start`](user/shell.picoc#L45), [`command_history_count`](user/shell.picoc#L46) | Ring indices/count |
+| [`last_command_exit_status`](user/shell.picoc#L29) | One integer used for `$?` |
+| [`last_background_process_id`](user/shell.picoc#L30) | Most recently tracked background/stopped PID used for `$!`, `fg`, and `bg` |
+| [`shell_executable_path`](user/shell.picoc#L31) | Embedded scratch buffer for one `PATH` candidate |
+| [`shell_pipe_left_command`](user/shell.picoc#L32), [`shell_pipe_right_command`](user/shell.picoc#L33), [`shell_pipe_path`](user/shell.picoc#L34) | Embedded command and temporary-path storage for one two-command pipeline |
+| [`command_history`](user/shell.picoc#L36) | Embedded ring containing at most eight recent commands, only consecutive duplicates are suppressed |
+| [`command_history_draft`](user/shell.picoc#L39) | Current unfinished line preserved while navigating history |
+| [`shell_line_erase_sequence`](user/shell.picoc#L41) | Embedded scratch array holding one batched terminal erase sequence |
+| [`shell_input_buffer`](user/shell.picoc#L42) | Up to 128 input bytes retained across command lines so one [`read()`](library/unistd/io.picoc#L6) can drain the kernel terminal ring |
+| [`command_history_start`](user/shell.picoc#L43), [`command_history_count`](user/shell.picoc#L44) | History ring indices/count |
+| [`shell_input_index`](user/shell.picoc#L45), [`shell_input_count`](user/shell.picoc#L46) | Next retained input byte and number of valid bytes in [`shell_input_buffer`](user/shell.picoc#L42) |
 
-The active command buffer is an 80-cell local array in [`main()`](user/shell.picoc#L1577)'s
-userspace stack. Redirection temporarily reserves descriptors 3–7 for saved stdin, fast-test output,
-saved stdout, saved stderr, and fast-test error output; all descriptor state itself remains in the
-shell PCB's kernel-heap table. [`main()`](user/shell.picoc#L1577) initializes the environment and
-directory snapshots; the status and history counters have zero initializers in the image, and
-command helpers fill the scratch buffers; [`shell_reset()`](user/shell.picoc#L241) resets the
-test-specific state between cases.
+The current command is an 80-cell local array in [`main()`](user/shell.picoc#L1448). Descriptor
+state lives in the PCB's kernel table. Reserved slots 5–7 save standard
+streams during redirection. The declaration below shows that
+[`shell_input_buffer`](user/shell.picoc#L42) is an array in the user image:
 
-## 12.2 Startup and main loop
+```mermaid
+flowchart LR
+    subgraph UI["shell Process Payload"]
+        subgraph DATA[".data: storage exists for the shell's lifetime"]
+            IB["shell_input_buffer[128]<br/>bytes stored inline"]
+            IX["shell_input_index"]
+            CT["shell_input_count"]
+            HS["history and pipeline arrays<br/>also stored inline"]
+        end
+        subgraph STACK["main() stack frame"]
+            CMD["command[80]<br/>current editable line"]
+        end
+    end
+    subgraph KH["kernel heap"]
+        PCB["shell Process"] --> FDT["FileDescriptorTable"]
+        FDT --> ENTRIES["entries → 8-descriptor array"]
+    end
+    IX -->|"next byte"| IB
+    CT -->|"valid prefix length"| IB
+    IB -->|"read_line copies one byte at a time"| CMD
+```
 
-At startup the shell calls [`set_foreground_process()`](library/unistd/process.picoc#L63),
-configures [`prctl(PR_SET_PDEATHSIG, SIGKILL)`](library/sys/prctl/prctl.picoc#L14), clones its
-environment, and records its current directory. It
-then repeatedly calls [`read_line()`](user/shell.picoc#L261), stores nonempty commands in history,
-and sends them to [`eval()`](user/shell.picoc#L1340). [`read_line()`](user/shell.picoc#L261) returns
-`-1` at EOF, so redirected stdin ends the shell normally. Therefore, `shell.bin < commands.txt`
-reads and executes the newline-separated commands in `commands.txt` without requiring typed terminal
-input. The function table below links the main loop’s operations to their library calls and local
-effects.
+Input passes through three arrays: the kernel's [`Terminal.input_buffer`](kernel/filesystem/terminal.header#L10),
+the shell's global [`shell_input_buffer`](user/shell.picoc#L42), and the stack-local [`command`](user/shell.picoc#L1449)
+built by [`read_line()`](user/shell.picoc#L271). None is a User Process Heap allocation.
+
+## 12.2 Shell startup and command loop
+[\[↑ TOC\]](#contents)
+
+Startup closes descriptors 3–7 but keeps inherited standard streams.
+[`set_foreground_process(0)`](library/unistd/process.picoc#L59) gives the shell input ownership without
+terminal-generated signals, and [`prctl()`](library/sys/prctl/prctl.picoc#L14) selects parent-death [`SIGKILL`](common/signal.header#L5).
+The loop reads lines, records history, and evaluates commands. Redirected
+stdin works through the same loop, so `shell.bin < commands.txt` executes
+lines until EOF.
+
+If one read supplies two lines, [`read_line()`](user/shell.picoc#L271) consumes the first and keeps
+the rest for the next prompt. This example shows the read-ahead state:
+
+| Buffer state | Cell 0 | Cell 1 | Cell 2 | Cell 3 | Cell 4 | Cell 5 | Cell 6 | [`shell_input_index`](user/shell.picoc#L45) | [`shell_input_count`](user/shell.picoc#L46) |
+| --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: |
+| After [`read()`](library/unistd/io.picoc#L6) | `p` | `w` | `d` | `\n` | `l` | `s` | `\n` | 0 | 7 |
+| After [`read_line()`](user/shell.picoc#L271) returns `pwd` | `p` | `w` | `d` | `\n` | `l` | `s` | `\n` | 4 | 7 |
+
+Cells 4–6 retain the next command, `ls\n`.
+
+This helper consumes buffered characters before making another read:
+
+```c
+int read_shell_character(char *character) {
+    if (shell_input_index >= shell_input_count) {
+        shell_input_count = read(
+            STDIN_FILENO,
+            shell_input_buffer,
+            SHELL_INPUT_BUFFER_CAPACITY
+        );
+        shell_input_index = 0;
+        if (shell_input_count <= 0) {
+            return shell_input_count;
+        }
+    }
+
+    *character = shell_input_buffer[shell_input_index];
+    shell_input_index = shell_input_index + 1;
+    return 1;
+}
+```
+
+The function table below links the main loop’s operations to their library calls and local effects.
 
 | Shell function | Return value / status | Library functions |
 | --- | --- | --- |
-| [`read_line()`](user/shell.picoc#L261) | Command length, or `-1` at EOF | Repeatedly calls [`read()`](library/unistd/io.picoc#L6), edits the stack buffer, and updates history-navigation state |
-| [`remember_shell_command()`](user/shell.picoc#L147) | No value | [`strcmp()`](library/string/string.picoc#L34) and [`strcpy()`](library/string/string.picoc#L4); mutates the global eight-entry history ring and skips consecutive duplicates |
-| [`expand_variables()`](user/shell.picoc#L430) | Expanded buffer (truncated to capacity minus one), or `NULL` for a null input | Uses [`getenv()`](library/stdlib/env.picoc#L115) and the `$?`/`$!` globals while preserving quotes for argument parsing; expansion also occurs inside single quotes |
-| [`load_from_path()`](user/shell.picoc#L1148) | Loaded PID, or 0 | Reads `PATH` with [`getenv()`](library/stdlib/env.picoc#L115), builds candidates, and calls [`load()`](library/unistd/process.picoc#L17) in order |
-| [`run_process()`](user/shell.picoc#L996) | `true` when [`run()`](library/unistd/process.picoc#L31) succeeds; otherwise `false` | [`run()`](library/unistd/process.picoc#L31), [`WIFSTOPPED()`](library/sys/wait/wait.picoc#L25), [`open()`](library/fcntl/fcntl.picoc#L5), [`dup2()`](library/unistd/io.picoc#L45), [`close()`](library/unistd/io.picoc#L41), [`set_foreground_process()`](library/unistd/process.picoc#L63), and [`waitpid()`](library/sys/wait/wait.picoc#L14); changes `$?`/`$!` state |
-| [`continue_background_process()`](user/shell.picoc#L1089) | `true` when the tracked process was continued; otherwise `false` | [`kill()`](library/signal/signal.picoc#L14) and, for `fg`, [`set_foreground_process()`](library/unistd/process.picoc#L63) and [`waitpid()`](library/sys/wait/wait.picoc#L14) |
-| [`eval()`](user/shell.picoc#L1340) | `false` only for `exit`; otherwise `true` | Selects a built-in or external execution path |
-| [`main()`](user/shell.picoc#L1577) | Shell exit status | [`prctl()`](library/sys/prctl/prctl.picoc#L14), [`set_foreground_process()`](library/unistd/process.picoc#L63), [`clone_environment()`](library/stdlib/env.picoc#L205), [`getcwd()`](library/unistd/working_directory.picoc#L11), [`lseek()`](library/unistd/io.picoc#L53), and [`unsetenv()`](library/stdlib/env.picoc#L157); initializes signal/reset state and owns the interactive or redirected-input execution path |
+| [`read_shell_character(character)`](user/shell.picoc#L252) | 1 after returning one byte, 0 at EOF, or the negative [`read()`](library/unistd/io.picoc#L6) error | Refills [`shell_input_buffer`](user/shell.picoc#L42) with one [`read()`](library/unistd/io.picoc#L6) and returns retained bytes one at a time across command lines |
+| [`read_line(buffer, capacity)`](user/shell.picoc#L271) | Command length, or `-1` at EOF | Calls [`read_shell_character()`](user/shell.picoc#L252), batches consecutive printable echoes through [`flush_shell_line_echo()`](user/shell.picoc#L240), flushes them before editing controls, edits the stack buffer, and updates history-navigation state |
+| [`remember_shell_command(command)`](user/shell.picoc#L147) | No value | [`strcmp()`](library/string/string.picoc#L34) and [`strcpy()`](library/string/string.picoc#L4), mutates the global eight-entry history ring and skips consecutive duplicates |
+| [`expand_variables(arguments, result, capacity)`](user/shell.picoc#L466) | Expanded buffer (truncated to capacity minus one), or `NULL` for a null input | Uses [`getenv()`](library/stdlib/env.picoc#L115) and the `$?`/`$!` globals while preserving quotes for argument parsing, expansion also occurs inside single quotes |
+| [`load_from_path(name)`](user/shell.picoc#L1186) | Loaded PID, or 0 | Reads `PATH` with [`getenv()`](library/stdlib/env.picoc#L115), builds candidates, and calls [`load()`](library/unistd/process.picoc#L17) in order |
+| [`run_process(pid, arguments, background, stdin_path, stdout_path, append_stdout, stderr_path, append_stderr)`](user/shell.picoc#L1034) | `true` when [`run()`](library/unistd/process.picoc#L31) succeeds, otherwise `false` | [`run()`](library/unistd/process.picoc#L31), [`WIFSTOPPED()`](library/sys/wait/wait.picoc#L25), [`open()`](library/fcntl/fcntl.picoc#L5), [`dup2()`](library/unistd/io.picoc#L58), [`close()`](library/unistd/io.picoc#L54), [`set_foreground_process()`](library/unistd/process.picoc#L59), and [`waitpid()`](library/sys/wait/wait.picoc#L14), changes `$?`/`$!` state |
+| [`continue_background_process(foreground)`](user/shell.picoc#L1127) | `true` when the tracked process was continued, otherwise `false` | [`kill()`](library/signal/signal.picoc#L14) and, for `fg`, [`set_foreground_process()`](library/unistd/process.picoc#L59) and [`waitpid()`](library/sys/wait/wait.picoc#L14) |
+| [`eval(command)`](user/shell.picoc#L1224) | `false` only for `exit`, otherwise `true` | Selects a built-in or external execution path |
+| [`main(argc, argv)`](user/shell.picoc#L1448) | Shell exit status | [`prctl()`](library/sys/prctl/prctl.picoc#L14), [`set_foreground_process()`](library/unistd/process.picoc#L59), [`lseek()`](library/unistd/io.picoc#L66), [`unsetenv()`](library/stdlib/env.picoc#L157), [`close()`](library/unistd/io.picoc#L54), [`read_line()`](user/shell.picoc#L271), and [`eval()`](user/shell.picoc#L1224), closes 3–7 at startup and owns the interactive or redirected-input execution path |
 
-## 12.3 Line editing and history
+## 12.3 Interactive line editing and command history
+[\[↑ TOC\]](#contents)
 
-The terminal ISR and descriptor layer deliver bytes; the shell interprets them as the editing
-operations listed in the table below. The 80-cell line buffer holds at most 79 characters plus the
-terminator:
+[`read_line()`](user/shell.picoc#L271) interprets editing and history keys in the 80-cell command
+buffer, leaving room for 79 characters and a terminator. The table maps
+keys to their helpers:
 
-| Input | Shell behavior |
-| --- | --- |
-| Line feed or carriage return | Echo one newline and finish the command |
-| Backspace (8) or Delete (127) | Remove one buffered character and erase it visually |
-| `Ctrl+U` | Erase the complete current line |
-| `Ctrl+W` | Erase trailing whitespace and the previous word |
-| Up arrow | Move toward older entries in the eight-command history ring |
-| Down arrow | Move toward newer entries and finally restore the draft |
-| Left/right arrows | Consume the escape sequence but do not move the cursor |
-| Tab | Append one space if room remains in the 80-cell buffer |
-| Printable byte | Append it if space remains in the 80-cell buffer |
+| Input | Shell behavior | Implementation |
+| --- | --- | --- |
+| Line feed or carriage return | Echo one newline and finish the command | [`read_line()`](user/shell.picoc#L271) calls [`shell_write_character()`](user/shell.picoc#L50) and ends its loop |
+| Backspace (8) or Delete (127) | Remove one buffered character and erase it visually | [`read_line()`](user/shell.picoc#L271) calls [`erase_shell_line_suffix()`](user/shell.picoc#L125) with `length - 1` |
+| `Ctrl+U` (21) | Erase the complete current line | [`read_line()`](user/shell.picoc#L271) calls [`erase_shell_line_suffix()`](user/shell.picoc#L125) with retained length 0 |
+| `Ctrl+V` (22) | Ignore the byte because PicoOS has no literal-next-character mode | It matches no [`read_line()`](user/shell.picoc#L271) branch and is below the printable range, so it is not appended |
+| `Ctrl+W` (23) | Erase trailing whitespace and the previous word | [`read_line()`](user/shell.picoc#L271) finds the retained prefix, then calls [`erase_shell_line_suffix()`](user/shell.picoc#L125) |
+| Up arrow (`ESC [ A` or `ESC O A`) | Move toward older entries in the eight-command history ring | [`read_line()`](user/shell.picoc#L271) decodes the sequence, then calls [`navigate_command_history(..., 1)`](user/shell.picoc#L194) |
+| Down arrow (`ESC [ B` or `ESC O B`) | Move toward newer entries and finally restore the draft | [`read_line()`](user/shell.picoc#L271) calls [`navigate_command_history(..., -1)`](user/shell.picoc#L194) |
+| Left/right arrows (`ESC [ C/D` or `ESC O C/D`) | Consume the escape sequence but do not move the cursor | [`read_line()`](user/shell.picoc#L271) sets [`process_character`](user/shell.picoc#L281) to `false` without changing the line |
+| Tab | Append one space if room remains | [`read_line()`](user/shell.picoc#L271) converts it to a space, then calls [`append_shell_line_character()`](user/shell.picoc#L227) |
+| Printable byte | Append it if room remains | [`read_line()`](user/shell.picoc#L271) calls [`append_shell_line_character()`](user/shell.picoc#L227) |
 
-[`read()`](library/unistd/io.picoc#L6) blocks when the global terminal ring is empty. The command
-buffer and its stack frame remain intact while the PCB waits on
-[`Terminal.input_waiters`](kernel/filesystem/terminal.header#L14); the UART ISR writes the character
-and the dispatcher later resumes the shell.
+These excerpts distinguish history navigation from ordinary editing:
 
-## 12.4 Parsing and command execution
+```c
+if (character == 'A') {
+    length = navigate_command_history(
+        buffer, length, capacity, &history_position, 1
+    );
+    process_character = false;
+} else if (character == 'B') {
+    length = navigate_command_history(
+        buffer, length, capacity, &history_position, -1
+    );
+    process_character = false;
+}
 
-The parser validates balanced single and double quotes and recognizes one unquoted `|` before
-selecting a built-in or external command. For external commands and the `run` built-in, it removes a
-trailing `&`, extracts final whitespace-preceded `<`, `>`, `>>`, `2>`, and `2>>` redirections, and
-separates the command/PID from its raw arguments. [`run_process()`](user/shell.picoc#L996) expands
-`$NAME`, `$?`, and `$!` in those arguments; `export` expands its assignment separately. Expansion
-preserves quote characters, including single quotes, and truncates at the output buffer limit.
-Command names and redirection paths are not expanded. A command containing `/` is loaded directly;
-another name is searched through colon-separated `PATH` entries.
+/* ... inside the ordinary-character branch ... */
+if (character == SHELL_CTRL_U) {
+    length = erase_shell_line_suffix(length, 0);
+} else if (character == SHELL_CTRL_W) {
+    /* scan backward over whitespace and the preceding word */
+    length = erase_shell_line_suffix(length, retained_length);
+}
+```
+
+`Ctrl+C` and `Ctrl+Z` are consumed by the UART signal handler before
+reaching the editable line. [`12.5.1 Foreground processes, background processes, and job-control signals`](#1251-foreground-processes-background-processes-and-job-control-signals) follows their foreground effects.
+
+[`read_shell_character()`](user/shell.picoc#L252) can refill 128 cells in one read, keeping bytes
+after a newline for the next command. [`read_line()`](user/shell.picoc#L271) batches printable
+echoes and flushes before editing controls. Its helpers use
+[`write_without_uart_escape_check()`](library/unistd/io.picoc#L43) only for known escape-free output.
+This reduces syscalls and repeated scans when input has accumulated.
+
+## 12.4 Command parsing, expansion, and execution
+[\[↑ TOC\]](#contents)
+
+Parsing checks balanced quotes and one unquoted `|`. For external commands
+and the [`run` built-in](user/shell.picoc#L1224), it removes a trailing `&` and final redirections before separating
+the command from its arguments. [`run_process()`](user/shell.picoc#L1034) expands `$NAME`, `$?`, and
+`$!` in arguments. Names and redirection paths are not expanded. Names
+containing `/` load directly, while others use colon-separated `PATH`.
+
+With `NAME=Ada` and `$? = 0`, this trace shows in-place parsing. Returned
+pointers refer into the same command array:
+
+| Stage | Result | What changed |
+| --- | --- | --- |
+| Input | `echo.bin "hello $NAME ($?)" > result.txt &` | Nothing yet |
+| [`strip_background_operator()`](user/shell.picoc#L804) | `echo.bin "hello $NAME ($?)" > result.txt` and [`background`](user/shell.picoc#L1236) set to `true` | Removed only the trailing `&` and adjacent whitespace |
+| [`strip_command_redirections()`](user/shell.picoc#L926) | Command prefix `echo.bin "hello $NAME ($?)"`<br>[`stdout_path`](user/shell.picoc#L1228) points at `result.txt` | Parsed the final `>` suffix and terminated the command before it. The path is not expanded |
+| [`command_arguments()`](user/shell.picoc#L426) | Name `echo.bin`<br>Raw arguments `"hello $NAME ($?)"` | Replaced the separator after the name with `\0` and returned a pointer to the remainder |
+| [`load_from_path()`](user/shell.picoc#L1186) | Loaded `/user/echo.bin`, returning a [`NEW`](kernel/process/process.header#L12) PID | Used `PATH`. This step does **not** copy descriptors |
+| [`expand_variables()`](user/shell.picoc#L466) | `"hello Ada (0)"` | Replaced `$NAME` and `$?`, deliberately retaining quote bytes |
+| [`run()`](library/unistd/process.picoc#L31) | Child [`argv[1]`](kernel/process/process_arguments.picoc#L200) is `hello Ada (0)` | Kernel run setup removed matching quotes while building [`argv`](kernel/process/process_arguments.picoc#L140), inherited the temporarily redirected descriptors, and made the child [`READY`](kernel/process/process.header#L13) |
+
+Unlike a conventional shell, expansion does not track quotes.
+`echo.bin '$NAME'` still expands to `Ada`. Quotes preserve whitespace
+within an argument and are removed during kernel run setup. There is no
+general backslash escape pass.
 
 The configured `PATH=/user` uses the PicoOS root, so commands remain discoverable after `cd`
 and from nested shells. A relative entry supplied by the user is resolved from the shell's current
-[`Process.working_directory`](kernel/process/process.header#L39), just like other relative paths. The
-sequence below follows a successful command without a pipeline through
-[`eval()`](user/shell.picoc#L1340), [`load_from_path()`](user/shell.picoc#L1148), and
-[`run_process()`](user/shell.picoc#L996). It shows that redirection changes the shell’s descriptors
-before [`run()`](library/unistd/process.picoc#L31), so the child inherits those values.
+[`ProcessControlBlock.working_directory`](kernel/process/process.header#L39), just like other relative paths.
 
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant M as Shell main loop
-    participant E as eval and parsing helpers
-    participant K as PicoOS kernel
-    participant H as RETI-Emulator host services
-    participant C as Child process
+Built-ins execute in the shell. External commands use [`load_from_path()`](user/shell.picoc#L1186)
+and [`run_process()`](user/shell.picoc#L1034) to load, expand, redirect, and start. [`4.3.1 Loading a process (load library call)`](#431-loading-a-process-load-library-call) explains
+transfer, and [`12.5.1 Foreground processes, background processes, and job-control signals`](#1251-foreground-processes-background-processes-and-job-control-signals) explains foreground waiting.
 
-    U->>M: Type bytes and Enter
-    M->>M: read_line edits and terminates, remember_shell_command stores history
-    M->>E: eval(command)
-    E->>E: Validate quotes and select built-in or external path
-    alt shell built-in
-        E->>E: Call the required library function in this shell process
-    else external command
-        E->>E: Parse background and redirection markers, name, and arguments
-        E->>K: load(direct path or PATH candidate)
-        K->>H: file-size and read-range, chunked or DMA image transfer
-        H-->>K: Program image or failure
-        K-->>E: NEW child PID
-        E->>K: Save/redirect standard descriptors, if requested
-        E->>E: Expand argument variables
-        E->>K: run(pid, arguments, current environment)
-        K->>C: Copy initial stack/descriptors and make READY
-        E->>K: Restore shell standard descriptors
-        alt foreground
-            E->>K: set_foreground_process(pid)
-            E->>K: waitpid(pid)
-            K-->>E: Exit or stopped status
-            E->>K: set_foreground_process(0)
-            E->>E: Store status in $?
-        else background
-            E->>E: Store PID in $!
-        end
-    end
-```
+Background execution skips terminal transfer and waiting. The shell
+restores its descriptors, records the PID in `$!`, and returns to the prompt.
 
-Argument handling is intentionally small. The kernel splits the final string on unquoted spaces and
-tabs and removes matching single or double quotes. There is no general escape grammar.
-[`echo.bin`](user/echo.picoc#L20) itself interprets the two characters `\n`.
+[`echo.bin`](user/echo.picoc#L20) interprets `\n` itself. It is not a shell escape rule.
 
-## 12.5 Shell built-ins
+## 12.5 Shell built-in commands
+[\[↑ TOC\]](#contents)
 
-Built-ins execute inside the shell process. This is essential for operations such as `cd` and
-`export`, since a separate child could change only its own PCB or process-local
-[`environ`](library/stdlib/env.picoc#L4). The table lists all **10 built-ins** and the library
-operations they use.
+The **9 built-ins** run inside the shell. This lets `cd` and `export` change
+its own directory and environment. A child could change only its copies:
 
-| Built-in | Behavior | Library functions |
+| Built-in | Behavior | Library functions / host requests |
 | --- | --- | --- |
-| `exit` | Accepts no argument and returns false from [`eval()`](user/shell.picoc#L1340), ending this shell session | No immediate syscall; [`libstart`](library/start/libstart.picoc) later calls [`exit(main_result)`](library/stdlib/exit.picoc#L3) |
-| `eval COMMAND` | Recursively evaluates the remaining text in the same shell state | Re-enters [`eval()`](user/shell.picoc#L1340); resulting command calls apply normally |
-| `run-shell-tests MANIFEST` | Runs scripted shell test directories and resets shell state between them | [`open`](library/fcntl/fcntl.picoc#L5), [`read`](library/unistd/io.picoc#L6), [`lseek`](library/unistd/io.picoc#L53), [`close`](library/unistd/io.picoc#L41), [`dup2`](library/unistd/io.picoc#L45), [`chdir`](library/unistd/working_directory.picoc#L4), [`reset_processes`](library/unistd/process.picoc#L59), environment clone/restore helpers |
+| `exit` | Accepts no argument and returns false from [`eval()`](user/shell.picoc#L1224), ending this shell session | No immediate syscall, [`libstart`](library/start/libstart.picoc) later calls [`exit(main_result)`](library/stdlib/exit.picoc#L3) |
+| `eval COMMAND` | Recursively evaluates the remaining text in the same shell state | Re-enters [`eval()`](user/shell.picoc#L1224), resulting command calls apply normally |
 | `export NAME=value` | Expands the complete assignment and stores/replaces the variable | [`getenv`](library/stdlib/env.picoc#L115) during expansion and [`setenv(..., true)`](library/stdlib/env.picoc#L126) |
-| `cd DIRECTORY` | Changes this shell PCB's working-directory string after host validation | [`chdir()`](library/unistd/working_directory.picoc#L4) / syscall 30 |
-| `load PATH` | Loads a binary but leaves its PCB in `NEW` | [`load()`](library/unistd/process.picoc#L17) / syscall 2 |
-| `run PID [ARGUMENTS]` | Starts a previously loaded PCB; supports `&`, `<`, `>`, `>>`, `2>`, and `2>>` | [`run()`](library/unistd/process.picoc#L31), and possibly [`open`](library/fcntl/fcntl.picoc#L5)/[`dup2`](library/unistd/io.picoc#L45)/[`close`](library/unistd/io.picoc#L41), [`set_foreground_process`](library/unistd/process.picoc#L63), [`waitpid`](library/sys/wait/wait.picoc#L14) |
-| `unload PID` | Terminates/removes the selected non-current process | [`unload()`](library/unistd/process.picoc#L47) / syscall 5 |
-| `fg` | Makes the most recently tracked PID foreground, sends [`SIGCONT`](common/signal.header#L6), and waits | [`set_foreground_process`](library/unistd/process.picoc#L63), [`kill`](library/signal/signal.picoc#L14), [`waitpid`](library/sys/wait/wait.picoc#L14) |
+| `cd DIRECTORY` | Changes this shell PCB's working-directory string after host validation | [`chdir()`](library/unistd/working_directory.picoc#L4)<br>**Host request:** `is-directory <absolute-path>` |
+| `load PATH` | Loads a binary but leaves its PCB in [`NEW`](kernel/process/process.header#L12) | [`load()`](library/unistd/process.picoc#L17)<br>**Host requests:** `file-size <path>`, then `read-range <offset> <count> <path>` for the header and executable payload |
+| `run PID [ARGUMENTS]` | Starts a previously loaded PCB, supports `&`, `<`, `>`, `>>`, `2>`, and `2>>` | [`run()`](library/unistd/process.picoc#L31), and possibly [`open()`](library/fcntl/fcntl.picoc#L5)/[`dup2()`](library/unistd/io.picoc#L58)/[`close()`](library/unistd/io.picoc#L54), [`set_foreground_process()`](library/unistd/process.picoc#L59), [`waitpid()`](library/sys/wait/wait.picoc#L14)<br>**Host requests when opening redirections:** `file-size <path>` for input/append existence checks, or `write <path>` followed by `write stdout` to create/truncate output |
+| `unload PID` | Terminates/removes the selected non-current process | [`unload()`](library/unistd/process.picoc#L47) |
+| `fg` | Makes the most recently tracked PID foreground, sends [`SIGCONT`](common/signal.header#L6), and waits | [`set_foreground_process`](library/unistd/process.picoc#L59), [`kill`](library/signal/signal.picoc#L14), [`waitpid`](library/sys/wait/wait.picoc#L14) |
 | `bg` | Sends [`SIGCONT`](common/signal.header#L6) to the most recently tracked PID without waiting | [`kill()`](library/signal/signal.picoc#L14) |
 
-The built-ins report missing required operands. `exit`, `fg`, and `bg` reject extra operands, while
-`cd` requires exactly one directory or help argument. `load` accepts the remaining text as its path;
-`run` accepts arguments after the PID. `cd -h`/`--help` prints its usage. A bare `NAME=value` is not
-assignment syntax and is treated as an external command; `unset` is not implemented even though the
-library provides [`unsetenv()`](library/stdlib/env.picoc#L157).
+Built-ins check required operands. `exit`, `fg`, and `bg` reject extras,
+and `cd` requires one directory or help argument. [`load`](user/shell.picoc#L1224) takes the remaining
+path text, while [`run`](user/shell.picoc#L1224) accepts arguments after its PID. Bare `NAME=value`
+is treated as an external command, and there is no `unset` built-in.
 
-## 12.6 Foreground, background, and signals
+### 12.5.1 Foreground processes, background processes, and job-control signals
+[\[↑ TOC\]](#contents)
 
-For a foreground child, the shell gives the child's PID to
-[`set_foreground_process()`](library/unistd/process.picoc#L63), waits for exactly that PID, restores
-terminal ownership with PID 0, and stores the returned status in `$?`. `Ctrl+C` becomes
-[`SIGINT`](common/signal.header#L4); `Ctrl+Z` becomes [`SIGTSTP`](common/signal.header#L8). A
-stopped status is recorded as the current `$!` target so `fg` or `bg` can continue it.
+Foreground execution gives the child terminal ownership and waits for its
+exact PID. The shell then reclaims input and stores the returned status
+in `$?`. A stopped child becomes the tracked `$!` target for `fg` or `bg`.
 
-A trailing `&` starts the child without waiting and stores the PID in `$!`. The shell tracks only
-one background/stopped PID rather than a job table. A background process that reads terminal stdin
-is stopped with [`SIGTTIN`](common/signal.header#L9); `fg` chooses that tracked process, transfers
-input ownership, and then continues its pending read. New input never wakes or selects a stopped
-background process on its own. `bg` alone cannot continue any stopped process that has a pending
-terminal read. A successful external background start preserves `$?`; a successful `run PID &`
-built-in sets it to 0. At shell startup, `PR_SET_PDEATHSIG=SIGKILL` is installed on the shell and
-inherited by children, so children receive [`SIGKILL`](common/signal.header#L5) when their direct
-parent terminates, with termination propagating to further descendants that retain this setting.
+This excerpt shows descriptor restoration before ownership transfer,
+followed by waiting and ownership reset:
 
-## 12.7 Redirection and pipelines
+```c
+started = run(pid, expand_variables(
+                       arguments,
+                       expanded_arguments,
+                       SHELL_COMMAND_BUFFER_CAPACITY),
+              NULL);
+restore_standard_descriptors(
+    stdin_redirected, stdout_redirected, stderr_redirected
+);
 
-For `COMMAND < PATH`, the shell saves stdin in private descriptor 3, closes descriptor 0, and opens
-the path read-only into that lowest free slot. It starts the child with the resulting descriptor
-table and then restores its own stdin. For example, `cat.bin < input.txt` uses cat's ordinary
-no-argument stdin path; cat contains no redirection parser. `shell.bin < commands.txt` likewise uses
-its normal line reader and exits when that input reaches EOF.
+if (!started) {
+    shell_write_error_string("error: could not start process\n");
+} else if (background) {
+    last_background_process_id = pid;
+} else {
+    set_foreground_process(pid);
+    last_command_exit_status = waitpid(pid);
+    set_foreground_process(0);
+    /* report status and remember a stopped pid */
+}
+```
 
-For `COMMAND > PATH`, the shell opens with `O_WRONLY | O_CREAT | O_TRUNC`; for `>>`, it uses
-`O_WRONLY | O_CREAT | O_APPEND`. It saves stdout in private descriptor 5, copies the opened file
-onto descriptor 1, starts the child, and restores its own stdout. Since
-[`run()`](library/unistd/process.picoc#L31) deep-copies the descriptor table, the child's descriptor
-1 retains the file path after the shell restores itself.
+`set_foreground_process()` stores the child PID for a positive argument.
+Argument zero instead stores the shell's negative PID:
 
-For `COMMAND 2> PATH`, the shell performs the same operation for stderr with private descriptor 6
-and opens the destination with truncation. `2>>` instead opens it for appending. Thus normal stdout
-stays visible while diagnostics can be inspected separately, accumulated across commands, or sent to
-`/device/null.dev`.
+```c
+int set_foreground_process(int pid) {
+    struct ProcessControlBlock *process;
 
-The two paths under `/device` are exceptions to ordinary host-file redirection.
-`/device/terminal.dev` connects output to UART, while `/device/null.dev` accepts and discards it.
-The kernel does not truncate or write either marker file when the normalized path is exactly one of
-those two special paths. The sequence below follows [`redirect_output()`](user/shell.picoc#L965),
-[`run()`](library/unistd/process.picoc#L31), and
-[`restore_standard_descriptors()`](user/shell.picoc#L928) for stdout. The write branch explains why
-append needs a size request while ordinary output uses its saved offset.
+    if (pid == 0) {
+        foreground_process_target = -current_process()->pid;
+        return 0;
+    }
+
+    process = find_process_by_pid(pid);
+    if (process == NULL ||
+        process->parent_pid != current_process()->pid) {
+        return -1;
+    }
+
+    foreground_process_target = pid;
+    return 0;
+}
+```
+
+The negative value keeps shell input ownership while suppressing terminal
+signals. `fg` uses the same set–continue–wait–reset sequence. `bg` neither
+changes ownership nor waits.
+
+`$!` remembers one background or stopped PID. Several jobs may exist, but
+there is no job table. Successful external background starts leave `$?`
+unchanged, while `run PID &` sets it to zero. Failures set it to one.
+Background completion does not update these values asynchronously.
+
+Redirection is copied during [`run()`](library/unistd/process.picoc#L31) before the shell restores itself,
+so a background child keeps its files afterward. A terminal read by a
+background child receives [`SIGTTIN`](common/signal.header#L9). File input needs no terminal ownership.
+
+Every child has an independent descriptor table. Later commands cannot
+overwrite an earlier child's redirection. Background exits become zombies
+until collected, unloaded, or removed as orphans. The shell does not
+automatically wait for them.
+
+The library can collect an exact PID with [`waitpid()`](library/sys/wait/wait.picoc#L14), but the shell has
+no `wait` built-in. `fg` handles the tracked running or stopped process.
+For a zombie, its preceding [`SIGCONT`](common/signal.header#L6) fails, so it does not collect that
+status. Older PIDs replaced in `$!` are also unavailable to `fg`. Their
+zombies remain until explicit unloading or shell termination.
+
+For a stopped reader, `fg` assigns ownership before continuing its pending
+read. [`8.4 Foreground input ownership and terminal-generated signals`](#84-foreground-input-ownership-and-terminal-generated-signals) shows the buffer and queue changes. Children normally inherit
+the shell's parent-death [`SIGKILL`](common/signal.header#L5), allowing termination to propagate.
+
+## 12.6 Input/output redirection
+[\[↑ TOC\]](#contents)
+
+A conventional Unix shell uses `fork()`, redirects the child's descriptors,
+and calls `exec()` to replace its image. The parent keeps its own table.
+
+PicoOS has neither process cloning nor image replacement. Its [`load()`](library/unistd/process.picoc#L17)
+creates a [`NEW`](kernel/process/process.header#L12) process, and [`run()`](library/unistd/process.picoc#L31) copies caller state before setting
+[`READY`](kernel/process/process.header#L13). The shell therefore redirects its own descriptors, starts the
+child with that snapshot, and restores itself. Paging is not inherently
+required for `fork()`, so its absence alone does not explain this design.
+
+[`dup2()`](library/unistd/io.picoc#L58) deep-copies the path and scalar fields into the target entry.
+The source stays unchanged, and offsets evolve independently. Equal
+descriptor numbers leave the entry unchanged.
+
+The shell reserves slot 5 for stdin, 6 for stdout, and 7 for stderr.
+Ordinary opens use only 0–4. If those are full, redirection fails before
+starting the child.
+
+This `COMMAND > OUT` trace shows complete descriptor entries and their
+own path copies, rather than Unix shared open-file descriptions. `T-in`,
+`T-out`, and `T-err` label the terminal streams:
+
+| Descriptor | 1. Initial shell | 2. After opening `OUT` as 3, then saving 1 as 6 | 3. After installing 3 as 1 and closing 3 | 4. Child after run setup | 5. Shell after restoring 6 as 1 and closing 6 |
+| ---: | --- | --- | --- | --- | --- |
+| 0 | `T-in` | `T-in` | `T-in` | independent `T-in` copy | `T-in` |
+| 1 | `T-out` | `T-out` | `OUT` | independent `OUT` copy | `T-out` |
+| 2 | `T-err` | `T-err` | `T-err` | independent `T-err` copy | `T-err` |
+| 3 | free | `OUT` opened here | free | free | free |
+| 4 | free | free | free | free | free |
+| 5 | free | free | free | free because inheritance never examines it | free |
+| 6 | free | saved `T-out` copy | saved `T-out` copy | free because inheritance never examines it | free |
+| 7 | free | free | free | free because inheritance never examines it | free |
+
+The arrows show how the snapshots are produced. Output is opened before
+stdout is saved, so open failure leaves the original table untouched:
 
 ```mermaid
-sequenceDiagram
-    participant S as Shell
-    participant K as Kernel descriptor/process code
-    participant H as RETI-Emulator host file
-    participant C as Child
+flowchart TB
+    subgraph SAVE["2. shell saves its stdout"]
+        S3["fd 3: OUT (open happened first)"]
+        S1["fd 1: T-out"] -->|"dup2(1, 6)"| S6["fd 6: saved T-out"]
+    end
 
-    S->>K: open(path, write/create/truncate or append)
-    opt truncating redirect
-        K->>H: ESC write path ESC /, then restore stdout
+    subgraph REDIRECT["3. shell installs OUT"]
+        O3["fd 3: OUT from open()"] -->|"dup2(3, 1)"| O1["fd 1: OUT"]
+        O3 -->|"close(3)"| OF["fd 3: free"]
     end
-    K-->>S: Temporary descriptor
-    S->>K: dup2(1, 5), dup2(temporary, 1), close(temporary)
-    S->>K: run(child)
-    K->>C: Deep-copy all eight descriptor entries
-    S->>K: dup2(5, 1), then close(5)
-    C->>K: write(1, bytes, count)
-    alt Append redirect
-        K->>H: ESC file-size path ESC /
-        H-->>K: Current size becomes write offset
-    else Truncating redirect
-        K->>K: Use descriptor offset, initially zero
+
+    subgraph RUN["4. run(): shell and child tables are different allocations"]
+        direction LR
+        subgraph ST["shell table"]
+            ST0["0: T-in"]
+            ST1["1: OUT"]
+            ST2["2: T-err"]
+            ST34["3–4: free (or opened FILE entries)"]
+            ST57["5: free · 6: saved T-out · 7: free"]
+        end
+        subgraph CT["new child table"]
+            CT0["0: T-in copy"]
+            CT1["1: OUT copy"]
+            CT2["2: T-err copy"]
+            CT34["3–4: FILE copies or free"]
+            CT57["5–7: free"]
+        end
+        ST0 -->|"always copied"| CT0
+        ST1 -->|"always copied"| CT1
+        ST2 -->|"always copied"| CT2
+        ST34 -->|"copy only FILE entries"| CT34
+        ST57 -. "not examined" .-> CT57
     end
-    K->>H: ESC write-at offset path ESC /, bytes, ESC write stdout ESC /
+
+    subgraph RESTORE["5. shell restores itself while the child remains unchanged"]
+        R6["shell fd 6: saved T-out"] -->|"dup2(6, 1)"| R1["shell fd 1: T-out"]
+        R6 -->|"close(6)"| RF["shell fd 6: free"]
+        C1["child fd 1: OUT"] --> KEEP["continues to name OUT"]
+    end
+
+    SAVE --> REDIRECT --> RUN --> RESTORE
 ```
 
-For `>`, opening first empties the host file and ordinary writes begin at offset zero. For `>>`,
-[`O_APPEND`](common/file.header#L15) makes every write request the current file size and write
-there. Redirections can be combined, including `sed.bin "5iNEW" < input.txt > output.txt`.
+Descriptor inheritance happens in run setup, before the child is scheduled:
 
-One `LEFT | RIGHT` operator is supported. For two foreground external commands,
-[`run_pipeline()`](user/shell.picoc#L725) runs `LEFT` to completion with stdout redirected to a
-hidden `.picoos-pipe-PID.tmp` file, then runs `RIGHT` with that file as stdin and removes it. This
-supports finite commands such as `cat.bin file.txt | sed.bin "5aNEW" > file2.txt`, but it is
-sequential rather than streaming and does not support longer pipelines. Combining `&` with a
-pipeline does not provide this completion ordering; commands that require a streaming pipe cannot
-use this temporary-file mechanism. Arbitrary descriptor syntax and a general `dup()` interface are
-not implemented.
+```c
+bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
+    struct ProcessControlBlock *process;
+    struct FileDescriptorTable *file_descriptors;
 
-The command example below uses [`echo.bin`](user/echo.picoc#L20) to create input,
-[`cat.bin`](user/cat.picoc#L103) and [`sed.bin`](user/sed.picoc#L66) to pass it through a
-two-command pipeline, and [`rm.bin`](user/rm.picoc#L11) to remove the files afterward. Enter the
-lines at the PicoOS prompt in a writable working directory; the final display is `first`,
-`INSERTED`, and `second` on separate lines. The intermediate pipeline file is removed by the shell.
+    process = find_process_by_pid(request->pid);
+    if (process == NULL || process->state != PROCESS_STATE_NEW) {
+        return false;
+    }
+    if (current_process() != NULL) {
+        file_descriptors = inherit_file_descriptors(
+            current_process()->file_descriptors
+        );
+        destroy_file_descriptor_table(process->file_descriptors);
+        process->file_descriptors = file_descriptors;
+    }
 
-```text
-echo.bin "first\nsecond" > pipeline-input.txt
-cat.bin pipeline-input.txt | sed.bin "1aINSERTED" > pipeline-output.txt
-cat.bin pipeline-output.txt
-rm.bin pipeline-input.txt pipeline-output.txt
+    store_process_arguments(process, request->arguments, request->environment);
+    process->state = PROCESS_STATE_READY;
+    return true;
+}
 ```
 
-## 12.8 Shell-test support
+The copy examines only 0–4 and skips saved originals in 5–7. [`8.1 Per-process file-descriptor table`](#81-per-process-file-descriptor-table) gives
+the full inheritance rule.
 
-The repository has **28 shell test classes**, counted as scenario directories with input/output
-fixtures that the runner classifies as shell tests. The
-[runner’s classification](run_os_tests.py#L115) is based on each scenario’s launcher and input
-script, not its directory name; the other **23 OS test classes** use the standard launcher script.
-Together with the **12 library test classes**, these are the categories described in the
-[test-system chapter](#15-test-system).
+The table follows each redirection. Startup has already closed 3–7,
+including in a nested shell:
 
-`run-shell-tests` is an internal built-in used so many interactive cases can run after one boot. The
-shell snapshots its initial environment and directory, closes private descriptors, resets non-system
-processes/PIDs, redirects test output as required, evaluates each input line, and restores state.
-This is why test-reset helpers appear in the userspace/kernel ABI even though they are not normal
-interactive facilities. [`run_shell_test_manifest()`](user/shell.picoc#L1306) calls
-[`run_shell_test()`](user/shell.picoc#L1212) for each listed scenario, and
-[`shell_reset()`](user/shell.picoc#L241) restores processes, descriptors 3–7, environment,
-directory, `$?`, and `$!` between cases. The [fast runner](run_os_tests_fast.py) sends raw editing
-input through UART and uses separate sessions for nested interactive shells and direct terminal
-output; those scenarios cannot be represented by calls to [`eval()`](user/shell.picoc#L1340) alone.
-
-# 13. User applications
-
-The shell described above is one of **18 user applications** in [`user/`](user/):
-**17 standalone commands plus the shell**. The separate init and test-launcher
-programs in [`system/`](system/) are not included in this count. An application
-runs in its own process and cannot directly change its parent shell's environment, working directory, or descriptor table.
-
-## 13.1 Applications and their library use
-
-The table lists all 18 programs, links each source at its entry point, and
-identifies the main library calls behind its behavior. These calls come from
-the [14 libraries](#102-implemented-libraries), which expose the
-[38 kernel syscalls](#43-system-call-path) where a kernel service is needed.
-Shared command helpers are explained below the table.
-
-| Binary (source link) | Behavior | Library functions |
-| --- | --- | --- |
-| [`shell.bin`](user/shell.picoc#L1577) | Interactive command interpreter that can read newline-separated commands from redirected stdin | [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L31), [`lseek()`](library/unistd/io.picoc#L53), [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), [`waitpid()`](library/sys/wait/wait.picoc#L14), [`kill()`](library/signal/signal.picoc#L14), [`prctl()`](library/sys/prctl/prctl.picoc#L14), [`getenv()`](library/stdlib/env.picoc#L115), [`setenv()`](library/stdlib/env.picoc#L126), [`strlen()`](library/string/string.picoc#L60), [`open()`](library/fcntl/fcntl.picoc#L5), [`dup2()`](library/unistd/io.picoc#L45), [`close()`](library/unistd/io.picoc#L41), [`unlink()`](library/unistd/file_removal.picoc#L4), [`chdir()`](library/unistd/working_directory.picoc#L4), [`getcwd()`](library/unistd/working_directory.picoc#L11); see [Shell](#12-shell) for the other calls |
-| [`echo.bin`](user/echo.picoc#L20) | Prints [`argv[1..]`](user/echo.picoc#L20) separated by spaces, converts `\n` inside an argument, and adds a newline | [`printf()`](library/stdio/stdio.picoc#L351) |
-| [`count.bin`](user/count.picoc#L20) | Counts forever with an optional busy-loop delay and yields after each displayed value | [`printf()`](library/stdio/stdio.picoc#L351), [`atoi()`](library/stdlib/atoi.picoc#L4), [`yield()`](library/schedule/schedule.picoc#L4) |
-| [`cat.bin`](user/cat.picoc#L103) | Copies named files or stdin to stdout; terminal stdin supports line editing | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L31), [`lseek()`](library/unistd/io.picoc#L53), [`close()`](library/unistd/io.picoc#L41), [`unsetenv()`](library/stdlib/env.picoc#L157) |
-| [`touch.bin`](user/touch.picoc#L11) | Creates each named file or updates its timestamps while preserving contents | [`touch()`](library/unistd/file_removal.picoc#L20) |
-| [`cp.bin`](user/cp.picoc#L16) | Copies one file to another in 64-cell chunks | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L31), [`close()`](library/unistd/io.picoc#L41), [`unsetenv()`](library/stdlib/env.picoc#L157) |
-| [`mv.bin`](user/mv.picoc#L11) | Moves or renames one file or directory | [`move()`](library/unistd/file_removal.picoc#L12) |
-| [`sed.bin`](user/sed.picoc#L66) | Reads stdin and inserts, changes, or appends text at selected lines | [`lseek()`](library/unistd/io.picoc#L53), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L31), [`malloc()`](library/stdlib/malloc.picoc#L35), [`free()`](library/stdlib/malloc.picoc#L49), [`unsetenv()`](library/stdlib/env.picoc#L157) |
-| [`ps.bin`](user/ps.picoc#L11) | Prints every process PID and canonical system-relative binary path | [`list_processes()`](library/unistd/process.picoc#L51) |
-| [`ls.bin`](user/ls.picoc#L13) | Lists `.` or one directory, hides dot entries by default, and supports `-a` | [`opendir()`](library/dirent/dirent.picoc#L8), [`readdir()`](library/dirent/dirent.picoc#L40), [`closedir()`](library/dirent/dirent.picoc#L66) |
-| [`mkdir.bin`](user/mkdir.picoc#L12) | Creates every supplied directory and reports individual failures | [`mkdir()`](library/sys/stat/stat.picoc#L5) |
-| [`pwd.bin`](user/pwd.picoc#L11) | Prints the working directory copied from its PCB | [`getcwd()`](library/unistd/working_directory.picoc#L11) |
-| [`rm.bin`](user/rm.picoc#L11) | Removes every supplied file and continues after errors | [`unlink()`](library/unistd/file_removal.picoc#L4) |
-| [`rmdir.bin`](user/rmdir.picoc#L11) | Removes every supplied empty directory and continues after errors | [`rmdir()`](library/unistd/file_removal.picoc#L8) |
-| [`kill.bin`](user/kill.picoc#L69) | Sends [`SIGKILL`](common/signal.header#L5) by default, a named/numbered signal, or signal 0 as a PID probe | [`kill()`](library/signal/signal.picoc#L14), [`atoi()`](library/stdlib/atoi.picoc#L4), [`yield()`](library/schedule/schedule.picoc#L4) |
-| [`poweroff.bin`](user/poweroff.picoc#L12) | Halts PicoOS | [`invoke_syscall()`](library/unistd/process.picoc#L7) with shutdown selector 0 |
-| [`reboot.bin`](user/reboot.picoc#L12) | Requests a kernel-controlled reboot | [`invoke_syscall()`](library/unistd/process.picoc#L7) with reboot selector 1 |
-| [`uname.bin`](user/uname.picoc#L15) | Prints the PicoOS version stored in [`config/os-release.txt`](config/os-release.txt) | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L31), [`close()`](library/unistd/io.picoc#L41) |
-
-[`common/user_command.picoc`](common/user_command.picoc) supplies two shared
-application helpers. The table explains their return values, output effects,
-and calls; neither helper keeps persistent state.
-
-| Kernel function (shared helper) | Return value / status | Effects | Calls |
+| Shell form | Opens/creates | Copies and replacements before [`run()`](library/unistd/process.picoc#L31) | Child endpoints and shell cleanup |
 | --- | --- | --- | --- |
-| [`command_write()`](common/user_command.picoc#L4) | No return value; the write result is ignored | Counts the text and writes it to the selected descriptor, such as stdout or stderr; the call creates an [`IoRequest`](common/file.header#L31) inside the library | [`write()`](library/unistd/io.picoc#L31) |
-| [`command_is_help()`](common/user_command.picoc#L13) | `true` for exactly `-h` or `--help`; `false` otherwise | Reads the argument without changing it | None |
+| `COMMAND` | None | None | Child receives independent copies of 0–2 and opened-file entries in 3–4 |
+| `COMMAND < IN` | Save 0 in reserved slot 5, close 0, then [`open(IN, O_RDONLY)`](library/fcntl/fcntl.picoc#L5) must return 0 | [`dup2(0, 5)`](library/unistd/io.picoc#L58) saves current stdin | Child reads `IN` on 0 but does not inherit slot 5, shell restores 5 to 0, then closes 5 |
+| `COMMAND > OUT` | [`open(OUT, O_WRONLY \| O_CREAT \| O_TRUNC)`](library/fcntl/fcntl.picoc#L5), normally temporary slot 3 | [`dup2(1, 6)`](library/unistd/io.picoc#L58) saves stdout, [`dup2(temporary, 1)`](library/unistd/io.picoc#L58) installs `OUT`, close temporary | Child writes `OUT` on 1 but does not inherit slot 6, shell restores 6 to 1, then closes 6 |
+| `COMMAND >> OUT` | Same, with [`O_APPEND`](common/file.header#L15) instead of [`O_TRUNC`](common/file.header#L14) | Same stdout operations | Each child write appends using a `file-size` request |
+| `COMMAND 2> ERR` / `2>> ERR` | Open with the corresponding truncate/append flags | [`dup2(2, 7)`](library/unistd/io.picoc#L58) saves stderr, [`dup2(temporary, 2)`](library/unistd/io.picoc#L58) installs `ERR`, close temporary | Child writes `ERR` on 2 but does not inherit slot 7, shell restores 7 to 2, then closes 7 |
+| `COMMAND < IN > OUT 2> ERR` | Perform stdout, stderr, then stdin setup, append variants may replace either output operator | Combines the operations above, using reserved slots 5, 6, and 7 | Child receives all redirected 0/1/2 endpoints but none of the saved originals, shell restores and closes every used save slot after [`run()`](library/unistd/process.picoc#L31) |
+| `LEFT \| RIGHT` | Create `.picoos-pipe-PID.tmp` through `LEFT > temporary`, then open it through `RIGHT < temporary` | Uses stdout save slot 6 for `LEFT` and stdin save slot 5 for `RIGHT`, no pipe descriptor kind exists | `LEFT` writes the host-backed file and exits before `RIGHT` reads it, each command's shell descriptors are restored, then the shell unlinks the temporary path |
 
-Every user program except [`echo.bin`](user/echo.picoc) uses [`command_is_help()`](common/user_command.picoc#L13) for a sole help
-argument. [`echo.bin`](user/echo.picoc) keeps `-h` and `--help` as ordinary text to print.
+Combined operators must appear in input, stdout, stderr order. Parsing
+removes them in reverse because each must be the current command suffix.
 
-## 13.2 Command behavior and limitations
+Temporary output descriptors close before [`run()`](library/unistd/process.picoc#L31). Saved originals remain
+until restoration, then close before foreground waiting. The child's
+independent copies survive. UART destination selection happens for each
+write in the kernel, as explained in [`8.8 Opening, reading, writing, and seeking`](#88-opening-reading-writing-and-seeking).
 
-[`echo.bin`](user/echo.picoc) always returns 0 and implements no `-n` option. [`count.bin`](user/count.picoc) accepts
-at most one nonnegative loop-count delay; its delay is not measured in milliseconds, and
-[`yield()`](library/schedule/schedule.picoc#L4) makes its infinite loop a visible scheduler example.
+`cat.bin < input.txt` uses cat's ordinary stdin behavior.
+`shell.bin < commands.txt` similarly reads commands until EOF. A nested
+shell retains redirected 0–2 while closing 3–7. Device targets use the
+behavior described in [`8.5 Virtual terminal and null-device paths`](#85-virtual-terminal-and-null-device-paths).
 
-[`cat.bin`](user/cat.picoc) copies each named path in 64-cell chunks. With no operands, seekable
-stdin is copied byte-for-byte, so `cat.bin < input.txt` needs no special cat
-logic. Terminal stdin is line-buffered: Backspace/Delete edits the current
-line, Enter writes it to stdout, and Ctrl+D finishes. When stdout is redirected
-to a file, editing feedback goes to stderr so `cat.bin > output.txt` remains
-usable. It returns 1 after an open, read, or write failure.
+For `program > file.txt`, [`redirect_output()`](user/shell.picoc#L1003) saves stdout in slot 6
+and installs a truncating output descriptor. These lines show rollback
+on partial failure:
 
-[`touch.bin`](user/touch.picoc) accepts one or more paths and stops at the first failure. [`cp.bin`](user/cp.picoc) and [`mv.bin`](user/mv.picoc) each accept exactly
-one source and destination and have no options. [`cp.bin`](user/cp.picoc) also disables
-`PICOOS_LOADING_BAR`; [`mv.bin`](user/mv.picoc) demonstrates a small multi-path syscall and the
-emulator's matching `move` host request. [`ps.bin`](user/ps.picoc) calls the process-list
-syscall from its own process.
+```c
+opened_file_descriptor = open(path, flags);
+if (opened_file_descriptor < 0) {
+    return false;
+}
+if (dup2(target_file_descriptor, saved_file_descriptor) < 0) {
+    close(opened_file_descriptor);
+    return false;
+}
+if (dup2(opened_file_descriptor, target_file_descriptor) < 0) {
+    close(opened_file_descriptor);
+    close(saved_file_descriptor);
+    return false;
+}
+close(opened_file_descriptor);
+return true;
+```
 
-[`sed.bin`](user/sed.picoc) has no path operand: `sed.bin EXPRESSION` reads seekable stdin and
-writes its result to stdout. Input can come from `< input.txt` or from the
-shell's file-backed pipeline. Expressions such as `5iNEW LINE`, `5cNEW LINE`,
-`5aNEW LINE`, and `/pattern/iNEW LINE` respectively insert before, change,
-append after, or insert before every matching line. `s/pattern/replacement/`
-replaces the first literal occurrence of `pattern` on every line. Sed loads
-stdin into memory and disables `PICOOS_LOADING_BAR` so output is not mixed with
-progress text.
+`>>` selects [`O_APPEND`](common/file.header#L15), while `>` selects [`O_TRUNC`](common/file.header#L14). Stderr uses the
+same helper with target 2 and save slot 7. Append checks file size for
+each write.
 
-[`ls.bin`](user/ls.picoc) receives entries sorted by name from the emulator and hides names
-beginning with `.` unless `-a` is given. It prefixes directories with `d ` and other entries with
-`- `. There is no long format or recursion. [`mkdir.bin`](user/mkdir.picoc) has no
-`-p`; [`rm.bin`](user/rm.picoc) has no force/recursive mode; [`rmdir.bin`](user/rmdir.picoc) removes only empty
-directories. [`mkdir.bin`](user/mkdir.picoc), [`rm.bin`](user/rm.picoc), and [`rmdir.bin`](user/rmdir.picoc) continue through later
-operands after an individual error.
+Input redirection saves stdin in slot 5, closes slot 0, and relies on
+lowest-free allocation to reopen the input there:
 
-[`kill.bin`](user/kill.picoc) accepts [`SIGINT`](common/signal.header#L4), [`SIGKILL`](common/signal.header#L5), [`SIGCONT`](common/signal.header#L6), [`SIGSTOP`](common/signal.header#L7), [`SIGTSTP`](common/signal.header#L8), and
-[`SIGTTIN`](common/signal.header#L9) by name without a leading `-`, or by number. Signal 0 checks
-existence without delivery. It yields after success so the target can be
-selected promptly. [`poweroff.bin`](user/poweroff.picoc) differs from shell built-in [`exit`](user/shell.picoc#L1373): the former
-invokes syscall 0 and halts the OS, whereas the latter lets init start a new
-shell. [`reboot.bin`](user/reboot.picoc) invokes syscall 1, which performs a full bootloader and
-kernel startup without ending the emulator process.
-[`uname.bin`](user/uname.picoc) prints `PicoOS-` followed by the release version installed from
-[`config/os-release.txt`](config/os-release.txt).
+```c
+if (dup2(STDIN_FILENO, SHELL_SAVED_STDIN_FILENO) < 0) {
+    return false;
+}
+close(STDIN_FILENO);
+file_descriptor = open(path, O_RDONLY);
+if (file_descriptor != STDIN_FILENO) {
+    if (file_descriptor >= 0) {
+        close(file_descriptor);
+    }
+    restore_standard_descriptors(true, false, false);
+    return false;
+}
+return true;
+```
 
-The following commands can be entered in the PicoOS shell from a writable
-directory. They show how [`echo.bin`](user/echo.picoc), [`cat.bin`](user/cat.picoc), and [`sed.bin`](user/sed.picoc) work together:
-create two lines, replace text through a file-backed pipeline, then read and
-remove both files. Each line after a prompt is a separate shell command.
+The child's copies also preserve background redirection after shell
+restoration. [`12.5.1 Foreground processes, background processes, and job-control signals`](#1251-foreground-processes-background-processes-and-job-control-signals) covers background status. Operators can combine,
+for example `sed.bin "5iNEW" < input.txt > output.txt 2> str_err_file.txt`.
+
+## 12.7 Sequential file-backed pipelines
+[\[↑ TOC\]](#contents)
+
+PicoOS supports one pipeline operator using a temporary host file. The
+producer finishes before the consumer starts.
+
+[`run_pipeline()`](user/shell.picoc#L762) builds `.picoos-pipe-<shell PID>.tmp` in the current
+directory. It adds output redirection to the left command and input
+redirection to the right, as this code shows:
+
+```c
+build_shell_pipe_path();
+if (!insert_redirection(
+        command,
+        ">",
+        shell_pipe_path,
+        strlen(command),
+        shell_pipe_left_command
+    ) || !insert_redirection(
+        right_command,
+        "<",
+        shell_pipe_path,
+        find_output_redirection(right_command),
+        shell_pipe_right_command
+    )) {
+    shell_write_error_string("error: pipeline is too long\n");
+    last_command_exit_status = 1;
+    return true;
+}
+
+eval(shell_pipe_left_command);
+evaluating = eval(shell_pipe_right_command);
+unlink(shell_pipe_path);
+```
+
+For `LEFT | RIGHT > OUT`, the rewrite and both complete descriptor snapshots are:
+
+```mermaid
+flowchart TB
+    I["input: LEFT | RIGHT > OUT"]
+    W["rewrite<br/>LEFT > TMP<br/>RIGHT < TMP > OUT<br/>TMP = .picoos-pipe-&lt;shell-pid&gt;.tmp"]
+
+    subgraph PRODUCER["producer: eval(LEFT > TMP)"]
+        P0["shell before setup<br/>0 T-in · 1 T-out · 2 T-err<br/>3 free · 4 free · 5 free · 6 free · 7 free"]
+        P1["open(TMP) → 3<br/>1 → 6: dup2(1,6)<br/>3 → 1: dup2(3,1)<br/>close(3)<br/><b>shell:</b> 0 T-in · 1 TMP · 2 T-err · 3 free · 4 free · 5 free · 6 T-out · 7 free"]
+        PC["run() copies child table<br/><b>producer:</b> 0 T-in · 1 TMP · 2 T-err<br/>3 free · 4 free · 5 free · 6 free · 7 free"]
+        PR["shell immediately restores<br/>6 → 1: dup2(6,1)<br/>close(6)<br/><b>shell:</b> 0 T-in · 1 T-out · 2 T-err<br/>3–7 free"]
+        PW["waitpid(producer)<br/>TMP now contains the complete output"]
+        P0 --> P1 --> PC --> PR --> PW
+    end
+
+    subgraph CONSUMER["consumer: eval(RIGHT < TMP > OUT)"]
+        C1["stdout first<br/>open(OUT) → 3<br/>1 → 6<br/>3 → 1<br/>close(3)<br/>stdin next<br/>0 → 5<br/>close(0)<br/>open(TMP) → 0<br/><b>shell:</b> 0 TMP · 1 OUT · 2 T-err · 3 free · 4 free · 5 T-in · 6 T-out · 7 free"]
+        CC["run() copies child table<br/><b>consumer:</b> 0 TMP · 1 OUT · 2 T-err<br/>3 free · 4 free · 5 free · 6 free · 7 free"]
+        CR["shell immediately restores<br/>5 → 0<br/>close(5)<br/>6 → 1<br/>close(6)<br/><b>shell:</b> 0 T-in · 1 T-out · 2 T-err · 3–7 free"]
+        CW["waitpid(consumer)"]
+        CU["unlink(TMP)"]
+        C1 --> CC --> CR --> CW --> CU
+    end
+
+    I --> W --> P0
+    PW --> C1
+```
+
+The producer's [`waitpid()`](library/sys/wait/wait.picoc#L14) separates the two stages. Each child inherits
+its final endpoints, and the shell restores itself before waiting.
+
+The left [`eval()`](user/shell.picoc#L1224) creates or truncates the file and waits for the producer.
+The right opens it as stdin and waits for the consumer. Then [`unlink()`](library/unistd/file_removal.picoc#L4)
+removes it. The two descriptors use the same path without a kernel pipe.
+An existing file with that generated name is also truncated and removed.
+
+Finite pipelines such as `cat.bin file.txt | sed.bin "5aNEW" > file2.txt`
+work. Longer pipelines and `&` combinations are unsupported. A background
+consumer can lose its input pathname on unlink, and a background producer
+can expose partial output.
+
+A conventional pipe has a bounded kernel buffer and concurrent processes.
+Empty reads and full writes block, with EOF after the last writer closes.
+That provides backpressure and streaming. PicoOS instead stores the whole
+producer result before starting the consumer, so it cannot support
+unbounded or interactive streams.
+
+The file-backed design reuses [`open()`](library/fcntl/fcntl.picoc#L5), redirection, [`waitpid()`](library/sys/wait/wait.picoc#L14), and
+[`unlink()`](library/unistd/file_removal.picoc#L4). A kernel pipe would need shared endpoint state, a buffer,
+reader/writer queues, EOF rules, and concurrent startup. These are visible
+tradeoffs. The source does not record the historical reason for the choice.
+
+This session creates input, runs one pipeline, displays the result, and
+removes the files. Use a writable directory. The shell removes its temporary
+file:
 
 ```console
-PicoOS> echo.bin "first\nsecond" > demo.txt
-PicoOS> cat.bin demo.txt | sed.bin "s/second/changed/" > edited.txt
-PicoOS> cat.bin edited.txt
-first
-changed
-PicoOS> rm.bin demo.txt edited.txt
+PicoOS> echo.bin "first\nsecond" > pipeline-input.txt
+PicoOS> cat.bin pipeline-input.txt | sed.bin "1aINSERTED" > pipeline-output.txt
+PicoOS> cat.bin pipeline-output.txt
+PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 ```
 
-The example omits process-created messages. The shell waits for the producer
-to finish before starting the consumer, as explained in
-[Redirection and pipelines](#127-redirection-and-pipelines).
+# 13. User applications and commands
+[\[↑ TOC\]](#contents)
 
-## 13.3 Errors and exit status
+[`user/`](user/) contains **18 applications**, the shell and 17 standalone commands.
+Init lives separately in [`system/`](system/). Applications normally change only
+their own environment, directory, and descriptors. This chapter lists
+commands, options, and error behavior.
 
-Commands send ordinary results to stdout and diagnostics/usage failures to
-stderr, so shell redirection of descriptor 1 does not hide errors. [`cat.bin`](user/cat.picoc),
-[`mkdir.bin`](user/mkdir.picoc), [`rm.bin`](user/rm.picoc), and [`rmdir.bin`](user/rmdir.picoc) retain a failure result while continuing
-through later operands. [`kill.bin`](user/kill.picoc) distinguishes an invalid PID, invalid signal, and a PID
-that does not exist. The shell similarly diagnoses unmatched quotes, malformed
-redirection, missing built-in operands, failed process operations, and unknown
-commands. Successful built-ins set `$?` to 0, built-in errors set it to 1, and
-foreground process return values replace it with their exit status. Signal
-termination/stopping is reported with the PID and signal name.
+## 13.1 Applications, library calls, and host requests
+[\[↑ TOC\]](#contents)
 
-Error checking is intentionally small: [`cp.bin`](user/cp.picoc) returns failure for open/read
-errors but does not check write results, and [`sed.bin`](user/sed.picoc) does not check output
-writes or fully validate expressions. [`echo.bin`](user/echo.picoc) also ignores output failures.
-A zero exit status therefore does not guarantee that all output was written.
-For the status transfer from a child to the shell, see
-[`run_process()`](user/shell.picoc#L996) and
-[waiting and saved status](#62-waitpid-and-saved-wait-state).
+The table links each entry point and identifies its library calls and host
+requests. [`10.2 Library overview and dependencies`](#102-library-overview-and-dependencies) lists the 15 libraries, and [`2.4.2.1.1 System-call groups`](#24211-system-call-groups) groups the 37 syscalls.
+Loading the command itself is the parent shell's operation:
 
-# 14. Use in operating-systems and real-time operating-systems lectures
+**Shared output requests** mean the descriptor routing from [`8.8 Opening, reading, writing, and seeking`](#88-opening-reading-writing-and-seeking). Regular
+files use `write-at` and restore stdout, with `file-size` for append. Terminal
+stderr selects and restores its destination. Data containing an escape
+byte uses `literal-output`. Terminal stdout and null output need no
+destination request.
 
-PicoOS was developed primarily so that students can inspect implementations of
-operating-systems and real-time operating-systems lecture concepts directly in
-the code and while the OS is executing.
+| Binary (source link) | Behavior | Library functions / Host Requests |
+| --- | --- | --- |
+| [`shell.bin`](user/shell.picoc#L1448) | Interactive command interpreter that can read newline-separated commands from redirected stdin | [`read()`](library/unistd/io.picoc#L6), [`write_without_uart_escape_check()`](library/unistd/io.picoc#L43), [`lseek()`](library/unistd/io.picoc#L66), [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), [`waitpid()`](library/sys/wait/wait.picoc#L14), [`kill()`](library/signal/signal.picoc#L14), [`prctl()`](library/sys/prctl/prctl.picoc#L14), [`getenv()`](library/stdlib/env.picoc#L115), [`setenv()`](library/stdlib/env.picoc#L126), [`strlen()`](library/string/string.picoc#L60), [`open()`](library/fcntl/fcntl.picoc#L5), [`dup2()`](library/unistd/io.picoc#L58), [`close()`](library/unistd/io.picoc#L54), [`unlink()`](library/unistd/file_removal.picoc#L4), [`chdir()`](library/unistd/working_directory.picoc#L4), [`getcwd()`](library/unistd/working_directory.picoc#L11). See [`12. Shell`](#12-shell) for the other calls<br>**Host Requests:** `file-size <path>` and `read-range <offset> <count> <path>` for process loading and regular-file stdin<br>`write <path>` then `write stdout` when creating/truncating redirected output<br>`is-directory <path>` for `cd`<br>`unlink <path>` for the pipeline file<br>Shared output requests when its own descriptors require them |
+| [`echo.bin`](user/echo.picoc#L20) | Prints [`argv[1..]`](user/echo.picoc#L20) separated by spaces, converts `\n` inside an argument, and adds a newline | [`printf()`](library/stdio/stdio.picoc#L354)<br>**Host Requests:** shared output requests only |
+| [`count.bin`](user/count.picoc#L20) | Counts forever with an optional busy-loop delay and yields after each displayed value | [`printf()`](library/stdio/stdio.picoc#L354), [`atoi()`](library/stdlib/atoi.picoc#L4), [`yield()`](library/schedule/schedule.picoc#L4)<br>**Host Requests:** shared output requests only |
+| [`cat.bin`](user/cat.picoc#L136) | Copies named files or stdin to stdout, terminal stdin supports line editing | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`lseek()`](library/unistd/io.picoc#L66), [`close()`](library/unistd/io.picoc#L54), [`unsetenv()`](library/stdlib/env.picoc#L157)<br>**Host Requests:** `file-size <path>` on named-file open, `read-range <offset> <count> <path>` for regular input, plus shared output requests |
+| [`touch.bin`](user/touch.picoc#L11) | Creates each named file or updates its timestamps while preserving contents | [`touch()`](library/unistd/file_removal.picoc#L20)<br>**Host Request:** `touch <path>`<br>Shared output requests only for help/diagnostics |
+| [`cp.bin`](user/cp.picoc#L16) | Copies one file to another in 64-cell chunks | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`close()`](library/unistd/io.picoc#L54), [`unsetenv()`](library/stdlib/env.picoc#L157)<br>**Host Requests:** source `file-size <path>` and `read-range <offset> <count> <path>`<br>Destination `write <path>`, `write stdout`, then `write-at <offset> <path>` and `write stdout`<br>Shared output requests for diagnostics |
+| [`mv.bin`](user/mv.picoc#L11) | Moves or renames one file or directory | [`move()`](library/unistd/file_removal.picoc#L12)<br>**Host Request:** `move <old path>\n<new path>`<br>Shared output requests for help/diagnostics |
+| [`sed.bin`](user/sed.picoc#L67) | Reads stdin and inserts, changes, appends, or substitutes text at selected lines | [`lseek()`](library/unistd/io.picoc#L66), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`malloc()`](library/stdlib/malloc.picoc#L35), [`free()`](library/stdlib/malloc.picoc#L49), [`unsetenv()`](library/stdlib/env.picoc#L157)<br>**Host Requests:** `file-size <path>` for its [`SEEK_END`](common/file.header#L19), `read-range <offset> <count> <path>` for regular stdin, plus shared output requests |
+| [`ps.bin`](user/ps.picoc#L11) | Prints every process PID and canonical system-relative binary path | [`list_processes()`](library/unistd/process.picoc#L51)<br>**Host Requests:** shared output requests only |
+| [`ls.bin`](user/ls.picoc#L13) | Lists `.` or one directory, hides dot entries by default, and supports `-a` | [`opendir()`](library/dirent/dirent.picoc#L8), [`readdir()`](library/dirent/dirent.picoc#L40), [`closedir()`](library/dirent/dirent.picoc#L66)<br>**Host Request:** `ls <path>`<br>Shared output requests |
+| [`mkdir.bin`](user/mkdir.picoc#L12) | Creates every supplied directory and reports individual failures | [`mkdir()`](library/sys/stat/stat.picoc#L5)<br>**Host Request:** `mkdir <path>` for each operand<br>Shared output requests for help/diagnostics |
+| [`pwd.bin`](user/pwd.picoc#L11) | Prints [`working_directory`](kernel/process/process.header#L39) from the current [`ProcessControlBlock`](kernel/process/process.header#L31) | [`getcwd()`](library/unistd/working_directory.picoc#L11)<br>**Host Requests:** shared output requests only |
+| [`rm.bin`](user/rm.picoc#L11) | Removes every supplied file and continues after errors | [`unlink()`](library/unistd/file_removal.picoc#L4)<br>**Host Request:** `unlink <path>` for each operand<br>Shared output requests for help/diagnostics |
+| [`rmdir.bin`](user/rmdir.picoc#L11) | Removes every supplied empty directory and continues after errors | [`rmdir()`](library/unistd/file_removal.picoc#L8)<br>**Host Request:** `rmdir <path>` for each operand<br>Shared output requests for help/diagnostics |
+| [`kill.bin`](user/kill.picoc#L69) | Sends [`SIGKILL`](common/signal.header#L5) by default, a named/numbered signal, or signal 0 as a PID probe | [`kill()`](library/signal/signal.picoc#L14), [`atoi()`](library/stdlib/atoi.picoc#L4), [`yield()`](library/schedule/schedule.picoc#L4)<br>**Host Requests:** none on success<br>Shared output requests for help/diagnostics |
+| [`poweroff.bin`](user/poweroff.picoc#L12) | Halts PicoOS | [`reboot(REBOOT_CMD_POWER_OFF)`](library/sys/reboot/reboot.picoc#L5)<br>**Host Requests:** none on shutdown<br>Shared output requests for help/diagnostics |
+| [`reboot.bin`](user/reboot.picoc#L12) | Requests a kernel-controlled reboot | [`reboot(REBOOT_CMD_RESTART)`](library/sys/reboot/reboot.picoc#L5)<br>**Host Requests after restart:** `load kernel/kernel.bin`, then `load /system/init.bin`<br>Shared output requests for help/diagnostics before a valid reboot |
+| [`uname.bin`](user/uname.picoc#L15) | Prints the PicoOS version stored in [`config/os-release.txt`](config/os-release.txt) | [`open()`](library/fcntl/fcntl.picoc#L5), [`read()`](library/unistd/io.picoc#L6), [`write()`](library/unistd/io.picoc#L32), [`close()`](library/unistd/io.picoc#L54)<br>**Host Requests:** `file-size <path>`, `read-range <offset> <count> <path>`, plus shared output requests |
 
-## 14.1 Operating-systems topics
+[`common/user_command.picoc`](common/user_command.picoc) supplies these two stateless command helpers:
 
-The table connects operating-systems lecture topics
-to the code and runtime state students can inspect. Host file access uses
-per-process file descriptors and UART requests; PicoOS does not implement an
-on-device filesystem.
+| Kernel function (shared helper) | Return value / status | Effects | Calls | Called by |
+| --- | --- | --- | --- | --- |
+| [`command_write(file_descriptor, text)`](common/user_command.picoc#L4) | No return value, the write result is ignored | Counts the text and writes it to the selected descriptor, such as stdout or stderr, the call creates an [`IoRequest`](common/file.header#L31) inside the library | [`write()`](library/unistd/io.picoc#L32)<br>**Host requests:** descriptor-dependent `file-size`, `write-at`, `write stderr`, `write stdout`, and optional `literal-output` requests described in [`8.8 Opening, reading, writing, and seeking`](#88-opening-reading-writing-and-seeking) | **User applications:** [`cat_usage()`](user/cat.picoc#L21), [`count_usage()`](user/count.picoc#L12), [`cp_usage()`](user/cp.picoc#L11), [`edit_standard_input()`](user/cat.picoc#L81), [`kill_write_usage()`](user/kill.picoc#L58), [`ls_usage()`](user/ls.picoc#L7), [`main()`](user/kill.picoc#L69), [`main()`](user/mkdir.picoc#L12), [`main()`](user/pwd.picoc#L11), [`main()`](user/rm.picoc#L11), [`main()`](user/rmdir.picoc#L11), [`main()`](user/cp.picoc#L16), [`main()`](user/ls.picoc#L13), [`main()`](user/mv.picoc#L11), [`main()`](user/touch.picoc#L11), [`main()`](user/uname.picoc#L15), [`main()`](user/cat.picoc#L136), [`main()`](user/count.picoc#L20), [`main()`](user/sed.picoc#L67), [`mkdir_usage()`](user/mkdir.picoc#L7), [`mv_usage()`](user/mv.picoc#L6), [`poweroff_usage()`](user/poweroff.picoc#L7), [`print_path_error()`](user/cat.picoc#L13), [`ps_usage()`](user/ps.picoc#L6), [`pwd_usage()`](user/pwd.picoc#L6), [`reboot_usage()`](user/reboot.picoc#L7), [`rm_usage()`](user/rm.picoc#L6), [`rmdir_usage()`](user/rmdir.picoc#L6), [`sed_usage()`](user/sed.picoc#L62), [`shell_usage()`](user/shell.picoc#L71), [`touch_usage()`](user/touch.picoc#L6), [`uname_usage()`](user/uname.picoc#L10), [`write_replacement()`](user/sed.picoc#L57) |
+| [`command_is_help(argument)`](common/user_command.picoc#L13) | `true` for exactly `-h` or `--help`, `false` otherwise | Reads the argument without changing it | None | **User applications:** [`eval()`](user/shell.picoc#L1224), [`main()`](user/kill.picoc#L69), [`main()`](user/mkdir.picoc#L12), [`main()`](user/pwd.picoc#L11), [`main()`](user/rm.picoc#L11), [`main()`](user/rmdir.picoc#L11), [`main()`](user/cp.picoc#L16), [`main()`](user/ls.picoc#L13), [`main()`](user/mv.picoc#L11), [`main()`](user/poweroff.picoc#L12), [`main()`](user/ps.picoc#L11), [`main()`](user/reboot.picoc#L12), [`main()`](user/touch.picoc#L11), [`main()`](user/uname.picoc#L15), [`main()`](user/cat.picoc#L136), [`main()`](user/count.picoc#L20), [`main()`](user/sed.picoc#L67), [`main()`](user/shell.picoc#L1448) |
+
+All applications except [`echo.bin`](user/echo.picoc) use [`command_is_help()`](common/user_command.picoc#L13) for a sole help
+argument. Echo prints `-h` and `--help` as ordinary text.
+
+### 13.1.1 Command behavior and supported options
+[\[↑ TOC\]](#contents)
+
+The following list records accepted operands and differences from familiar
+Unix commands. `cd` is a shell built-in because it changes the shell itself:
+
+- [`echo.bin`](user/echo.picoc) converts each literal `\n` pair inside an
+  argument to a newline, separates arguments with spaces, adds a final
+  newline, and always returns 0. It has no `-n` option.
+- [`count.bin`](user/count.picoc) accepts at most one nonnegative busy-loop
+  delay. The value is not milliseconds. [`yield()`](library/schedule/schedule.picoc#L4)
+  after every displayed number makes the infinite loop a visible scheduler
+  example.
+- [`cat.bin`](user/cat.picoc) copies each named path in 64-cell chunks. When
+  stdout is seekable, it copies every byte unchanged. Terminal output preserves
+  printable ASCII, newline, carriage return, and tab, and displays all other
+  bytes as `\xHH`. The same rules apply to seekable stdin with no operands,
+  including `cat.bin < input.txt`. Terminal stdin is line-buffered: Backspace/Delete
+  edits, Enter emits the line, and Ctrl+D finishes. With redirected stdout,
+  editing feedback stays on stderr. An open, read, or write failure returns 1.
+- [`touch.bin`](user/touch.picoc) accepts one or more paths and stops at the
+  first failure. [`cp.bin`](user/cp.picoc) and [`mv.bin`](user/mv.picoc) accept
+  exactly one source and destination and no options. [`cp.bin`](user/cp.picoc)
+  copies in 64-cell chunks and disables
+  [`PICOOS_LOADING_BAR`](common/loading_bar.header#L5). [`mv.bin`](user/mv.picoc)
+  uses one [`move()`](library/unistd/file_removal.picoc#L12) call and matching
+  [`move`](library/unistd/file_removal.picoc#L12) Host Request. [`ps.bin`](user/ps.picoc) takes no operands and lists
+  every [`ProcessControlBlock`](kernel/process/process.header#L31), including its own and
+  any process whose [`state`](kernel/process/process.header#L33) is
+  [`ZOMBIE`](kernel/process/process.header#L17) and has not yet been removed.
+- [`sed.bin`](user/sed.picoc) has no path operand: `sed.bin EXPRESSION` reads
+  seekable stdin and writes stdout. `5iNEW LINE`, `5cNEW LINE`, `5aNEW LINE`,
+  and `/pattern/iNEW LINE` insert before, change, append after, or insert before
+  each matching line. `s/pattern/replacement/` replaces the first literal
+  occurrence on every line. It reads all input into memory and disables the
+  loading bar.
+- [`ls.bin`](user/ls.picoc) lists `.` or one directory. Its only special option
+  is `-a`, which includes names beginning with `.`. Directories receive `d `
+  and other entries `- `. There is no long or recursive mode.
+  [`mkdir.bin`](user/mkdir.picoc) has no `-p`, [`rm.bin`](user/rm.picoc) has no
+  force/recursive mode, and [`rmdir.bin`](user/rmdir.picoc) removes only empty
+  directories. Those three commands accept multiple operands and continue
+  after an individual error.
+- [`kill.bin`](user/kill.picoc) defaults to [`SIGKILL`](common/signal.header#L5).
+  It accepts `0`, or [`SIGINT`](common/signal.header#L4),
+  [`SIGKILL`](common/signal.header#L5), [`SIGCONT`](common/signal.header#L6),
+  [`SIGSTOP`](common/signal.header#L7), [`SIGTSTP`](common/signal.header#L8), and
+  [`SIGTTIN`](common/signal.header#L9) by exact name without a leading `-`, or
+  by number. Probe 0 checks for a non-zombie PID without delivering anything.
+  See [`7.3 Process signals`](#73-process-signals). After an accepted
+  request, the command yields so the target can be selected promptly.
+- [`poweroff.bin`](user/poweroff.picoc) invokes
+  [`SYSCALL_SHUTDOWN`](common/syscall.header#L5) and halts PicoOS.
+  Unlike the shell's [`exit`](user/shell.picoc#L1257), it does not let init
+  start a replacement shell. [`reboot.bin`](user/reboot.picoc) invokes
+  [`SYSCALL_REBOOT`](common/syscall.header#L6) for full bootloader and kernel
+  startup without ending the emulator process.
+  [`uname.bin`](user/uname.picoc) prints `PicoOS-` plus the installed
+  [`config/os-release.txt`](config/os-release.txt) version. These commands take
+  no operands.
+
+This session builds a report and a five-command PicoOS script, then runs
+it through [`shell.bin`](user/shell.picoc) stdin. It also stops an infinite background counter.
+Loading messages and unrelated output are omitted. The example counter
+is PID 14, while `$!` selects it without hardcoding the PID:
+
+```console
+PicoOS> mkdir.bin demo
+PicoOS> cd demo
+PicoOS> echo.bin "todo\nreview" > n
+PicoOS> cat.bin n | sed.bin "s/todo/done/" > r
+PicoOS> echo.bin "pwd.bin\ntouch.bin e\ncp.bin n c\nmv.bin c b\nls.bin -a" > x
+PicoOS> shell.bin < x
+/demo
+PicoOS> count.bin 0 > /device/null.dev &
+PicoOS> ps.bin
+14 user/count.bin
+PicoOS> kill.bin SIGSTOP $!
+PicoOS> kill.bin SIGCONT $!
+PicoOS> kill.bin $!
+PicoOS> kill.bin 0 $!
+kill: process not found
+PicoOS> echo.bin $?
+1
+PicoOS> ps.bin
+14 user/count.bin
+PicoOS> cd ..
+PicoOS> rm.bin demo/n demo/b demo/e demo/r demo/x
+PicoOS> rmdir.bin demo
+```
+
+After [`SIGKILL`](common/signal.header#L5), the existence probe fails, but [`ps.bin`](user/ps.picoc) still shows the
+uncollected zombie. The pipeline uses the temporary-file sequence from [`12.7 Sequential file-backed pipelines`](#127-sequential-file-backed-pipelines).
+
+### 13.1.2 Command errors and exit statuses
+[\[↑ TOC\]](#contents)
+
+Commands write results to stdout and diagnostics to stderr. Multi-path
+commands continue after an individual error but retain failure status.
+The shell stores foreground exit status in `$?`, diagnoses parsing and
+process errors, and reports signal stops or termination by PID and name.
+
+[`cp.bin`](user/cp.picoc), [`sed.bin`](user/sed.picoc), and [`echo.bin`](user/echo.picoc) do not check every output failure.
+A zero status therefore does not guarantee complete output. [`7.2.2 Child waiting with waitpid`](#722-child-waiting-with-waitpid)
+explains child-status delivery.
+
+# 14. Test system
+[\[↑ TOC\]](#contents)
+
+Tests compile code, run it in the emulator, and compare the output with
+a stored expectation. This chapter explains the four categories, their
+fixtures, and how to run them.
+
+## 14.1 Library, OS, shell, and boot test categories
+[\[↑ TOC\]](#contents)
+
+The repository has **63 test classes**: **13 library**, **23 OS**,
+**26 shell**, and **1 boot**. OS and shell classes form the 49 System tests
+selected by `make test-sys`. Each class can check several behaviors.
+
+These counts follow the runner's selection and fixture-validation rules.
+Directories without both `input.txt` and `expected_output.txt` are excluded.
+The current `cat_binary` fixture is a shell test because its input differs
+from the exact OS launcher sequence.
+
+The diagram shows category targets and expected-output sources. Boot, OS,
+and shell tests all execute the full startup chain:
+
+```mermaid
+flowchart TD
+    T["63 Tests<br/><code>make test</code>"] --> L["13 Library Tests<br/><code>make test-lib</code>"]
+    T --> B["1 Boot Test<br/><code>make test-boot</code>"]
+    T --> S["49 System Tests<br/><code>make test-sys</code>"]
+    S --> O["23 OS Tests<br/><code>make test-os</code>"]
+    S --> H["26 Shell Tests<br/><code>make test-shell</code>"]
+    L --> LM["Expected output from<br/><code>// expected:</code> source metadata"]
+    B --> EF["Expected output from<br/><code>expected_output.txt</code>"]
+    O --> EF
+    H --> EF
+    LM --> LC["Compare actual Library output<br/>with expected output"]
+    EF --> SC["Compare normalized <code>output.txt</code><br/>with <code>expected_output.txt</code>"]
+```
+
+### 14.1.1 Files that make up a test
+[\[↑ TOC\]](#contents)
+
+A library class is one top-level `.picoc` file. Other classes use a
+directory of fixtures. These examples show one library and one OS class:
+
+```mermaid
+flowchart TD
+    T["<code>test/</code>"] --> L["<code>basic_printf_newline_escape.picoc</code><br/>one Library test"]
+    T --> O["<code>hello_world/</code><br/>one OS test"]
+    O --> I["<code>input.txt</code>"]
+    O --> E["<code>expected_output.txt</code>"]
+    O --> A["<code>launcher.picoc</code>"]
+    O --> P["<code>hello_world.picoc</code>"]
+```
+
+Boot, OS, and shell classes require input and expected-output files.
+Private programs, headers, and data are optional. The table distinguishes
+source fixtures from generated files:
+
+| File or generated file | Role | Test categories |
+| --- | --- | --- |
+| [`test/*.picoc`](test/) | One top-level file is one Library test. Its opening comments declare emulator input, expected output, and linked `.reti_blocks` dependencies. The Library tests have no separate test-specific `.header` files. | Library |
+| `test/<name>/input.txt` | Host-side UTF-8 text read by [`run_os_tests.py`](run_os_tests.py#L522). Each line becomes one command or encoded key sequence sent to the shell after the runner sees `PicoOS> `. | Boot, OS, Shell |
+| `test/<name>/expected_output.txt` | Source-controlled UTF-8 output that the test expects after terminal output has been normalized. | Boot, OS, Shell |
+| `test/<name>/launcher.picoc` | A test-specific user program that coordinates an OS test by loading, starting, waiting for, or checking other programs. Its presence alone does not classify a directory as an OS test. | Every OS test and the [`shell_exit_status_pid` Shell test](test/shell_exit_status_pid/) |
+| `test/<name>/<program>.picoc` | Optional test application or worker. Every `.picoc` file in the directory is compiled and assembled into a `.bin` file under `binary/test/<name>/`. | OS, Shell |
+| `test/<name>/*.header` | Optional definitions shared by test programs. The current shared-memory mutex tests use this form. | OS when needed |
+| Other `test/<name>/*.txt` source files | Optional guest-visible data, command script, or expected-output variant used by the test. The runner copies these files below `binary/test/<name>/`. | OS, Shell |
+| `test/<name>/raw_output.txt` | Generated complete RETI-Emulator stdout, including prompts, typed commands, control characters, and loading bars. | Boot, OS, Shell |
+| `test/<name>/output.txt` | Generated readable output after prompt lines, loading bars, terminal cursor effects, and empty lines have been removed. This is the actual value used for comparison. | Boot, OS, Shell |
+| `test/<library-name>.input`, `.expected_output`, `.output`, `.error`, [`.reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py), and compiler files | Generated files derived from a top-level Library source. The `.input` and `.expected_output` values come from its first two metadata comments. | Library |
+
+[`stage_test_directories()`](run_os_tests.py#L176) copies fixtures below `binary/test/`.
+[`build_test_programs()`](run_os_tests.py#L725) compiles and assembles private applications there.
+The runner reads the original input file, while guest programs open the
+staged data.
+
+### 14.1.2 Library test example
+[\[↑ TOC\]](#contents)
+
+This complete library test declares no input, an expected newline, and
+a stdio dependency in its comments:
+
+```c
+// in:
+// expected:newline\n
+// dependencies: ../library/stdio/libstdio.reti_blocks
+
+#include "../library/stdio/stdio.header"
+
+int main() {
+    printf("newline\n");
+    return 0;
+}
+```
+
+[`run_sys_tests.sh`](run_sys_tests.sh#L112) extracts the input and expected-output comments. The
+linked test runs with [`interrupt_service_routines/isrs.picoc`](interrupt_service_routines/isrs.picoc), without
+the PicoOS kernel. Emulator test mode records its output.
+
+Staged mode rewrites supported metadata comments into the linked RETI.
+Direct mode compiles source and dependencies together. Both compare against
+the expectation extracted from the second source line.
+
+The runner ignores trailing whitespace per line. A differing output,
+compiler or emulator error, missing output, or five-second timeout fails
+the test.
+
+```mermaid
+flowchart LR
+    M["Source metadata in <code>.picoc</code>"] --> R["Compiled RETI program"]
+    M --> E["Generated <code>.expected_output</code>"]
+    R --> A["Actual <code>.output</code>"]
+    E --> C["Exact line comparison"]
+    A --> C
+    C --> P["Pass or fail"]
+```
+
+### 14.1.3 OS test example
+[\[↑ TOC\]](#contents)
+
+An OS class puts process orchestration in `launcher.picoc`. Classification
+requires that source and exactly this three-line input sequence:
+
+```text
+load test/hello_world/launcher.bin
+run 3
+poweroff.bin
+```
+
+The shell loads the launcher as PID 3 and waits for it. The launcher
+starts the application under test:
+
+```c
+// test/hello_world/launcher.picoc
+// dependencies: ../../library/unistd/libunistd.reti_blocks ../../library/sys/wait/libwait.reti_blocks
+
+#include "../../library/unistd/unistd.header"
+#include "../../library/sys/wait/wait.header"
+#include "../../common/stddef.header"
+
+int main(void) {
+    int pid = load("test/hello_world/hello_world.bin");
+
+    run(pid, NULL, NULL);
+    waitpid(pid);
+    return 0;
+}
+```
+
+The launched application is also a complete test-local source file:
+
+```c
+// test/hello_world/hello_world.picoc
+// dependencies: ../../library/stdio/libstdio.reti_blocks
+
+#include "../../library/stdio/stdio.header"
+
+int main(void) {
+    printf("hello world");
+    return 0;
+}
+```
+
+The expected output includes shell messages as well as application output:
+
+```text
+process with pid 3 created
+hello world
+process with pid 5 created
+```
+
+The complete path is therefore:
+
+```mermaid
+flowchart LR
+    I["<code>input.txt</code>"] --> S["Shell <code>load</code> and <code>run</code> built-ins"]
+    S --> L["<code>launcher.bin</code>"]
+    L --> H["<code>hello_world.bin</code>"]
+    H --> C["Captured emulator stdout"]
+    C --> O["Normalized <code>output.txt</code>"]
+    O --> D["Comparison"]
+    E["<code>expected_output.txt</code>"] --> D
+    D --> P["Pass or fail"]
+```
+
+A launcher can coordinate multiple processes, shared memory, signals,
+and scheduler events without adding host input commands.
+
+### 14.1.4 Shell test example
+[\[↑ TOC\]](#contents)
+
+Shell classes use commands and encoded keys in `input.txt`, without the
+exact OS launcher sequence. [`decode_test_input()`](run_os_tests.py#L461) recognizes arrows, Home,
+Escape, Backspace, and the supported control-key spellings. The runner
+waits for a new prompt before sending each line.
+
+The `ps` shell class uses only the two required files. Its input runs
+[`ps.bin`](user/ps.picoc#L11) and powers off:
+
+```text
+ps.bin
+poweroff.bin
+```
+
+Its [`expected_output.txt`](test/ps/expected_output.txt) checks both the shell's
+process-creation messages and the command's process listing:
+
+```text
+process with pid 3 created
+1 system/init.bin
+2 user/shell.bin
+3 user/ps.bin
+process with pid 4 created
+```
+
+Each command passes through shell parsing and execution. The runner waits
+for the next prompt before continuing. More complex classes can include
+private applications and data.
+
+```mermaid
+flowchart LR
+    I["<code>input.txt</code>"] --> R["Runner waits for <code>PicoOS&gt;</code>"]
+    R --> S["Shell"]
+    S --> A["Command or test application"]
+    A --> C["Captured UART output"]
+    C --> O["Normalized <code>output.txt</code>"]
+    O --> D["Comparison"]
+    E["<code>expected_output.txt</code>"] --> D
+    D --> P["Pass or fail"]
+```
+
+### 14.1.5 Boot test example
+[\[↑ TOC\]](#contents)
+
+The one [`boot` test directory](test/boot/) has no private PicoC program. Its
+[`input.txt`](test/boot/input.txt) runs a release command after startup:
+
+```text
+echo.bin hello world
+poweroff.bin
+```
+
+Its [`expected_output.txt`](test/boot/expected_output.txt) is:
+
+```text
+process with pid 3 created
+hello world
+process with pid 4 created
+```
+
+`make test-boot` selects this fixture. `reti_emulator -e` starts the EPROM
+bootloader, followed by kernel, init, and shell. The runner sends `echo.bin`
+and [`poweroff.bin`](user/poweroff.picoc#L12) after their prompts.
+
+```mermaid
+flowchart LR
+    B["EPROM <code>bootloader.reti</code>"] --> K["<code>kernel.bin</code>"]
+    K --> I["<code>init.bin</code>"]
+    I --> S["<code>shell.bin</code>"]
+    S --> E["<code>echo.bin</code>"]
+    E --> C["Captured UART output"]
+    C --> O["Normalized <code>output.txt</code>"]
+    O --> D["Comparison"]
+    X["<code>expected_output.txt</code>"] --> D
+    D --> P["Pass or fail"]
+```
+
+The separate boot target provides a small startup check. OS and shell tests
+use the same [`RUNTIME_BOOT_ARGUMENTS`](run_os_tests.py#L28) and full boot sequence.
+
+## 14.2 Test execution
+[\[↑ TOC\]](#contents)
+
+Each class gets its own emulator and temporary peripheral directory.
+Boot, OS, and shell classes each boot a fresh system. Independent classes
+can run in parallel. The table follows input through comparison:
+
+| Test representation | Started by | Input path | Code that runs | Output and pass condition |
+| --- | --- | --- | --- | --- |
+| Top-level Library `.picoc` file | [`run_sys_tests.sh`](run_sys_tests.sh), then [`run_lib_test_case.sh`](run_lib_test_case.sh) | `// in:` is extracted from the source and supplied by RETI-Emulator test mode | The compiled test and declared library dependencies run with the generated [`config/isrs.reti`](config/isrs.reti) test interrupt service routines, without PicoOS | Emulator output in `<name>.output` is compared with the value extracted from `// expected:`. Trailing whitespace is removed per line. Compile, emulator, timeout, missing-file, or comparison failure prevents a pass. |
+| OS directory | [`run_os_tests.py`](run_os_tests.py) with `--kind os` | The runner waits for `PicoOS> ` before sending each decoded `input.txt` line to emulator stdin. The shell loads and runs `launcher.bin`. | EPROM bootloader, kernel, Init, shell, launcher, and any worker or application binaries | Complete stdout is saved as `raw_output.txt`. [`normalize_os_output()`](run_os_tests.py#L440) applies terminal cursor effects and removes prompts, typed commands, loading bars, and empty lines to produce `output.txt`. [`outputs_match()`](run_os_tests.py#L633) removes trailing whitespace from the complete expected and actual strings and requires equality. |
+| Shell directory | [`run_os_tests.py`](run_os_tests.py) with `--kind shell` | The same prompt-controlled `input.txt` path feeds shell commands and encoded keys. | EPROM bootloader, kernel, Init, shell, and commands or test-local applications named by those lines | The same `raw_output.txt`, normalized `output.txt`, and `expected_output.txt` comparison as an OS test. |
+| [`test/boot/`](test/boot/) | [`run_os_tests.py`](run_os_tests.py) with `--kind boot` | The same prompt-controlled path sends `echo.bin hello world` and [`poweroff.bin`](user/poweroff.picoc#L12) from `input.txt` | EPROM bootloader, kernel, Init, shell, and release applications. There is no test-local binary. | The same `raw_output.txt`, normalized `output.txt`, and `expected_output.txt` comparison as OS and Shell tests. |
+
+Private user programs use `libstart`. Staged mode reuses `.reti_blocks`
+and `.st`, while `TEST_BUILD_MODE=direct` links sources directly. Both
+use the same execution and comparison. Timeouts are five seconds for
+library tests and 120 seconds for the other categories.
+
+The [CI workflow](.github/workflows/run_tests.yml) calls `make test` with direct
+source linking and DMA enabled. It therefore runs all four categories through
+the same target hierarchy described below.
+
+### 14.2.1 Make targets
+[\[↑ TOC\]](#contents)
+
+These Make targets select categories, patterns, or previously failed tests:
+
+| Command | Tests run |
+| --- | --- |
+| `make test` | Builds the release tree, then runs `make test-lib`, `make test-sys`, and `make test-boot`, in that order. With the default empty patterns, this is all 63 tests. |
+| `make test-all` | Alias for `make test`. |
+| `make test-lib` | The 13 top-level Library tests, or the subset selected by `TEST_PATTERN`. |
+| `make test-sys` | Aggregate for `make test-os` followed by `make test-shell`. It does not invoke `make test-boot`. |
+| `make test-os` | The 23 directories recognized by the exact `launcher.picoc` and three-line `input.txt` rule. |
+| `make test-shell` | The 26 runnable non-Boot directories that do not match the OS rule. |
+| `make test-boot` | Only [`test/boot/`](test/boot/), using one emulator job. This target is called directly by `make test`, not by `make test-sys`. |
+| `make test_not_passed` | Only Library source paths recorded in [`config/not_passed_tests.txt`](config/not_passed_tests.txt) by the preceding Library run. |
+
+`make run-os` runs `OS_RUN_PATH` for inspection and skips expected-output
+comparison. Outside debug mode, it still records output files.
+
+# 15. Use in operating-systems and real-time operating-systems lectures
+[\[↑ TOC\]](#contents)
+
+PicoOS lets students inspect lecture concepts in source code and live
+execution. The examples below cover OS mechanisms first, then scheduling
+and synchronization topics from RTOS lectures.
+
+## 15.1 Operating-systems topics
+[\[↑ TOC\]](#contents)
+
+The table connects lecture topics to inspectable code and state. Filesystem
+examples cover descriptors and UART host requests:
 
 | Operating-systems lecture topic | What students can inspect in PicoOS |
 | --- | --- |
-| Parent/child relationships and process loading | [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), [`Process`](kernel/process/process.header#L31), its [`parent_pid`](kernel/process/process.header#L57), process images, zombies, [`waitpid()`](library/sys/wait/wait.picoc#L14), and cleanup |
-| Signals | [Pending signals, stopping, continuing, and parent-death signals](#63-signals-inside-the-pcb) in [`Process`](kernel/process/process.header#L31) |
-| Interrupt vector tables and ISRs | The [IVT](#41-interrupt-vector-table), saved [`ActivationRecord`](kernel/process/process.header#L21), timer/UART handlers, and `RTI` |
-| Software, hardware, and synchronous interrupts | System calls, timer and UART interrupts, and CPU exceptions with their fixed exception vector |
+| Parent/child relationships and process loading | [`load()`](library/unistd/process.picoc#L17), [`run()`](library/unistd/process.picoc#L31), [`ProcessControlBlock`](kernel/process/process.header#L31), its [`parent_pid`](kernel/process/process.header#L57), process images, zombies, [`waitpid()`](library/sys/wait/wait.picoc#L14), and cleanup |
+| Signals | [`7.3 Process signals`](#73-process-signals) in [`ProcessControlBlock`](kernel/process/process.header#L31) |
+| interrupt service routines tables and ISRs | The IVT and interrupt service routines in [`2.1 RETI interrupt entry and the interrupt service routine table`](#21-reti-interrupt-entry-and-the-interrupt-service-routine-table), the saved [`ActivationRecord`](kernel/process/process.header#L21), timer/UART handlers, and `RTI` |
+| Software, hardware, and synchronous interrupts | System calls, timer and UART interrupts, and CPU exceptions with their fixed exception entry |
 | [`malloc()`](library/stdlib/malloc.picoc#L35) / [`free()`](library/stdlib/malloc.picoc#L49) | Heap headers, first-fit allocation, block splitting, freeing, and merging adjacent free blocks |
 | Filesystem boundary | Per-process file descriptors, descriptor inheritance, and UART host requests instead of an on-device filesystem |
 
-Generated `.reti`, `.sections`, and debug files allow PicoC source, symbolic
+Generated [`.reti`](../PicoC-Compiler/source/passes/linking/reti_pass.py), `.sections`, and debug files allow PicoC source, symbolic
 RETI, binary layout, and live machine state to be compared.
 
-### 14.1.1 Understanding PicoOS and the kernel step by step in the RETI-Emulator
+### 15.1.1 Inspecting PicoOS execution in the RETI-Emulator
+[\[↑ TOC\]](#contents)
 
-Students who want to understand one of the RTOS or OS lecture concepts above
-can follow it directly while PicoOS is executing in the RETI-Emulator. The
-following commands illustrate compiling a standalone program with intermediate
-output (`-i -w`), debug metadata (`-g`), and verbose annotations (`-v`), then
-opening its commented debugger (`-d -c`) with that metadata (`-D`):
+To compare PicoC with generated RETI, enable intermediate output (`-i -w`),
+debug metadata (`-g`), and annotations (`-v`). Open the result with the
+commented debugger and matching metadata:
 
 ```console
 $ picoc_compiler -O1 -i -w -g -v -o program.reti program.picoc
 $ reti_emulator -d -c -D program.debuginfo program.reti
 ```
 
-For the kernel, use the EPROM boot command and kernel metadata described in
-[Build and run](#build-and-run). While PicoOS is running, students can use the
-following controls for the teaching uses described here. The RETI-Emulator documentation covers its other
-controls.
+For a built PicoOS checkout, start the bootloader with kernel layout and
+debug metadata from the runtime directory:
+
+```console
+$ cd binary
+$ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.sections -D kernel/kernel.debuginfo -d -c
+```
+
+The following controls help trace the running system. The
+[RETI-Emulator documentation](../RETI-Emulator/README.md) lists the remaining
+controls:
 
 | Keys or option | What students can inspect or do |
 | --- | --- |
@@ -4231,11 +7900,9 @@ controls.
 | `S` / `R` (`Snapshot` / `Restore`) | Save/restore emulator state to repeat a scheduler decision, system call, or interrupt |
 | `e`, then `T` | Trigger and inspect an interrupt handler without waiting for a timer event or UART input |
 
-`d` uses `<program>.debuginfo`, or the file supplied with `-D`, and the
-matching `.pre` source file. It also shows annotations for global data,
-string literals, and the current stack frame's local variables and arguments.
-The table below illustrates the annotation format; its addresses and variable
-names are examples, not fixed PicoOS locations:
+Source view uses `.debuginfo` and matching `.pre` files to annotate globals
+and stack frames. These example annotations show the format rather than
+fixed PicoOS addresses:
 
 | SRAM address | Value | Annotation in the debug TUI |
 | ---: | ---: | --- |
@@ -4251,18 +7918,14 @@ The [PicoC-Compiler](../PicoC-Compiler/README.md) and
 [RETI-Emulator](../RETI-Emulator/README.md) documentation describe their
 command-line options.
 
-This lets students follow the PicoC-to-RETI translation patterns from the
-operating-systems lecture slides while the real kernel executes.
-
 <!-- TODO: Add the details for trying out memory-mapped devices with `(A)ssign value`. -->
 
-### 14.1.2 Understanding the heap, [`malloc()`](library/stdlib/malloc.picoc#L35), and [`free()`](library/stdlib/malloc.picoc#L49) with PicoOS
+### 15.1.2 Exploring userspace heap allocation
+[\[↑ TOC\]](#contents)
 
-[`test/exercise_sheet_4_heap/launcher.picoc`](test/exercise_sheet_4_heap/launcher.picoc)
-can be used to understand PicoOS's heap, [`malloc()`](library/stdlib/malloc.picoc#L35), and [`free()`](library/stdlib/malloc.picoc#L49). It is based
-on an exercise from operating-systems exercise sheet 4 and uses the complete
-PicoOS heap implementation. The full test below lets students follow stack
-objects, pointers to the same object, one heap allocation, and its cleanup:
+[`test/exercise_sheet_4_heap/launcher.picoc`](test/exercise_sheet_4_heap/launcher.picoc) adapts OS exercise sheet 4.
+This complete test contrasts stack objects, aliases, and a heap allocation
+with its cleanup:
 
 ```c
 // dependencies: ../../library/stdlib/libstdlib.reti_blocks
@@ -4300,68 +7963,31 @@ int main(void) {
 }
 ```
 
-The test does not call [`init_process_heap()`](library/stdlib/malloc.picoc#L18) itself. Every OS test program is
-linked with [`library/start/libstart.picoc`](library/start/libstart.picoc)
-through `-C library/start/libstart.picoc`. The complete source and the default
-startup it replaces appear earlier in
-[Custom userspace startup](#116-custom-userspace-startup). Its
-[`_start()`](library/start/start.picoc#L14) reaches
-[`init_process_heap()`](library/stdlib/malloc.picoc#L18) before the application
-entry point.
+Predict the storage and aliasing first, then single-step the test. Explain
+why `p3` retains the allocation, what is written through `a`, and which
+address must be freed.
 
-The sequence diagram separates initialization calls from application calls:
-[`_start()`](library/start/start.picoc#L14) enters [`start_process()`](library/start/start.picoc#L7), which calls [`init_process_heap()`](library/stdlib/malloc.picoc#L18)
-(and therefore [`heap_init_region()`](common/heap.picoc#L49)), then [`initialize_environment()`](library/stdlib/env.picoc#L97). Only
-after both return does it call the test's [`main()`](test/exercise_sheet_4_heap/launcher.picoc#L10);
-its return value is passed to [`exit()`](library/stdlib/exit.picoc#L3).
+[`3.1 Heap block layout and allocation algorithm`](#31-heap-block-layout-and-allocation-algorithm) explains allocation and merging, [`9.1 Memory layout, allocation sources, and lifetimes`](#91-memory-layout-allocation-sources-and-lifetimes) compares stack and heap
+lifetimes, and [`1.1.5.2 PicoOS libstart startup sequence`](#1152-picoos-libstart-startup-sequence) shows heap initialization before [`main()`](test/exercise_sheet_4_heap/launcher.picoc#L10).
 
-```mermaid
-sequenceDiagram
-    participant S as Startup library
-    participant H as Heap routines
-    participant E as Environment routines
-    participant A as Heap exercise
-    participant K as Kernel
-    S->>H: init_process_heap()
-    H->>K: Query heap start and size (syscalls 16 and 17)
-    K-->>H: Process heap bounds
-    H->>H: heap_init_region()
-    H-->>S: Heap ready
-    S->>E: initialize_environment()
-    E-->>S: Environment ready
-    S->>A: main()
-    A->>H: malloc(sizeof(struct point))
-    H-->>A: Heap pointer
-    Note over A: Reassign a pointer to the stack object
-    A->>H: free(p3)
-    H-->>A: Block freed and adjacent free blocks merged
-    A-->>S: Return 0
-    S->>K: exit(0) invokes syscall 6
-```
-
-[`malloc()`](library/stdlib/malloc.picoc#L35) uses first fit and splits a sufficiently large free block;
-[`free()`](library/stdlib/malloc.picoc#L49) marks the block free and merges adjacent free blocks. In this test,
-[`p3`](test/exercise_sheet_4_heap/launcher.picoc#L12) keeps the heap address after
-[`p1`](test/exercise_sheet_4_heap/launcher.picoc#L11) is redirected to
-[`p2`](test/exercise_sheet_4_heap/launcher.picoc#L14). Because
-[`p2.y`](test/exercise_sheet_4_heap/launcher.picoc#L7) is 4, the else branch
-changes [`p2.x`](test/exercise_sheet_4_heap/launcher.picoc#L6) to 1 through
-[`a`](test/exercise_sheet_4_heap/launcher.picoc#L13). The final free uses the
-saved heap pointer. This exercise has only one allocation; allocation after
-freeing and merging are exercised separately in
+After the one-allocation exercise, students can use
 [`basic_free.picoc`](test/basic_free.picoc) and
-[`basic_free_block_merging.picoc`](test/basic_free_block_merging.picoc).
+[`basic_free_block_merging.picoc`](test/basic_free_block_merging.picoc) to
+test their understanding of reuse and merging with longer allocation traces.
 
-### 14.1.3 Symbolic assembly for students
+### 15.1.3 Editing and executing symbolic RETI assembly
+[\[↑ TOC\]](#contents)
 
-The [PicoC-Compiler](../PicoC-Compiler/README.md) supports structured,
-symbolic RETI assembly in `.reti_blocks` files. This example counts down from
-three, stores the final value in a global cell, and then stops at `JUMP 0`.
-That instruction jumps to itself and is the emulator's stop marker; it does
-not jump to address zero.
+The heap exercise stays at the PicoC level. To inspect and modify the
+compiler's symbolic RETI output instead, a compile-only build can be edited
+before the final link.
 
-First save this small source as `exercise.picoc`. It declares the global and
-entry point so the compiler can generate their matching symbol metadata:
+A `.reti_blocks` file contains editable symbolic assembly. This example
+counts down from three, stores zero in a global, and halts at `JUMP 0`.
+That instruction jumps to itself, rather than address zero.
+
+Save this source as `exercise.picoc` so compilation creates matching
+symbol metadata:
 
 ```c
 int result;
@@ -4378,9 +8004,8 @@ Compile it without linking to produce `exercise.reti_blocks` and `exercise.st`:
 $ picoc_compiler -c exercise.picoc
 ```
 
-Keep `exercise.st` and replace the contents of `exercise.reti_blocks` with the
-complete assembly unit below. The symbolic loop label avoids manually
-calculating a branch offset; the global operand uses the symbol table:
+Keep `exercise.st` and replace the assembly with this complete unit.
+Labels handle branch offsets and the global symbol:
 
 ```reti
   .ivt
@@ -4404,27 +8029,23 @@ $ picoc_compiler -o exercise.reti exercise.reti_blocks
 $ reti_emulator -d -c exercise.reti
 ```
 
-## 14.2 Real-time operating-systems topics
+## 15.2 Real-time operating-systems topics
+[\[↑ TOC\]](#contents)
 
-PicoOS also connects with topics from the real-time operating-systems lecture,
-including mutexes, process states, scheduling, dispatching, [`waitpid()`](library/sys/wait/wait.picoc#L14),
-wait-queue [`sleep()`](library/unistd/blocking.picoc#L9), and [`wakeup()`](library/unistd/blocking.picoc#L19). The table identifies the runtime behavior
-behind each topic; these are teaching mechanisms, with no deadline guarantees.
+The RTOS lecture topics below connect to process state, scheduling, waiting,
+and mutexes. PicoOS demonstrates these mechanisms without deadline
+guarantees:
 
 | Real-time operating-systems lecture topic | What students can inspect in PicoOS |
 | --- | --- |
-| Process states | New, ready, running, blocked, stopped, and zombie entries in the [`Process`](kernel/process/process.header#L31) list; [termination and removal](#55-states-and-lifetime) are separate steps |
-| Scheduling and dispatching | The scheduler chooses a ready process; the dispatcher saves and restores its activation record |
+| Process states | New, ready, running, blocked, stopped, and zombie entries in the [`ProcessControlBlock`](kernel/process/process.header#L31) list, [`4.3.2.3 Parent collection and final removal`](#4323-parent-collection-and-final-removal) explains why termination and removal are separate steps |
+| Scheduling and dispatching | The scheduler chooses a ready process, the dispatcher saves and restores its activation record |
 | [`waitpid()`](library/sys/wait/wait.picoc#L14), [`sleep()`](library/unistd/blocking.picoc#L9), and [`wakeup()`](library/unistd/blocking.picoc#L19) | A process blocks in a wait queue until a child, mutex, or other event wakes it |
 | Mutexes | [`mutex_lock()`](library/mutex/mutex.picoc#L18) blocks a contending process and [`mutex_unlock()`](library/mutex/mutex.picoc#L25) wakes a waiting process |
 
-[`test/shared_memory_mutex/worker.picoc`](test/shared_memory_mutex/worker.picoc)
-is a minimal demonstration of [`mutex_lock()`](library/mutex/mutex.picoc#L18) and [`mutex_unlock()`](library/mutex/mutex.picoc#L25). Two workers
-map the same [`SharedState`](test/shared_memory_mutex/shared.header#L5) and increment its [`workers`](test/shared_memory_mutex/shared.header#L6) counter. Worker 1 yields while
-holding the mutex, giving the other worker a chance to try the lock. If it
-tries the lock before worker 1 unlocks, it must wait. The complete
-worker below includes the shared-state definition and library headers needed
-for mapping, locking, and yielding:
+Two workers map one [`SharedState`](test/shared_memory_mutex/shared.header#L5) and increment [`workers`](test/shared_memory_mutex/shared.header#L6). Worker 1 yields
+while holding the mutex, letting worker 2 contend. This complete source
+shows mapping, locking, and yielding:
 
 ```c
 // dependencies: ../../library/stdlib/libstdlib.reti_blocks ../../library/mutex/libmutex.reti_blocks ../../library/schedule/libschedule.reti_blocks ../../library/sys/mman/libmman.reti_blocks
@@ -4448,258 +8069,122 @@ int main(int argc, char **argv) {
 }
 ```
 
-The [`launcher`](test/shared_memory_mutex/launcher.picoc#L33) initializes the
-counter to zero and calls [`mutex_init()`](library/mutex/mutex.picoc#L12) before starting the workers, prints
-`workers: 2` after waiting for both, then calls [`shm_unlink()`](library/sys/mman/mman.picoc#L27) to release the
-name. The yield occurs **after** the increment, so it demonstrates holding a
-lock across a scheduling point; it does not force a lost update without the
-lock. The separate
-[`shared_memory_mutual_exclusion`](test/shared_memory_mutual_exclusion/)
-scenario adds messages around lock acquisition, yielding, and unlocking so
-students can follow the order in its
-[expected output](test/shared_memory_mutual_exclusion/expected_output.txt).
+The launcher initializes the counter and mutex, starts both workers,
+waits, prints `workers: 2`, and unlinks the region. Yielding after the
+increment demonstrates holding a lock across a switch. Moving it before
+the write would help demonstrate a lost update without locking. The
+[`shared_memory_mutual_exclusion`](test/shared_memory_mutual_exclusion/) test adds messages to trace acquisition.
 
-The flowchart shows why a contending [`mutex_lock()`](library/mutex/mutex.picoc#L18) can sleep instead of
-spinning continuously: it retries [`testset()`](library/mutex/mutex.picoc#L3) after [`sleep()`](library/unistd/blocking.picoc#L9) returns.
-[`mutex_unlock()`](library/mutex/mutex.picoc#L25) clears the lock and calls [`wakeup()`](library/unistd/blocking.picoc#L19); waking a process makes
-it eligible to run, but does not transfer ownership of the lock.
-
-```mermaid
-flowchart TD
-    A["mutex_lock: try testset"] --> B{"Was it already locked?"}
-    B -->|No| C["Enter critical section"]
-    B -->|Yes| D["sleep on mutex wait queue"]
-    D --> E["Resume when scheduled after wakeup"]
-    E --> A
-    C --> F["mutex_unlock: clear lock, then call wakeup"]
-    F -.->|If another process is waiting| E
-```
-
-# 15. Test system
-
-The preceding chapters describe the runtime path from compiler output to user
-commands. The test system exercises that path at library, kernel, and
-interactive-shell levels, including the boundaries between the sibling
-projects.
-
-## 15.1 Test categories and repository integration
-
-The repository contains **63 test classes: 12 library, 23 OS feature, and
-28 shell classes**. Here, a class means one top-level library source or one
-system-test directory, which may contain several programs and checks. The
-table explains how the runners classify them, so a directory containing
-PicoC code is not automatically counted as an OS feature class.
-
-| Test category | Classes | Classification and execution |
-| --- | ---: | --- |
-| Library | 12 | A top-level `.picoc` file in [`test/`](test/); direct RETI execution with test ISR support, without booting PicoOS |
-| OS feature | 23 | A directory with `launcher.picoc` and exactly the three input lines that load that launcher, run PID 3, and power off |
-| Shell | 28 | Every other test directory; exercises command handling and application behavior through shell input |
-
-Library tests integrate library code with the compiler, emulator, and small
-[test ISR implementation](interrupt_service_routines/isrs.picoc), including
-UART I/O and heap-bound queries. They do not run the full kernel. OS feature
-and shell tests validate complete PicoOS sessions.
-
-For example, [`test/hello_world/input.txt`](test/hello_world/input.txt) contains
-the following three lines. This input makes
-[`run_os_tests.py`](run_os_tests.py#L115) classify the directory as an OS
-feature test; [`launcher.picoc`](test/hello_world/launcher.picoc) performs the
-process orchestration inside PicoOS:
-
-```text
-load test/hello_world/launcher.bin
-run 3
-poweroff.bin
-```
-
-Detailed fixture and runner behavior is in [`test/README.md`](test/README.md).
-The [CI workflow](.github/workflows/run_tests.yml) checks out the compiler's
-`linker_update` branch and the latest version-sorted `v*` release tag of the
-emulator, rebuilds both, and runs PicoOS tests with direct source linking and
-DMA enabled. The diagram distinguishes the standalone library path from the
-complete boot path shared by OS feature and shell tests.
-
-```mermaid
-flowchart TD
-    T["63 test classes"] --> L["12 library classes"]
-    T --> S["51 system classes"]
-    S --> O["23 OS feature classes"]
-    S --> H["28 shell classes"]
-    L --> LC["Compile and run RETI with test ISRs<br/>Compare metadata-based expected output"]
-    O --> K["Compile and assemble programs<br/>Boot EPROM, kernel, init, shell<br/>Run scenario and compare fixture"]
-    H --> K
-```
-
-The three related repositories validate different levels: PicoC-Compiler tests
-compile source and commonly compare the result with GCC; RETI-Emulator system
-tests execute assembly programs; PicoOS system tests exercise the complete
-compiler-emulator-bootloader-kernel-userspace chain.
-
-## 15.2 Normal and fast execution
-
-Normal and fast runners use the same fixtures but differ in how much runtime
-state they reuse. The table shows where each case gets a fresh boot and where
-explicit cleanup replaces it; build commands remain in [Build and run](#build-and-run).
-
-| Execution mode | Scope | Boot strategy |
-| --- | --- | --- |
-| Standalone library runner, [`run_lib_test_case.sh`](run_lib_test_case.sh) | Library programs | No PicoOS boot; one emulator process per program |
-| Normal runner, [`run_os_tests.py`](run_os_tests.py) | OS feature or shell cases selected with `--kind os` or `--kind shell` | Fresh boot per case; independent cases can run in parallel |
-| Fast runner, [`run_os_tests_fast.py`](run_os_tests_fast.py) | OS feature cases | One shared boot for compatible cases |
-| Fast runner, [`run_os_tests_fast.py`](run_os_tests_fast.py) | Shell cases | Shared boot for compatible cases; nested interactive shells and direct terminal output use independent boots |
-
-Normal system tests compile and assemble every program in one test directory,
-start the release-style EPROM bootloader, wait for shell prompts, inject UART
-input, capture raw terminal output, normalize terminal control sequences, and
-compare the result with that directory's `expected_output.txt`. Generated test
-binaries and input fixtures are staged below the generated `binary/test/`
-directory. Observed `output.txt` and `raw_output.txt` files are written beside
-the source fixture, such as [`test/hello_world/`](test/hello_world/).
-
-The compiler's `-C library/start/libstart.picoc` option supplies the
-[startup code](#1412-understanding-the-heap-malloc-and-free-with-picoos), and
-`reti_emulator -a` assembles the resulting `.reti` files. Runtime execution
-uses `-e boot/bootloader.reti`, `-O`, `-n 5`, and `-r 262144`, with kernel
-layout/debug metadata supplied by `-S` and `-D`.
-
-Fast mode reuses a boot but explicitly resets mutable state.
-[`run_test_launcher()`](system/fast_os_test_launcher.picoc#L31) redirects stdout,
-loads and starts one test launcher, restores its own stdout, waits for the
-child, then calls [`reset_processes()`](library/unistd/process.picoc#L59) to remove remaining test processes and
-reset PID allocation. The child retains its inherited output descriptor.
-Fast shell tests additionally use [`shell_reset()`](user/shell.picoc#L241) to restore the initial
-environment, working directory, private descriptors, `$?`, and `$!`.
-
-The flowchart compares the order of work in the normal runner and the shared
-part of fast execution. Both prepare binaries before booting and compare
-outputs on the host afterward; fast execution captures and isolates each case
-inside the shared session.
-
-```mermaid
-flowchart TD
-    subgraph Normal["Normal system execution"]
-        N1["Compile and assemble test binaries"] --> N2["Fresh boot for a case"]
-        N2 --> N3["Inject UART input at prompts"]
-        N3 --> N4["Normalize output and compare fixture"]
-        N4 -->|Next case| N2
-    end
-    subgraph Fast["Shared fast execution"]
-        F1["Compile binaries and write manifests"] --> F2["Boot once"]
-        F2 --> F3["OS: run child launcher with captured stdout<br/>Shell: reset state, then evaluate captured commands"]
-        F3 --> F4["OS: wait and remove remaining test processes<br/>Shell: restore descriptors after capture"]
-        F4 -->|Next compatible case| F3
-        F4 -->|Session complete| F5["Compare each captured output on host"]
-    end
-```
-
-The fast runner scans `input.txt` for cases that require an independent boot:
-an exact [`shell.bin`](user/shell.picoc) command, a command ending in `/shell.bin`, or a line
-containing `/device/terminal.dev`. It identifies raw UART cases through
-line-editing escape sequences. Those cases still traverse UART and [`read_line()`](user/shell.picoc#L261)
-at the end of the shared boot instead of going through [`eval()`](user/shell.picoc#L1340) directly.
-
-Library tests instead read input/expected-output metadata, compile one program,
-apply a five-second emulator timeout, and compare output with trailing
-whitespace removed. The normal system runner allows 120 seconds per case;
-the fast runner budgets 60 seconds per shared case. Passing `--direct` to a
-system runner selects `picoc_compiler --direct-source-link`, which compiles
-from PicoC sources instead of reusing staged `.reti_blocks`/`.st` artifacts.
-
-## 15.3 Covered behavior
-
-The OS scenarios cover process loading and initial arguments, environment
-inheritance, process states, round-robin/timer switches, first-fit process
-memory, wait queues, mutexes, signals and parent-death signals, shared memory,
-descriptor inheritance and duplication, host files/directories, redirection,
-terminal blocking/editing, and process exceptions. Running both normal
-and fast modes can also reveal state left behind between successive scenarios.
-The [fixture directories](test/) hold the concrete scenarios; these tests do
-not establish full POSIX compatibility or real-time deadline guarantees.
+Predict the worker order and states at yield and unlock. Then vary the
+lock or yield placement and compare the result. [`7.4 Mutexes with test-and-set and wait queues`](#74-mutexes-with-test-and-set-and-wait-queues) gives the mutex flow,
+and [`6.1.1 Algorithm and Round Robin comparison`](#611-algorithm-and-round-robin-comparison) gives the scheduling policy.
 
 # 16. Use of AI in the project
+[\[↑ TOC\]](#contents)
 
-Alongside the implementation and testing described above, AI tools were used
-for parts of the [Makefile](Makefile) and Python test runners
-([normal](run_os_tests.py) and [fast](run_os_tests_fast.py)),
-repetitive implementation and test setup, refactoring, debugging, and
-documentation. Generated changes were reviewed against PicoOS,
-PicoC-Compiler, and RETI-Emulator source and the relevant tests. The
-architecture, project scope, and final technical decisions remained the
-project author's responsibility.
+I use the University of Freiburg's
+[Academic Writing Guide](https://uni-freiburg.de/ska/wp-content/uploads/sites/186/AcademicWritingGuide_2025.09.29.pdf)
+as a basis for documenting AI assistance. It concerns academic writing
+rather than code generation. Here I apply its transparency principles
+to the tools, stages, tasks, and results of source-code work.
+
+I developed the core concepts, architecture, and structural decisions
+myself. AI did not decide how PicoOS or its core mechanisms should work.
+
+A **substantial part of the work was manual debugging**. I added a PicoC
+source debugger to the RETI-Emulator because this custom architecture has
+no existing GDB support. The compiler's RETI output, stack frames, and
+runtime conventions required detailed inspection. AI assistance was not
+reliable enough for that work, so I debugged it with my own tools.
+
+I used AI for repetitive or time-consuming implementation tasks whose
+behavior and approach I already understood, and for supporting work.
+Understanding the system, planning features, and integrating them remained
+my responsibility.
+
+Pointer arithmetic is one example. Once I understood the memory layout,
+AI could draft the address calculations, which I then checked and fixed.
+It helped write an already understood solution more quickly.
+
+AI also helped with user applications, tests, Makefiles, Python, and shell
+scripts. I would not have had time to create some of these additions
+otherwise. The [AI usage record](documentation/ai_usage.md) lists the
+source files where it was used.
+
+I used AI more toward the end as the models available through GitHub
+Copilot improved. I also saw supervisors at other chairs encourage its
+use. I regarded it as another technical tool, much as computers replaced
+typewriters and online research supplemented libraries. By then I had
+worked on the project for three semesters, spending the last entirely
+on the OS, well beyond its 18 ECTS scope.
 
 # 17. Limitations
+[\[↑ TOC\]](#contents)
 
-The lecture examples and tests above should be read with these limits in
-mind. The list links each main limitation to the implementation or its fuller
-explanation:
+These limits matter when interpreting the lecture examples and tests.
+Each reference gives the relevant implementation details:
 
-- one [physical address space](#8-memory-management-and-shared-memory) with no
-  MMU, hardware memory isolation, or virtual memory
-- [host-backed UART files](#96-working-directories-and-host-operations) rather
-  than a resident filesystem
+- one physical address space with no MMU, hardware memory isolation, or virtual
+  memory, as described in [`3. Memory management and shared memory`](#3-memory-management-and-shared-memory)
+- host-backed UART files rather than a resident filesystem, as described in
+  [`8.9 PicoOS paths, working directories, and host operations`](#89-picoos-paths-working-directories-and-host-operations)
 - eight descriptors per process (0–7), set by
   [`FILE_DESCRIPTOR_COUNT`](kernel/filesystem/file_descriptor.header#L6), with
-  [copied descriptor state](#91-per-process-descriptor-table) rather than shared
-  open-file descriptions
-- [linked-list round-robin scanning](#71-scheduler) rather than a separate ready queue
-- [non-preemptive kernel execution and timer-preempted userspace](#44-timer-isr-and-preemption)
-- wait-queue [`sleep()`](library/unistd/blocking.picoc#L9) rather than timed sleep
-- exact-child [`waitpid()`](library/sys/wait/wait.picoc#L14) rather than a general wait interface
-- [six fixed-action signals](#63-signals-inside-the-pcb) and one
-  [foreground/input owner](#126-foreground-background-and-signals) rather than full job control
-- one [global terminal ring and wait queue](#92-global-terminal) with per-process pending input reads
-- non-atomic [`O_APPEND`](common/file.header#L15) positioning when another process or host program writes
-  the same host-backed file concurrently
-- [fixed/default process heap and stack sizing](#54-process-image-and-initial-stack)
-  with no dynamic stack growth
-- small [formatting, scanning](#1025-standard-io), [shell parsing](#124-parsing-and-command-execution),
-  and [standard-library subsets](#103-library-organization-and-scope)
-- one [sequential, file-backed pipeline](#127-redirection-and-pipelines) per command,
-  with no streaming kernel pipes
+  copied descriptor state rather than shared open-file descriptions, as
+  described in [`8.1 Per-process file-descriptor table`](#81-per-process-file-descriptor-table)
+- cyclic process selection (Lazy Round Robin) rather than ready-queue rotation (Round Robin), as described in
+  [`6.1.1 Algorithm and Round Robin comparison`](#611-algorithm-and-round-robin-comparison)
+- non-preemptive kernel execution and deferred rescheduling, as explained in
+  [`2.5.2 Kernel non-preemption and deferred rescheduling`](#252-kernel-non-preemption-and-deferred-rescheduling)
+- fixed/default process heap and stack sizing with no dynamic stack growth, as
+  described in [`4.2 Initial user process stack`](#42-initial-user-process-stack)
+- limited formatting and scanning, shell parsing, and standard-library subsets,
+  as described in [`10.2.9 stdio: streams, formatting, and scanning`](#1029-stdio-streams-formatting-and-scanning),
+  [`12.4 Command parsing, expansion, and execution`](#124-command-parsing-expansion-and-execution), and
+  [`10.2 Library overview and dependencies`](#102-library-overview-and-dependencies)
+- no implemented PicoOS-specific physical RETI CPU or hardware timer: the
+  emulator's instruction-count timer provides reproducible preemption, not
+  exact elapsed-time behavior, so programs that require exact timing, such as
+  games, cannot be supported reliably
+- no sound hardware or dedicated LCD monitor: terminal I/O and host-backed
+  files are provided through the emulator and host operating system rather
+  than PicoOS devices
+- statically linked program images, with no dynamic loader, shared libraries,
+  or dynamically linked libc, the C library is a reduced PicoOS subset linked
+  through [`libstart`](library/start/libstart.picoc)
 - familiar POSIX-like names without full POSIX semantics
 
 # Appendix: Inspecting `.bin` files with `hexyl`
+[\[↑ TOC\]](#contents)
 
-[`hexyl`](https://github.com/sharkdp/hexyl) helps connect the
-[process-image layout](#54-process-image-and-initial-stack) to the bytes in a
-generated `.bin` file. Each RETI word occupies four file bytes in big-endian
-order. The first five words form a **20-byte loader header**, followed by the
-image payload. The table gives byte offsets for finding those header words;
-the stored addresses and sizes are measured in RETI cells, not file bytes.
+[`hexyl`](https://github.com/sharkdp/hexyl) shows how image offsets become file bytes. RETI words use four
+big-endian bytes. The five-word loader header occupies the first 20 bytes,
+with cell-based addresses and sizes stored at these byte offsets:
 
 | File byte offset | Header word | Meaning |
 | --- | --- | --- |
 | `0x00` | Code start | Offset of executable code within the loaded image |
 | `0x04` | Data start | Offset used to initialize the data-segment register |
 | `0x08` | Heap start | Start of the process heap within its allocated memory |
-| `0x0c` | Heap size | Number of cells reserved for the process heap; `ff ff ff ff` selects the kernel default |
-| `0x10` | Stack start | Initial stack offset; `ff ff ff ff` denotes automatic stack placement |
+| `0x0c` | Heap size | Number of cells reserved for the process heap, `ff ff ff ff` selects the kernel default |
+| `0x10` | Stack start | Initial stack offset, `ff ff ff ff` denotes automatic stack placement |
 
-The [bootloader](boot/bootloader.picoc#L41) receives a word count from the UART
-load protocol before reading these five header words. That count is **not**
-an extra word stored at the beginning of the `.bin` file. Process loading
-reads the same header in [`begin_process_load()`](kernel/process/process_loader.picoc#L109).
+The UART [`load`](#123-uart-host-service-protocol) word count precedes the file transfer. It is not stored
+in the `.bin` file. Process loading reads the same five-word header.
 
-After a user binary has been assembled, these commands show its header and
-then the first 64 payload bytes. Grouping four bytes with `-g 4` makes each
-32-bit RETI word easier to recognize; `-s` skips bytes and `-n` limits how
-many bytes are displayed:
+These commands show the header and first 64 payload bytes. `-g 4` groups
+words, `-s` skips bytes, and `-n` limits output:
 
 ```console
 $ hexyl -g 4 -n 20 binary/user/echo.bin
 $ hexyl -g 4 -s 20 -n 64 binary/user/echo.bin
 ```
 
-For example, a header group `00000020` means 32 RETI cells. To inspect the word
-at image offset 32, skip `20 + 4 * 32 = 148` file bytes. This conversion avoids
-confusing the byte positions shown by `hexyl` with the cell addresses in the
-emulator.
+A header value `00000020` means 32 cells. Image word 32 is at file byte
+`20 + 4 × 32 = 148`, including the header.
 
-Skip and length values accept decimal, hexadecimal, and size suffixes. A
-negative skip is relative to the file end, so the following command displays
-the final 64 bytes of the binary. The `=` keeps the negative number attached
-to the option, as in [hexyl's negative-offset examples](https://github.com/sharkdp/hexyl/releases/tag/v0.9.0):
+A negative skip counts from the file end. This command displays the last
+64 bytes, following [hexyl's negative-offset examples](https://github.com/sharkdp/hexyl/releases/tag/v0.9.0) and keeping the negative value attached to its option:
 
 ```console
 $ hexyl --skip=-64 -n 64 binary/user/echo.bin

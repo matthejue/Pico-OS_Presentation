@@ -23,7 +23,7 @@ export default () => async (code: string, options: Record<string, unknown>) => {
       noteTextColor: '#17313a',
     },
     flowchart: { nodeSpacing: 28, rankSpacing: 38 },
-    sequence: { actorMargin: 35, messageMargin: 28 },
+    sequence: { actorMargin: 35, messageMargin: 22, mirrorActors: false, diagramMarginY: 8, boxMargin: 8 },
     ...Object.fromEntries(Object.entries(options).filter(([, value]) => value !== undefined)),
   })
   const { svg } = await mermaid.render(`pico-diagram-${++diagramId}`, code)
