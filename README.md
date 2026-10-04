@@ -127,20 +127,20 @@ lists are replaced by the dynamic contents slide and section overviews.
 
 Ordinary slide text and table descriptions stay brief. Use bullets for multiple
 items; single statements, table values, card headings, and notes use plain text.
-If a table column contains a multi-item cell, all nonempty cells in that column
-use bullets on that slide, including both halves of a split table. Matching list
-panels and card detail fields follow the same slide-local consistency rule.
-Code and diagram
+Every list must contain at least two items. Each table cell, list panel, and card
+detail field follows this rule independently, even when neighboring content
+uses bullets. Code and diagram
 bodies stay complete. Long code examples split into balanced columns, with
 boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware
 slides include the setup, wiring, and README price estimates.
 
-Side-by-side content aligns at the top in every column layout, including paired
-tables, code boxes, lists, and columns within stacked panels. Standalone visuals
-are vertically centered within their panels. Command strips and their code
-examples stay together as one group. The RETI address map and its usage table
-share one slide.
+Side-by-side content shares a common top edge while the whole group stays
+vertically centered in its available slide or panel area. This applies to
+paired tables, code boxes, lists, and columns within stacked panels. Standalone
+visuals are vertically centered within their panels. Command strips and their
+code examples stay together as one group. The RETI address map and its usage
+table share one slide.
 
 Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
@@ -277,7 +277,8 @@ PRESENTATION_URL=http://localhost:3032/selectable-text/ PRESENTATION_ROUTER=hist
 
 The check visits every slide and validates the cover, generated contents, source
 anchors, heading order, numbered subtitles, content bounds, full-width code
-boxes, top alignment of column content, and table-cell clipping. It rejects
+boxes, matching column top edges, vertical centering of column groups, and
+table-cell clipping. It rejects
 console/module/network errors, Slidev error fallbacks, missing diagrams, and
 Mermaid/XML error placeholders, and exercises enlargement, keyboard navigation,
 text selection, complete code in the enlarged viewer, scrolling through the

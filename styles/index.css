@@ -668,11 +668,15 @@ html.selectable-text .slidev-layout * {
 .pipeline-panel .readme-list > ul { display: flex; gap: 1.8rem; flex-wrap: wrap; }
 .pipeline-panel .readme-list li { margin: 0; }
 
-/* Keep column frames tall enough to fit complete visuals, but place their
-   visible content at the same top edge, including columns in stacked panels. */
+/* Center each column group using its tallest item, then align the tops of
+   the items within that shared row, including columns in stacked panels. */
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) { grid-template-rows: minmax(0, max-content); align-content: center; }
 :is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-visual { align-items: start; }
-:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) :is(.readme-list, .readme-explanation) { justify-content: flex-start; padding-top: 0; }
-:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > :is(ul, ol) > li:first-child { margin-top: 0; }
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) :is(.readme-list, .readme-explanation) { justify-content: flex-start; padding: 0; }
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > :is(ul, ol) > li:first-child,
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > .readme-item:first-child { margin-top: 0; }
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > :is(ul, ol) > li:last-child,
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > .readme-item:last-child { margin-bottom: 0; }
 .content-columns .diagram-panel .mermaid { align-items: flex-start; }
 
 /* A spacious cover: typography and the toolchain artwork share the canvas. */

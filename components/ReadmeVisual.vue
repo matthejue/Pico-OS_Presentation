@@ -21,7 +21,13 @@ function measure() {
     nativeWidth.value = sourceWidth
     nativeHeight.value = box?.height || img?.naturalHeight || content.value.scrollHeight
     sourceAspect.value = sourceWidth / nativeHeight.value
-    const availableWidth = frame.value.clientWidth, availableHeight = frame.value.clientHeight
+    // A centered column row takes the height of its tallest fitted item.
+    // Fit against the group's available height so fitting does not depend
+    // on the row height produced by the previous measurement.
+    const parent = frame.value.parentElement
+    const columns = parent?.matches('.layout-columns, .artifact-columns, .code-columns, .content-columns')
+    const availableWidth = frame.value.clientWidth
+    const availableHeight = columns ? parent.clientHeight : frame.value.clientHeight
     if (availableWidth && availableHeight) {
       scale.value = Math.min(availableWidth / sourceWidth, availableHeight / nativeHeight.value)
       // Keep a complete code box flush with both edges of its column even
@@ -41,6 +47,8 @@ onMounted(async () => {
   await nextTick()
   resize = new ResizeObserver(measure)
   resize.observe(frame.value); resize.observe(content.value)
+  if (frame.value.parentElement?.matches('.layout-columns, .artifact-columns, .code-columns, .content-columns'))
+    resize.observe(frame.value.parentElement)
   mutation = new MutationObserver(measure)
   mutation.observe(content.value, { childList: true, subtree: true })
   frame.value.addEventListener('load', measure, true)

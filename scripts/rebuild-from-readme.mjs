@@ -36,14 +36,12 @@ for(const block of previous.split(/(?=<!-- SOURCE Pico-OS\/README.md#)/)) {
 const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by dynamic presentation contents and section overviews'}:{})}]))
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 const prose=s=>displayHtml(md.renderInline(s))
-const bulletList=(items,cls='',consistent=false)=>{
+const bulletList=(items,cls='')=>{
  const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1))}`:prose(item))
- if(content.length===1&&!consistent)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
+ if(!content.length)return ''
+ if(content.length===1)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
  return `<ul${cls?` class="${cls}"`:''}>${content.map(item=>`<li>${item}</li>`).join('\n')}</ul>`
 }
-// Decide from the rows on this slide, before splitting into side-by-side panels.
-const listColumns=rows=>rows[0].values.map((_,i)=>rows.some(r=>(r.values[i].html.match(/<li>/g)||[]).length>1))
-const cellHtml=(value,list)=>list&&!value.html.startsWith('<ul>')&&value.html?`<ul><li>${value.html}</li></ul>`:value.html
 const marker=a=>`<!-- README_ASSET ${a.id}${a.borrowed?' repeated':''} -->`
 const visual=(kind,inner,width=980,classes='',attributes='')=>`<ReadmeVisual kind="${kind}" :width="${width}"${classes?` class="${classes}"`:''}${attributes?` ${attributes}`:''}>\n\n${inner}\n\n</ReadmeVisual>`
 await fs.mkdir('public/readme',{recursive:true})
@@ -99,9 +97,8 @@ function widths(table,rows,target) {
  return {width,columns:lengths.map(c=>100*(c.minimum+extra*c.weight/weights)/width),labels}
 }
 function renderTable(a) {
- const columnLists=listColumns(a.compactRows)
  if(a.grid) {
-  const html=`<div class="readme-tiles" v-pre>${a.compactRows.map(r=>`<div class="readme-tile"><div class="tile-name">${cellHtml(r.values[0],columnLists[0])}</div>${r.values.slice(1).map((v,i)=>`<div class="tile-detail">${cellHtml(v,columnLists[i+1])}</div>`).join('')}</div>`).join('\n')}</div>`
+  const html=`<div class="readme-tiles" v-pre>${a.compactRows.map(r=>`<div class="readme-tile"><div class="tile-name">${r.values[0].html}</div>${r.values.slice(1).map(v=>`<div class="tile-detail">${v.html}</div>`).join('')}</div>`).join('\n')}</div>`
   return visual('table',html,a.id==='table-5997'?1440:1280,`inventory-grid${a.id==='table-5997'?' library-grid':''}`)
  }
  const chunks=a.tableColumns===2?balanced(a.compactRows,Math.ceil(a.compactRows.length/2)):[a.compactRows]
@@ -111,7 +108,7 @@ function renderTable(a) {
  const merged=widths(a,a.compactRows,maxWidth)
  const tableKey=a.id+':'+a.compactRows.map(r=>r.sourceRow).join(',')
  if(tableWidths[tableKey]?.length===merged.columns.length)merged.columns=tableWidths[tableKey]
- const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-source-row="${r.sourceRow}">${r.values.map((v,i)=>`<td${i===0?' class="table-key"':''}>${cellHtml(v,columnLists[i])}</td>`).join('')}</tr>`).join('\n')}</tbody></table></div>`).join('\n')
+ const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-source-row="${r.sourceRow}">${r.values.map((v,i)=>`<td${i===0?' class="table-key"':''}>${v.html}</td>`).join('')}</tr>`).join('\n')}</tbody></table></div>`).join('\n')
  return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}"${chunks.length===2?' '+columnAttributes('table:'+tableKey):''} v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"`)
 }
 function renderCode(a) {
@@ -137,7 +134,7 @@ function render(a) {
  if(a.type==='image')return marker(a)+'\n'+visual('image',`<img src="${a.outputPath}" alt="${esc(a.alt)}" />`)
  if(a.type==='list') {
   if(a.tiles)return marker(a)+`\n<div class="hardware-tiles">${a.items.map(item=>`<div class="readme-tile"><div class="tile-name">${prose(Array.isArray(item)?item[0]:item)}</div>${Array.isArray(item)?bulletList(item.slice(1)):''}</div>`).join('')}</div>`
-  return marker(a)+`\n<div class="readme-list${a.listColumns===2?' bullet-columns':''}">${bulletList(a.items,'',a.consistentList)}</div>`
+  return marker(a)+`\n<div class="readme-list${a.listColumns===2?' bullet-columns':''}">${bulletList(a.items)}</div>`
  }
  if(a.type==='recording')return marker(a)+'\n<AsciinemaRecording src="/casts/reti_emulator.cast" title="RETI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />\n<div class="slide-note">Click to play; click outside to navigate</div>'
 }
@@ -189,8 +186,6 @@ for(const section of sections) {
  if(!groups.length && !originals.length && section.paragraphs.length && !introOnly.has(section.anchor))throw Error('Missing reviewed prose bullets: '+section.anchor)
  groups.forEach(({group,layout,panels,weights},number)=>{
   let content
-  const consistentList=group.some(a=>a.type==='list'&&!a.tiles&&a.items.length>1)
-  for(const a of group)if(a.type==='list')a.consistentList=consistentList
   const columnKey='assets:'+group.map(a=>a.id).join('+')
   if(layout==='columns') {
    for(const a of group)if(a.type==='code')a.narrow=true

@@ -33,10 +33,10 @@ does not leave stale links. Headings without their own slide link to an availabl
 descendant; empty branches and chapters are omitted from navigation. Ancestor
 headings link back to their major section overview; each overview links back
 to Contents. Slide text stays brief, with bullets for multiple items and plain
-text for single statements, values, headings, and notes. A multi-item table cell
-requires bullets in all nonempty cells of its column on that slide, across both
-panels when split. Matching list panels and card detail fields also keep their
-formatting consistent within the slide. Hardware slides include the FPGA, SRAM, UART adapter,
+text for single statements, values, headings, and notes. Every list must contain
+at least two items. Each table cell, list panel, and card detail field follows
+this rule independently, even when neighboring content uses bullets.
+Hardware slides include the FPGA, SRAM, UART adapter,
 connections, individual prices, and total from the README.
 
 Function tables retain operations exposed through or called by a library,
@@ -64,10 +64,12 @@ edges. Table keys and inline code use cyan; contextual comparison labels use
 amber. Authored wording stays unchanged. `styles/readme-emphasis.css` contains
 the scoped emphasis and composition styles.
 
-Side-by-side content aligns at the top, including code, tables, diagrams, and
-lists within columns and stacked composition panels. Standalone visuals stay
-vertically centered in their panels. Command strips and their examples form
-one group. The RETI execution model's address map and usage table share a slide.
+Side-by-side content shares a common top edge, with the whole group vertically
+centered in its available slide or panel area. This includes code, tables,
+diagrams, and lists within columns and stacked composition panels. Standalone
+visuals stay vertically centered in their panels. Command strips and their
+examples form one group. The RETI execution model's address map and usage table
+share a slide.
 
 All 70 column layouts were reviewed at slide size. Columns use unequal shares
 where the content benefits: the hardware details use 39% for the short list and

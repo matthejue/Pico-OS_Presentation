@@ -1,8 +1,8 @@
 {
   "list-27": [
-    "**PicoC:** compile + link",
-    "**RETI:** execute + inspect",
-    "**PicoOS:** boot → kernel → applications"
+    "**Pico-Compiler:** compile + link",
+    "**RETI-Emulator:** assemble to machine code, execute, inspect",
+    "**PicoOS:** source includes bootloader, kernel, init process, user applications (shell)"
   ],
   "list-185": [
     [

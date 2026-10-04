@@ -183,13 +183,18 @@ try {
           found.push('Source visual is not vertically centered in its panel')
       }
       for (const group of element.querySelectorAll('.layout-columns, .artifact-columns, .code-columns, .content-columns, .table-panels-two')) {
-        const tops = [...group.children].map(child => {
-          const content = child.matches('.readme-visual') ? child.querySelector('.source-fit-stage')
-            : child.matches('.readme-list') ? child.firstElementChild : child
-          return content.getBoundingClientRect().top
+        const items = [...group.children].map(child => {
+          const contents = child.matches('.readme-visual') ? [child.querySelector('.source-fit-stage')]
+            : child.matches('.readme-list') ? [...child.children] : [child]
+          const rects = contents.map(content => content.getBoundingClientRect())
+          return { top: Math.min(...rects.map(r => r.top)), bottom: Math.max(...rects.map(r => r.bottom)) }
         })
-        if (tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 2)
+        const top = Math.min(...items.map(r => r.top)), bottom = Math.max(...items.map(r => r.bottom))
+        if (items.length > 1 && Math.max(...items.map(r => r.top)) - top > 2)
           found.push('Side-by-side content does not align at the top')
+        const frame = group.getBoundingClientRect()
+        if (Math.abs((frame.top + frame.bottom) - (top + bottom)) > 4)
+          found.push('Side-by-side content is not vertically centered as a group')
       }
       for (const group of element.querySelectorAll('.layout-command-above, .layout-compact-stacked')) {
         // Column visuals align at the top; their frames determine group spacing.
@@ -203,25 +208,9 @@ try {
         if (cell.scrollWidth > cell.clientWidth + 2)
           found.push(`Horizontally clipped table cell: ${cell.textContent.slice(0, 70)}`)
       }
-      // Each table column and each matching card field is consistent locally.
-      // A real multi-item list is the only reason to retain one-item bullets.
-      const checkFields = (rows, label) => {
-        for (let i = 0; i < rows[0].length; i++) {
-          const cells = rows.map(row => row[i]).filter(cell => cell.textContent.trim())
-          const multi = cells.some(cell => cell.querySelectorAll(':scope > ul > li').length > 1)
-          for (const cell of cells) {
-            if (Boolean(cell.querySelector(':scope > ul')) !== multi)
-              found.push(`Unnecessary or inconsistent bullets in ${label} field ${i + 1}`)
-          }
-        }
-      }
-      for (const panels of element.querySelectorAll('.table-panels')) {
-        const rows = [...panels.querySelectorAll('tbody tr')].map(row => [...row.children])
-        checkFields(rows, 'table')
-      }
-      for (const tiles of element.querySelectorAll('.readme-tiles')) {
-        const rows = [...tiles.children].map(tile => [...tile.children])
-        checkFields(rows, 'card')
+      for (const list of element.querySelectorAll('.readme-slide ul, .readme-slide ol')) {
+        if (list.querySelectorAll(':scope > li').length < 2)
+          found.push(`List has fewer than two items: ${list.textContent.slice(0, 70)}`)
       }
       for (const host of element.querySelectorAll('.mermaid')) {
         const svg = host.shadowRoot?.querySelector('svg')
