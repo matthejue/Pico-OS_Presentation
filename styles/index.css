@@ -641,7 +641,7 @@ html.selectable-text .slidev-layout * {
 .context-note b { flex-basis: 10rem; }
 .context-note > ul { flex: 1; display: flex; flex-wrap: wrap; column-gap: 1.8rem; row-gap: 0.25rem; padding-left: 1rem; margin: 0; }
 .context-note li { margin: 0; }
-.table-panels-two { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 24px; align-items: center; }
+.table-panels-two { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 24px; align-items: start; }
 .readme-table table { table-layout: fixed; }
 .readme-table th { font-size: 16px; line-height: 1.25; }
 .readme-table td, .readme-table th { padding: 8px 10px; overflow-wrap: normal; }
@@ -665,6 +665,13 @@ html.selectable-text .slidev-layout * {
 .pipeline-panel .readme-list { flex: none; padding: 0; font-size: 0.85rem; }
 .pipeline-panel .readme-list > ul { display: flex; gap: 1.8rem; flex-wrap: wrap; }
 .pipeline-panel .readme-list li { margin: 0; }
+
+/* Keep column frames tall enough to fit complete visuals, but place their
+   visible content at the same top edge, including columns in stacked panels. */
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-visual { align-items: start; }
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) :is(.readme-list, .readme-explanation) { justify-content: flex-start; padding-top: 0; }
+:is(.layout-columns, .artifact-columns, .code-columns, .content-columns) .readme-list > :is(ul, ol) > li:first-child { margin-top: 0; }
+.content-columns .diagram-panel .mermaid { align-items: flex-start; }
 
 /* A spacious cover: typography and the toolchain artwork share the canvas. */
 .slidev-layout:has(.cover-title) { display: flex; flex-direction: column; justify-content: center; padding-bottom: 5rem; }

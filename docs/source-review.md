@@ -62,9 +62,10 @@ edges. Table keys and inline code use cyan; contextual comparison labels use
 amber. Authored wording stays unchanged. `styles/readme-emphasis.css` contains
 the scoped emphasis and composition styles.
 
-Slide content is vertically centered, including code and lists within columns.
-Command strips and their examples form one centered group. The RETI execution
-model's address map and usage table share a single centered slide.
+Side-by-side content aligns at the top, including code, tables, diagrams, and
+lists within columns and stacked composition panels. Standalone visuals stay
+vertically centered in their panels. Command strips and their examples form
+one group. The RETI execution model's address map and usage table share a slide.
 
 All 70 column layouts were reviewed at slide size. Columns use unequal shares
 where the content benefits: the hardware details use 39% for the short list and

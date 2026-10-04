@@ -176,12 +176,25 @@ try {
       for (const visual of element.querySelectorAll('.readme-visual')) {
         const frame = visual.getBoundingClientRect()
         const stage = visual.querySelector('.source-fit-stage').getBoundingClientRect()
-        if (Math.abs((frame.top + frame.bottom) - (stage.top + stage.bottom)) > 4)
+        const inColumns = visual.closest('.layout-columns, .artifact-columns, .code-columns, .content-columns')
+        if (inColumns && Math.abs(frame.top - stage.top) > 2)
+          found.push('Source visual is not aligned to the top of its column')
+        if (!inColumns && Math.abs((frame.top + frame.bottom) - (stage.top + stage.bottom)) > 4)
           found.push('Source visual is not vertically centered in its panel')
       }
+      for (const group of element.querySelectorAll('.layout-columns, .artifact-columns, .code-columns, .content-columns, .table-panels-two')) {
+        const tops = [...group.children].map(child => {
+          const content = child.matches('.readme-visual') ? child.querySelector('.source-fit-stage')
+            : child.matches('.readme-list') ? child.querySelector('ul, ol') : child
+          return content.getBoundingClientRect().top
+        })
+        if (tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 2)
+          found.push('Side-by-side content does not align at the top')
+      }
       for (const group of element.querySelectorAll('.layout-command-above, .layout-compact-stacked')) {
+        // Column visuals align at the top; their frames determine group spacing.
         const frame = group.getBoundingClientRect()
-        const stages = [...group.querySelectorAll('.source-fit-stage')].map(el => el.getBoundingClientRect())
+        const stages = [...group.children].map(el => el.matches('.readme-visual') ? el.querySelector('.source-fit-stage').getBoundingClientRect() : el.getBoundingClientRect())
         const top = Math.min(...stages.map(r => r.top)), bottom = Math.max(...stages.map(r => r.bottom))
         if (Math.abs((frame.top + frame.bottom) - (top + bottom)) > 6)
           found.push('Related visuals are not vertically centered as a group')
