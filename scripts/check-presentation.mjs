@@ -61,7 +61,7 @@ for (const { page, slide, source, anchor } of pages) {
   }
 }
 if (!process.env.PRESENTATION_SOURCE)
-  assert.equal(JSON.parse(await readFile(new URL('../source-state.json', import.meta.url))).slideCount, pages.length)
+  assert.equal(JSON.parse(await readFile(new URL('../.source/source-state.json', import.meta.url))).slideCount, pages.length)
 const shortVersion = inspectSlides(markdown)
 assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees every source slide')
 assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')

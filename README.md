@@ -85,7 +85,7 @@ The slide source is
 Each slide contains an invisible `SOURCE` comment that maps it back to a stable
 Pico-OS README heading. The exact input bytes are saved in
 [`.source/Pico-OS-README.md`](.source/Pico-OS-README.md), with their commit, hash,
-dirty state, date, and slide count in [`source-state.json`](source-state.json).
+dirty state, date, and slide count in [`.source/source-state.json`](.source/source-state.json).
 The current revision and update workflow are documented in
 [source review](docs/source-review.md).
 
@@ -186,7 +186,7 @@ node scripts/check-presentation.mjs
 
 While updating, set `PRESENTATION_SOURCE` to the exact candidate README path
 to validate its hierarchy before replacing the last successful source snapshot.
-After validation, save those exact bytes and refresh `source-state.json`.
+After validation, save those exact bytes and refresh `.source/source-state.json`.
 
 Also check both development launch variants, because successful production
 bundling does not guarantee that development imports load correctly. Start each

@@ -1,7 +1,7 @@
 # Source review · 4 October 2026
 
 The presentation follows the current PicoOS README, including its uncommitted
-changes. `source-state.json` records the repository commit, exact source hash,
+changes. `.source/source-state.json` records the repository commit, exact source hash,
 dirty state, and slide count. `.source/Pico-OS-README.md` contains the input bytes.
 The full deck has 374 slides; the short deck has 367.
 
