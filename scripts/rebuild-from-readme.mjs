@@ -5,6 +5,7 @@ import path from 'node:path'
 import {readmeSource, md, hash, plain, displayHtml} from './readme-source.mjs'
 import {styleSourceSvg} from '../config/visual-palette.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
+import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '../Pico-OS/README.md'
 const source=await fs.readFile(sourcePath,'utf8')
 const {sections,assets}=readmeSource(source)
@@ -171,13 +172,13 @@ for(const section of sections) {
   if(origin)originals.unshift(...origin.assets.filter(a=>a.type==='code'&&a.language==='c').map(a=>({...a,borrowed:true})))
  }
  const parts=originals.flatMap(prepare)
- let groups=compose(parts)
+ let groups=compactGroups(compose(parts),section)
  if(section.anchor==='reti-execution-model')groups=[{group:parts,layout:'compact-stacked'}]
  if(section.anchor==='intended-physical-hardware')groups=[{group:parts.filter(a=>a.type==='image'),layout:'single'},{group:parts.filter(a=>a.type==='list'||a.type==='table'),layout:'hardware'}]
  if(!groups.length && summaries[section.anchor] && !introOnly.has(section.anchor))groups=[{group:[],layout:'bullets'}]
  if(section.anchor==='picoos')groups.unshift({group:[],layout:'bullets'})
  if(!groups.length && !originals.length && section.paragraphs.length && !introOnly.has(section.anchor))throw Error('Missing reviewed prose bullets: '+section.anchor)
- groups.forEach(({group,layout},number)=>{
+ groups.forEach(({group,layout,panels,weights},number)=>{
   let content
   const columnKey='assets:'+group.map(a=>a.id).join('+')
   if(layout==='columns') {
@@ -190,6 +191,7 @@ for(const section of sections) {
   if(!group.length)content=`<div class="readme-list${summaries[section.anchor].length>6?' bullet-columns':''}">${bulletList(summaries[section.anchor])}</div>`
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
+  else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed})
   else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
   const fact=number===0?facts[section.anchor]:null
   if(fact)content+=`\n<aside class="context-note"><b>${esc(fact[0])}</b>${bulletList(fact[1])}</aside>`

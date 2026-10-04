@@ -4,7 +4,7 @@ The presentation uses the README at PicoOS commit
 `4d1fa5047c14aa80121a76850b75c2c0319147f6`, including uncommitted edits to
 Contents link labels. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
-and slide count. The full deck has 313 slides; the short deck has 306.
+and slide count. The full deck has 272 slides; the short deck has 267.
 
 ## Content and composition
 
@@ -42,11 +42,23 @@ by side. Long code examples use two full-width column boxes, with the extra
 line in the left half when necessary. Command strips sit above their related
 code. Every original code line remains present, including split boundaries.
 
+Reviewed merges cover 38 subsections and remove 41 unnecessary slide breaks.
+Build and run combines its commands and launcher-options table. Stacked
+composition panels preserve the existing column proportions and give each
+panel height according to its content. `config/readme-composition.mjs` stores
+these arrangements; changed source compositions require a fresh review.
+
+List labels and selected keywords use bold color emphasis. Original and
+Extended compiler pipelines have amber and cyan labels and matching panel
+edges. Table keys and inline code use cyan; contextual comparison labels use
+amber. Authored wording stays unchanged. `styles/readme-emphasis.css` contains
+the scoped emphasis and composition styles.
+
 Slide content is vertically centered, including code and lists within columns.
 Command strips and their examples form one centered group. The RETI execution
 model's address map and usage table share a single centered slide.
 
-All 76 column layouts were reviewed at slide size. Columns use unequal shares
+All 70 column layouts were reviewed at slide size. Columns use unequal shares
 where the content benefits: the hardware details use 39% for the short list and
 61% for the table. Its text is about 75% larger than with the previous equal
 split. Paired code boxes and tables use compatible text sizes; split code keeps
@@ -110,18 +122,18 @@ For future updates:
    numbered short-version choices from the relocated markers.
 
 Existing exclusions follow unchanged artifact hashes, even when source lines
-move. Their combined or split placements now occupy seven full-deck slides:
-3, 4, 6, 7, 8, 9, and 12. Changed assets and layouts need review.
+move. Their merged placements now occupy five full-deck slides:
+3, 5, 6, 7, and 10. Changed assets and layouts need review.
 
 ## Verification
 
 The full and short production builds passed. Browser checks passed across all
-313 slides in production, normal development, and selectable-text development.
+272 slides in production, normal development, and selectable-text development.
 They cover source hierarchy, numbering, content bounds, vertical centering, full-width code boxes,
 table clipping, Mermaid/XML rendering, enlarged visuals, complete enlarged
 code, scrolling, text selection, navigation, and inline asciinema playback.
-All 117 table/grid pages were inspected; table widths and wording were adjusted
-to avoid tiny wrapped remainders.
+All 116 table/grid pages were checked for clipping. The reviewed table widths,
+wording, and column proportions from the preceding review remain in place.
 
 The `m`, `Alt+A`, and `Alt+S` shortcuts passed against the real development write
 endpoints in both modes; test edits were restored. Short-version unit checks

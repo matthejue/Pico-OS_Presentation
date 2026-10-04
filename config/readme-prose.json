@@ -1,158 +1,158 @@
 {
   "picoos": [
-    "Educational OS for RETI",
-    "Bootloader → kernel → init → shell",
-    "Shared physical memory; no MMU",
-    "Host-backed files via UART"
+    "**Educational OS** for RETI",
+    "**Bootloader** → kernel → init → shell",
+    "**Shared physical memory**; no MMU",
+    "**Host-backed files** via UART"
   ],
   "intended-physical-hardware": [
-    "Parts total: €78.18 including VAT",
-    "DigiKey Germany estimate: 12 August 2026",
-    "Excludes wiring, PCB, cables, shipping",
-    "Proposed hardware; development uses emulator",
-    "Hardware needs companion host service"
+    "**Parts total:** €78.18 including VAT",
+    "**DigiKey Germany estimate:** 12 August 2026",
+    "**Excludes** wiring, PCB, cables, shipping",
+    "Proposed hardware; development uses **emulator**",
+    "Hardware needs **companion host service**"
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
-    "Shared convention: C, assembly, startup, interrupts",
-    "BAF identifies stack frame",
-    "Caller pushes arguments + continuation",
-    "Caller removes arguments after return",
-    "Callee restores BAF; result in IN2"
+    "**Shared convention:** C, assembly, startup, interrupts",
+    "**BAF** identifies stack frame",
+    "Caller pushes **arguments** + continuation",
+    "Caller removes **arguments** after return",
+    "Callee restores **BAF**; result in IN2"
   ],
   "24-system-call-interface-and-execution": [
-    "Library wrapper → selector + request",
-    "INT 0 → handle_syscall",
-    "No hardcoded kernel function addresses",
-    "ABI: registers, layouts, result meanings"
+    "**Library wrapper** → selector + request",
+    "INT 0 → **handle_syscall**",
+    "**No hardcoded** kernel function addresses",
+    "**ABI:** registers, layouts, result meanings"
   ],
   "252-kernel-non-preemption-and-deferred-rescheduling": [
-    "Kernel work completes before process switch",
-    "Device interrupts remain enabled",
-    "Timer → deferred rescheduling flag",
-    "Syscall return → safe switching point",
-    "Polling: bounded chunks; DMA: block"
+    "Kernel work completes before **process switch**",
+    "**Device interrupts** remain enabled",
+    "Timer → **deferred rescheduling** flag",
+    "Syscall return → **safe switching point**",
+    "**Polling:** bounded chunks; **DMA:** block"
   ],
   "261-borrowed-stack-entry-and-return": [
-    "UART/DMA borrow interrupted stack",
-    "Handler uses space below saved frame",
-    "Retain SP + stack boundary",
-    "Kernel CS classifies nested faults",
-    "Return restores interrupted execution"
+    "**UART/DMA** borrow interrupted stack",
+    "Handler uses space below **saved frame**",
+    "Retain SP + **stack boundary**",
+    "Kernel **CS** classifies nested faults",
+    "**Return restores** interrupted execution"
   ],
   "331-kernel-heap-blocks-and-kernel-objects": [
-    "Kernel Heap: PCB, paths, shared metadata",
-    "Separate allocation for each object",
-    "Metadata points into outer heap",
-    "kernel_heap.first_block → header chain"
+    "**Kernel Heap:** PCB, paths, shared metadata",
+    "**Separate allocation** for each object",
+    "Metadata points into **outer heap**",
+    "kernel_heap.first_block → **header chain**"
   ],
   "341-process-allocations": [
-    "PSDMalloc → complete Process Payload",
-    "PCB records base_address + size",
-    "Image + user heap + stack",
-    "remove_process → PSDFree whole payload",
-    "User free releases inner allocation only"
+    "PSDMalloc → complete **Process Payload**",
+    "PCB records **base_address + size**",
+    "Image + **user heap** + stack",
+    "remove_process → **PSDFree** whole payload",
+    "User free releases **inner allocation** only"
   ],
   "342-shared-data-allocations": [
-    "PSDMalloc → Shared Data Payload",
-    "Entry + name in Kernel Heap",
-    "Several mappings → same shared payload",
-    "No nested user heap",
-    "Unlinked + unmapped → PSDFree"
+    "PSDMalloc → **Shared Data Payload**",
+    "Entry + name in **Kernel Heap**",
+    "Several mappings → same **shared payload**",
+    "**No nested user heap**",
+    "Unlinked + unmapped → **PSDFree**"
   ],
   "351-per-process-user-process-heap": [
-    "process_heap stored in process .data",
-    "Startup obtains bounds through syscalls",
-    "malloc/realloc/free → common allocator",
-    "Inner blocks; outer payload stays allocated",
-    "Restored DS selects process-local globals"
+    "**process_heap** stored in process .data",
+    "**Startup obtains** bounds through syscalls",
+    "malloc/realloc/free → **common allocator**",
+    "Inner blocks; **outer payload** stays allocated",
+    "Restored DS selects **process-local globals**"
   ],
   "363-allocation-and-repeated-coalescing-example": [
-    "Allocation → free → repeated coalescing",
-    "Amber: headers; cyan: allocated payloads",
-    "Green: free payloads",
-    "Arrows: next links; offsets: cells"
+    "**Allocation** → free → repeated coalescing",
+    "<strong class=\"emphasis-amber\">Amber:</strong> headers; **cyan:** allocated payloads",
+    "<strong class=\"emphasis-green\">Green:</strong> free payloads",
+    "**Arrows:** next links; **offsets:** cells"
   ],
   "6-scheduling-and-context-switching": [
-    "Save activation → select PCB → restore",
-    "Lazy Round Robin scans process list",
-    "Only runnable processes enter execution"
+    "Save activation → **select PCB** → restore",
+    "**Lazy Round Robin** scans process list",
+    "Only **runnable processes** enter execution"
   ],
   "721-blocking-with-sleep-and-waking-with-wakeup": [
-    "sleep → FIFO queue + BLOCKED",
-    "wakeup → remove head; mark READY",
-    "Queue references PCBs; owns no allocations"
+    "sleep → **FIFO queue** + BLOCKED",
+    "wakeup → remove head; mark **READY**",
+    "Queue references PCBs; **owns no allocations**"
   ],
   "732-stopping-and-continuing-a-process": [
-    "Stop saves previous state + signal",
-    "STOPPED processes stay in process list",
-    "Continue restores prior state",
-    "Terminal read also needs input ownership"
+    "Stop saves **previous state** + signal",
+    "STOPPED processes stay in **process list**",
+    "Continue restores **prior state**",
+    "Terminal read also needs **input ownership**"
   ],
   "733-termination-ctrl-c-and-parent-collection": [
-    "Current target: defer until dispatch",
-    "Waiting parent: status + wakeup + removal",
-    "Otherwise: retain status as ZOMBIE",
-    "Ctrl+C → shell resumes with 130"
+    "**Current target:** defer until dispatch",
+    "**Waiting parent:** status + wakeup + removal",
+    "**Otherwise:** retain status as ZOMBIE",
+    "**Ctrl+C** → shell resumes with 130"
   ],
   "734-fixed-picoos-signal-actions-compared-with-unix": [
-    "PicoOS: fixed signal actions",
-    "Stop/continue update state immediately",
-    "Current-process termination waits for dispatch"
+    "**PicoOS:** fixed signal actions",
+    "**Stop/continue** update state immediately",
+    "Current-process termination waits for **dispatch**"
   ],
   "9-kernel-data-structures-relationships-storage-and-lifetimes": [
-    "Containment: embedded field",
-    "Reference: pointer to another object",
-    "Ownership: responsibility for cleanup",
-    "Wait queues reference; do not own PCBs"
+    "**Containment:** embedded field",
+    "**Reference:** pointer to another object",
+    "**Ownership:** responsibility for cleanup",
+    "Wait queues reference; **do not own PCBs**"
   ],
   "10-userspace-libraries": [
-    "Local library code or syscall wrapper",
-    "Link dependencies into user image",
-    "Source portability depends on interface",
-    "PicoOS implements documented subset"
+    "Local library code or **syscall wrapper**",
+    "**Link dependencies** into user image",
+    "**Source portability** depends on interface",
+    "PicoOS implements **documented subset**"
   ],
   "1136-shell-exit-and-restart-policy": [
-    "exit → end session; init restarts shell",
-    "poweroff → halt; reboot → EPROM",
-    "Stopped shell can trigger new session",
-    "Init in /system; commands in /user"
+    "**exit** → end session; init restarts shell",
+    "**poweroff** → halt; **reboot** → EPROM",
+    "**Stopped** shell can trigger new session",
+    "**Init** in /system; commands in /user"
   ],
   "1137-when-init-terminates": [
-    "PID 1 has no signal protection",
-    "Kernel releases init resources",
-    "Children orphaned + parent-death signals",
-    "Survivors continue; init never restarted",
-    "Final-candidate deletion: dispatcher limitation"
+    "**PID 1** has no signal protection",
+    "Kernel releases **init** resources",
+    "**Children orphaned** + parent-death signals",
+    "Survivors continue; **init** never restarted",
+    "**Final-candidate deletion:** dispatcher limitation"
   ],
   "1312-command-errors-and-exit-statuses": [
-    "Results → stdout; diagnostics → stderr",
-    "Multiple paths: continue; retain failure",
-    "Foreground result stored in $?",
-    "Signal status reported by PID/name",
-    "Unchecked writes: success may hide truncation"
+    "Results → **stdout**; diagnostics → stderr",
+    "**Multiple paths:** continue; retain failure",
+    "**Foreground result** stored in $?",
+    "**Signal status** reported by PID/name",
+    "**Unchecked writes:** success may hide truncation"
   ],
   "16-use-of-ai-in-the-project": [
-    "Core concepts + architecture: author",
-    "Manual debugging; custom PicoC debugger",
-    "GDB unavailable for RETI",
-    "AI: repetitive, already-understood implementation",
-    "Supporting applications, tests, build scripts",
-    "Author checks calculations + integrates changes",
-    "Freiburg guide: transparency principles",
-    "GitHub Copilot; documented source-file usage",
-    "Three semesters; beyond 18 ECTS"
+    "**Core concepts + architecture:** author",
+    "**Manual debugging**; custom PicoC debugger",
+    "**GDB unavailable** for RETI",
+    "**AI:** repetitive, already-understood implementation",
+    "**Supporting applications**, tests, build scripts",
+    "**Author checks** calculations + integrates changes",
+    "**Freiburg guide:** transparency principles",
+    "**GitHub Copilot**; documented source-file usage",
+    "**Three semesters**; beyond 18 ECTS"
   ],
   "15-use-in-operating-systems-and-real-time-operating-systems-lectures": [
-    "Inspect source + live execution",
-    "OS: processes, interrupts, memory, files",
-    "RTOS: scheduling, queues, synchronization"
+    "Inspect source + **live execution**",
+    "**OS:** processes, interrupts, memory, files",
+    "**RTOS:** scheduling, queues, synchronization"
   ],
   "111-compilation-pipeline-and-compiler-passes": [
-    "Original: one source file",
-    "Lark → AST → RETI",
-    "Single-file compiler passes",
-    "Extended: reusable compilation units",
-    "Includes, macros, symbols, types",
-    "Linking + startup + address resolution"
+    "**Original:** one source file",
+    "**Lark** → AST → RETI",
+    "**Single-file** compiler passes",
+    "**Extended:** reusable compilation units",
+    "**Includes**, macros, symbols, types",
+    "**Linking** + startup + address resolution"
   ]
 }

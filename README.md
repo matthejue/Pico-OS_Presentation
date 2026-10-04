@@ -96,7 +96,7 @@ Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
 descriptions use brief bullets; columns and widths are reviewed for readability.
 The title page contains a compact, seven-topic outline; there is no separate
-Contents slide. The full deck contains 313 slides. Slides load on demand to
+Contents slide. The full deck contains 272 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -120,8 +120,16 @@ and its usage table share one slide.
 
 Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
-sizes. All 76 column layouts have been reviewed at slide size. Their proportions
+sizes. All 70 column layouts have been reviewed at slide size. Their proportions
 and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
+
+Important list words and labels use selective bold color accents; Original and
+Extended compiler pipelines use amber and cyan labels. Table keys and inline
+code use cyan. Reviewed merges in
+[`config/readme-composition.mjs`](config/readme-composition.mjs) keep related
+content on one slide, including Build and run. Stacked panels retain the
+existing column proportions and allocate height to match their content.
+The emphasis styles are in [`styles/readme-emphasis.css`](styles/readme-emphasis.css).
 
 SVGs in `public/readme/` are copied from the README assets. Styling changes
 their colors, font, and rectangle corners; their coordinates, paths, labels,
