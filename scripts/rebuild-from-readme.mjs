@@ -23,10 +23,11 @@ const cover=await fs.readFile('config/title-slide.md','utf8')
 const previous=await fs.readFile('slides.md','utf8')
 const oldInventory=JSON.parse(await fs.readFile('docs/readme-coverage.json','utf8'))
 const oldAssets=new Map(oldInventory.assets.map(a=>[a.id,a]))
-const excludedHashes=new Set(),excludedAnchors=new Set()
+const excludedHashes=new Set(),excludedAnchors=new Set(),excludedOverviews=new Set()
 for(const block of previous.split(/(?=<!-- SOURCE Pico-OS\/README.md#)/)) {
  if(!block.includes('<!-- SHORT_VERSION_DISABLED -->'))continue
  const anchor=block.match(/<!-- SOURCE Pico-OS\/README.md#([^ ]+) -->/)?.[1]
+ if(block.includes('<SectionOverview ')) {excludedOverviews.add(anchor);continue}
  const ids=[...block.matchAll(/<!-- README_ASSET (\S+)/g)].map(m=>m[1])
  if(ids.length) {
   for(const id of ids)if(oldAssets.has(id))excludedHashes.add(oldAssets.get(id).sourceSha256)
@@ -198,8 +199,34 @@ for(const section of sections) {
   pages.push({section,group,layout,content,number:groups.length>1?number+1:null})
  })
 }
-const body=pages.map((p,i)=>{
+// Overview entries retain every README heading, including headings whose
+// content is presented by descendants rather than a separate introduction.
+const majorSections=sections.filter(s=>!s.parents.length && /^\d+\. /.test(s.title))
+const sectionOverviews=majorSections.map(s=>({
+ anchor:s.anchor,
+ number:s.title.match(/^\d+/)[0],
+ entries:sections.filter(child=>child.parents[0]===s.title).map(child=>({
+  anchor:child.anchor,
+  number:child.title.match(/^[\d.]+/)[0],
+  title:plain(child.title.replace(/^[\d.]+\s+/,'')),
+  titleHtml:prose(child.title.replace(/^[\d.]+\s+/,'')),
+  depth:child.parents.length,
+  descendants:sections.filter(descendant=>descendant.parents.includes(child.title)).map(descendant=>descendant.anchor),
+ })),
+}))
+const deckPages=[]
+const startedSections=new Set()
+for(const p of pages) {
+ const major=majorSections.find(s=>s===p.section || p.section.parents[0]===s.title)
+ if(major && !startedSections.has(major.anchor)) {
+  startedSections.add(major.anchor)
+  deckPages.push({section:major,overview:true})
+ }
+ deckPages.push(p)
+}
+const body=deckPages.map((p,i)=>{
  const page=i+2,s=p.section
+ if(p.overview) return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${excludedOverviews.has(s.anchor)?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n<div class="eyebrow section-eyebrow">Section ${s.title.match(/^\d+/)[0].padStart(2,'0')} · Overview</div>\n\n# ${s.title}\n\n<SectionOverview section="${s.anchor}" />`
  const disabled=excludedAnchors.has(s.anchor)||p.group.some(a=>excludedHashes.has(a.sha256))
  for(const a of p.group)inventory.get(a.id).slides.push({page,layout:p.layout,...(a.type==='table'?{rows:a.compactRows.map(r=>r.sourceRow)}:{}),...(a.type==='list'?{items:a.itemIndices}:{}),...(a.type==='code'?{codeParts:a.split?2:1}:{}),...(a.borrowed?{repeated:true}:{})})
  const main=s.parents.length?s.parents.join(' · '):s.title
@@ -207,5 +234,6 @@ const body=pages.map((p,i)=>{
  return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n# ${main}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
 await fs.writeFile('slides.md',cover.trimEnd()+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
-await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:pages.length+1,assets:[...inventory.values()]},null,2)+'\n')
-console.log(`${pages.length+1} slides; complete source code/diagrams; reviewed bullets + library-facing table rows.`)
+await fs.writeFile('config/section-overviews.json',JSON.stringify(sectionOverviews,null,2)+'\n')
+await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:deckPages.length+1,assets:[...inventory.values()]},null,2)+'\n')
+console.log(`${deckPages.length+1} slides, including ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)

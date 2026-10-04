@@ -67,7 +67,14 @@ assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees e
 assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')
 
 const expectedTopics = ['Toolchain extensions', 'Interrupts, system calls & exceptions', 'Memory, processes & blocking', 'Boot & kernel startup', 'Shell & user applications', 'Test system', 'OS and RTOS usecases']
-assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover is the only contents overview')
+assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover replaces the global README contents')
+const sectionOverviews = JSON.parse(await readFile(new URL('../config/section-overviews.json', import.meta.url)))
+for (const section of sectionOverviews) {
+  const sectionPages = pages.filter(p => p.anchor === section.anchor || p.source.parents[0] === hierarchy.get(section.anchor).title)
+  assert.ok(sectionPages[0].slide.includes('<SectionOverview '), `${section.anchor}: overview precedes all section slides`)
+  assert.equal(sectionPages.filter(p => p.slide.includes('<SectionOverview ')).length, 1, `${section.anchor}: exactly one overview`)
+  assert.deepEqual(section.entries.map(entry => entry.anchor), [...hierarchy].filter(([, source]) => source.parents[0] === hierarchy.get(section.anchor).title).map(([anchor]) => anchor), `${section.anchor}: complete ordered README hierarchy`)
+}
 
 const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] })
 const errors = []

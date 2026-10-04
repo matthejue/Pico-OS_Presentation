@@ -10,7 +10,8 @@
     "short:sync": "node scripts/sync-short-version-selection.mjs",
     "test:short": "node scripts/test-short-version.mjs",
     "rebuild:readme": "node scripts/rebuild-from-readme.mjs",
-    "test:source": "node scripts/check-readme-coverage.mjs"
+    "test:source": "node scripts/check-readme-coverage.mjs",
+    "test:overviews": "node scripts/test-section-overviews.mjs"
   },
   "devDependencies": {
     "@slidev/cli": "52.18.0",

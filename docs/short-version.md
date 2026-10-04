@@ -38,6 +38,12 @@ A message at the top of the browser confirms each operation. These editing
 shortcuts need the Slidev development server: a static archive cannot write back
 to its source checkout.
 
+The full development deck shows a subtle corner reminder of these shortcuts,
+plus the visual viewer and recording controls. The full static deck shows only
+the viewer and recording controls. Corner hints are hidden throughout the short
+deck and in PDF output. Visual controls apply to a focused visual or its open
+viewer; recording controls apply while the player has focus.
+
 `m` only edits the text file. The short deck does not change until `Alt+A` is
 pressed or the apply script is run. This makes it possible to mark several
 slides while reviewing the full deck and commit them together.
@@ -88,6 +94,18 @@ The outputs of the package and PDF targets are
 `picoos-presentation-short-static.tar.gz` and
 `picoos-presentation-short.pdf`. The existing full-deck targets and filenames
 remain unchanged.
+
+Static builds go to separate directories: `dist/` for the full deck and
+`dist-short/` for the short deck. Both versions can be generated in one command:
+
+```sh
+make package-static-presentation package-short-static-presentation
+make generate-presentation-pdf generate-short-presentation-pdf
+```
+
+The GitHub release workflow generates all four outputs. Tagged releases attach
+both PDFs and both static archives; manual runs upload the same files as
+workflow artifacts.
 
 The underlying commands also work directly:
 

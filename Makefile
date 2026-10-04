@@ -7,31 +7,30 @@ PDF_CHUNK_SIZE ?= 20
 SLIDES_SHORT ?= 0
 STATIC_ARCHIVE ?= picoos-presentation-static.tar.gz
 STATIC_DIRECTORY ?= picoos-presentation-static
+STATIC_BUILD_DIRECTORY ?= dist
 
 .PHONY: apply-short-version-selection sync-short-version-selection test-short-version generate-presentation-pdf generate-short-presentation-pdf build-static-presentation build-short-static-presentation package-static-presentation package-short-static-presentation launch-presentation-in-browser launch-short-presentation-in-browser launch-presentation-with-selectable-text launch-short-presentation-with-selectable-text all
 
 all: generate-presentation-pdf
 
 build-static-presentation:
-	SLIDES_SHORT=$(SLIDES_SHORT) $(YARN) build --router-mode hash
+	SLIDES_SHORT=$(SLIDES_SHORT) $(YARN) build --router-mode hash --out "$(STATIC_BUILD_DIRECTORY)"
 
-build-short-static-presentation: SLIDES_SHORT = 1
-build-short-static-presentation: build-static-presentation
+build-short-static-presentation:
+	$(MAKE) build-static-presentation SLIDES_SHORT=1 STATIC_BUILD_DIRECTORY=dist-short
 
 package-static-presentation: build-static-presentation
 	@set -euo pipefail; \
 	package_dir="$$(mktemp -d)"; \
 	trap 'rm -rf "$$package_dir"' EXIT; \
 	mkdir "$$package_dir/$(STATIC_DIRECTORY)"; \
-	cp -a dist/. "$$package_dir/$(STATIC_DIRECTORY)/"; \
+	cp -a "$(STATIC_BUILD_DIRECTORY)/." "$$package_dir/$(STATIC_DIRECTORY)/"; \
 	install -m 755 scripts/start-presentation.sh "$$package_dir/$(STATIC_DIRECTORY)/start-presentation.sh"; \
 	cp docs/static-presentation.md "$$package_dir/$(STATIC_DIRECTORY)/README.md"; \
 	tar -czf "$(STATIC_ARCHIVE)" -C "$$package_dir" "$(STATIC_DIRECTORY)"
 
-package-short-static-presentation: SLIDES_SHORT = 1
-package-short-static-presentation: STATIC_ARCHIVE = picoos-presentation-short-static.tar.gz
-package-short-static-presentation: STATIC_DIRECTORY = picoos-presentation-short-static
-package-short-static-presentation: package-static-presentation
+package-short-static-presentation:
+	$(MAKE) package-static-presentation SLIDES_SHORT=1 STATIC_BUILD_DIRECTORY=dist-short STATIC_ARCHIVE=picoos-presentation-short-static.tar.gz STATIC_DIRECTORY=picoos-presentation-short-static
 
 generate-presentation-pdf:
 	@set -euo pipefail; \
@@ -52,9 +51,8 @@ generate-presentation-pdf:
 	done; \
 	pdfunite "$${chunks[@]}" "$(PDF)"
 
-generate-short-presentation-pdf: SLIDES_SHORT = 1
-generate-short-presentation-pdf: PDF = picoos-presentation-short.pdf
-generate-short-presentation-pdf: generate-presentation-pdf
+generate-short-presentation-pdf:
+	$(MAKE) generate-presentation-pdf SLIDES_SHORT=1 PDF=picoos-presentation-short.pdf
 
 launch-presentation-in-browser:
 	SLIDES_SHORT=$(SLIDES_SHORT) $(YARN) dev

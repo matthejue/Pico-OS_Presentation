@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build:
-    name: Build PDF and static presentation
+    name: Build full and short PDFs and static presentations
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
@@ -36,8 +36,14 @@ jobs:
       - name: Build PDF
         run: make generate-presentation-pdf BROWSER="$(node -e "console.log(require('playwright-chromium').chromium.executablePath())")"
 
+      - name: Build short PDF
+        run: make generate-short-presentation-pdf BROWSER="$(node -e "console.log(require('playwright-chromium').chromium.executablePath())")"
+
       - name: Build static presentation archive
         run: make package-static-presentation
+
+      - name: Build short static presentation archive
+        run: make package-short-static-presentation
 
       - name: Upload presentation artifacts
         uses: actions/upload-artifact@v7
@@ -46,6 +52,8 @@ jobs:
           path: |
             picoos-presentation.pdf
             picoos-presentation-static.tar.gz
+            picoos-presentation-short.pdf
+            picoos-presentation-short-static.tar.gz
           if-no-files-found: error
 
   release:
@@ -66,4 +74,6 @@ jobs:
           files: |
             release/picoos-presentation.pdf
             release/picoos-presentation-static.tar.gz
+            release/picoos-presentation-short.pdf
+            release/picoos-presentation-short-static.tar.gz
           fail_on_unmatched_files: true

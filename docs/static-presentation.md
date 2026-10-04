@@ -7,6 +7,11 @@ Extract `picoos-presentation-static.tar.gz`, open a terminal in the extracted
 ./start-presentation.sh
 ```
 
+For the shortened presentation, extract
+`picoos-presentation-short-static.tar.gz` and run the same script from the
+`picoos-presentation-short-static` folder. It includes only the slides selected
+for the short deck.
+
 Open <http://127.0.0.1:8000/> in Firefox or Chromium. Keep the terminal open while
 presenting; press `Ctrl+C` there to stop the server. Use the arrow keys to navigate
 and `F11` for browser fullscreen. Presenter view is available at

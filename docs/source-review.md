@@ -4,7 +4,7 @@ The presentation uses the README at PicoOS commit
 `4d1fa5047c14aa80121a76850b75c2c0319147f6`, including uncommitted edits to
 Contents link labels. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
-and slide count. The full deck has 272 slides; the short deck has 267.
+and slide count. The full deck has 289 slides; the short deck has 284.
 
 ## Content and composition
 
@@ -25,7 +25,12 @@ The coverage inventory tracks all 345 substantive source artifacts:
 | 29 lists | Every substantive source item represented by brief bullets |
 
 The two Contents/navigation lists are replaced by the prescribed seven-topic
-cover outline. Ordinary prose, list items, contextual facts, and verbose table
+cover outline. Each numbered major section also starts with a linked overview
+of every README subsection, with individual slide links for continuation pages.
+The overview uses the active deck's slide metadata, so filtering or renumbering
+does not leave stale links. Headings without their own slide link to an available
+descendant; omitted topics remain visible without a link. Ordinary prose, list
+items, contextual facts, and verbose table
 cells use brief bullets. Hardware slides include the FPGA, SRAM, UART adapter,
 connections, individual prices, and total from the README.
 
@@ -127,8 +132,15 @@ move. Their merged placements now occupy five full-deck slides:
 
 ## Verification
 
-The full and short production builds passed. Browser checks passed across all
-272 slides in production, normal development, and selectable-text development.
+The section-overview update passed full and short static builds and the existing
+browser checks across all 289 slides in normal development. Additional checks
+covered all 17 overviews in full and short development and static decks:
+complete ordered headings, every slide link, content bounds, larger titles,
+pointer clicks, and keyboard navigation. Rebuilding reproduced the generated
+slides, overview data, and coverage inventory exactly.
+
+Earlier browser checks passed across the original 272 slides in production,
+normal development, and selectable-text development.
 They cover source hierarchy, numbering, content bounds, vertical centering, full-width code boxes,
 table clipping, Mermaid/XML rendering, enlarged visuals, complete enlarged
 code, scrolling, text selection, navigation, and inline asciinema playback.

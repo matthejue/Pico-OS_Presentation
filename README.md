@@ -41,6 +41,7 @@ Run or generate the filtered deck with:
 make launch-short-presentation-in-browser
 make launch-short-presentation-with-selectable-text
 make build-short-static-presentation
+make package-short-static-presentation
 make generate-short-presentation-pdf
 ```
 
@@ -51,12 +52,17 @@ targets continue to produce the full deck.
 
 ## Releases
 
-Pushing a tag whose name starts with `v` builds and uploads two assets to the
+Pushing a tag whose name starts with `v` builds and uploads four assets to the
 matching GitHub release:
 
 - `picoos-presentation.pdf`
 - `picoos-presentation-static.tar.gz`, containing the browser presentation and an
   Ubuntu launcher script.
+- `picoos-presentation-short.pdf`
+- `picoos-presentation-short-static.tar.gz`, containing only the shortened deck
+  and the same Ubuntu launcher script.
+
+Manual workflow runs also build and upload all four files as workflow artifacts.
 
 After committing and pushing the release changes, create the release tag with,
 for example:
@@ -79,6 +85,8 @@ needed; Node.js and Yarn are not required. See the included
 and offline font behavior.
 
 To build the same archive locally, run `make package-static-presentation`.
+Use `make package-short-static-presentation` for the shortened archive. The full
+and short static builds use separate `dist/` and `dist-short/` directories.
 
 The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
@@ -95,8 +103,12 @@ Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
 Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
 descriptions use brief bullets; columns and widths are reviewed for readability.
-The title page contains a compact, seven-topic outline; there is no separate
-Contents slide. The full deck contains 272 slides. Slides load on demand to
+The title page contains a compact, seven-topic outline. Each of the 17 numbered
+README sections starts with an overview slide featuring a larger title and its
+complete subsection hierarchy. Click a topic to jump to its first slide, or a
+numbered link to choose an individual slide. Links follow the active full or
+short deck; headings without separate content link to their first available
+descendant. The full deck contains 289 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -153,8 +165,16 @@ README artifacts with reviewed bullet summaries and contextual notes in
 `config/readme-*.json`. `config/readme-tables.mjs` and the table-cell and
 column-width configurations describe the reviewed tables;
 `config/title-slide.md` preserves the title page.
+The rebuild also generates `config/section-overviews.json` for
+[`SectionOverview`](components/SectionOverview.vue); overview styling and
+navigation live in that component.
 Review those authored files whenever the source changes, then follow the
 validation and baseline workflow in [source review](docs/source-review.md).
+
+With the presentation running, `yarn test:overviews` checks all overview layouts,
+topic links, individual slide links, and keyboard navigation. Set
+`PRESENTATION_URL` for a different server, `SLIDES_SHORT=1` for the short deck,
+and `PRESENTATION_ROUTER=hash` for a static build.
 
 ## Enlarging visuals
 

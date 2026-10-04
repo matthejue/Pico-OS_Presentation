@@ -353,6 +353,16 @@ scheduler
 
 ---
 
+<!-- SOURCE Pico-OS/README.md#1-toolchain-extensions-for-picoos -->
+
+<div class="eyebrow section-eyebrow">Section 01 · Overview</div>
+
+# 1. Toolchain extensions for PicoOS
+
+<SectionOverview section="1-toolchain-extensions-for-picoos" />
+
+---
+
 <!-- SOURCE Pico-OS/README.md#11-picoc-compiler-extensions -->
 
 # 1. Toolchain extensions for PicoOS
@@ -2325,6 +2335,16 @@ sequenceDiagram
 
 ---
 
+<!-- SOURCE Pico-OS/README.md#2-interrupts-system-calls-preemption-and-exceptions -->
+
+<div class="eyebrow section-eyebrow">Section 02 · Overview</div>
+
+# 2. Interrupts, system calls, preemption, and exceptions
+
+<SectionOverview section="2-interrupts-system-calls-preemption-and-exceptions" />
+
+---
+
 <!-- SOURCE Pico-OS/README.md#21-reti-interrupt-entry-and-the-interrupt-service-routine-table -->
 
 # 2. Interrupts, system calls, preemption, and exceptions
@@ -4138,6 +4158,16 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 ---
 
+<!-- SOURCE Pico-OS/README.md#3-memory-management-and-shared-memory -->
+
+<div class="eyebrow section-eyebrow">Section 03 · Overview</div>
+
+# 3. Memory management and shared memory
+
+<SectionOverview section="3-memory-management-and-shared-memory" />
+
+---
+
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
 
 # 3. Memory management and shared memory
@@ -4647,6 +4677,16 @@ flowchart LR
 </div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#4-processes-and-process-lifecycle -->
+
+<div class="eyebrow section-eyebrow">Section 04 · Overview</div>
+
+# 4. Processes and process lifecycle
+
+<SectionOverview section="4-processes-and-process-lifecycle" />
 
 ---
 
@@ -5533,6 +5573,16 @@ flowchart TB
 
 ---
 
+<!-- SOURCE Pico-OS/README.md#5-shared-memory-entries-and-mappings -->
+
+<div class="eyebrow section-eyebrow">Section 05 · Overview</div>
+
+# 5. Shared Memory Entries and Mappings
+
+<SectionOverview section="5-shared-memory-entries-and-mappings" />
+
+---
+
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
 
 # 5. Shared Memory Entries and Mappings
@@ -5830,6 +5880,16 @@ int main(int argc, char **argv) {
 </div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#6-scheduling-and-context-switching -->
+
+<div class="eyebrow section-eyebrow">Section 06 · Overview</div>
+
+# 6. Scheduling and context switching
+
+<SectionOverview section="6-scheduling-and-context-switching" />
 
 ---
 
@@ -6225,6 +6285,16 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 </div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#7-blocking-wait-queues-signals-and-mutexes -->
+
+<div class="eyebrow section-eyebrow">Section 07 · Overview</div>
+
+# 7. Blocking, wait queues, signals, and mutexes
+
+<SectionOverview section="7-blocking-wait-queues-signals-and-mutexes" />
 
 ---
 
@@ -6722,6 +6792,16 @@ flowchart TD
 </div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#8-terminal-file-descriptors-and-host-filesystem -->
+
+<div class="eyebrow section-eyebrow">Section 08 · Overview</div>
+
+# 8. Terminal, file descriptors, and host filesystem
+
+<SectionOverview section="8-terminal-file-descriptors-and-host-filesystem" />
 
 ---
 
@@ -7283,6 +7363,16 @@ process->state = PROCESS_STATE_READY;
 
 <!-- SOURCE Pico-OS/README.md#9-kernel-data-structures-relationships-storage-and-lifetimes -->
 
+<div class="eyebrow section-eyebrow">Section 09 · Overview</div>
+
+# 9. Kernel data structures: relationships, storage, and lifetimes
+
+<SectionOverview section="9-kernel-data-structures-relationships-storage-and-lifetimes" />
+
+---
+
+<!-- SOURCE Pico-OS/README.md#9-kernel-data-structures-relationships-storage-and-lifetimes -->
+
 # 9. Kernel data structures: relationships, storage, and lifetimes
 
 <div class="deck-content readme-slide">
@@ -7543,6 +7633,16 @@ flowchart LR
 </div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#10-userspace-libraries -->
+
+<div class="eyebrow section-eyebrow">Section 10 · Overview</div>
+
+# 10. Userspace libraries
+
+<SectionOverview section="10-userspace-libraries" />
 
 ---
 
@@ -8345,6 +8445,16 @@ struct PicoFile {
 
 <!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
 
+<div class="eyebrow section-eyebrow">Section 11 · Overview</div>
+
+# 11. Complete startup: bootloader, kernel, init, shell, and user applications
+
+<SectionOverview section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications" />
+
+---
+
+<!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
+
 # 11. Complete startup: bootloader, kernel, init, shell, and user applications
 
 <div class="deck-content readme-slide">
@@ -9098,6 +9208,16 @@ void _start(int argc, char *first_argument) {
 <li><strong>Final-candidate deletion:</strong> dispatcher limitation</li></ul></div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#12-shell -->
+
+<div class="eyebrow section-eyebrow">Section 12 · Overview</div>
+
+# 12. Shell
+
+<SectionOverview section="12-shell" />
 
 ---
 
@@ -9904,6 +10024,16 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SOURCE Pico-OS/README.md#13-user-applications-and-commands -->
+
+<div class="eyebrow section-eyebrow">Section 13 · Overview</div>
+
+# 13. User applications and commands
+
+<SectionOverview section="13-user-applications-and-commands" />
+
+---
+
 <!-- SOURCE Pico-OS/README.md#131-applications-library-calls-and-host-requests -->
 
 # 13. User applications and commands
@@ -10080,6 +10210,16 @@ PicoOS> rmdir.bin demo
 <li><strong>Unchecked writes:</strong> success may hide truncation</li></ul></div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#14-test-system -->
+
+<div class="eyebrow section-eyebrow">Section 14 · Overview</div>
+
+# 14. Test system
+
+<SectionOverview section="14-test-system" />
 
 ---
 
@@ -10587,6 +10727,16 @@ flowchart LR
 
 <!-- SOURCE Pico-OS/README.md#15-use-in-operating-systems-and-real-time-operating-systems-lectures -->
 
+<div class="eyebrow section-eyebrow">Section 15 · Overview</div>
+
+# 15. Use in operating-systems and real-time operating-systems lectures
+
+<SectionOverview section="15-use-in-operating-systems-and-real-time-operating-systems-lectures" />
+
+---
+
+<!-- SOURCE Pico-OS/README.md#15-use-in-operating-systems-and-real-time-operating-systems-lectures -->
+
 # 15. Use in operating-systems and real-time operating-systems lectures
 
 <div class="deck-content readme-slide">
@@ -10968,6 +11118,16 @@ int main(int argc, char **argv) {
 
 <!-- SOURCE Pico-OS/README.md#16-use-of-ai-in-the-project -->
 
+<div class="eyebrow section-eyebrow">Section 16 · Overview</div>
+
+# 16. Use of AI in the project
+
+<SectionOverview section="16-use-of-ai-in-the-project" />
+
+---
+
+<!-- SOURCE Pico-OS/README.md#16-use-of-ai-in-the-project -->
+
 # 16. Use of AI in the project
 
 <div class="deck-content readme-slide">
@@ -10983,6 +11143,16 @@ int main(int argc, char **argv) {
 <li><strong>Three semesters</strong>; beyond 18 ECTS</li></ul></div>
 
 </div>
+
+---
+
+<!-- SOURCE Pico-OS/README.md#17-limitations -->
+
+<div class="eyebrow section-eyebrow">Section 17 · Overview</div>
+
+# 17. Limitations
+
+<SectionOverview section="17-limitations" />
 
 ---
 

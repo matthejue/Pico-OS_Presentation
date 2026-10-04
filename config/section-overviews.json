@@ -1,0 +1,1865 @@
+[
+  {
+    "anchor": "1-toolchain-extensions-for-picoos",
+    "number": "1",
+    "entries": [
+      {
+        "anchor": "11-picoc-compiler-extensions",
+        "number": "1.1",
+        "title": "PicoC-Compiler extensions",
+        "titleHtml": "PicoC-Compiler extensions",
+        "depth": 1,
+        "descendants": [
+          "111-compilation-pipeline-and-compiler-passes",
+          "112-separate-compilation-reusable-artifacts-and-linking",
+          "113-system-v-abi-stack-frames-and-call-cleanup",
+          "1131-stack-frame-layout-and-caller-cleanup",
+          "1132-shared-function-epilogue-and-return-values",
+          "1133-naked-functions-without-a-generated-frame",
+          "114-placing-globals-in-ivt-with-sectionivt",
+          "115-selecting-a-startup-function-with--c----startup-source",
+          "1151-default-compiler-generated-_start",
+          "1152-picoos-libstart-startup-sequence",
+          "1153-startup-functions-used-by-picoos-images",
+          "116-program-sections-interrupt-table-entries-and-linker-placement",
+          "117-reti-pseudoinstructions",
+          "1171-interrupt-safe-push-and-pop",
+          "1172-loading-32-bit-values-with-loadi32",
+          "1173-long-jumps-with-jump32",
+          "1174-pseudoinstruction-expansion-during-linking",
+          "118-linked-sections-metadata-and-the-five-word-binary-header",
+          "119-generated-memory-constants-for-the-bootloader-and-kernel"
+        ]
+      },
+      {
+        "anchor": "111-compilation-pipeline-and-compiler-passes",
+        "number": "1.1.1",
+        "title": "Compilation pipeline and compiler passes",
+        "titleHtml": "Compilation pipeline and compiler passes",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "112-separate-compilation-reusable-artifacts-and-linking",
+        "number": "1.1.2",
+        "title": "Separate compilation, reusable artifacts, and linking",
+        "titleHtml": "Separate compilation, reusable artifacts, and linking",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "113-system-v-abi-stack-frames-and-call-cleanup",
+        "number": "1.1.3",
+        "title": "System V ABI stack frames and call cleanup",
+        "titleHtml": "System V ABI stack frames and call cleanup",
+        "depth": 2,
+        "descendants": [
+          "1131-stack-frame-layout-and-caller-cleanup",
+          "1132-shared-function-epilogue-and-return-values",
+          "1133-naked-functions-without-a-generated-frame"
+        ]
+      },
+      {
+        "anchor": "1131-stack-frame-layout-and-caller-cleanup",
+        "number": "1.1.3.1",
+        "title": "Stack-frame layout and caller cleanup",
+        "titleHtml": "Stack-frame layout and caller cleanup",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1132-shared-function-epilogue-and-return-values",
+        "number": "1.1.3.2",
+        "title": "Shared function epilogue and return values",
+        "titleHtml": "Shared function epilogue and return values",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1133-naked-functions-without-a-generated-frame",
+        "number": "1.1.3.3",
+        "title": "Naked functions without a generated frame",
+        "titleHtml": "Naked functions without a generated frame",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+        "number": "1.1.4",
+        "title": "Placing globals in .ivt with section(&quot;ivt&quot;)",
+        "titleHtml": "Placing globals in <code>.ivt</code> with <code>section(&quot;ivt&quot;)</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "115-selecting-a-startup-function-with--c----startup-source",
+        "number": "1.1.5",
+        "title": "Selecting a startup function with -C / --startup-source",
+        "titleHtml": "Selecting a startup function with <code>-C</code> / <code>--startup-source</code>",
+        "depth": 2,
+        "descendants": [
+          "1151-default-compiler-generated-_start",
+          "1152-picoos-libstart-startup-sequence",
+          "1153-startup-functions-used-by-picoos-images"
+        ]
+      },
+      {
+        "anchor": "1151-default-compiler-generated-_start",
+        "number": "1.1.5.1",
+        "title": "Default compiler-generated _start",
+        "titleHtml": "Default compiler-generated <code>_start</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1152-picoos-libstart-startup-sequence",
+        "number": "1.1.5.2",
+        "title": "PicoOS libstart startup sequence",
+        "titleHtml": "PicoOS <code>libstart</code> startup sequence",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1153-startup-functions-used-by-picoos-images",
+        "number": "1.1.5.3",
+        "title": "Startup functions used by PicoOS images",
+        "titleHtml": "Startup functions used by PicoOS images",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "116-program-sections-interrupt-table-entries-and-linker-placement",
+        "number": "1.1.6",
+        "title": "Program sections, interrupt table entries, and linker placement",
+        "titleHtml": "Program sections, interrupt table entries, and linker placement",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "117-reti-pseudoinstructions",
+        "number": "1.1.7",
+        "title": "RETI pseudoinstructions",
+        "titleHtml": "RETI pseudoinstructions",
+        "depth": 2,
+        "descendants": [
+          "1171-interrupt-safe-push-and-pop",
+          "1172-loading-32-bit-values-with-loadi32",
+          "1173-long-jumps-with-jump32",
+          "1174-pseudoinstruction-expansion-during-linking"
+        ]
+      },
+      {
+        "anchor": "1171-interrupt-safe-push-and-pop",
+        "number": "1.1.7.1",
+        "title": "Interrupt-safe PUSH and POP",
+        "titleHtml": "Interrupt-safe <code>PUSH</code> and <code>POP</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1172-loading-32-bit-values-with-loadi32",
+        "number": "1.1.7.2",
+        "title": "Loading 32-bit values with LOADI32",
+        "titleHtml": "Loading 32-bit values with <code>LOADI32</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1173-long-jumps-with-jump32",
+        "number": "1.1.7.3",
+        "title": "Long jumps with JUMP32",
+        "titleHtml": "Long jumps with <code>JUMP32</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1174-pseudoinstruction-expansion-during-linking",
+        "number": "1.1.7.4",
+        "title": "Pseudoinstruction expansion during linking",
+        "titleHtml": "Pseudoinstruction expansion during linking",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+        "number": "1.1.8",
+        "title": "Linked .sections metadata and the five-word binary header",
+        "titleHtml": "Linked <code>.sections</code> metadata and the five-word binary header",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
+        "number": "1.1.9",
+        "title": "Generated memory constants for the bootloader and kernel",
+        "titleHtml": "Generated memory constants for the bootloader and kernel",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "12-reti-emulator-extensions",
+        "number": "1.2",
+        "title": "RETI-Emulator extensions",
+        "titleHtml": "RETI-Emulator extensions",
+        "depth": 1,
+        "descendants": [
+          "121-reti-machine-model-and-memory-mapped-peripherals",
+          "122-atomic-test-and-set-with-tsl",
+          "123-uart-host-service-protocol",
+          "124-debugger-source-view-and-terminal-modes"
+        ]
+      },
+      {
+        "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
+        "number": "1.2.1",
+        "title": "RETI machine model and memory-mapped peripherals",
+        "titleHtml": "RETI machine model and memory-mapped peripherals",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "122-atomic-test-and-set-with-tsl",
+        "number": "1.2.2",
+        "title": "Atomic test-and-set with TSL",
+        "titleHtml": "Atomic test-and-set with <code>TSL</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "123-uart-host-service-protocol",
+        "number": "1.2.3",
+        "title": "UART host-service protocol",
+        "titleHtml": "UART host-service protocol",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "124-debugger-source-view-and-terminal-modes",
+        "number": "1.2.4",
+        "title": "Debugger, source view, and terminal modes",
+        "titleHtml": "Debugger, source view, and terminal modes",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "2-interrupts-system-calls-preemption-and-exceptions",
+    "number": "2",
+    "entries": [
+      {
+        "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
+        "number": "2.1",
+        "title": "RETI interrupt entry and the interrupt service routine table",
+        "titleHtml": "RETI interrupt entry and the interrupt service routine table",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "22-interrupt-controller-mappings-and-priorities",
+        "number": "2.2",
+        "title": "Interrupt-controller mappings and priorities",
+        "titleHtml": "Interrupt-controller mappings and priorities",
+        "depth": 1,
+        "descendants": [
+          "221-interrupt-controller-function-reference",
+          "222-memory-mapped-periphery-function-reference"
+        ]
+      },
+      {
+        "anchor": "221-interrupt-controller-function-reference",
+        "number": "2.2.1",
+        "title": "Interrupt-controller function reference",
+        "titleHtml": "Interrupt-controller function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "222-memory-mapped-periphery-function-reference",
+        "number": "2.2.2",
+        "title": "Memory-mapped periphery function reference",
+        "titleHtml": "Memory-mapped periphery function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "23-saved-interrupt-stack-frame",
+        "number": "2.3",
+        "title": "Saved interrupt stack frame",
+        "titleHtml": "Saved interrupt stack frame",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "24-system-call-interface-and-execution",
+        "number": "2.4",
+        "title": "System-call interface and execution",
+        "titleHtml": "System-call interface and execution",
+        "depth": 1,
+        "descendants": [
+          "241-syscall-selectors-and-register-convention",
+          "2411-process-wait-signal-and-memory-request-structures",
+          "2412-file-and-directory-request-structures",
+          "242-system-call-entry-execution-and-return-to-userspace",
+          "2421-handle-syscall",
+          "24211-system-call-groups",
+          "2422-selecting-the-return-path",
+          "2423-stack-boundary-helpers",
+          "243-system-call-selection-function-reference"
+        ]
+      },
+      {
+        "anchor": "241-syscall-selectors-and-register-convention",
+        "number": "2.4.1",
+        "title": "Syscall selectors and register convention",
+        "titleHtml": "Syscall selectors and register convention",
+        "depth": 2,
+        "descendants": [
+          "2411-process-wait-signal-and-memory-request-structures",
+          "2412-file-and-directory-request-structures"
+        ]
+      },
+      {
+        "anchor": "2411-process-wait-signal-and-memory-request-structures",
+        "number": "2.4.1.1",
+        "title": "Process, wait, signal, and memory request structures",
+        "titleHtml": "Process, wait, signal, and memory request structures",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2412-file-and-directory-request-structures",
+        "number": "2.4.1.2",
+        "title": "File and directory request structures",
+        "titleHtml": "File and directory request structures",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+        "number": "2.4.2",
+        "title": "System-call entry, execution, and return to userspace",
+        "titleHtml": "System-call entry, execution, and return to userspace",
+        "depth": 2,
+        "descendants": [
+          "2421-handle-syscall",
+          "24211-system-call-groups",
+          "2422-selecting-the-return-path",
+          "2423-stack-boundary-helpers"
+        ]
+      },
+      {
+        "anchor": "2421-handle-syscall",
+        "number": "2.4.2.1",
+        "title": "Handle Syscall",
+        "titleHtml": "Handle Syscall",
+        "depth": 3,
+        "descendants": [
+          "24211-system-call-groups"
+        ]
+      },
+      {
+        "anchor": "24211-system-call-groups",
+        "number": "2.4.2.1.1",
+        "title": "System-call groups",
+        "titleHtml": "System-call groups",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "2422-selecting-the-return-path",
+        "number": "2.4.2.2",
+        "title": "Selecting the return path",
+        "titleHtml": "Selecting the return path",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2423-stack-boundary-helpers",
+        "number": "2.4.2.3",
+        "title": "Stack-boundary helpers",
+        "titleHtml": "Stack-boundary helpers",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "243-system-call-selection-function-reference",
+        "number": "2.4.3",
+        "title": "System-call selection function reference",
+        "titleHtml": "System-call selection function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "25-timer-interrupts-and-userspace-preemption",
+        "number": "2.5",
+        "title": "Timer interrupts and userspace preemption",
+        "titleHtml": "Timer interrupts and userspace preemption",
+        "depth": 1,
+        "descendants": [
+          "251-timer-interrupt-path",
+          "252-kernel-non-preemption-and-deferred-rescheduling",
+          "253-shell-character-delay-for-different-timer-intervals"
+        ]
+      },
+      {
+        "anchor": "251-timer-interrupt-path",
+        "number": "2.5.1",
+        "title": "Timer interrupt path",
+        "titleHtml": "Timer interrupt path",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "252-kernel-non-preemption-and-deferred-rescheduling",
+        "number": "2.5.2",
+        "title": "Kernel non-preemption and deferred rescheduling",
+        "titleHtml": "Kernel non-preemption and deferred rescheduling",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "253-shell-character-delay-for-different-timer-intervals",
+        "number": "2.5.3",
+        "title": "Shell character delay for different timer intervals",
+        "titleHtml": "Shell character delay for different timer intervals",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "26-uart-receive-interrupt-path",
+        "number": "2.6",
+        "title": "UART receive interrupt path",
+        "titleHtml": "UART receive interrupt path",
+        "depth": 1,
+        "descendants": [
+          "261-borrowed-stack-entry-and-return",
+          "262-uart-nesting-and-interrupt-priorities",
+          "263-polled-uart-function-reference"
+        ]
+      },
+      {
+        "anchor": "261-borrowed-stack-entry-and-return",
+        "number": "2.6.1",
+        "title": "Borrowed-stack entry and return",
+        "titleHtml": "Borrowed-stack entry and return",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "262-uart-nesting-and-interrupt-priorities",
+        "number": "2.6.2",
+        "title": "UART nesting and interrupt priorities",
+        "titleHtml": "UART nesting and interrupt priorities",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "263-polled-uart-function-reference",
+        "number": "2.6.3",
+        "title": "Polled UART function reference",
+        "titleHtml": "Polled UART function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "27-dma-completion-interrupt-path",
+        "number": "2.7",
+        "title": "DMA completion interrupt path",
+        "titleHtml": "DMA completion interrupt path",
+        "depth": 1,
+        "descendants": [
+          "271-dma-waiting-and-completion-function-reference"
+        ]
+      },
+      {
+        "anchor": "271-dma-waiting-and-completion-function-reference",
+        "number": "2.7.1",
+        "title": "DMA waiting and completion function reference",
+        "titleHtml": "DMA waiting and completion function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "28-cpu-exceptions-and-runtime-errors",
+        "number": "2.8",
+        "title": "CPU exceptions and runtime errors",
+        "titleHtml": "CPU exceptions and runtime errors",
+        "depth": 1,
+        "descendants": [
+          "281-cpu-exception-entry-and-registers",
+          "282-supported-exceptions-and-allocation-errors",
+          "283-exception-and-stack-boundary-function-reference"
+        ]
+      },
+      {
+        "anchor": "281-cpu-exception-entry-and-registers",
+        "number": "2.8.1",
+        "title": "CPU exception entry and registers",
+        "titleHtml": "CPU exception entry and registers",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "282-supported-exceptions-and-allocation-errors",
+        "number": "2.8.2",
+        "title": "Supported exceptions and allocation errors",
+        "titleHtml": "Supported exceptions and allocation errors",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "283-exception-and-stack-boundary-function-reference",
+        "number": "2.8.3",
+        "title": "Exception and stack-boundary function reference",
+        "titleHtml": "Exception and stack-boundary function reference",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "3-memory-management-and-shared-memory",
+    "number": "3",
+    "entries": [
+      {
+        "anchor": "31-heap-block-layout-and-allocation-algorithm",
+        "number": "3.1",
+        "title": "Heap block layout and allocation algorithm",
+        "titleHtml": "Heap block layout and allocation algorithm",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "32-sram-image-and-heap-hierarchy",
+        "number": "3.2",
+        "title": "SRAM image and heap hierarchy",
+        "titleHtml": "SRAM image and heap hierarchy",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "33-kernel-heap",
+        "number": "3.3",
+        "title": "Kernel Heap",
+        "titleHtml": "Kernel Heap",
+        "depth": 1,
+        "descendants": [
+          "331-kernel-heap-blocks-and-kernel-objects",
+          "332-kernel-heap-allocator-function-reference"
+        ]
+      },
+      {
+        "anchor": "331-kernel-heap-blocks-and-kernel-objects",
+        "number": "3.3.1",
+        "title": "Kernel Heap blocks and kernel objects",
+        "titleHtml": "Kernel Heap blocks and kernel objects",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "332-kernel-heap-allocator-function-reference",
+        "number": "3.3.2",
+        "title": "Kernel Heap allocator function reference",
+        "titleHtml": "Kernel Heap allocator function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "34-process-and-shared-data-heap",
+        "number": "3.4",
+        "title": "Process and Shared Data Heap",
+        "titleHtml": "Process and Shared Data Heap",
+        "depth": 1,
+        "descendants": [
+          "341-process-allocations",
+          "342-shared-data-allocations",
+          "343-process-and-shared-data-heap-allocator-function-reference"
+        ]
+      },
+      {
+        "anchor": "341-process-allocations",
+        "number": "3.4.1",
+        "title": "Process allocations",
+        "titleHtml": "Process allocations",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "342-shared-data-allocations",
+        "number": "3.4.2",
+        "title": "Shared Data allocations",
+        "titleHtml": "Shared Data allocations",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "343-process-and-shared-data-heap-allocator-function-reference",
+        "number": "3.4.3",
+        "title": "Process and Shared Data Heap allocator function reference",
+        "titleHtml": "Process and Shared Data Heap allocator function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "35-user-process-heap",
+        "number": "3.5",
+        "title": "User Process Heap",
+        "titleHtml": "User Process Heap",
+        "depth": 1,
+        "descendants": [
+          "351-per-process-user-process-heap",
+          "352-user-process-heap-allocator-function-reference"
+        ]
+      },
+      {
+        "anchor": "351-per-process-user-process-heap",
+        "number": "3.5.1",
+        "title": "Per-Process User Process Heap",
+        "titleHtml": "Per-Process User Process Heap",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "352-user-process-heap-allocator-function-reference",
+        "number": "3.5.2",
+        "title": "User Process Heap allocator function reference",
+        "titleHtml": "User Process Heap allocator function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "36-heap-and-allocator-function-reference",
+        "number": "3.6",
+        "title": "Heap and allocator function reference",
+        "titleHtml": "Heap and allocator function reference",
+        "depth": 1,
+        "descendants": [
+          "361-common-allocator-linkage-and-function-reference",
+          "362-reallocation-decisions",
+          "363-allocation-and-repeated-coalescing-example",
+          "3631-initial-state-and-first-fit-search",
+          "3632-allocation-splits-d",
+          "3633-free-d-and-merge-its-remainder",
+          "3634-free-c-and-merge-repeatedly-at-b"
+        ]
+      },
+      {
+        "anchor": "361-common-allocator-linkage-and-function-reference",
+        "number": "3.6.1",
+        "title": "Common allocator linkage and function reference",
+        "titleHtml": "Common allocator linkage and function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "362-reallocation-decisions",
+        "number": "3.6.2",
+        "title": "Reallocation decisions",
+        "titleHtml": "Reallocation decisions",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "363-allocation-and-repeated-coalescing-example",
+        "number": "3.6.3",
+        "title": "Allocation and repeated coalescing example",
+        "titleHtml": "Allocation and repeated coalescing example",
+        "depth": 2,
+        "descendants": [
+          "3631-initial-state-and-first-fit-search",
+          "3632-allocation-splits-d",
+          "3633-free-d-and-merge-its-remainder",
+          "3634-free-c-and-merge-repeatedly-at-b"
+        ]
+      },
+      {
+        "anchor": "3631-initial-state-and-first-fit-search",
+        "number": "3.6.3.1",
+        "title": "Initial state and first-fit search",
+        "titleHtml": "Initial state and first-fit search",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "3632-allocation-splits-d",
+        "number": "3.6.3.2",
+        "title": "Allocation splits D",
+        "titleHtml": "Allocation splits D",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "3633-free-d-and-merge-its-remainder",
+        "number": "3.6.3.3",
+        "title": "Free D and merge its remainder",
+        "titleHtml": "Free D and merge its remainder",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "3634-free-c-and-merge-repeatedly-at-b",
+        "number": "3.6.3.4",
+        "title": "Free C and merge repeatedly at B",
+        "titleHtml": "Free C and merge repeatedly at B",
+        "depth": 3,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "4-processes-and-process-lifecycle",
+    "number": "4",
+    "entries": [
+      {
+        "anchor": "41-process-control-block-fields",
+        "number": "4.1",
+        "title": "Process control block fields",
+        "titleHtml": "Process control block fields",
+        "depth": 1,
+        "descendants": [
+          "411-process-states-and-transitions",
+          "412-global-process-list-and-current-process",
+          "4121-from-pcbs-to-process-payloads-in-sram"
+        ]
+      },
+      {
+        "anchor": "411-process-states-and-transitions",
+        "number": "4.1.1",
+        "title": "Process states and transitions",
+        "titleHtml": "Process states and transitions",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "412-global-process-list-and-current-process",
+        "number": "4.1.2",
+        "title": "Global process list and current process",
+        "titleHtml": "Global process list and current process",
+        "depth": 2,
+        "descendants": [
+          "4121-from-pcbs-to-process-payloads-in-sram"
+        ]
+      },
+      {
+        "anchor": "4121-from-pcbs-to-process-payloads-in-sram",
+        "number": "4.1.2.1",
+        "title": "From PCBs to Process Payloads in SRAM",
+        "titleHtml": "From PCBs to Process Payloads in SRAM",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "42-initial-user-process-stack",
+        "number": "4.2",
+        "title": "Initial user process stack",
+        "titleHtml": "Initial user process stack",
+        "depth": 1,
+        "descendants": [
+          "421-user-process-stack-placement",
+          "422-initial-argc-argv-and-envp",
+          "4221-concrete-initial-stack-example"
+        ]
+      },
+      {
+        "anchor": "421-user-process-stack-placement",
+        "number": "4.2.1",
+        "title": "User process stack placement",
+        "titleHtml": "User process stack placement",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "422-initial-argc-argv-and-envp",
+        "number": "4.2.2",
+        "title": "Initial argc , argv , and envp",
+        "titleHtml": "Initial <code>argc</code>, <code>argv</code>, and <code>envp</code>",
+        "depth": 2,
+        "descendants": [
+          "4221-concrete-initial-stack-example"
+        ]
+      },
+      {
+        "anchor": "4221-concrete-initial-stack-example",
+        "number": "4.2.2.1",
+        "title": "Concrete initial-stack example",
+        "titleHtml": "Concrete initial-stack example",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "43-loading-and-starting-a-process",
+        "number": "4.3",
+        "title": "Loading and starting a process",
+        "titleHtml": "Loading and starting a process",
+        "depth": 1,
+        "descendants": [
+          "431-loading-a-process-load-library-call",
+          "4311-load-function-reference",
+          "432-starting-a-process-run-library-call",
+          "4321-parent-to-child-inheritance",
+          "43211-environment-origin-and-propagation",
+          "43212-loading-bar-environment-variable",
+          "4322-recording-termination-status",
+          "4323-parent-collection-and-final-removal",
+          "4324-run-function-reference"
+        ]
+      },
+      {
+        "anchor": "431-loading-a-process-load-library-call",
+        "number": "4.3.1",
+        "title": "Loading a process ( load library call)",
+        "titleHtml": "Loading a process (<code>load</code> library call)",
+        "depth": 2,
+        "descendants": [
+          "4311-load-function-reference"
+        ]
+      },
+      {
+        "anchor": "4311-load-function-reference",
+        "number": "4.3.1.1",
+        "title": "Load function reference",
+        "titleHtml": "Load function reference",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "432-starting-a-process-run-library-call",
+        "number": "4.3.2",
+        "title": "Starting a process ( run library call)",
+        "titleHtml": "Starting a process (<code>run</code> library call)",
+        "depth": 2,
+        "descendants": [
+          "4321-parent-to-child-inheritance",
+          "43211-environment-origin-and-propagation",
+          "43212-loading-bar-environment-variable",
+          "4322-recording-termination-status",
+          "4323-parent-collection-and-final-removal",
+          "4324-run-function-reference"
+        ]
+      },
+      {
+        "anchor": "4321-parent-to-child-inheritance",
+        "number": "4.3.2.1",
+        "title": "Parent-to-child inheritance",
+        "titleHtml": "Parent-to-child inheritance",
+        "depth": 3,
+        "descendants": [
+          "43211-environment-origin-and-propagation",
+          "43212-loading-bar-environment-variable"
+        ]
+      },
+      {
+        "anchor": "43211-environment-origin-and-propagation",
+        "number": "4.3.2.1.1",
+        "title": "Environment origin and propagation",
+        "titleHtml": "Environment origin and propagation",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "43212-loading-bar-environment-variable",
+        "number": "4.3.2.1.2",
+        "title": "Loading-bar environment variable",
+        "titleHtml": "Loading-bar environment variable",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "4322-recording-termination-status",
+        "number": "4.3.2.2",
+        "title": "Recording termination status",
+        "titleHtml": "Recording termination status",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "4323-parent-collection-and-final-removal",
+        "number": "4.3.2.3",
+        "title": "Parent collection and final removal",
+        "titleHtml": "Parent collection and final removal",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "4324-run-function-reference",
+        "number": "4.3.2.4",
+        "title": "Run function reference",
+        "titleHtml": "Run function reference",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "44-process-list-pcb-metadata-and-lifecycle-function-reference",
+        "number": "4.4",
+        "title": "Process list, PCB metadata, and lifecycle function reference",
+        "titleHtml": "Process list, PCB metadata, and lifecycle function reference",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "5-shared-memory-entries-and-mappings",
+    "number": "5",
+    "entries": [
+      {
+        "anchor": "51-named-entries-and-per-process-attachments",
+        "number": "5.1",
+        "title": "Named entries and per-process attachments",
+        "titleHtml": "Named entries and per-process attachments",
+        "depth": 1,
+        "descendants": [
+          "511-global-shared-memory-list-and-entry-names",
+          "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram",
+          "512-per-process-attachment-lists-in-sram"
+        ]
+      },
+      {
+        "anchor": "511-global-shared-memory-list-and-entry-names",
+        "number": "5.1.1",
+        "title": "Global shared-memory list and entry names",
+        "titleHtml": "Global shared-memory list and entry names",
+        "depth": 2,
+        "descendants": [
+          "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram"
+        ]
+      },
+      {
+        "anchor": "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram",
+        "number": "5.1.1.1",
+        "title": "From Shared Memory Entries to Shared Data Payloads in SRAM",
+        "titleHtml": "From Shared Memory Entries to Shared Data Payloads in SRAM",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "512-per-process-attachment-lists-in-sram",
+        "number": "5.1.2",
+        "title": "Per-process attachment lists in SRAM",
+        "titleHtml": "Per-process attachment lists in SRAM",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "52-mapping-unlinking-and-deferred-destruction",
+        "number": "5.2",
+        "title": "Mapping, unlinking, and deferred destruction",
+        "titleHtml": "Mapping, unlinking, and deferred destruction",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "53-shared-memory-function-reference",
+        "number": "5.3",
+        "title": "Shared Memory function reference",
+        "titleHtml": "Shared Memory function reference",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "6-scheduling-and-context-switching",
+    "number": "6",
+    "entries": [
+      {
+        "anchor": "61-scheduler-implementation",
+        "number": "6.1",
+        "title": "Scheduler implementation",
+        "titleHtml": "Scheduler implementation",
+        "depth": 1,
+        "descendants": [
+          "611-algorithm-and-round-robin-comparison",
+          "612-scheduler-function-reference"
+        ]
+      },
+      {
+        "anchor": "611-algorithm-and-round-robin-comparison",
+        "number": "6.1.1",
+        "title": "Algorithm and Round Robin comparison",
+        "titleHtml": "Algorithm and Round Robin comparison",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "612-scheduler-function-reference",
+        "number": "6.1.2",
+        "title": "Scheduler function reference",
+        "titleHtml": "Scheduler function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "62-saved-process-registers",
+        "number": "6.2",
+        "title": "Saved process registers",
+        "titleHtml": "Saved process registers",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+        "number": "6.3",
+        "title": "Saving the current process and selecting the next process",
+        "titleHtml": "Saving the current process and selecting the next process",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
+        "number": "6.4",
+        "title": "Restoring the selected process and returning with RTI",
+        "titleHtml": "Restoring the selected process and returning with <code>RTI</code>",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "65-dispatcher-function-reference",
+        "number": "6.5",
+        "title": "Dispatcher function reference",
+        "titleHtml": "Dispatcher function reference",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "7-blocking-wait-queues-signals-and-mutexes",
+    "number": "7",
+    "entries": [
+      {
+        "anchor": "71-blocking-and-wakeup",
+        "number": "7.1",
+        "title": "Blocking and wakeup",
+        "titleHtml": "Blocking and wakeup",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "72-wait-queues-and-pcb-links",
+        "number": "7.2",
+        "title": "Wait queues and PCB links",
+        "titleHtml": "Wait queues and PCB links",
+        "depth": 1,
+        "descendants": [
+          "721-blocking-with-sleep-and-waking-with-wakeup",
+          "722-child-waiting-with-waitpid",
+          "723-wait-queue-function-reference"
+        ]
+      },
+      {
+        "anchor": "721-blocking-with-sleep-and-waking-with-wakeup",
+        "number": "7.2.1",
+        "title": "Blocking with sleep and waking with wakeup",
+        "titleHtml": "Blocking with <code>sleep</code> and waking with <code>wakeup</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "722-child-waiting-with-waitpid",
+        "number": "7.2.2",
+        "title": "Child waiting with waitpid",
+        "titleHtml": "Child waiting with <code>waitpid</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "723-wait-queue-function-reference",
+        "number": "7.2.3",
+        "title": "Wait queue function reference",
+        "titleHtml": "Wait queue function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "73-process-signals",
+        "number": "7.3",
+        "title": "Process signals",
+        "titleHtml": "Process signals",
+        "depth": 1,
+        "descendants": [
+          "731-supported-signals-and-fixed-actions",
+          "732-stopping-and-continuing-a-process",
+          "733-termination-ctrl-c-and-parent-collection",
+          "734-fixed-picoos-signal-actions-compared-with-unix",
+          "735-signal-function-reference"
+        ]
+      },
+      {
+        "anchor": "731-supported-signals-and-fixed-actions",
+        "number": "7.3.1",
+        "title": "Supported signals and fixed actions",
+        "titleHtml": "Supported signals and fixed actions",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "732-stopping-and-continuing-a-process",
+        "number": "7.3.2",
+        "title": "Stopping and continuing a process",
+        "titleHtml": "Stopping and continuing a process",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "733-termination-ctrl-c-and-parent-collection",
+        "number": "7.3.3",
+        "title": "Termination, Ctrl-C , and parent collection",
+        "titleHtml": "Termination, <code>Ctrl-C</code>, and parent collection",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "734-fixed-picoos-signal-actions-compared-with-unix",
+        "number": "7.3.4",
+        "title": "Fixed PicoOS signal actions compared with Unix",
+        "titleHtml": "Fixed PicoOS signal actions compared with Unix",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "735-signal-function-reference",
+        "number": "7.3.5",
+        "title": "Signal function reference",
+        "titleHtml": "Signal function reference",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
+        "number": "7.4",
+        "title": "Mutexes with test-and-set and wait queues",
+        "titleHtml": "Mutexes with test-and-set and wait queues",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "8-terminal-file-descriptors-and-host-filesystem",
+    "number": "8",
+    "entries": [
+      {
+        "anchor": "81-per-process-file-descriptor-table",
+        "number": "8.1",
+        "title": "Per-process file-descriptor table",
+        "titleHtml": "Per-process file-descriptor table",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "82-global-terminal-input-buffer",
+        "number": "8.2",
+        "title": "Global terminal input buffer",
+        "titleHtml": "Global terminal input buffer",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "83-blocking-and-completing-terminal-reads",
+        "number": "8.3",
+        "title": "Blocking and completing terminal reads",
+        "titleHtml": "Blocking and completing terminal reads",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
+        "number": "8.4",
+        "title": "Foreground input ownership and terminal-generated signals",
+        "titleHtml": "Foreground input ownership and terminal-generated signals",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "85-virtual-terminal-and-null-device-paths",
+        "number": "8.5",
+        "title": "Virtual terminal and null-device paths",
+        "titleHtml": "Virtual terminal and null-device paths",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "86-file-descriptor-creation-inheritance-duplication-and-cleanup",
+        "number": "8.6",
+        "title": "File-descriptor creation, inheritance, duplication, and cleanup",
+        "titleHtml": "File-descriptor creation, inheritance, duplication, and cleanup",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "87-terminal-buffer-and-pending-read-function-reference",
+        "number": "8.7",
+        "title": "Terminal-buffer and pending-read function reference",
+        "titleHtml": "Terminal-buffer and pending-read function reference",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "88-opening-reading-writing-and-seeking",
+        "number": "8.8",
+        "title": "Opening, reading, writing, and seeking",
+        "titleHtml": "Opening, reading, writing, and seeking",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "89-picoos-paths-working-directories-and-host-operations",
+        "number": "8.9",
+        "title": "PicoOS paths, working directories, and host operations",
+        "titleHtml": "PicoOS paths, working directories, and host operations",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "9-kernel-data-structures-relationships-storage-and-lifetimes",
+    "number": "9",
+    "entries": [
+      {
+        "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
+        "number": "9.1",
+        "title": "Memory layout, allocation sources, and lifetimes",
+        "titleHtml": "Memory layout, allocation sources, and lifetimes",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "92-containment-and-reference-relationships",
+        "number": "9.2",
+        "title": "Containment and reference relationships",
+        "titleHtml": "Containment and reference relationships",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "93-kernel-global-variables-and-process-list-roots",
+        "number": "9.3",
+        "title": "Kernel global variables and process-list roots",
+        "titleHtml": "Kernel global variables and process-list roots",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "94-wait-requests-and-queue-storage",
+        "number": "9.4",
+        "title": "Wait requests and queue storage",
+        "titleHtml": "Wait requests and queue storage",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "10-userspace-libraries",
+    "number": "10",
+    "entries": [
+      {
+        "anchor": "101-from-a-library-call-to-the-kernel-waitpid",
+        "number": "10.1",
+        "title": "From a library call to the kernel: waitpid",
+        "titleHtml": "From a library call to the kernel: waitpid",
+        "depth": 1,
+        "descendants": [
+          "1011-header-implementation-and-linking",
+          "1012-packing-arguments-and-executing-the-syscall",
+          "1013-interrupt-entry-waiting-and-return"
+        ]
+      },
+      {
+        "anchor": "1011-header-implementation-and-linking",
+        "number": "10.1.1",
+        "title": "Header, implementation, and linking",
+        "titleHtml": "Header, implementation, and linking",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1012-packing-arguments-and-executing-the-syscall",
+        "number": "10.1.2",
+        "title": "Packing arguments and executing the syscall",
+        "titleHtml": "Packing arguments and executing the syscall",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1013-interrupt-entry-waiting-and-return",
+        "number": "10.1.3",
+        "title": "Interrupt entry, waiting, and return",
+        "titleHtml": "Interrupt entry, waiting, and return",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "102-library-overview-and-dependencies",
+        "number": "10.2",
+        "title": "Library overview and dependencies",
+        "titleHtml": "Library overview and dependencies",
+        "depth": 1,
+        "descendants": [
+          "1021-unistd-processes-descriptors-paths-and-wait-queues",
+          "10211-process-operations-in-processpicoc",
+          "10212-descriptor-operations-in-iopicoc",
+          "10213-working-directory-operations-in-working_directorypicoc",
+          "10214-path-operations-in-file_removalpicoc",
+          "10215-wait-queue-operations-in-blockingpicoc",
+          "1022-fcntl-opening-and-creating-files",
+          "1023-syswait-waiting-for-children",
+          "1024-mutex-locking-and-waking-contenders",
+          "1025-sysmman-named-shared-memory",
+          "1026-dirent-directory-streams",
+          "1027-stdlib-process-heap-environment-conversion-and-exit",
+          "10271-heap-operations-in-mallocpicoc",
+          "10272-decimal-conversion-in-atoipicoc",
+          "10273-environment-operations-in-envpicoc",
+          "10274-process-exit-in-exitpicoc",
+          "1028-string-copying-comparison-and-length",
+          "1029-stdio-streams-formatting-and-scanning",
+          "10291-streams-and-output-in-stdiopicoc",
+          "10292-scanning-in-scanfpicoc",
+          "10210-start-entering-and-leaving-a-user-program",
+          "10211-single-function-libraries"
+        ]
+      },
+      {
+        "anchor": "1021-unistd-processes-descriptors-paths-and-wait-queues",
+        "number": "10.2.1",
+        "title": "unistd: processes, descriptors, paths, and wait queues",
+        "titleHtml": "unistd: processes, descriptors, paths, and wait queues",
+        "depth": 2,
+        "descendants": [
+          "10211-process-operations-in-processpicoc",
+          "10212-descriptor-operations-in-iopicoc",
+          "10213-working-directory-operations-in-working_directorypicoc",
+          "10214-path-operations-in-file_removalpicoc",
+          "10215-wait-queue-operations-in-blockingpicoc"
+        ]
+      },
+      {
+        "anchor": "10211-process-operations-in-processpicoc",
+        "number": "10.2.1.1",
+        "title": "Process operations in process.picoc",
+        "titleHtml": "Process operations in <code>process.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10212-descriptor-operations-in-iopicoc",
+        "number": "10.2.1.2",
+        "title": "Descriptor operations in io.picoc",
+        "titleHtml": "Descriptor operations in <code>io.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10213-working-directory-operations-in-working_directorypicoc",
+        "number": "10.2.1.3",
+        "title": "Working-directory operations in working_directory.picoc",
+        "titleHtml": "Working-directory operations in <code>working_directory.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10214-path-operations-in-file_removalpicoc",
+        "number": "10.2.1.4",
+        "title": "Path operations in file_removal.picoc",
+        "titleHtml": "Path operations in <code>file_removal.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10215-wait-queue-operations-in-blockingpicoc",
+        "number": "10.2.1.5",
+        "title": "Wait-queue operations in blocking.picoc",
+        "titleHtml": "Wait-queue operations in <code>blocking.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1022-fcntl-opening-and-creating-files",
+        "number": "10.2.2",
+        "title": "fcntl: opening and creating files",
+        "titleHtml": "fcntl: opening and creating files",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1023-syswait-waiting-for-children",
+        "number": "10.2.3",
+        "title": "sys/wait: waiting for children",
+        "titleHtml": "sys/wait: waiting for children",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1024-mutex-locking-and-waking-contenders",
+        "number": "10.2.4",
+        "title": "mutex: locking and waking contenders",
+        "titleHtml": "mutex: locking and waking contenders",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1025-sysmman-named-shared-memory",
+        "number": "10.2.5",
+        "title": "sys/mman: named shared memory",
+        "titleHtml": "sys/mman: named shared memory",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1026-dirent-directory-streams",
+        "number": "10.2.6",
+        "title": "dirent: directory streams",
+        "titleHtml": "dirent: directory streams",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1027-stdlib-process-heap-environment-conversion-and-exit",
+        "number": "10.2.7",
+        "title": "stdlib: process heap, environment, conversion, and exit",
+        "titleHtml": "stdlib: process heap, environment, conversion, and exit",
+        "depth": 2,
+        "descendants": [
+          "10271-heap-operations-in-mallocpicoc",
+          "10272-decimal-conversion-in-atoipicoc",
+          "10273-environment-operations-in-envpicoc",
+          "10274-process-exit-in-exitpicoc"
+        ]
+      },
+      {
+        "anchor": "10271-heap-operations-in-mallocpicoc",
+        "number": "10.2.7.1",
+        "title": "Heap operations in malloc.picoc",
+        "titleHtml": "Heap operations in <code>malloc.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10272-decimal-conversion-in-atoipicoc",
+        "number": "10.2.7.2",
+        "title": "Decimal conversion in atoi.picoc",
+        "titleHtml": "Decimal conversion in <code>atoi.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10273-environment-operations-in-envpicoc",
+        "number": "10.2.7.3",
+        "title": "Environment operations in env.picoc",
+        "titleHtml": "Environment operations in <code>env.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10274-process-exit-in-exitpicoc",
+        "number": "10.2.7.4",
+        "title": "Process exit in exit.picoc",
+        "titleHtml": "Process exit in <code>exit.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1028-string-copying-comparison-and-length",
+        "number": "10.2.8",
+        "title": "string: copying, comparison, and length",
+        "titleHtml": "string: copying, comparison, and length",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1029-stdio-streams-formatting-and-scanning",
+        "number": "10.2.9",
+        "title": "stdio: streams, formatting, and scanning",
+        "titleHtml": "stdio: streams, formatting, and scanning",
+        "depth": 2,
+        "descendants": [
+          "10291-streams-and-output-in-stdiopicoc",
+          "10292-scanning-in-scanfpicoc"
+        ]
+      },
+      {
+        "anchor": "10291-streams-and-output-in-stdiopicoc",
+        "number": "10.2.9.1",
+        "title": "Streams and output in stdio.picoc",
+        "titleHtml": "Streams and output in <code>stdio.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10292-scanning-in-scanfpicoc",
+        "number": "10.2.9.2",
+        "title": "Scanning in scanf.picoc",
+        "titleHtml": "Scanning in <code>scanf.picoc</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10210-start-entering-and-leaving-a-user-program",
+        "number": "10.2.10",
+        "title": "start: entering and leaving a user program",
+        "titleHtml": "start: entering and leaving a user program",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "10211-single-function-libraries",
+        "number": "10.2.11",
+        "title": "Single-function libraries",
+        "titleHtml": "Single-function libraries",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
+    "number": "11",
+    "entries": [
+      {
+        "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+        "number": "11.1",
+        "title": "Loading the kernel from the EPROM bootloader",
+        "titleHtml": "Loading the kernel from the EPROM bootloader",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "112-kernel-startup",
+        "number": "11.2",
+        "title": "Kernel startup",
+        "titleHtml": "Kernel startup",
+        "depth": 1,
+        "descendants": [
+          "1121-loading-init-and-entering-normal-execution"
+        ]
+      },
+      {
+        "anchor": "1121-loading-init-and-entering-normal-execution",
+        "number": "11.2.1",
+        "title": "Loading init and entering normal execution",
+        "titleHtml": "Loading init and entering normal execution",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "113-init-process",
+        "number": "11.3",
+        "title": "Init process",
+        "titleHtml": "Init process",
+        "depth": 1,
+        "descendants": [
+          "1131-init-responsibilities",
+          "1132-initial-environment-configuration",
+          "1133-loading-starting-and-waiting-for-the-shell",
+          "1134-shell-startup",
+          "1135-loading-user-applications",
+          "1136-shell-exit-and-restart-policy",
+          "1137-when-init-terminates"
+        ]
+      },
+      {
+        "anchor": "1131-init-responsibilities",
+        "number": "11.3.1",
+        "title": "Init responsibilities",
+        "titleHtml": "Init responsibilities",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1132-initial-environment-configuration",
+        "number": "11.3.2",
+        "title": "Initial environment configuration",
+        "titleHtml": "Initial environment configuration",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1133-loading-starting-and-waiting-for-the-shell",
+        "number": "11.3.3",
+        "title": "Loading, starting, and waiting for the shell",
+        "titleHtml": "Loading, starting, and waiting for the shell",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1134-shell-startup",
+        "number": "11.3.4",
+        "title": "Shell startup",
+        "titleHtml": "Shell startup",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1135-loading-user-applications",
+        "number": "11.3.5",
+        "title": "Loading user applications",
+        "titleHtml": "Loading user applications",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1136-shell-exit-and-restart-policy",
+        "number": "11.3.6",
+        "title": "Shell exit and restart policy",
+        "titleHtml": "Shell exit and restart policy",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1137-when-init-terminates",
+        "number": "11.3.7",
+        "title": "When init terminates",
+        "titleHtml": "When init terminates",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "12-shell",
+    "number": "12",
+    "entries": [
+      {
+        "anchor": "121-shell-owned-state",
+        "number": "12.1",
+        "title": "Shell-owned state",
+        "titleHtml": "Shell-owned state",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "122-shell-startup-and-command-loop",
+        "number": "12.2",
+        "title": "Shell startup and command loop",
+        "titleHtml": "Shell startup and command loop",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "123-interactive-line-editing-and-command-history",
+        "number": "12.3",
+        "title": "Interactive line editing and command history",
+        "titleHtml": "Interactive line editing and command history",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "124-command-parsing-expansion-and-execution",
+        "number": "12.4",
+        "title": "Command parsing, expansion, and execution",
+        "titleHtml": "Command parsing, expansion, and execution",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "125-shell-built-in-commands",
+        "number": "12.5",
+        "title": "Shell built-in commands",
+        "titleHtml": "Shell built-in commands",
+        "depth": 1,
+        "descendants": [
+          "1251-foreground-processes-background-processes-and-job-control-signals"
+        ]
+      },
+      {
+        "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
+        "number": "12.5.1",
+        "title": "Foreground processes, background processes, and job-control signals",
+        "titleHtml": "Foreground processes, background processes, and job-control signals",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "126-inputoutput-redirection",
+        "number": "12.6",
+        "title": "Input/output redirection",
+        "titleHtml": "Input/output redirection",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "127-sequential-file-backed-pipelines",
+        "number": "12.7",
+        "title": "Sequential file-backed pipelines",
+        "titleHtml": "Sequential file-backed pipelines",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "13-user-applications-and-commands",
+    "number": "13",
+    "entries": [
+      {
+        "anchor": "131-applications-library-calls-and-host-requests",
+        "number": "13.1",
+        "title": "Applications, library calls, and host requests",
+        "titleHtml": "Applications, library calls, and host requests",
+        "depth": 1,
+        "descendants": [
+          "1311-command-behavior-and-supported-options",
+          "1312-command-errors-and-exit-statuses"
+        ]
+      },
+      {
+        "anchor": "1311-command-behavior-and-supported-options",
+        "number": "13.1.1",
+        "title": "Command behavior and supported options",
+        "titleHtml": "Command behavior and supported options",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1312-command-errors-and-exit-statuses",
+        "number": "13.1.2",
+        "title": "Command errors and exit statuses",
+        "titleHtml": "Command errors and exit statuses",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "14-test-system",
+    "number": "14",
+    "entries": [
+      {
+        "anchor": "141-library-os-shell-and-boot-test-categories",
+        "number": "14.1",
+        "title": "Library, OS, shell, and boot test categories",
+        "titleHtml": "Library, OS, shell, and boot test categories",
+        "depth": 1,
+        "descendants": [
+          "1411-files-that-make-up-a-test",
+          "1412-library-test-example",
+          "1413-os-test-example",
+          "1414-shell-test-example",
+          "1415-boot-test-example"
+        ]
+      },
+      {
+        "anchor": "1411-files-that-make-up-a-test",
+        "number": "14.1.1",
+        "title": "Files that make up a test",
+        "titleHtml": "Files that make up a test",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1412-library-test-example",
+        "number": "14.1.2",
+        "title": "Library test example",
+        "titleHtml": "Library test example",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1413-os-test-example",
+        "number": "14.1.3",
+        "title": "OS test example",
+        "titleHtml": "OS test example",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1414-shell-test-example",
+        "number": "14.1.4",
+        "title": "Shell test example",
+        "titleHtml": "Shell test example",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1415-boot-test-example",
+        "number": "14.1.5",
+        "title": "Boot test example",
+        "titleHtml": "Boot test example",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "142-test-execution",
+        "number": "14.2",
+        "title": "Test execution",
+        "titleHtml": "Test execution",
+        "depth": 1,
+        "descendants": [
+          "1421-make-targets"
+        ]
+      },
+      {
+        "anchor": "1421-make-targets",
+        "number": "14.2.1",
+        "title": "Make targets",
+        "titleHtml": "Make targets",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
+    "number": "15",
+    "entries": [
+      {
+        "anchor": "151-operating-systems-topics",
+        "number": "15.1",
+        "title": "Operating-systems topics",
+        "titleHtml": "Operating-systems topics",
+        "depth": 1,
+        "descendants": [
+          "1511-inspecting-picoos-execution-in-the-reti-emulator",
+          "1512-exploring-userspace-heap-allocation",
+          "1513-editing-and-executing-symbolic-reti-assembly"
+        ]
+      },
+      {
+        "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
+        "number": "15.1.1",
+        "title": "Inspecting PicoOS execution in the RETI-Emulator",
+        "titleHtml": "Inspecting PicoOS execution in the RETI-Emulator",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1512-exploring-userspace-heap-allocation",
+        "number": "15.1.2",
+        "title": "Exploring userspace heap allocation",
+        "titleHtml": "Exploring userspace heap allocation",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
+        "number": "15.1.3",
+        "title": "Editing and executing symbolic RETI assembly",
+        "titleHtml": "Editing and executing symbolic RETI assembly",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "152-real-time-operating-systems-topics",
+        "number": "15.2",
+        "title": "Real-time operating-systems topics",
+        "titleHtml": "Real-time operating-systems topics",
+        "depth": 1,
+        "descendants": []
+      }
+    ]
+  },
+  {
+    "anchor": "16-use-of-ai-in-the-project",
+    "number": "16",
+    "entries": []
+  },
+  {
+    "anchor": "17-limitations",
+    "number": "17",
+    "entries": []
+  }
+]
