@@ -103,12 +103,17 @@ Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
 Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
 descriptions use brief bullets; columns and widths are reviewed for readability.
-The title page contains a compact, seven-topic outline. Each of the 17 numbered
-README sections starts with an overview slide featuring a larger title and its
-complete subsection hierarchy. Click a topic to jump to its first slide, or a
-numbered link to choose an individual slide. Links follow the active full or
-short deck; headings without separate content link to their first available
-descendant. The full deck contains 289 slides. Slides load on demand to
+The title page focuses on PicoOS and the toolchain artwork. A contents slide
+immediately follows it, linking to the overview of each major README section.
+Each overview has a larger title and a clickable subsection hierarchy. Click
+a topic to jump to its first slide, or a numbered link to choose an individual
+slide. Click the major section title in a content slide's ancestor heading to
+return to its overview; every overview also links back to Contents.
+
+Navigation follows the generated README hierarchy and the active full or short
+deck. Empty branches and sections disappear; ancestors remain when descendants
+have content. Section overviews and Contents are maintained automatically when
+content slides are excluded. The full deck contains 290 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -118,7 +123,7 @@ examples, 38 Mermaid diagrams, 136 tables, 32 images, one terminal recording,
 and 29 lists. All code, diagrams, images, recordings, and substantive list
 items are represented. Tables retain the reviewed library-facing operations;
 ten internal-only function catalogs are omitted. The two README navigation
-lists are replaced by the prescribed title-page outline.
+lists are replaced by the dynamic contents slide and section overviews.
 
 Ordinary slide text and table descriptions use brief bullets. Code and diagram
 bodies stay complete. Long code examples split into balanced columns, with
@@ -166,15 +171,26 @@ README artifacts with reviewed bullet summaries and contextual notes in
 column-width configurations describe the reviewed tables;
 `config/title-slide.md` preserves the title page.
 The rebuild also generates `config/section-overviews.json` for
-[`SectionOverview`](components/SectionOverview.vue); overview styling and
-navigation live in that component.
+[`SectionOverview`](components/SectionOverview.vue),
+[`PresentationContents`](components/PresentationContents.vue), and the
+breadcrumb links. Shared styles live in `styles/section-navigation.css`;
+`setup/presentation-navigation.ts` resolves destinations from the active deck.
 Review those authored files whenever the source changes, then follow the
 validation and baseline workflow in [source review](docs/source-review.md).
 
-With the presentation running, `yarn test:overviews` checks all overview layouts,
-topic links, individual slide links, and keyboard navigation. Set
+With the presentation running, `yarn test:overviews` checks contents and overview
+layouts, filtered topic branches, individual slide links, breadcrumb returns,
+and keyboard navigation. `yarn test:navigation` verifies dynamic filtering and
+PDF destination conversion. Set
 `PRESENTATION_URL` for a different server, `SLIDES_SHORT=1` for the short deck,
 and `PRESENTATION_ROUTER=hash` for a static build.
+
+The `make generate-presentation-pdf` and `make generate-short-presentation-pdf`
+targets preserve these links as internal PDF page destinations. They export
+slides in chunks, merge the chunks, then finalize destinations against the
+complete active deck with `scripts/link-presentation-pdf.mjs`. This last step
+is required for linked PDFs; raw Slidev export chunks still contain temporary
+destination URLs. It uses the `pdf-lib` dependency already used by Slidev.
 
 ## Enlarging visuals
 
@@ -252,7 +268,7 @@ PRESENTATION_URL=http://localhost:3031/ PRESENTATION_ROUTER=history node scripts
 PRESENTATION_URL=http://localhost:3032/selectable-text/ PRESENTATION_ROUTER=history node scripts/check-presentation.mjs
 ```
 
-The check visits every slide and validates the summarized cover outline, source
+The check visits every slide and validates the cover, generated contents, source
 anchors, heading order, numbered subtitles, content bounds, full-width code
 boxes, and table-cell clipping. It rejects
 console/module/network errors, Slidev error fallbacks, missing diagrams, and

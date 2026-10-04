@@ -2,6 +2,8 @@
   {
     "anchor": "1-toolchain-extensions-for-picoos",
     "number": "1",
+    "title": "Toolchain extensions for PicoOS",
+    "titleHtml": "Toolchain extensions for PicoOS",
     "entries": [
       {
         "anchor": "11-picoc-compiler-extensions",
@@ -246,6 +248,8 @@
   {
     "anchor": "2-interrupts-system-calls-preemption-and-exceptions",
     "number": "2",
+    "title": "Interrupts, system calls, preemption, and exceptions",
+    "titleHtml": "Interrupts, system calls, preemption, and exceptions",
     "entries": [
       {
         "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
@@ -521,6 +525,8 @@
   {
     "anchor": "3-memory-management-and-shared-memory",
     "number": "3",
+    "title": "Memory management and shared memory",
+    "titleHtml": "Memory management and shared memory",
     "entries": [
       {
         "anchor": "31-heap-block-layout-and-allocation-algorithm",
@@ -710,6 +716,8 @@
   {
     "anchor": "4-processes-and-process-lifecycle",
     "number": "4",
+    "title": "Processes and process lifecycle",
+    "titleHtml": "Processes and process lifecycle",
     "entries": [
       {
         "anchor": "41-process-control-block-fields",
@@ -902,6 +910,8 @@
   {
     "anchor": "5-shared-memory-entries-and-mappings",
     "number": "5",
+    "title": "Shared Memory Entries and Mappings",
+    "titleHtml": "Shared Memory Entries and Mappings",
     "entries": [
       {
         "anchor": "51-named-entries-and-per-process-attachments",
@@ -962,6 +972,8 @@
   {
     "anchor": "6-scheduling-and-context-switching",
     "number": "6",
+    "title": "Scheduling and context switching",
+    "titleHtml": "Scheduling and context switching",
     "entries": [
       {
         "anchor": "61-scheduler-implementation",
@@ -1027,6 +1039,8 @@
   {
     "anchor": "7-blocking-wait-queues-signals-and-mutexes",
     "number": "7",
+    "title": "Blocking, wait queues, signals, and mutexes",
+    "titleHtml": "Blocking, wait queues, signals, and mutexes",
     "entries": [
       {
         "anchor": "71-blocking-and-wakeup",
@@ -1139,6 +1153,8 @@
   {
     "anchor": "8-terminal-file-descriptors-and-host-filesystem",
     "number": "8",
+    "title": "Terminal, file descriptors, and host filesystem",
+    "titleHtml": "Terminal, file descriptors, and host filesystem",
     "entries": [
       {
         "anchor": "81-per-process-file-descriptor-table",
@@ -1217,6 +1233,8 @@
   {
     "anchor": "9-kernel-data-structures-relationships-storage-and-lifetimes",
     "number": "9",
+    "title": "Kernel data structures: relationships, storage, and lifetimes",
+    "titleHtml": "Kernel data structures: relationships, storage, and lifetimes",
     "entries": [
       {
         "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
@@ -1255,6 +1273,8 @@
   {
     "anchor": "10-userspace-libraries",
     "number": "10",
+    "title": "Userspace libraries",
+    "titleHtml": "Userspace libraries",
     "entries": [
       {
         "anchor": "101-from-a-library-call-to-the-kernel-waitpid",
@@ -1518,6 +1538,8 @@
   {
     "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
     "number": "11",
+    "title": "Complete startup: bootloader, kernel, init, shell, and user applications",
+    "titleHtml": "Complete startup: bootloader, kernel, init, shell, and user applications",
     "entries": [
       {
         "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
@@ -1622,6 +1644,8 @@
   {
     "anchor": "12-shell",
     "number": "12",
+    "title": "Shell",
+    "titleHtml": "Shell",
     "entries": [
       {
         "anchor": "121-shell-owned-state",
@@ -1694,6 +1718,8 @@
   {
     "anchor": "13-user-applications-and-commands",
     "number": "13",
+    "title": "User applications and commands",
+    "titleHtml": "User applications and commands",
     "entries": [
       {
         "anchor": "131-applications-library-calls-and-host-requests",
@@ -1727,6 +1753,8 @@
   {
     "anchor": "14-test-system",
     "number": "14",
+    "title": "Test system",
+    "titleHtml": "Test system",
     "entries": [
       {
         "anchor": "141-library-os-shell-and-boot-test-categories",
@@ -1805,6 +1833,8 @@
   {
     "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
     "number": "15",
+    "title": "Use in operating-systems and real-time operating-systems lectures",
+    "titleHtml": "Use in operating-systems and real-time operating-systems lectures",
     "entries": [
       {
         "anchor": "151-operating-systems-topics",
@@ -1855,11 +1885,15 @@
   {
     "anchor": "16-use-of-ai-in-the-project",
     "number": "16",
+    "title": "Use of AI in the project",
+    "titleHtml": "Use of AI in the project",
     "entries": []
   },
   {
     "anchor": "17-limitations",
     "number": "17",
+    "title": "Limitations",
+    "titleHtml": "Limitations",
     "entries": []
   }
 ]

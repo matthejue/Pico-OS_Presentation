@@ -33,7 +33,7 @@ for(const block of previous.split(/(?=<!-- SOURCE Pico-OS\/README.md#)/)) {
   for(const id of ids)if(oldAssets.has(id))excludedHashes.add(oldAssets.get(id).sourceSha256)
  } else excludedAnchors.add(anchor)
 }
-const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by prescribed cover outline'}:{})}]))
+const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by dynamic presentation contents and section overviews'}:{})}]))
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 const prose=s=>displayHtml(md.renderInline(s))
 const bulletList=(items,cls='')=>`<ul${cls?` class="${cls}"`:''}>${items.map(item=>Array.isArray(item)?`<li>${prose(item[0])}${bulletList(item.slice(1))}</li>`:`<li>${prose(item)}</li>`).join('\n')}</ul>`
@@ -205,6 +205,8 @@ const majorSections=sections.filter(s=>!s.parents.length && /^\d+\. /.test(s.tit
 const sectionOverviews=majorSections.map(s=>({
  anchor:s.anchor,
  number:s.title.match(/^\d+/)[0],
+ title:plain(s.title.replace(/^\d+\.\s+/,'')),
+ titleHtml:prose(s.title.replace(/^\d+\.\s+/,'')),
  entries:sections.filter(child=>child.parents[0]===s.title).map(child=>({
   anchor:child.anchor,
   number:child.title.match(/^[\d.]+/)[0],
@@ -225,15 +227,18 @@ for(const p of pages) {
  deckPages.push(p)
 }
 const body=deckPages.map((p,i)=>{
- const page=i+2,s=p.section
+ const page=i+3,s=p.section
  if(p.overview) return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${excludedOverviews.has(s.anchor)?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n<div class="eyebrow section-eyebrow">Section ${s.title.match(/^\d+/)[0].padStart(2,'0')} · Overview</div>\n\n# ${s.title}\n\n<SectionOverview section="${s.anchor}" />`
  const disabled=excludedAnchors.has(s.anchor)||p.group.some(a=>excludedHashes.has(a.sha256))
  for(const a of p.group)inventory.get(a.id).slides.push({page,layout:p.layout,...(a.type==='table'?{rows:a.compactRows.map(r=>r.sourceRow)}:{}),...(a.type==='list'?{items:a.itemIndices}:{}),...(a.type==='code'?{codeParts:a.split?2:1}:{}),...(a.borrowed?{repeated:true}:{})})
- const main=s.parents.length?s.parents.join(' · '):s.title
+ const major=majorSections.find(major=>major===s||s.parents[0]===major.title)
+ const majorTitle=title=>major && title===major.title?`<MajorSectionLink section="${major.anchor}">${title}</MajorSectionLink>`:title
+ const main=s.parents.length?s.parents.map(majorTitle).join(' · '):majorTitle(s.title)
  const subtitle=s.parents.length?`\n\n## ${s.title}${p.number?` (${p.number})`:''}`:''
  return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n# ${main}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
-await fs.writeFile('slides.md',cover.trimEnd()+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
+const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
+await fs.writeFile('slides.md',cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
 await fs.writeFile('config/section-overviews.json',JSON.stringify(sectionOverviews,null,2)+'\n')
-await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:deckPages.length+1,assets:[...inventory.values()]},null,2)+'\n')
-console.log(`${deckPages.length+1} slides, including ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)
+await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:deckPages.length+2,assets:[...inventory.values()]},null,2)+'\n')
+console.log(`${deckPages.length+2} slides, including contents and ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)

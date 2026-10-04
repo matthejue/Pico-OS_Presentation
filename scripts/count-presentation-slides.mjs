@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { readFile } from 'node:fs/promises'
-import { defaultSlidesPath, inspectSlides } from './short-version.mjs'
+import { defaultSlidesPath } from './short-version.mjs'
+import { presentationSlides } from './presentation-navigation.mjs'
 
-const { slideCount, disabled } = inspectSlides(await readFile(defaultSlidesPath, 'utf8'))
-console.log(process.env.SLIDES_SHORT === '1' ? slideCount - disabled.length : slideCount)
+const sections = JSON.parse(await readFile(new URL('../config/section-overviews.json', import.meta.url), 'utf8'))
+console.log(presentationSlides(await readFile(defaultSlidesPath, 'utf8'), sections, process.env.SLIDES_SHORT === '1').length)

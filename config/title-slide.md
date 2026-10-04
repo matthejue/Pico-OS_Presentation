@@ -32,16 +32,6 @@ const presentationVersion = releaseVersion.trim()
 
 <div class="cover-title mt-2">An educational operating<br>system toolchain for the<br><span class="accent">OS and RTOS lectures</span></div>
 
-<div class="cover-outline" aria-label="Presentation outline">
-  <div class="cover-chapter"><span>01</span><span>Toolchain extensions</span></div>
-  <div class="cover-chapter"><span>02</span><span>Interrupts, system calls &amp; exceptions</span></div>
-  <div class="cover-chapter"><span>03</span><span>Memory, processes &amp; blocking</span></div>
-  <div class="cover-chapter"><span>04</span><span>Boot &amp; kernel startup</span></div>
-  <div class="cover-chapter"><span>05</span><span>Shell &amp; user applications</span></div>
-  <div class="cover-chapter"><span>06</span><span>Test system</span></div>
-  <div class="cover-chapter cover-lecture"><span>07</span><span>OS and RTOS usecases</span></div>
-</div>
-
 <div class="project-art" aria-label="Pico-OS source is compiled by PicoC-Compiler and assembled and executed by RETI-Emulator">
   <div class="art-trace trace-a"></div><div class="art-trace trace-b"></div><div class="art-trace trace-c"></div>
   <div class="art-node art-os"><b>Pico-OS</b><span>.picoc</span></div>

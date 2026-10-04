@@ -1,19 +1,15 @@
 import assert from 'node:assert/strict'
 import { readFile, mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
+import { presentationSlides } from './presentation-navigation.mjs'
 
 const base = process.env.PRESENTATION_URL || 'http://localhost:3030/'
 const mode = process.env.PRESENTATION_ROUTER || 'history'
 const short = process.env.SLIDES_SHORT === '1'
-const markdown = await readFile(new URL('../slides.md', import.meta.url), 'utf8')
-const sections = JSON.parse(await readFile(new URL('../config/section-overviews.json', import.meta.url)))
-const slides = markdown.split(/^---\s*$/m).slice(2)
-  .filter(slide => !short || !slide.includes('<!-- SHORT_VERSION_DISABLED -->'))
-  .map((slide, i) => ({
-    page: i + 1,
-    anchor: slide.match(/<!-- SOURCE Pico-OS\/README.md#([^ ]+) -->/)[1],
-    overview: slide.includes('<SectionOverview '),
-  }))
+const project = process.env.PRESENTATION_PROJECT
+const markdown = await readFile(project ? `${project}/slides.md` : new URL('../slides.md', import.meta.url), 'utf8')
+const sections = JSON.parse(await readFile(project ? `${project}/config/section-overviews.json` : new URL('../config/section-overviews.json', import.meta.url)))
+const slides = presentationSlides(markdown, sections, short)
 const url = n => new URL(mode === 'hash' ? `#/${n}` : `${n}`, base).href
 const browser = await chromium.launch({ executablePath: process.env.BROWSER || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] })
 try {
@@ -34,17 +30,35 @@ try {
   }
   const screenshots = process.env.OVERVIEW_SCREENSHOTS
   if (screenshots) await mkdir(screenshots, { recursive: true })
+  const cover = await navigate(1)
+  assert.equal(await cover.locator('.cover-outline, .cover-chapter').count(), 0, 'Old cover outline removed')
+  if (screenshots) await cover.screenshot({ path: `${screenshots}/cover.png` })
+  const mainContents = slides.find(slide => slide.contents)
+  assert.equal(mainContents.page, 2, 'Contents immediately follows the cover')
+  const activeSections = sections.filter(section => slides.some(slide => slide.overview && slide.anchor === section.anchor))
+  const mainLayout = await navigate(mainContents.page)
+  await mainLayout.locator('.major-toc').waitFor()
+  assert.deepEqual(await mainLayout.locator('[data-contents-anchor]').evaluateAll(links => links.map(link => link.dataset.contentsAnchor)), activeSections.map(section => section.anchor), 'Contents lists exactly the populated sections')
+  const contentsIssues = await mainLayout.locator('.major-toc').evaluate(el => [...el.querySelectorAll('a')].filter(link => link.scrollHeight > link.clientHeight + 2 || link.scrollWidth > link.clientWidth + 2).map(link => link.textContent))
+  assert.deepEqual(contentsIssues, [], 'Main contents entries fit')
+  if (screenshots) await mainLayout.screenshot({ path: `${screenshots}/contents.png` })
   for (const section of sections) {
     const overview = slides.find(slide => slide.overview && slide.anchor === section.anchor)
-    assert.ok(overview, `${section.anchor}: overview available`)
+    const content = slides.filter(slide => !slide.overview && !slide.contents && (slide.anchor === section.anchor || section.entries.some(entry => entry.anchor === slide.anchor)))
+    if (!content.length) { assert.equal(overview, undefined, `${section.anchor}: empty section overview omitted`); continue }
+    assert.ok(overview, `${section.anchor}: populated overview available`)
+    await navigate(mainContents.page)
+    const mainLink = mainLayout.locator(`[data-contents-anchor="${section.anchor}"]`)
+    assert.equal(new URL(await mainLink.getAttribute('href'), base).href, url(overview.page))
+    await mainLink.click()
     const layout = await navigate(overview.page)
     const toc = layout.locator('.section-overview')
     await toc.waitFor()
     await page.waitForTimeout(150)
-    assert.deepEqual(await toc.locator('[data-topic-anchor]').evaluateAll(rows => rows.map(row => row.dataset.topicAnchor)), section.entries.map(entry => entry.anchor), `${section.number}: every README heading in order`)
-    const content = slides.filter(slide => !slide.overview && (slide.anchor === section.anchor || section.entries.some(entry => entry.anchor === slide.anchor)))
+    const availableEntries = section.entries.filter(entry => content.some(slide => slide.anchor === entry.anchor || entry.descendants.includes(slide.anchor)))
+    assert.deepEqual(await toc.locator('[data-topic-anchor]').evaluateAll(rows => rows.map(row => row.dataset.topicAnchor)), availableEntries.map(entry => entry.anchor), `${section.number}: only populated heading branches, in order`)
     const linked = new Set()
-    for (const entry of section.entries) {
+    for (const entry of availableEntries) {
       const row = toc.locator(`[data-topic-anchor="${entry.anchor}"]`)
       const direct = content.filter(slide => slide.anchor === entry.anchor).map(slide => slide.page)
       assert.deepEqual((await row.locator('.section-slide-links a').allTextContents()).map(Number), direct, `${entry.number}: every continuation slide linked with current page number`)
@@ -83,8 +97,14 @@ try {
       await (await link.count() ? link : fallback).click()
       await page.locator(`.slidev-page-${target} .slidev-layout`).first().waitFor({ state: 'visible' })
       assert.equal(page.url(), url(target), `${section.number}: click navigates to slide ${target}`)
+      const breadcrumb = page.locator(`.slidev-page-${target} [data-overview-anchor="${section.anchor}"]`).first()
+      assert.equal(new URL(await breadcrumb.getAttribute('href'), base).href, url(overview.page))
+      await breadcrumb.click()
+      await page.waitForURL(url(overview.page))
     }
-    console.log(`Section ${section.number}: ${section.entries.length} headings, ${content.length} linked slides; font ${measuredFont}.`)
+    await layout.locator('.contents-back-link').click()
+    await page.waitForURL(url(mainContents.page))
+    console.log(`Section ${section.number}: ${availableEntries.length} headings, ${content.length} linked slides; font ${measuredFont}.`)
   }
   // A keyboard-activated link must navigate just like a pointer click.
   const sample = slides.find(slide => slide.overview)
@@ -95,6 +115,6 @@ try {
   await page.keyboard.press('Enter')
   await page.waitForURL(target)
   assert.deepEqual(errors, [], 'No browser errors')
-  console.log(`Verified all ${sections.length} section overviews in the ${short ? 'short' : 'full'} deck: hierarchy, every slide link, layout, clicks, and keyboard navigation.`)
+  console.log(`Verified ${activeSections.length} section overviews in the ${short ? 'short' : 'full'} deck: contents, filtered hierarchy, slide links, breadcrumbs, return links, layout, clicks, and keyboard navigation.`)
 }
 finally { await browser.close() }

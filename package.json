@@ -11,12 +11,14 @@
     "test:short": "node scripts/test-short-version.mjs",
     "rebuild:readme": "node scripts/rebuild-from-readme.mjs",
     "test:source": "node scripts/check-readme-coverage.mjs",
-    "test:overviews": "node scripts/test-section-overviews.mjs"
+    "test:overviews": "node scripts/test-section-overviews.mjs",
+    "test:navigation": "node scripts/test-presentation-navigation.mjs"
   },
   "devDependencies": {
     "@slidev/cli": "52.18.0",
     "@slidev/theme-default": "0.25.0",
     "asciinema-player": "3.15.1",
+    "pdf-lib": "1.17.1",
     "playwright-chromium": "1.62.0"
   }
 }

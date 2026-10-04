@@ -25,7 +25,7 @@ function headings(text) {
   for (const line of text.split('\n')) {
     if (line.startsWith('```')) fenced = !fenced
     const match = !fenced && /^(#{1,6}) (.+)$/.exec(line)
-    if (match) result.push({ level: match[1].length, title: match[2].replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') })
+    if (match) result.push({ level: match[1].length, title: match[2].replace(/<\/?MajorSectionLink\b[^>]*>/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') })
   }
   return result
 }
@@ -45,13 +45,20 @@ const pages = slides.map((slide, i) => {
   const anchor = markers[0][1]
   const source = hierarchy.get(anchor)
   assert.ok(source, `Slide ${i + 1}: anchor ${anchor} exists`)
-  assert.ok(source.order >= lastOrder, `Slide ${i + 1}: README order`)
-  lastOrder = source.order
+  if (anchor !== 'contents') {
+    assert.ok(source.order >= lastOrder, `Slide ${i + 1}: README order`)
+    lastOrder = source.order
+  }
   occurrences.set(anchor, (occurrences.get(anchor) || 0) + 1)
   return { page: i + 1, slide, source, anchor }
 })
 const numbers = new Map()
 for (const { page, slide, source, anchor } of pages) {
+  if (anchor === 'contents') {
+    assert.equal(page, 2, 'Contents directly follows the title slide')
+    assert.equal(headings(slide)[0].title, 'Contents')
+    continue
+  }
   const titles = headings(slide)
   assert.equal(titles[0].title, source.parents.length ? source.parents.join(' · ') : source.title, `Slide ${page}: main title`)
   if (source.parents.length) {
@@ -66,8 +73,7 @@ const shortVersion = inspectSlides(markdown)
 assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees every source slide')
 assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')
 
-const expectedTopics = ['Toolchain extensions', 'Interrupts, system calls & exceptions', 'Memory, processes & blocking', 'Boot & kernel startup', 'Shell & user applications', 'Test system', 'OS and RTOS usecases']
-assert.ok(!pages.some(p => p.anchor === 'contents'), 'The summarized cover replaces the global README contents')
+assert.equal(pages.filter(p => p.anchor === 'contents').length, 1, 'Exactly one presentation contents slide')
 const sectionOverviews = JSON.parse(await readFile(new URL('../config/section-overviews.json', import.meta.url)))
 for (const section of sectionOverviews) {
   const sectionPages = pages.filter(p => p.anchor === section.anchor || p.source.parents[0] === hierarchy.get(section.anchor).title)
@@ -138,7 +144,7 @@ try {
   }
 
   const cover = await navigate(1)
-  assert.deepEqual(await cover.locator('.cover-chapter > span:last-child').allTextContents(), expectedTopics, 'Cover has the seven summarized topics')
+  assert.equal(await cover.locator('.cover-outline, .cover-chapter').count(), 0, 'Cover has no fixed topic outline')
 
   const layoutIssues = []
   for (const { page: n } of pages) {

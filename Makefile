@@ -49,7 +49,8 @@ generate-presentation-pdf:
 		SLIDES_SHORT=$(SLIDES_SHORT) $(YARN) export --per-slide --range "$$start-$$end" --output "$$chunk" --executable-path "$(BROWSER)"; \
 		chunks+=("$$chunk"); \
 	done; \
-	pdfunite "$${chunks[@]}" "$(PDF)"
+	pdfunite "$${chunks[@]}" "$${build_dir}/merged.pdf"; \
+	SLIDES_SHORT=$(SLIDES_SHORT) node scripts/link-presentation-pdf.mjs "$${build_dir}/merged.pdf" "$(PDF)"
 
 generate-short-presentation-pdf:
 	$(MAKE) generate-presentation-pdf SLIDES_SHORT=1 PDF=picoos-presentation-short.pdf

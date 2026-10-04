@@ -1,7 +1,7 @@
 <template>
   <VisualZoom />
   <ShortVersionStatus />
-  <div v-if="$nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.shortVersion" class="zoom-hint">
+  <div v-if="$nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.presentationContents && !$nav.currentFrontmatter.shortVersion" class="zoom-hint">
     <div v-if="isDevelopment">m: toggle short-deck exclusion · Alt+A: apply exclusions · Alt+S: sync list from slides</div>
     <div>Visual: Enter/Space open · +/− zoom · F fit · arrows/PgUp/PgDn/Space scroll · Esc close · Recording: Space play/pause · ←/→ seek</div>
   </div>

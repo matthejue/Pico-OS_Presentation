@@ -4,7 +4,7 @@ The presentation uses the README at PicoOS commit
 `4d1fa5047c14aa80121a76850b75c2c0319147f6`, including uncommitted edits to
 Contents link labels. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
-and slide count. The full deck has 289 slides; the short deck has 284.
+and slide count. The full deck has 290 slides; the short deck has 285.
 
 ## Content and composition
 
@@ -24,12 +24,15 @@ The coverage inventory tracks all 345 substantive source artifacts:
 | 1 terminal recording | Local inline asciinema playback |
 | 29 lists | Every substantive source item represented by brief bullets |
 
-The two Contents/navigation lists are replaced by the prescribed seven-topic
-cover outline. Each numbered major section also starts with a linked overview
+The title page uses the project title and toolchain artwork. The two README
+navigation lists are replaced by a contents slide immediately after the cover,
+linking to each populated major section's overview. Each numbered major section starts with a linked overview
 of every README subsection, with individual slide links for continuation pages.
 The overview uses the active deck's slide metadata, so filtering or renumbering
 does not leave stale links. Headings without their own slide link to an available
-descendant; omitted topics remain visible without a link. Ordinary prose, list
+descendant; empty branches and chapters are omitted from navigation. Ancestor
+headings link back to their major section overview; each overview links back
+to Contents. Ordinary prose, list
 items, contextual facts, and verbose table
 cells use brief bullets. Hardware slides include the FPGA, SRAM, UART adapter,
 connections, individual prices, and total from the README.
@@ -128,16 +131,25 @@ For future updates:
 
 Existing exclusions follow unchanged artifact hashes, even when source lines
 move. Their merged placements now occupy five full-deck slides:
-3, 5, 6, 7, and 10. Changed assets and layouts need review.
+4, 6, 7, 8, and 11. Changed assets and layouts need review.
 
 ## Verification
 
-The section-overview update passed full and short static builds and the existing
-browser checks across all 289 slides in normal development. Additional checks
-covered all 17 overviews in full and short development and static decks:
-complete ordered headings, every slide link, content bounds, larger titles,
-pointer clicks, and keyboard navigation. Rebuilding reproduced the generated
-slides, overview data, and coverage inventory exactly.
+The navigation update passed full and short static builds and the existing
+browser checks across all 290 slides in normal development. Additional checks
+covered contents, all 17 overviews, ordered populated headings, every slide
+link, breadcrumb returns, return-to-contents links, content bounds, larger
+titles, pointer clicks, and keyboard navigation in full and short decks.
+An isolated fixture removed chapter 2, a whole subsection branch, and one leaf,
+then added chapter 18. Empty branches disappeared and the new chapter appeared
+without changing destination code. Rebuilding reproduced the generated slides,
+overview data, and coverage inventory exactly.
+
+Representative nine-page PDF samples were exported in both variants. Their
+151 navigation annotations per variant were checked through `pdfunite` and the
+finalization step, with blank destination pages filling unexported positions.
+Every annotation became an internal destination to the correct final page,
+including cross-chunk links and overview/contents/breadcrumb return links.
 
 Earlier browser checks passed across the original 272 slides in production,
 normal development, and selectable-text development.
@@ -152,5 +164,5 @@ endpoints in both modes; test edits were restored. Short-version unit checks
 and source coverage passed. Representative compiler diagrams, hardware,
 code columns, tables, and inventory grids were inspected at slide size.
 
-No PDF was exported, no PicoOS tests were run, and `speaker-notes.md` was not
-edited.
+PDF exports for this update were temporary verification samples. No PicoOS tests
+were run, and `speaker-notes.md` was not edited.

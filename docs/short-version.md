@@ -95,6 +95,13 @@ The outputs of the package and PDF targets are
 `picoos-presentation-short.pdf`. The existing full-deck targets and filenames
 remain unchanged.
 
+Contents, chapter overviews, slide-number links, and breadcrumb returns are
+derived from the surviving slides. Empty chapters and subsection branches are
+removed automatically. Ancestors with surviving descendants remain visible.
+Navigation slides are maintained automatically; use `m` on content slides to
+change the selection. PDF targets finalize internal destinations after merging
+the exported chunks, so links use the short PDF's page numbers.
+
 Static builds go to separate directories: `dist/` for the full deck and
 `dist-short/` for the short deck. Both versions can be generated in one command:
 

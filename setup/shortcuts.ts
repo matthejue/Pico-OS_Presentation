@@ -45,6 +45,10 @@ export default defineShortcutsSetup((_operations, base: ShortcutOptions[]) => {
       name: 'toggle_short_version_slide',
       key: 'm',
       fn: () => {
+        if (nav.currentFrontmatter.value.sectionOverview || nav.currentFrontmatter.value.presentationContents) {
+          announce('Navigation slides follow the included content automatically. Mark a content slide to change the short deck.')
+          return
+        }
         const sourceIndex = nav.currentSlideRoute.value.meta.slide.sourceIndex
         void request('toggle', sourceIndex + 1)
       },
