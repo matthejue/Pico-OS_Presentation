@@ -1,8 +1,8 @@
 # Source review · 4 October 2026
 
 The presentation uses the README at PicoOS commit
-`4d1fa5047c14aa80121a76850b75c2c0319147f6`, including uncommitted edits to
-Contents link labels. `.source/Pico-OS-README.md` stores its exact bytes;
+`4a8c95017f28572d575993e72561d2380465edba`, including the compiler-pipeline clarification in
+section 1.1.1. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
 and slide count. The full deck has 290 slides; the short deck has 285.
 
@@ -105,8 +105,10 @@ and `short-version.md` in
 latest instructions taking precedence.
 
 Source changes are reviewed against the saved README bytes. The latest source
-delta changes only Contents link labels; headings and substantive artifacts
-remain unchanged. The saved snapshot and dirty flag include these edits.
+delta clarifies Lark parsing, separate AST construction, and the replacement
+with Tree-sitter in section 1.1.1. Its two diagrams and slide summaries now
+show the actual frontend steps. The saved snapshot and dirty flag include
+these edits.
 
 `scripts/rebuild-from-readme.mjs` combines the original artifacts with reviewed
 `config/readme-lists.json`, `config/readme-prose.json`, and
@@ -171,3 +173,20 @@ code columns, tables, and inventory grids were inspected at slide size.
 
 PDF exports for this update were temporary verification samples. No PicoOS tests
 were run, and `speaker-notes.md` was not edited.
+
+## Compiler pipeline correction · 4 October 2026
+
+Verified the Lark frontend against compiler history before commit `20ed47f`
+and the current Tree-sitter frontend against `source/ast_transformers.py` and
+`source/option_handler.py`. The README and slide distinguish source parsing
+into a parse tree from conversion into the PicoC AST. Tree-sitter replaces
+Lark explicitly. The extended diagram shows the Tree-sitter lexer/parser
+rather than a token stream feeding parsing. Diagnostic tokens are extracted
+from the completed tree and are omitted from this compilation overview.
+
+Rebuilt only the affected slide content and refreshed source coverage. All
+345 source artifacts passed coverage checks. The production build passed.
+Targeted Chromium checks of slide 14 passed in production and both normal
+and selectable-text development modes, including diagram bounds, summary
+text, enlargement, selectable diagram text, and return to the same slide.
+The full and short deck selections remain unchanged. No PDF was exported.

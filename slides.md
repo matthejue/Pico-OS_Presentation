@@ -414,8 +414,8 @@ scheduler
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts pipeline-comparison"><div class="pipeline-panel"><div class="readme-list"><ul><li><strong>Original:</strong> one source file</li>
-<li><strong>Lark</strong> → AST → RETI</li>
-<li><strong>Single-file</strong> compiler passes</li></ul></div>
+<li><strong>Lark:</strong> parses source into a parse tree</li>
+<li><strong>AST construction</strong>, then single-file lowering to RETI</li></ul></div>
 
 <!-- README_ASSET mermaid-534 -->
 <ReadmeVisual kind="mermaid" :width="980">
@@ -427,7 +427,7 @@ flowchart LR
     subgraph frontend["Lexing and parsing"]
         lexer["Lark lexer and parser"]
         tree["Parse tree"]
-        ast["TransformerPicoC AST"]
+        ast["PicoC AST"]
     end
 
     subgraph compilation["Single-file compilation passes"]
@@ -441,7 +441,7 @@ flowchart LR
 
     output["One RETI program"]
 
-    source --> lexer --> tree --> ast
+    source --> lexer --> tree -->|TransformerPicoC| ast
     ast --> shrink --> blocks --> anf --> reti_blocks --> patch --> reti --> output
 ```
 
@@ -449,9 +449,9 @@ flowchart LR
 
 </div>
 
-<div class="pipeline-panel"><div class="readme-list"><ul><li><strong>Extended:</strong> reusable compilation units</li>
-<li><strong>Includes</strong>, macros, symbols, types</li>
-<li><strong>Linking</strong> + startup + address resolution</li></ul></div>
+<div class="pipeline-panel"><div class="readme-list"><ul><li><strong>Extended:</strong> reusable units, <strong>Tree-sitter</strong> replaces <strong>Lark</strong></li>
+<li><strong>Tree-sitter:</strong> parses preprocessed source into a parse tree</li>
+<li><strong>AST construction</strong>, symbol/type checks, linking + startup</li></ul></div>
 
 <!-- README_ASSET mermaid-563 -->
 <ReadmeVisual kind="mermaid" :width="980">
@@ -466,7 +466,7 @@ flowchart LR
     end
 
     subgraph frontend["Lexing and parsing"]
-        tokens["Token stream"]
+        parser["Tree-sitter lexer and parser"]:::added
         parse_tree["Tree-sitter parse tree"]
         ast["PicoC AST"]
     end
@@ -488,7 +488,7 @@ flowchart LR
 
     output["Linked RETI program"]
 
-    source --> preprocessor --> preprocessed --> tokens --> parse_tree --> ast
+    source --> preprocessor --> preprocessed --> parser --> parse_tree -->|TransformerPicoC.build_ast| ast
     ast --> shrink --> blocks --> symbol --> typing --> anf --> reti_blocks
     reti_blocks --> merge --> patch --> reti --> output
     classDef added fill:#fff2b2,stroke:#8a5a00,stroke-width:3px,color:#111

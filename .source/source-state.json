@@ -4,8 +4,8 @@
   "primarySource": {
     "repository": "/home/areo/Documents/Studium/Pico-OS",
     "file": "README.md",
-    "commit": "4d1fa5047c14aa80121a76850b75c2c0319147f6",
-    "contentSha256": "afd6c2147bd82f46abb99b54f91358755e4869ac1d1ea293763a232d41d920d2",
+    "commit": "4a8c95017f28572d575993e72561d2380465edba",
+    "contentSha256": "087f14b65df4ff14454e7ae5cfd6b5de8de45916e8ce850acff0ac1ec8e86b73",
     "dirtyAtGeneration": true,
     "snapshot": ".source/Pico-OS-README.md"
   },

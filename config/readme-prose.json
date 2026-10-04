@@ -149,10 +149,10 @@
   ],
   "111-compilation-pipeline-and-compiler-passes": [
     "**Original:** one source file",
-    "**Lark** → AST → RETI",
-    "**Single-file** compiler passes",
-    "**Extended:** reusable compilation units",
-    "**Includes**, macros, symbols, types",
-    "**Linking** + startup + address resolution"
+    "**Lark:** parses source into a parse tree",
+    "**AST construction**, then single-file lowering to RETI",
+    "**Extended:** reusable units, **Tree-sitter** replaces **Lark**",
+    "**Tree-sitter:** parses preprocessed source into a parse tree",
+    "**AST construction**, symbol/type checks, linking + startup"
   ]
 }
