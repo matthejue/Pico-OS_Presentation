@@ -102,7 +102,7 @@ with middle dots in the main title, and the current heading is the subtitle.
 Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
 Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
-descriptions use brief bullets; columns and widths are reviewed for readability.
+descriptions use brief text; columns and widths are reviewed for readability.
 The title page focuses on PicoOS and the toolchain artwork. A contents slide
 immediately follows it, linking to the overview of each major README section.
 Each overview has a larger title and a clickable subsection hierarchy. Click
@@ -125,7 +125,12 @@ items are represented. Tables retain the reviewed library-facing operations;
 ten internal-only function catalogs are omitted. The two README navigation
 lists are replaced by the dynamic contents slide and section overviews.
 
-Ordinary slide text and table descriptions use brief bullets. Code and diagram
+Ordinary slide text and table descriptions stay brief. Use bullets for multiple
+items; single statements, table values, card headings, and notes use plain text.
+If a table column contains a multi-item cell, all nonempty cells in that column
+use bullets on that slide, including both halves of a split table. Matching list
+panels and card detail fields follow the same slide-local consistency rule.
+Code and diagram
 bodies stay complete. Long code examples split into balanced columns, with
 boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware

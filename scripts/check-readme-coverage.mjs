@@ -49,10 +49,10 @@ for(const a of assets) {
 }
 const cover=await fs.readFile('config/title-slide.md','utf8')
 assert.ok(deck.startsWith(cover.trimEnd()),'Cover unchanged')
-// Source code/diagram labels are preserved; authored slide prose must be bullets.
+// Source code/diagram labels are preserved; authored slide text stays brief.
 const prose=JSON.parse(await fs.readFile('config/readme-prose.json','utf8'))
 const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
 const bullets=[...Object.values(summaries).flat(2),...Object.values(prose).flat(),...Object.values(facts).flatMap(f=>f[1])]
 for(const bullet of bullets)assert.ok(plain(bullet).split(/\s+/).length<=10,`Brief bullet: ${bullet}`)
 assert.equal((deck.slice(cover.length).match(/<(?:p|div class="readme-explanation")\b/g)||[]).length,0,'No continuous slide prose')
-console.log(`Verified ${assets.filter(a=>!a.navigationOnly).length} source artifacts: full code/diagrams/images, all list items, reviewed table filtering/summaries, and brief slide bullets.`)
+console.log(`Verified ${assets.filter(a=>!a.navigationOnly).length} source artifacts: full code/diagrams/images, all list items, reviewed table filtering/summaries, and brief slide text.`)

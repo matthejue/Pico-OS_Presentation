@@ -117,11 +117,11 @@ const presentationVersion = releaseVersion.trim()
 <!-- README_ASSET table-51 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-51:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.58%" /><col style="width:39.16%" /><col style="width:32.26%" /></colgroup><thead><tr><th>Producer</th><th>Contract</th><th>Consumer</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>PicoC-Compiler</li></ul></td><td><ul><li>Linked code + layout + debug metadata</li></ul></td><td><ul><li>Assembler + source debugger</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>RETI-Emulator assembler</li></ul></td><td><ul><li>Five-word header + RETI binary</li></ul></td><td><ul><li>Bootloader + process loader</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>PicoOS libraries</li></ul></td><td><ul><li>Selector + value/request pointer</li></ul></td><td><ul><li>Interrupt entry + kernel subsystem</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Kernel subsystems</li></ul></td><td><ul><li>PCBs, queues, descriptors, periphery writes</li></ul></td><td><ul><li>Dispatcher + emulated hardware</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>PicoOS UART host request protocol</li></ul></td><td><ul><li>Bounded UART requests + big-endian replies</li></ul></td><td><ul><li>Emulator or companion serial host</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.58%" /><col style="width:39.16%" /><col style="width:32.26%" /></colgroup><thead><tr><th>Producer</th><th>Contract</th><th>Consumer</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">PicoC-Compiler</td><td>Linked code + layout + debug metadata</td><td>Assembler + source debugger</td></tr>
+<tr data-source-row="2"><td class="table-key">RETI-Emulator assembler</td><td>Five-word header + RETI binary</td><td>Bootloader + process loader</td></tr>
+<tr data-source-row="3"><td class="table-key">PicoOS libraries</td><td>Selector + value/request pointer</td><td>Interrupt entry + kernel subsystem</td></tr>
+<tr data-source-row="4"><td class="table-key">Kernel subsystems</td><td>PCBs, queues, descriptors, periphery writes</td><td>Dispatcher + emulated hardware</td></tr>
+<tr data-source-row="5"><td class="table-key">PicoOS UART host request protocol</td><td>Bounded UART requests + big-endian replies</td><td>Emulator or companion serial host</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -169,11 +169,11 @@ $ ./start-picoos.sh
 <!-- README_ASSET table-86 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-86:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.69%" /><col style="width:33.15%" /><col style="width:33.15%" /></colgroup><thead><tr><th>Behavior</th><th>Shell launcher</th><th>PowerShell launcher</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Use a specific emulator</li></ul></td><td><ul><li><code>--reti-emulator PATH</code></li></ul></td><td><ul><li><code>-RetiEmulator PATH</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Enable DMA loading</li></ul></td><td><ul><li><code>--dma</code> or <code>-M</code></li></ul></td><td><ul><li><code>-Dma</code> or <code>-M</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Run directly in the terminal</li></ul></td><td><ul><li><code>--notui</code> or <code>-N</code></li></ul></td><td><ul><li><code>-NoTui</code> or <code>-N</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Show help</li></ul></td><td><ul><li><code>--help</code> or <code>-h</code></li></ul></td><td><ul><li><code>-Help</code> or <code>-h</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Pass remaining emulator options</li></ul></td><td><ul><li><code>-- EMULATOR_ARGS...</code></li></ul></td><td><ul><li><code>-- EMULATOR_ARGS...</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.69%" /><col style="width:33.15%" /><col style="width:33.15%" /></colgroup><thead><tr><th>Behavior</th><th>Shell launcher</th><th>PowerShell launcher</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Use a specific emulator</td><td><code>--reti-emulator PATH</code></td><td><code>-RetiEmulator PATH</code></td></tr>
+<tr data-source-row="2"><td class="table-key">Enable DMA loading</td><td><code>--dma</code> or <code>-M</code></td><td><code>-Dma</code> or <code>-M</code></td></tr>
+<tr data-source-row="3"><td class="table-key">Run directly in the terminal</td><td><code>--notui</code> or <code>-N</code></td><td><code>-NoTui</code> or <code>-N</code></td></tr>
+<tr data-source-row="4"><td class="table-key">Show help</td><td><code>--help</code> or <code>-h</code></td><td><code>-Help</code> or <code>-h</code></td></tr>
+<tr data-source-row="5"><td class="table-key">Pass remaining emulator options</td><td><code>-- EMULATOR_ARGS...</code></td><td><code>-- EMULATOR_ARGS...</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -235,15 +235,15 @@ scheduler
 <!-- README_ASSET table-150 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-150:1,2,3,4,5,6,7,8,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.04%" /><col style="width:50.96%" /></colgroup><thead><tr><th>Archive path</th><th>Purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>binary/README.md</code></span></li></ul></td><td><ul><li>Release startup + filesystem instructions</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>binary/start-picoos.sh</code></span>, <span class="source-link"><code>binary/start-picoos.ps1</code></span></li></ul></td><td><ul><li>Find tools; configure; launch emulator</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>binary/download-tools.sh</code></span>, <span class="source-link"><code>binary/download-tools.ps1</code></span></li></ul></td><td><ul><li>Download missing released tools</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>binary/boot/</code></span></li></ul></td><td><ul><li>EPROM image; load kernel</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>binary/kernel/</code></span></li></ul></td><td><ul><li>Kernel binary + layout/debug metadata</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>binary/system/</code></span></li></ul></td><td><ul><li>Init binary</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>binary/user/</code></span></li></ul></td><td><ul><li>Shell + standalone commands</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>binary/config/</code></span></li></ul></td><td><ul><li>Environment, emulator options, OS version</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>binary/device/</code></span></li></ul></td><td><ul><li>Virtual terminal/null marker files</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.04%" /><col style="width:50.96%" /></colgroup><thead><tr><th>Archive path</th><th>Purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>binary/README.md</code></span></td><td>Release startup + filesystem instructions</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>binary/start-picoos.sh</code></span>, <span class="source-link"><code>binary/start-picoos.ps1</code></span></td><td>Find tools; configure; launch emulator</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>binary/download-tools.sh</code></span>, <span class="source-link"><code>binary/download-tools.ps1</code></span></td><td>Download missing released tools</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>binary/boot/</code></span></td><td>EPROM image; load kernel</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>binary/kernel/</code></span></td><td>Kernel binary + layout/debug metadata</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>binary/system/</code></span></td><td>Init binary</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>binary/user/</code></span></td><td>Shell + standalone commands</td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>binary/config/</code></span></td><td>Environment, emulator options, OS version</td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>binary/device/</code></span></td><td>Virtual terminal/null marker files</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -285,15 +285,12 @@ scheduler
 <div class="deck-content readme-slide">
 
 <!-- README_ASSET list-185 -->
-<div class="hardware-tiles"><div class="readme-tile"><ul><li><strong>FPGA:</strong> Alchitry Cu V2 — €55.66</li>
-<li>Lattice iCE40-HX8K</li>
+<div class="hardware-tiles"><div class="readme-tile"><div class="tile-name"><strong>FPGA:</strong> Alchitry Cu V2 — €55.66</div><ul><li>Lattice iCE40-HX8K</li>
 <li>CPU / IRQ / <strong>UART</strong> / DMA</li>
-<li>Timer + buffer + SRAM arbitration</li></ul></div><div class="readme-tile"><ul><li><strong>SRAM:</strong> 2 × ISSI chips</li>
-<li>IS61WV25616BLL-10TLI</li>
+<li>Timer + buffer + SRAM arbitration</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>SRAM:</strong> 2 × ISSI chips</div><ul><li>IS61WV25616BLL-10TLI</li>
 <li>2 × €5.80 = €11.60</li>
 <li>Shared address + control</li>
-<li>Combined 32-bit bus; 1 MiB</li></ul></div><div class="readme-tile"><ul><li><strong>USB–UART:</strong> SparkFun CH340C</li>
-<li><strong>Price:</strong> €10.92</li>
+<li>Combined 32-bit bus; 1 MiB</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>USB–UART:</strong> SparkFun CH340C</div><ul><li><strong>Price:</strong> €10.92</li>
 <li>TXO → RX; RXI ← TX</li>
 <li>Common ground; matching serial format</li>
 <li><strong>DMA:</strong> four bytes → one word</li></ul></div></div>
@@ -306,11 +303,11 @@ scheduler
 <!-- README_ASSET table-236 -->
 <ReadmeVisual kind="table" :width="760" data-table-key="table-236:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.91%" /><col style="width:26.47%" /><col style="width:28.62%" /></colgroup><thead><tr><th>Image</th><th>32-bit words</th><th>Size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>kernel.bin</code></span> (<span class="source-link"><code>kernel.picoc</code></span>)</li></ul></td><td><ul><li>41,502</li></ul></td><td><ul><li>0.166008 MB</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>init.bin</code></span> (<span class="source-link"><code>init.picoc</code></span>)</li></ul></td><td><ul><li>10,824</li></ul></td><td><ul><li>0.043296 MB</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>shell.bin</code></span> (<span class="source-link"><code>shell.picoc</code></span>)</li></ul></td><td><ul><li>29,647</li></ul></td><td><ul><li>0.118588 MB</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>cat.bin</code></span> (<span class="source-link"><code>cat.picoc</code></span>)</li></ul></td><td><ul><li>10,487</li></ul></td><td><ul><li>0.041948 MB</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>echo.bin</code></span> (<span class="source-link"><code>echo.picoc</code></span>)</li></ul></td><td><ul><li>12,018</li></ul></td><td><ul><li>0.048072 MB</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.91%" /><col style="width:26.47%" /><col style="width:28.62%" /></colgroup><thead><tr><th>Image</th><th>32-bit words</th><th>Size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>kernel.bin</code></span> (<span class="source-link"><code>kernel.picoc</code></span>)</td><td>41,502</td><td>0.166008 MB</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>init.bin</code></span> (<span class="source-link"><code>init.picoc</code></span>)</td><td>10,824</td><td>0.043296 MB</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>shell.bin</code></span> (<span class="source-link"><code>shell.picoc</code></span>)</td><td>29,647</td><td>0.118588 MB</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cat.bin</code></span> (<span class="source-link"><code>cat.picoc</code></span>)</td><td>10,487</td><td>0.041948 MB</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>echo.bin</code></span> (<span class="source-link"><code>echo.picoc</code></span>)</td><td>12,018</td><td>0.048072 MB</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -341,9 +338,9 @@ scheduler
 <!-- README_ASSET table-260 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-260:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.82%" /><col style="width:30.15%" /><col style="width:45.02%" /></colgroup><thead><tr><th>High bits</th><th>Address space</th><th>PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>00</code></li></ul></td><td><ul><li>EPROM</li></ul></td><td><ul><li>Bootloader</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>01</code></li></ul></td><td><ul><li>Memory-mapped periphery</li></ul></td><td><ul><li>UART, interrupts, timer, exceptions, DMA</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>10</code> or <code>11</code></li></ul></td><td><ul><li>SRAM</li></ul></td><td><ul><li>Kernel, processes, heaps, stacks</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.82%" /><col style="width:30.15%" /><col style="width:45.02%" /></colgroup><thead><tr><th>High bits</th><th>Address space</th><th>PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>00</code></td><td>EPROM</td><td>Bootloader</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>01</code></td><td>Memory-mapped periphery</td><td>UART, interrupts, timer, exceptions, DMA</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>10</code> or <code>11</code></td><td>SRAM</td><td>Kernel, processes, heaps, stacks</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -376,29 +373,29 @@ scheduler
 <!-- README_ASSET table-501 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-501:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-501:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Installation</li></ul></td><td><ul><li>Install picoc_compiler + environment</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Preprocessing</li></ul></td><td><ul><li>Includes, macros, #pragma once</li><li>Dependencies + optional syntax checking</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Multiple translation units</li></ul></td><td><ul><li>Per-file compilation + final linking</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Reusable build artifacts</li></ul></td><td><ul><li>Reusable code/symbol/debug artifacts</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Automatic artifact reuse</li></ul></td><td><ul><li>Hashes + options decide reuse</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Broader PicoC syntax</li></ul></td><td><ul><li>typedef, casts, declarations, increment</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Pointer support</li></ul></td><td><ul><li>Typed pointers + compatible structs</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>Function pointers</li></ul></td><td><ul><li>Indirect calls + linked addresses</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>Variadic functions</li></ul></td><td><ul><li>Variadic declarations + System V frames</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li>String and character data</li></ul></td><td><ul><li>Escapes + linker-safe string literals</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li>Inline RETI assembly</li></ul></td><td><ul><li>Inline assembly + linked labels</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li>Low-level functions</li></ul></td><td><ul><li>Naked startup/interrupt handlers</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="13"><td class="table-key"><ul><li>Custom sections</li></ul></td><td><ul><li>.ivt attributes; .text/.data defaults</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li>ISR entries</li></ul></td><td><ul><li>Tagged SRAM handler addresses</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li>Runtime startup</li></ul></td><td><ul><li>Generated entry or custom -C source</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li>Global initialization</li></ul></td><td><ul><li>-O1 static global initializers</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li>Shared epilogues</li></ul></td><td><ul><li>One shared restore/return block</li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><ul><li>Section layout</li></ul></td><td><ul><li>.ivt + .text + .data + .sections</li></ul></td></tr>
-<tr data-source-row="19"><td class="table-key"><ul><li>Linked labels</li></ul></td><td><ul><li>Readable labels until final patching</li></ul></td></tr>
-<tr data-source-row="20"><td class="table-key"><ul><li>Kernel headers</li></ul></td><td><ul><li>Generated kernel/boot memory constants</li></ul></td></tr>
-<tr data-source-row="21"><td class="table-key"><ul><li>Debug information</li></ul></td><td><ul><li>Source, globals, locals, calls, frames</li></ul></td></tr>
-<tr data-source-row="22"><td class="table-key"><ul><li>Inspectable intermediates</li></ul></td><td><ul><li>Preprocessed source + named pass results</li></ul></td></tr>
-<tr data-source-row="23"><td class="table-key"><ul><li>Debug trap + NOP</li></ul></td><td><ul><li>debug trap + real NOP</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-501:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Installation</td><td><ul><li>Install picoc_compiler + environment</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">Preprocessing</td><td><ul><li>Includes, macros, #pragma once</li><li>Dependencies + optional syntax checking</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">Multiple translation units</td><td><ul><li>Per-file compilation + final linking</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key">Reusable build artifacts</td><td><ul><li>Reusable code/symbol/debug artifacts</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key">Automatic artifact reuse</td><td><ul><li>Hashes + options decide reuse</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key">Broader PicoC syntax</td><td><ul><li>typedef, casts, declarations, increment</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key">Pointer support</td><td><ul><li>Typed pointers + compatible structs</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key">Function pointers</td><td><ul><li>Indirect calls + linked addresses</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key">Variadic functions</td><td><ul><li>Variadic declarations + System V frames</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key">String and character data</td><td><ul><li>Escapes + linker-safe string literals</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key">Inline RETI assembly</td><td><ul><li>Inline assembly + linked labels</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key">Low-level functions</td><td><ul><li>Naked startup/interrupt handlers</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:39.32%" /><col style="width:60.68%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="13"><td class="table-key">Custom sections</td><td><ul><li>.ivt attributes; .text/.data defaults</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key">ISR entries</td><td><ul><li>Tagged SRAM handler addresses</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key">Runtime startup</td><td><ul><li>Generated entry or custom -C source</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key">Global initialization</td><td><ul><li>-O1 static global initializers</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key">Shared epilogues</td><td><ul><li>One shared restore/return block</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key">Section layout</td><td><ul><li>.ivt + .text + .data + .sections</li></ul></td></tr>
+<tr data-source-row="19"><td class="table-key">Linked labels</td><td><ul><li>Readable labels until final patching</li></ul></td></tr>
+<tr data-source-row="20"><td class="table-key">Kernel headers</td><td><ul><li>Generated kernel/boot memory constants</li></ul></td></tr>
+<tr data-source-row="21"><td class="table-key">Debug information</td><td><ul><li>Source, globals, locals, calls, frames</li></ul></td></tr>
+<tr data-source-row="22"><td class="table-key">Inspectable intermediates</td><td><ul><li>Preprocessed source + named pass results</li></ul></td></tr>
+<tr data-source-row="23"><td class="table-key">Debug trap + NOP</td><td><ul><li>debug trap + real NOP</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -654,20 +651,20 @@ flowchart TB
 <!-- README_ASSET table-689 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-689:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.60%" /><col style="width:44.05%" /><col style="width:28.36%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><strong>Higher addresses ↑</strong></li></ul></td><td><ul><li>Earlier stack contents</li></ul></td><td><ul><li>Earlier calls</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><em><code>caller BAF + 3</code></em></li></ul></td><td><ul><li>Caller argument</li></ul></td><td><ul><li>Caller’s caller</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><em><code>caller BAF + 2</code></em></li></ul></td><td><ul><li>Caller return address</li></ul></td><td><ul><li>Caller’s caller</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><em><code>caller BAF + 1</code></em></li></ul></td><td><ul><li>Saved caller frame pointer</li></ul></td><td><ul><li>Caller frame</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><em><code>caller BAF</code></em></li></ul></td><td><ul><li>Caller local</li></ul></td><td><ul><li>Caller frame</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><em><code>caller BAF - 1</code></em></li></ul></td><td><ul><li>Retained temporary expression</li></ul></td><td><ul><li>Caller expression</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><strong><code>BAF + 4</code></strong></li></ul></td><td><ul><li>Second argument (arg2)</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><strong><code>BAF + 3</code></strong></li></ul></td><td><ul><li>First argument (arg1)</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><strong><code>BAF + 2</code></strong></li></ul></td><td><ul><li>Return continuation address</li></ul></td><td><ul><li>Caller</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><strong><code>BAF + 1</code></strong></li></ul></td><td><ul><li>Saved caller BAF</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><strong><code>BAF</code></strong></li></ul></td><td><ul><li>First local</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><strong><code>BAF - 1</code>, ...</strong></li></ul></td><td><ul><li>More locals + temporaries</li></ul></td><td><ul><li>Callee</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><strong><code>SP</code></strong></li></ul></td><td><ul><li>Free cell below occupied stack</li></ul></td><td><ul><li>Current stack boundary</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><strong>Lower addresses ↓</strong></li></ul></td><td><ul><li>Stack grows toward lower addresses</li></ul></td><td><ul></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.60%" /><col style="width:44.05%" /><col style="width:28.36%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><strong>Higher addresses ↑</strong></td><td>Earlier stack contents</td><td>Earlier calls</td></tr>
+<tr data-source-row="2"><td class="table-key"><em><code>caller BAF + 3</code></em></td><td>Caller argument</td><td>Caller’s caller</td></tr>
+<tr data-source-row="3"><td class="table-key"><em><code>caller BAF + 2</code></em></td><td>Caller return address</td><td>Caller’s caller</td></tr>
+<tr data-source-row="4"><td class="table-key"><em><code>caller BAF + 1</code></em></td><td>Saved caller frame pointer</td><td>Caller frame</td></tr>
+<tr data-source-row="5"><td class="table-key"><em><code>caller BAF</code></em></td><td>Caller local</td><td>Caller frame</td></tr>
+<tr data-source-row="6"><td class="table-key"><em><code>caller BAF - 1</code></em></td><td>Retained temporary expression</td><td>Caller expression</td></tr>
+<tr data-source-row="7"><td class="table-key"><strong><code>BAF + 4</code></strong></td><td>Second argument (arg2)</td><td>Caller</td></tr>
+<tr data-source-row="8"><td class="table-key"><strong><code>BAF + 3</code></strong></td><td>First argument (arg1)</td><td>Caller</td></tr>
+<tr data-source-row="9"><td class="table-key"><strong><code>BAF + 2</code></strong></td><td>Return continuation address</td><td>Caller</td></tr>
+<tr data-source-row="10"><td class="table-key"><strong><code>BAF + 1</code></strong></td><td>Saved caller BAF</td><td>Callee</td></tr>
+<tr data-source-row="11"><td class="table-key"><strong><code>BAF</code></strong></td><td>First local</td><td>Callee</td></tr>
+<tr data-source-row="12"><td class="table-key"><strong><code>BAF - 1</code>, ...</strong></td><td>More locals + temporaries</td><td>Callee</td></tr>
+<tr data-source-row="13"><td class="table-key"><strong><code>SP</code></strong></td><td>Free cell below occupied stack</td><td>Current stack boundary</td></tr>
+<tr data-source-row="14"><td class="table-key"><strong>Lower addresses ↓</strong></td><td>Stack grows toward lower addresses</td><td></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1345,11 +1342,11 @@ void _start(int argc, char *first_argument) {
 <!-- README_ASSET table-1112 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1112:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.20%" /><col style="width:52.37%" /><col style="width:23.44%" /></colgroup><thead><tr><th>Image</th><th>_start used</th><th>Next function</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>EPROM bootloader</li></ul></td><td><ul><li>Explicit naked _start; no -C</li></ul></td><td><ul><li><span class="source-link"><code>boot_main()</code></span></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>SRAM kernel</li></ul></td><td><ul><li>Compiler-generated _start</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Init process</li></ul></td><td><ul><li>libstart; -C library/start/libstart.picoc</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Shell</li></ul></td><td><ul><li>Same libstart -C option</li></ul></td><td><ul><li><span class="source-link"><code>main()</code></span></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>User applications</li></ul></td><td><ul><li>Common userspace libstart link rule</li></ul></td><td><ul><li>Application main()</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.20%" /><col style="width:52.37%" /><col style="width:23.44%" /></colgroup><thead><tr><th>Image</th><th>_start used</th><th>Next function</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">EPROM bootloader</td><td>Explicit naked _start; no -C</td><td><span class="source-link"><code>boot_main()</code></span></td></tr>
+<tr data-source-row="2"><td class="table-key">SRAM kernel</td><td>Compiler-generated _start</td><td><span class="source-link"><code>main()</code></span></td></tr>
+<tr data-source-row="3"><td class="table-key">Init process</td><td>libstart; -C library/start/libstart.picoc</td><td><span class="source-link"><code>main()</code></span></td></tr>
+<tr data-source-row="4"><td class="table-key">Shell</td><td>Same libstart -C option</td><td><span class="source-link"><code>main()</code></span></td></tr>
+<tr data-source-row="5"><td class="table-key">User applications</td><td>Common userspace libstart link rule</td><td>Application main()</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1416,9 +1413,9 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1126 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1126:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:18.09%" /><col style="width:40.78%" /><col style="width:41.14%" /></colgroup><thead><tr><th>Section</th><th>Default contents and addressing</th><th>How source selects it</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>.ivt</code></li></ul></td><td><ul><li>ISR words; CS-relative globals</li></ul></td><td><ul><li>section(&quot;ivt&quot;) attribute</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>.text</code></li></ul></td><td><ul><li>Entry + ordinary instructions; CS-relative</li></ul></td><td><ul><li>Default for functions</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>.data</code></li></ul></td><td><ul><li>Ordinary globals; DS-relative</li></ul></td><td><ul><li>Default for globals</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:18.09%" /><col style="width:40.78%" /><col style="width:41.14%" /></colgroup><thead><tr><th>Section</th><th>Default contents and addressing</th><th>How source selects it</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>.ivt</code></td><td>ISR words; CS-relative globals</td><td>section(&quot;ivt&quot;) attribute</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>.text</code></td><td>Entry + ordinary instructions; CS-relative</td><td>Default for functions</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>.data</code></td><td>Ordinary globals; DS-relative</td><td>Default for globals</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1445,10 +1442,10 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1152 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1152:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.86%" /><col style="width:37.40%" /><col style="width:30.74%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Purpose</th><th>Concrete size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>PUSH reg</code></li></ul></td><td><ul><li>Reserve cell; store register</li></ul></td><td><ul><li>2 instructions</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>POP reg</code></li></ul></td><td><ul><li>Load top cell; release cell</li></ul></td><td><ul><li>2 instructions</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>LOADI32 reg operand</code></li></ul></td><td><ul><li>Load 32-bit literal or linked address</li></ul></td><td><ul><li>3 instructions</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>JUMP32[relation] target</code></li></ul></td><td><ul><li>Jump beyond immediate range</li></ul></td><td><ul><li>4--6 instructions when retained</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.86%" /><col style="width:37.40%" /><col style="width:30.74%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Purpose</th><th>Concrete size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH reg</code></td><td>Reserve cell; store register</td><td>2 instructions</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>POP reg</code></td><td>Load top cell; release cell</td><td>2 instructions</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>LOADI32 reg operand</code></td><td>Load 32-bit literal or linked address</td><td>3 instructions</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>JUMP32[relation] target</code></td><td>Jump beyond immediate range</td><td>4--6 instructions when retained</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1473,8 +1470,8 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1169 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1169:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>PUSH ACC</code></li></ul></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>POP ACC</code></li></ul></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1640,9 +1637,9 @@ MOVE ACC PC
 <!-- README_ASSET table-1310 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1310:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.80%" /><col style="width:45.54%" /><col style="width:31.67%" /></colgroup><thead><tr><th>Block</th><th>Symbolic instructions</th><th>Real instructions after expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>entry</code></li></ul></td><td><ul><li><code>PUSH BAF</code>, <code>LOADI32 ACC done</code>, <code>JUMP32 done</code></li></ul></td><td><ul><li><code>2 + 3 + 5 = 10</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>work</code></li></ul></td><td><ul><li><code>PUSH ACC</code>, <code>POP IN1</code>, <code>LOADI32 ACC 7</code></li></ul></td><td><ul><li><code>2 + 2 + 3 = 7</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>done</code></li></ul></td><td><ul><li><code>POP BAF</code></li></ul></td><td><ul><li><code>2</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.80%" /><col style="width:45.54%" /><col style="width:31.67%" /></colgroup><thead><tr><th>Block</th><th>Symbolic instructions</th><th>Real instructions after expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>entry</code></td><td><code>PUSH BAF</code>, <code>LOADI32 ACC done</code>, <code>JUMP32 done</code></td><td><code>2 + 3 + 5 = 10</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>work</code></td><td><code>PUSH ACC</code>, <code>POP IN1</code>, <code>LOADI32 ACC 7</code></td><td><code>2 + 2 + 3 = 7</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>done</code></td><td><code>POP BAF</code></td><td><code>2</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1693,12 +1690,12 @@ MOVE ACC PC
 <!-- README_ASSET table-1349 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1349:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:50.59%" /><col style="width:49.41%" /></colgroup><thead><tr><th>Entry</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>interrupt_service_routines_start</code></li></ul></td><td><ul><li>Optional ISR code start</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>codesegment_start</code></li></ul></td><td><ul><li>Initial CS + entry region</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>datasegment_start</code></li></ul></td><td><ul><li>Initial DS</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>heap_start</code></span></li></ul></td><td><ul><li>First process-local heap cell</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Capacity in cells; −1 → default</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>stack_start</code></span></li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:50.59%" /><col style="width:49.41%" /></colgroup><thead><tr><th>Entry</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>interrupt_service_routines_start</code></td><td>Optional ISR code start</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>codesegment_start</code></td><td>Initial CS + entry region</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>datasegment_start</code></td><td>Initial DS</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>heap_start</code></span></td><td>First process-local heap cell</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>heap_size</code></span></td><td>Capacity in cells; −1 → default</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>stack_start</code></span></td><td>Highest stack cell; −1 → default</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1776,11 +1773,11 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1390 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1390:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.34%" /><col style="width:32.71%" /><col style="width:42.96%" /></colgroup><thead><tr><th>Word</th><th>Value</th><th>Use in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><code>codesegment_start</code></li></ul></td><td><ul><li>Initial CS + entry</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><code>datasegment_start</code></li></ul></td><td><ul><li>Initial DS</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>heap_start</code></span></li></ul></td><td><ul><li>Process-local heap start</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li><span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Configured cells; −1 → default</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li><span class="source-link"><code>stack_start</code></span></li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.34%" /><col style="width:32.71%" /><col style="width:42.96%" /></colgroup><thead><tr><th>Word</th><th>Value</th><th>Use in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td><code>codesegment_start</code></td><td>Initial CS + entry</td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td><code>datasegment_start</code></td><td>Initial DS</td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td><span class="source-link"><code>heap_start</code></span></td><td>Process-local heap start</td></tr>
+<tr data-source-row="4"><td class="table-key">3</td><td><span class="source-link"><code>heap_size</code></span></td><td>Configured cells; −1 → default</td></tr>
+<tr data-source-row="5"><td class="table-key">4</td><td><span class="source-link"><code>stack_start</code></span></td><td>Highest stack cell; −1 → default</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1843,13 +1840,13 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1430 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1430:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:53.02%" /><col style="width:46.98%" /></colgroup><thead><tr><th>Kernel constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_BASE</code></span></li></ul></td><td><ul><li>Relative → absolute SRAM addresses</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_MAX_ADDRESS_IN_MEMORY_MAP</code></span></li></ul></td><td><ul><li>Inclusive outer-heap limit</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_HEAP_START</code></span>, <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span></li></ul></td><td><ul><li>Kernel Heap bounds + stack boundary</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>PROCESS_MEMORY_START</code></span></li></ul></td><td><ul><li>First Process/Shared Data Heap cell</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_CS_START_ASM</code></span>, <span class="source-link"><code>KERNEL_DS_START_ASM</code></span></li></ul></td><td><ul><li>Install kernel CS + DS</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_SP_START_ASM</code></span></li></ul></td><td><ul><li>Install kernel SP</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>KERNEL_CS_ACC_ASM</code></span></li></ul></td><td><ul><li>Load kernel code base; currently unused</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:53.02%" /><col style="width:46.98%" /></colgroup><thead><tr><th>Kernel constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SRAM_BASE</code></span></td><td>Relative → absolute SRAM addresses</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SRAM_MAX_ADDRESS_IN_MEMORY_MAP</code></span></td><td>Inclusive outer-heap limit</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>KERNEL_HEAP_START</code></span>, <span class="source-link"><code>KERNEL_HEAP_SIZE</code></span></td><td>Kernel Heap bounds + stack boundary</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>PROCESS_MEMORY_START</code></span></td><td>First Process/Shared Data Heap cell</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>KERNEL_CS_START_ASM</code></span>, <span class="source-link"><code>KERNEL_DS_START_ASM</code></span></td><td>Install kernel CS + DS</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>KERNEL_SP_START_ASM</code></span></td><td>Install kernel SP</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>KERNEL_CS_ACC_ASM</code></span></td><td>Load kernel code base; currently unused</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1894,9 +1891,9 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1450 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1450:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.29%" /><col style="width:51.71%" /></colgroup><thead><tr><th>Bootloader constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SRAM_MAX_ADDRESS</code></span></li></ul></td><td><ul><li>Physical SRAM limit; fallback stack</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>EPROM_DS_START_ASM</code></span></li></ul></td><td><ul><li>Install linked EPROM DS</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>EPROM_STACK_START_ASM</code></span></li></ul></td><td><ul><li>Temporary stack at SRAM top</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.29%" /><col style="width:51.71%" /></colgroup><thead><tr><th>Bootloader constant</th><th>Consumer and purpose</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SRAM_MAX_ADDRESS</code></span></td><td>Physical SRAM limit; fallback stack</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>EPROM_DS_START_ASM</code></span></td><td>Install linked EPROM DS</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>EPROM_STACK_START_ASM</code></span></td><td>Temporary stack at SRAM top</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1921,19 +1918,19 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1470 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-1470:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-1470:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Plain execution output</li></ul></td><td><ul><li>UART output → host stdout</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Commented assembly</li></ul></td><td><ul><li>Source labels/comments beside assembly</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Atomic locking</li></ul></td><td><ul><li>Atomic old value + store 1</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Structured loading</li></ul></td><td><ul><li>Distinct code/data/heap/stack regions</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Binary assembly</li></ul></td><td><ul><li>RETI words + five-word header</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>EPROM-only boot</li></ul></td><td><ul><li>Start bootloader without SRAM preload</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Configurable SRAM</li></ul></td><td><ul><li>Configurable physical word capacity</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li>Memory-mapped periphery</li></ul></td><td><ul><li>Memory-mapped offsets 0–16</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>Interrupt controller</li></ul></td><td><ul><li>Mappings, priorities, pending state, nesting</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li>Direct memory access</li></ul></td><td><ul><li>UART words → SRAM; completion interrupt</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li>Manual interrupts</li></ul></td><td><ul><li>Trigger selected ISR in TUI</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li>Runtime timer</li></ul></td><td><ul><li>Instruction-count timer; visible live counter</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li>Raw-byte UART</li></ul></td><td><ul><li>Byte registers + status bits</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-1470:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Plain execution output</td><td>UART output → host stdout</td></tr>
+<tr data-source-row="2"><td class="table-key">Commented assembly</td><td>Source labels/comments beside assembly</td></tr>
+<tr data-source-row="3"><td class="table-key">Atomic locking</td><td>Atomic old value + store 1</td></tr>
+<tr data-source-row="4"><td class="table-key">Structured loading</td><td>Distinct code/data/heap/stack regions</td></tr>
+<tr data-source-row="5"><td class="table-key">Binary assembly</td><td>RETI words + five-word header</td></tr>
+<tr data-source-row="6"><td class="table-key">EPROM-only boot</td><td>Start bootloader without SRAM preload</td></tr>
+<tr data-source-row="7"><td class="table-key">Configurable SRAM</td><td>Configurable physical word capacity</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:37.58%" /><col style="width:62.42%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key">Memory-mapped periphery</td><td>Memory-mapped offsets 0–16</td></tr>
+<tr data-source-row="9"><td class="table-key">Interrupt controller</td><td>Mappings, priorities, pending state, nesting</td></tr>
+<tr data-source-row="10"><td class="table-key">Direct memory access</td><td>UART words → SRAM; completion interrupt</td></tr>
+<tr data-source-row="11"><td class="table-key">Manual interrupts</td><td>Trigger selected ISR in TUI</td></tr>
+<tr data-source-row="12"><td class="table-key">Runtime timer</td><td>Instruction-count timer; visible live counter</td></tr>
+<tr data-source-row="13"><td class="table-key">Raw-byte UART</td><td>Byte registers + status bits</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1956,18 +1953,18 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1470 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-1470:14,15,16,17,18,19,20,21,22,23,24,25">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-1470:14,15,16,17,18,19,20,21,22,23,24,25" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="14"><td class="table-key"><ul><li>UART host services</li></ul></td><td><ul><li>Bounded host filesystem protocol</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li>Normal and raw terminals</li></ul></td><td><ul><li>Normal/raw input + control bytes</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li>CPU exceptions</li></ul></td><td><ul><li>Divide/stack/illegal → IVT entry 3</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li>Stack/heap protection</li></ul></td><td><ul><li>Inclusive lower SP boundary</li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><ul><li>Runtime segment interpretation</li></ul></td><td><ul><li>Views follow live CS + DS</li></ul></td></tr>
-<tr data-source-row="19"><td class="table-key"><ul><li>Source-level debugging</li></ul></td><td><ul><li>Globals, locals, frames, source locations</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="20"><td class="table-key"><ul><li>SRAM transcoding</li></ul></td><td><ul><li>Numbers, characters, decoded instructions</li></ul></td></tr>
-<tr data-source-row="21"><td class="table-key"><ul><li>Snapshots and restart</li></ul></td><td><ul><li>Save/restore/restart complete machine state</li></ul></td></tr>
-<tr data-source-row="22"><td class="table-key"><ul><li>Live inspection/editing</li></ul></td><td><ul><li>Select, scroll, center, edit views</li></ul></td></tr>
-<tr data-source-row="23"><td class="table-key"><ul><li>Synthetic OS context</li></ul></td><td><ul><li>Synthetic startup kernel/interrupt context</li></ul></td></tr>
-<tr data-source-row="24"><td class="table-key"><ul><li>Explicit ISR table size</li></ul></td><td><ul><li>Reserve five-entry IVT</li></ul></td></tr>
-<tr data-source-row="25"><td class="table-key"><ul><li>Isolated assembly runs</li></ul></td><td><ul><li>Keep assembler periphery files isolated</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-1470:14,15,16,17,18,19,20,21,22,23,24,25" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="14"><td class="table-key">UART host services</td><td>Bounded host filesystem protocol</td></tr>
+<tr data-source-row="15"><td class="table-key">Normal and raw terminals</td><td>Normal/raw input + control bytes</td></tr>
+<tr data-source-row="16"><td class="table-key">CPU exceptions</td><td>Divide/stack/illegal → IVT entry 3</td></tr>
+<tr data-source-row="17"><td class="table-key">Stack/heap protection</td><td>Inclusive lower SP boundary</td></tr>
+<tr data-source-row="18"><td class="table-key">Runtime segment interpretation</td><td>Views follow live CS + DS</td></tr>
+<tr data-source-row="19"><td class="table-key">Source-level debugging</td><td>Globals, locals, frames, source locations</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="20"><td class="table-key">SRAM transcoding</td><td>Numbers, characters, decoded instructions</td></tr>
+<tr data-source-row="21"><td class="table-key">Snapshots and restart</td><td>Save/restore/restart complete machine state</td></tr>
+<tr data-source-row="22"><td class="table-key">Live inspection/editing</td><td>Select, scroll, center, edit views</td></tr>
+<tr data-source-row="23"><td class="table-key">Synthetic OS context</td><td>Synthetic startup kernel/interrupt context</td></tr>
+<tr data-source-row="24"><td class="table-key">Explicit ISR table size</td><td>Reserve five-entry IVT</td></tr>
+<tr data-source-row="25"><td class="table-key">Isolated assembly runs</td><td>Keep assembler periphery files isolated</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2003,9 +2000,9 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1513 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1513:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.38%" /><col style="width:17.00%" /><col style="width:18.52%" /><col style="width:30.09%" /></colgroup><thead><tr><th>Address range</th><th>Top-bit prefix</th><th>RETI region</th><th>Implemented PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>0x00000000..0x3fffffff</code></li></ul></td><td><ul><li><code>00</code></li></ul></td><td><ul><li>EPROM</li></ul></td><td><ul><li>Bootloader code + data</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><strong><code>0x40000000..0x7fffffff</code></strong></li></ul></td><td><ul><li><strong><code>01</code></strong></li></ul></td><td><ul><li><strong>Periphery</strong></li></ul></td><td><ul><li>Implemented offsets 0–16</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>0x80000000..0xffffffff</code></li></ul></td><td><ul><li><code>10</code> or <code>11</code></li></ul></td><td><ul><li>SRAM</li></ul></td><td><ul><li>Kernel, processes, heaps, stacks</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.38%" /><col style="width:17.00%" /><col style="width:18.52%" /><col style="width:30.09%" /></colgroup><thead><tr><th>Address range</th><th>Top-bit prefix</th><th>RETI region</th><th>Implemented PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>0x00000000..0x3fffffff</code></td><td><code>00</code></td><td>EPROM</td><td>Bootloader code + data</td></tr>
+<tr data-source-row="2"><td class="table-key"><strong><code>0x40000000..0x7fffffff</code></strong></td><td><strong><code>01</code></strong></td><td><strong>Periphery</strong></td><td>Implemented offsets 0–16</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>0x80000000..0xffffffff</code></td><td><code>10</code> or <code>11</code></td><td>SRAM</td><td>Kernel, processes, heaps, stacks</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2030,19 +2027,19 @@ $ hexyl -n 20 program.bin
 <!-- README_ASSET table-1523 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-1523:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-1523:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>UART send</li></ul></td><td><ul><li>Write low byte; clear send-ready</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li>UART receive</li></ul></td><td><ul><li>Receive byte; poll or ISR reads</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li>UART status</li></ul></td><td><ul><li>Bit 0: send; bit 1: receive</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>3–5</li></ul></td><td><ul><li>Device-to-ISR mappings</li></ul></td><td><ul><li>Timer/custom/UART → IVT; 255 disables</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>6–8</li></ul></td><td><ul><li>Device priorities</li></ul></td><td><ul><li>Highest pending priority wins</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>9</li></ul></td><td><ul><li>Timer interval</li></ul></td><td><ul><li>Instruction interval; zero disables</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>10</li></ul></td><td><ul><li>Stack/heap boundary</li></ul></td><td><ul><li>Inclusive SP limit; rewrite on switch</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li>11</li></ul></td><td><ul><li>CPU exception cause</li></ul></td><td><ul><li>None/divide/stack/illegal cause</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>12</li></ul></td><td><ul><li>DMA active</li></ul></td><td><ul><li>1 enables DMA + extra registers</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li>13</li></ul></td><td><ul><li>DMA source</li></ul></td><td><ul><li>Absolute UART receive source</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li>14</li></ul></td><td><ul><li>DMA destination</li></ul></td><td><ul><li>Absolute SRAM destination</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li>15</li></ul></td><td><ul><li>DMA word count</li></ul></td><td><ul><li>Complete 32-bit words</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li>16</li></ul></td><td><ul><li>DMA status/control</li></ul></td><td><ul><li>0 idle; 1 busy; 2 done; 3 error</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-1523:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td>UART send</td><td>Write low byte; clear send-ready</td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td>UART receive</td><td>Receive byte; poll or ISR reads</td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td>UART status</td><td>Bit 0: send; bit 1: receive</td></tr>
+<tr data-source-row="4"><td class="table-key">3–5</td><td>Device-to-ISR mappings</td><td>Timer/custom/UART → IVT; 255 disables</td></tr>
+<tr data-source-row="5"><td class="table-key">6–8</td><td>Device priorities</td><td>Highest pending priority wins</td></tr>
+<tr data-source-row="6"><td class="table-key">9</td><td>Timer interval</td><td>Instruction interval; zero disables</td></tr>
+<tr data-source-row="7"><td class="table-key">10</td><td>Stack/heap boundary</td><td>Inclusive SP limit; rewrite on switch</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:18.19%" /><col style="width:29.47%" /><col style="width:52.34%" /></colgroup><thead><tr><th>Offset</th><th>Register</th><th>Access and connection to PicoOS</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key">11</td><td>CPU exception cause</td><td>None/divide/stack/illegal cause</td></tr>
+<tr data-source-row="9"><td class="table-key">12</td><td>DMA active</td><td>1 enables DMA + extra registers</td></tr>
+<tr data-source-row="10"><td class="table-key">13</td><td>DMA source</td><td>Absolute UART receive source</td></tr>
+<tr data-source-row="11"><td class="table-key">14</td><td>DMA destination</td><td>Absolute SRAM destination</td></tr>
+<tr data-source-row="12"><td class="table-key">15</td><td>DMA word count</td><td>Complete 32-bit words</td></tr>
+<tr data-source-row="13"><td class="table-key">16</td><td>DMA status/control</td><td>0 idle; 1 busy; 2 done; 3 error</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2125,10 +2122,10 @@ TSL DS ACC 2
 <!-- README_ASSET table-1580 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1580:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.19%" /><col style="width:20.19%" /><col style="width:21.72%" /><col style="width:37.90%" /></colgroup><thead><tr><th>Type</th><th>Mode M</th><th>Assembly syntax</th><th>Operation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>00</code></li></ul></td><td><ul><li><code>STORE S i</code></li></ul></td><td><ul><li>Store S at DS-relative address</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>01</code></li></ul></td><td><ul><li><code>STOREIN D S i</code></li></ul></td><td><ul><li>Store register <code>S</code> at address <code>D + i</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>10</code></li></ul></td><td><ul><li><code>TSL S D i</code></li></ul></td><td><ul><li>D ← M[S+i]; M[S+i] ← 1</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>10</code></li></ul></td><td><ul><li><code>11</code></li></ul></td><td><ul><li><code>MOVE S D</code></li></ul></td><td><ul><li>Copy register <code>S</code> to register <code>D</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.19%" /><col style="width:20.19%" /><col style="width:21.72%" /><col style="width:37.90%" /></colgroup><thead><tr><th>Type</th><th>Mode M</th><th>Assembly syntax</th><th>Operation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>10</code></td><td><code>00</code></td><td><code>STORE S i</code></td><td>Store S at DS-relative address</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>10</code></td><td><code>01</code></td><td><code>STOREIN D S i</code></td><td>Store register <code>S</code> at address <code>D + i</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>10</code></td><td><code>10</code></td><td><code>TSL S D i</code></td><td>D ← M[S+i]; M[S+i] ← 1</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>10</code></td><td><code>11</code></td><td><code>MOVE S D</code></td><td>Copy register <code>S</code> to register <code>D</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2212,21 +2209,21 @@ flowchart LR
 <!-- README_ASSET table-1642 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-1642:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-1642:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15" style="--readme-columns:minmax(0, 54fr) minmax(0, 46fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>&lt;ESC&gt;load &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Word count + binary bytes</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>&lt;ESC&gt;read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Returned count + file range</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>&lt;ESC&gt;file-size &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>32-bit file size</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>&lt;ESC&gt;write &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create/truncate; route UART output</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>&lt;ESC&gt;write-at &lt;offset&gt; &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Preserve file; output at offset</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>&lt;ESC&gt;write stdout&lt;ESC&gt;/</code> / <span class="source-link"><code>stderr</code></span></li></ul></td><td><ul><li>Restore host stdout/stderr</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>&lt;ESC&gt;literal-output &lt;count&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Following bytes bypass control parser</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>&lt;ESC&gt;pwd&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Length-prefixed PicoOS root /</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="9"><td class="table-key"><ul><li><code>&lt;ESC&gt;is-directory &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Directory existence/type test</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><code>&lt;ESC&gt;mkdir &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create directory</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><code>&lt;ESC&gt;ls &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Length-prefixed listing</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><code>&lt;ESC&gt;unlink &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Remove file</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><code>&lt;ESC&gt;rmdir &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Remove empty directory</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><code>&lt;ESC&gt;move &lt;old path&gt;\n&lt;new path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Move/rename path</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li><code>&lt;ESC&gt;touch &lt;path&gt;&lt;ESC&gt;/</code></li></ul></td><td><ul><li>Create/update timestamps</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-1642:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15" style="--readme-columns:minmax(0, 54fr) minmax(0, 46fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>&lt;ESC&gt;load &lt;path&gt;&lt;ESC&gt;/</code></td><td>Word count + binary bytes</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>&lt;ESC&gt;read-range &lt;offset&gt; &lt;count&gt; &lt;path&gt;&lt;ESC&gt;/</code></td><td>Returned count + file range</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>&lt;ESC&gt;file-size &lt;path&gt;&lt;ESC&gt;/</code></td><td>32-bit file size</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>&lt;ESC&gt;write &lt;path&gt;&lt;ESC&gt;/</code></td><td>Create/truncate; route UART output</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>&lt;ESC&gt;write-at &lt;offset&gt; &lt;path&gt;&lt;ESC&gt;/</code></td><td>Preserve file; output at offset</td></tr>
+<tr data-source-row="6"><td class="table-key"><code>&lt;ESC&gt;write stdout&lt;ESC&gt;/</code> / <span class="source-link"><code>stderr</code></span></td><td>Restore host stdout/stderr</td></tr>
+<tr data-source-row="7"><td class="table-key"><code>&lt;ESC&gt;literal-output &lt;count&gt;&lt;ESC&gt;/</code></td><td>Following bytes bypass control parser</td></tr>
+<tr data-source-row="8"><td class="table-key"><code>&lt;ESC&gt;pwd&lt;ESC&gt;/</code></td><td>Length-prefixed PicoOS root /</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:69.85%" /><col style="width:30.15%" /></colgroup><thead><tr><th>Request form</th><th>Result</th></tr></thead><tbody><tr data-source-row="9"><td class="table-key"><code>&lt;ESC&gt;is-directory &lt;path&gt;&lt;ESC&gt;/</code></td><td>Directory existence/type test</td></tr>
+<tr data-source-row="10"><td class="table-key"><code>&lt;ESC&gt;mkdir &lt;path&gt;&lt;ESC&gt;/</code></td><td>Create directory</td></tr>
+<tr data-source-row="11"><td class="table-key"><code>&lt;ESC&gt;ls &lt;path&gt;&lt;ESC&gt;/</code></td><td>Length-prefixed listing</td></tr>
+<tr data-source-row="12"><td class="table-key"><code>&lt;ESC&gt;unlink &lt;path&gt;&lt;ESC&gt;/</code></td><td>Remove file</td></tr>
+<tr data-source-row="13"><td class="table-key"><code>&lt;ESC&gt;rmdir &lt;path&gt;&lt;ESC&gt;/</code></td><td>Remove empty directory</td></tr>
+<tr data-source-row="14"><td class="table-key"><code>&lt;ESC&gt;move &lt;old path&gt;\n&lt;new path&gt;&lt;ESC&gt;/</code></td><td>Move/rename path</td></tr>
+<tr data-source-row="15"><td class="table-key"><code>&lt;ESC&gt;touch &lt;path&gt;&lt;ESC&gt;/</code></td><td>Create/update timestamps</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2300,7 +2297,7 @@ sequenceDiagram
 
 <!-- README_ASSET recording-1714 -->
 <AsciinemaRecording src="/casts/reti_emulator.cast" title="RETI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />
-<ul class="slide-note"><li>Click to play; click outside to navigate</li></ul>
+<div class="slide-note">Click to play; click outside to navigate</div>
 
 </div>
 
@@ -2321,11 +2318,11 @@ sequenceDiagram
 <!-- README_ASSET table-1726 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1726:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.97%" /><col style="width:26.73%" /><col style="width:51.30%" /></colgroup><thead><tr><th>View</th><th>Default tracking</th><th>Additional selection</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>CPU registers</li></ul></td><td><ul><li>All eight live registers</li></ul></td><td><ul><li>Inspect/edit selected register</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>EEPROM / SRAM code</li></ul></td><td><ul><li>PC in matching address space</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>SRAM data</li></ul></td><td><ul><li>DS</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>SRAM stack</li></ul></td><td><ul><li>SP</li></ul></td><td><ul><li>Choose register or address</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Periphery</li></ul></td><td><ul><li>UART state</li></ul></td><td><ul><li>Cycle interrupt/timer/exception/DMA views</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.97%" /><col style="width:26.73%" /><col style="width:51.30%" /></colgroup><thead><tr><th>View</th><th>Default tracking</th><th>Additional selection</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">CPU registers</td><td>All eight live registers</td><td>Inspect/edit selected register</td></tr>
+<tr data-source-row="2"><td class="table-key">EEPROM / SRAM code</td><td>PC in matching address space</td><td>Choose register or address</td></tr>
+<tr data-source-row="3"><td class="table-key">SRAM data</td><td>DS</td><td>Choose register or address</td></tr>
+<tr data-source-row="4"><td class="table-key">SRAM stack</td><td>SP</td><td>Choose register or address</td></tr>
+<tr data-source-row="5"><td class="table-key">Periphery</td><td>UART state</td><td>Cycle interrupt/timer/exception/DMA views</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2397,11 +2394,11 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 <!-- README_ASSET table-1771 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1771:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.02%" /><col style="width:43.05%" /><col style="width:33.93%" /></colgroup><thead><tr><th>Index</th><th>Entry</th><th>Source</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><span class="source-link"><code>syscall_interrupt()</code></span></li></ul></td><td><ul><li>Userspace INT 0</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><span class="source-link"><code>timer_interrupt()</code></span></li></ul></td><td><ul><li>Timer</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>uart_interrupt()</code></span></li></ul></td><td><ul><li>UART receive</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li><span class="source-link"><code>cpu_exception_interrupt()</code></span></li></ul></td><td><ul><li>Synchronous CPU exception</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li><span class="source-link"><code>dma_interrupt()</code></span></li></ul></td><td><ul><li>DMA completion; custom-device line</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.02%" /><col style="width:43.05%" /><col style="width:33.93%" /></colgroup><thead><tr><th>Index</th><th>Entry</th><th>Source</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td><span class="source-link"><code>syscall_interrupt()</code></span></td><td>Userspace INT 0</td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td><span class="source-link"><code>timer_interrupt()</code></span></td><td>Timer</td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td><span class="source-link"><code>uart_interrupt()</code></span></td><td>UART receive</td></tr>
+<tr data-source-row="4"><td class="table-key">3</td><td><span class="source-link"><code>cpu_exception_interrupt()</code></span></td><td>Synchronous CPU exception</td></tr>
+<tr data-source-row="5"><td class="table-key">4</td><td><span class="source-link"><code>dma_interrupt()</code></span></td><td>DMA completion; custom-device line</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2544,9 +2541,9 @@ void interrupt_controller_initialize(void) {
 <!-- README_ASSET table-1859 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1859:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.68%" /><col style="width:40.97%" /><col style="width:46.35%" /></colgroup><thead><tr><th>Device / array index</th><th>Mapping source → periphery cell</th><th>Priority source → periphery cell</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Timer / <code>0</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[0] = 1</code> → <code>0x40000003</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[0] = 1</code> → <code>0x40000006</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>DMA on custom line / <code>1</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[1] = 4</code> → <code>0x40000004</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[1] = 1</code> → <code>0x40000007</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>UART / <code>2</code></li></ul></td><td><ul><li><code>interrupt_device_isrs[2] = 2</code> → <code>0x40000005</code></li></ul></td><td><ul><li><code>interrupt_device_priorities[2] = 2</code> → <code>0x40000008</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.68%" /><col style="width:40.97%" /><col style="width:46.35%" /></colgroup><thead><tr><th>Device / array index</th><th>Mapping source → periphery cell</th><th>Priority source → periphery cell</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Timer / <code>0</code></td><td><code>interrupt_device_isrs[0] = 1</code> → <code>0x40000003</code></td><td><code>interrupt_device_priorities[0] = 1</code> → <code>0x40000006</code></td></tr>
+<tr data-source-row="2"><td class="table-key">DMA on custom line / <code>1</code></td><td><code>interrupt_device_isrs[1] = 4</code> → <code>0x40000004</code></td><td><code>interrupt_device_priorities[1] = 1</code> → <code>0x40000007</code></td></tr>
+<tr data-source-row="3"><td class="table-key">UART / <code>2</code></td><td><code>interrupt_device_isrs[2] = 2</code> → <code>0x40000005</code></td><td><code>interrupt_device_priorities[2] = 2</code> → <code>0x40000008</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2569,14 +2566,14 @@ void interrupt_controller_initialize(void) {
 <!-- README_ASSET table-1901 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1901:1,2,3,4,5,6,7,8">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.52%" /><col style="width:57.48%" /></colgroup><thead><tr><th>Offset</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>+0</code></li></ul></td><td><ul><li>Free cell addressed by <span class="source-link"><code>caller_context</code></span></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>+1</code></li></ul></td><td><ul><li>Saved <code>DS</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>+2</code></li></ul></td><td><ul><li>Saved <code>CS</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>+3</code></li></ul></td><td><ul><li>Saved <code>BAF</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>+4</code></li></ul></td><td><ul><li>Saved <code>IN2</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>+5</code></li></ul></td><td><ul><li>Saved <code>IN1</code></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>+6</code></li></ul></td><td><ul><li>Saved <code>ACC</code></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>+7</code></li></ul></td><td><ul><li>Return PC saved by interrupt entry</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.52%" /><col style="width:57.48%" /></colgroup><thead><tr><th>Offset</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>+0</code></td><td>Free cell addressed by <span class="source-link"><code>caller_context</code></span></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>+1</code></td><td>Saved <code>DS</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>+2</code></td><td>Saved <code>CS</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>+3</code></td><td>Saved <code>BAF</code></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>+4</code></td><td>Saved <code>IN2</code></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>+5</code></td><td>Saved <code>IN1</code></td></tr>
+<tr data-source-row="7"><td class="table-key"><code>+6</code></td><td>Saved <code>ACC</code></td></tr>
+<tr data-source-row="8"><td class="table-key"><code>+7</code></td><td>Return PC saved by interrupt entry</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2734,19 +2731,19 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 <!-- README_ASSET table-2001 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-2001:1,2,3,4,5,6,7,8,9,10,11,12,13">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-2001:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>LoadProcessRequest.path</code></span></li></ul></td><td><ul><li>Binary path</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>LoadProcessRequest</code></li><li><code>.show_loading_bar</code></li></ul></td><td><ul><li>Whether UART transfer progress should be printed</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.pid</code></span></li></ul></td><td><ul><li>Existing NEW PID</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.arguments</code></span></li></ul></td><td><ul><li>Argument string / NULL</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.environment</code></span></li></ul></td><td><ul><li>Null-terminated array of <code>NAME=value</code> pointers</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span></li></ul></td><td><ul><li>Exact child PID</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span></li></ul></td><td><ul><li>Address of caller's status cell</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.pid</code></span></li></ul></td><td><ul><li>Target process</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.signal_number</code></span></li></ul></td><td><ul><li>Signal to deliver, 0 probes existence</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.option</code></span></li></ul></td><td><ul><li>Currently only <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.argument</code></span></li></ul></td><td><ul><li>Signal number, or 0 to disable</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.name</code></span></li></ul></td><td><ul><li>Shared-entry lookup name</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.size</code></span></li></ul></td><td><ul><li>Requested shared region size in RETI cells</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-2001:1,2,3,4,5,6,7,8,9,10,11,12,13" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>LoadProcessRequest.path</code></span></li></ul></td><td>Binary path</td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>LoadProcessRequest</code></li><li><code>.show_loading_bar</code></li></ul></td><td>Whether UART transfer progress should be printed</td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.pid</code></span></li></ul></td><td>Existing NEW PID</td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.arguments</code></span></li></ul></td><td>Argument string / NULL</td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>RunProcessRequest.environment</code></span></li></ul></td><td>Null-terminated array of <code>NAME=value</code> pointers</td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span></li></ul></td><td>Exact child PID</td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span></li></ul></td><td>Address of caller's status cell</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:56.25%" /><col style="width:43.75%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.pid</code></span></li></ul></td><td>Target process</td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>KillRequest.signal_number</code></span></li></ul></td><td>Signal to deliver, 0 probes existence</td></tr>
+<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.option</code></span></li></ul></td><td>Currently only <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></td></tr>
+<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>PrctlRequest.argument</code></span></li></ul></td><td>Signal number, or 0 to disable</td></tr>
+<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.name</code></span></li></ul></td><td>Shared-entry lookup name</td></tr>
+<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>ShmOpenRequest.size</code></span></li></ul></td><td>Requested shared region size in RETI cells</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2769,28 +2766,28 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 <!-- README_ASSET table-2023 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-2023:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-2023:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>OpenRequest.path</code></span></li></ul></td><td><ul><li>Relative/absolute file or device path</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>OpenRequest.flags</code></span></li></ul></td><td><ul><li>Access mode plus <span class="source-link"><code>O_CREAT</code></span>, <span class="source-link"><code>O_TRUNC</code></span>, or <span class="source-link"><code>O_APPEND</code></span></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.file_descriptor</code></span></li></ul></td><td><ul><li>Entry number in the current PCB’s eight-entry table</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace destination for read or source for write</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.count</code></span></li></ul></td><td><ul><li>Maximum cells to read or exact cells to write</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.protect_uart_control</code></span></li></ul></td><td><ul><li>Scan escapes; protect with literal-output</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.show_loading_bar</code></span></li></ul></td><td><ul><li>Whether a host-file read shows progress</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.transferred</code></span></li></ul></td><td><ul><li>Bytes already copied by earlier chunks of the same <span class="source-link"><code>read()</code></span></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.loading_bar_update</code></span></li></ul></td><td><ul><li>Next total byte count that redraws read progress</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>IoRequest.complete</code></span></li></ul></td><td><ul><li>Whether <span class="source-link"><code>read()</code></span> should return instead of invoking another chunk</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.file_descriptor</code></span></li></ul></td><td><ul><li>Regular-file descriptor to reposition</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.offset</code></span></li></ul></td><td><ul><li>Signed displacement</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>SeekRequest.origin</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SEEK_SET</code></span>, <span class="source-link"><code>SEEK_CUR</code></span>, or <span class="source-link"><code>SEEK_END</code></span></li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>Dup2Request.old_file_descriptor</code></span></li></ul></td><td><ul><li>Descriptor to copy</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>Dup2Request.new_file_descriptor</code></span></li></ul></td><td><ul><li>Entry to replace</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>GetCwdRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace destination</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>GetCwdRequest.size</code></span></li></ul></td><td><ul><li>Destination capacity</li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.path</code></span></li></ul></td><td><ul><li>Directory to list</li></ul></td></tr>
-<tr data-source-row="19"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.buffer</code></span></li></ul></td><td><ul><li>Userspace listing buffer</li></ul></td></tr>
-<tr data-source-row="20"><td class="table-key"><ul><li><span class="source-link"><code>ReadDirectoryRequest.capacity</code></span></li></ul></td><td><ul><li>Maximum returned cells</li></ul></td></tr>
-<tr data-source-row="21"><td class="table-key"><ul><li><span class="source-link"><code>MoveRequest.old_path</code></span></li></ul></td><td><ul><li>Existing file or directory</li></ul></td></tr>
-<tr data-source-row="22"><td class="table-key"><ul><li><span class="source-link"><code>MoveRequest.new_path</code></span></li></ul></td><td><ul><li>New file or directory path</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-2023:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>OpenRequest.path</code></span></td><td>Relative/absolute file or device path</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>OpenRequest.flags</code></span></td><td>Access mode plus <span class="source-link"><code>O_CREAT</code></span>, <span class="source-link"><code>O_TRUNC</code></span>, or <span class="source-link"><code>O_APPEND</code></span></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>IoRequest.file_descriptor</code></span></td><td>Entry number in the current PCB’s eight-entry table</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>IoRequest.buffer</code></span></td><td>Userspace destination for read or source for write</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>IoRequest.count</code></span></td><td>Maximum cells to read or exact cells to write</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>IoRequest.protect_uart_control</code></span></td><td>Scan escapes; protect with literal-output</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>IoRequest.show_loading_bar</code></span></td><td>Whether a host-file read shows progress</td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>IoRequest.transferred</code></span></td><td>Bytes already copied by earlier chunks of the same <span class="source-link"><code>read()</code></span></td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>IoRequest.loading_bar_update</code></span></td><td>Next total byte count that redraws read progress</td></tr>
+<tr data-source-row="10"><td class="table-key"><span class="source-link"><code>IoRequest.complete</code></span></td><td>Whether <span class="source-link"><code>read()</code></span> should return instead of invoking another chunk</td></tr>
+<tr data-source-row="11"><td class="table-key"><span class="source-link"><code>SeekRequest.file_descriptor</code></span></td><td>Regular-file descriptor to reposition</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:60.06%" /><col style="width:39.94%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="12"><td class="table-key"><span class="source-link"><code>SeekRequest.offset</code></span></td><td>Signed displacement</td></tr>
+<tr data-source-row="13"><td class="table-key"><span class="source-link"><code>SeekRequest.origin</code></span></td><td><span class="source-link"><code>SEEK_SET</code></span>, <span class="source-link"><code>SEEK_CUR</code></span>, or <span class="source-link"><code>SEEK_END</code></span></td></tr>
+<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>Dup2Request.old_file_descriptor</code></span></td><td>Descriptor to copy</td></tr>
+<tr data-source-row="15"><td class="table-key"><span class="source-link"><code>Dup2Request.new_file_descriptor</code></span></td><td>Entry to replace</td></tr>
+<tr data-source-row="16"><td class="table-key"><span class="source-link"><code>GetCwdRequest.buffer</code></span></td><td>Userspace destination</td></tr>
+<tr data-source-row="17"><td class="table-key"><span class="source-link"><code>GetCwdRequest.size</code></span></td><td>Destination capacity</td></tr>
+<tr data-source-row="18"><td class="table-key"><span class="source-link"><code>ReadDirectoryRequest.path</code></span></td><td>Directory to list</td></tr>
+<tr data-source-row="19"><td class="table-key"><span class="source-link"><code>ReadDirectoryRequest.buffer</code></span></td><td>Userspace listing buffer</td></tr>
+<tr data-source-row="20"><td class="table-key"><span class="source-link"><code>ReadDirectoryRequest.capacity</code></span></td><td>Maximum returned cells</td></tr>
+<tr data-source-row="21"><td class="table-key"><span class="source-link"><code>MoveRequest.old_path</code></span></td><td>Existing file or directory</td></tr>
+<tr data-source-row="22"><td class="table-key"><span class="source-link"><code>MoveRequest.new_path</code></span></td><td>New file or directory path</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3081,12 +3078,12 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 <!-- README_ASSET table-2258 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-2258:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.37%" /><col style="width:75.63%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>System control</li></ul></td><td><ul><li>Shutdown, reboot</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Process management</li></ul></td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Scheduling</li></ul></td><td><ul><li>Queue sleep, queue wakeup, yield</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Process and shared memory</li></ul></td><td><ul><li>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Descriptors and I/O</li></ul></td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Paths and directories</li></ul></td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.37%" /><col style="width:75.63%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">System control</td><td><ul><li>Shutdown, reboot</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">Process management</td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">Scheduling</td><td><ul><li>Queue sleep, queue wakeup, yield</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key">Process and shared memory</td><td><ul><li>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key">Descriptors and I/O</td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key">Paths and directories</td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3754,13 +3751,13 @@ void handle_uart_interrupt(void) {
 <!-- README_ASSET table-2797 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-2797:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.52%" /><col style="width:33.49%" /><col style="width:41.99%" /></colgroup><thead><tr><th>Event</th><th>Context already executing</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>UART receive</li></ul></td><td><ul><li>Syscall, with no hardware handler active</li></ul></td><td><ul><li>Immediate UART; return to syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>UART receive</li></ul></td><td><ul><li>Timer or DMA handler</li></ul></td><td><ul><li>UART priority 2 nests over priority 1</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Timer expiration</li></ul></td><td><ul><li>UART handler</li></ul></td><td><ul><li>Timer pending until UART returns</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>DMA completion</li></ul></td><td><ul><li>UART handler</li></ul></td><td><ul><li>DMA pending until UART returns</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Timer expiration</li></ul></td><td><ul><li>DMA handler</li></ul></td><td><ul><li>Timer pending until DMA returns</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>DMA completion</li></ul></td><td><ul><li>Timer handler</li></ul></td><td><ul><li>DMA pending until timer RTI</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Another UART byte</li></ul></td><td><ul><li>UART handler or an already pending UART byte</li></ul></td><td><ul><li>Queued byte until active UART ISR completes</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.52%" /><col style="width:33.49%" /><col style="width:41.99%" /></colgroup><thead><tr><th>Event</th><th>Context already executing</th><th>Result</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">UART receive</td><td>Syscall, with no hardware handler active</td><td>Immediate UART; return to syscall</td></tr>
+<tr data-source-row="2"><td class="table-key">UART receive</td><td>Timer or DMA handler</td><td>UART priority 2 nests over priority 1</td></tr>
+<tr data-source-row="3"><td class="table-key">Timer expiration</td><td>UART handler</td><td>Timer pending until UART returns</td></tr>
+<tr data-source-row="4"><td class="table-key">DMA completion</td><td>UART handler</td><td>DMA pending until UART returns</td></tr>
+<tr data-source-row="5"><td class="table-key">Timer expiration</td><td>DMA handler</td><td>Timer pending until DMA returns</td></tr>
+<tr data-source-row="6"><td class="table-key">DMA completion</td><td>Timer handler</td><td>DMA pending until timer RTI</td></tr>
+<tr data-source-row="7"><td class="table-key">Another UART byte</td><td>UART handler or an already pending UART byte</td><td>Queued byte until active UART ISR completes</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3783,7 +3780,7 @@ void handle_uart_interrupt(void) {
 <!-- README_ASSET table-2829 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-2829:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.24%" /><col style="width:16.22%" /><col style="width:20.07%" /><col style="width:31.47%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>send_byte_over_uart()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Send one polled UART byte</li></ul></td><td><ul><li><code>send_byte_over_uart()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.24%" /><col style="width:16.22%" /><col style="width:20.07%" /><col style="width:31.47%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>send_byte_over_uart()</code></td><td>No value</td><td>Send one polled UART byte</td><td><code>send_byte_over_uart()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -3965,8 +3962,8 @@ flowchart LR
 <!-- README_ASSET table-2974 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-2974:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.42%" /><col style="width:18.40%" /><col style="width:44.18%" /></colgroup><thead><tr><th>Register</th><th>Written by</th><th>Contents and use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>10, <span class="source-link"><code>STACK_HEAP_BOUNDARY_REGISTER</code></span></li></ul></td><td><ul><li>PicoOS</li></ul></td><td><ul><li>0: disabled</li><li>SP below boundary → exception</li><li>Boundary: final heap cell</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>11, <span class="source-link"><code>CPU_EXCEPTION_CAUSE_REGISTER</code></span></li></ul></td><td><ul><li>RETI CPU/emulator</li></ul></td><td><ul><li>0: none; 1: divide-by-zero</li><li>2: stack overflow; 3: illegal instruction</li><li>Read-only cause register</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.42%" /><col style="width:18.40%" /><col style="width:44.18%" /></colgroup><thead><tr><th>Register</th><th>Written by</th><th>Contents and use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">10, <span class="source-link"><code>STACK_HEAP_BOUNDARY_REGISTER</code></span></td><td>PicoOS</td><td><ul><li>0: disabled</li><li>SP below boundary → exception</li><li>Boundary: final heap cell</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">11, <span class="source-link"><code>CPU_EXCEPTION_CAUSE_REGISTER</code></span></td><td>RETI CPU/emulator</td><td><ul><li>0: none; 1: divide-by-zero</li><li>2: stack overflow; 3: illegal instruction</li><li>Read-only cause register</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4120,12 +4117,12 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 <!-- README_ASSET table-3080 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3080:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.25%" /><col style="width:26.18%" /><col style="width:36.48%" /><col style="width:22.09%" /></colgroup><thead><tr><th>Condition</th><th>Trigger</th><th>Entry or reported cause</th><th>PicoOS handling</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Division or modulo by zero</li></ul></td><td><ul><li>DIV/DIVI/MOD/MODI with zero divisor</li></ul></td><td><ul><li>Cause 1; IVT entry 3</li></ul></td><td><ul><li>Userspace → terminate</li><li>Kernel → panic + shutdown</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Stack overflow</li></ul></td><td><ul><li>SP decreased below active boundary</li></ul></td><td><ul><li>Cause 2; IVT entry 3</li></ul></td><td><ul><li>Process overflow → terminate</li><li>Kernel overflow → shutdown</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Illegal instruction</li></ul></td><td><ul><li>Invalid/unsupported decoded RETI instruction</li></ul></td><td><ul><li>Cause 3; IVT entry 3</li></ul></td><td><ul><li>Same process/kernel fault policy</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Process heap full</li></ul></td><td><ul><li><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</li></ul></td><td><ul><li><span class="source-link"><code>require_process_heap_allocation()</code></span> invokes the process-heap-full syscall</li></ul></td><td><ul><li>Print heap-full diagnostic; terminate process</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Kernel heap full</li></ul></td><td><ul><li><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</li></ul></td><td><ul><li><span class="source-link"><code>require_kernel_heap_allocation()</code></span> calls the panic handler directly</li></ul></td><td><ul><li>UART panic; shut down kernel</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Process and Shared Data Heap exhausted</li></ul></td><td><ul><li>No contiguous Process/Shared Data Payload</li></ul></td><td><ul><li>Returns <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span>, no CPU exception is raised</li></ul></td><td><ul><li>Load fails / shm_open returns −1</li><li>Process + kernel continue</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.25%" /><col style="width:26.18%" /><col style="width:36.48%" /><col style="width:22.09%" /></colgroup><thead><tr><th>Condition</th><th>Trigger</th><th>Entry or reported cause</th><th>PicoOS handling</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Division or modulo by zero</td><td>DIV/DIVI/MOD/MODI with zero divisor</td><td>Cause 1; IVT entry 3</td><td><ul><li>Userspace → terminate</li><li>Kernel → panic + shutdown</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">Stack overflow</td><td>SP decreased below active boundary</td><td>Cause 2; IVT entry 3</td><td><ul><li>Process overflow → terminate</li><li>Kernel overflow → shutdown</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">Illegal instruction</td><td>Invalid/unsupported decoded RETI instruction</td><td>Cause 3; IVT entry 3</td><td><ul><li>Same process/kernel fault policy</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key">Process heap full</td><td><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</td><td><span class="source-link"><code>require_process_heap_allocation()</code></span> invokes the process-heap-full syscall</td><td><ul><li>Print heap-full diagnostic; terminate process</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key">Kernel heap full</td><td><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</td><td><span class="source-link"><code>require_kernel_heap_allocation()</code></span> calls the panic handler directly</td><td><ul><li>UART panic; shut down kernel</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key">Process and Shared Data Heap exhausted</td><td>No contiguous Process/Shared Data Payload</td><td>Returns <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span>, no CPU exception is raised</td><td><ul><li>Load fails / shm_open returns −1</li><li>Process + kernel continue</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4148,7 +4145,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 <!-- README_ASSET table-3097 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3097:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:36.64%" /><col style="width:13.24%" /><col style="width:16.44%" /><col style="width:33.68%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>handle_process_heap_full_exception()</code></li></ul></td><td><ul><li>Terminates process</li></ul></td><td><ul><li>Print diagnostic; terminate process</li></ul></td><td><ul><li><code>require_process_heap_allocation()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:36.64%" /><col style="width:13.24%" /><col style="width:16.44%" /><col style="width:33.68%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>handle_process_heap_full_exception()</code></td><td>Terminates process</td><td>Print diagnostic; terminate process</td><td><code>require_process_heap_allocation()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4242,10 +4239,10 @@ struct Heap {
 <!-- README_ASSET table-3145 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3145:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.71%" /><col style="width:59.29%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.size</code></span></li></ul></td><td><ul><li>Usable cells; excludes header</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.free</code></span></li></ul></td><td><ul><li>Whether payload can satisfy allocation</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader.next</code></span></li></ul></td><td><ul><li>Next header or NULL</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>Heap.first_block</code></span></li></ul></td><td><ul><li>First header; no separate block array</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.71%" /><col style="width:59.29%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>BlockHeader.size</code></span></td><td>Usable cells; excludes header</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>BlockHeader.free</code></span></td><td>Whether payload can satisfy allocation</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>BlockHeader.next</code></span></td><td>Next header or NULL</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>Heap.first_block</code></span></td><td>First header; no separate block array</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4268,9 +4265,9 @@ struct Heap {
 <!-- README_ASSET table-3167 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3167:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.13%" /><col style="width:35.34%" /><col style="width:29.36%" /><col style="width:19.17%" /></colgroup><thead><tr><th>Heap context</th><th>Descriptor storage</th><th>Managed payloads</th><th>Interface</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel Heap</li></ul></td><td><ul><li>kernel_heap in kernel .data</li></ul></td><td><ul><li>PCBs, paths, descriptors, shared metadata</li></ul></td><td><ul><li><span class="source-link"><code>kmalloc()</code></span> / <span class="source-link"><code>kfree()</code></span></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Process and Shared Data Heap</li></ul></td><td><ul><li>process_shared_data_heap in kernel .data</li></ul></td><td><ul><li>Complete process + shared-data payloads</li></ul></td><td><ul><li><span class="source-link"><code>PSDMalloc()</code></span> / <span class="source-link"><code>PSDFree()</code></span></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>User Process Heap</li></ul></td><td><ul><li>process_heap in each process .data</li></ul></td><td><ul><li>Process + linked-library allocations</li></ul></td><td><ul><li><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.13%" /><col style="width:35.34%" /><col style="width:29.36%" /><col style="width:19.17%" /></colgroup><thead><tr><th>Heap context</th><th>Descriptor storage</th><th>Managed payloads</th><th>Interface</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Kernel Heap</td><td>kernel_heap in kernel .data</td><td>PCBs, paths, descriptors, shared metadata</td><td><span class="source-link"><code>kmalloc()</code></span> / <span class="source-link"><code>kfree()</code></span></td></tr>
+<tr data-source-row="2"><td class="table-key">Process and Shared Data Heap</td><td>process_shared_data_heap in kernel .data</td><td>Complete process + shared-data payloads</td><td><span class="source-link"><code>PSDMalloc()</code></span> / <span class="source-link"><code>PSDFree()</code></span></td></tr>
+<tr data-source-row="3"><td class="table-key">User Process Heap</td><td>process_heap in each process .data</td><td>Process + linked-library allocations</td><td><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4316,23 +4313,23 @@ struct Heap {
 <!-- README_ASSET table-3189 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3189:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.83%" /><col style="width:21.97%" /><col style="width:17.41%" /><col style="width:35.78%" /></colgroup><thead><tr><th>Larger part</th><th>SRAM offset</th><th>Section or region</th><th>Contents</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>0..4</code></li></ul></td><td><ul><li><code>.ivt</code></li></ul></td><td><ul><li>Five ISR addresses</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>5..40765</code></li></ul></td><td><ul><li><code>.text</code></li></ul></td><td><ul><li>Kernel + interrupt code</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Kernel Image</li></ul></td><td><ul><li><code>40766..41496</code></li></ul></td><td><ul><li><code>.data</code></li></ul></td><td><ul><li>Globals, heap descriptors, list roots</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Kernel runtime reservation</li></ul></td><td><ul><li><code>41497..45592</code></li></ul></td><td><ul><li>Kernel Heap</li></ul></td><td><ul><li>4096 cells + in-region headers</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Kernel runtime reservation</li></ul></td><td><ul><li><code>45593..48308</code></li></ul></td><td><ul><li>Kernel Stack</li></ul></td><td><ul><li>Downward-growing kernel stack</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>After the Kernel region</li></ul></td><td><ul><li><code>48309..262143</code></li></ul></td><td><ul><li>Process and Shared Data Heap</li></ul></td><td><ul><li>Outer process + shared-data allocations</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.83%" /><col style="width:21.97%" /><col style="width:17.41%" /><col style="width:35.78%" /></colgroup><thead><tr><th>Larger part</th><th>SRAM offset</th><th>Section or region</th><th>Contents</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Kernel Image</td><td><code>0..4</code></td><td><code>.ivt</code></td><td>Five ISR addresses</td></tr>
+<tr data-source-row="2"><td class="table-key">Kernel Image</td><td><code>5..40765</code></td><td><code>.text</code></td><td>Kernel + interrupt code</td></tr>
+<tr data-source-row="3"><td class="table-key">Kernel Image</td><td><code>40766..41496</code></td><td><code>.data</code></td><td>Globals, heap descriptors, list roots</td></tr>
+<tr data-source-row="4"><td class="table-key">Kernel runtime reservation</td><td><code>41497..45592</code></td><td>Kernel Heap</td><td>4096 cells + in-region headers</td></tr>
+<tr data-source-row="5"><td class="table-key">Kernel runtime reservation</td><td><code>45593..48308</code></td><td>Kernel Stack</td><td>Downward-growing kernel stack</td></tr>
+<tr data-source-row="6"><td class="table-key">After the Kernel region</td><td><code>48309..262143</code></td><td>Process and Shared Data Heap</td><td>Outer process + shared-data allocations</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-3207 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3207:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.31%" /><col style="width:41.54%" /><col style="width:39.14%" /></colgroup><thead><tr><th>Process Payload part</th><th>Relative address</th><th>Runtime role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Optional <code>.ivt</code></li></ul></td><td><ul><li>Before <span class="source-link"><code>code_start</code></span> when present</li></ul></td><td><ul><li>Optional attributed data</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>.text</code></li></ul></td><td><ul><li><span class="source-link"><code>code_start</code></span></li></ul></td><td><ul><li>base_address → activation.cs</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>.data</code></li></ul></td><td><ul><li><span class="source-link"><code>data_start</code></span></li></ul></td><td><ul><li>base_address → activation.ds; process_heap</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>User Process Heap</li></ul></td><td><ul><li><span class="source-link"><code>heap_start</code></span> through <code>heap_start + heap_size - 1</code></li></ul></td><td><ul><li>Inner headers + allocations; stack boundary</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>User Process Stack</li></ul></td><td><ul><li>First cell beyond the heap through <span class="source-link"><code>effective_stack_start</code></span></li></ul></td><td><ul><li>Arguments, environment, PC, call frames</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.31%" /><col style="width:41.54%" /><col style="width:39.14%" /></colgroup><thead><tr><th>Process Payload part</th><th>Relative address</th><th>Runtime role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Optional <code>.ivt</code></td><td>Before <span class="source-link"><code>code_start</code></span> when present</td><td>Optional attributed data</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>.text</code></td><td><span class="source-link"><code>code_start</code></span></td><td>base_address → activation.cs</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>.data</code></td><td><span class="source-link"><code>data_start</code></span></td><td>base_address → activation.ds; process_heap</td></tr>
+<tr data-source-row="4"><td class="table-key">User Process Heap</td><td><span class="source-link"><code>heap_start</code></span> through <code>heap_start + heap_size - 1</code></td><td>Inner headers + allocations; stack boundary</td></tr>
+<tr data-source-row="5"><td class="table-key">User Process Stack</td><td>First cell beyond the heap through <span class="source-link"><code>effective_stack_start</code></span></td><td>Arguments, environment, PC, call frames</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4426,11 +4423,11 @@ struct Heap {
 <!-- README_ASSET table-3332 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3332:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.94%" /><col style="width:14.79%" /><col style="width:17.79%" /><col style="width:33.48%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>malloc()</code></li></ul></td><td><ul><li>Pointer / NULL / heap-full</li></ul></td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>copy_environment_variable()</code></li><li><code>initialize_environment()</code></li><li><code>setenv()</code></li><li><code>clone_environment()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>realloc()</code></li></ul></td><td><ul><li>Pointer / NULL / heap-full</li></ul></td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>store_environment_variable()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>free()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>closedir()</code></li><li><code>store_environment_variable()</code></li><li><code>unsetenv()</code></li><li><code>clearenv()</code></li><li><code>destroy_environment()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>init_process_heap()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>start_process()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>require_process_heap_allocation()</code></li></ul></td><td><ul><li>Pointer or termination</li></ul></td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>malloc()</code></li><li><code>realloc()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.94%" /><col style="width:14.79%" /><col style="width:17.79%" /><col style="width:33.48%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>malloc()</code></td><td>Pointer / NULL / heap-full</td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>copy_environment_variable()</code></li><li><code>initialize_environment()</code></li><li><code>setenv()</code></li><li><code>clone_environment()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>realloc()</code></td><td>Pointer / NULL / heap-full</td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>store_environment_variable()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>free()</code></td><td>No value</td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li><code>opendir()</code></li><li><code>closedir()</code></li><li><code>store_environment_variable()</code></li><li><code>unsetenv()</code></li><li><code>clearenv()</code></li><li><code>destroy_environment()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>init_process_heap()</code></td><td>No value</td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>start_process()</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>require_process_heap_allocation()</code></td><td>Pointer or termination</td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>malloc()</code></li><li><code>realloc()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4485,10 +4482,10 @@ flowchart LR
 <!-- README_ASSET table-3368 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3368:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.56%" /><col style="width:16.95%" /><col style="width:32.17%" /><col style="width:24.32%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>heap_init_region()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Initialize one free header</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>heap_alloc_from()</code></li></ul></td><td><ul><li>Pointer or NULL</li></ul></td><td><ul><li>First fit; split; mark allocated</li></ul></td><td><ul><li><code>malloc()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>heap_realloc_from()</code></li></ul></td><td><ul><li>Pointer or NULL; old block on failure</li></ul></td><td><ul><li>Shrink, grow, or allocate/copy/free</li></ul></td><td><ul><li><code>realloc()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>heap_free_from()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Mark free; coalesce neighbors</li></ul></td><td><ul><li><code>free()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.56%" /><col style="width:16.95%" /><col style="width:32.17%" /><col style="width:24.32%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>heap_init_region()</code></td><td>No value</td><td>Initialize one free header</td><td><code>init_process_heap()</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>heap_alloc_from()</code></td><td>Pointer or NULL</td><td>First fit; split; mark allocated</td><td><code>malloc()</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>heap_realloc_from()</code></td><td>Pointer or NULL; old block on failure</td><td>Shrink, grow, or allocate/copy/free</td><td><code>realloc()</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>heap_free_from()</code></td><td>No value</td><td>Mark free; coalesce neighbors</td><td><code>free()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4775,24 +4772,24 @@ struct ProcessControlBlock {
 <!-- README_ASSET table-3526 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-3526:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-3526:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>pid</code></span></li></ul></td><td><ul><li>Stable process ID</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>state</code></span></li></ul></td><td><ul><li>NEW / READY / RUNNING</li><li>BLOCKED / STOPPED / ZOMBIE</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></li></ul></td><td><ul><li>Absolute Process Payload base + size</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></li></ul></td><td><ul><li>Relative userspace heap bounds</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>binary_path</code></span></li></ul></td><td><ul><li>Owned executable path; later argv[0]</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Owned absolute path; inherited or /</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>activation</code></span></li></ul></td><td><ul><li>Embedded saved CPU context</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>file_descriptors</code></span></li></ul></td><td><ul><li>Owned descriptor table</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>waiting_status_ptr</code></span></li></ul></td><td><ul><li>Pointer into suspended waitpid frame</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>waiters</code></span></li></ul></td><td><ul><li>Embedded FIFO of waiting parents</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></li></ul></td><td><ul><li>Owning queue + intrusive successor</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>next</code></span></li></ul></td><td><ul><li>Global process-list successor</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>shared_memory_attachments</code></span></li></ul></td><td><ul><li>Head of process mapping records</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Parent identity + parent-death signal</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>exit_status</code></span></li></ul></td><td><ul><li>Retained zombie termination status</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></li></ul></td><td><ul><li>Stop/prior-state/deferred-termination bookkeeping</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Retained buffer + requested count</li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><ul><li><span class="source-link"><code>pending_load</code></span></li></ul></td><td><ul><li>Metadata + progress of pending load</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-3526:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>pid</code></span></td><td><ul><li>Stable process ID</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>state</code></span></td><td><ul><li>NEW / READY / RUNNING</li><li>BLOCKED / STOPPED / ZOMBIE</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></td><td><ul><li>Absolute Process Payload base + size</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></td><td><ul><li>Relative userspace heap bounds</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>binary_path</code></span></td><td><ul><li>Owned executable path; later argv[0]</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>working_directory</code></span></td><td><ul><li>Owned absolute path; inherited or /</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>activation</code></span></td><td><ul><li>Embedded saved CPU context</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>file_descriptors</code></span></td><td><ul><li>Owned descriptor table</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>waiting_status_ptr</code></span></td><td><ul><li>Pointer into suspended waitpid frame</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:47.69%" /><col style="width:52.31%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><span class="source-link"><code>waiters</code></span></td><td><ul><li>Embedded FIFO of waiting parents</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></td><td><ul><li>Owning queue + intrusive successor</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><span class="source-link"><code>next</code></span></td><td><ul><li>Global process-list successor</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><span class="source-link"><code>shared_memory_attachments</code></span></td><td><ul><li>Head of process mapping records</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></td><td><ul><li>Parent identity + parent-death signal</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><span class="source-link"><code>exit_status</code></span></td><td><ul><li>Retained zombie termination status</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></td><td><ul><li>Stop/prior-state/deferred-termination bookkeeping</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td><td><ul><li>Retained buffer + requested count</li></ul></td></tr>
+<tr data-source-row="18"><td class="table-key"><span class="source-link"><code>pending_load</code></span></td><td><ul><li>Metadata + progress of pending load</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4815,12 +4812,12 @@ struct ProcessControlBlock {
 <!-- README_ASSET table-3561 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3561:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.21%" /><col style="width:19.21%" /><col style="width:30.66%" /><col style="width:30.91%" /></colgroup><thead><tr><th>State</th><th>Numeric value</th><th>Meaning</th><th>Typical transition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>NEW</code></span></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>Loaded; startup not prepared</li></ul></td><td><ul><li>Load completion</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>READY</code></span></li></ul></td><td><ul><li>1</li></ul></td><td><ul><li>Eligible for scheduling</li></ul></td><td><ul><li>Run, wakeup, SIGCONT</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>RUNNING</code></span></li></ul></td><td><ul><li>2</li></ul></td><td><ul><li>Activation loaded into CPU</li></ul></td><td><ul><li>Dispatch</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>BLOCKED</code></span></li></ul></td><td><ul><li>3</li></ul></td><td><ul><li>Linked into wait queue</li></ul></td><td><ul><li>Read, DMA, waitpid, sleep</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>STOPPED</code></span></li></ul></td><td><ul><li>4</li></ul></td><td><ul><li>Suspended by signal</li></ul></td><td><ul><li>SIGSTOP/TSTP/TTIN</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ZOMBIE</code></span></li></ul></td><td><ul><li>5</li></ul></td><td><ul><li>Status retained for parent</li></ul></td><td><ul><li>Termination</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.21%" /><col style="width:19.21%" /><col style="width:30.66%" /><col style="width:30.91%" /></colgroup><thead><tr><th>State</th><th>Numeric value</th><th>Meaning</th><th>Typical transition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>NEW</code></span></td><td>0</td><td>Loaded; startup not prepared</td><td>Load completion</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>READY</code></span></td><td>1</td><td>Eligible for scheduling</td><td>Run, wakeup, SIGCONT</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>RUNNING</code></span></td><td>2</td><td>Activation loaded into CPU</td><td>Dispatch</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>BLOCKED</code></span></td><td>3</td><td>Linked into wait queue</td><td>Read, DMA, waitpid, sleep</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>STOPPED</code></span></td><td>4</td><td>Suspended by signal</td><td>SIGSTOP/TSTP/TTIN</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>ZOMBIE</code></span></td><td>5</td><td>Status retained for parent</td><td>Termination</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4910,8 +4907,8 @@ stateDiagram-v2
 <!-- README_ASSET table-3648 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3648:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.86%" /><col style="width:27.65%" /><col style="width:41.50%" /></colgroup><thead><tr><th>List</th><th>Insertion policy</th><th>Pointers and linking cost</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>PCB list</li></ul></td><td><ul><li>Append at tail</li></ul></td><td><ul><li>Head for traversal; tail → O(1)</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry</code></span> registry</li></ul></td><td><ul><li>Prepend at head</li></ul></td><td><ul><li>Head insertion → O(1)</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.86%" /><col style="width:27.65%" /><col style="width:41.50%" /></colgroup><thead><tr><th>List</th><th>Insertion policy</th><th>Pointers and linking cost</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">PCB list</td><td>Append at tail</td><td>Head for traversal; tail → O(1)</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry</code></span> registry</td><td>Prepend at head</td><td>Head insertion → O(1)</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4980,10 +4977,10 @@ stateDiagram-v2
 <!-- README_ASSET table-3716 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3716:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.70%" /><col style="width:29.15%" /><col style="width:38.14%" /></colgroup><thead><tr><th>Name</th><th>Meaning</th><th>Calculation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>startup_cell_count</code></li></ul></td><td><ul><li>All startup values + strings</li></ul></td><td><ul><li>Sum shown below</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>entry_pc_address</code></li></ul></td><td><ul><li>Saved initial entry PC cell</li></ul></td><td><ul><li><code>base_address + size - startup_cell_count</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>strings_start_address</code></li></ul></td><td><ul><li>First copied character</li></ul></td><td><ul><li><code>entry_pc_address + argc + envc + 4</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>highest_stack_address</code></li></ul></td><td><ul><li>Highest reserved stack cell</li></ul></td><td><ul><li><code>base_address + size - 1</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.70%" /><col style="width:29.15%" /><col style="width:38.14%" /></colgroup><thead><tr><th>Name</th><th>Meaning</th><th>Calculation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>startup_cell_count</code></td><td>All startup values + strings</td><td>Sum shown below</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>entry_pc_address</code></td><td>Saved initial entry PC cell</td><td><code>base_address + size - startup_cell_count</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>strings_start_address</code></td><td>First copied character</td><td><code>entry_pc_address + argc + envc + 4</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>highest_stack_address</code></td><td>Highest reserved stack cell</td><td><code>base_address + size - 1</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5009,20 +5006,20 @@ stateDiagram-v2
 <!-- README_ASSET table-3726 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3726:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.30%" /><col style="width:50.70%" /></colgroup><thead><tr><th>Cell address</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><strong>↑ Decreasing addresses</strong></li></ul></td><td><ul><li><strong>Lower addresses · stack grows ↑</strong></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>entry_pc_address</code></li></ul></td><td><ul><li>Entry PC = <span class="source-link"><code>activation.cs</code></span> minus 1</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>entry_pc_address + 1</code></li></ul></td><td><ul><li><span class="source-link"><code>argc</code></span></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>entry_pc_address + 2</code></li></ul></td><td><ul><li><span class="source-link"><code>argv[0]</code></span></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li><code>...</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>entry_pc_address + argc + 2</code></li></ul></td><td><ul><li><span class="source-link"><code>argv[argc] = NULL</code></span></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>entry_pc_address + argc + 3</code></li></ul></td><td><ul><li><span class="source-link"><code>envp[0]</code></span></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li><code>...</code></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><code>entry_pc_address + argc + envc + 3</code></li></ul></td><td><ul><li><span class="source-link"><code>envp[envc] = NULL</code></span></li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><code>strings_start_address</code></li></ul></td><td><ul><li>First character of the copied <span class="source-link"><code>binary_path</code></span></li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><code>strings_start_address + 1</code></li></ul></td><td><ul><li>Path character / \0</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><code>...</code></li></ul></td><td><ul><li>Remaining path, argument, and environment characters and <code>\0</code> terminators</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><code>highest_stack_address</code></li></ul></td><td><ul><li>Final \0</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><strong>↓ Increasing addresses</strong></li></ul></td><td><ul><li><strong>Higher addresses</strong></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.30%" /><col style="width:50.70%" /></colgroup><thead><tr><th>Cell address</th><th>Stored value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><strong>↑ Decreasing addresses</strong></td><td><strong>Lower addresses · stack grows ↑</strong></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>entry_pc_address</code></td><td>Entry PC = <span class="source-link"><code>activation.cs</code></span> minus 1</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>entry_pc_address + 1</code></td><td><span class="source-link"><code>argc</code></span></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>entry_pc_address + 2</code></td><td><span class="source-link"><code>argv[0]</code></span></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>...</code></td><td><code>...</code></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>entry_pc_address + argc + 2</code></td><td><span class="source-link"><code>argv[argc] = NULL</code></span></td></tr>
+<tr data-source-row="7"><td class="table-key"><code>entry_pc_address + argc + 3</code></td><td><span class="source-link"><code>envp[0]</code></span></td></tr>
+<tr data-source-row="8"><td class="table-key"><code>...</code></td><td><code>...</code></td></tr>
+<tr data-source-row="9"><td class="table-key"><code>entry_pc_address + argc + envc + 3</code></td><td><span class="source-link"><code>envp[envc] = NULL</code></span></td></tr>
+<tr data-source-row="10"><td class="table-key"><code>strings_start_address</code></td><td>First character of the copied <span class="source-link"><code>binary_path</code></span></td></tr>
+<tr data-source-row="11"><td class="table-key"><code>strings_start_address + 1</code></td><td>Path character / \0</td></tr>
+<tr data-source-row="12"><td class="table-key"><code>...</code></td><td>Remaining path, argument, and environment characters and <code>\0</code> terminators</td></tr>
+<tr data-source-row="13"><td class="table-key"><code>highest_stack_address</code></td><td>Final \0</td></tr>
+<tr data-source-row="14"><td class="table-key"><strong>↓ Increasing addresses</strong></td><td><strong>Higher addresses</strong></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5213,15 +5210,15 @@ int main(void) {
 <!-- README_ASSET table-3888 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3888:1,2,3,4,5,6,7,8,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.41%" /><col style="width:51.59%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.base_address</code></span></li></ul></td><td><ul><li>Absolute reserved payload base</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.process_size</code></span></li></ul></td><td><ul><li>Image + heap + stack cells</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.code_start</code></span>, <span class="source-link"><code>ProcessLoad.data_start</code></span></li></ul></td><td><ul><li>Linked code- and data-segment offsets from the binary header</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.heap_start</code></span>, <span class="source-link"><code>ProcessLoad.heap_size</code></span></li></ul></td><td><ul><li>Resolved userspace heap offset and cell count</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.payload_word_count</code></span></li></ul></td><td><ul><li>Encoded program words after the five-word header</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.loaded_word_count</code></span></li></ul></td><td><ul><li>Words copied by the polling transfer so far</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.loading_bar_update</code></span></li></ul></td><td><ul><li>Next word count at which progress output is redrawn</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.uses_dma</code></span></li></ul></td><td><ul><li>DMA transfer versus polling chunks</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad.path</code></span></li></ul></td><td><ul><li>Owned binary path; range requests + PCB</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48.41%" /><col style="width:51.59%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>ProcessLoad.base_address</code></span></td><td>Absolute reserved payload base</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>ProcessLoad.process_size</code></span></td><td>Image + heap + stack cells</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>ProcessLoad.code_start</code></span>, <span class="source-link"><code>ProcessLoad.data_start</code></span></td><td>Linked code- and data-segment offsets from the binary header</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>ProcessLoad.heap_start</code></span>, <span class="source-link"><code>ProcessLoad.heap_size</code></span></td><td>Resolved userspace heap offset and cell count</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ProcessLoad.payload_word_count</code></span></td><td>Encoded program words after the five-word header</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>ProcessLoad.loaded_word_count</code></span></td><td>Words copied by the polling transfer so far</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>ProcessLoad.loading_bar_update</code></span></td><td>Next word count at which progress output is redrawn</td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>ProcessLoad.uses_dma</code></span></td><td>DMA transfer versus polling chunks</td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>ProcessLoad.path</code></span></td><td>Owned binary path; range requests + PCB</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5244,7 +5241,7 @@ int main(void) {
 <!-- README_ASSET table-3914 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3914:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.01%" /><col style="width:21.53%" /><col style="width:33.92%" /><col style="width:15.55%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>load_process_chunk()</code></li></ul></td><td><ul><li>PID success; 0 failure; −1 pending</li></ul></td><td><ul><li>Incremental load; preserve progress</li><li>Create NEW PCB on completion</li></ul></td><td><ul><li><code>load()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.01%" /><col style="width:21.53%" /><col style="width:33.92%" /><col style="width:15.55%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>load_process_chunk()</code></td><td>PID success; 0 failure; −1 pending</td><td><ul><li>Incremental load; preserve progress</li><li>Create NEW PCB on completion</li></ul></td><td><code>load()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5313,11 +5310,11 @@ int main(void) {
 <!-- README_ASSET table-3973 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3973:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.73%" /><col style="width:30.25%" /><col style="width:38.02%" /></colgroup><thead><tr><th>Child field or resource</th><th>Source and time</th><th>Relationship to parent afterward</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>parent_pid</code></span></li></ul></td><td><ul><li>Loading parent; during load</li></ul></td><td><ul><li>Parent identity; no shared PCB pointer</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Owned path copied during load</li></ul></td><td><ul><li>Independent owned path</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Signal setting copied during load</li></ul></td><td><ul><li>Independent signal setting</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>file_descriptors</code></span></li></ul></td><td><ul><li>Run caller; during run</li></ul></td><td><ul><li>Independent entries, paths, offsets</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Initial environment</li></ul></td><td><ul><li>Explicit env or run caller</li></ul></td><td><ul><li>Copied to child stack; then heap</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.73%" /><col style="width:30.25%" /><col style="width:38.02%" /></colgroup><thead><tr><th>Child field or resource</th><th>Source and time</th><th>Relationship to parent afterward</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>parent_pid</code></span></td><td>Loading parent; during load</td><td>Parent identity; no shared PCB pointer</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>working_directory</code></span></td><td>Owned path copied during load</td><td>Independent owned path</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>parent_death_signal</code></span></td><td>Signal setting copied during load</td><td>Independent signal setting</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>file_descriptors</code></span></td><td>Run caller; during run</td><td>Independent entries, paths, offsets</td></tr>
+<tr data-source-row="5"><td class="table-key">Initial environment</td><td>Explicit env or run caller</td><td>Copied to child stack; then heap</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5510,9 +5507,9 @@ flowchart TB
 <!-- README_ASSET table-4164 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4164:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.20%" /><col style="width:27.30%" /><col style="width:38.50%" /></colgroup><thead><tr><th>Lifecycle order</th><th>Status handoff and child state</th><th>Who deletes the child PCB, and when</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Parent calls <span class="source-link"><code>waitpid()</code></span> while child is alive</li></ul></td><td><ul><li>Parent blocks; child later exits</li></ul></td><td><ul><li>Exit writes status; wakes; removes child</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Child terminates before parent calls <span class="source-link"><code>waitpid()</code></span></li></ul></td><td><ul><li>Child zombie; parent later waits</li></ul></td><td><ul><li>waitpid collects + removes child</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>No live parent remains</li></ul></td><td><ul><li>No future parent collection</li></ul></td><td><ul><li>Orphan exit or parent cleanup removes child</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.20%" /><col style="width:27.30%" /><col style="width:38.50%" /></colgroup><thead><tr><th>Lifecycle order</th><th>Status handoff and child state</th><th>Who deletes the child PCB, and when</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Parent calls <span class="source-link"><code>waitpid()</code></span> while child is alive</td><td>Parent blocks; child later exits</td><td>Exit writes status; wakes; removes child</td></tr>
+<tr data-source-row="2"><td class="table-key">Child terminates before parent calls <span class="source-link"><code>waitpid()</code></span></td><td>Child zombie; parent later waits</td><td>waitpid collects + removes child</td></tr>
+<tr data-source-row="3"><td class="table-key">No live parent remains</td><td>No future parent collection</td><td>Orphan exit or parent cleanup removes child</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5535,7 +5532,7 @@ flowchart TB
 <!-- README_ASSET table-4184 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4184:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.09%" /><col style="width:12.29%" /><col style="width:34.57%" /><col style="width:13.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>mark_process_ready_with_arguments()</code></li></ul></td><td><ul><li>true / false</li></ul></td><td><ul><li>Build arguments/environment stack</li><li>Inherit descriptors; NEW → READY</li></ul></td><td><ul><li><code>run()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.09%" /><col style="width:12.29%" /><col style="width:34.57%" /><col style="width:13.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>mark_process_ready_with_arguments()</code></td><td>true / false</td><td><ul><li>Build arguments/environment stack</li><li>Inherit descriptors; NEW → READY</li></ul></td><td><code>run()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5558,12 +5555,12 @@ flowchart TB
 <!-- README_ASSET table-4204 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4204:1,2,3,4,5,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.77%" /><col style="width:23.01%" /><col style="width:29.78%" /><col style="width:22.44%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>list_processes()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Print all PIDs + binary paths</li></ul></td><td><ul><li><code>list_processes()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>unload_process_by_pid()</code></li></ul></td><td><ul><li>true / false</li></ul></td><td><ul><li>Remove noncurrent process by PID</li></ul></td><td><ul><li><code>unload()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>exit_process()</code></li></ul></td><td><ul><li>No normal return</li></ul></td><td><ul><li>Record exit; notify parent; dispatch</li></ul></td><td><ul><li><code>exit()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>process_heap_start()</code></li></ul></td><td><ul><li>Absolute heap address</li></ul></td><td><ul><li>Current process heap base</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>process_heap_size()</code></li></ul></td><td><ul><li>Heap cell count</li></ul></td><td><ul><li>Current process heap capacity</li></ul></td><td><ul><li><code>init_process_heap()</code></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><code>current_process()</code></li></ul></td><td><ul><li>PCB pointer or NULL</li></ul></td><td><ul><li>Current PCB; GETPID reads its pid</li></ul></td><td><ul><li><code>getpid()</code> → <code>GETPID</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.77%" /><col style="width:23.01%" /><col style="width:29.78%" /><col style="width:22.44%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>list_processes()</code></td><td>No value</td><td>Print all PIDs + binary paths</td><td><code>list_processes()</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>unload_process_by_pid()</code></td><td>true / false</td><td>Remove noncurrent process by PID</td><td><code>unload()</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>exit_process()</code></td><td>No normal return</td><td>Record exit; notify parent; dispatch</td><td><code>exit()</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>process_heap_start()</code></td><td>Absolute heap address</td><td>Current process heap base</td><td><code>init_process_heap()</code></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>process_heap_size()</code></td><td>Heap cell count</td><td>Current process heap capacity</td><td><code>init_process_heap()</code></td></tr>
+<tr data-source-row="9"><td class="table-key"><code>current_process()</code></td><td>PCB pointer or NULL</td><td>Current PCB; GETPID reads its pid</td><td><code>getpid()</code> → <code>GETPID</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5638,20 +5635,20 @@ struct SharedMemoryAttachment {
 <!-- README_ASSET table-4265 -->
 <ReadmeVisual kind="table" :width="948" data-table-key="table-4265:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.19%" /><col style="width:50.81%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.name</code></span></li></ul></td><td><ul><li>Owned lookup name</li><li>Unlink → free + NULL</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.id</code></span></li></ul></td><td><ul><li>Numeric open/map handle</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.address</code></span></li></ul></td><td><ul><li>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></li></ul></td><td><ul><li>Attachment count, not distinct PID count</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></li></ul></td><td><ul><li>Defers destruction until the last attachment disappears</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry.next</code></span></li></ul></td><td><ul><li>Link to the next entry in the kernel's linked list</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.19%" /><col style="width:50.81%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.name</code></span></td><td><ul><li>Owned lookup name</li><li>Unlink → free + NULL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.id</code></span></td><td><ul><li>Numeric open/map handle</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.address</code></span></td><td><ul><li>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></td><td><ul><li>Attachment count, not distinct PID count</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></td><td><ul><li>Defers destruction until the last attachment disappears</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.next</code></span></td><td><ul><li>Link to the next entry in the kernel's linked list</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-4277 -->
 <ReadmeVisual kind="table" :width="632" data-table-key="table-4277:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.10%" /><col style="width:50.90%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></li></ul></td><td><ul><li>Non-owning entry pointer; contributes one reference</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryAttachment.next</code></span></li></ul></td><td><ul><li>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.10%" /><col style="width:50.90%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></td><td>Non-owning entry pointer; contributes one reference</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.next</code></span></td><td>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5871,9 +5868,9 @@ int main(int argc, char **argv) {
 <!-- README_ASSET table-4432 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4432:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.02%" /><col style="width:16.51%" /><col style="width:33.16%" /><col style="width:20.31%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open_shared_memory()</code></li></ul></td><td><ul><li>ID or −1</li></ul></td><td><ul><li>Find/create named shared entry</li></ul></td><td><ul><li><code>shm_open()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>map_shared_memory()</code></li></ul></td><td><ul><li>Address or NULL</li></ul></td><td><ul><li>Attach process; return shared address</li></ul></td><td><ul><li><code>mmap()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>unlink_shared_memory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Remove name; defer final release</li></ul></td><td><ul><li><code>shm_unlink()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.02%" /><col style="width:16.51%" /><col style="width:33.16%" /><col style="width:20.31%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>open_shared_memory()</code></td><td>ID or −1</td><td>Find/create named shared entry</td><td><code>shm_open()</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>map_shared_memory()</code></td><td>Address or NULL</td><td>Attach process; return shared address</td><td><code>mmap()</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>unlink_shared_memory()</code></td><td>0 / −1</td><td>Remove name; defer final release</td><td><code>shm_unlink()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6052,11 +6049,11 @@ struct ActivationRecord {
 <!-- README_ASSET table-4586 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4586:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:73.86%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></li></ul></td><td><ul><li>General argument/result registers at the suspension point</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>sp</code></span></li></ul></td><td><ul><li>Below saved PC; PC at sp + 1</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>baf</code></span></li></ul></td><td><ul><li>Base address of the interrupted PicoC function frame</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>cs</code></span></li></ul></td><td><ul><li>Absolute code-segment base used for instruction addresses</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ds</code></span></li></ul></td><td><ul><li>Absolute data-segment base used for globals/static data</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:73.86%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>General argument/result registers at the suspension point</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>sp</code></span></td><td>Below saved PC; PC at sp + 1</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Base address of the interrupted PicoC function frame</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base used for instruction addresses</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base used for globals/static data</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6278,7 +6275,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 <!-- README_ASSET table-4765 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4765:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.13%" /><col style="width:10.63%" /><col style="width:15.18%" /><col style="width:43.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>dispatcher_switch_from_context()</code></li></ul></td><td><ul><li>RTI; C return only for empty list</li></ul></td><td><ul><li>Save activation; select; restore process</li></ul></td><td><ul><li><code>yield()</code></li><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>read()</code></li><li><code>load()</code></li><li><code>timer_interrupt_after_reschedule_request()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.13%" /><col style="width:10.63%" /><col style="width:15.18%" /><col style="width:43.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>dispatcher_switch_from_context()</code></td><td>RTI; C return only for empty list</td><td>Save activation; select; restore process</td><td><ul><li><code>yield()</code></li><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>read()</code></li><li><code>load()</code></li><li><code>timer_interrupt_after_reschedule_request()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6334,11 +6331,11 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 <!-- README_ASSET table-4802 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4802:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.61%" /><col style="width:37.75%" /><col style="width:28.63%" /></colgroup><thead><tr><th>Blocking event</th><th>Wait queue</th><th>Wakeup event</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>sleep(queue)</li></ul></td><td><ul><li>Caller-supplied <span class="source-link"><code>wait_queue</code></span></li></ul></td><td><ul><li>wakeup(queue)</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Parent waitpid(child)</li></ul></td><td><ul><li>Child PCB waiters</li></ul></td><td><ul><li>Child exit or termination</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Contended mutex_lock</li></ul></td><td><ul><li>Mutex waiters</li></ul></td><td><ul><li>Mutex unlock</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Terminal read without input</li></ul></td><td><ul><li><span class="source-link"><code>Terminal.input_waiters</code></span></li></ul></td><td><ul><li>UART byte arrival</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>DMA-backed process load</li></ul></td><td><ul><li>Global <span class="source-link"><code>dma_waiters</code></span></li></ul></td><td><ul><li>DMA completion</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.61%" /><col style="width:37.75%" /><col style="width:28.63%" /></colgroup><thead><tr><th>Blocking event</th><th>Wait queue</th><th>Wakeup event</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">sleep(queue)</td><td>Caller-supplied <span class="source-link"><code>wait_queue</code></span></td><td>wakeup(queue)</td></tr>
+<tr data-source-row="2"><td class="table-key">Parent waitpid(child)</td><td>Child PCB waiters</td><td>Child exit or termination</td></tr>
+<tr data-source-row="3"><td class="table-key">Contended mutex_lock</td><td>Mutex waiters</td><td>Mutex unlock</td></tr>
+<tr data-source-row="4"><td class="table-key">Terminal read without input</td><td><span class="source-link"><code>Terminal.input_waiters</code></span></td><td>UART byte arrival</td></tr>
+<tr data-source-row="5"><td class="table-key">DMA-backed process load</td><td>Global <span class="source-link"><code>dma_waiters</code></span></td><td>DMA completion</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6384,23 +6381,23 @@ struct wait_queue {
 <!-- README_ASSET table-4830 -->
 <ReadmeVisual kind="table" :width="480" data-table-key="table-4830:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.15%" /><col style="width:59.85%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>head</code></span></li></ul></td><td><ul><li>First blocked PCB</li><li>Empty → NULL</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>tail</code></span></li></ul></td><td><ul><li>Last blocked PCB</li><li>O(1) append; empty → NULL</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40.15%" /><col style="width:59.85%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>head</code></span></td><td><ul><li>First blocked PCB</li><li>Empty → NULL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>tail</code></span></td><td><ul><li>Last blocked PCB</li><li>O(1) append; empty → NULL</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-4845 -->
 <ReadmeVisual kind="table" :width="1020" data-table-key="table-4845:1,2,3,4,5,6,7,8,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:47.75%" /><col style="width:52.25%" /></colgroup><thead><tr><th>Field / storage</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span>, in <span class="source-link"><code>request</code></span> on the parent's userspace stack</li></ul></td><td><ul><li>Exact requested child PID</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span>, in the same stack-local request</li></ul></td><td><ul><li>Pointer to stack-local status result</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>wait_queue.head + wait_queue.tail</li></ul></td><td><ul><li>FIFO endpoints; O(1) append; NULL when empty</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiters</code></span>, embedded in each kernel-heap PCB</li></ul></td><td><ul><li>Other processes waiting for this child</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_status_ptr</code></span>, pointer stored in the waiting parent's kernel-heap PCB</li></ul></td><td><ul><li>Parent's suspended stack-local status</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_queue_ptr</code></span>, pointer stored in every kernel-heap PCB</li></ul></td><td><ul><li>Queue containing this PCB or NULL</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.wait_next</code></span>, embedded in every kernel-heap PCB</li></ul></td><td><ul><li>Intrusive successor; one active queue</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.state</code></span> and <span class="source-link"><code>ProcessControlBlock.stopped_from_state</code></span>, in the PCB</li></ul></td><td><ul><li>BLOCKED/runnable/STOPPED + completed wait</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>Child PCB: parent_pid</li><li>exit_status + stop_signal</li></ul></td><td><ul><li>Parent validation + retained child state</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:47.75%" /><col style="width:52.25%" /></colgroup><thead><tr><th>Field / storage</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.pid</code></span>, in <span class="source-link"><code>request</code></span> on the parent's userspace stack</li></ul></td><td>Exact requested child PID</td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>WaitPidRequest.status</code></span>, in the same stack-local request</li></ul></td><td>Pointer to stack-local status result</td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li>wait_queue.head + wait_queue.tail</li></ul></td><td>FIFO endpoints; O(1) append; NULL when empty</td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiters</code></span>, embedded in each kernel-heap PCB</li></ul></td><td>Other processes waiting for this child</td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_status_ptr</code></span>, pointer stored in the waiting parent's kernel-heap PCB</li></ul></td><td>Parent's suspended stack-local status</td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.waiting_queue_ptr</code></span>, pointer stored in every kernel-heap PCB</li></ul></td><td>Queue containing this PCB or NULL</td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.wait_next</code></span>, embedded in every kernel-heap PCB</li></ul></td><td>Intrusive successor; one active queue</td></tr>
+<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock.state</code></span> and <span class="source-link"><code>ProcessControlBlock.stopped_from_state</code></span>, in the PCB</li></ul></td><td>BLOCKED/runnable/STOPPED + completed wait</td></tr>
+<tr data-source-row="9"><td class="table-key"><ul><li>Child PCB: parent_pid</li><li>exit_status + stop_signal</li></ul></td><td>Parent validation + retained child state</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6516,19 +6513,19 @@ int waitpid(int pid) {
 <!-- README_ASSET table-4957 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4957:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.23%" /><col style="width:49.63%" /><col style="width:33.14%" /></colgroup><thead><tr><th>Public/library operation</th><th>Syscall and kernel call path</th><th>Completion path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>sleep(wq)</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></li></ul></td><td><ul><li>An event owner reaches <span class="source-link"><code>wakeup_wait_queue(wq)</code></span>, often through <span class="source-link"><code>wakeup(wq)</code></span>.</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>wakeup(wq)</code></span></li></ul></td><td><ul><li><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></li></ul></td><td><ul><li>Clear links; READY or completed beneath STOPPED</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid(pid)</code></span></li></ul></td><td><ul><li>WAITPID → validate child → sleep_on_wait_queue</li></ul></td><td><ul><li>Child exits/stops → status write</li><li>Same FIFO wakeup primitive</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.23%" /><col style="width:49.63%" /><col style="width:33.14%" /></colgroup><thead><tr><th>Public/library operation</th><th>Syscall and kernel call path</th><th>Completion path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>sleep(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></td><td><ul><li>An event owner reaches <span class="source-link"><code>wakeup_wait_queue(wq)</code></span>, often through <span class="source-link"><code>wakeup(wq)</code></span>.</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>wakeup(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></td><td><ul><li>Clear links; READY or completed beneath STOPPED</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>waitpid(pid)</code></span></td><td>WAITPID → validate child → sleep_on_wait_queue</td><td><ul><li>Child exits/stops → status write</li><li>Same FIFO wakeup primitive</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-4966 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4966:1,2,3,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.28%" /><col style="width:19.08%" /><col style="width:16.34%" /><col style="width:27.30%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>wait_for_process_by_pid()</code></li></ul></td><td><ul><li>Completion flag; userspace IN2 = 1</li></ul></td><td><ul><li>Validate child; collect or block</li></ul></td><td><ul><li><code>waitpid()</code></li><li><code>SYSCALL_WAITPID</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>sleep_on_wait_queue()</code></li></ul></td><td><ul><li>No value; later resumes via RTI</li></ul></td><td><ul><li>Enqueue caller; BLOCKED; dispatch</li></ul></td><td><ul><li><code>sleep()</code></li><li><code>SYSCALL_SLEEP</code></li><li><code>waitpid()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>wakeup_wait_queue()</code></li></ul></td><td><ul><li>true if woke; false if empty</li></ul></td><td><ul><li>Wake FIFO head</li></ul></td><td><ul><li><code>wakeup()</code></li><li><code>SYSCALL_WAKEUP</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>enqueue_current_process_on_wait_queue()</code></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>Link current PCB into FIFO</li></ul></td><td><ul><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>sleep_on_wait_queue()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.28%" /><col style="width:19.08%" /><col style="width:16.34%" /><col style="width:27.30%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>wait_for_process_by_pid()</code></td><td>Completion flag; userspace IN2 = 1</td><td>Validate child; collect or block</td><td><ul><li><code>waitpid()</code></li><li><code>SYSCALL_WAITPID</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>sleep_on_wait_queue()</code></td><td>No value; later resumes via RTI</td><td>Enqueue caller; BLOCKED; dispatch</td><td><ul><li><code>sleep()</code></li><li><code>SYSCALL_SLEEP</code></li><li><code>waitpid()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>wakeup_wait_queue()</code></td><td>true if woke; false if empty</td><td>Wake FIFO head</td><td><ul><li><code>wakeup()</code></li><li><code>SYSCALL_WAKEUP</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>enqueue_current_process_on_wait_queue()</code></td><td>No value</td><td>Link current PCB into FIFO</td><td><ul><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>sleep_on_wait_queue()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6551,24 +6548,24 @@ int waitpid(int pid) {
 <!-- README_ASSET table-4990 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4990:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:55.09%" /><col style="width:44.91%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>pending_termination_signal</code></span></li></ul></td><td><ul><li>Deferred SIGINT/SIGKILL</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>stop_signal</code></span></li></ul></td><td><ul><li>Current stop signal</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>stopped_from_state</code></span></li></ul></td><td><ul><li>State reconsidered on SIGCONT</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>parent_death_signal</code></span></li></ul></td><td><ul><li>Signal delivered when parent dies</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Retained terminal buffer + count</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:55.09%" /><col style="width:44.91%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>pending_termination_signal</code></span></td><td>Deferred SIGINT/SIGKILL</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>stop_signal</code></span></td><td>Current stop signal</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>stopped_from_state</code></span></td><td>State reconsidered on SIGCONT</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>parent_death_signal</code></span></td><td>Signal delivered when parent dies</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td><td>Retained terminal buffer + count</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5004 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5004:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.79%" /><col style="width:19.55%" /><col style="width:35.17%" /><col style="width:29.50%" /></colgroup><thead><tr><th>Number</th><th>Name</th><th>Kernel action</th><th>Reported status/state</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>Probe</li></ul></td><td><ul><li>Validates that a non-zombie PID exists</li></ul></td><td><ul><li>No change</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><span class="source-link"><code>SIGINT</code></span></li></ul></td><td><ul><li>Terminates the target</li></ul></td><td><ul><li>Exit status 130</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>9</li></ul></td><td><ul><li><span class="source-link"><code>SIGKILL</code></span></li></ul></td><td><ul><li>Terminates the target</li></ul></td><td><ul><li>Exit status 137</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>18</li></ul></td><td><ul><li><span class="source-link"><code>SIGCONT</code></span></li></ul></td><td><ul><li>Resumes a stopped target</li></ul></td><td><ul><li>READY / original BLOCKED wait</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>19</li></ul></td><td><ul><li><span class="source-link"><code>SIGSTOP</code></span></li></ul></td><td><ul><li>Stops the target</li></ul></td><td><ul><li>STOPPED</li><li>Status: 147</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>20</li></ul></td><td><ul><li><span class="source-link"><code>SIGTSTP</code></span></li></ul></td><td><ul><li>Stops the target</li></ul></td><td><ul><li>STOPPED</li><li>Status: 148</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>21</li></ul></td><td><ul><li><span class="source-link"><code>SIGTTIN</code></span></li></ul></td><td><ul><li>Stop background terminal reader</li></ul></td><td><ul><li>STOPPED</li><li>Status: 149</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.79%" /><col style="width:19.55%" /><col style="width:35.17%" /><col style="width:29.50%" /></colgroup><thead><tr><th>Number</th><th>Name</th><th>Kernel action</th><th>Reported status/state</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td>Probe</td><td>Validates that a non-zombie PID exists</td><td><ul><li>No change</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">2</td><td><span class="source-link"><code>SIGINT</code></span></td><td>Terminates the target</td><td><ul><li>Exit status 130</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">9</td><td><span class="source-link"><code>SIGKILL</code></span></td><td>Terminates the target</td><td><ul><li>Exit status 137</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key">18</td><td><span class="source-link"><code>SIGCONT</code></span></td><td>Resumes a stopped target</td><td><ul><li>READY / original BLOCKED wait</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key">19</td><td><span class="source-link"><code>SIGSTOP</code></span></td><td>Stops the target</td><td><ul><li>STOPPED</li><li>Status: 147</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key">20</td><td><span class="source-link"><code>SIGTSTP</code></span></td><td>Stops the target</td><td><ul><li>STOPPED</li><li>Status: 148</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key">21</td><td><span class="source-link"><code>SIGTTIN</code></span></td><td>Stop background terminal reader</td><td><ul><li>STOPPED</li><li>Status: 149</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6646,8 +6643,8 @@ int waitpid(int pid) {
 <!-- README_ASSET table-5072 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5072:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.71%" /><col style="width:16.76%" /><col style="width:28.01%" /><col style="width:17.52%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>send_signal_by_pid()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Validate PID; probe or deliver</li></ul></td><td><ul><li><code>kill()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>set_parent_death_signal()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Configure signal on parent death</li></ul></td><td><ul><li><code>prctl()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.71%" /><col style="width:16.76%" /><col style="width:28.01%" /><col style="width:17.52%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>send_signal_by_pid()</code></td><td>0 / −1</td><td>Validate PID; probe or deliver</td><td><code>kill()</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>set_parent_death_signal()</code></td><td>0 / −1</td><td>Configure signal on parent death</td><td><code>prctl()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6774,18 +6771,18 @@ flowchart TD
 <!-- README_ASSET table-5151 -->
 <ReadmeVisual kind="table" :width="540" data-table-key="table-5151:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.80%" /><col style="width:65.20%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>lock</code></span></li></ul></td><td><ul><li>Unlocked=false; TSL returns old, stores true</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>waiters</code></span></li></ul></td><td><ul><li>Embedded FIFO of waiting parents</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.80%" /><col style="width:65.20%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>lock</code></span></td><td>Unlocked=false; TSL returns old, stores true</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>waiters</code></span></td><td>Embedded FIFO of waiting parents</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5156 -->
 <ReadmeVisual kind="table" :width="960" data-table-key="table-5156:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.98%" /><col style="width:45.89%" /><col style="width:24.13%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>testset()</code></li></ul></td><td><ul><li>Atomic old value; store 1</li></ul></td><td><ul><li>TSL; no syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>mutex_init()</code></li></ul></td><td><ul><li>Clear lock + initialize wait queue</li></ul></td><td><ul><li>None</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>mutex_lock()</code></li></ul></td><td><ul><li>Acquire; sleep/retry on contention</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>mutex_unlock()</code></li></ul></td><td><ul><li>Clear lock; wake one contender</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.98%" /><col style="width:45.89%" /><col style="width:24.13%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>testset()</code></td><td>Atomic old value; store 1</td><td>TSL; no syscall</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>mutex_init()</code></td><td>Clear lock + initialize wait queue</td><td>None</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>mutex_lock()</code></td><td>Acquire; sleep/retry on contention</td><td><code>SLEEP</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>mutex_unlock()</code></td><td>Clear lock; wake one contender</td><td><code>WAKEUP</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6859,14 +6856,14 @@ struct FileDescriptorTable {
 <!-- README_ASSET table-5206 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5206:1,2,3,4,5,6,7,8">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:38.71%" /><col style="width:35.15%" /></colgroup><thead><tr><th>Index</th><th>Initial or conventional use</th><th>Availability to open()</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li>Standard input</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li>Standard output</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li>Standard error</li></ul></td><td><ul><li>Reused if closed</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li>General inherited slot</li></ul></td><td><ul><li>Available</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li>General inherited slot</li></ul></td><td><ul><li>Available</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>5</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>6</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>7</li></ul></td><td><ul><li>Shell scratch</li></ul></td><td><ul><li>open skips slot</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.14%" /><col style="width:38.71%" /><col style="width:35.15%" /></colgroup><thead><tr><th>Index</th><th>Initial or conventional use</th><th>Availability to open()</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td>Standard input</td><td>Reused if closed</td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td>Standard output</td><td>Reused if closed</td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td>Standard error</td><td>Reused if closed</td></tr>
+<tr data-source-row="4"><td class="table-key">3</td><td>General inherited slot</td><td>Available</td></tr>
+<tr data-source-row="5"><td class="table-key">4</td><td>General inherited slot</td><td>Available</td></tr>
+<tr data-source-row="6"><td class="table-key">5</td><td>Shell scratch</td><td>open skips slot</td></tr>
+<tr data-source-row="7"><td class="table-key">6</td><td>Shell scratch</td><td>open skips slot</td></tr>
+<tr data-source-row="8"><td class="table-key">7</td><td>Shell scratch</td><td>open skips slot</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6927,23 +6924,23 @@ flowchart LR
 <!-- README_ASSET table-5247 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5247:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.35%" /><col style="width:56.65%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.kind</code></span></li></ul></td><td><ul><li>FREE/STDIN/STDOUT/STDERR/FILE identity</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.flags</code></span></li></ul></td><td><ul><li>Access + create/truncate/append bits</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.offset</code></span></li></ul></td><td><ul><li>Independent logical byte position</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptor.path</code></span></li></ul></td><td><ul><li>Owned normalized path or NULL</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptorTable.entries</code></span></li></ul></td><td><ul><li>Owned array of eight descriptors</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.35%" /><col style="width:56.65%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>FileDescriptor.kind</code></span></td><td>FREE/STDIN/STDOUT/STDERR/FILE identity</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>FileDescriptor.flags</code></span></td><td>Access + create/truncate/append bits</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>FileDescriptor.offset</code></span></td><td>Independent logical byte position</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>FileDescriptor.path</code></span></td><td>Owned normalized path or NULL</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>FileDescriptorTable.entries</code></span></td><td>Owned array of eight descriptors</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5258 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5258:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.04%" /><col style="width:25.64%" /><col style="width:23.75%" /><col style="width:31.56%" /></colgroup><thead><tr><th>Descriptor case</th><th>kind</th><th>path</th><th>Read/write behavior</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Initial standard input</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDIN</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Ring input; may block</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Initial standard output</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDOUT</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>UART → stdout</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Initial standard error</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Select stderr; restore stdout</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Opened regular file</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li>Normalized absolute path</li></ul></td><td><ul><li>Flags + saved offset; host requests</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Explicitly opened terminal device</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Ring reads; UART stdout writes</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Explicitly opened null device</li></ul></td><td><ul><li><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></li></ul></td><td><ul><li><code>/device/null.dev</code></li></ul></td><td><ul><li>Read → 0; write → count</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.04%" /><col style="width:25.64%" /><col style="width:23.75%" /><col style="width:31.56%" /></colgroup><thead><tr><th>Descriptor case</th><th>kind</th><th>path</th><th>Read/write behavior</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Initial standard input</td><td><span class="source-link"><code>FILE_DESCRIPTOR_STDIN</code></span></td><td><code>/device/terminal.dev</code></td><td>Ring input; may block</td></tr>
+<tr data-source-row="2"><td class="table-key">Initial standard output</td><td><span class="source-link"><code>FILE_DESCRIPTOR_STDOUT</code></span></td><td><code>/device/terminal.dev</code></td><td>UART → stdout</td></tr>
+<tr data-source-row="3"><td class="table-key">Initial standard error</td><td><span class="source-link"><code>FILE_DESCRIPTOR_STDERR</code></span></td><td><code>/device/terminal.dev</code></td><td>Select stderr; restore stdout</td></tr>
+<tr data-source-row="4"><td class="table-key">Opened regular file</td><td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td><td>Normalized absolute path</td><td>Flags + saved offset; host requests</td></tr>
+<tr data-source-row="5"><td class="table-key">Explicitly opened terminal device</td><td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td><td><code>/device/terminal.dev</code></td><td>Ring reads; UART stdout writes</td></tr>
+<tr data-source-row="6"><td class="table-key">Explicitly opened null device</td><td><span class="source-link"><code>FILE_DESCRIPTOR_FILE</code></span></td><td><code>/device/null.dev</code></td><td>Read → 0; write → count</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6992,11 +6989,11 @@ struct Terminal {
 <!-- README_ASSET table-5296 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5296:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.16%" /><col style="width:50.84%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_buffer</code></span></li></ul></td><td><ul><li>Embedded receive ring</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_head</code></span></li></ul></td><td><ul><li>Next unread byte</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_tail</code></span></li></ul></td><td><ul><li>Next insertion cell</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_count</code></span></li></ul></td><td><ul><li>Occupied count; distinguishes full/empty</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>Terminal.input_waiters</code></span></li></ul></td><td><ul><li>Foreground readers awaiting input</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.16%" /><col style="width:50.84%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>Terminal.input_buffer</code></span></td><td>Embedded receive ring</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>Terminal.input_head</code></span></td><td>Next unread byte</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>Terminal.input_tail</code></span></td><td>Next insertion cell</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>Terminal.input_count</code></span></td><td>Occupied count; distinguishes full/empty</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>Terminal.input_waiters</code></span></td><td>Foreground readers awaiting input</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7167,19 +7164,19 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5430 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5430:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.80%" /><col style="width:34.20%" /><col style="width:20.19%" /><col style="width:21.81%" /></colgroup><thead><tr><th>Situation</th><th>Saved foreground_process_target value</th><th>Ordinary input</th><th>Ctrl+C / Ctrl+Z</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Before shell registration</li></ul></td><td><ul><li><code>0</code></li></ul></td><td><ul><li>Buffer; fallback completion target</li></ul></td><td><ul><li>Consume; no signal</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Shell prompt, including while background work runs</li></ul></td><td><ul><li>Negative shell process ID</li></ul></td><td><ul><li>Shell input</li></ul></td><td><ul><li>Consume; protect shell</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Foreground child / fg</li></ul></td><td><ul><li>Positive child process ID</li></ul></td><td><ul><li>Child input</li></ul></td><td><ul><li>SIGINT / SIGTSTP</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.80%" /><col style="width:34.20%" /><col style="width:20.19%" /><col style="width:21.81%" /></colgroup><thead><tr><th>Situation</th><th>Saved foreground_process_target value</th><th>Ordinary input</th><th>Ctrl+C / Ctrl+Z</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Before shell registration</td><td><code>0</code></td><td>Buffer; fallback completion target</td><td>Consume; no signal</td></tr>
+<tr data-source-row="2"><td class="table-key">Shell prompt, including while background work runs</td><td>Negative shell process ID</td><td>Shell input</td><td>Consume; protect shell</td></tr>
+<tr data-source-row="3"><td class="table-key">Foreground child / fg</td><td>Positive child process ID</td><td>Child input</td><td>SIGINT / SIGTSTP</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5441 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5441:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.65%" /><col style="width:41.11%" /><col style="width:36.24%" /></colgroup><thead><tr><th>Input byte</th><th>Detection and action</th><th>Buffered?</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>3 (<code>Ctrl+C</code>)</li></ul></td><td><ul><li>Foreground SIGINT</li></ul></td><td><ul><li>Never buffered</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>26 (<code>Ctrl+Z</code>)</li></ul></td><td><ul><li>Foreground SIGTSTP</li></ul></td><td><ul><li>Never buffered</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>4 (<code>Ctrl+D</code>)</li></ul></td><td><ul><li>Ordinary ring byte; user handles EOF</li></ul></td><td><ul><li>Stored; dropped only when full</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Any other byte</li></ul></td><td><ul><li>Enqueue; complete pending read</li></ul></td><td><ul><li>Stored unless full; waiter may consume</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.65%" /><col style="width:41.11%" /><col style="width:36.24%" /></colgroup><thead><tr><th>Input byte</th><th>Detection and action</th><th>Buffered?</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">3 (<code>Ctrl+C</code>)</td><td>Foreground SIGINT</td><td>Never buffered</td></tr>
+<tr data-source-row="2"><td class="table-key">26 (<code>Ctrl+Z</code>)</td><td>Foreground SIGTSTP</td><td>Never buffered</td></tr>
+<tr data-source-row="3"><td class="table-key">4 (<code>Ctrl+D</code>)</td><td>Ordinary ring byte; user handles EOF</td><td>Stored; dropped only when full</td></tr>
+<tr data-source-row="4"><td class="table-key">Any other byte</td><td>Enqueue; complete pending read</td><td>Stored unless full; waiter may consume</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7190,7 +7187,7 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5470 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5470:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.90%" /><col style="width:14.52%" /><col style="width:20.31%" /><col style="width:32.27%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>set_foreground_process()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Select shell or child input owner</li></ul></td><td><ul><li><code>set_foreground_process()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.90%" /><col style="width:14.52%" /><col style="width:20.31%" /><col style="width:32.27%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>set_foreground_process()</code></td><td>0 / −1</td><td>Select shell or child input owner</td><td><code>set_foreground_process()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7215,8 +7212,8 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5491 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5491:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.46%" /><col style="width:55.54%" /></colgroup><thead><tr><th>Device path</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>/device/terminal.dev</code></li></ul></td><td><ul><li>Global ring input; UART output; no seek</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>/device/null.dev</code></li></ul></td><td><ul><li>Immediate EOF; discard writes; no seek</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.46%" /><col style="width:55.54%" /></colgroup><thead><tr><th>Device path</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>/device/terminal.dev</code></td><td>Global ring input; UART output; no seek</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>/device/null.dev</code></td><td>Immediate EOF; discard writes; no seek</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7239,8 +7236,8 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5506 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5506:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.04%" /><col style="width:15.90%" /><col style="width:24.64%" /><col style="width:17.42%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>close_file_descriptor()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Release path; reset entry</li></ul></td><td><ul><li><code>close()</code></li><li><code>fclose()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>duplicate_file_descriptor()</code></li></ul></td><td><ul><li>Target FD / −1</li></ul></td><td><ul><li>Replace target with independent copy</li></ul></td><td><ul><li><code>dup2()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:42.04%" /><col style="width:15.90%" /><col style="width:24.64%" /><col style="width:17.42%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>close_file_descriptor()</code></td><td>0 / −1</td><td>Release path; reset entry</td><td><ul><li><code>close()</code></li><li><code>fclose()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>duplicate_file_descriptor()</code></td><td>Target FD / −1</td><td>Replace target with independent copy</td><td><ul><li><code>dup2()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7263,25 +7260,25 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5543 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5543:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.74%" /><col style="width:21.20%" /><col style="width:56.06%" /></colgroup><thead><tr><th>Flag</th><th>Value</th><th>Meaning in OpenRequest.flags</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>O_RDONLY</code></span></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>Permit reads</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>O_WRONLY</code></span></li></ul></td><td><ul><li>1</li></ul></td><td><ul><li>Permit writes</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>O_RDWR</code></span></li></ul></td><td><ul><li>2</li></ul></td><td><ul><li>Read + write; O_ACCMODE extracts access bits</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>O_CREAT</code></span></li></ul></td><td><ul><li>64</li></ul></td><td><ul><li>Allow a missing regular path to be created</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>512</li></ul></td><td><ul><li>With writable access, create/empty the regular host file during open</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>1024</li></ul></td><td><ul><li>Every write uses current file end</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.74%" /><col style="width:21.20%" /><col style="width:56.06%" /></colgroup><thead><tr><th>Flag</th><th>Value</th><th>Meaning in OpenRequest.flags</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>O_RDONLY</code></span></td><td>0</td><td>Permit reads</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>O_WRONLY</code></span></td><td>1</td><td>Permit writes</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>O_RDWR</code></span></td><td>2</td><td>Read + write; O_ACCMODE extracts access bits</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>O_CREAT</code></span></td><td>64</td><td>Allow a missing regular path to be created</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>O_TRUNC</code></span></td><td>512</td><td>With writable access, create/empty the regular host file during open</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>O_APPEND</code></span></td><td>1024</td><td>Every write uses current file end</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5565 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5565:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.06%" /><col style="width:18.39%" /><col style="width:16.85%" /><col style="width:24.08%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Operation or mode</th><th>Descriptor flags/state</th><th>Offset handling</th><th>PicoOS functions</th><th>Host requests</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Open existing without truncation</li></ul></td><td><ul><li>Any valid access mode, no <span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>file_exists()</code></span></li></ul></td><td><ul><li>file-size verifies existing file</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Create missing file</li></ul></td><td><ul><li><span class="source-link"><code>O_CREAT</code></span> with any valid access mode</li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span></li></ul></td><td><ul><li>Failed file-size → write → restore stdout</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Truncate/overwrite open</li></ul></td><td><ul><li>Writable mode plus <span class="source-link"><code>O_TRUNC</code></span>, usually with <span class="source-link"><code>O_CREAT</code></span></li></ul></td><td><ul><li>Initializes 0</li></ul></td><td><ul><li><span class="source-link"><code>open_file_descriptor()</code></span></li></ul></td><td><ul><li>write creates/truncates; restore stdout</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Read</li></ul></td><td><ul><li>Readable descriptor</li></ul></td><td><ul><li>Starts at saved offset, advances by returned bytes</li></ul></td><td><ul><li><span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>read_regular_file()</code></span></li></ul></td><td><ul><li>read-range; ≤1 KiB/syscall; 0 → EOF</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Ordinary overwrite/write</li></ul></td><td><ul><li>Writable regular descriptor without <span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>Uses saved offset, advances by requested count</li></ul></td><td><ul><li><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>write_uart_bytes()</code></span></li></ul></td><td><ul><li>write-at; optional literal-output; restore stdout</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Append write</li></ul></td><td><ul><li>Writable regular descriptor with <span class="source-link"><code>O_APPEND</code></span></li></ul></td><td><ul><li>Place at end; save resulting offset</li></ul></td><td><ul><li><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></li></ul></td><td><ul><li>file-size → write-at end → restore stdout</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Seek from end</li></ul></td><td><ul><li>Regular non-device descriptor</li></ul></td><td><ul><li>File size plus requested displacement becomes the new nonnegative offset</li></ul></td><td><ul><li><span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></li></ul></td><td><ul><li><code>file-size &lt;path&gt;</code>, no data transfer</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:16.06%" /><col style="width:18.39%" /><col style="width:16.85%" /><col style="width:24.08%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Operation or mode</th><th>Descriptor flags/state</th><th>Offset handling</th><th>PicoOS functions</th><th>Host requests</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Open existing without truncation</td><td>Any valid access mode, no <span class="source-link"><code>O_TRUNC</code></span></td><td>Initializes 0</td><td><span class="source-link"><code>open_file_descriptor()</code></span>, <span class="source-link"><code>file_exists()</code></span></td><td>file-size verifies existing file</td></tr>
+<tr data-source-row="2"><td class="table-key">Create missing file</td><td><span class="source-link"><code>O_CREAT</code></span> with any valid access mode</td><td>Initializes 0</td><td><span class="source-link"><code>open_file_descriptor()</code></span></td><td>Failed file-size → write → restore stdout</td></tr>
+<tr data-source-row="3"><td class="table-key">Truncate/overwrite open</td><td>Writable mode plus <span class="source-link"><code>O_TRUNC</code></span>, usually with <span class="source-link"><code>O_CREAT</code></span></td><td>Initializes 0</td><td><span class="source-link"><code>open_file_descriptor()</code></span></td><td>write creates/truncates; restore stdout</td></tr>
+<tr data-source-row="4"><td class="table-key">Read</td><td>Readable descriptor</td><td>Starts at saved offset, advances by returned bytes</td><td><span class="source-link"><code>read_file_descriptor()</code></span>, <span class="source-link"><code>read_regular_file()</code></span></td><td>read-range; ≤1 KiB/syscall; 0 → EOF</td></tr>
+<tr data-source-row="5"><td class="table-key">Ordinary overwrite/write</td><td>Writable regular descriptor without <span class="source-link"><code>O_APPEND</code></span></td><td>Uses saved offset, advances by requested count</td><td><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>write_uart_bytes()</code></span></td><td>write-at; optional literal-output; restore stdout</td></tr>
+<tr data-source-row="6"><td class="table-key">Append write</td><td>Writable regular descriptor with <span class="source-link"><code>O_APPEND</code></span></td><td>Place at end; save resulting offset</td><td><span class="source-link"><code>write_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></td><td>file-size → write-at end → restore stdout</td></tr>
+<tr data-source-row="7"><td class="table-key">Seek from end</td><td>Regular non-device descriptor</td><td>File size plus requested displacement becomes the new nonnegative offset</td><td><span class="source-link"><code>seek_file_descriptor()</code></span>, <span class="source-link"><code>receive_file_size()</code></span></td><td><code>file-size &lt;path&gt;</code>, no data transfer</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7304,10 +7301,10 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5608 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5608:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.14%" /><col style="width:18.85%" /><col style="width:21.19%" /><col style="width:36.82%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open_file_descriptor()</code></li></ul></td><td><ul><li>Lowest free FD / −1</li></ul></td><td><ul><li>Open path; choose lowest free slot</li></ul></td><td><ul><li><code>open()</code></li><li><code>fopen()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>read_file_descriptor()</code></li></ul></td><td><ul><li>Byte count / −1</li></ul></td><td><ul><li>Read file or terminal; may block</li></ul></td><td><ul><li><code>read()</code></li><li><code>fgetc()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>write_file_descriptor()</code></li></ul></td><td><ul><li>Byte count / −1</li></ul></td><td><ul><li>Route output; advance saved offset</li></ul></td><td><ul><li><code>write()</code></li><li><code>write_without_uart_escape_check()</code></li><li><code>fputc()</code></li><li><code>fputs()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>seek_file_descriptor()</code></li></ul></td><td><ul><li>Offset / −1</li></ul></td><td><ul><li>Replace logical file offset</li></ul></td><td><ul><li><code>lseek()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.14%" /><col style="width:18.85%" /><col style="width:21.19%" /><col style="width:36.82%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>open_file_descriptor()</code></td><td>Lowest free FD / −1</td><td>Open path; choose lowest free slot</td><td><ul><li><code>open()</code></li><li><code>fopen()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>read_file_descriptor()</code></td><td>Byte count / −1</td><td>Read file or terminal; may block</td><td><ul><li><code>read()</code></li><li><code>fgetc()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>write_file_descriptor()</code></td><td>Byte count / −1</td><td>Route output; advance saved offset</td><td><ul><li><code>write()</code></li><li><code>write_without_uart_escape_check()</code></li><li><code>fputc()</code></li><li><code>fputs()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>seek_file_descriptor()</code></td><td>Offset / −1</td><td>Replace logical file offset</td><td><ul><li><code>lseek()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7330,25 +7327,25 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5646 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5646:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.97%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Requested path</th><th>Base and normalization</th><th>Example result from current directory /a/b</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Relative dir</li></ul></td><td><ul><li>Append to the PCB directory</li></ul></td><td><ul><li><code>/a/b/dir</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>. / repeated separators</li></ul></td><td><ul><li>Skip . + empty segments</li></ul></td><td><ul><li><code>/a/b</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>..</code></li></ul></td><td><ul><li>Remove one existing result segment, but never remove root</li></ul></td><td><ul><li><code>/a</code>, from <code>/</code>, still <code>/</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Parent/child combinations</li></ul></td><td><ul><li>Apply segments from left to right</li></ul></td><td><ul><li><code>/a/dir</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>Absolute <code>/dir</code></li></ul></td><td><ul><li>Ignore the PCB directory and start at root</li></ul></td><td><ul><li><code>/dir</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Empty or result at least <span class="source-link"><code>PATH_MAX</code></span> cells</li></ul></td><td><ul><li>Reject before contacting the emulator</li></ul></td><td><ul><li>Operation returns failure</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.97%" /><col style="width:24.62%" /></colgroup><thead><tr><th>Requested path</th><th>Base and normalization</th><th>Example result from current directory /a/b</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Relative dir</td><td>Append to the PCB directory</td><td><code>/a/b/dir</code></td></tr>
+<tr data-source-row="2"><td class="table-key">. / repeated separators</td><td>Skip . + empty segments</td><td><code>/a/b</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>..</code></td><td>Remove one existing result segment, but never remove root</td><td><code>/a</code>, from <code>/</code>, still <code>/</code></td></tr>
+<tr data-source-row="4"><td class="table-key">Parent/child combinations</td><td>Apply segments from left to right</td><td><code>/a/dir</code></td></tr>
+<tr data-source-row="5"><td class="table-key">Absolute <code>/dir</code></td><td>Ignore the PCB directory and start at root</td><td><code>/dir</code></td></tr>
+<tr data-source-row="6"><td class="table-key">Empty or result at least <span class="source-link"><code>PATH_MAX</code></span> cells</td><td>Reject before contacting the emulator</td><td>Operation returns failure</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-5659 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5659:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.04%" /><col style="width:16.15%" /><col style="width:28.14%" /><col style="width:17.67%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>get_working_directory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Copy current absolute path</li></ul></td><td><ul><li><code>getcwd()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>change_working_directory()</code></li></ul></td><td><ul><li>0 / −1</li></ul></td><td><ul><li>Validate directory; replace current path</li></ul></td><td><ul><li><code>chdir()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>make_host_directory()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request host directory creation</li></ul></td><td><ul><li><code>mkdir()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>read_host_directory()</code></li></ul></td><td><ul><li>Listing count / error</li></ul></td><td><ul><li>Fetch directory listing</li></ul></td><td><ul><li><code>opendir()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>unlink_host_file()</code></li><li><code>remove_host_directory()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request file removal</li></ul></td><td><ul><li><code>unlink()</code></li><li><code>rmdir()</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>move_host_path()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Request move/rename</li></ul></td><td><ul><li><code>move()</code></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>touch_host_file()</code></li></ul></td><td><ul><li>Host status</li></ul></td><td><ul><li>Create file or update timestamps</li></ul></td><td><ul><li><code>touch()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.04%" /><col style="width:16.15%" /><col style="width:28.14%" /><col style="width:17.67%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>get_working_directory()</code></li></ul></td><td>0 / −1</td><td>Copy current absolute path</td><td><ul><li><code>getcwd()</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><ul><li><code>change_working_directory()</code></li></ul></td><td>0 / −1</td><td>Validate directory; replace current path</td><td><ul><li><code>chdir()</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><ul><li><code>make_host_directory()</code></li></ul></td><td>Host status</td><td>Request host directory creation</td><td><ul><li><code>mkdir()</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><ul><li><code>read_host_directory()</code></li></ul></td><td>Listing count / error</td><td>Fetch directory listing</td><td><ul><li><code>opendir()</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><ul><li><code>unlink_host_file()</code></li><li><code>remove_host_directory()</code></li></ul></td><td>Host status</td><td>Request file removal</td><td><ul><li><code>unlink()</code></li><li><code>rmdir()</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><ul><li><code>move_host_path()</code></li></ul></td><td>Host status</td><td>Request move/rename</td><td><ul><li><code>move()</code></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><ul><li><code>touch_host_file()</code></li></ul></td><td>Host status</td><td>Create file or update timestamps</td><td><ul><li><code>touch()</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7399,16 +7396,16 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5696 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5696:1,2,3,4,5,6,7,8,9,10">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.07%" /><col style="width:22.42%" /><col style="width:27.13%" /><col style="width:27.37%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>ProcessControlBlock</code></span>, the PCB</li></ul></td><td><ul><li>One kernel-heap allocation per process via <span class="source-link"><code>create_process()</code></span></li></ul></td><td><ul><li>Global list + current/queue pointers</li></ul></td><td><ul><li>Until <span class="source-link"><code>remove_process()</code></span>, possibly after a zombie period</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>ActivationRecord</code></span>, child <span class="source-link"><code>waiters</code></span>, and PCB scalar/pointer fields</li></ul></td><td><ul><li>Embedded in the PCB, no separate allocation</li></ul></td><td><ul><li>Saved activation + queue back-reference</li></ul></td><td><ul><li>PCB lifetime. Queue membership and pending-operation fields change during it</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Complete Process Payload</li></ul></td><td><ul><li>One <span class="source-link"><code>PSDMalloc()</code></span> payload, including program sections, heap and stack reservation</li></ul></td><td><ul><li>PCB base/size + heap + saved registers</li></ul></td><td><ul><li>Released with <span class="source-link"><code>PSDFree()</code></span> on PCB removal</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>ProcessLoad</code></span> and copied path</li></ul></td><td><ul><li>Separate kernel-heap allocations, plus a reserved Process Payload</li></ul></td><td><ul><li>Loading caller's <span class="source-link"><code>pending_load</code></span>. <span class="source-link"><code>ProcessLoad.base_address</code></span> reaches the unfinished image</li></ul></td><td><ul><li>Completion transfers payload; cancellation frees it</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>PCB <span class="source-link"><code>binary_path</code></span> and <span class="source-link"><code>working_directory</code></span></li></ul></td><td><ul><li>Separate kernel-heap strings via <span class="source-link"><code>copy_process_path()</code></span></li></ul></td><td><ul><li>PCB pointers</li></ul></td><td><ul><li>PCB removal. Changing directory replaces its string</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>FileDescriptorTable</code></span></li></ul></td><td><ul><li>One kernel-heap wrapper allocation</li></ul></td><td><ul><li><span class="source-link"><code>ProcessControlBlock.file_descriptors</code></span></li></ul></td><td><ul><li>Table replacement or PCB removal</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Eight <span class="source-link"><code>FileDescriptor</code></span> entries</li></ul></td><td><ul><li>Separate contiguous Kernel Heap array</li></ul></td><td><ul><li>entries pointer; indexed by descriptor number</li></ul></td><td><ul><li>Array lasts with table. Closing resets one element</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>Descriptor paths</li></ul></td><td><ul><li>Separate kernel-heap copies, including standard terminal paths</li></ul></td><td><ul><li>Each occupied descriptor references its own path</li></ul></td><td><ul><li>Close, duplication/replacement, or table destruction</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>Terminal</code></span></li></ul></td><td><ul><li>Kernel .data; embedded ring + wait queue</li></ul></td><td><ul><li><span class="source-link"><code>kernel_terminal()</code></span> returns its address</li></ul></td><td><ul><li>Whole kernel run</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>SharedMemoryEntry</code></span>, name, and <span class="source-link"><code>SharedMemoryAttachment</code></span> nodes</li></ul></td><td><ul><li>Separate kernel-heap allocations</li></ul></td><td><ul><li>Registry → entries; PCB → attachments → entry</li></ul></td><td><ul><li>Process removal; unlink + last reference</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.07%" /><col style="width:22.42%" /><col style="width:27.13%" /><col style="width:27.37%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>ProcessControlBlock</code></span>, the PCB</td><td>One kernel-heap allocation per process via <span class="source-link"><code>create_process()</code></span></td><td>Global list + current/queue pointers</td><td>Until <span class="source-link"><code>remove_process()</code></span>, possibly after a zombie period</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>ActivationRecord</code></span>, child <span class="source-link"><code>waiters</code></span>, and PCB scalar/pointer fields</td><td>Embedded in the PCB, no separate allocation</td><td>Saved activation + queue back-reference</td><td>PCB lifetime. Queue membership and pending-operation fields change during it</td></tr>
+<tr data-source-row="3"><td class="table-key">Complete Process Payload</td><td>One <span class="source-link"><code>PSDMalloc()</code></span> payload, including program sections, heap and stack reservation</td><td>PCB base/size + heap + saved registers</td><td>Released with <span class="source-link"><code>PSDFree()</code></span> on PCB removal</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>ProcessLoad</code></span> and copied path</td><td>Separate kernel-heap allocations, plus a reserved Process Payload</td><td>Loading caller's <span class="source-link"><code>pending_load</code></span>. <span class="source-link"><code>ProcessLoad.base_address</code></span> reaches the unfinished image</td><td>Completion transfers payload; cancellation frees it</td></tr>
+<tr data-source-row="5"><td class="table-key">PCB <span class="source-link"><code>binary_path</code></span> and <span class="source-link"><code>working_directory</code></span></td><td>Separate kernel-heap strings via <span class="source-link"><code>copy_process_path()</code></span></td><td>PCB pointers</td><td>PCB removal. Changing directory replaces its string</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>FileDescriptorTable</code></span></td><td>One kernel-heap wrapper allocation</td><td><span class="source-link"><code>ProcessControlBlock.file_descriptors</code></span></td><td>Table replacement or PCB removal</td></tr>
+<tr data-source-row="7"><td class="table-key">Eight <span class="source-link"><code>FileDescriptor</code></span> entries</td><td>Separate contiguous Kernel Heap array</td><td>entries pointer; indexed by descriptor number</td><td>Array lasts with table. Closing resets one element</td></tr>
+<tr data-source-row="8"><td class="table-key">Descriptor paths</td><td>Separate kernel-heap copies, including standard terminal paths</td><td>Each occupied descriptor references its own path</td><td>Close, duplication/replacement, or table destruction</td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>Terminal</code></span></td><td>Kernel .data; embedded ring + wait queue</td><td><span class="source-link"><code>kernel_terminal()</code></span> returns its address</td><td>Whole kernel run</td></tr>
+<tr data-source-row="10"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry</code></span>, name, and <span class="source-link"><code>SharedMemoryAttachment</code></span> nodes</td><td>Separate kernel-heap allocations</td><td>Registry → entries; PCB → attachments → entry</td><td>Process removal; unlink + last reference</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7431,15 +7428,15 @@ process->state = PROCESS_STATE_READY;
 <!-- README_ASSET table-5696 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5696:11,12,13,14,15,16,17,18,19">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.09%" /><col style="width:29.63%" /><col style="width:34.50%" /><col style="width:18.77%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="11"><td class="table-key"><ul><li>Shared data</li></ul></td><td><ul><li>Separate <span class="source-link"><code>PSDMalloc()</code></span> payload</li></ul></td><td><ul><li>Same absolute address for every mapping</li></ul></td><td><ul><li>Entry destruction; independent of mapper image</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li>Kernel Heap and Process and Shared Data Heap <span class="source-link"><code>Heap</code></span> descriptors</li></ul></td><td><ul><li>Kernel .data globals</li></ul></td><td><ul><li>Each <span class="source-link"><code>first_block</code></span> points into its own managed region</li></ul></td><td><ul><li>Whole kernel run</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li>Per-process <span class="source-link"><code>process_heap</code></span> and <span class="source-link"><code>environ</code></span></li></ul></td><td><ul><li>Process <code>.data</code> globals when the libraries are linked</li></ul></td><td><ul><li>Process heap blocks + environment array</li></ul></td><td><ul><li>Image lifetime. Environment contents can be replaced</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>BlockHeader</code></span></li></ul></td><td><ul><li>In-region header immediately before payload</li></ul></td><td><ul><li>Descriptor → first → next header</li></ul></td><td><ul><li>Allocator splits/merges; inner/outer lists separate</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li>Userspace library objects, buffers, and caller-created mutexes/queues</li></ul></td><td><ul><li>Caller chooses heap/data/stack/shared storage</li></ul></td><td><ul><li>DirectoryStream, environment, mutex</li></ul></td><td><ul><li>Caller lifetime; retain until kernel completion</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li>Syscall requests and result cells</li></ul></td><td><ul><li>Stack-local request; user/kernel</li></ul></td><td><ul><li>Syscall pointer argument or direct function argument</li></ul></td><td><ul><li>Suspended call preserves retained result/buffer</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li>Pending terminal-read state and destination</li></ul></td><td><ul><li>PCB retains caller buffer + count</li></ul></td><td><ul><li><span class="source-link"><code>pending_terminal_read_buffer</code></span> and <span class="source-link"><code>pending_terminal_read_count</code></span></li></ul></td><td><ul><li>Clear fields; preserve buffer through blocked call</li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><ul><li>Kernel local variables and scratch buffers</li></ul></td><td><ul><li>Live kernel stack frames in normal kernel calls, e.g. <span class="source-link"><code>absolute_path</code></span></li></ul></td><td><ul><li>Parameters and local pointers</li></ul></td><td><ul><li>Until return or context-switch abandonment of that kernel call chain</li></ul></td></tr>
-<tr data-source-row="19"><td class="table-key"><ul><li>Interrupt saved frames and handler locals</li></ul></td><td><ul><li>Interrupted process or kernel stack</li></ul></td><td><ul><li>Saved frame; PC at activation.sp + 1</li></ul></td><td><ul><li>Until restore; UART/DMA borrow same stack</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.09%" /><col style="width:29.63%" /><col style="width:34.50%" /><col style="width:18.77%" /></colgroup><thead><tr><th>Object</th><th>Storage and allocation</th><th>References / access</th><th>Lifetime or release</th></tr></thead><tbody><tr data-source-row="11"><td class="table-key">Shared data</td><td>Separate <span class="source-link"><code>PSDMalloc()</code></span> payload</td><td>Same absolute address for every mapping</td><td>Entry destruction; independent of mapper image</td></tr>
+<tr data-source-row="12"><td class="table-key">Kernel Heap and Process and Shared Data Heap <span class="source-link"><code>Heap</code></span> descriptors</td><td>Kernel .data globals</td><td>Each <span class="source-link"><code>first_block</code></span> points into its own managed region</td><td>Whole kernel run</td></tr>
+<tr data-source-row="13"><td class="table-key">Per-process <span class="source-link"><code>process_heap</code></span> and <span class="source-link"><code>environ</code></span></td><td>Process <code>.data</code> globals when the libraries are linked</td><td>Process heap blocks + environment array</td><td>Image lifetime. Environment contents can be replaced</td></tr>
+<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>BlockHeader</code></span></td><td>In-region header immediately before payload</td><td>Descriptor → first → next header</td><td>Allocator splits/merges; inner/outer lists separate</td></tr>
+<tr data-source-row="15"><td class="table-key">Userspace library objects, buffers, and caller-created mutexes/queues</td><td>Caller chooses heap/data/stack/shared storage</td><td>DirectoryStream, environment, mutex</td><td>Caller lifetime; retain until kernel completion</td></tr>
+<tr data-source-row="16"><td class="table-key">Syscall requests and result cells</td><td>Stack-local request; user/kernel</td><td>Syscall pointer argument or direct function argument</td><td>Suspended call preserves retained result/buffer</td></tr>
+<tr data-source-row="17"><td class="table-key">Pending terminal-read state and destination</td><td>PCB retains caller buffer + count</td><td><span class="source-link"><code>pending_terminal_read_buffer</code></span> and <span class="source-link"><code>pending_terminal_read_count</code></span></td><td>Clear fields; preserve buffer through blocked call</td></tr>
+<tr data-source-row="18"><td class="table-key">Kernel local variables and scratch buffers</td><td>Live kernel stack frames in normal kernel calls, e.g. <span class="source-link"><code>absolute_path</code></span></td><td>Parameters and local pointers</td><td>Until return or context-switch abandonment of that kernel call chain</td></tr>
+<tr data-source-row="19"><td class="table-key">Interrupt saved frames and handler locals</td><td>Interrupted process or kernel stack</td><td>Saved frame; PC at activation.sp + 1</td><td>Until restore; UART/DMA borrow same stack</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7552,23 +7549,23 @@ flowchart LR
 <!-- README_ASSET table-5816 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-5816:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-5816:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>process_list_head</code></span></li></ul></td><td><ul><li>First PCB or NULL; traversal starts here</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>process_list_tail</code></span></li></ul></td><td><ul><li>Final PCB or NULL; O(1) append</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>active_process</code></span></li></ul></td><td><ul><li>Current PCB + scheduler scan position</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>next_process_id</code></span></li></ul></td><td><ul><li>Next PID; initial 1</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>kernel_heap</code></span></li></ul></td><td><ul><li>Embedded descriptor whose first-block pointer reaches the kernel heap</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>process_shared_data_heap</code></span></li></ul></td><td><ul><li>Outer Process/Shared Data Heap descriptor</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>terminal</code></span></li></ul></td><td><ul><li>128-cell ring + indices/count + wait queue</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>shared_memory_list_head</code></span></li></ul></td><td><ul><li>Registry head; includes unlinked live entries</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>next_shared_memory_id</code></span></li></ul></td><td><ul><li>Next shared-memory ID; independent of PID</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>dma_waiters</code></span></li></ul></td><td><ul><li>Standalone DMA wait queue; PCB endpoints</li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><span class="source-link"><code>dma_initialized</code></span></li></ul></td><td><ul><li>Initially false. It prevents reinitializing the DMA queue after setup</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><span class="source-link"><code>reschedule_requested</code></span></li></ul></td><td><ul><li>Deferred switch flag; cleared on selection</li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><ul><li><span class="source-link"><code>foreground_process_target</code></span></li></ul></td><td><ul><li>0: unregistered</li><li>Positive: input + signals</li><li>Negative: input; suppress signals</li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_device_isrs</code></span></li></ul></td><td><ul><li>Timer/DMA/UART indices {1,4,2}</li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_device_priorities</code></span></li></ul></td><td><ul><li>Timer/DMA/UART priorities <code>{1, 1, 2}</code> used during controller initialization</li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><ul><li><span class="source-link"><code>loading_bar_enabled</code></span></li></ul></td><td><ul><li>Image-local loading-bar setting; initially true</li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><ul><li><span class="source-link"><code>interrupt_vector_table</code></span></li></ul></td><td><ul><li>Five ISR addresses in .ivt</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-5816:1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>process_list_head</code></span></td><td><ul><li>First PCB or NULL; traversal starts here</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>process_list_tail</code></span></td><td><ul><li>Final PCB or NULL; O(1) append</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>active_process</code></span></td><td><ul><li>Current PCB + scheduler scan position</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>next_process_id</code></span></td><td><ul><li>Next PID; initial 1</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>kernel_heap</code></span></td><td><ul><li>Embedded descriptor whose first-block pointer reaches the kernel heap</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>process_shared_data_heap</code></span></td><td><ul><li>Outer Process/Shared Data Heap descriptor</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>terminal</code></span></td><td><ul><li>128-cell ring + indices/count + wait queue</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>shared_memory_list_head</code></span></td><td><ul><li>Registry head; includes unlinked live entries</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>next_shared_memory_id</code></span></td><td><ul><li>Next shared-memory ID; independent of PID</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:52.85%" /><col style="width:47.15%" /></colgroup><thead><tr><th>Global</th><th>Stored value / referenced structure and role</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><span class="source-link"><code>dma_waiters</code></span></td><td><ul><li>Standalone DMA wait queue; PCB endpoints</li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><span class="source-link"><code>dma_initialized</code></span></td><td><ul><li>Initially false. It prevents reinitializing the DMA queue after setup</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><span class="source-link"><code>reschedule_requested</code></span></td><td><ul><li>Deferred switch flag; cleared on selection</li></ul></td></tr>
+<tr data-source-row="13"><td class="table-key"><span class="source-link"><code>foreground_process_target</code></span></td><td><ul><li>0: unregistered</li><li>Positive: input + signals</li><li>Negative: input; suppress signals</li></ul></td></tr>
+<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>interrupt_device_isrs</code></span></td><td><ul><li>Timer/DMA/UART indices {1,4,2}</li></ul></td></tr>
+<tr data-source-row="15"><td class="table-key"><span class="source-link"><code>interrupt_device_priorities</code></span></td><td><ul><li>Timer/DMA/UART priorities <code>{1, 1, 2}</code> used during controller initialization</li></ul></td></tr>
+<tr data-source-row="16"><td class="table-key"><span class="source-link"><code>loading_bar_enabled</code></span></td><td><ul><li>Image-local loading-bar setting; initially true</li></ul></td></tr>
+<tr data-source-row="17"><td class="table-key"><span class="source-link"><code>interrupt_vector_table</code></span></td><td><ul><li>Five ISR addresses in .ivt</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7622,11 +7619,11 @@ flowchart LR
 <!-- README_ASSET table-5864 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5864:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.29%" /><col style="width:31.50%" /><col style="width:31.21%" /></colgroup><thead><tr><th>Call path</th><th>Request and queue storage</th><th>Retained references and reason</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>sleep(wq)</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span></li></ul></td><td><ul><li>Caller queue address directly in IN1</li></ul></td><td><ul><li>Retained queue pointer + intrusive PCB links</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>mutex_lock()</code></span> → <span class="source-link"><code>sleep()</code></span></li></ul></td><td><ul><li>Embedded mutex.waiters; stack or shared storage</li></ul></td><td><ul><li>Kernel writes PCB pointers into caller queue</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid()</code></span> → <span class="source-link"><code>wait_for_process_by_pid()</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span>, when blocking</li></ul></td><td><ul><li>Parent stack request/status; child's embedded waiters</li></ul></td><td><ul><li>Retain status pointer; suspended frame stays alive</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>begin_terminal_read()</code></span></li></ul></td><td><ul><li>Kernel-global terminal.input_waiters</li></ul></td><td><ul><li>PCB retains caller buffer/count for delivery after an input interrupt</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>start_dma_uart_receive()</code></span></li></ul></td><td><ul><li>Kernel-global dma_waiters</li></ul></td><td><ul><li>Intrusive wait links + persistent load progress</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:37.29%" /><col style="width:31.50%" /><col style="width:31.21%" /></colgroup><thead><tr><th>Call path</th><th>Request and queue storage</th><th>Retained references and reason</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>sleep(wq)</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span></td><td>Caller queue address directly in IN1</td><td>Retained queue pointer + intrusive PCB links</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>mutex_lock()</code></span> → <span class="source-link"><code>sleep()</code></span></td><td>Embedded mutex.waiters; stack or shared storage</td><td>Kernel writes PCB pointers into caller queue</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>waitpid()</code></span> → <span class="source-link"><code>wait_for_process_by_pid()</code></span> → <span class="source-link"><code>sleep_on_wait_queue()</code></span>, when blocking</td><td>Parent stack request/status; child's embedded waiters</td><td>Retain status pointer; suspended frame stays alive</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>begin_terminal_read()</code></span></td><td>Kernel-global terminal.input_waiters</td><td>PCB retains caller buffer/count for delivery after an input interrupt</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>start_dma_uart_receive()</code></span></td><td>Kernel-global dma_waiters</td><td>Intrusive wait links + persistent load progress</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7676,10 +7673,10 @@ flowchart LR
 <!-- README_ASSET table-5902 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5902:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.83%" /><col style="width:61.17%" /></colgroup><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>wait.header</code></span></li></ul></td><td><ul><li>Public waitpid declaration</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>wait.picoc</code></span></li></ul></td><td><ul><li>Implementation + syscall helper</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>libwait.picoc</code></span></li></ul></td><td><ul><li>Compilation unit links wait implementation</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>common/syscall.header</code></span></li></ul></td><td><ul><li>Shared request + selector declarations</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:38.83%" /><col style="width:61.17%" /></colgroup><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>wait.header</code></span></td><td>Public waitpid declaration</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>wait.picoc</code></span></td><td>Implementation + syscall helper</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>libwait.picoc</code></span></td><td>Compilation unit links wait implementation</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>common/syscall.header</code></span></td><td>Shared request + selector declarations</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7816,21 +7813,21 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-5997 -->
 <ReadmeVisual kind="table" :width="1440" class="inventory-grid library-grid">
 
-<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>unistd</code></span></li></ul><ul><li>Processes + descriptors</li><li>Paths + wait queues</li></ul><ul><li>stdlib: environment</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>fcntl</code></span></li></ul><ul><li>Open/create files</li></ul><ul><li>unistd syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/wait</code></span></li></ul><ul><li>Child wait/stop status</li></ul><ul><li>Own syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mutex</code></span></li></ul><ul><li>Atomic lock + wait queue</li></ul><ul><li>unistd wait queues</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/mman</code></span></li></ul><ul><li>Named shared memory</li></ul><ul><li>Own syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>dirent</code></span></li></ul><ul><li>Directory streams</li></ul><ul><li>unistd + stdlib</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>stdlib</code></span></li></ul><ul><li>Heap + environment</li><li>Conversion + exit</li></ul><ul><li>common/heap.picoc</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>string</code></span></li></ul><ul><li>Copy, compare, length</li></ul><ul><li>common/string.picoc</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>stdio</code></span></li></ul><ul><li>Streams, formatting, scanning</li></ul><ul><li>common/decimal.picoc</li><li>Syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>start</code></span></li></ul><ul><li>Entry + runtime initialization</li></ul><ul><li>stdlib</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>schedule</code></span></li></ul><ul><li>Voluntary scheduling</li></ul><ul><li>Inline syscall</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>signal</code></span></li></ul><ul><li>Signal delivery</li></ul><ul><li>Own syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/prctl</code></span></li></ul><ul><li>Parent-death signal</li></ul><ul><li>Own syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/reboot</code></span></li></ul><ul><li>Restart + power-off</li></ul><ul><li>unistd syscall helper</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sys/stat</code></span></li></ul><ul><li>Directory creation</li></ul><ul><li>unistd syscall helper</li></ul></div></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><div class="tile-name"><span class="source-link"><code>unistd</code></span></div><div class="tile-detail"><ul><li>Processes + descriptors</li><li>Paths + wait queues</li></ul></div><div class="tile-detail"><ul><li>stdlib: environment</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>fcntl</code></span></div><div class="tile-detail"><ul><li>Open/create files</li></ul></div><div class="tile-detail"><ul><li>unistd syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sys/wait</code></span></div><div class="tile-detail"><ul><li>Child wait/stop status</li></ul></div><div class="tile-detail"><ul><li>Own syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>mutex</code></span></div><div class="tile-detail"><ul><li>Atomic lock + wait queue</li></ul></div><div class="tile-detail"><ul><li>unistd wait queues</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sys/mman</code></span></div><div class="tile-detail"><ul><li>Named shared memory</li></ul></div><div class="tile-detail"><ul><li>Own syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>dirent</code></span></div><div class="tile-detail"><ul><li>Directory streams</li></ul></div><div class="tile-detail"><ul><li>unistd + stdlib</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>stdlib</code></span></div><div class="tile-detail"><ul><li>Heap + environment</li><li>Conversion + exit</li></ul></div><div class="tile-detail"><ul><li>common/heap.picoc</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>string</code></span></div><div class="tile-detail"><ul><li>Copy, compare, length</li></ul></div><div class="tile-detail"><ul><li>common/string.picoc</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>stdio</code></span></div><div class="tile-detail"><ul><li>Streams, formatting, scanning</li></ul></div><div class="tile-detail"><ul><li>common/decimal.picoc</li><li>Syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>start</code></span></div><div class="tile-detail"><ul><li>Entry + runtime initialization</li></ul></div><div class="tile-detail"><ul><li>stdlib</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>schedule</code></span></div><div class="tile-detail"><ul><li>Voluntary scheduling</li></ul></div><div class="tile-detail"><ul><li>Inline syscall</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>signal</code></span></div><div class="tile-detail"><ul><li>Signal delivery</li></ul></div><div class="tile-detail"><ul><li>Own syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sys/prctl</code></span></div><div class="tile-detail"><ul><li>Parent-death signal</li></ul></div><div class="tile-detail"><ul><li>Own syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sys/reboot</code></span></div><div class="tile-detail"><ul><li>Restart + power-off</li></ul></div><div class="tile-detail"><ul><li>unistd syscall helper</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sys/stat</code></span></div><div class="tile-detail"><ul><li>Directory creation</li></ul></div><div class="tile-detail"><ul><li>unistd syscall helper</li></ul></div></div></div>
 
 </ReadmeVisual>
 
@@ -7853,13 +7850,13 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6036 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6036:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.98%" /><col style="width:31.30%" /><col style="width:42.72%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>invoke_syscall()</code></li></ul></td><td><ul><li>Internal syscall bridge; result in IN2</li></ul></td><td><ul><li>Forward supplied selector + argument</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>load()</code></li></ul></td><td><ul><li>Load binary; return NEW child PID</li></ul></td><td><ul><li><code>LOAD_PROCESS</code></li><li>Host: <code>file-size</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>run()</code></li></ul></td><td><ul><li>Prepare child; mark READY</li></ul></td><td><ul><li><code>RUN_PROCESS_WITH_ARGUMENTS</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>unload()</code></li></ul></td><td><ul><li>Remove noncurrent process</li></ul></td><td><ul><li><code>UNLOAD_PROCESS</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>list_processes()</code></li></ul></td><td><ul><li>Print all PIDs + binary paths</li></ul></td><td><ul><li><code>LIST_PROCESSES</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>getpid()</code></li></ul></td><td><ul><li>Current process PID</li></ul></td><td><ul><li><code>GETPID</code></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>set_foreground_process()</code></li></ul></td><td><ul><li>Shell/child input owner</li></ul></td><td><ul><li><code>SET_FOREGROUND_PROCESS</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.98%" /><col style="width:31.30%" /><col style="width:42.72%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>invoke_syscall()</code></td><td>Internal syscall bridge; result in IN2</td><td><ul><li>Forward supplied selector + argument</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>load()</code></td><td>Load binary; return NEW child PID</td><td><ul><li><code>LOAD_PROCESS</code></li><li>Host: <code>file-size</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>run()</code></td><td>Prepare child; mark READY</td><td><ul><li><code>RUN_PROCESS_WITH_ARGUMENTS</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>unload()</code></td><td>Remove noncurrent process</td><td><ul><li><code>UNLOAD_PROCESS</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>list_processes()</code></td><td>Print all PIDs + binary paths</td><td><ul><li><code>LIST_PROCESSES</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>getpid()</code></td><td>Current process PID</td><td><ul><li><code>GETPID</code></li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><code>set_foreground_process()</code></td><td>Shell/child input owner</td><td><ul><li><code>SET_FOREGROUND_PROCESS</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7882,12 +7879,12 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6056 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6056:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.34%" /><col style="width:33.44%" /><col style="width:34.22%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>read()</code></li></ul></td><td><ul><li>Read bytes; return count or −1</li></ul></td><td><ul><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>write()</code></li></ul></td><td><ul><li>Write bytes; protect UART control</li></ul></td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>write_without_uart_escape_check()</code></li></ul></td><td><ul><li>Write known escape-free bytes</li></ul></td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>close()</code></li></ul></td><td><ul><li>Close descriptor; return 0 or −1</li></ul></td><td><ul><li><code>CLOSE</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>dup2()</code></li></ul></td><td><ul><li>Independent entry copy; return target</li></ul></td><td><ul><li><code>DUP2</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>lseek()</code></li></ul></td><td><ul><li>Set offset; return position or −1</li></ul></td><td><ul><li><code>LSEEK</code></li><li>Host: <code>file-size</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.34%" /><col style="width:33.44%" /><col style="width:34.22%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>read()</code></td><td>Read bytes; return count or −1</td><td><ul><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>write()</code></td><td>Write bytes; protect UART control</td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>write_without_uart_escape_check()</code></td><td>Write known escape-free bytes</td><td><ul><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>close()</code></td><td>Close descriptor; return 0 or −1</td><td><ul><li><code>CLOSE</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>dup2()</code></td><td>Independent entry copy; return target</td><td><ul><li><code>DUP2</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>lseek()</code></td><td>Set offset; return position or −1</td><td><ul><li><code>LSEEK</code></li><li>Host: <code>file-size</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7910,8 +7907,8 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6071 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6071:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.33%" /><col style="width:44.34%" /><col style="width:31.33%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>chdir()</code></li></ul></td><td><ul><li>Change process working directory</li></ul></td><td><ul><li><code>CHDIR</code></li><li>Host: <code>is-directory</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>getcwd()</code></li></ul></td><td><ul><li>Copy directory; buffer or NULL</li></ul></td><td><ul><li><code>GETCWD</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.33%" /><col style="width:44.34%" /><col style="width:31.33%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>chdir()</code></td><td>Change process working directory</td><td><ul><li><code>CHDIR</code></li><li>Host: <code>is-directory</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>getcwd()</code></td><td>Copy directory; buffer or NULL</td><td><ul><li><code>GETCWD</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7934,10 +7931,10 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6081 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6081:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.49%" /><col style="width:42.50%" /><col style="width:32.01%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>unlink()</code></li></ul></td><td><ul><li>Remove file; return host status</li></ul></td><td><ul><li><code>UNLINK</code></li><li>Host: <code>unlink</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>rmdir()</code></li></ul></td><td><ul><li>Remove empty directory</li></ul></td><td><ul><li><code>RMDIR</code></li><li>Host: <code>rmdir</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>move()</code></li></ul></td><td><ul><li>Move/rename path</li></ul></td><td><ul><li><code>MOVE</code></li><li>Host: <code>move</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>touch()</code></li></ul></td><td><ul><li>Create or update timestamps</li></ul></td><td><ul><li><code>TOUCH</code></li><li>Host: <code>touch</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.49%" /><col style="width:42.50%" /><col style="width:32.01%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>unlink()</code></td><td>Remove file; return host status</td><td><ul><li><code>UNLINK</code></li><li>Host: <code>unlink</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>rmdir()</code></td><td>Remove empty directory</td><td><ul><li><code>RMDIR</code></li><li>Host: <code>rmdir</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>move()</code></td><td>Move/rename path</td><td><ul><li><code>MOVE</code></li><li>Host: <code>move</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>touch()</code></td><td>Create or update timestamps</td><td><ul><li><code>TOUCH</code></li><li>Host: <code>touch</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7960,9 +7957,9 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6094 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6094:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.01%" /><col style="width:25.58%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>wait_queue_init()</code></li></ul></td><td><ul><li>Clear FIFO head + tail</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>sleep()</code></li></ul></td><td><ul><li>Queue caller; suspend execution</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>wakeup()</code></li></ul></td><td><ul><li>Wake at most one waiter</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:32.41%" /><col style="width:42.01%" /><col style="width:25.58%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>wait_queue_init()</code></td><td>Clear FIFO head + tail</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>sleep()</code></td><td>Queue caller; suspend execution</td><td><code>SLEEP</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>wakeup()</code></td><td>Wake at most one waiter</td><td><code>WAKEUP</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -7985,8 +7982,8 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6106 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6106:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.57%" /><col style="width:36.28%" /><col style="width:43.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>open()</code></li></ul></td><td><ul><li>Lowest free descriptor; −1 on error</li></ul></td><td><ul><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>creat()</code></li></ul></td><td><ul><li>Write + create + truncate</li></ul></td><td><ul><li><code>OPEN</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.57%" /><col style="width:36.28%" /><col style="width:43.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>open()</code></td><td>Lowest free descriptor; −1 on error</td><td><ul><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>creat()</code></td><td>Write + create + truncate</td><td><ul><li><code>OPEN</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8009,8 +8006,8 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6117 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6117:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.72%" /><col style="width:46.72%" /><col style="width:26.56%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>waitpid()</code></li></ul></td><td><ul><li>Child exit/stopped status; −1 on error</li></ul></td><td><ul><li><code>WAITPID</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>WIFSTOPPED()</code></li></ul></td><td><ul><li>Test stopped-status encoding</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.72%" /><col style="width:46.72%" /><col style="width:26.56%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>waitpid()</code></td><td>Child exit/stopped status; −1 on error</td><td><code>WAITPID</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>WIFSTOPPED()</code></td><td>Test stopped-status encoding</td><td>Local code; no syscall</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8033,10 +8030,10 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6127 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6127:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.72%" /><col style="width:45.37%" /><col style="width:25.91%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>testset()</code></li></ul></td><td><ul><li>Atomic old value; store 1</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>mutex_init()</code></li></ul></td><td><ul><li>Clear lock + initialize wait queue</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>mutex_lock()</code></li></ul></td><td><ul><li>Acquire; sleep/retry on contention</li></ul></td><td><ul><li><code>SLEEP</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>mutex_unlock()</code></li></ul></td><td><ul><li>Clear lock; wake one contender</li></ul></td><td><ul><li><code>WAKEUP</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.72%" /><col style="width:45.37%" /><col style="width:25.91%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>testset()</code></td><td>Atomic old value; store 1</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>mutex_init()</code></td><td>Clear lock + initialize wait queue</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>mutex_lock()</code></td><td>Acquire; sleep/retry on contention</td><td><code>SLEEP</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>mutex_unlock()</code></td><td>Clear lock; wake one contender</td><td><code>WAKEUP</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8059,9 +8056,9 @@ int invoke_waitpid_syscall(int number, int argument) {
 <!-- README_ASSET table-6144 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6144:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.45%" /><col style="width:44.62%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>shm_open()</code></li></ul></td><td><ul><li>Named entry ID or −1</li></ul></td><td><ul><li><code>SHM_OPEN</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>mmap()</code></li></ul></td><td><ul><li>Attach; shared address or NULL</li></ul></td><td><ul><li><code>MMAP</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>shm_unlink()</code></li></ul></td><td><ul><li>Unlink name; defer destruction</li></ul></td><td><ul><li><code>SHM_UNLINK</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.45%" /><col style="width:44.62%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>shm_open()</code></td><td>Named entry ID or −1</td><td><code>SHM_OPEN</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>mmap()</code></td><td>Attach; shared address or NULL</td><td><code>MMAP</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>shm_unlink()</code></td><td>Unlink name; defer destruction</td><td><code>SHM_UNLINK</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8124,21 +8121,21 @@ struct DirectoryStream {
 <!-- README_ASSET table-6174 -->
 <ReadmeVisual kind="table" :width="704" data-table-key="table-6174:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:46.74%" /><col style="width:53.26%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.contents</code></span></li></ul></td><td><ul><li>Owned 512-cell listing buffer</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.length</code></span></li></ul></td><td><ul><li>Listing length without terminator</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.offset</code></span></li></ul></td><td><ul><li>Next listing record</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>DirectoryStream.entry</code></span></li></ul></td><td><ul><li>Embedded, reused directory-entry result</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>dirent.d_type</code></span></li></ul></td><td><ul><li>Directory or regular-file type</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>dirent.d_name</code></span></li></ul></td><td><ul><li>Terminated name; 127-character limit</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:46.74%" /><col style="width:53.26%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>DirectoryStream.contents</code></span></td><td>Owned 512-cell listing buffer</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>DirectoryStream.length</code></span></td><td>Listing length without terminator</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>DirectoryStream.offset</code></span></td><td>Next listing record</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>DirectoryStream.entry</code></span></td><td>Embedded, reused directory-entry result</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>dirent.d_type</code></span></td><td>Directory or regular-file type</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>dirent.d_name</code></span></td><td>Terminated name; 127-character limit</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-6186 -->
 <ReadmeVisual kind="table" :width="896" data-table-key="table-6186:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.29%" /><col style="width:32.62%" /><col style="width:48.09%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>opendir()</code></li></ul></td><td><ul><li>Allocate stream + fetch listing</li></ul></td><td><ul><li><code>READ_DIRECTORY</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>ls</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>readdir()</code></li></ul></td><td><ul><li>Reuse entry; NULL at end</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>closedir()</code></li></ul></td><td><ul><li>Free buffer + stream</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.29%" /><col style="width:32.62%" /><col style="width:48.09%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>opendir()</code></td><td>Allocate stream + fetch listing</td><td><ul><li><code>READ_DIRECTORY</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>ls</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>readdir()</code></td><td>Reuse entry; NULL at end</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>closedir()</code></td><td>Free buffer + stream</td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8161,11 +8158,11 @@ struct DirectoryStream {
 <!-- README_ASSET table-6206 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6206:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.67%" /><col style="width:31.39%" /><col style="width:32.94%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>require_process_heap_allocation()</code></li></ul></td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>init_process_heap()</code></li></ul></td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>malloc()</code></li></ul></td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>realloc()</code></li></ul></td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>free()</code></li></ul></td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.67%" /><col style="width:31.39%" /><col style="width:32.94%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>require_process_heap_allocation()</code></td><td><ul><li>Positive failure → heap-full syscall</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>init_process_heap()</code></td><td><ul><li>Initialize process-local heap</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>malloc()</code></td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>realloc()</code></td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>free()</code></td><td><ul><li>Free + coalesce process blocks</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8188,7 +8185,7 @@ struct DirectoryStream {
 <!-- README_ASSET table-6220 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6220:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.86%" /><col style="width:38.86%" /><col style="width:35.28%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>atoi()</code></li></ul></td><td><ul><li>Convert signed decimal text</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.86%" /><col style="width:38.86%" /><col style="width:35.28%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>atoi()</code></td><td>Convert signed decimal text</td><td>Local code; no syscall</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8211,18 +8208,18 @@ struct DirectoryStream {
 <!-- README_ASSET table-6230 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-6230:1,2,3,4,5,6,7,8,9,10,11,12">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-6230:1,2,3,4,5,6,7,8,9,10,11,12" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>getenv()</code></li></ul></td><td><ul><li>Value pointer or NULL</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>current_environment()</code></li></ul></td><td><ul><li>Process-global environ pointer</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>copy_environment_variable()</code></li></ul></td><td><ul><li>Allocate string copy</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>store_environment_variable()</code></li></ul></td><td><ul><li>Add/replace environment entry</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>initialize_environment()</code></li></ul></td><td><ul><li>Copy inherited environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>setenv()</code></li></ul></td><td><ul><li>Add/replace NAME=value</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><ul><li><code>unsetenv()</code></li></ul></td><td><ul><li>Remove entry; compact pointer array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>putenv()</code></li></ul></td><td><ul><li>Copy NAME=value; require =</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><code>clearenv()</code></li></ul></td><td><ul><li>Free strings; retain empty array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><code>clone_environment()</code></li></ul></td><td><ul><li>Deep-copy environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><code>destroy_environment()</code></li></ul></td><td><ul><li>Free cloned strings + array</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><code>restore_environment()</code></li></ul></td><td><ul><li>Recreate current environment</li></ul></td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-6230:1,2,3,4,5,6,7,8,9,10,11,12" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>getenv()</code></td><td>Value pointer or NULL</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>current_environment()</code></td><td>Process-global environ pointer</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>copy_environment_variable()</code></td><td>Allocate string copy</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>store_environment_variable()</code></td><td>Add/replace environment entry</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>initialize_environment()</code></td><td>Copy inherited environment</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>setenv()</code></td><td>Add/replace NAME=value</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:48.00%" /><col style="width:30.31%" /><col style="width:21.69%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><code>unsetenv()</code></td><td>Remove entry; compact pointer array</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><code>putenv()</code></td><td>Copy NAME=value; require =</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><code>clearenv()</code></td><td>Free strings; retain empty array</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><code>clone_environment()</code></td><td>Deep-copy environment</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><code>destroy_environment()</code></td><td>Free cloned strings + array</td><td><ul><li>Local code; no syscall</li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><code>restore_environment()</code></td><td>Recreate current environment</td><td><ul><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8245,7 +8242,7 @@ struct DirectoryStream {
 <!-- README_ASSET table-6255 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6255:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.93%" /><col style="width:46.14%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>exit()</code></li></ul></td><td><ul><li>Terminate with status; no return</li></ul></td><td><ul><li><code>EXIT</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.93%" /><col style="width:46.14%" /><col style="width:26.93%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>exit()</code></td><td>Terminate with status; no return</td><td><code>EXIT</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8268,11 +8265,11 @@ struct DirectoryStream {
 <!-- README_ASSET table-6266 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6266:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.27%" /><col style="width:43.89%" /><col style="width:32.84%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>strcpy()</code></li></ul></td><td><ul><li>Copy terminated string; return destination</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>strcat()</code></li></ul></td><td><ul><li>Append string; return destination</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>strcmp()</code></li></ul></td><td><ul><li>First unequal cell difference</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>strncmp()</code></li></ul></td><td><ul><li>Compare at most count cells</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>strlen()</code></li></ul></td><td><ul><li>Cells before terminator</li></ul></td><td><ul><li>Local code; no syscall</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.27%" /><col style="width:43.89%" /><col style="width:32.84%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>strcpy()</code></td><td>Copy terminated string; return destination</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>strcat()</code></td><td>Append string; return destination</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>strcmp()</code></td><td>First unequal cell difference</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>strncmp()</code></td><td>Compare at most count cells</td><td>Local code; no syscall</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>strlen()</code></td><td>Cells before terminator</td><td>Local code; no syscall</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8317,7 +8314,7 @@ struct PicoFile {
 <!-- README_ASSET table-6291 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6291:1">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.79%" /><col style="width:50.21%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>PicoFile.file_descriptor</code></span></li></ul></td><td><ul><li>Current process descriptor number</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.79%" /><col style="width:50.21%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>PicoFile.file_descriptor</code></span></td><td>Current process descriptor number</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8342,18 +8339,18 @@ struct PicoFile {
 <!-- README_ASSET table-6304 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-6304:1,2,3,4,5,6,7,8,9,10,11,12">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-6304:1,2,3,4,5,6,7,8,9,10,11,12" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>standard_input()</code></li></ul></td><td><ul><li>Process-global stdin stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>standard_output()</code></li></ul></td><td><ul><li>Process-global stdout stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>standard_error()</code></li></ul></td><td><ul><li>Process-global stderr stream</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>fopen()</code></li></ul></td><td><ul><li>Stream slot or NULL; r/w/a/+</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>fclose()</code></li></ul></td><td><ul><li>Close + release stream slot</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>CLOSE</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>fgetc()</code></li></ul></td><td><ul><li>Character or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><ul><li><code>fputc()</code></li></ul></td><td><ul><li>Written character or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>fputs()</code></li></ul></td><td><ul><li>Written count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><code>write_decimal()</code></li></ul></td><td><ul><li>Print decimal; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><code>format_stream()</code></li></ul></td><td><ul><li>Format arguments; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><ul><li><code>fprintf()</code></li></ul></td><td><ul><li>Formatted stream output; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><ul><li><code>printf()</code></li></ul></td><td><ul><li>Formatted stdout output; count or −1</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-6304:1,2,3,4,5,6,7,8,9,10,11,12" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>standard_input()</code></td><td>Process-global stdin stream</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>standard_output()</code></td><td>Process-global stdout stream</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>standard_error()</code></td><td>Process-global stderr stream</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>fopen()</code></td><td>Stream slot or NULL; r/w/a/+</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>OPEN</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write</code></li><li>Host: <code>write stdout</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>fclose()</code></td><td>Close + release stream slot</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>CLOSE</code></li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key"><code>fgetc()</code></td><td>Character or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:20.60%" /><col style="width:46.40%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="7"><td class="table-key"><code>fputc()</code></td><td>Written character or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><code>fputs()</code></td><td>Written count or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><code>write_decimal()</code></td><td>Print decimal; count or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><code>format_stream()</code></td><td>Format arguments; count or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="11"><td class="table-key"><code>fprintf()</code></td><td>Formatted stream output; count or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr>
+<tr data-source-row="12"><td class="table-key"><code>printf()</code></td><td>Formatted stdout output; count or −1</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>WRITE</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li><li>Host: <code>literal-output</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8378,11 +8375,11 @@ struct PicoFile {
 <!-- README_ASSET table-6331 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6331:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.13%" /><col style="width:36.72%" /><col style="width:44.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>read_input()</code></li></ul></td><td><ul><li>Pushback character or stdin byte</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>skip_whitespace()</code></li></ul></td><td><ul><li>Skip spaces; save following character</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>read_decimal()</code></li></ul></td><td><ul><li>Parse signed decimal into target</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>read_string()</code></li></ul></td><td><ul><li>Parse nonempty whitespace-delimited string</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>scanf()</code></li></ul></td><td><ul><li>Number of assigned arguments</li></ul></td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.13%" /><col style="width:36.72%" /><col style="width:44.15%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>read_input()</code></td><td>Pushback character or stdin byte</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>skip_whitespace()</code></td><td>Skip spaces; save following character</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>read_decimal()</code></td><td>Parse signed decimal into target</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>read_string()</code></td><td>Parse nonempty whitespace-delimited string</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>scanf()</code></td><td>Number of assigned arguments</td><td><ul><li><code>FILE_DESCRIPTORS_AVAILABLE</code></li><li><code>READ</code></li><li>Host: <code>read-range</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8405,8 +8402,8 @@ struct PicoFile {
 <!-- README_ASSET table-6346 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6346:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.17%" /><col style="width:29.67%" /><col style="width:49.16%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>_start()</code></li></ul></td><td><ul><li>Naked entry → start_process</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>start_process()</code></li></ul></td><td><ul><li>Initialize heap + environment</li><li>main → exit(status)</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.17%" /><col style="width:29.67%" /><col style="width:49.16%" /></colgroup><thead><tr><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>_start()</code></td><td><ul><li>Naked entry → start_process</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>start_process()</code></td><td><ul><li>Initialize heap + environment</li><li>main → exit(status)</li></ul></td><td><ul><li><code>PROCESS_HEAP_START</code></li><li><code>PROCESS_HEAP_SIZE</code></li><li><code>EXIT</code></li><li><code>PROCESS_HEAP_FULL</code></li><li>Host: <code>write-at</code></li><li>Host: <code>write stdout</code></li><li>Host: <code>file-size</code></li><li>Host: <code>write stderr</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8429,11 +8426,11 @@ struct PicoFile {
 <!-- README_ASSET table-6358 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6358:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.80%" /><col style="width:24.62%" /><col style="width:41.30%" /><col style="width:16.28%" /></colgroup><thead><tr><th>Library</th><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>schedule</code></span></li></ul></td><td><ul><li><span class="source-link"><code>yield(void)</code></span></li></ul></td><td><ul><li>Voluntarily saves the current activation and schedules another runnable process</li></ul></td><td><ul><li><code>YIELD</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>signal</code></span></li></ul></td><td><ul><li><span class="source-link"><code>kill(pid, signal_number)</code></span></li></ul></td><td><ul><li>0 / −1</li><li>Signal 0: existence probe</li></ul></td><td><ul><li><code>KILL</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>sys/prctl</code></span></li></ul></td><td><ul><li><span class="source-link"><code>prctl(option, argument)</code></span></li></ul></td><td><ul><li>0 or <code>-1</code>. Supports <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></li></ul></td><td><ul><li><code>PRCTL</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>sys/reboot</code></span></li></ul></td><td><ul><li><span class="source-link"><code>reboot(command)</code></span></li></ul></td><td><ul><li>Restart/power-off: no return; otherwise −1</li></ul></td><td><ul><li><code>REBOOT</code></li><li><code>SHUTDOWN</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>sys/stat</code></span></li></ul></td><td><ul><li><span class="source-link"><code>mkdir(path)</code></span></li></ul></td><td><ul><li>0 success; −1 path/host error</li></ul></td><td><ul><li><code>MKDIR</code></li><li>Host: <code>mkdir</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.80%" /><col style="width:24.62%" /><col style="width:41.30%" /><col style="width:16.28%" /></colgroup><thead><tr><th>Library</th><th>Library function</th><th>Purpose / result</th><th>Syscalls / host</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>schedule</code></span></td><td><span class="source-link"><code>yield(void)</code></span></td><td><ul><li>Voluntarily saves the current activation and schedules another runnable process</li></ul></td><td><ul><li><code>YIELD</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>signal</code></span></td><td><span class="source-link"><code>kill(pid, signal_number)</code></span></td><td><ul><li>0 / −1</li><li>Signal 0: existence probe</li></ul></td><td><ul><li><code>KILL</code></li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>sys/prctl</code></span></td><td><span class="source-link"><code>prctl(option, argument)</code></span></td><td><ul><li>0 or <code>-1</code>. Supports <span class="source-link"><code>PR_SET_PDEATHSIG</code></span></li></ul></td><td><ul><li><code>PRCTL</code></li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>sys/reboot</code></span></td><td><span class="source-link"><code>reboot(command)</code></span></td><td><ul><li>Restart/power-off: no return; otherwise −1</li></ul></td><td><ul><li><code>REBOOT</code></li><li><code>SHUTDOWN</code></li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>sys/stat</code></span></td><td><span class="source-link"><code>mkdir(path)</code></span></td><td><ul><li>0 success; −1 path/host error</li></ul></td><td><ul><li><code>MKDIR</code></li><li>Host: <code>mkdir</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8511,11 +8508,11 @@ sequenceDiagram
 <!-- README_ASSET table-6428 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6428:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.39%" /><col style="width:35.21%" /><col style="width:40.40%" /></colgroup><thead><tr><th>Component</th><th>Startup implementation</th><th>Execution path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Bootloader</li></ul></td><td><ul><li>Explicit naked _start</li></ul></td><td><ul><li>boot_main → load kernel → jump</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Kernel</li></ul></td><td><ul><li>Generated default _start</li></ul></td><td><ul><li>main → init subsystems → dispatch</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Init process</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Shell</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>User applications</li></ul></td><td><ul><li>libstart; custom -C</li></ul></td><td><ul><li>_start → heap/env → main → exit</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.39%" /><col style="width:35.21%" /><col style="width:40.40%" /></colgroup><thead><tr><th>Component</th><th>Startup implementation</th><th>Execution path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Bootloader</td><td>Explicit naked _start</td><td>boot_main → load kernel → jump</td></tr>
+<tr data-source-row="2"><td class="table-key">Kernel</td><td>Generated default _start</td><td>main → init subsystems → dispatch</td></tr>
+<tr data-source-row="3"><td class="table-key">Init process</td><td>libstart; custom -C</td><td>_start → heap/env → main → exit</td></tr>
+<tr data-source-row="4"><td class="table-key">Shell</td><td>libstart; custom -C</td><td>_start → heap/env → main → exit</td></tr>
+<tr data-source-row="5"><td class="table-key">User applications</td><td>libstart; custom -C</td><td>_start → heap/env → main → exit</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8538,9 +8535,9 @@ sequenceDiagram
 <!-- README_ASSET table-6447 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6447:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.89%" /><col style="width:18.30%" /><col style="width:18.05%" /><col style="width:19.64%" /><col style="width:18.12%" /></colgroup><thead><tr><th>Bootloader function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Called by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>_start(void)</code></span></li></ul></td><td><ul><li>Naked entry → start_process</li></ul></td><td><ul><li>Install EPROM CS/DS + temporary SRAM stack</li></ul></td><td><ul><li>Jumps to <span class="source-link"><code>boot_main()</code></span></li></ul></td><td><ul><li><strong>Machine entry:</strong> PC 0 at boot. Kernel <span class="source-link"><code>reboot()</code></span></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>boot_main(void)</code></span></li></ul></td><td><ul><li>Load kernel; install segments; transfer control</li></ul></td><td><ul><li>Read five-word header; copy kernel payload</li></ul></td><td><ul><li>UART host load; receive words</li><li>Copy to SRAM; jump to kernel</li></ul></td><td><ul><li><strong>Bootloader functions:</strong> <span class="source-link"><code>_start()</code></span></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>start_loaded_kernel(void)</code></span></li></ul></td><td><ul><li>Does not return</li></ul></td><td><ul><li>Relative → absolute segments; replace boot stack</li></ul></td><td><ul><li>Jumps to the generated kernel <span class="source-link"><code>_start</code></span>, which calls <span class="source-link"><code>main()</code></span></li></ul></td><td><ul><li><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25.89%" /><col style="width:18.30%" /><col style="width:18.05%" /><col style="width:19.64%" /><col style="width:18.12%" /></colgroup><thead><tr><th>Bootloader function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Called by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>_start(void)</code></span></td><td>Naked entry → start_process</td><td>Install EPROM CS/DS + temporary SRAM stack</td><td><ul><li>Jumps to <span class="source-link"><code>boot_main()</code></span></li></ul></td><td><strong>Machine entry:</strong> PC 0 at boot. Kernel <span class="source-link"><code>reboot()</code></span></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>boot_main(void)</code></span></td><td>Load kernel; install segments; transfer control</td><td>Read five-word header; copy kernel payload</td><td><ul><li>UART host load; receive words</li><li>Copy to SRAM; jump to kernel</li></ul></td><td><strong>Bootloader functions:</strong> <span class="source-link"><code>_start()</code></span></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>start_loaded_kernel(void)</code></span></td><td>Does not return</td><td>Relative → absolute segments; replace boot stack</td><td><ul><li>Jumps to the generated kernel <span class="source-link"><code>_start</code></span>, which calls <span class="source-link"><code>main()</code></span></li></ul></td><td><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8938,9 +8935,9 @@ void _start(int argc, char *first_argument) {
 <!-- README_ASSET table-6648 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6648:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.19%" /><col style="width:68.81%" /></colgroup><thead><tr><th>Component</th><th>Responsibility</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Kernel <span class="source-link"><code>main()</code></span></li></ul></td><td><ul><li>Initialize subsystems + dispatch</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>Init</code></span></li></ul></td><td><ul><li>Configure environment; supervise shell</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>Shell</code></span></li></ul></td><td><ul><li>Terminal ownership + command execution</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.19%" /><col style="width:68.81%" /></colgroup><thead><tr><th>Component</th><th>Responsibility</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Kernel <span class="source-link"><code>main()</code></span></td><td>Initialize subsystems + dispatch</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>Init</code></span></td><td>Configure environment; supervise shell</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>Shell</code></span></td><td>Terminal ownership + command execution</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -8965,9 +8962,9 @@ void _start(int argc, char *first_argument) {
 <!-- README_ASSET table-6666 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6666:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.04%" /><col style="width:28.98%" /><col style="width:37.99%" /></colgroup><thead><tr><th>Init function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>init_write_error(text)</code></span></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>write → stderr diagnostic</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>read_environment(void)</code></span></li></ul></td><td><ul><li>Read /config environment</li></ul></td><td><ul><li>Read config; setenv; release buffers</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>main(void)</code></span></li></ul></td><td><ul><li>Setup/launch failure → 1; otherwise supervises</li></ul></td><td><ul><li><span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, and exact-child <span class="source-link"><code>waitpid()</code></span></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.04%" /><col style="width:28.98%" /><col style="width:37.99%" /></colgroup><thead><tr><th>Init function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>init_write_error(text)</code></span></td><td>No value</td><td>write → stderr diagnostic</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>read_environment(void)</code></span></td><td>Read /config environment</td><td>Read config; setenv; release buffers</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>main(void)</code></span></td><td>Setup/launch failure → 1; otherwise supervises</td><td><span class="source-link"><code>setenv()</code></span>, <span class="source-link"><code>load()</code></span>, <span class="source-link"><code>run()</code></span>, and exact-child <span class="source-link"><code>waitpid()</code></span></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9234,16 +9231,16 @@ void _start(int argc, char *first_argument) {
 <!-- README_ASSET table-6793 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-6793:1,2,3,4,5,6,7,8,9,10">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-6793:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>last_command_exit_status</code></span></li></ul></td><td><ul><li>$? status integer</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>last_background_process_id</code></span></li></ul></td><td><ul><li>Background/stopped PID</li><li>Used by $!, fg, bg</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>shell_executable_path</code></span></li></ul></td><td><ul><li>Embedded scratch buffer for one <code>PATH</code> candidate</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>shell_pipe_left_command</code></span>, <span class="source-link"><code>shell_pipe_right_command</code></span>, <span class="source-link"><code>shell_pipe_path</code></span></li></ul></td><td><ul><li>Embedded command and temporary-path storage for one two-command pipeline</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>command_history</code></span></li></ul></td><td><ul><li>Eight-command ring; skip consecutive duplicates</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>command_history_draft</code></span></li></ul></td><td><ul><li>Current unfinished line preserved while navigating history</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>shell_line_erase_sequence</code></span></li></ul></td><td><ul><li>Embedded scratch array holding one batched terminal erase sequence</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>shell_input_buffer</code></span></li></ul></td><td><ul><li>Retain up to 128 read-ahead bytes</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>command_history_start</code></span>, <span class="source-link"><code>command_history_count</code></span></li></ul></td><td><ul><li>History ring indices/count</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li><span class="source-link"><code>shell_input_index</code></span>, <span class="source-link"><code>shell_input_count</code></span></li></ul></td><td><ul><li>Next retained byte + valid byte count</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-6793:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>last_command_exit_status</code></span></td><td><ul><li>$? status integer</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>last_background_process_id</code></span></td><td><ul><li>Background/stopped PID</li><li>Used by $!, fg, bg</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>shell_executable_path</code></span></td><td><ul><li>Embedded scratch buffer for one <code>PATH</code> candidate</li></ul></td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>shell_pipe_left_command</code></span>, <span class="source-link"><code>shell_pipe_right_command</code></span>, <span class="source-link"><code>shell_pipe_path</code></span></td><td><ul><li>Embedded command and temporary-path storage for one two-command pipeline</li></ul></td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>command_history</code></span></td><td><ul><li>Eight-command ring; skip consecutive duplicates</li></ul></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:45.34%" /><col style="width:54.66%" /></colgroup><thead><tr><th>Global</th><th>Meaning and storage</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><span class="source-link"><code>command_history_draft</code></span></td><td><ul><li>Current unfinished line preserved while navigating history</li></ul></td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>shell_line_erase_sequence</code></span></td><td><ul><li>Embedded scratch array holding one batched terminal erase sequence</li></ul></td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>shell_input_buffer</code></span></td><td><ul><li>Retain up to 128 read-ahead bytes</li></ul></td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>command_history_start</code></span>, <span class="source-link"><code>command_history_count</code></span></td><td><ul><li>History ring indices/count</li></ul></td></tr>
+<tr data-source-row="10"><td class="table-key"><span class="source-link"><code>shell_input_index</code></span>, <span class="source-link"><code>shell_input_count</code></span></td><td><ul><li>Next retained byte + valid byte count</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9309,8 +9306,8 @@ flowchart LR
 <!-- README_ASSET table-6850 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6850:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.17%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:16.27%" /><col style="width:16.27%" /></colgroup><thead><tr><th>Buffer state</th><th>Cell 0</th><th>Cell 1</th><th>Cell 2</th><th>Cell 3</th><th>Cell 4</th><th>Cell 5</th><th>Cell 6</th><th>shell_input_index</th><th>shell_input_count</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>After <span class="source-link"><code>read()</code></span></li></ul></td><td><ul><li><code>p</code></li></ul></td><td><ul><li><code>w</code></li></ul></td><td><ul><li><code>d</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li><code>l</code></li></ul></td><td><ul><li><code>s</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li>0</li></ul></td><td><ul><li>7</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>After <span class="source-link"><code>read_line()</code></span> returns <code>pwd</code></li></ul></td><td><ul><li><code>p</code></li></ul></td><td><ul><li><code>w</code></li></ul></td><td><ul><li><code>d</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li><code>l</code></li></ul></td><td><ul><li><code>s</code></li></ul></td><td><ul><li><code>\n</code></li></ul></td><td><ul><li>4</li></ul></td><td><ul><li>7</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.17%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:7.90%" /><col style="width:16.27%" /><col style="width:16.27%" /></colgroup><thead><tr><th>Buffer state</th><th>Cell 0</th><th>Cell 1</th><th>Cell 2</th><th>Cell 3</th><th>Cell 4</th><th>Cell 5</th><th>Cell 6</th><th>shell_input_index</th><th>shell_input_count</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">After <span class="source-link"><code>read()</code></span></td><td><code>p</code></td><td><code>w</code></td><td><code>d</code></td><td><code>\n</code></td><td><code>l</code></td><td><code>s</code></td><td><code>\n</code></td><td>0</td><td>7</td></tr>
+<tr data-source-row="2"><td class="table-key">After <span class="source-link"><code>read_line()</code></span> returns <code>pwd</code></td><td><code>p</code></td><td><code>w</code></td><td><code>d</code></td><td><code>\n</code></td><td><code>l</code></td><td><code>s</code></td><td><code>\n</code></td><td>4</td><td>7</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9379,15 +9376,15 @@ int read_shell_character(char *character) {
 <!-- README_ASSET table-6881 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6881:1,2,3,4,5,6,7,8,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.94%" /><col style="width:20.26%" /><col style="width:35.80%" /></colgroup><thead><tr><th>Shell function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><span class="source-link"><code>read_shell_character(character)</code></span></li></ul></td><td><ul><li>1 byte; 0 EOF; negative error</li></ul></td><td><ul><li>Refill once; consume retained bytes</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>read_line(buffer, capacity)</code></span></li></ul></td><td><ul><li>Length; −1 EOF</li></ul></td><td><ul><li>Batch echoes; edit line; navigate history</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>remember_shell_command(command)</code></span></li></ul></td><td><ul><li>No value</li></ul></td><td><ul><li>strcmp/strcpy; update eight-entry ring</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>expand_variables(arguments, result, capacity)</code></span></li></ul></td><td><ul><li>Expanded buffer; bounded length; NULL on null</li></ul></td><td><ul><li>getenv + $?/$!; retain quote bytes</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>load_from_path(name)</code></span></li></ul></td><td><ul><li>Loaded PID, or 0</li></ul></td><td><ul><li>Search PATH; load candidates in order</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>run_process(pid, arguments, background, stdin_path, stdout_path, append_stdout, stderr_path, append_stderr)</code></span></li></ul></td><td><ul><li><code>true</code> when <span class="source-link"><code>run()</code></span> succeeds, otherwise <code>false</code></li></ul></td><td><ul><li>Redirect; run; foreground/wait; update statuses</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>continue_background_process(foreground)</code></span></li></ul></td><td><ul><li><code>true</code> when the tracked process was continued, otherwise <code>false</code></li></ul></td><td><ul><li><span class="source-link"><code>kill()</code></span> and, for <code>fg</code>, <span class="source-link"><code>set_foreground_process()</code></span> and <span class="source-link"><code>waitpid()</code></span></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><span class="source-link"><code>eval(command)</code></span></li></ul></td><td><ul><li><code>false</code> only for <code>exit</code>, otherwise <code>true</code></li></ul></td><td><ul><li>Selects a built-in or external execution path</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li><span class="source-link"><code>main(argc, argv)</code></span></li></ul></td><td><ul><li>Shell exit status</li></ul></td><td><ul><li>Initialize ownership; close scratch; command loop</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.94%" /><col style="width:20.26%" /><col style="width:35.80%" /></colgroup><thead><tr><th>Shell function</th><th>Result</th><th>Library functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>read_shell_character(character)</code></span></td><td>1 byte; 0 EOF; negative error</td><td>Refill once; consume retained bytes</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>read_line(buffer, capacity)</code></span></td><td>Length; −1 EOF</td><td>Batch echoes; edit line; navigate history</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>remember_shell_command(command)</code></span></td><td>No value</td><td>strcmp/strcpy; update eight-entry ring</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>expand_variables(arguments, result, capacity)</code></span></td><td>Expanded buffer; bounded length; NULL on null</td><td>getenv + $?/$!; retain quote bytes</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>load_from_path(name)</code></span></td><td>Loaded PID, or 0</td><td>Search PATH; load candidates in order</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>run_process(pid, arguments, background, stdin_path, stdout_path, append_stdout, stderr_path, append_stderr)</code></span></td><td><code>true</code> when <span class="source-link"><code>run()</code></span> succeeds, otherwise <code>false</code></td><td>Redirect; run; foreground/wait; update statuses</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>continue_background_process(foreground)</code></span></td><td><code>true</code> when the tracked process was continued, otherwise <code>false</code></td><td><span class="source-link"><code>kill()</code></span> and, for <code>fg</code>, <span class="source-link"><code>set_foreground_process()</code></span> and <span class="source-link"><code>waitpid()</code></span></td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>eval(command)</code></span></td><td><code>false</code> only for <code>exit</code>, otherwise <code>true</code></td><td>Selects a built-in or external execution path</td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>main(argc, argv)</code></span></td><td>Shell exit status</td><td>Initialize ownership; close scratch; command loop</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9410,16 +9407,16 @@ int read_shell_character(char *character) {
 <!-- README_ASSET table-6900 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-6900:1,2,3,4,5,6,7,8,9,10">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-6900:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Line feed or carriage return</li></ul></td><td><ul><li>Echo one newline and finish the command</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>shell_write_character()</code></span> and ends its loop</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Backspace (8) or Delete (127)</li></ul></td><td><ul><li>Remove one buffered character and erase it visually</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with <code>length - 1</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>Ctrl+U</code> (21)</li></ul></td><td><ul><li>Erase the complete current line</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with retained length 0</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>Ctrl+V</code> (22)</li></ul></td><td><ul><li>Ignore the byte because PicoOS has no literal-next-character mode</li></ul></td><td><ul><li>No matching branch; discarded</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>Ctrl+W</code> (23)</li></ul></td><td><ul><li>Erase trailing whitespace and the previous word</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> finds the retained prefix, then calls <span class="source-link"><code>erase_shell_line_suffix()</code></span></li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li>Up: ESC [ A / ESC O A</li></ul></td><td><ul><li>Move toward older entries in the eight-command history ring</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> decodes the sequence, then calls <span class="source-link"><code>navigate_command_history(..., 1)</code></span></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Down: ESC [ B / ESC O B</li></ul></td><td><ul><li>Move toward newer entries and finally restore the draft</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>navigate_command_history(..., -1)</code></span></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>Left/right: ESC [ C/D / ESC O C/D</li></ul></td><td><ul><li>Consume the escape sequence but do not move the cursor</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> sets <span class="source-link"><code>process_character</code></span> to <code>false</code> without changing the line</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>Tab</li></ul></td><td><ul><li>Append one space if room remains</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> converts it to a space, then calls <span class="source-link"><code>append_shell_line_character()</code></span></li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li>Printable byte</li></ul></td><td><ul><li>Append it if room remains</li></ul></td><td><ul><li><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>append_shell_line_character()</code></span></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-6900:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Line feed or carriage return</td><td>Echo one newline and finish the command</td><td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>shell_write_character()</code></span> and ends its loop</td></tr>
+<tr data-source-row="2"><td class="table-key">Backspace (8) or Delete (127)</td><td>Remove one buffered character and erase it visually</td><td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with <code>length - 1</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>Ctrl+U</code> (21)</td><td>Erase the complete current line</td><td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>erase_shell_line_suffix()</code></span> with retained length 0</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>Ctrl+V</code> (22)</td><td>Ignore the byte because PicoOS has no literal-next-character mode</td><td>No matching branch; discarded</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>Ctrl+W</code> (23)</td><td>Erase trailing whitespace and the previous word</td><td><span class="source-link"><code>read_line()</code></span> finds the retained prefix, then calls <span class="source-link"><code>erase_shell_line_suffix()</code></span></td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:22.82%" /><col style="width:37.85%" /><col style="width:39.33%" /></colgroup><thead><tr><th>Input</th><th>Shell behavior</th><th>Implementation</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key">Up: ESC [ A / ESC O A</td><td>Move toward older entries in the eight-command history ring</td><td><span class="source-link"><code>read_line()</code></span> decodes the sequence, then calls <span class="source-link"><code>navigate_command_history(..., 1)</code></span></td></tr>
+<tr data-source-row="7"><td class="table-key">Down: ESC [ B / ESC O B</td><td>Move toward newer entries and finally restore the draft</td><td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>navigate_command_history(..., -1)</code></span></td></tr>
+<tr data-source-row="8"><td class="table-key">Left/right: ESC [ C/D / ESC O C/D</td><td>Consume the escape sequence but do not move the cursor</td><td><span class="source-link"><code>read_line()</code></span> sets <span class="source-link"><code>process_character</code></span> to <code>false</code> without changing the line</td></tr>
+<tr data-source-row="9"><td class="table-key">Tab</td><td>Append one space if room remains</td><td><span class="source-link"><code>read_line()</code></span> converts it to a space, then calls <span class="source-link"><code>append_shell_line_character()</code></span></td></tr>
+<tr data-source-row="10"><td class="table-key">Printable byte</td><td>Append it if room remains</td><td><span class="source-link"><code>read_line()</code></span> calls <span class="source-link"><code>append_shell_line_character()</code></span></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9490,13 +9487,13 @@ if (character == SHELL_CTRL_U) {
 <!-- README_ASSET table-6958 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-6958:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.40%" /><col style="width:31.28%" /><col style="width:38.33%" /></colgroup><thead><tr><th>Stage</th><th>Result</th><th>What changed</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Input</li></ul></td><td><ul><li>Original command + redirection + &amp;</li></ul></td><td><ul><li>Nothing yet</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><span class="source-link"><code>strip_background_operator()</code></span></li></ul></td><td><ul><li>Trailing &amp; removed; background=true</li></ul></td><td><ul><li>Removed only the trailing <code>&amp;</code> and adjacent whitespace</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>strip_command_redirections()</code></span></li></ul></td><td><ul><li>Command prefix + stdout_path</li></ul></td><td><ul><li>Split final &gt;; path stays unexpanded</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>command_arguments()</code></span></li></ul></td><td><ul><li>Separated name + raw arguments</li></ul></td><td><ul><li>Terminate name; retain raw argument suffix</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>load_from_path()</code></span></li></ul></td><td><ul><li>/user/echo.bin; NEW PID</li></ul></td><td><ul><li>Used <code>PATH</code>. This step does <strong>not</strong> copy descriptors</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><span class="source-link"><code>expand_variables()</code></span></li></ul></td><td><ul><li>&quot;hello Ada (0)&quot;; quotes retained</li></ul></td><td><ul><li>Replaced <code>$NAME</code> and <code>$?</code>, deliberately retaining quote bytes</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><span class="source-link"><code>run()</code></span></li></ul></td><td><ul><li>argv[1] = hello Ada (0)</li></ul></td><td><ul><li>Strip matching quotes; inherit FDs; READY</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.40%" /><col style="width:31.28%" /><col style="width:38.33%" /></colgroup><thead><tr><th>Stage</th><th>Result</th><th>What changed</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Input</td><td>Original command + redirection + &amp;</td><td>Nothing yet</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>strip_background_operator()</code></span></td><td>Trailing &amp; removed; background=true</td><td>Removed only the trailing <code>&amp;</code> and adjacent whitespace</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>strip_command_redirections()</code></span></td><td>Command prefix + stdout_path</td><td>Split final &gt;; path stays unexpanded</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>command_arguments()</code></span></td><td>Separated name + raw arguments</td><td>Terminate name; retain raw argument suffix</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>load_from_path()</code></span></td><td>/user/echo.bin; NEW PID</td><td>Used <code>PATH</code>. This step does <strong>not</strong> copy descriptors</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>expand_variables()</code></span></td><td>&quot;hello Ada (0)&quot;; quotes retained</td><td>Replaced <code>$NAME</code> and <code>$?</code>, deliberately retaining quote bytes</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>run()</code></span></td><td>argv[1] = hello Ada (0)</td><td>Strip matching quotes; inherit FDs; READY</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9519,15 +9516,15 @@ if (character == SHELL_CTRL_U) {
 <!-- README_ASSET table-6992 -->
 <ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><code>exit</code></li></ul><ul><li>End current session</li></ul><ul><li>libstart → exit(main_result)</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>eval COMMAND</code></li></ul><ul><li>Recursively evaluate command; same shell state</li></ul><ul><li>eval; normal command APIs</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>export NAME=value</code></li></ul><ul><li>Expand assignment; update environment</li></ul><ul><li>getenv/setenv</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>cd DIRECTORY</code></li></ul><ul><li>Validate path; change shell directory</li></ul><ul><li>chdir; host directory check</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>load PATH</code></li></ul><ul><li>Load binary → NEW PCB</li></ul><ul><li>load; host file-size + read-range</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>run PID [ARGUMENTS]</code></li></ul><ul><li>Run child; background + redirection</li></ul><ul><li>Redirect → run → wait → restore</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>unload PID</code></li></ul><ul><li>Remove noncurrent process</li></ul><ul><li>unload</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>fg</code></li></ul><ul><li>Continue job; foreground; wait</li></ul><ul><li>Foreground ownership; SIGCONT; waitpid</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><code>bg</code></li></ul><ul><li>Continue job in background</li></ul><ul><li>kill(SIGCONT)</li></ul></div></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><div class="tile-name"><code>exit</code></div><div class="tile-detail">End current session</div><div class="tile-detail">libstart → exit(main_result)</div></div>
+<div class="readme-tile"><div class="tile-name"><code>eval COMMAND</code></div><div class="tile-detail">Recursively evaluate command; same shell state</div><div class="tile-detail">eval; normal command APIs</div></div>
+<div class="readme-tile"><div class="tile-name"><code>export NAME=value</code></div><div class="tile-detail">Expand assignment; update environment</div><div class="tile-detail">getenv/setenv</div></div>
+<div class="readme-tile"><div class="tile-name"><code>cd DIRECTORY</code></div><div class="tile-detail">Validate path; change shell directory</div><div class="tile-detail">chdir; host directory check</div></div>
+<div class="readme-tile"><div class="tile-name"><code>load PATH</code></div><div class="tile-detail">Load binary → NEW PCB</div><div class="tile-detail">load; host file-size + read-range</div></div>
+<div class="readme-tile"><div class="tile-name"><code>run PID [ARGUMENTS]</code></div><div class="tile-detail">Run child; background + redirection</div><div class="tile-detail">Redirect → run → wait → restore</div></div>
+<div class="readme-tile"><div class="tile-name"><code>unload PID</code></div><div class="tile-detail">Remove noncurrent process</div><div class="tile-detail">unload</div></div>
+<div class="readme-tile"><div class="tile-name"><code>fg</code></div><div class="tile-detail">Continue job; foreground; wait</div><div class="tile-detail">Foreground ownership; SIGCONT; waitpid</div></div>
+<div class="readme-tile"><div class="tile-name"><code>bg</code></div><div class="tile-detail">Continue job in background</div><div class="tile-detail">kill(SIGCONT)</div></div></div>
 
 </ReadmeVisual>
 
@@ -9644,14 +9641,14 @@ int set_foreground_process(int pid) {
 <!-- README_ASSET table-7116 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7116:1,2,3,4,5,6,7,8">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.53%" /><col style="width:15.25%" /><col style="width:14.49%" /><col style="width:14.47%" /><col style="width:23.02%" /><col style="width:15.25%" /></colgroup><thead><tr><th>Descriptor</th><th>Initial shell</th><th>Open 3; save 1 → 6</th><th>3 → 1; close 3</th><th>Child after run</th><th>Restore 6 → 1; close 6</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>0</li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li><code>T-in</code></li></ul></td><td><ul><li>T-in copy</li></ul></td><td><ul><li><code>T-in</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>1</li></ul></td><td><ul><li><code>T-out</code></li></ul></td><td><ul><li><code>T-out</code></li></ul></td><td><ul><li><code>OUT</code></li></ul></td><td><ul><li>OUT copy</li></ul></td><td><ul><li><code>T-out</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>2</li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li><code>T-err</code></li></ul></td><td><ul><li>T-err copy</li></ul></td><td><ul><li><code>T-err</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>3</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li><code>OUT</code> opened here</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li>4</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>5</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>6</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>saved <code>T-out</code> copy</li></ul></td><td><ul><li>saved <code>T-out</code> copy</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>7</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free</li></ul></td><td><ul><li>free because inheritance never examines it</li></ul></td><td><ul><li>free</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.53%" /><col style="width:15.25%" /><col style="width:14.49%" /><col style="width:14.47%" /><col style="width:23.02%" /><col style="width:15.25%" /></colgroup><thead><tr><th>Descriptor</th><th>Initial shell</th><th>Open 3; save 1 → 6</th><th>3 → 1; close 3</th><th>Child after run</th><th>Restore 6 → 1; close 6</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td><code>T-in</code></td><td><code>T-in</code></td><td><code>T-in</code></td><td>T-in copy</td><td><code>T-in</code></td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td><code>T-out</code></td><td><code>T-out</code></td><td><code>OUT</code></td><td>OUT copy</td><td><code>T-out</code></td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td><code>T-err</code></td><td><code>T-err</code></td><td><code>T-err</code></td><td>T-err copy</td><td><code>T-err</code></td></tr>
+<tr data-source-row="4"><td class="table-key">3</td><td>free</td><td><code>OUT</code> opened here</td><td>free</td><td>free</td><td>free</td></tr>
+<tr data-source-row="5"><td class="table-key">4</td><td>free</td><td>free</td><td>free</td><td>free</td><td>free</td></tr>
+<tr data-source-row="6"><td class="table-key">5</td><td>free</td><td>free</td><td>free</td><td>free because inheritance never examines it</td><td>free</td></tr>
+<tr data-source-row="7"><td class="table-key">6</td><td>free</td><td>saved <code>T-out</code> copy</td><td>saved <code>T-out</code> copy</td><td>free because inheritance never examines it</td><td>free</td></tr>
+<tr data-source-row="8"><td class="table-key">7</td><td>free</td><td>free</td><td>free</td><td>free because inheritance never examines it</td><td>free</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9790,13 +9787,13 @@ bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
 <!-- README_ASSET table-7205 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7205:1,2,3,4,5,6,7">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.34%" /><col style="width:35.76%" /><col style="width:16.33%" /><col style="width:32.58%" /></colgroup><thead><tr><th>Shell form</th><th>Opens/creates</th><th>Copies and replacements before run()</th><th>Child endpoints and shell cleanup</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>COMMAND</code></li></ul></td><td><ul><li>None</li></ul></td><td><ul><li>None</li></ul></td><td><ul><li>Child: independent 0–2 + file slots 3–4</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>COMMAND &lt; IN</code></li></ul></td><td><ul><li>Save stdin → 5; open IN as 0</li></ul></td><td><ul><li><span class="source-link"><code>dup2(0, 5)</code></span> saves current stdin</li></ul></td><td><ul><li>Child reads 0; shell restores/closes 5</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>COMMAND &gt; OUT</code></li></ul></td><td><ul><li>Open OUT: write/create/truncate; temporary slot 3</li></ul></td><td><ul><li>Save 1 → 6; install OUT; close temporary</li></ul></td><td><ul><li>Child writes 1; shell restores/closes 6</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>COMMAND &gt;&gt; OUT</code></li></ul></td><td><ul><li>Same, with <span class="source-link"><code>O_APPEND</code></span> instead of <span class="source-link"><code>O_TRUNC</code></span></li></ul></td><td><ul><li>Same stdout operations</li></ul></td><td><ul><li>Each child write appends using a <code>file-size</code> request</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>COMMAND 2&gt; ERR</code> / <code>2&gt;&gt; ERR</code></li></ul></td><td><ul><li>Open with the corresponding truncate/append flags</li></ul></td><td><ul><li>Save 2 → 7; install ERR; close temporary</li></ul></td><td><ul><li>Child writes 2; shell restores/closes 7</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>COMMAND &lt; IN &gt; OUT 2&gt; ERR</code></li></ul></td><td><ul><li>stdout → stderr → stdin; append optional</li></ul></td><td><ul><li>Combine save slots 5, 6, 7</li></ul></td><td><ul><li>Child gets endpoints; shell restores originals</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>LEFT | RIGHT</code></li></ul></td><td><ul><li>LEFT &gt; temporary; RIGHT &lt; temporary</li></ul></td><td><ul><li>Save stdout → 6; stdin → 5</li></ul></td><td><ul><li>LEFT exits → RIGHT reads → unlink temporary</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.34%" /><col style="width:35.76%" /><col style="width:16.33%" /><col style="width:32.58%" /></colgroup><thead><tr><th>Shell form</th><th>Opens/creates</th><th>Copies and replacements before run()</th><th>Child endpoints and shell cleanup</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>COMMAND</code></td><td>None</td><td>None</td><td>Child: independent 0–2 + file slots 3–4</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>COMMAND &lt; IN</code></td><td>Save stdin → 5; open IN as 0</td><td><span class="source-link"><code>dup2(0, 5)</code></span> saves current stdin</td><td>Child reads 0; shell restores/closes 5</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>COMMAND &gt; OUT</code></td><td>Open OUT: write/create/truncate; temporary slot 3</td><td>Save 1 → 6; install OUT; close temporary</td><td>Child writes 1; shell restores/closes 6</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>COMMAND &gt;&gt; OUT</code></td><td>Same, with <span class="source-link"><code>O_APPEND</code></span> instead of <span class="source-link"><code>O_TRUNC</code></span></td><td>Same stdout operations</td><td>Each child write appends using a <code>file-size</code> request</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>COMMAND 2&gt; ERR</code> / <code>2&gt;&gt; ERR</code></td><td>Open with the corresponding truncate/append flags</td><td>Save 2 → 7; install ERR; close temporary</td><td>Child writes 2; shell restores/closes 7</td></tr>
+<tr data-source-row="6"><td class="table-key"><code>COMMAND &lt; IN &gt; OUT 2&gt; ERR</code></td><td>stdout → stderr → stdin; append optional</td><td>Combine save slots 5, 6, 7</td><td>Child gets endpoints; shell restores originals</td></tr>
+<tr data-source-row="7"><td class="table-key"><code>LEFT | RIGHT</code></td><td>LEFT &gt; temporary; RIGHT &lt; temporary</td><td>Save stdout → 6; stdin → 5</td><td>LEFT exits → RIGHT reads → unlink temporary</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10047,15 +10044,15 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 <!-- README_ASSET table-7397 -->
 <ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>shell.bin</code></span></li></ul><ul><li>Interpret commands; interactive or redirected</li></ul><ul><li>Process + descriptor + environment APIs</li><li>Host: load/read/output/directory requests</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>echo.bin</code></span></li></ul><ul><li>Join arguments; expand \n; newline</li></ul><ul><li>printf; descriptor-based output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>count.bin</code></span></li></ul><ul><li>Count + busy delay; yield</li></ul><ul><li>printf/atoi/yield; descriptor-based output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>cat.bin</code></span></li></ul><ul><li>Files/stdin → stdout; editing</li></ul><ul><li>open/read/write/lseek/close</li><li>Host: file-size/read-range/output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>touch.bin</code></span></li></ul><ul><li>Create file or update timestamps</li></ul><ul><li>touch; host touch</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>cp.bin</code></span></li></ul><ul><li>Copy file in 64-cell chunks</li></ul><ul><li>open/read/write/close</li><li>Host: read-range/write-at</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mv.bin</code></span></li></ul><ul><li>Move/rename file or directory</li></ul><ul><li>move; host move/rename</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>sed.bin</code></span></li></ul><ul><li>Insert/change/append/substitute stdin lines</li></ul><ul><li>lseek/read/write; malloc/free</li><li>Host: file-size/read-range/output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>ps.bin</code></span></li></ul><ul><li>Print PIDs + binary paths</li></ul><ul><li>list_processes; descriptor-based output</li></ul></div></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><div class="tile-name"><span class="source-link"><code>shell.bin</code></span></div><div class="tile-detail">Interpret commands; interactive or redirected</div><div class="tile-detail"><ul><li>Process + descriptor + environment APIs</li><li>Host: load/read/output/directory requests</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>echo.bin</code></span></div><div class="tile-detail">Join arguments; expand \n; newline</div><div class="tile-detail"><ul><li>printf; descriptor-based output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>count.bin</code></span></div><div class="tile-detail">Count + busy delay; yield</div><div class="tile-detail"><ul><li>printf/atoi/yield; descriptor-based output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>cat.bin</code></span></div><div class="tile-detail">Files/stdin → stdout; editing</div><div class="tile-detail"><ul><li>open/read/write/lseek/close</li><li>Host: file-size/read-range/output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>touch.bin</code></span></div><div class="tile-detail">Create file or update timestamps</div><div class="tile-detail"><ul><li>touch; host touch</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>cp.bin</code></span></div><div class="tile-detail">Copy file in 64-cell chunks</div><div class="tile-detail"><ul><li>open/read/write/close</li><li>Host: read-range/write-at</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>mv.bin</code></span></div><div class="tile-detail">Move/rename file or directory</div><div class="tile-detail"><ul><li>move; host move/rename</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>sed.bin</code></span></div><div class="tile-detail">Insert/change/append/substitute stdin lines</div><div class="tile-detail"><ul><li>lseek/read/write; malloc/free</li><li>Host: file-size/read-range/output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>ps.bin</code></span></div><div class="tile-detail">Print PIDs + binary paths</div><div class="tile-detail"><ul><li>list_processes; descriptor-based output</li></ul></div></div></div>
 
 </ReadmeVisual>
 
@@ -10078,15 +10075,15 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 <!-- README_ASSET table-7397 -->
 <ReadmeVisual kind="table" :width="1280" class="inventory-grid">
 
-<div class="readme-tiles" v-pre><div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>ls.bin</code></span></li></ul><ul><li>Directory listing; optional -a</li></ul><ul><li>opendir/readdir/closedir; host ls</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>mkdir.bin</code></span></li></ul><ul><li>Create supplied directories</li></ul><ul><li>mkdir; host mkdir</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>pwd.bin</code></span></li></ul><ul><li>Print current working directory</li></ul><ul><li>getcwd; descriptor-based output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>rm.bin</code></span></li></ul><ul><li>Remove supplied files</li></ul><ul><li>unlink; host unlink</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>rmdir.bin</code></span></li></ul><ul><li>Remove supplied empty directories</li></ul><ul><li>rmdir; host rmdir</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>kill.bin</code></span></li></ul><ul><li>Deliver signal; 0 probes PID</li></ul><ul><li>kill/atoi/yield; diagnostics output</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>poweroff.bin</code></span></li></ul><ul><li>Halt PicoOS</li></ul><ul><li>reboot(POWER_OFF); no host request</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>reboot.bin</code></span></li></ul><ul><li>Restart bootloader + kernel</li></ul><ul><li>reboot(RESTART); host reloads kernel + init</li></ul></div>
-<div class="readme-tile"><ul class="tile-name"><li><span class="source-link"><code>uname.bin</code></span></li></ul><ul><li>Print installed PicoOS version</li></ul><ul><li>open/read/write/close</li><li>Host: file-size/read-range/output</li></ul></div></div>
+<div class="readme-tiles" v-pre><div class="readme-tile"><div class="tile-name"><span class="source-link"><code>ls.bin</code></span></div><div class="tile-detail">Directory listing; optional -a</div><div class="tile-detail"><ul><li>opendir/readdir/closedir; host ls</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>mkdir.bin</code></span></div><div class="tile-detail">Create supplied directories</div><div class="tile-detail"><ul><li>mkdir; host mkdir</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>pwd.bin</code></span></div><div class="tile-detail">Print current working directory</div><div class="tile-detail"><ul><li>getcwd; descriptor-based output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>rm.bin</code></span></div><div class="tile-detail">Remove supplied files</div><div class="tile-detail"><ul><li>unlink; host unlink</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>rmdir.bin</code></span></div><div class="tile-detail">Remove supplied empty directories</div><div class="tile-detail"><ul><li>rmdir; host rmdir</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>kill.bin</code></span></div><div class="tile-detail">Deliver signal; 0 probes PID</div><div class="tile-detail"><ul><li>kill/atoi/yield; diagnostics output</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>poweroff.bin</code></span></div><div class="tile-detail">Halt PicoOS</div><div class="tile-detail"><ul><li>reboot(POWER_OFF); no host request</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>reboot.bin</code></span></div><div class="tile-detail">Restart bootloader + kernel</div><div class="tile-detail"><ul><li>reboot(RESTART); host reloads kernel + init</li></ul></div></div>
+<div class="readme-tile"><div class="tile-name"><span class="source-link"><code>uname.bin</code></span></div><div class="tile-detail">Print installed PicoOS version</div><div class="tile-detail"><ul><li>open/read/write/close</li><li>Host: file-size/read-range/output</li></ul></div></div></div>
 
 </ReadmeVisual>
 
@@ -10107,12 +10104,12 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-7434 -->
-<div class="readme-list bullet-columns"><ul><li><strong>echo:</strong> spaces + newline; expands \n<ul><li><strong>No -n</strong>; returns 0</li></ul></li>
-<li><strong>count:</strong> optional busy-loop delay<ul><li><strong>Yield</strong> after each value</li></ul></li>
-<li><strong>cat:</strong> files/stdin → stdout<ul><li><strong>64-cell chunks</strong>; terminal editing + Ctrl+D</li></ul></li>
+<div class="readme-list bullet-columns"><ul><li><strong>echo:</strong> spaces + newline; expands \n<div class="readme-item"><strong>No -n</strong>; returns 0</div></li>
+<li><strong>count:</strong> optional busy-loop delay<div class="readme-item"><strong>Yield</strong> after each value</div></li>
+<li><strong>cat:</strong> files/stdin → stdout<div class="readme-item"><strong>64-cell chunks</strong>; terminal editing + Ctrl+D</div></li>
 <li><strong>touch:</strong> multiple paths<ul><li><strong>cp/mv:</strong> one source + destination</li>
 <li><strong>cp:</strong> 64-cell chunks; ps includes zombies</li></ul></li>
-<li><strong>sed:</strong> seekable stdin; no path operand<ul><li>Insert/change/append; <strong>first literal substitution</strong></li></ul></li>
+<li><strong>sed:</strong> seekable stdin; no path operand<div class="readme-item">Insert/change/append; <strong>first literal substitution</strong></div></li>
 <li><strong>ls:</strong> one directory; -a<ul><li><strong>mkdir:</strong> no -p; <strong>rm:</strong> nonrecursive</li>
 <li><strong>rmdir:</strong> empty directories; multiple paths</li></ul></li>
 <li><strong>kill:</strong> default SIGKILL; names/numbers<ul><li><strong>Signal 0</strong> probes; zombies rejected</li>
@@ -10303,16 +10300,16 @@ flowchart TD
 <!-- README_ASSET table-7591 -->
 <ReadmeVisual kind="table" :width="1324" data-table-key="table-7591:1,2,3,4,5,6,7,8,9,10">
 
-<div class="table-panels table-panels-two" data-column-key="table:table-7591:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 52fr) minmax(0, 48fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>test/*.picoc</li></ul></td><td><ul><li>Program + input/expected/link metadata</li></ul></td><td><ul><li>Library</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>input.txt</li></ul></td><td><ul><li>Prompt-driven commands + encoded keys</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>expected_output.txt</li></ul></td><td><ul><li>Source-controlled normalized expectation</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>launcher.picoc</li></ul></td><td><ul><li>OS coordination program</li></ul></td><td><ul><li>Every OS test and the <span class="source-link"><code>shell_exit_status_pid</code> Shell test</span></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>&lt;program&gt;.picoc</code></li></ul></td><td><ul><li>Optional applications/workers</li></ul></td><td><ul><li>OS, Shell</li></ul></td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key"><ul><li>*.header</li></ul></td><td><ul><li>Shared definitions</li></ul></td><td><ul><li>OS when needed</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li>Other source *.txt</li></ul></td><td><ul><li>Guest data, scripts, expected variants</li></ul></td><td><ul><li>OS, Shell</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li>raw_output.txt</li></ul></td><td><ul><li>Complete emulator stdout</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><ul><li>output.txt</li></ul></td><td><ul><li>Normalized actual output</li></ul></td><td><ul><li>Boot, OS, Shell</li></ul></td></tr>
-<tr data-source-row="10"><td class="table-key"><ul><li>Library build artifacts</li></ul></td><td><ul><li>Derived input/output/compiler artifacts</li></ul></td><td><ul><li>Library</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels table-panels-two" data-column-key="table:table-7591:1,2,3,4,5,6,7,8,9,10" style="--readme-columns:minmax(0, 52fr) minmax(0, 48fr);" v-pre><div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">test/*.picoc</td><td>Program + input/expected/link metadata</td><td>Library</td></tr>
+<tr data-source-row="2"><td class="table-key">input.txt</td><td>Prompt-driven commands + encoded keys</td><td>Boot, OS, Shell</td></tr>
+<tr data-source-row="3"><td class="table-key">expected_output.txt</td><td>Source-controlled normalized expectation</td><td>Boot, OS, Shell</td></tr>
+<tr data-source-row="4"><td class="table-key">launcher.picoc</td><td>OS coordination program</td><td>Every OS test and the <span class="source-link"><code>shell_exit_status_pid</code> Shell test</span></td></tr>
+<tr data-source-row="5"><td class="table-key"><code>&lt;program&gt;.picoc</code></td><td>Optional applications/workers</td><td>OS, Shell</td></tr></tbody></table></div>
+<div class="readme-table"><table><colgroup><col style="width:28.19%" /><col style="width:42.05%" /><col style="width:29.76%" /></colgroup><thead><tr><th>File or generated file</th><th>Role</th><th>Test categories</th></tr></thead><tbody><tr data-source-row="6"><td class="table-key">*.header</td><td>Shared definitions</td><td>OS when needed</td></tr>
+<tr data-source-row="7"><td class="table-key">Other source *.txt</td><td>Guest data, scripts, expected variants</td><td>OS, Shell</td></tr>
+<tr data-source-row="8"><td class="table-key">raw_output.txt</td><td>Complete emulator stdout</td><td>Boot, OS, Shell</td></tr>
+<tr data-source-row="9"><td class="table-key">output.txt</td><td>Normalized actual output</td><td>Boot, OS, Shell</td></tr>
+<tr data-source-row="10"><td class="table-key">Library build artifacts</td><td>Derived input/output/compiler artifacts</td><td>Library</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10682,10 +10679,10 @@ flowchart LR
 <!-- README_ASSET table-7810 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7810:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:14.77%" /><col style="width:20.63%" /><col style="width:14.80%" /><col style="width:35.15%" /><col style="width:14.65%" /></colgroup><thead><tr><th>Test representation</th><th>Started by</th><th>Input path</th><th>Code that runs</th><th>Output and pass condition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Top-level Library <code>.picoc</code> file</li></ul></td><td><ul><li><span class="source-link"><code>run_sys_tests.sh</code></span>, then <span class="source-link"><code>run_lib_test_case.sh</code></span></li></ul></td><td><ul><li>Source // in: → emulator</li></ul></td><td><ul><li>Test + libraries; no PicoOS</li></ul></td><td><ul><li>Output equals // expected; trim line endings</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>OS directory</li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind os</code></li></ul></td><td><ul><li>Prompt-driven input.txt → launcher</li></ul></td><td><ul><li>Boot/kernel/init/shell/launcher/workers</li></ul></td><td><ul><li>Raw → normalize terminal → compare expectation</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>Shell directory</li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind shell</code></li></ul></td><td><ul><li>Prompt-driven commands + keys</li></ul></td><td><ul><li>Boot/kernel/init/shell/commands</li></ul></td><td><ul><li>Same normalized comparison as OS tests</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><span class="source-link"><code>test/boot/</code></span></li></ul></td><td><ul><li><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind boot</code></li></ul></td><td><ul><li>Prompt-driven boot commands</li></ul></td><td><ul><li>Boot/kernel/init/shell/release applications</li></ul></td><td><ul><li>Same normalized comparison as OS tests</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:14.77%" /><col style="width:20.63%" /><col style="width:14.80%" /><col style="width:35.15%" /><col style="width:14.65%" /></colgroup><thead><tr><th>Test representation</th><th>Started by</th><th>Input path</th><th>Code that runs</th><th>Output and pass condition</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Top-level Library <code>.picoc</code> file</td><td><span class="source-link"><code>run_sys_tests.sh</code></span>, then <span class="source-link"><code>run_lib_test_case.sh</code></span></td><td>Source // in: → emulator</td><td>Test + libraries; no PicoOS</td><td>Output equals // expected; trim line endings</td></tr>
+<tr data-source-row="2"><td class="table-key">OS directory</td><td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind os</code></td><td>Prompt-driven input.txt → launcher</td><td>Boot/kernel/init/shell/launcher/workers</td><td>Raw → normalize terminal → compare expectation</td></tr>
+<tr data-source-row="3"><td class="table-key">Shell directory</td><td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind shell</code></td><td>Prompt-driven commands + keys</td><td>Boot/kernel/init/shell/commands</td><td>Same normalized comparison as OS tests</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>test/boot/</code></span></td><td><span class="source-link"><code>run_os_tests.py</code></span> with <code>--kind boot</code></td><td>Prompt-driven boot commands</td><td>Boot/kernel/init/shell/release applications</td><td>Same normalized comparison as OS tests</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10708,14 +10705,14 @@ flowchart LR
 <!-- README_ASSET table-7831 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7831:1,2,3,4,5,6,7,8">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.60%" /><col style="width:64.40%" /></colgroup><thead><tr><th>Command</th><th>Tests run</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>make test</code></li></ul></td><td><ul><li>Release build + Library/System/Boot</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>make test-all</code></li></ul></td><td><ul><li>Alias for make test</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>make test-lib</code></li></ul></td><td><ul><li>Library; TEST_PATTERN filters</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>make test-sys</code></li></ul></td><td><ul><li>OS then Shell; excludes Boot</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>make test-os</code></li></ul></td><td><ul><li>Directories matching OS classification</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>make test-shell</code></li></ul></td><td><ul><li>Runnable non-Boot/non-OS directories</li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><ul><li><code>make test-boot</code></li></ul></td><td><ul><li>Only test/boot; one emulator</li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><ul><li><code>make test_not_passed</code></li></ul></td><td><ul><li>Previously failed Library paths</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.60%" /><col style="width:64.40%" /></colgroup><thead><tr><th>Command</th><th>Tests run</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>make test</code></td><td>Release build + Library/System/Boot</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>make test-all</code></td><td>Alias for make test</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>make test-lib</code></td><td>Library; TEST_PATTERN filters</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>make test-sys</code></td><td>OS then Shell; excludes Boot</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>make test-os</code></td><td>Directories matching OS classification</td></tr>
+<tr data-source-row="6"><td class="table-key"><code>make test-shell</code></td><td>Runnable non-Boot/non-OS directories</td></tr>
+<tr data-source-row="7"><td class="table-key"><code>make test-boot</code></td><td>Only test/boot; one emulator</td></tr>
+<tr data-source-row="8"><td class="table-key"><code>make test_not_passed</code></td><td>Previously failed Library paths</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10762,12 +10759,12 @@ flowchart LR
 <!-- README_ASSET table-7858 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7858:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.41%" /><col style="width:50.59%" /></colgroup><thead><tr><th>Operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Parent/child relationships and process loading</li></ul></td><td><ul><li>load/run; PCB parent; zombies; cleanup</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Signals</li></ul></td><td><ul><li>Signal fields + state changes</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li>interrupt service routines tables and ISRs</li></ul></td><td><ul><li>IVT; saved activation; handlers; RTI</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Software, hardware, and synchronous interrupts</li></ul></td><td><ul><li>Syscalls, devices, synchronous exceptions</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></li></ul></td><td><ul><li>First fit; split; free; coalesce</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li>Filesystem boundary</li></ul></td><td><ul><li>Descriptors + UART host boundary</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:49.41%" /><col style="width:50.59%" /></colgroup><thead><tr><th>Operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Parent/child relationships and process loading</td><td>load/run; PCB parent; zombies; cleanup</td></tr>
+<tr data-source-row="2"><td class="table-key">Signals</td><td>Signal fields + state changes</td></tr>
+<tr data-source-row="3"><td class="table-key">interrupt service routines tables and ISRs</td><td>IVT; saved activation; handlers; RTI</td></tr>
+<tr data-source-row="4"><td class="table-key">Software, hardware, and synchronous interrupts</td><td>Syscalls, devices, synchronous exceptions</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>malloc()</code></span> / <span class="source-link"><code>free()</code></span></td><td>First fit; split; free; coalesce</td></tr>
+<tr data-source-row="6"><td class="table-key">Filesystem boundary</td><td>Descriptors + UART host boundary</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -10826,22 +10823,22 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 <!-- README_ASSET table-7894 -->
 <ReadmeVisual kind="table" :width="770" data-table-key="table-7894:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.07%" /><col style="width:64.93%" /></colgroup><thead><tr><th>Keys or option</th><th>What students can inspect or do</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>c</code>, then <code>E</code> (<code>Enter again</code>)</li></ul></td><td><ul><li>Continue; stop anywhere; inspect instruction</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>d</code> (<code>debug source</code>)</li></ul></td><td><ul><li>PicoC source for current RETI instruction</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>A</code> (<code>Assign value</code>)</li></ul></td><td><ul><li>Edit register/memory; continue execution</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>r</code> (<code>restart</code>)</li></ul></td><td><ul><li>Restart emulator</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>S</code> / <code>R</code> (<code>Snapshot</code> / <code>Restore</code>)</li></ul></td><td><ul><li>Save/restore complete emulator state</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><ul><li><code>e</code>, then <code>T</code></li></ul></td><td><ul><li>Trigger + inspect selected interrupt</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.07%" /><col style="width:64.93%" /></colgroup><thead><tr><th>Keys or option</th><th>What students can inspect or do</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>c</code>, then <code>E</code> (<code>Enter again</code>)</td><td>Continue; stop anywhere; inspect instruction</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>d</code> (<code>debug source</code>)</td><td>PicoC source for current RETI instruction</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>A</code> (<code>Assign value</code>)</td><td>Edit register/memory; continue execution</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>r</code> (<code>restart</code>)</td><td>Restart emulator</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>S</code> / <code>R</code> (<code>Snapshot</code> / <code>Restore</code>)</td><td>Save/restore complete emulator state</td></tr>
+<tr data-source-row="6"><td class="table-key"><code>e</code>, then <code>T</code></td><td>Trigger + inspect selected interrupt</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 <!-- README_ASSET table-7907 -->
 <ReadmeVisual kind="table" :width="630" data-table-key="table-7907:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.31%" /><col style="width:26.98%" /><col style="width:44.71%" /></colgroup><thead><tr><th>SRAM address</th><th>Value</th><th>Annotation in the debug TUI</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>8012</code></li></ul></td><td><ul><li><code>3</code></li></ul></td><td><ul><li><code>global current_pid@12</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>8179</code></li></ul></td><td><ul><li><code>42</code></li></ul></td><td><ul><li><code>var timeslice@0</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>8182</code></li></ul></td><td><ul><li><code>9001</code></li></ul></td><td><ul><li><code>return addr.</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>8183</code></li></ul></td><td><ul><li><code>7</code></li></ul></td><td><ul><li><code>arg next_pid@0</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.31%" /><col style="width:26.98%" /><col style="width:44.71%" /></colgroup><thead><tr><th>SRAM address</th><th>Value</th><th>Annotation in the debug TUI</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>8012</code></td><td><code>3</code></td><td><code>global current_pid@12</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>8179</code></td><td><code>42</code></td><td><code>var timeslice@0</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>8182</code></td><td><code>9001</code></td><td><code>return addr.</code></td></tr>
+<tr data-source-row="4"><td class="table-key"><code>8183</code></td><td><code>7</code></td><td><code>arg next_pid@0</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11055,10 +11052,10 @@ $ reti_emulator -d -c exercise.reti
 <!-- README_ASSET table-8039 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-8039:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.94%" /><col style="width:64.06%" /></colgroup><thead><tr><th>Real-time operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li>Process states</li></ul></td><td><ul><li>NEW/READY/RUNNING/BLOCKED/STOPPED/ZOMBIE</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li>Scheduling and dispatching</li></ul></td><td><ul><li>Scheduler chooses; dispatcher saves/restores</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><span class="source-link"><code>waitpid()</code></span>, <span class="source-link"><code>sleep()</code></span>, and <span class="source-link"><code>wakeup()</code></span></li></ul></td><td><ul><li>Wait queues + event wakeup</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li>Mutexes</li></ul></td><td><ul><li>Sleep on contention; unlock wakes waiter</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.94%" /><col style="width:64.06%" /></colgroup><thead><tr><th>Real-time operating-systems lecture topic</th><th>What students can inspect in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Process states</td><td>NEW/READY/RUNNING/BLOCKED/STOPPED/ZOMBIE</td></tr>
+<tr data-source-row="2"><td class="table-key">Scheduling and dispatching</td><td>Scheduler chooses; dispatcher saves/restores</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>waitpid()</code></span>, <span class="source-link"><code>sleep()</code></span>, and <span class="source-link"><code>wakeup()</code></span></td><td>Wait queues + event wakeup</td></tr>
+<tr data-source-row="4"><td class="table-key">Mutexes</td><td>Sleep on contention; unlock wakes waiter</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -11198,11 +11195,11 @@ int main(int argc, char **argv) {
 <!-- README_ASSET table-8195 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-8195:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.10%" /><col style="width:27.10%" /><col style="width:45.80%" /></colgroup><thead><tr><th>File byte offset</th><th>Header word</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><ul><li><code>0x00</code></li></ul></td><td><ul><li>Code start</li></ul></td><td><ul><li>Initial code/entry offset</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><ul><li><code>0x04</code></li></ul></td><td><ul><li>Data start</li></ul></td><td><ul><li>Initial data offset</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><ul><li><code>0x08</code></li></ul></td><td><ul><li>Heap start</li></ul></td><td><ul><li>Process heap start</li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><ul><li><code>0x0c</code></li></ul></td><td><ul><li>Heap size</li></ul></td><td><ul><li>Heap capacity; −1 → default</li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><ul><li><code>0x10</code></li></ul></td><td><ul><li>Stack start</li></ul></td><td><ul><li>Highest stack cell; −1 → default</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.10%" /><col style="width:27.10%" /><col style="width:45.80%" /></colgroup><thead><tr><th>File byte offset</th><th>Header word</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>0x00</code></td><td>Code start</td><td>Initial code/entry offset</td></tr>
+<tr data-source-row="2"><td class="table-key"><code>0x04</code></td><td>Data start</td><td>Initial data offset</td></tr>
+<tr data-source-row="3"><td class="table-key"><code>0x08</code></td><td>Heap start</td><td>Process heap start</td></tr>
+<tr data-source-row="4"><td class="table-key"><code>0x0c</code></td><td>Heap size</td><td>Heap capacity; −1 → default</td></tr>
+<tr data-source-row="5"><td class="table-key"><code>0x10</code></td><td>Stack start</td><td>Highest stack cell; −1 → default</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 

@@ -185,7 +185,7 @@ try {
       for (const group of element.querySelectorAll('.layout-columns, .artifact-columns, .code-columns, .content-columns, .table-panels-two')) {
         const tops = [...group.children].map(child => {
           const content = child.matches('.readme-visual') ? child.querySelector('.source-fit-stage')
-            : child.matches('.readme-list') ? child.querySelector('ul, ol') : child
+            : child.matches('.readme-list') ? child.firstElementChild : child
           return content.getBoundingClientRect().top
         })
         if (tops.length > 1 && Math.max(...tops) - Math.min(...tops) > 2)
@@ -202,6 +202,26 @@ try {
       for (const cell of element.querySelectorAll('.readme-table th, .readme-table td')) {
         if (cell.scrollWidth > cell.clientWidth + 2)
           found.push(`Horizontally clipped table cell: ${cell.textContent.slice(0, 70)}`)
+      }
+      // Each table column and each matching card field is consistent locally.
+      // A real multi-item list is the only reason to retain one-item bullets.
+      const checkFields = (rows, label) => {
+        for (let i = 0; i < rows[0].length; i++) {
+          const cells = rows.map(row => row[i]).filter(cell => cell.textContent.trim())
+          const multi = cells.some(cell => cell.querySelectorAll(':scope > ul > li').length > 1)
+          for (const cell of cells) {
+            if (Boolean(cell.querySelector(':scope > ul')) !== multi)
+              found.push(`Unnecessary or inconsistent bullets in ${label} field ${i + 1}`)
+          }
+        }
+      }
+      for (const panels of element.querySelectorAll('.table-panels')) {
+        const rows = [...panels.querySelectorAll('tbody tr')].map(row => [...row.children])
+        checkFields(rows, 'table')
+      }
+      for (const tiles of element.querySelectorAll('.readme-tiles')) {
+        const rows = [...tiles.children].map(tile => [...tile.children])
+        checkFields(rows, 'card')
       }
       for (const host of element.querySelectorAll('.mermaid')) {
         const svg = host.shadowRoot?.querySelector('svg')

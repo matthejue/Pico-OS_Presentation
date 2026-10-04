@@ -32,9 +32,11 @@ The overview uses the active deck's slide metadata, so filtering or renumbering
 does not leave stale links. Headings without their own slide link to an available
 descendant; empty branches and chapters are omitted from navigation. Ancestor
 headings link back to their major section overview; each overview links back
-to Contents. Ordinary prose, list
-items, contextual facts, and verbose table
-cells use brief bullets. Hardware slides include the FPGA, SRAM, UART adapter,
+to Contents. Slide text stays brief, with bullets for multiple items and plain
+text for single statements, values, headings, and notes. A multi-item table cell
+requires bullets in all nonempty cells of its column on that slide, across both
+panels when split. Matching list panels and card detail fields also keep their
+formatting consistent within the slide. Hardware slides include the FPGA, SRAM, UART adapter,
 connections, individual prices, and total from the README.
 
 Function tables retain operations exposed through or called by a library,

@@ -88,7 +88,10 @@ const statuses = {
  send_byte_over_uart:'No value',handle_process_heap_full_exception:'Terminates process',malloc:'Pointer / NULL / heap-full',realloc:'Pointer / NULL / heap-full',free:'No value',init_process_heap:'No value',require_process_heap_allocation:'Pointer or termination',
  heap_init_region:'No value',heap_alloc_from:'Pointer or NULL',heap_realloc_from:'Pointer or NULL; old block on failure',heap_free_from:'No value',load_process_chunk:'PID success; 0 failure; −1 pending',mark_process_ready_with_arguments:'true / false',list_processes:'No value',unload_process_by_pid:'true / false',exit_process:'No normal return',process_heap_start:'Absolute heap address',process_heap_size:'Heap cell count',open_shared_memory:'ID or −1',map_shared_memory:'Address or NULL',unlink_shared_memory:'0 / −1',dispatcher_switch_from_context:'RTI; C return only for empty list',wait_for_process_by_pid:'Completion flag; userspace IN2 = 1',sleep_on_wait_queue:'No value; later resumes via RTI',wakeup_wait_queue:'true if woke; false if empty',enqueue_current_process_on_wait_queue:'No value',send_signal_by_pid:'0 / −1',set_parent_death_signal:'0 / −1',set_foreground_process:'0 / −1',close_file_descriptor:'0 / −1',duplicate_file_descriptor:'Target FD / −1',open_file_descriptor:'Lowest free FD / −1',read_file_descriptor:'Byte count / −1',write_file_descriptor:'Byte count / −1',seek_file_descriptor:'Offset / −1',get_working_directory:'0 / −1',change_working_directory:'0 / −1',make_host_directory:'Host status',read_host_directory:'Listing count / error',unlink_host_file:'Host status',move_host_path:'Host status',touch_host_file:'Host status'
 }
-function bulletHtml(items) {return `<ul>${items.filter(Boolean).map(s=>`<li>${displayHtml(md.renderInline(s))}</li>`).join('')}</ul>`}
+function bulletHtml(items) {
+ const content=items.filter(Boolean).map(s=>displayHtml(md.renderInline(s)))
+ return content.length>1?`<ul>${content.map(s=>`<li>${s}</li>`).join('')}</ul>`:content[0]||''
+}
 function tokens(html) {
  const code=[...html.matchAll(/<code>(.*?)<\/code>/g)].map(m=>m[1])
  const syscalls=[...new Set(code.filter(c=>c.startsWith('SYSCALL_')))]
