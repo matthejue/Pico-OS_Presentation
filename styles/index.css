@@ -587,3 +587,39 @@ html.selectable-text .slidev-layout * {
 .deck-content > .content-columns:has(.diagram-panel) { flex: 1; min-height: 0; align-items: stretch; }
 .deck-content > .content-columns:has(.diagram-panel) > div { min-height: 0; }
 .data-table td { overflow-wrap: anywhere; }
+
+/* README-first slides: source composition is fitted as one visual, never redrawn. */
+.readme-slide { gap: 0.85rem; }
+.readme-artifacts { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 1rem; }
+.readme-artifacts > * { flex: 1; min-height: 0; }
+.artifact-pair > .readme-list { flex-grow: 10; }
+.readme-visual { width: 100%; flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; }
+.source-fit-stage { position: relative; flex: none; }
+.source-fit-content { transform-origin: top left; position: absolute; top: 0; left: 0; }
+.source-fit-content > p { margin: 0; }
+.source-fit-content img { width: 100%; height: auto; display: block; }
+.source-fit-content .mermaid { display: block; margin: 0; }
+.readme-code { border: 1px solid var(--line-strong); background: var(--code-background); }
+.readme-code .slidev-code { font-size: 14px !important; line-height: 1.5 !important; padding: 16px !important; margin: 0 !important; border: 0 !important; max-height: none !important; overflow: visible !important; white-space: pre !important; }
+.readme-code .slidev-code code, .readme-code .slidev-code .line { font-size: inherit !important; line-height: inherit !important; white-space: pre !important; }
+.readme-terminal .slidev-code { color: var(--cyan-dim); background: var(--code-background); }
+.readme-table { background: #fff; border: 1px solid var(--line-strong); }
+.readme-table table { width: 100%; margin: 0; border-collapse: collapse; font-size: 17px; table-layout: auto; }
+.readme-table td, .readme-table th { padding: 10px 12px; border: 1px solid var(--line); line-height: 1.45; overflow-wrap: anywhere; vertical-align: top; }
+.readme-table th { color: var(--cyan-dim); background: #d8efef; text-align: left; font-weight: 650; }
+.readme-table tr:nth-child(even) { background: #f4f8f8; }
+.readme-table code { white-space: normal; color: var(--ink); background: none; font-size: 0.92em; padding: 0; }
+.source-link { color: inherit; }
+.readme-table strong { color: var(--ink); }
+.readme-list { display: flex; flex-direction: column; justify-content: center; font-size: 1.1rem; line-height: 1.45; padding: 0.3rem 0; }
+.readme-list ul, .readme-list ol { margin: 0; padding-left: 1.7rem; }
+.readme-list li { padding-left: 0.3rem; margin: 0.55rem 0; }
+.readme-list li::marker { color: var(--cyan); font-weight: 650; }
+.readme-explanation { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 1.5rem; font-size: 1.15rem; line-height: 1.5; }
+.context-note { flex: none; display: flex; gap: 1rem; align-items: baseline; border-left: 3px solid var(--amber); padding: 0.7rem 0.9rem; background: #fff8e9; font-size: 0.87rem; line-height: 1.4; }
+.context-note b { flex: 0 0 10rem; color: #805916; font-weight: 650; }
+.context-note span { flex: 1; }
+.artifact-caption { flex: none; color: var(--muted); font-size: 0.9rem; line-height: 1.35; }
+.readme-slide :is(.card, pre, code, .slidev-code, table, .context-note, .asciinema-recording),
+.visual-zoom :is(.readme-code, .readme-code pre, .readme-code code, .readme-table) { border-radius: 0 !important; box-shadow: none !important; }
+.readme-slide * { border-radius: 0 !important; }

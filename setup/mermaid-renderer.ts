@@ -1,6 +1,7 @@
 // Use the same browser bundle as Slidev. The package-root import pulls in
 // unbundled CommonJS dependencies (such as dayjs) in the development server.
 import mermaid from 'mermaid/dist/mermaid.esm.mjs'
+import { presentationColor } from '../config/visual-palette.mjs'
 
 let diagramId = 0
 
@@ -22,17 +23,21 @@ export default () => async (code: string, options: Record<string, unknown>) => {
       noteBkgColor: '#fff1d6',
       noteTextColor: '#17313a',
     },
-    flowchart: { nodeSpacing: 28, rankSpacing: 38 },
-    sequence: { actorMargin: 35, messageMargin: 22, mirrorActors: false, diagramMarginY: 8, boxMargin: 8 },
+    // Retain Mermaid defaults and any README init directives for composition.
     ...Object.fromEntries(Object.entries(options).filter(([, value]) => value !== undefined)),
   })
-  const { svg } = await mermaid.render(`pico-diagram-${++diagramId}`, code)
+  const styledCode = code.replace(/#[\da-fA-F]{3,8}\b/g, presentationColor)
+  const { svg } = await mermaid.render(`pico-diagram-${++diagramId}`, styledCode)
   // Mermaid's foreignObject labels contain HTML void elements such as <br>.
   // Parse as HTML so those are normalized before serializing to valid SVG/XML;
   // an XML parse here inserts a visible browser parsererror into the diagram.
   const document = new DOMParser().parseFromString(svg, 'text/html')
   const root = document.querySelector('svg')
   if (!root) throw new Error('Mermaid did not return an SVG diagram')
+  for (const rect of root.querySelectorAll('rect')) { rect.setAttribute('rx', '0'); rect.setAttribute('ry', '0') }
+  const squareCorners = document.createElementNS('http://www.w3.org/2000/svg', 'style')
+  squareCorners.textContent = 'rect { rx: 0 !important; ry: 0 !important; }'
+  root.append(squareCorners)
   root.setAttribute('width', '100%')
   root.setAttribute('height', '100%')
   root.setAttribute('style', 'width:100%;height:100%;max-width:100%;max-height:100%')

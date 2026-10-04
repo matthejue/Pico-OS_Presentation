@@ -8,7 +8,9 @@
     "export": "slidev export",
     "short:apply": "node scripts/apply-short-version.mjs",
     "short:sync": "node scripts/sync-short-version-selection.mjs",
-    "test:short": "node scripts/test-short-version.mjs"
+    "test:short": "node scripts/test-short-version.mjs",
+    "rebuild:readme": "node scripts/rebuild-from-readme.mjs",
+    "test:source": "node scripts/check-readme-coverage.mjs"
   },
   "devDependencies": {
     "@slidev/cli": "52.18.0",

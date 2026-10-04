@@ -6384,7 +6384,7 @@ comes from the host over UART, with DMA when enabled. Solid arrows show
 loading, and dotted arrows show register setup and control transfer:
 
 ```mermaid
-%%{init: {"sequence": {"height": 45, "width": 110, "actorMargin": 15, "boxMargin": 5, "diagramMarginX": 10, "wrap": true}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
+%%{init: {"sequence": {"height": 90}, "themeCSS": "rect { rx: 0 !important; ry: 0 !important; }"}}%%
 sequenceDiagram
     box rgb(232, 248, 248) EPROM
         participant B as Bootloader<br/>.text and .data

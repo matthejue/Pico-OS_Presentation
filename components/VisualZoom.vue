@@ -49,6 +49,18 @@ async function enlarge(element) {
   originals.forEach((original, index) => {
     if (original.shadowRoot) copies[index].innerHTML = original.shadowRoot.innerHTML
   })
+  // README examples are fitted as a whole on the slide. Enlarge their original
+  // dimensions, not the already scaled preview, so every line remains readable.
+  if (element.matches('.readme-visual')) {
+    width.value = Number(element.dataset.nativeWidth)
+    height.value = Number(element.dataset.nativeHeight)
+    const originalContent = clone.querySelector('.source-fit-content')
+    originalContent.style.transform = 'none'
+    originalContent.style.position = 'static'
+    clone.replaceChildren(originalContent)
+    clone.style.display = 'block'
+    clone.style.overflow = 'visible'
+  }
   // Cloned Slidev controls have no Vue handlers. Remove them, including the
   // hover-only clipboard SVG, before looking for a diagram to fit.
   for (const control of clone.querySelectorAll('.slidev-code-copy')) control.remove()

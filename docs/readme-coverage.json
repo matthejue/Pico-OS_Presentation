@@ -1,0 +1,5483 @@
+{
+  "sourceSha256": "e609dcd1a7aff9fd177ce0a69788059aacdb6383efca4a824799bf2cbec125dd",
+  "slideCount": 374,
+  "assets": [
+    {
+      "id": "list-27",
+      "type": "list",
+      "anchor": "picoos",
+      "line": 27,
+      "endLine": 35,
+      "sourceSha256": "12ca3b1b79c2b3b5cef7571b29c39960d73ca1a9e7af49952b73d56886fec209",
+      "slides": [
+        {
+          "page": 3,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-42",
+      "type": "image",
+      "anchor": "picoos",
+      "line": 42,
+      "endLine": 42,
+      "sourceSha256": "e45ef4cc313a4c218abe3d002d6adf2ee3bd7ea250bdb9aabd7f8491ff596553",
+      "sourcePath": "documentation/images/picoos-build-boot.svg",
+      "slides": [
+        {
+          "page": 3
+        }
+      ],
+      "copiedFile": "public/readme/picoos-build-boot.svg",
+      "originalFileSha256": "dadffbb60872b26bf9ead7c52e7c6e9e6965a5c32b9af239840acff2a189659c"
+    },
+    {
+      "id": "table-51",
+      "type": "table",
+      "anchor": "picoos",
+      "line": 51,
+      "endLine": 57,
+      "sourceSha256": "7add53298e18fbff8d9cea254cd9a940f90014baf3fd244f180d6464015b01b6",
+      "slides": [
+        {
+          "page": 4,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-68",
+      "type": "code",
+      "anchor": "build-and-run",
+      "line": 68,
+      "endLine": 74,
+      "sourceSha256": "462ee467b6d395277886d329bfce906518e5c124ad4e9bec2186240d15417da9",
+      "slides": [
+        {
+          "page": 5
+        }
+      ]
+    },
+    {
+      "id": "table-86",
+      "type": "table",
+      "anchor": "build-and-run",
+      "line": 86,
+      "endLine": 92,
+      "sourceSha256": "f91fefaef8bbc9d59be593cab0ba60ba559ebdef1b933cb2fbab80d00a78e655",
+      "slides": [
+        {
+          "page": 6,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-122",
+      "type": "code",
+      "anchor": "use-the-picoos-shell",
+      "line": 122,
+      "endLine": 129,
+      "sourceSha256": "2964694c734884a3f8d0f0b8c5d7b96165980187211bd8f189ae4fa8f0435da2",
+      "slides": [
+        {
+          "page": 7
+        }
+      ]
+    },
+    {
+      "id": "table-150",
+      "type": "table",
+      "anchor": "release-archive-layout",
+      "line": 150,
+      "endLine": 160,
+      "sourceSha256": "1fc64bf2b24fe143d1a8498d59d232f22fd586948dba0e288dd4db23c223a8ec",
+      "slides": [
+        {
+          "page": 8,
+          "rows": [
+            1,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-178",
+      "type": "image",
+      "anchor": "intended-physical-hardware",
+      "line": 178,
+      "endLine": 178,
+      "sourceSha256": "4884af0421cae1cbbe46b904eb6d8d849163f2d2937f49c1af3f031f4fc47e6f",
+      "sourcePath": "documentation/images/intended-hardware.svg",
+      "slides": [
+        {
+          "page": 9
+        }
+      ],
+      "copiedFile": "public/readme/intended-hardware.svg",
+      "originalFileSha256": "678c1cd9f27c030f22d34a237d6ff8701b8f52d12d7ea8865554c8db59cac95c"
+    },
+    {
+      "id": "list-185",
+      "type": "list",
+      "anchor": "intended-physical-hardware",
+      "line": 185,
+      "endLine": 219,
+      "sourceSha256": "a1a7142c2c26c1a3bc00f39abaad4d0548e9aeebbf7c18bc94727abc5fb34910",
+      "slides": [
+        {
+          "page": 10,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-236",
+      "type": "table",
+      "anchor": "intended-physical-hardware",
+      "line": 236,
+      "endLine": 242,
+      "sourceSha256": "a61966fd48c69e46b71a6bd9687747b0cb18d88f2a3af542fe88f9bff59b4e63",
+      "slides": [
+        {
+          "page": 11,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-256",
+      "type": "image",
+      "anchor": "reti-execution-model",
+      "line": 256,
+      "endLine": 256,
+      "sourceSha256": "7570df23fb408556043e227cc5f8feaf173e4ecddda9fa2b8b332f8f80a62790",
+      "sourcePath": "documentation/images/reti-memory-map.svg",
+      "slides": [
+        {
+          "page": 12
+        }
+      ],
+      "copiedFile": "public/readme/reti-memory-map.svg",
+      "originalFileSha256": "a1eb0c4e1e137e3350a68dd515651ec0c73b5ec0e92d738aa6082bef85d7290a"
+    },
+    {
+      "id": "table-260",
+      "type": "table",
+      "anchor": "reti-execution-model",
+      "line": 260,
+      "endLine": 264,
+      "sourceSha256": "c55d1d6b6d5a627b9fe5907cd7fd2c3d5393abf4dd27d566ff92794312a1ebd8",
+      "slides": [
+        {
+          "page": 13,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-272",
+      "type": "list",
+      "anchor": "contents",
+      "line": 272,
+      "endLine": 481,
+      "sourceSha256": "41dde64e88852b520d86dbbf76e578b4012cce83a83191eb006f1044bab4889b",
+      "slides": [],
+      "excluded": "README navigation; replaced by the prescribed cover outline"
+    },
+    {
+      "id": "list-482",
+      "type": "list",
+      "anchor": "contents",
+      "line": 482,
+      "endLine": 483,
+      "sourceSha256": "238b92bb53ea6e83027667f80535559cf211d9205f605416ffcfc9376dadbbaf",
+      "slides": [],
+      "excluded": "README navigation; replaced by the prescribed cover outline"
+    },
+    {
+      "id": "table-501",
+      "type": "table",
+      "anchor": "11-picoc-compiler-extensions",
+      "line": 501,
+      "endLine": 525,
+      "sourceSha256": "abc80d2f3dab22e77aff023d106ef61db6f74b61a61bb061f774c018e6db5e7f",
+      "slides": [
+        {
+          "page": 14,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 15,
+          "rows": [
+            13,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-534",
+      "type": "mermaid",
+      "anchor": "111-compilation-pipeline-and-compiler-passes",
+      "line": 534,
+      "endLine": 557,
+      "sourceSha256": "b9f0d6bb993f756b269add6cfe0a67f266e2f38d58bf7c92cd9dabbb88c14389",
+      "slides": [
+        {
+          "page": 16
+        }
+      ]
+    },
+    {
+      "id": "mermaid-563",
+      "type": "mermaid",
+      "anchor": "111-compilation-pipeline-and-compiler-passes",
+      "line": 563,
+      "endLine": 600,
+      "sourceSha256": "277cfde02d97413068eb99b55184ed1773e56d1fa1e54afdde704e133faae4ff",
+      "slides": [
+        {
+          "page": 17
+        }
+      ]
+    },
+    {
+      "id": "code-612",
+      "type": "code",
+      "anchor": "112-separate-compilation-reusable-artifacts-and-linking",
+      "line": 612,
+      "endLine": 636,
+      "sourceSha256": "010cf132d73629782882daee1590d54ef8d20a6f695fa8ca0aa591c1a21ed929",
+      "slides": [
+        {
+          "page": 18
+        }
+      ]
+    },
+    {
+      "id": "mermaid-640",
+      "type": "mermaid",
+      "anchor": "112-separate-compilation-reusable-artifacts-and-linking",
+      "line": 640,
+      "endLine": 647,
+      "sourceSha256": "5f1193507d4e136c3b3c3bdba88581a00090f103500a62e626e52351fad46966",
+      "slides": [
+        {
+          "page": 19
+        }
+      ]
+    },
+    {
+      "id": "mermaid-652",
+      "type": "mermaid",
+      "anchor": "112-separate-compilation-reusable-artifacts-and-linking",
+      "line": 652,
+      "endLine": 662,
+      "sourceSha256": "dd5847609ccf4c505b42bc841231dd775b9147977a3f026c3d9db03980c64726",
+      "slides": [
+        {
+          "page": 20
+        }
+      ]
+    },
+    {
+      "id": "table-689",
+      "type": "table",
+      "anchor": "1131-stack-frame-layout-and-caller-cleanup",
+      "line": 689,
+      "endLine": 704,
+      "sourceSha256": "06f8d88b8f68ed2ea20c740b7e03a1d521e4a0393e313bf6312be1ca4b4f714b",
+      "slides": [
+        {
+          "page": 22,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 23,
+          "rows": [
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-723",
+      "type": "mermaid",
+      "anchor": "1132-shared-function-epilogue-and-return-values",
+      "line": 723,
+      "endLine": 730,
+      "sourceSha256": "151a7073a9d462da6a8a8c01d443683da19e3ec20d5158aeeb6456511402ed90",
+      "slides": [
+        {
+          "page": 24
+        }
+      ]
+    },
+    {
+      "id": "code-735",
+      "type": "code",
+      "anchor": "1132-shared-function-epilogue-and-return-values",
+      "line": 735,
+      "endLine": 743,
+      "sourceSha256": "2ebdb28b232c9075d0ead39c23d666d04292445ae03e74447b831d2f0d02b56d",
+      "slides": [
+        {
+          "page": 25
+        }
+      ]
+    },
+    {
+      "id": "code-748",
+      "type": "code",
+      "anchor": "1132-shared-function-epilogue-and-return-values",
+      "line": 748,
+      "endLine": 750,
+      "sourceSha256": "cb87ded0c59d555285423ecb56d2451354c557c2dd5c5a4f1373c90dd2a7faf0",
+      "slides": [
+        {
+          "page": 25
+        }
+      ]
+    },
+    {
+      "id": "code-754",
+      "type": "code",
+      "anchor": "1132-shared-function-epilogue-and-return-values",
+      "line": 754,
+      "endLine": 781,
+      "sourceSha256": "b3f7b2d4e2666428d276fc3383ca8ec91894d1ec496f7470ab07d86728bff2f4",
+      "slides": [
+        {
+          "page": 26
+        }
+      ]
+    },
+    {
+      "id": "code-787",
+      "type": "code",
+      "anchor": "1132-shared-function-epilogue-and-return-values",
+      "line": 787,
+      "endLine": 855,
+      "sourceSha256": "8be9c4076bf88275cbe658db569e4d5be9060cb680ecd32d2631d943ad6d1a41",
+      "slides": [
+        {
+          "page": 27
+        }
+      ]
+    },
+    {
+      "id": "code-874",
+      "type": "code",
+      "anchor": "1133-naked-functions-without-a-generated-frame",
+      "line": 874,
+      "endLine": 886,
+      "sourceSha256": "5e899dfd76532d5f79fbafdd3bdc679447babfe496cec8f24304728dac185c8e",
+      "slides": [
+        {
+          "page": 28
+        }
+      ]
+    },
+    {
+      "id": "code-891",
+      "type": "code",
+      "anchor": "1133-naked-functions-without-a-generated-frame",
+      "line": 891,
+      "endLine": 893,
+      "sourceSha256": "719f07cc35ef3e5e09ba2ea1d90fc89ba12c8691d659fd5bd98b0c7c1943153f",
+      "slides": [
+        {
+          "page": 28
+        }
+      ]
+    },
+    {
+      "id": "code-895",
+      "type": "code",
+      "anchor": "1133-naked-functions-without-a-generated-frame",
+      "line": 895,
+      "endLine": 925,
+      "sourceSha256": "803a6ab568c48dec8919c7eeb8c57cbf7791e5008be6e3ccf208bf7043f46ad1",
+      "slides": [
+        {
+          "page": 29
+        }
+      ]
+    },
+    {
+      "id": "code-948",
+      "type": "code",
+      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+      "line": 948,
+      "endLine": 962,
+      "sourceSha256": "dbce9e8af4a406673c7b556c666b6f57006a404e82acbdc5ac315bc09ee4563c",
+      "slides": [
+        {
+          "page": 30
+        }
+      ]
+    },
+    {
+      "id": "code-967",
+      "type": "code",
+      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+      "line": 967,
+      "endLine": 969,
+      "sourceSha256": "057b0756131d9a32e4e425f0f7f02ea9518f855f72af70942508a439bb54d6d4",
+      "slides": [
+        {
+          "page": 31
+        }
+      ]
+    },
+    {
+      "id": "code-973",
+      "type": "code",
+      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+      "line": 973,
+      "endLine": 1004,
+      "sourceSha256": "7f6a8521a1ef0b1d2fa61ab6d7b61f6d357216fe9094b7c1cb295c120c5a2033",
+      "slides": [
+        {
+          "page": 32
+        }
+      ]
+    },
+    {
+      "id": "code-1009",
+      "type": "code",
+      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+      "line": 1009,
+      "endLine": 1011,
+      "sourceSha256": "ceb61b83f6cdec8ad21bf713b651b0687a0d771b64dbf07e99000ac81bc25792",
+      "slides": [
+        {
+          "page": 33
+        }
+      ]
+    },
+    {
+      "id": "code-1016",
+      "type": "code",
+      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
+      "line": 1016,
+      "endLine": 1029,
+      "sourceSha256": "6a1e05ff7082ea09e2bdfdddc249e021fcb38b0aaf92402be254e8b82238ea05",
+      "slides": [
+        {
+          "page": 33
+        }
+      ]
+    },
+    {
+      "id": "code-1050",
+      "type": "code",
+      "anchor": "1151-default-compiler-generated-_start",
+      "line": 1050,
+      "endLine": 1055,
+      "sourceSha256": "fdb48d6b79292acc74b21b283a686cbfd1ea3b453f06b54bf9335491c9b8dd57",
+      "slides": [
+        {
+          "page": 34
+        },
+        {
+          "page": 305,
+          "repeated": true
+        }
+      ]
+    },
+    {
+      "id": "code-1072",
+      "type": "code",
+      "anchor": "1152-picoos-libstart-startup-sequence",
+      "line": 1072,
+      "endLine": 1076,
+      "sourceSha256": "4f55c52c3adf043478c9b99655b20c6ab42a56a5dc027e1b6592fd1498fb5bad",
+      "slides": [
+        {
+          "page": 35
+        },
+        {
+          "page": 308,
+          "repeated": true
+        },
+        {
+          "page": 313,
+          "repeated": true
+        },
+        {
+          "page": 315,
+          "repeated": true
+        }
+      ]
+    },
+    {
+      "id": "code-1081",
+      "type": "code",
+      "anchor": "1152-picoos-libstart-startup-sequence",
+      "line": 1081,
+      "endLine": 1098,
+      "sourceSha256": "1452c2a7269590eb187b2a4612260acae93a6195cc38b0d7438216567674df9f",
+      "slides": [
+        {
+          "page": 36
+        },
+        {
+          "page": 309,
+          "repeated": true
+        },
+        {
+          "page": 314,
+          "repeated": true
+        },
+        {
+          "page": 316,
+          "repeated": true
+        }
+      ]
+    },
+    {
+      "id": "table-1112",
+      "type": "table",
+      "anchor": "1153-startup-functions-used-by-picoos-images",
+      "line": 1112,
+      "endLine": 1118,
+      "sourceSha256": "321e7bba9747b4944fbbe75af0a5b206f4d0126ec309fa4becaaffd2e17e341e",
+      "slides": [
+        {
+          "page": 37,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1126",
+      "type": "table",
+      "anchor": "116-program-sections-interrupt-table-entries-and-linker-placement",
+      "line": 1126,
+      "endLine": 1130,
+      "sourceSha256": "7c94ee2f43ba42fe73c9c99de5722dcc1cc85a6847032de4a9b7dd8de62bdd24",
+      "slides": [
+        {
+          "page": 39,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1152",
+      "type": "table",
+      "anchor": "117-reti-pseudoinstructions",
+      "line": 1152,
+      "endLine": 1157,
+      "sourceSha256": "fa598d75985d7c37648f990d006b480d27089d0c2ed64218ee21da52699011cf",
+      "slides": [
+        {
+          "page": 40,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1169",
+      "type": "table",
+      "anchor": "1171-interrupt-safe-push-and-pop",
+      "line": 1169,
+      "endLine": 1172,
+      "sourceSha256": "f48769b9f325f1073b30a2da00b9438c817574810379e4c8618590acfc7149d6",
+      "slides": [
+        {
+          "page": 41,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1183",
+      "type": "code",
+      "anchor": "1171-interrupt-safe-push-and-pop",
+      "line": 1183,
+      "endLine": 1189,
+      "sourceSha256": "a32879637ca887ec68544b4ef4391bf957c5dbd1352a9104b20be41656fcb3f8",
+      "slides": [
+        {
+          "page": 42
+        }
+      ]
+    },
+    {
+      "id": "code-1211",
+      "type": "code",
+      "anchor": "1172-loading-32-bit-values-with-loadi32",
+      "line": 1211,
+      "endLine": 1215,
+      "sourceSha256": "14915f96df6fed5b7df87288c19a2cdff8c6a4d04f802f0961779f702ad3f3e8",
+      "slides": [
+        {
+          "page": 43
+        }
+      ]
+    },
+    {
+      "id": "code-1223",
+      "type": "code",
+      "anchor": "1172-loading-32-bit-values-with-loadi32",
+      "line": 1223,
+      "endLine": 1227,
+      "sourceSha256": "042141f9a686363e2a641d31c66d732c4fed83e202f874470c533f4336e7380b",
+      "slides": [
+        {
+          "page": 43
+        }
+      ]
+    },
+    {
+      "id": "code-1233",
+      "type": "code",
+      "anchor": "1172-loading-32-bit-values-with-loadi32",
+      "line": 1233,
+      "endLine": 1237,
+      "sourceSha256": "24298b5956321cbd819f0ce1d14e102f6ccfaef2ca3c024e77162339bf9c46aa",
+      "slides": [
+        {
+          "page": 44
+        }
+      ]
+    },
+    {
+      "id": "code-1275",
+      "type": "code",
+      "anchor": "1173-long-jumps-with-jump32",
+      "line": 1275,
+      "endLine": 1281,
+      "sourceSha256": "44dce56cb6c742a3a1514428b6032a1bf4f479e34afebe2fa40a1c0a48e4d2fa",
+      "slides": [
+        {
+          "page": 45
+        }
+      ]
+    },
+    {
+      "id": "image-1308",
+      "type": "image",
+      "anchor": "1174-pseudoinstruction-expansion-during-linking",
+      "line": 1308,
+      "endLine": 1308,
+      "sourceSha256": "a7b792618d0ab30e3d3935ed1cf11126a947711b004b5b6b231988941fbb8bb2",
+      "sourcePath": "documentation/images/pseudoinstruction-blocks.svg",
+      "slides": [
+        {
+          "page": 46
+        }
+      ],
+      "copiedFile": "public/readme/pseudoinstruction-blocks.svg",
+      "originalFileSha256": "9fdbd0f7f2ca7a9a41977d780a32fa750b089883fbdd37ad5001bd88f48a1b58"
+    },
+    {
+      "id": "table-1310",
+      "type": "table",
+      "anchor": "1174-pseudoinstruction-expansion-during-linking",
+      "line": 1310,
+      "endLine": 1314,
+      "sourceSha256": "19ebe7b16787f23c57ce833bdb8249eb3558a1fd3aeb6d709939a2f15ba02db0",
+      "slides": [
+        {
+          "page": 47,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1336",
+      "type": "code",
+      "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+      "line": 1336,
+      "endLine": 1344,
+      "sourceSha256": "e14679b00b825bfaea0d59b8809952e8b42603eb06168dd9d63f7d46349789cb",
+      "slides": [
+        {
+          "page": 48
+        }
+      ]
+    },
+    {
+      "id": "table-1349",
+      "type": "table",
+      "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+      "line": 1349,
+      "endLine": 1356,
+      "sourceSha256": "fdac5c69c31967bb4687ab0afe4f5adb90053db6b9955e9ad3f37261c3058610",
+      "slides": [
+        {
+          "page": 49,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-1366",
+      "type": "mermaid",
+      "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+      "line": 1366,
+      "endLine": 1371,
+      "sourceSha256": "a52f7fa3cf17981b795528c1485f95c9907f3c5e06a1369c1d5272255f1fd3bb",
+      "slides": [
+        {
+          "page": 50
+        }
+      ]
+    },
+    {
+      "id": "code-1376",
+      "type": "code",
+      "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+      "line": 1376,
+      "endLine": 1383,
+      "sourceSha256": "e545cd274f65132913d47a2a45542d6fd8afef969e4b043bc80da247badb7695",
+      "slides": [
+        {
+          "page": 51
+        }
+      ]
+    },
+    {
+      "id": "table-1390",
+      "type": "table",
+      "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
+      "line": 1390,
+      "endLine": 1396,
+      "sourceSha256": "d7598aa3226b2da349bf849cbec3dfb72d6efc58602c58f5283a55d6dc120240",
+      "slides": [
+        {
+          "page": 52,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1416",
+      "type": "code",
+      "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
+      "line": 1416,
+      "endLine": 1426,
+      "sourceSha256": "4db307bbf77e264e7a043c8eb2c6d82b66ce05f0cf1e9508b2df67f506ea12ec",
+      "slides": [
+        {
+          "page": 53
+        }
+      ]
+    },
+    {
+      "id": "table-1430",
+      "type": "table",
+      "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
+      "line": 1430,
+      "endLine": 1438,
+      "sourceSha256": "4deba363e43edf562a055842e83451a85b1a5d267dc5648aacc8cc8f5aa79605",
+      "slides": [
+        {
+          "page": 54,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1444",
+      "type": "code",
+      "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
+      "line": 1444,
+      "endLine": 1448,
+      "sourceSha256": "fd6e8f3bec218679992c71f484946cdbd80b6fb70a74582018215859be6ab035",
+      "slides": [
+        {
+          "page": 55
+        }
+      ]
+    },
+    {
+      "id": "table-1450",
+      "type": "table",
+      "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
+      "line": 1450,
+      "endLine": 1454,
+      "sourceSha256": "611d45d170be808165fd14ffe533157e83a2c927cd2d31f556aff831090bde14",
+      "slides": [
+        {
+          "page": 56,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1470",
+      "type": "table",
+      "anchor": "12-reti-emulator-extensions",
+      "line": 1470,
+      "endLine": 1496,
+      "sourceSha256": "50e155da9c43ff317e5f043db42a34eeb38d436fb6ea20e9f139c1c68d2e4334",
+      "slides": [
+        {
+          "page": 57,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 58,
+          "rows": [
+            13,
+            24
+          ]
+        },
+        {
+          "page": 59,
+          "rows": [
+            25,
+            25
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-1508",
+      "type": "image",
+      "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
+      "line": 1508,
+      "endLine": 1508,
+      "sourceSha256": "afab238c54a521dd40e07e8363ced406d1a830bd6a7e5fafa12808fffd8517f3",
+      "sourcePath": "documentation/images/reti-periphery-memory-map.svg",
+      "slides": [
+        {
+          "page": 60
+        }
+      ],
+      "copiedFile": "public/readme/reti-periphery-memory-map.svg",
+      "originalFileSha256": "73eef470825838bcc1da66a2172699cc3449f02784659a60bb5debf5c1e91238"
+    },
+    {
+      "id": "table-1513",
+      "type": "table",
+      "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
+      "line": 1513,
+      "endLine": 1517,
+      "sourceSha256": "441c49e97b233ffc1b0e108dfa573a6bbacbe8d423379a43d985cec06d11723e",
+      "slides": [
+        {
+          "page": 61,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1523",
+      "type": "table",
+      "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
+      "line": 1523,
+      "endLine": 1537,
+      "sourceSha256": "a2fd61e0863a385c429fd41a70ea80ce6bc2feb4d1f519bae9d5aae470d357cf",
+      "slides": [
+        {
+          "page": 62,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 63,
+          "rows": [
+            13,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1552",
+      "type": "code",
+      "anchor": "122-atomic-test-and-set-with-tsl",
+      "line": 1552,
+      "endLine": 1556,
+      "sourceSha256": "cf7416a8f50b126d3271c119315aadd52572a6f83f31f96e80cf14bcf03f0508",
+      "slides": [
+        {
+          "page": 64
+        }
+      ]
+    },
+    {
+      "id": "image-1562",
+      "type": "image",
+      "anchor": "122-atomic-test-and-set-with-tsl",
+      "line": 1562,
+      "endLine": 1562,
+      "sourceSha256": "a1550aa4d7a4d750300677d78984fe1eff03c1b7fe52f9d09abb84bd445e4a53",
+      "sourcePath": "documentation/images/tsl-memory-layout.svg",
+      "slides": [
+        {
+          "page": 64
+        }
+      ],
+      "copiedFile": "public/readme/tsl-memory-layout.svg",
+      "originalFileSha256": "706eb70f42f63f1639461860f8700a39f913358a8316c0d8846e14b6e765ec46"
+    },
+    {
+      "id": "image-1572",
+      "type": "image",
+      "anchor": "122-atomic-test-and-set-with-tsl",
+      "line": 1572,
+      "endLine": 1572,
+      "sourceSha256": "eed490d8961789a22fac76f2c2fbe9882d35f232463ffa2230c81ecee3f35ef2",
+      "sourcePath": "documentation/images/tsl-instruction-format.svg",
+      "slides": [
+        {
+          "page": 65
+        }
+      ],
+      "copiedFile": "public/readme/tsl-instruction-format.svg",
+      "originalFileSha256": "0163e9dbccfe2fb7a23128ee3814e71a8a06cf9432d3f027badf769db31a9797"
+    },
+    {
+      "id": "table-1580",
+      "type": "table",
+      "anchor": "122-atomic-test-and-set-with-tsl",
+      "line": 1580,
+      "endLine": 1585,
+      "sourceSha256": "2a3d9c19f52afeb07c8cfb0c20b29a09e527bf030a78e844af5782054e0b6a08",
+      "slides": [
+        {
+          "page": 66,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-1598",
+      "type": "mermaid",
+      "anchor": "123-uart-host-service-protocol",
+      "line": 1598,
+      "endLine": 1610,
+      "sourceSha256": "59c93b2fecf8a73fb1abea6c388c9b90e9376f210685d570ac3735415cad20d9",
+      "slides": [
+        {
+          "page": 67
+        }
+      ]
+    },
+    {
+      "id": "mermaid-1615",
+      "type": "mermaid",
+      "anchor": "123-uart-host-service-protocol",
+      "line": 1615,
+      "endLine": 1632,
+      "sourceSha256": "b52978380e461bbf2def8ab471d51f7b522fd8225f29b8c9371d345b0dd8bd0d",
+      "slides": [
+        {
+          "page": 68
+        }
+      ]
+    },
+    {
+      "id": "table-1642",
+      "type": "table",
+      "anchor": "123-uart-host-service-protocol",
+      "line": 1642,
+      "endLine": 1658,
+      "sourceSha256": "e4b48175eabb24169e68b3e8e362b76978992e876a3db72c2ccb3bf7a9558136",
+      "slides": [
+        {
+          "page": 69,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 70,
+          "rows": [
+            13,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-1666",
+      "type": "mermaid",
+      "anchor": "123-uart-host-service-protocol",
+      "line": 1666,
+      "endLine": 1675,
+      "sourceSha256": "bbef5863e95d9500226d7778a654d9ebe9b451784e08d0640588958a120f388d",
+      "slides": [
+        {
+          "page": 71
+        }
+      ]
+    },
+    {
+      "id": "mermaid-1680",
+      "type": "mermaid",
+      "anchor": "123-uart-host-service-protocol",
+      "line": 1680,
+      "endLine": 1693,
+      "sourceSha256": "61e39824e2df06a7827152a87fe06b1475695b4d4bfdbd69720710ee1b64142d",
+      "slides": [
+        {
+          "page": 72
+        }
+      ]
+    },
+    {
+      "id": "recording-1714",
+      "type": "recording",
+      "anchor": "124-debugger-source-view-and-terminal-modes",
+      "line": 1714,
+      "endLine": 1714,
+      "sourceSha256": "fe3b45c6c77f0cab9b4e69d0772940850b8b1875e30cfc74b67a4abba486c76e",
+      "sourcePath": "https://asciinema.org/a/1264549.svg",
+      "slides": [
+        {
+          "page": 73
+        }
+      ]
+    },
+    {
+      "id": "table-1726",
+      "type": "table",
+      "anchor": "124-debugger-source-view-and-terminal-modes",
+      "line": 1726,
+      "endLine": 1732,
+      "sourceSha256": "3249b91be0827573ed5ee8751d6faaead98afb6973d7bc1a9118fad64e5e52d7",
+      "slides": [
+        {
+          "page": 74,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1760",
+      "type": "code",
+      "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
+      "line": 1760,
+      "endLine": 1769,
+      "sourceSha256": "1113b51eba83aa543440687dbe9e3803e80b5557bd595f4ad0de71cd9715ecc1",
+      "slides": [
+        {
+          "page": 38,
+          "repeated": true
+        },
+        {
+          "page": 75
+        }
+      ]
+    },
+    {
+      "id": "table-1771",
+      "type": "table",
+      "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
+      "line": 1771,
+      "endLine": 1777,
+      "sourceSha256": "8e0bbb73468ac67c34c6856262352f0c5b2f809029e58155ce024286cd813a55",
+      "slides": [
+        {
+          "page": 76,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1787",
+      "type": "code",
+      "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
+      "line": 1787,
+      "endLine": 1792,
+      "sourceSha256": "ab94554a40ae23cdf2afa765de57514c65c9bcea0d300cd97d759072453c95c5",
+      "slides": [
+        {
+          "page": 38,
+          "repeated": true
+        },
+        {
+          "page": 77
+        }
+      ]
+    },
+    {
+      "id": "code-1813",
+      "type": "code",
+      "anchor": "22-interrupt-controller-mappings-and-priorities",
+      "line": 1813,
+      "endLine": 1843,
+      "sourceSha256": "b02904abaf16e4aed99ed0889f215ef5f9e8ce525b8f038db4032cde75b6f0ac",
+      "slides": [
+        {
+          "page": 78
+        }
+      ]
+    },
+    {
+      "id": "image-1853",
+      "type": "image",
+      "anchor": "22-interrupt-controller-mappings-and-priorities",
+      "line": 1853,
+      "endLine": 1853,
+      "sourceSha256": "4ab69730d1ee75fb192b07ea56418273981d1afdcfd11b5246e47dbb05ae329b",
+      "sourcePath": "documentation/images/interrupt-controller-initialization.svg",
+      "slides": [
+        {
+          "page": 79
+        }
+      ],
+      "copiedFile": "public/readme/interrupt-controller-initialization.svg",
+      "originalFileSha256": "da75eaa77abcad8c1555ef264acbc36f301bf335991d75167a825d4d78cfdf2a"
+    },
+    {
+      "id": "table-1859",
+      "type": "table",
+      "anchor": "22-interrupt-controller-mappings-and-priorities",
+      "line": 1859,
+      "endLine": 1863,
+      "sourceSha256": "478d91cb5b545cd7e979834d7375e2fa213db6d5d1bb835863c275baf6fd6136",
+      "slides": [
+        {
+          "page": 80,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1876",
+      "type": "table",
+      "anchor": "221-interrupt-controller-function-reference",
+      "line": 1876,
+      "endLine": 1881,
+      "sourceSha256": "0109a8b21744b97997e082f9e1fcd321050ea6f2284b92edeb19bd1c2e62a593",
+      "slides": [
+        {
+          "page": 81,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1890",
+      "type": "table",
+      "anchor": "222-memory-mapped-periphery-function-reference",
+      "line": 1890,
+      "endLine": 1893,
+      "sourceSha256": "77578ffb4236cdee77dd02e3079f4b8730bbe4217b4cda1ef5b282eb8873ca8e",
+      "slides": [
+        {
+          "page": 82,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-1901",
+      "type": "table",
+      "anchor": "23-saved-interrupt-stack-frame",
+      "line": 1901,
+      "endLine": 1910,
+      "sourceSha256": "e2d90811ac015f307918300799b537860450876be7bc637f0e32889996631243",
+      "slides": [
+        {
+          "page": 83,
+          "rows": [
+            1,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-1960",
+      "type": "code",
+      "anchor": "241-syscall-selectors-and-register-convention",
+      "line": 1960,
+      "endLine": 1988,
+      "sourceSha256": "3f821aa10efabfb216605f26fb8e796a71ba7754b36bd188e99241311c3673f3",
+      "slides": [
+        {
+          "page": 86
+        }
+      ]
+    },
+    {
+      "id": "table-2001",
+      "type": "table",
+      "anchor": "2411-process-wait-signal-and-memory-request-structures",
+      "line": 2001,
+      "endLine": 2015,
+      "sourceSha256": "428f0944a37ba769a11c641ac92fe4f6e894a40d8d7d69b2a2146b2b98b90a68",
+      "slides": [
+        {
+          "page": 87,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 88,
+          "rows": [
+            13,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-2023",
+      "type": "table",
+      "anchor": "2412-file-and-directory-request-structures",
+      "line": 2023,
+      "endLine": 2046,
+      "sourceSha256": "2582fb12a075b1faf91286538bb80afeec2988564ca0c94fe8816044f1f651ff",
+      "slides": [
+        {
+          "page": 89,
+          "rows": [
+            1,
+            11
+          ]
+        },
+        {
+          "page": 90,
+          "rows": [
+            12,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-2064",
+      "type": "mermaid",
+      "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+      "line": 2064,
+      "endLine": 2073,
+      "sourceSha256": "95dd1e9bdbcd6ea66b44258b86fea7cace0189eb7439940964e4a6b9f6b19a1b",
+      "slides": [
+        {
+          "page": 91
+        }
+      ]
+    },
+    {
+      "id": "code-2079",
+      "type": "code",
+      "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+      "line": 2079,
+      "endLine": 2146,
+      "sourceSha256": "43fe8346cfbbf816cd3d0a276d68c551a097a7cdd21101aa043817080b1e3ff0",
+      "slides": [
+        {
+          "page": 92
+        }
+      ]
+    },
+    {
+      "id": "list-2151",
+      "type": "list",
+      "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+      "line": 2151,
+      "endLine": 2172,
+      "sourceSha256": "aca9cffc8c9a472b8334bec77ea421232ec234a023b4bf22d3b4fe126c65f7ca",
+      "slides": [
+        {
+          "page": 93,
+          "items": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2179",
+      "type": "list",
+      "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+      "line": 2179,
+      "endLine": 2191,
+      "sourceSha256": "57bca20836fee88d0507721ab4dedd979bcc802d9cd58f4487c5dc317a92ccc6",
+      "slides": [
+        {
+          "page": 94,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2195",
+      "type": "list",
+      "anchor": "242-system-call-entry-execution-and-return-to-userspace",
+      "line": 2195,
+      "endLine": 2204,
+      "sourceSha256": "fd66de87fc3d41ce3a705e5561b45bb9a0bc450c30ad71a265fcd90707b6b3c5",
+      "slides": [
+        {
+          "page": 94,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-2212",
+      "type": "code",
+      "anchor": "2421-handle-syscall",
+      "line": 2212,
+      "endLine": 2239,
+      "sourceSha256": "fd8abd62dfbfa899a719b03cfc729a559c8225c570bb6bf6ce56868a58ce5fca",
+      "slides": [
+        {
+          "page": 95
+        }
+      ]
+    },
+    {
+      "id": "list-2243",
+      "type": "list",
+      "anchor": "2421-handle-syscall",
+      "line": 2243,
+      "endLine": 2248,
+      "sourceSha256": "0c22a02080a6610451a2105e61b9b6656eefb0a400219afc4b86cdc418f29da4",
+      "slides": [
+        {
+          "page": 96,
+          "items": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-2258",
+      "type": "table",
+      "anchor": "24211-system-call-groups",
+      "line": 2258,
+      "endLine": 2265,
+      "sourceSha256": "1dd797ab4981f3686abe384453662ad1a123cc21d3be41be1fc31690012655f5",
+      "slides": [
+        {
+          "page": 97,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-2277",
+      "type": "code",
+      "anchor": "2422-selecting-the-return-path",
+      "line": 2277,
+      "endLine": 2289,
+      "sourceSha256": "231b863ebeb54d2b15374b8ff6172fbe1ae860b6f03f476f6596740a209a3cd3",
+      "slides": [
+        {
+          "page": 98
+        }
+      ]
+    },
+    {
+      "id": "code-2305",
+      "type": "code",
+      "anchor": "2422-selecting-the-return-path",
+      "line": 2305,
+      "endLine": 2317,
+      "sourceSha256": "81bb457b59894b1afae4f96dd82965b1f34fc3ada6fdae42f55c7f101bcacef8",
+      "slides": [
+        {
+          "page": 98
+        }
+      ]
+    },
+    {
+      "id": "list-2322",
+      "type": "list",
+      "anchor": "2422-selecting-the-return-path",
+      "line": 2322,
+      "endLine": 2333,
+      "sourceSha256": "b88cc8a9b456359accbcd350b7cc7e6348687a8def6b96c46af46c3a39935ad5",
+      "slides": [
+        {
+          "page": 99,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-2358",
+      "type": "code",
+      "anchor": "2423-stack-boundary-helpers",
+      "line": 2358,
+      "endLine": 2364,
+      "sourceSha256": "b398c4f370719bff2bf03e0c7b1048f43e01d78caf1099c5f8f46a615c2ac8fa",
+      "slides": [
+        {
+          "page": 100
+        }
+      ]
+    },
+    {
+      "id": "code-2373",
+      "type": "code",
+      "anchor": "2423-stack-boundary-helpers",
+      "line": 2373,
+      "endLine": 2391,
+      "sourceSha256": "73db604564cd7fb568b06a3deeba863b34e5d97666071d5c172122392c11314a",
+      "slides": [
+        {
+          "page": 101
+        }
+      ]
+    },
+    {
+      "id": "table-2418",
+      "type": "table",
+      "anchor": "243-system-call-selection-function-reference",
+      "line": 2418,
+      "endLine": 2420,
+      "sourceSha256": "a82f9391552d7af744ab8f8c4afe476ccf9df4305b07e9da627cebd42b041c51",
+      "slides": [
+        {
+          "page": 102,
+          "rows": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-2436",
+      "type": "mermaid",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2436,
+      "endLine": 2452,
+      "sourceSha256": "dfe1cac86770e92ec71ce76633e4eff6fd6f231b9bc9240a716e2609bbbcbba1",
+      "slides": [
+        {
+          "page": 103
+        }
+      ]
+    },
+    {
+      "id": "mermaid-2457",
+      "type": "mermaid",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2457,
+      "endLine": 2463,
+      "sourceSha256": "bc827eee4c5765b1b1d98272b59e91d56b3648f3e4cd0ff459a42afbea601252",
+      "slides": [
+        {
+          "page": 104
+        }
+      ]
+    },
+    {
+      "id": "code-2467",
+      "type": "code",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2467,
+      "endLine": 2539,
+      "sourceSha256": "a49a96b3e4a5330890932d54386a4f3a697c8e81381e812b8113f23356c9a038",
+      "slides": [
+        {
+          "page": 105
+        }
+      ]
+    },
+    {
+      "id": "list-2544",
+      "type": "list",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2544,
+      "endLine": 2554,
+      "sourceSha256": "28541310dac01602fb8dde84995d9c7e14577e4d6632e0db519e792b88584d82",
+      "slides": [
+        {
+          "page": 106,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-2553",
+      "type": "image",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2553,
+      "endLine": 2553,
+      "sourceSha256": "3a21b57f6d5d952138734a1bcdb38e9ffe6362e88b54fc6c5f099a5ad07e41ea",
+      "sourcePath": "documentation/images/timer-pc-memory-layout.svg",
+      "slides": [
+        {
+          "page": 106
+        }
+      ],
+      "copiedFile": "public/readme/timer-pc-memory-layout.svg",
+      "originalFileSha256": "2921368e128975ca639128dac92bb1251f2c269d0e70868e727ad4981254b33b"
+    },
+    {
+      "id": "list-2563",
+      "type": "list",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2563,
+      "endLine": 2566,
+      "sourceSha256": "21271eb319987fb7f9e382910aa04ee70b6ad3b468db09e65614487642542257",
+      "slides": [
+        {
+          "page": 107,
+          "items": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2570",
+      "type": "list",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2570,
+      "endLine": 2578,
+      "sourceSha256": "013fbb90ff6b9bc888027818009d6e9079637b64d206928ed9dbd32e4c93b32b",
+      "slides": [
+        {
+          "page": 107,
+          "items": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2582",
+      "type": "list",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2582,
+      "endLine": 2595,
+      "sourceSha256": "149fd0030ee8813665070372c6e475768111d6273bd7a766b1fb683062457c05",
+      "slides": [
+        {
+          "page": 108,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2599",
+      "type": "list",
+      "anchor": "251-timer-interrupt-path",
+      "line": 2599,
+      "endLine": 2609,
+      "sourceSha256": "293a852b1a22d76b22c6c4762659e5e4b9a9a3f3573e172a60b45babd1abfa71",
+      "slides": [
+        {
+          "page": 108,
+          "items": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-2642",
+      "type": "image",
+      "anchor": "253-shell-character-delay-for-different-timer-intervals",
+      "line": 2642,
+      "endLine": 2642,
+      "sourceSha256": "fad0728823df234acdcad7929a1e5cb2dfeac5810c8568668be41c6374d7dbb7",
+      "sourcePath": "documentation/images/timer_interval_measurements.png",
+      "slides": [
+        {
+          "page": 110
+        }
+      ],
+      "copiedFile": "public/readme/timer_interval_measurements.png",
+      "originalFileSha256": "67c47166f6d079c29a67985b7ceef415be9305f715be8f6a1fbe933b82b24c91"
+    },
+    {
+      "id": "mermaid-2657",
+      "type": "mermaid",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2657,
+      "endLine": 2664,
+      "sourceSha256": "96f9af0df7675830e58ebcff3110259e6bd2428a8bae0bfc8f0339e4f15910ff",
+      "slides": [
+        {
+          "page": 111
+        }
+      ]
+    },
+    {
+      "id": "code-2668",
+      "type": "code",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2668,
+      "endLine": 2706,
+      "sourceSha256": "cfa06e99965d8fc79fbd16fabb22030ed995be2d2b3bf1782e39eced0836631a",
+      "slides": [
+        {
+          "page": 112
+        }
+      ]
+    },
+    {
+      "id": "list-2711",
+      "type": "list",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2711,
+      "endLine": 2718,
+      "sourceSha256": "99fd0eb3f5cb644b623f947db739d3540557016250f0949ce2917a28a8385bef",
+      "slides": [
+        {
+          "page": 113,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2722",
+      "type": "list",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2722,
+      "endLine": 2726,
+      "sourceSha256": "0a231a811d679b1d253ea82e238da4b096e8c03bec16516582463b1154e4ed28",
+      "slides": [
+        {
+          "page": 113,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-2730",
+      "type": "code",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2730,
+      "endLine": 2751,
+      "sourceSha256": "82f778fe324162eaa25243d2cac3f48df0fbe08c650b3572ebe4ad7c10911945",
+      "slides": [
+        {
+          "page": 114
+        }
+      ]
+    },
+    {
+      "id": "list-2756",
+      "type": "list",
+      "anchor": "26-uart-receive-interrupt-path",
+      "line": 2756,
+      "endLine": 2774,
+      "sourceSha256": "e07c90085bacf4b8331bb3079059412f63b2e92aa167f7f5a9a378fa5ed79dc4",
+      "slides": [
+        {
+          "page": 115,
+          "items": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-2797",
+      "type": "table",
+      "anchor": "262-uart-nesting-and-interrupt-priorities",
+      "line": 2797,
+      "endLine": 2805,
+      "sourceSha256": "32dac6f3073fb6b87621db09526a7bcadf049e7380aba9770bf58b3f1ed1343e",
+      "slides": [
+        {
+          "page": 117,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-2829",
+      "type": "table",
+      "anchor": "263-polled-uart-function-reference",
+      "line": 2829,
+      "endLine": 2832,
+      "sourceSha256": "4a3b10b6eccd9c249d085705fe1ca26cd0405e0a22250703c6841e786c232d9b",
+      "slides": [
+        {
+          "page": 118,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-2841",
+      "type": "mermaid",
+      "anchor": "27-dma-completion-interrupt-path",
+      "line": 2841,
+      "endLine": 2852,
+      "sourceSha256": "6ecb812e878b6a6b57132b0515b4e914c1d761cf0d10c1436e38875c63eb14dd",
+      "slides": [
+        {
+          "page": 119
+        }
+      ]
+    },
+    {
+      "id": "code-2857",
+      "type": "code",
+      "anchor": "27-dma-completion-interrupt-path",
+      "line": 2857,
+      "endLine": 2897,
+      "sourceSha256": "542a8b2cab56ee9d9e355889d27bf372dac5495d9dbff91d9e4c7ec974486c1a",
+      "slides": [
+        {
+          "page": 120
+        }
+      ]
+    },
+    {
+      "id": "list-2902",
+      "type": "list",
+      "anchor": "27-dma-completion-interrupt-path",
+      "line": 2902,
+      "endLine": 2909,
+      "sourceSha256": "6d7b96205c576c5fd6828171144e6bb5bc88584ecf4e37855291431396725b59",
+      "slides": [
+        {
+          "page": 121,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-2918",
+      "type": "list",
+      "anchor": "27-dma-completion-interrupt-path",
+      "line": 2918,
+      "endLine": 2923,
+      "sourceSha256": "4d158130f148a92fba61c5decba97790321906b4eeac3eadf7cedf37bb2656c2",
+      "slides": [
+        {
+          "page": 121,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-2939",
+      "type": "table",
+      "anchor": "271-dma-waiting-and-completion-function-reference",
+      "line": 2939,
+      "endLine": 2943,
+      "sourceSha256": "5d5045509e584631d2dcb7b46aa2c3a9f5c6764c35c69f3a2e1f9ea9fe42f414",
+      "slides": [
+        {
+          "page": 122,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-2959",
+      "type": "mermaid",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 2959,
+      "endLine": 2969,
+      "sourceSha256": "5012825aa14faab49f6c4c8cfe9836f12f4dcad37d15761bda527c90de9658f5",
+      "slides": [
+        {
+          "page": 123
+        }
+      ]
+    },
+    {
+      "id": "table-2974",
+      "type": "table",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 2974,
+      "endLine": 2977,
+      "sourceSha256": "4378fd99bf75ebe71e6e71e95b0fd3d7a6fde4f0cef5387b67dd6a4c52bac465",
+      "slides": [
+        {
+          "page": 124,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-2982",
+      "type": "code",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 2982,
+      "endLine": 3006,
+      "sourceSha256": "802e78ab7294d011ccd900f4819c81062179cd8c22e1bd65f27201236fb4b652",
+      "slides": [
+        {
+          "page": 125
+        }
+      ]
+    },
+    {
+      "id": "list-3011",
+      "type": "list",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 3011,
+      "endLine": 3026,
+      "sourceSha256": "5939c5d530db0aacb58af559102f4656d9d9642d825f7cfae58348a4d476a8a9",
+      "slides": [
+        {
+          "page": 126,
+          "items": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-3030",
+      "type": "code",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 3030,
+      "endLine": 3042,
+      "sourceSha256": "ea35b648517a3a60363275bd9b6b4be9739f5e9089c73fa74e71cd177ec49c0e",
+      "slides": [
+        {
+          "page": 126
+        }
+      ]
+    },
+    {
+      "id": "list-3047",
+      "type": "list",
+      "anchor": "281-cpu-exception-entry-and-registers",
+      "line": 3047,
+      "endLine": 3065,
+      "sourceSha256": "fe579a477cdd27896b00a2a64ff6fe6bcc7d5ca4a67a4825cade1431596a9b2c",
+      "slides": [
+        {
+          "page": 127,
+          "items": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3080",
+      "type": "table",
+      "anchor": "282-supported-exceptions-and-allocation-errors",
+      "line": 3080,
+      "endLine": 3087,
+      "sourceSha256": "2a608b5ae072fedb27f0d903e20d59dfde2ccec18aa5ed5486974fab8270fef9",
+      "slides": [
+        {
+          "page": 128,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3097",
+      "type": "table",
+      "anchor": "283-exception-and-stack-boundary-function-reference",
+      "line": 3097,
+      "endLine": 3104,
+      "sourceSha256": "d084f802f8122f7a320227c576205c1cb9745789640cd066b95733f39f29a5a3",
+      "slides": [
+        {
+          "page": 129,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-3120",
+      "type": "code",
+      "anchor": "31-heap-block-layout-and-allocation-algorithm",
+      "line": 3120,
+      "endLine": 3130,
+      "sourceSha256": "f4814f39f7797bdc7c47a70a7c28496909daaaaa18bc009398a7e4ddcfc9b322",
+      "slides": [
+        {
+          "page": 130
+        }
+      ]
+    },
+    {
+      "id": "image-3140",
+      "type": "image",
+      "anchor": "31-heap-block-layout-and-allocation-algorithm",
+      "line": 3140,
+      "endLine": 3140,
+      "sourceSha256": "7c59871cdf437cda895a13b0c8ddf787407093e483092ea00aa8c61c1f6965ce",
+      "sourcePath": "documentation/images/memory-generic-heap.svg",
+      "slides": [
+        {
+          "page": 131
+        }
+      ],
+      "copiedFile": "public/readme/memory-generic-heap.svg",
+      "originalFileSha256": "7f1cf6415354e927d4f8adfff94dcff69a06fb8a97d75104ab0c150a14e7d360"
+    },
+    {
+      "id": "table-3145",
+      "type": "table",
+      "anchor": "31-heap-block-layout-and-allocation-algorithm",
+      "line": 3145,
+      "endLine": 3150,
+      "sourceSha256": "67d1a426ec4ea81df929abbfaef113866546e6022851f4e5451c0ba364db3068",
+      "slides": [
+        {
+          "page": 132,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3167",
+      "type": "table",
+      "anchor": "32-sram-image-and-heap-hierarchy",
+      "line": 3167,
+      "endLine": 3171,
+      "sourceSha256": "595b685cc0e0adc414f40e2139d3f543d0a1fee0b61ec71863aeaa04fe7ee650",
+      "slides": [
+        {
+          "page": 133,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-3183",
+      "type": "image",
+      "anchor": "32-sram-image-and-heap-hierarchy",
+      "line": 3183,
+      "endLine": 3183,
+      "sourceSha256": "30b5649a2261cb49dfc77223cd1db037b002221c864dedf4910f623ba8e826a3",
+      "sourcePath": "documentation/images/memory-sram-overview.svg",
+      "slides": [
+        {
+          "page": 134
+        }
+      ],
+      "copiedFile": "public/readme/memory-sram-overview.svg",
+      "originalFileSha256": "c1b21b6b6f34d501770fdce35c861253ec8674a3c0c37ca67d3585a45aff7755"
+    },
+    {
+      "id": "table-3189",
+      "type": "table",
+      "anchor": "32-sram-image-and-heap-hierarchy",
+      "line": 3189,
+      "endLine": 3196,
+      "sourceSha256": "702ae40b633c13dade45234580c84429fac6820f2cee6d40a3ea1e410e2ffaf1",
+      "slides": [
+        {
+          "page": 135,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3207",
+      "type": "table",
+      "anchor": "32-sram-image-and-heap-hierarchy",
+      "line": 3207,
+      "endLine": 3213,
+      "sourceSha256": "689e9f5dc2b1e47539d0e5f852141c98ae461b3e383b38abcd071cc9bd311ea6",
+      "slides": [
+        {
+          "page": 136,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3242",
+      "type": "table",
+      "anchor": "332-kernel-heap-allocator-function-reference",
+      "line": 3242,
+      "endLine": 3248,
+      "sourceSha256": "cdec24630a3d51ca9417de78aa071200d9db43585fce9e9445ea1110e7d25a7c",
+      "slides": [
+        {
+          "page": 138,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3296",
+      "type": "table",
+      "anchor": "343-process-and-shared-data-heap-allocator-function-reference",
+      "line": 3296,
+      "endLine": 3301,
+      "sourceSha256": "0ded89be2adf84c4f63906709d146069516e8f0a7e9035af4180d37db6cef830",
+      "slides": [
+        {
+          "page": 141,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3332",
+      "type": "table",
+      "anchor": "352-user-process-heap-allocator-function-reference",
+      "line": 3332,
+      "endLine": 3338,
+      "sourceSha256": "b9d11b566d3a2a7e25c6103e0d2105dc3b4c72bf6ca6f7de28da4410624c4702",
+      "slides": [
+        {
+          "page": 143,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-3353",
+      "type": "mermaid",
+      "anchor": "361-common-allocator-linkage-and-function-reference",
+      "line": 3353,
+      "endLine": 3362,
+      "sourceSha256": "6b4b58f5ccd415f83de1067e05f4c78141e5318d805a09e0d77cdfafa3ec40bc",
+      "slides": [
+        {
+          "page": 144
+        }
+      ]
+    },
+    {
+      "id": "table-3368",
+      "type": "table",
+      "anchor": "361-common-allocator-linkage-and-function-reference",
+      "line": 3368,
+      "endLine": 3376,
+      "sourceSha256": "b900d053a7df7b39d3526726682062d35d7d94df8833d5afa705302d9699c67c",
+      "slides": [
+        {
+          "page": 145,
+          "rows": [
+            1,
+            5
+          ]
+        },
+        {
+          "page": 146,
+          "rows": [
+            6,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-3385",
+      "type": "mermaid",
+      "anchor": "362-reallocation-decisions",
+      "line": 3385,
+      "endLine": 3398,
+      "sourceSha256": "e4795f53d3adf6df9be56d5329aeae9a64c7a5ddb7fe4633a65cc1a2b3d08f33",
+      "slides": [
+        {
+          "page": 147
+        }
+      ]
+    },
+    {
+      "id": "image-3418",
+      "type": "image",
+      "anchor": "3631-initial-state-and-first-fit-search",
+      "line": 3418,
+      "endLine": 3418,
+      "sourceSha256": "7cf4d733e939e54a3fabbfb6076d8b39f51d4b86030772092ff7f260d4a03683",
+      "sourcePath": "documentation/images/heap-01-initial.svg",
+      "slides": [
+        {
+          "page": 149
+        }
+      ],
+      "copiedFile": "public/readme/heap-01-initial.svg",
+      "originalFileSha256": "c77f875712ddddde13374e508cd47475125b83608f0501bec089684e1bf15add"
+    },
+    {
+      "id": "image-3433",
+      "type": "image",
+      "anchor": "3632-allocation-splits-d",
+      "line": 3433,
+      "endLine": 3433,
+      "sourceSha256": "ade532b9a9c1a1bd58855c2221b1917719b1a8aa27aa0b37f88ffe4c62d5b15b",
+      "sourcePath": "documentation/images/heap-02-allocated.svg",
+      "slides": [
+        {
+          "page": 150
+        }
+      ],
+      "copiedFile": "public/readme/heap-02-allocated.svg",
+      "originalFileSha256": "9e15e4292c6ba241595bf399e30640d8404c7fa6b59891e55b658c86427258c5"
+    },
+    {
+      "id": "image-3444",
+      "type": "image",
+      "anchor": "3633-free-d-and-merge-its-remainder",
+      "line": 3444,
+      "endLine": 3444,
+      "sourceSha256": "3f64b75ec22fbefe84664b003af6746c576c08e3d559374f163f6cf5a9305108",
+      "sourcePath": "documentation/images/heap-03-d-marked-free.svg",
+      "slides": [
+        {
+          "page": 151
+        }
+      ],
+      "copiedFile": "public/readme/heap-03-d-marked-free.svg",
+      "originalFileSha256": "e6245d2a7d2300bd522637fb75557d6a0e7ffe0862566d190c29b26ae6605738"
+    },
+    {
+      "id": "image-3450",
+      "type": "image",
+      "anchor": "3633-free-d-and-merge-its-remainder",
+      "line": 3450,
+      "endLine": 3450,
+      "sourceSha256": "1b880001858363acbb335df7b7645ece55b1185a9aafabbc45b2706e2d43dadc",
+      "sourcePath": "documentation/images/heap-04-d-merged.svg",
+      "slides": [
+        {
+          "page": 151
+        }
+      ],
+      "copiedFile": "public/readme/heap-04-d-merged.svg",
+      "originalFileSha256": "a221b6a60d31d339b5c6fdb2639276009ee805e5335d18577cb92b3137dcffca"
+    },
+    {
+      "id": "image-3460",
+      "type": "image",
+      "anchor": "3634-free-c-and-merge-repeatedly-at-b",
+      "line": 3460,
+      "endLine": 3460,
+      "sourceSha256": "1d9f501d88c251463f9843dd3ec31099fd4f8223d8429cca9d051832bfc9998c",
+      "sourcePath": "documentation/images/heap-05-c-marked-free.svg",
+      "slides": [
+        {
+          "page": 152
+        }
+      ],
+      "copiedFile": "public/readme/heap-05-c-marked-free.svg",
+      "originalFileSha256": "055e2789aaf8335dc2e56d08bef3cb6f66090bdf4bdaed287b9b2d5ee8f6bf50"
+    },
+    {
+      "id": "image-3465",
+      "type": "image",
+      "anchor": "3634-free-c-and-merge-repeatedly-at-b",
+      "line": 3465,
+      "endLine": 3465,
+      "sourceSha256": "126e8c62f1b0214b0bfb3f1ca8f62683b62a41eec024c8e2cc3b9473166c2dd2",
+      "sourcePath": "documentation/images/heap-06-b-c-merged.svg",
+      "slides": [
+        {
+          "page": 152
+        }
+      ],
+      "copiedFile": "public/readme/heap-06-b-c-merged.svg",
+      "originalFileSha256": "c88d75e142a4a9dee83c1f3749a8829ba25ded7720b7a98258d9dccd1f6279b1"
+    },
+    {
+      "id": "image-3471",
+      "type": "image",
+      "anchor": "3634-free-c-and-merge-repeatedly-at-b",
+      "line": 3471,
+      "endLine": 3471,
+      "sourceSha256": "6909ae233a0dbc12e55b621765dad2ef308f35a307a4f80be8096a839580cfd9",
+      "sourcePath": "documentation/images/heap-07-b-d-merged.svg",
+      "slides": [
+        {
+          "page": 153
+        }
+      ],
+      "copiedFile": "public/readme/heap-07-b-d-merged.svg",
+      "originalFileSha256": "a11b1aeb915f63710ca91da60c09f0102cb5814a662f60b4d55b63af47866737"
+    },
+    {
+      "id": "code-3496",
+      "type": "code",
+      "anchor": "41-process-control-block-fields",
+      "line": 3496,
+      "endLine": 3524,
+      "sourceSha256": "c19e51e6d79054b1c90d8acbc98d75676b56fb729d52d6b923df962fc1cee869",
+      "slides": [
+        {
+          "page": 154
+        }
+      ]
+    },
+    {
+      "id": "table-3526",
+      "type": "table",
+      "anchor": "41-process-control-block-fields",
+      "line": 3526,
+      "endLine": 3545,
+      "sourceSha256": "c855afdf6dff0c69a9513881200aba4ea992364c5fc47a635d82c6977a5773d1",
+      "slides": [
+        {
+          "page": 155,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 156,
+          "rows": [
+            13,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3561",
+      "type": "table",
+      "anchor": "411-process-states-and-transitions",
+      "line": 3561,
+      "endLine": 3568,
+      "sourceSha256": "f19356edc74a7db03a95ab56bbf166992074b75d71b4c28044f274e3478074b1",
+      "slides": [
+        {
+          "page": 157,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-3590",
+      "type": "mermaid",
+      "anchor": "411-process-states-and-transitions",
+      "line": 3590,
+      "endLine": 3611,
+      "sourceSha256": "d3d3c62fa57895e4d68ffb817eb2194213c1d49db098cecddd781844ccb94ba1",
+      "slides": [
+        {
+          "page": 158
+        }
+      ]
+    },
+    {
+      "id": "image-3627",
+      "type": "image",
+      "anchor": "412-global-process-list-and-current-process",
+      "line": 3627,
+      "endLine": 3627,
+      "sourceSha256": "bb5f5cbb4d2fe8280693e55e8eb80a9ddd1ccb1468bb4fc187384fa3624f98c1",
+      "sourcePath": "documentation/images/memory-process-list.svg",
+      "slides": [
+        {
+          "page": 159
+        }
+      ],
+      "copiedFile": "public/readme/memory-process-list.svg",
+      "originalFileSha256": "f9e5670604031599a7f206dbeec4668979b1a14452d3c166398de056e0314e38"
+    },
+    {
+      "id": "table-3648",
+      "type": "table",
+      "anchor": "412-global-process-list-and-current-process",
+      "line": 3648,
+      "endLine": 3651,
+      "sourceSha256": "8619c6ed401126e46824bd2c3f62217e92426d328308950887f512fce6e01b59",
+      "slides": [
+        {
+          "page": 160,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-3674",
+      "type": "image",
+      "anchor": "4121-from-pcbs-to-process-payloads-in-sram",
+      "line": 3674,
+      "endLine": 3674,
+      "sourceSha256": "5179c2650708f193b160cb5a70e92b5e936206099363873080f6ff215423cd4f",
+      "sourcePath": "documentation/images/memory-process-payload-links.svg",
+      "slides": [
+        {
+          "page": 161
+        }
+      ],
+      "copiedFile": "public/readme/memory-process-payload-links.svg",
+      "originalFileSha256": "2f204a012f0dfe02bcc1036420f8ae5301473e2e60865844bba1fdd1d84ec602"
+    },
+    {
+      "id": "image-3693",
+      "type": "image",
+      "anchor": "421-user-process-stack-placement",
+      "line": 3693,
+      "endLine": 3693,
+      "sourceSha256": "58337b6580b6230afbd59aa63e2669c30ed81639ef27aeded3cdfd8fc461cd7d",
+      "sourcePath": "documentation/images/process-stack-placement.svg",
+      "slides": [
+        {
+          "page": 162
+        }
+      ],
+      "copiedFile": "public/readme/process-stack-placement.svg",
+      "originalFileSha256": "897809aabeee995c9eee811f808203cb223e523ae80047ad19c5a257f971bdc2"
+    },
+    {
+      "id": "table-3716",
+      "type": "table",
+      "anchor": "422-initial-argc-argv-and-envp",
+      "line": 3716,
+      "endLine": 3721,
+      "sourceSha256": "faec34e3b19355d14963b19cce94f5a6104be6baab6aea4de4d77edf4014e798",
+      "slides": [
+        {
+          "page": 163,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3726",
+      "type": "table",
+      "anchor": "422-initial-argc-argv-and-envp",
+      "line": 3726,
+      "endLine": 3741,
+      "sourceSha256": "21b7d1186500f979d786f406734e0b2c9ff3acdb4af3205080c2587a08feebae",
+      "slides": [
+        {
+          "page": 164,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 165,
+          "rows": [
+            13,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-3756",
+      "type": "code",
+      "anchor": "422-initial-argc-argv-and-envp",
+      "line": 3756,
+      "endLine": 3761,
+      "sourceSha256": "272da2021f3c1445d329da7b57c949d870da26c976fde04531bd802f2a1cdee4",
+      "slides": [
+        {
+          "page": 166
+        }
+      ]
+    },
+    {
+      "id": "code-3791",
+      "type": "code",
+      "anchor": "4221-concrete-initial-stack-example",
+      "line": 3791,
+      "endLine": 3802,
+      "sourceSha256": "7567ca73477272248b11eeaa841f28bacdac7429796758082b45f2b704b9fbb1",
+      "slides": [
+        {
+          "page": 167
+        }
+      ]
+    },
+    {
+      "id": "code-3807",
+      "type": "code",
+      "anchor": "4221-concrete-initial-stack-example",
+      "line": 3807,
+      "endLine": 3821,
+      "sourceSha256": "bdac77b76b5062b556a24bb0366f0995634064045c60d1434bea26d28c96c1da",
+      "slides": [
+        {
+          "page": 168
+        }
+      ]
+    },
+    {
+      "id": "image-3828",
+      "type": "image",
+      "anchor": "4221-concrete-initial-stack-example",
+      "line": 3828,
+      "endLine": 3828,
+      "sourceSha256": "f16afda91a507bb2297e0d21c63019e262701502ab5bbad63454be784c2679dc",
+      "sourcePath": "documentation/images/process-initial-stack-example.svg",
+      "slides": [
+        {
+          "page": 169
+        }
+      ],
+      "copiedFile": "public/readme/process-initial-stack-example.svg",
+      "originalFileSha256": "46ac9e01fb2532cb341c39b5a6488c327045b09a976c7fccd0cedcc9849d3829"
+    },
+    {
+      "id": "list-3847",
+      "type": "list",
+      "anchor": "431-loading-a-process-load-library-call",
+      "line": 3847,
+      "endLine": 3856,
+      "sourceSha256": "27f7a274f1d77fb1e7b7067b5eb8ebfec74fa8a5bfca0c99ce956db4cbc2420c",
+      "slides": [
+        {
+          "page": 170,
+          "items": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-3863",
+      "type": "image",
+      "anchor": "431-loading-a-process-load-library-call",
+      "line": 3863,
+      "endLine": 3863,
+      "sourceSha256": "2b0d9c0895e3a7e4bbabbf70b05a350a17262b57e7ae89ed4833ff0883eb1520",
+      "sourcePath": "documentation/images/process-load-transfer.svg",
+      "slides": [
+        {
+          "page": 171
+        }
+      ],
+      "copiedFile": "public/readme/process-load-transfer.svg",
+      "originalFileSha256": "0bb7edac6ab59da33164f68acbb5829992e2d342d599f70f91b63ba19e1fdf54"
+    },
+    {
+      "id": "image-3878",
+      "type": "image",
+      "anchor": "431-loading-a-process-load-library-call",
+      "line": 3878,
+      "endLine": 3878,
+      "sourceSha256": "a2fcb53cf6db7900500640548c9adfcad0f0599944de2d4b342d16eeebe7e11d",
+      "sourcePath": "documentation/images/process-load-complete.svg",
+      "slides": [
+        {
+          "page": 172
+        }
+      ],
+      "copiedFile": "public/readme/process-load-complete.svg",
+      "originalFileSha256": "83cb6c4b6caa76850b48c8770beb3832e136c9736040df9e3a165b137f36b422"
+    },
+    {
+      "id": "table-3888",
+      "type": "table",
+      "anchor": "431-loading-a-process-load-library-call",
+      "line": 3888,
+      "endLine": 3898,
+      "sourceSha256": "494a8bd903bdcba3b5de6cbc9317fbc3ea211520ee580b7d27048ec5719cbe70",
+      "slides": [
+        {
+          "page": 173,
+          "rows": [
+            1,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3914",
+      "type": "table",
+      "anchor": "4311-load-function-reference",
+      "line": 3914,
+      "endLine": 3928,
+      "sourceSha256": "1f32cce6dfc15e44816f119d4827cdb455d0798b0181cb5076f7a35f54ca2700",
+      "slides": [
+        {
+          "page": 174,
+          "rows": [
+            1,
+            6
+          ]
+        },
+        {
+          "page": 175,
+          "rows": [
+            7,
+            13
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-3932",
+      "type": "table",
+      "anchor": "4311-load-function-reference",
+      "line": 3932,
+      "endLine": 3934,
+      "sourceSha256": "a493ec94e7d1391354dd39f567440c5ef73ffec7bb1c45783e588c088bdc827e",
+      "slides": [
+        {
+          "page": 176,
+          "rows": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-3941",
+      "type": "list",
+      "anchor": "432-starting-a-process-run-library-call",
+      "line": 3941,
+      "endLine": 3948,
+      "sourceSha256": "4bf15750d89b92ab4a6469d856fcc79f3f2ff0bef42a6221f76d9c1f965c8e2b",
+      "slides": [
+        {
+          "page": 177,
+          "items": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-3952",
+      "type": "image",
+      "anchor": "432-starting-a-process-run-library-call",
+      "line": 3952,
+      "endLine": 3952,
+      "sourceSha256": "41325ac468b6bf3174f19849bc7b3fe4f4b35e6cc45c99779efe531317068948",
+      "sourcePath": "documentation/images/process-run-setup.svg",
+      "slides": [
+        {
+          "page": 178
+        }
+      ],
+      "copiedFile": "public/readme/process-run-setup.svg",
+      "originalFileSha256": "43529786b957e78b124ad8debddb5e5312c3e8b944b4a0a6703d894dac0e001f"
+    },
+    {
+      "id": "table-3973",
+      "type": "table",
+      "anchor": "4321-parent-to-child-inheritance",
+      "line": 3973,
+      "endLine": 3979,
+      "sourceSha256": "5ed8c83a64b20bba5841dcb2b27e2ee88820407b7662f8c38aab3511bc700dc5",
+      "slides": [
+        {
+          "page": 179,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-3985",
+      "type": "image",
+      "anchor": "4321-parent-to-child-inheritance",
+      "line": 3985,
+      "endLine": 3985,
+      "sourceSha256": "c3581a3b3792a7b40263080b4700d42b3d9235d667a8b3a37dffc817200be35b",
+      "sourcePath": "documentation/images/process-inheritance.svg",
+      "slides": [
+        {
+          "page": 180
+        }
+      ],
+      "copiedFile": "public/readme/process-inheritance.svg",
+      "originalFileSha256": "15fcdab71c3ac50a76631869d75ea84820aed3ced9be22637701777b4446bac5"
+    },
+    {
+      "id": "mermaid-4031",
+      "type": "mermaid",
+      "anchor": "43211-environment-origin-and-propagation",
+      "line": 4031,
+      "endLine": 4043,
+      "sourceSha256": "def90fbf3a42730b3eec1db5a5ac93d839ac0134046f08a9beb6af64b7b9c13f",
+      "slides": [
+        {
+          "page": 181
+        }
+      ]
+    },
+    {
+      "id": "code-4062",
+      "type": "code",
+      "anchor": "43212-loading-bar-environment-variable",
+      "line": 4062,
+      "endLine": 4068,
+      "sourceSha256": "ec4432189e61db44db327bfe44abd41a4df953743d5de62bb6780259e732a4f3",
+      "slides": [
+        {
+          "page": 182
+        }
+      ]
+    },
+    {
+      "id": "mermaid-4081",
+      "type": "mermaid",
+      "anchor": "4322-recording-termination-status",
+      "line": 4081,
+      "endLine": 4105,
+      "sourceSha256": "137b3f5919a5b91a2a697ae4dbb8bc075229352a66e524441e733cd5c8514ef4",
+      "slides": [
+        {
+          "page": 183
+        }
+      ]
+    },
+    {
+      "id": "list-4109",
+      "type": "list",
+      "anchor": "4322-recording-termination-status",
+      "line": 4109,
+      "endLine": 4117,
+      "sourceSha256": "48cecfe046df11cb05d7d7e1d4f866ffc8b9a8ae1a5cd14db287388ea8215fff",
+      "slides": [
+        {
+          "page": 184,
+          "items": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-4124",
+      "type": "list",
+      "anchor": "4322-recording-termination-status",
+      "line": 4124,
+      "endLine": 4145,
+      "sourceSha256": "24571067baae17eb772ad8eb6cc4b96ad610a21911c80ce95aa1f1d904313a4e",
+      "slides": [
+        {
+          "page": 184,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4164",
+      "type": "table",
+      "anchor": "4323-parent-collection-and-final-removal",
+      "line": 4164,
+      "endLine": 4168,
+      "sourceSha256": "98edd679769e467b88a637bc912f6215f386cabace40daa4cf9e593a0615bc01",
+      "slides": [
+        {
+          "page": 185,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4184",
+      "type": "table",
+      "anchor": "4324-run-function-reference",
+      "line": 4184,
+      "endLine": 4195,
+      "sourceSha256": "cfcb11e689fc5e8c1323721aff1b1da8f35bfdc37738d7b381917b8c97464404",
+      "slides": [
+        {
+          "page": 186,
+          "rows": [
+            1,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4204",
+      "type": "table",
+      "anchor": "44-process-list-pcb-metadata-and-lifecycle-function-reference",
+      "line": 4204,
+      "endLine": 4221,
+      "sourceSha256": "e8b2256510ebf7a02b8cc933fbe348e61dd87e6d6beccfad518e0f474e053f0a",
+      "slides": [
+        {
+          "page": 187,
+          "rows": [
+            1,
+            11
+          ]
+        },
+        {
+          "page": 188,
+          "rows": [
+            12,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4241",
+      "type": "code",
+      "anchor": "51-named-entries-and-per-process-attachments",
+      "line": 4241,
+      "endLine": 4255,
+      "sourceSha256": "b546cb1756e3ac50e700f0acb6e038dbacd751de2b721282f4aebffbac4955d6",
+      "slides": [
+        {
+          "page": 189
+        }
+      ]
+    },
+    {
+      "id": "table-4265",
+      "type": "table",
+      "anchor": "51-named-entries-and-per-process-attachments",
+      "line": 4265,
+      "endLine": 4272,
+      "sourceSha256": "40966a291ea21a02c630df68a25f81fa6b5a1a1419f680b710126773852367e2",
+      "slides": [
+        {
+          "page": 190,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4277",
+      "type": "table",
+      "anchor": "51-named-entries-and-per-process-attachments",
+      "line": 4277,
+      "endLine": 4280,
+      "sourceSha256": "5a472a8075dcaf04bcd6adb4d6f8a29bea775c5b1443695165848ca47a5fdd7d",
+      "slides": [
+        {
+          "page": 191,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-4299",
+      "type": "image",
+      "anchor": "511-global-shared-memory-list-and-entry-names",
+      "line": 4299,
+      "endLine": 4299,
+      "sourceSha256": "d3dfe14197dada592c89d6f619df855108162318066db5ff904e5f2a4dfeed64",
+      "sourcePath": "documentation/images/memory-shared-list.svg",
+      "slides": [
+        {
+          "page": 192
+        }
+      ],
+      "copiedFile": "public/readme/memory-shared-list.svg",
+      "originalFileSha256": "66d1a5a9183e9f051d83a1e68306ab99d527bb1b7a058c6fe75b7eadbbfa0835"
+    },
+    {
+      "id": "image-4311",
+      "type": "image",
+      "anchor": "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram",
+      "line": 4311,
+      "endLine": 4311,
+      "sourceSha256": "199ba8dfd467c8299c334bd0279acf9e005b2bb3790b83190a427d53c4fd18d6",
+      "sourcePath": "documentation/images/memory-shared-mappings.svg",
+      "slides": [
+        {
+          "page": 193
+        }
+      ],
+      "copiedFile": "public/readme/memory-shared-mappings.svg",
+      "originalFileSha256": "a37b0c3642838872c45844f7a55ffc070fb461b9350e60f6b9f6a29c4820bde3"
+    },
+    {
+      "id": "image-4332",
+      "type": "image",
+      "anchor": "512-per-process-attachment-lists-in-sram",
+      "line": 4332,
+      "endLine": 4332,
+      "sourceSha256": "cfec91a7b437ecb6fcb4af68390ab4eb4f4a7af6ac717278688f62472075b795",
+      "sourcePath": "documentation/images/memory-shared-attachments.svg",
+      "slides": [
+        {
+          "page": 194
+        }
+      ],
+      "copiedFile": "public/readme/memory-shared-attachments.svg",
+      "originalFileSha256": "1a8a1951deadbe59487ed9fdba0af90ae9683000661ddc962eeb890ca856d2ff"
+    },
+    {
+      "id": "image-4354",
+      "type": "image",
+      "anchor": "52-mapping-unlinking-and-deferred-destruction",
+      "line": 4354,
+      "endLine": 4354,
+      "sourceSha256": "08f97074799fac55c4f703cd1839b7c5fb95547b266b4e295eeca4e2250f1241",
+      "sourcePath": "documentation/images/memory-shared-destruction.svg",
+      "slides": [
+        {
+          "page": 195
+        }
+      ],
+      "copiedFile": "public/readme/memory-shared-destruction.svg",
+      "originalFileSha256": "b74b9e8591cd1f13f4e9a65db959a1b565f5b04d3c307f6bee60dd399c5217db"
+    },
+    {
+      "id": "code-4371",
+      "type": "code",
+      "anchor": "52-mapping-unlinking-and-deferred-destruction",
+      "line": 4371,
+      "endLine": 4398,
+      "sourceSha256": "8eecff27f75d3d733a98ba25e60fcb68f43e31cb6820485ce630ae0f082c7efe",
+      "slides": [
+        {
+          "page": 196
+        }
+      ]
+    },
+    {
+      "id": "code-4403",
+      "type": "code",
+      "anchor": "52-mapping-unlinking-and-deferred-destruction",
+      "line": 4403,
+      "endLine": 4417,
+      "sourceSha256": "df0d667eccf446a35d864ccf80cef3b24a28dd83e56a8a5b08ab68dcfdcfe47e",
+      "slides": [
+        {
+          "page": 197
+        }
+      ]
+    },
+    {
+      "id": "table-4432",
+      "type": "table",
+      "anchor": "53-shared-memory-function-reference",
+      "line": 4432,
+      "endLine": 4447,
+      "sourceSha256": "fea17ffe2ec83734b6b8cfe1ea9169884c4002eab8981d5135477d230bf4e69a",
+      "slides": [
+        {
+          "page": 198,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-4489",
+      "type": "mermaid",
+      "anchor": "611-algorithm-and-round-robin-comparison",
+      "line": 4489,
+      "endLine": 4495,
+      "sourceSha256": "2036afe43d69f5dab4b1787d9e598227343b61539051fe1e851fdbccddfdfc97",
+      "slides": [
+        {
+          "page": 200
+        }
+      ]
+    },
+    {
+      "id": "code-4510",
+      "type": "code",
+      "anchor": "611-algorithm-and-round-robin-comparison",
+      "line": 4510,
+      "endLine": 4549,
+      "sourceSha256": "403a23c3e1e421a746fe3a8eee079fb3797e0e56758c6bb63256837e8f247ea6",
+      "slides": [
+        {
+          "page": 201
+        }
+      ]
+    },
+    {
+      "id": "table-4556",
+      "type": "table",
+      "anchor": "612-scheduler-function-reference",
+      "line": 4556,
+      "endLine": 4559,
+      "sourceSha256": "e87fe8ef10ff685e7dc7c63bf9cdd2f0febe8ce02e7c861308d00e83f1a57bd1",
+      "slides": [
+        {
+          "page": 202,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4574",
+      "type": "code",
+      "anchor": "62-saved-process-registers",
+      "line": 4574,
+      "endLine": 4584,
+      "sourceSha256": "260433f4e057fe7f7dbe0eda4ea38e536f7862fd1c7eb7feaf2f3bc45b1fcf40",
+      "slides": [
+        {
+          "page": 203
+        }
+      ]
+    },
+    {
+      "id": "table-4586",
+      "type": "table",
+      "anchor": "62-saved-process-registers",
+      "line": 4586,
+      "endLine": 4592,
+      "sourceSha256": "785f899bd6ef993a32f6a10ce23f7e19d565f764b3981ff50e7f6ad7021d8224",
+      "slides": [
+        {
+          "page": 204,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-4606",
+      "type": "list",
+      "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+      "line": 4606,
+      "endLine": 4611,
+      "sourceSha256": "843a8e19d3f7966104935dcbb01bfb9a9dc64ea41fada01b79c5823a2dd774df",
+      "slides": [
+        {
+          "page": 205,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4618",
+      "type": "code",
+      "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+      "line": 4618,
+      "endLine": 4637,
+      "sourceSha256": "4350bf18e8c0a7fc3b35a9c1a0e38fd1efb0ff3707147ad1438d9a5cb0c194d2",
+      "slides": [
+        {
+          "page": 206
+        }
+      ]
+    },
+    {
+      "id": "list-4642",
+      "type": "list",
+      "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+      "line": 4642,
+      "endLine": 4652,
+      "sourceSha256": "54a1edcc3548ebf020d1ada5f987861d9685e7e50fe423d92f817584703683fa",
+      "slides": [
+        {
+          "page": 207,
+          "items": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4666",
+      "type": "code",
+      "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+      "line": 4666,
+      "endLine": 4682,
+      "sourceSha256": "19fec4113daabbe214208a488d9f8b694461247eb8fed62cef62fbee6aa8585f",
+      "slides": [
+        {
+          "page": 208
+        }
+      ]
+    },
+    {
+      "id": "list-4687",
+      "type": "list",
+      "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
+      "line": 4687,
+      "endLine": 4694,
+      "sourceSha256": "524b85608aeaa141494190c5f5c8a69da3004e543203df9acf544471e1479a48",
+      "slides": [
+        {
+          "page": 209,
+          "items": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4705",
+      "type": "code",
+      "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
+      "line": 4705,
+      "endLine": 4728,
+      "sourceSha256": "71be107f3b64800ee69105fcbcba14e5a7019532a7864e599afecd209c4f0afa",
+      "slides": [
+        {
+          "page": 210
+        }
+      ]
+    },
+    {
+      "id": "list-4733",
+      "type": "list",
+      "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
+      "line": 4733,
+      "endLine": 4749,
+      "sourceSha256": "d297d10d47a3a910270dd60e15656b11462d8a0b987ec74a34de85dea877bacd",
+      "slides": [
+        {
+          "page": 211,
+          "items": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4765",
+      "type": "table",
+      "anchor": "65-dispatcher-function-reference",
+      "line": 4765,
+      "endLine": 4772,
+      "sourceSha256": "98b87af37a5f644941bc397dffd75955095fc89c4dae81422e8ccad95a748a4c",
+      "slides": [
+        {
+          "page": 212,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "image-4793",
+      "type": "image",
+      "anchor": "71-blocking-and-wakeup",
+      "line": 4793,
+      "endLine": 4793,
+      "sourceSha256": "f2954c11d0134d93defd6292179d21b526c6d7cf3e729b9eeefa7970270527d0",
+      "sourcePath": "documentation/images/blocking-cycle.svg",
+      "slides": [
+        {
+          "page": 213
+        }
+      ],
+      "copiedFile": "public/readme/blocking-cycle.svg",
+      "originalFileSha256": "09dcbd85bd99daf9c0e52ccb441c9030b4b5c3d774bcab384a6e7d3aaad68760"
+    },
+    {
+      "id": "table-4802",
+      "type": "table",
+      "anchor": "71-blocking-and-wakeup",
+      "line": 4802,
+      "endLine": 4808,
+      "sourceSha256": "ad12880515c25141f1b09f7a99bf587f7f6cbfc9fc9d71f133fd0383802aa9eb",
+      "slides": [
+        {
+          "page": 214,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-4823",
+      "type": "code",
+      "anchor": "72-wait-queues-and-pcb-links",
+      "line": 4823,
+      "endLine": 4828,
+      "sourceSha256": "790454d9a7ab70a292cc7ba302226aca21b77755bcd1eab12889c91160b65ae8",
+      "slides": [
+        {
+          "page": 215
+        }
+      ]
+    },
+    {
+      "id": "table-4830",
+      "type": "table",
+      "anchor": "72-wait-queues-and-pcb-links",
+      "line": 4830,
+      "endLine": 4833,
+      "sourceSha256": "273fa00d8fdf268f5b99b7d5eff261683f75085cf024762da357f130ef4794e2",
+      "slides": [
+        {
+          "page": 216,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4845",
+      "type": "table",
+      "anchor": "72-wait-queues-and-pcb-links",
+      "line": 4845,
+      "endLine": 4855,
+      "sourceSha256": "ddaa21c0f706242a7d14a7020e3d554071c10b3cedc90b98c07a142c9736261b",
+      "slides": [
+        {
+          "page": 217,
+          "rows": [
+            1,
+            5
+          ]
+        },
+        {
+          "page": 218,
+          "rows": [
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-4879",
+      "type": "mermaid",
+      "anchor": "72-wait-queues-and-pcb-links",
+      "line": 4879,
+      "endLine": 4892,
+      "sourceSha256": "88d7fac33e1bc994d1c8e1469a7a75f532a0e003301c508863ef75bab1f03301",
+      "slides": [
+        {
+          "page": 219
+        }
+      ]
+    },
+    {
+      "id": "code-4917",
+      "type": "code",
+      "anchor": "722-child-waiting-with-waitpid",
+      "line": 4917,
+      "endLine": 4928,
+      "sourceSha256": "28870e382de1ef28438db72a387ff858b6a9e42170c566d35a3dd9bd9ef20e3c",
+      "slides": [
+        {
+          "page": 85,
+          "repeated": true
+        },
+        {
+          "page": 221
+        }
+      ]
+    },
+    {
+      "id": "table-4957",
+      "type": "table",
+      "anchor": "723-wait-queue-function-reference",
+      "line": 4957,
+      "endLine": 4961,
+      "sourceSha256": "e8dbf2b188772effe7e4313777a1c58981882e1b036550af425250c6a500e717",
+      "slides": [
+        {
+          "page": 222,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4966",
+      "type": "table",
+      "anchor": "723-wait-queue-function-reference",
+      "line": 4966,
+      "endLine": 4976,
+      "sourceSha256": "03dc1ada71378a61d83a1bf60571fac1738eae71b8f79789e731b4fb7d644ae8",
+      "slides": [
+        {
+          "page": 223,
+          "rows": [
+            1,
+            7
+          ]
+        },
+        {
+          "page": 224,
+          "rows": [
+            8,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-4990",
+      "type": "table",
+      "anchor": "731-supported-signals-and-fixed-actions",
+      "line": 4990,
+      "endLine": 4996,
+      "sourceSha256": "0d3975a19e250e056cdb32d8346c1a803f15bbf6e89bce230a7fc8c849d4c834",
+      "slides": [
+        {
+          "page": 225,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5004",
+      "type": "table",
+      "anchor": "731-supported-signals-and-fixed-actions",
+      "line": 5004,
+      "endLine": 5012,
+      "sourceSha256": "eb38d64a2067b57f50042e8da5728a264e130d5d6f1164417da3f1fb49a20911",
+      "slides": [
+        {
+          "page": 226,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5072",
+      "type": "table",
+      "anchor": "735-signal-function-reference",
+      "line": 5072,
+      "endLine": 5081,
+      "sourceSha256": "770e79a06a78017c3afe144794903ed67bc1d159476df759d2ad9313c28bca57",
+      "slides": [
+        {
+          "page": 230,
+          "rows": [
+            1,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-5100",
+      "type": "code",
+      "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
+      "line": 5100,
+      "endLine": 5128,
+      "sourceSha256": "5824b5c1f987c280e540e83d5a51d3a4f3fcf72ff21ffd84d2f097334d5dd889",
+      "slides": [
+        {
+          "page": 231
+        }
+      ]
+    },
+    {
+      "id": "mermaid-5137",
+      "type": "mermaid",
+      "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
+      "line": 5137,
+      "endLine": 5146,
+      "sourceSha256": "93fe91df6c8c382eb4f21eda8294e276a076b75e098e882a253e1a948af4cd1d",
+      "slides": [
+        {
+          "page": 232
+        }
+      ]
+    },
+    {
+      "id": "table-5151",
+      "type": "table",
+      "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
+      "line": 5151,
+      "endLine": 5154,
+      "sourceSha256": "cda183dc20b793dbf4e004f29d1cc6428b7db2e3733c40f6e1e0dab43088ff5f",
+      "slides": [
+        {
+          "page": 233,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5156",
+      "type": "table",
+      "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
+      "line": 5156,
+      "endLine": 5161,
+      "sourceSha256": "6bc4671ef2fa491ce293ac1cf0553232d577492bdd7302ecbabdcbb0fc69c5ae",
+      "slides": [
+        {
+          "page": 234,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-5182",
+      "type": "code",
+      "anchor": "81-per-process-file-descriptor-table",
+      "line": 5182,
+      "endLine": 5193,
+      "sourceSha256": "bf3aa4980d9230a948f14f015e92b43bd08426cfab0329b54a8b8d16d14c04e2",
+      "slides": [
+        {
+          "page": 235
+        }
+      ]
+    },
+    {
+      "id": "table-5206",
+      "type": "table",
+      "anchor": "81-per-process-file-descriptor-table",
+      "line": 5206,
+      "endLine": 5215,
+      "sourceSha256": "3683eb9326b06537a8de21bfb77fad28be8a190e6012bd615204c1b6772590f8",
+      "slides": [
+        {
+          "page": 236,
+          "rows": [
+            1,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-5221",
+      "type": "mermaid",
+      "anchor": "81-per-process-file-descriptor-table",
+      "line": 5221,
+      "endLine": 5236,
+      "sourceSha256": "b6d69b83752f8e013bb83c86e572af9530b89fc584065821bfa8c66b21e7ea74",
+      "slides": [
+        {
+          "page": 237
+        }
+      ]
+    },
+    {
+      "id": "table-5247",
+      "type": "table",
+      "anchor": "81-per-process-file-descriptor-table",
+      "line": 5247,
+      "endLine": 5253,
+      "sourceSha256": "5e4149d0332aab5c1f784eda91987960d60ceec539d5a85284235e9755aa6977",
+      "slides": [
+        {
+          "page": 238,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5258",
+      "type": "table",
+      "anchor": "81-per-process-file-descriptor-table",
+      "line": 5258,
+      "endLine": 5265,
+      "sourceSha256": "66a4765c5b25bebfb21c8a63b7737d40871940bdd3c85e8076bba7f4adc14bf8",
+      "slides": [
+        {
+          "page": 239,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-5286",
+      "type": "code",
+      "anchor": "82-global-terminal-input-buffer",
+      "line": 5286,
+      "endLine": 5294,
+      "sourceSha256": "3498762ae101fd8747077f6b9dbf4a28ff10cc2b3ab871616da2b3b91978fba3",
+      "slides": [
+        {
+          "page": 240
+        }
+      ]
+    },
+    {
+      "id": "table-5296",
+      "type": "table",
+      "anchor": "82-global-terminal-input-buffer",
+      "line": 5296,
+      "endLine": 5302,
+      "sourceSha256": "4ee45ad077a024dd7d7ee14009a9382c48ea18b60993b307a4f1aa2689588338",
+      "slides": [
+        {
+          "page": 241,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-5351",
+      "type": "code",
+      "anchor": "83-blocking-and-completing-terminal-reads",
+      "line": 5351,
+      "endLine": 5354,
+      "sourceSha256": "556ae0c85720668eaca4f3588d0b5b4ec1eea6f4eedca86266eb1f034884524d",
+      "slides": [
+        {
+          "page": 242
+        }
+      ]
+    },
+    {
+      "id": "code-5359",
+      "type": "code",
+      "anchor": "83-blocking-and-completing-terminal-reads",
+      "line": 5359,
+      "endLine": 5368,
+      "sourceSha256": "ae5edaf3265b7e712cd875a1352a9da8668c58db0b2befb5f2fb581cb44d2976",
+      "slides": [
+        {
+          "page": 242
+        }
+      ]
+    },
+    {
+      "id": "code-5374",
+      "type": "code",
+      "anchor": "83-blocking-and-completing-terminal-reads",
+      "line": 5374,
+      "endLine": 5384,
+      "sourceSha256": "eb455d87ace27758ce0cec424958dd0d463e1ce87fd6f33649dd3590d9e0525a",
+      "slides": [
+        {
+          "page": 243
+        }
+      ]
+    },
+    {
+      "id": "code-5390",
+      "type": "code",
+      "anchor": "83-blocking-and-completing-terminal-reads",
+      "line": 5390,
+      "endLine": 5400,
+      "sourceSha256": "e7996c672648bee3bd55623606ceb3a07b6bfe628b5171c150a03da55952f5ef",
+      "slides": [
+        {
+          "page": 243
+        }
+      ]
+    },
+    {
+      "id": "code-5406",
+      "type": "code",
+      "anchor": "83-blocking-and-completing-terminal-reads",
+      "line": 5406,
+      "endLine": 5418,
+      "sourceSha256": "45903f93baf1abca433ea5582e20b6b7b97e4d803480765cd4818fa8aaea4613",
+      "slides": [
+        {
+          "page": 244
+        }
+      ]
+    },
+    {
+      "id": "table-5430",
+      "type": "table",
+      "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
+      "line": 5430,
+      "endLine": 5434,
+      "sourceSha256": "714b8f55433b47125d2b4b4548e3d1ee6a1c656dbd3c1cd644142102199beb3d",
+      "slides": [
+        {
+          "page": 245,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5441",
+      "type": "table",
+      "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
+      "line": 5441,
+      "endLine": 5446,
+      "sourceSha256": "231391f6aa5ba8edef782d4aff2c75e589561835606348ad1609bb48590e41de",
+      "slides": [
+        {
+          "page": 246,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5470",
+      "type": "table",
+      "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
+      "line": 5470,
+      "endLine": 5478,
+      "sourceSha256": "4e61257927b5f0213b61129725eda7587680b2ecaef04a1afd794a39f663ea09",
+      "slides": [
+        {
+          "page": 247,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5491",
+      "type": "table",
+      "anchor": "85-virtual-terminal-and-null-device-paths",
+      "line": 5491,
+      "endLine": 5494,
+      "sourceSha256": "55b0d47385ee5c9575df3cf8c83930fd531bd15265198da5a67363059ae18bea",
+      "slides": [
+        {
+          "page": 248,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5506",
+      "type": "table",
+      "anchor": "86-file-descriptor-creation-inheritance-duplication-and-cleanup",
+      "line": 5506,
+      "endLine": 5516,
+      "sourceSha256": "65e668a1e7b4d4ef73ad00548f52a9cac8e6b37c71553fc0a39188df1c146a3c",
+      "slides": [
+        {
+          "page": 249,
+          "rows": [
+            1,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5524",
+      "type": "table",
+      "anchor": "87-terminal-buffer-and-pending-read-function-reference",
+      "line": 5524,
+      "endLine": 5535,
+      "sourceSha256": "9079f64ab197784d0f079b163e67d59a6e3a6f66973f05394d3a86ca81cebe2c",
+      "slides": [
+        {
+          "page": 250,
+          "rows": [
+            1,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5543",
+      "type": "table",
+      "anchor": "88-opening-reading-writing-and-seeking",
+      "line": 5543,
+      "endLine": 5550,
+      "sourceSha256": "b79035b6f7cb6533e39aa1d1631bdf170f741db0124e460a7b9aecfe43f8c4e6",
+      "slides": [
+        {
+          "page": 251,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5565",
+      "type": "table",
+      "anchor": "88-opening-reading-writing-and-seeking",
+      "line": 5565,
+      "endLine": 5573,
+      "sourceSha256": "5c543ccb0ace2e6f93af01d61117c2fa48824117d0be53526443b928e5b67713",
+      "slides": [
+        {
+          "page": 252,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5608",
+      "type": "table",
+      "anchor": "88-opening-reading-writing-and-seeking",
+      "line": 5608,
+      "endLine": 5616,
+      "sourceSha256": "977e5a47ca705297ac17ded579a8e576b4210a8f08eef589476d2d7bd2c513ce",
+      "slides": [
+        {
+          "page": 253,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5646",
+      "type": "table",
+      "anchor": "89-picoos-paths-working-directories-and-host-operations",
+      "line": 5646,
+      "endLine": 5653,
+      "sourceSha256": "760026ee6cdaac3e0d4c4182c2a6326d09c8f19f41a5f021cdc16de09a7e9863",
+      "slides": [
+        {
+          "page": 254,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5659",
+      "type": "table",
+      "anchor": "89-picoos-paths-working-directories-and-host-operations",
+      "line": 5659,
+      "endLine": 5671,
+      "sourceSha256": "7f9b903fd3f178638d3336d31b703ba4f039134a61686b9e73b28b40bab9483a",
+      "slides": [
+        {
+          "page": 255,
+          "rows": [
+            1,
+            10
+          ]
+        },
+        {
+          "page": 256,
+          "rows": [
+            11,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5696",
+      "type": "table",
+      "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
+      "line": 5696,
+      "endLine": 5716,
+      "sourceSha256": "68c8e903edbdab5ac55744b3429670bba767da74bf98f4da14c2ac0bf94e46a6",
+      "slides": [
+        {
+          "page": 258,
+          "rows": [
+            1,
+            10
+          ]
+        },
+        {
+          "page": 259,
+          "rows": [
+            11,
+            18
+          ]
+        },
+        {
+          "page": 260,
+          "rows": [
+            19,
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-5729",
+      "type": "mermaid",
+      "anchor": "92-containment-and-reference-relationships",
+      "line": 5729,
+      "endLine": 5771,
+      "sourceSha256": "21c1c04fbc9f1ed6167d77cb65dc308146005e82d192205273673264a315c552",
+      "slides": [
+        {
+          "page": 261
+        }
+      ]
+    },
+    {
+      "id": "mermaid-5776",
+      "type": "mermaid",
+      "anchor": "92-containment-and-reference-relationships",
+      "line": 5776,
+      "endLine": 5794,
+      "sourceSha256": "635e664e284e2a70af82f4b1e903fec89296e8410394f9f98a091634f167c861",
+      "slides": [
+        {
+          "page": 262
+        }
+      ]
+    },
+    {
+      "id": "table-5816",
+      "type": "table",
+      "anchor": "93-kernel-global-variables-and-process-list-roots",
+      "line": 5816,
+      "endLine": 5834,
+      "sourceSha256": "1dc69a946e28ccae846f07940fd8c0cc1cb8535025dabbf9eda24a2ce65c7a2b",
+      "slides": [
+        {
+          "page": 263,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 264,
+          "rows": [
+            13,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-5840",
+      "type": "mermaid",
+      "anchor": "93-kernel-global-variables-and-process-list-roots",
+      "line": 5840,
+      "endLine": 5848,
+      "sourceSha256": "581b1e7a9f45cdbac5dfd53999ee7896571551ebedf8f8a4dff3d1931afcd716",
+      "slides": [
+        {
+          "page": 265
+        }
+      ]
+    },
+    {
+      "id": "table-5864",
+      "type": "table",
+      "anchor": "94-wait-requests-and-queue-storage",
+      "line": 5864,
+      "endLine": 5870,
+      "sourceSha256": "e93d733b4bd74553831edb0601e54636856b82015ec99c4e55efbe7a97d61178",
+      "slides": [
+        {
+          "page": 266,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-5902",
+      "type": "table",
+      "anchor": "1011-header-implementation-and-linking",
+      "line": 5902,
+      "endLine": 5907,
+      "sourceSha256": "c53fed7c8d604280f10f3742f5b9933dcc8f876040bfe12081d07f9e4d16efcd",
+      "slides": [
+        {
+          "page": 268,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-5911",
+      "type": "code",
+      "anchor": "1011-header-implementation-and-linking",
+      "line": 5911,
+      "endLine": 5915,
+      "sourceSha256": "04efe0c4738cd3c061f99de31f5530f9aa6a093adeaa509d7dbf1c34a1b7b63a",
+      "slides": [
+        {
+          "page": 269
+        }
+      ]
+    },
+    {
+      "id": "code-5932",
+      "type": "code",
+      "anchor": "1012-packing-arguments-and-executing-the-syscall",
+      "line": 5932,
+      "endLine": 5937,
+      "sourceSha256": "b608348b7a4f5362b081c806d4fadd474677071bf5ddab9888bbd6b6d323d82b",
+      "slides": [
+        {
+          "page": 270
+        }
+      ]
+    },
+    {
+      "id": "code-5943",
+      "type": "code",
+      "anchor": "1012-packing-arguments-and-executing-the-syscall",
+      "line": 5943,
+      "endLine": 5953,
+      "sourceSha256": "5a79caf9bc16d6682846ce5d1119abb66cbc86a72163816f501c4e331a3b5e64",
+      "slides": [
+        {
+          "page": 270
+        }
+      ]
+    },
+    {
+      "id": "code-5970",
+      "type": "code",
+      "anchor": "1013-interrupt-entry-waiting-and-return",
+      "line": 5970,
+      "endLine": 5977,
+      "sourceSha256": "45c340a287cccc46d5e3b2a50706fe7b80639aca23cd5f7817339cbe427684a0",
+      "slides": [
+        {
+          "page": 271
+        }
+      ]
+    },
+    {
+      "id": "table-5997",
+      "type": "table",
+      "anchor": "102-library-overview-and-dependencies",
+      "line": 5997,
+      "endLine": 6013,
+      "sourceSha256": "27e374bbd00d98546712efa215c76f4d25a4c222f7b859321cce6dd83dc11561",
+      "slides": [
+        {
+          "page": 272,
+          "rows": [
+            1,
+            12
+          ]
+        },
+        {
+          "page": 273,
+          "rows": [
+            13,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6036",
+      "type": "table",
+      "anchor": "10211-process-operations-in-processpicoc",
+      "line": 6036,
+      "endLine": 6044,
+      "sourceSha256": "9ebbd9f0d9b07d3b350b1a4a21f82e26bc39802636410e02929bfcf7a60eab38",
+      "slides": [
+        {
+          "page": 274,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6056",
+      "type": "table",
+      "anchor": "10212-descriptor-operations-in-iopicoc",
+      "line": 6056,
+      "endLine": 6063,
+      "sourceSha256": "eae8859b4230d4559ee61a9b1dd18fc234abf87a974c7957ede3cebb0f08ebd6",
+      "slides": [
+        {
+          "page": 275,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6071",
+      "type": "table",
+      "anchor": "10213-working-directory-operations-in-working_directorypicoc",
+      "line": 6071,
+      "endLine": 6074,
+      "sourceSha256": "4bdec54c210cc91ce800fdc36666258bedd7d2a38550007e7e7016bb69e3b6f8",
+      "slides": [
+        {
+          "page": 276,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6081",
+      "type": "table",
+      "anchor": "10214-path-operations-in-file_removalpicoc",
+      "line": 6081,
+      "endLine": 6086,
+      "sourceSha256": "0a6fdd93b78151e9ff8bf948a7588380f2999e27bad8c3d312c22e694d9bb86b",
+      "slides": [
+        {
+          "page": 277,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6094",
+      "type": "table",
+      "anchor": "10215-wait-queue-operations-in-blockingpicoc",
+      "line": 6094,
+      "endLine": 6098,
+      "sourceSha256": "de5fadaa1864fc8e391dc3e5641406bee386fce42e7d61fe3f60e240fdc019c3",
+      "slides": [
+        {
+          "page": 278,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6106",
+      "type": "table",
+      "anchor": "1022-fcntl-opening-and-creating-files",
+      "line": 6106,
+      "endLine": 6109,
+      "sourceSha256": "d29c4370cbdd94d65442dd305d48d5691fcd254afd615bb8896cab770a458fb2",
+      "slides": [
+        {
+          "page": 279,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6117",
+      "type": "table",
+      "anchor": "1023-syswait-waiting-for-children",
+      "line": 6117,
+      "endLine": 6120,
+      "sourceSha256": "27565af790228d7ceec20d799bee8ca40de0200ecc0e3536e85b6163f16e4999",
+      "slides": [
+        {
+          "page": 280,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6127",
+      "type": "table",
+      "anchor": "1024-mutex-locking-and-waking-contenders",
+      "line": 6127,
+      "endLine": 6132,
+      "sourceSha256": "91b164608e99cbb4b10148a2a0e1f3de710e120ec9ddbed990da64464380d026",
+      "slides": [
+        {
+          "page": 281,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6144",
+      "type": "table",
+      "anchor": "1025-sysmman-named-shared-memory",
+      "line": 6144,
+      "endLine": 6148,
+      "sourceSha256": "11e18993b4a5511e3316435e060601ac7d85bbadc6fa514b703873469f75e0a7",
+      "slides": [
+        {
+          "page": 282,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6156",
+      "type": "code",
+      "anchor": "1026-dirent-directory-streams",
+      "line": 6156,
+      "endLine": 6168,
+      "sourceSha256": "43f3eeab878aac5f999d1341ff16353785c10fd5be8a05e77718d5c83685a179",
+      "slides": [
+        {
+          "page": 283
+        }
+      ]
+    },
+    {
+      "id": "table-6174",
+      "type": "table",
+      "anchor": "1026-dirent-directory-streams",
+      "line": 6174,
+      "endLine": 6181,
+      "sourceSha256": "7e65ed90e96a84f8b3c65cfe813a8a4acfcc5cc25e583c46e472c8263770c031",
+      "slides": [
+        {
+          "page": 284,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6186",
+      "type": "table",
+      "anchor": "1026-dirent-directory-streams",
+      "line": 6186,
+      "endLine": 6190,
+      "sourceSha256": "8137f911953f3c7db5c351c5d590d753b9859c3828d2e2efbdcb96729af5550f",
+      "slides": [
+        {
+          "page": 285,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6206",
+      "type": "table",
+      "anchor": "10271-heap-operations-in-mallocpicoc",
+      "line": 6206,
+      "endLine": 6212,
+      "sourceSha256": "3dd8668ea115d00d9caeb4ac541279e1efa65e87e579d8001a1abfc98bed4153",
+      "slides": [
+        {
+          "page": 286,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6220",
+      "type": "table",
+      "anchor": "10272-decimal-conversion-in-atoipicoc",
+      "line": 6220,
+      "endLine": 6222,
+      "sourceSha256": "23cb56191a355944e8b3d2a0cb95596580cf0fcc2a81f765ad875ff047e39566",
+      "slides": [
+        {
+          "page": 287,
+          "rows": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6230",
+      "type": "table",
+      "anchor": "10273-environment-operations-in-envpicoc",
+      "line": 6230,
+      "endLine": 6243,
+      "sourceSha256": "6584f3e9a089331410871291e3993c46e3f639a15dfd3a4dc2e0b896b80f95b8",
+      "slides": [
+        {
+          "page": 288,
+          "rows": [
+            1,
+            9
+          ]
+        },
+        {
+          "page": 289,
+          "rows": [
+            10,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6255",
+      "type": "table",
+      "anchor": "10274-process-exit-in-exitpicoc",
+      "line": 6255,
+      "endLine": 6257,
+      "sourceSha256": "4d063c6b89acffc660874e98823de0527439b1f184d28c27a84d698427a3ff00",
+      "slides": [
+        {
+          "page": 290,
+          "rows": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6266",
+      "type": "table",
+      "anchor": "1028-string-copying-comparison-and-length",
+      "line": 6266,
+      "endLine": 6272,
+      "sourceSha256": "023adefd07116a7225a1e55471e07abc07f23c66a63c092d55bac2b1549c2e58",
+      "slides": [
+        {
+          "page": 291,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6280",
+      "type": "code",
+      "anchor": "1029-stdio-streams-formatting-and-scanning",
+      "line": 6280,
+      "endLine": 6284,
+      "sourceSha256": "e6c020659c138a03a9072bdfcbd0b8054ba4829b5a35951db47e3da6659d988d",
+      "slides": [
+        {
+          "page": 292
+        }
+      ]
+    },
+    {
+      "id": "table-6291",
+      "type": "table",
+      "anchor": "1029-stdio-streams-formatting-and-scanning",
+      "line": 6291,
+      "endLine": 6293,
+      "sourceSha256": "40e18b136455c97070a62f7de86291470a7564ca25ec00da648a752b2a970c8f",
+      "slides": [
+        {
+          "page": 293,
+          "rows": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6304",
+      "type": "table",
+      "anchor": "10291-streams-and-output-in-stdiopicoc",
+      "line": 6304,
+      "endLine": 6317,
+      "sourceSha256": "edfc2066609e2d57090491dea104f60ca2899af04b2dc1f668e30de6b1805ca9",
+      "slides": [
+        {
+          "page": 294,
+          "rows": [
+            1,
+            9
+          ]
+        },
+        {
+          "page": 295,
+          "rows": [
+            10,
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6331",
+      "type": "table",
+      "anchor": "10292-scanning-in-scanfpicoc",
+      "line": 6331,
+      "endLine": 6337,
+      "sourceSha256": "424503e2213e3cbedceb282624e723f5c5a3dea5b249ceb5c06ddb8a8206c5f2",
+      "slides": [
+        {
+          "page": 296,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6346",
+      "type": "table",
+      "anchor": "10210-start-entering-and-leaving-a-user-program",
+      "line": 6346,
+      "endLine": 6349,
+      "sourceSha256": "fb88e7503621c5fcd67a5c61f1919f11e8b8b140282fb0d3f374b1f8fff712f4",
+      "slides": [
+        {
+          "page": 297,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6358",
+      "type": "table",
+      "anchor": "10211-single-function-libraries",
+      "line": 6358,
+      "endLine": 6364,
+      "sourceSha256": "eaab2b32909cf5812ade0376046ca3a213ecd0a07e2802ef2aaf3c940f81cdf7",
+      "slides": [
+        {
+          "page": 298,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-6386",
+      "type": "mermaid",
+      "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
+      "line": 6386,
+      "endLine": 6412,
+      "sourceSha256": "b0145278cdcec80d1bcc602cbf9778284498c7a2d5693660422c7f022c431ee0",
+      "slides": [
+        {
+          "page": 299
+        }
+      ]
+    },
+    {
+      "id": "table-6428",
+      "type": "table",
+      "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
+      "line": 6428,
+      "endLine": 6434,
+      "sourceSha256": "2273e5ce2acd48517878b710d092ac6c3b82016d76f46b334d9ab234866be7f7",
+      "slides": [
+        {
+          "page": 300,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6447",
+      "type": "table",
+      "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+      "line": 6447,
+      "endLine": 6451,
+      "sourceSha256": "fa7e99fa8396e443fde1ca761401a64de842459659fd9169e10a8ef7f9e5cf49",
+      "slides": [
+        {
+          "page": 301,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6456",
+      "type": "code",
+      "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+      "line": 6456,
+      "endLine": 6468,
+      "sourceSha256": "5e8225f3d2632ac43d04ca7efa57b4d44733a74ffedef3df526c5bc1eccae0d8",
+      "slides": [
+        {
+          "page": 302
+        }
+      ]
+    },
+    {
+      "id": "code-6474",
+      "type": "code",
+      "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+      "line": 6474,
+      "endLine": 6517,
+      "sourceSha256": "ffee9caefabf80c8115563f6a83377fff1cf78c6193edbdf96bbbaf8a5fb5cf9",
+      "slides": [
+        {
+          "page": 303
+        }
+      ]
+    },
+    {
+      "id": "code-6522",
+      "type": "code",
+      "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+      "line": 6522,
+      "endLine": 6543,
+      "sourceSha256": "fc51335906172eb4c587c2b3f5f609f3de57c2a5d08b1c846a1969748759f314",
+      "slides": [
+        {
+          "page": 304
+        }
+      ]
+    },
+    {
+      "id": "code-6561",
+      "type": "code",
+      "anchor": "112-kernel-startup",
+      "line": 6561,
+      "endLine": 6586,
+      "sourceSha256": "74b6beb4d0ba43e305ccabcd23e8a38d459f8b0840ba44b312d4d31c3d423e5b",
+      "slides": [
+        {
+          "page": 306
+        }
+      ]
+    },
+    {
+      "id": "code-6612",
+      "type": "code",
+      "anchor": "1121-loading-init-and-entering-normal-execution",
+      "line": 6612,
+      "endLine": 6628,
+      "sourceSha256": "29d40365765d6370163fc30fef130e86048fd5cd8bf040734587c7e94949b0e6",
+      "slides": [
+        {
+          "page": 307
+        }
+      ]
+    },
+    {
+      "id": "table-6648",
+      "type": "table",
+      "anchor": "1131-init-responsibilities",
+      "line": 6648,
+      "endLine": 6652,
+      "sourceSha256": "2456aebcd6ade1d7f9814495e12e8178aa3cbe0c9c2ef553511cb58b24fbe7da",
+      "slides": [
+        {
+          "page": 310,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6666",
+      "type": "table",
+      "anchor": "1132-initial-environment-configuration",
+      "line": 6666,
+      "endLine": 6670,
+      "sourceSha256": "f789b2c5bef256a8ededb7ade2c5425ac202e103c18aa5aa62e2c7b3d4a16a42",
+      "slides": [
+        {
+          "page": 311,
+          "rows": [
+            1,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6681",
+      "type": "code",
+      "anchor": "1133-loading-starting-and-waiting-for-the-shell",
+      "line": 6681,
+      "endLine": 6714,
+      "sourceSha256": "5367b3c0e75c6c9706e7170b1a15b440ea2ac5567106ccf1d38d156c14c5bd2d",
+      "slides": [
+        {
+          "page": 312
+        }
+      ]
+    },
+    {
+      "id": "table-6793",
+      "type": "table",
+      "anchor": "121-shell-owned-state",
+      "line": 6793,
+      "endLine": 6804,
+      "sourceSha256": "17716d4c1799997272094f3cd9d25a82abdf89b1bdcf0f6ed3a83f52242136f7",
+      "slides": [
+        {
+          "page": 319,
+          "rows": [
+            1,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-6811",
+      "type": "mermaid",
+      "anchor": "121-shell-owned-state",
+      "line": 6811,
+      "endLine": 6831,
+      "sourceSha256": "fcf5be7085318c7c1bc11793ec5e5ca12551195bd7d8deb7a383d716d336c143",
+      "slides": [
+        {
+          "page": 320
+        }
+      ]
+    },
+    {
+      "id": "table-6850",
+      "type": "table",
+      "anchor": "122-shell-startup-and-command-loop",
+      "line": 6850,
+      "endLine": 6853,
+      "sourceSha256": "e8499edf9f14966758612d8f41c7c7310c0efbca1f755ae7acfefee0ebaa3159",
+      "slides": [
+        {
+          "page": 321,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6859",
+      "type": "code",
+      "anchor": "122-shell-startup-and-command-loop",
+      "line": 6859,
+      "endLine": 6877,
+      "sourceSha256": "104d7888d5ac1dc1ba446a6c64b245d79e6f4184ef38906905c6cab1f0c066bc",
+      "slides": [
+        {
+          "page": 322
+        }
+      ]
+    },
+    {
+      "id": "table-6881",
+      "type": "table",
+      "anchor": "122-shell-startup-and-command-loop",
+      "line": 6881,
+      "endLine": 6891,
+      "sourceSha256": "1b2efa2291466a947959ed703af8238ff592c19ac671fc81e4785c60082c32af",
+      "slides": [
+        {
+          "page": 323,
+          "rows": [
+            1,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6900",
+      "type": "table",
+      "anchor": "123-interactive-line-editing-and-command-history",
+      "line": 6900,
+      "endLine": 6911,
+      "sourceSha256": "b7f99ea4a6592de2f0237bae8df79d7b35b2eafd810d6dad8c2b16c0a921f926",
+      "slides": [
+        {
+          "page": 324,
+          "rows": [
+            1,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-6915",
+      "type": "code",
+      "anchor": "123-interactive-line-editing-and-command-history",
+      "line": 6915,
+      "endLine": 6935,
+      "sourceSha256": "603e30e275d277066c54c4b0dc599146f5f4bda2ccfa37a1f388d1a8a0b9b8bd",
+      "slides": [
+        {
+          "page": 325
+        }
+      ]
+    },
+    {
+      "id": "table-6958",
+      "type": "table",
+      "anchor": "124-command-parsing-expansion-and-execution",
+      "line": 6958,
+      "endLine": 6966,
+      "sourceSha256": "b8391ba854ea3aa9009bb849a8104ad69060b0c9dc2269d34ca946eea6cc5091",
+      "slides": [
+        {
+          "page": 326,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-6992",
+      "type": "table",
+      "anchor": "125-shell-built-in-commands",
+      "line": 6992,
+      "endLine": 7002,
+      "sourceSha256": "a87889ebefa7572102e93ec42b9fe6783cfbd0ebd9875c9fb37873297d7d934b",
+      "slides": [
+        {
+          "page": 327,
+          "rows": [
+            1,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7019",
+      "type": "code",
+      "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
+      "line": 7019,
+      "endLine": 7039,
+      "sourceSha256": "d207d81d68a4bb2dce5cd7aa5de13e9125758a4c2282a4980584e5f13d93fe88",
+      "slides": [
+        {
+          "page": 328
+        }
+      ]
+    },
+    {
+      "id": "code-7044",
+      "type": "code",
+      "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
+      "line": 7044,
+      "endLine": 7062,
+      "sourceSha256": "f523b2d602bb981c6ebc3863881fd060845996d9ae4707e0a3f55d1317ab0d60",
+      "slides": [
+        {
+          "page": 329
+        }
+      ]
+    },
+    {
+      "id": "table-7116",
+      "type": "table",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7116,
+      "endLine": 7125,
+      "sourceSha256": "849989453f464d9565e9a4c2430d1cfc3d88cdc2e00d3da5861bd521930a8876",
+      "slides": [
+        {
+          "page": 330,
+          "rows": [
+            1,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7130",
+      "type": "mermaid",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7130,
+      "endLine": 7172,
+      "sourceSha256": "7a3f79abac38e89a883aff7007affc6ab39ab3b3c1d2f51e93bb7b413267f050",
+      "slides": [
+        {
+          "page": 331
+        }
+      ]
+    },
+    {
+      "id": "code-7176",
+      "type": "code",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7176,
+      "endLine": 7197,
+      "sourceSha256": "eac0f354b0a0ea3ea148d1826c4a0a582a04e96baf08e5d26f6e74447361a18a",
+      "slides": [
+        {
+          "page": 332
+        }
+      ]
+    },
+    {
+      "id": "table-7205",
+      "type": "table",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7205,
+      "endLine": 7213,
+      "sourceSha256": "080bcc960264a3906dd6e01d28e3fa37aaf5b3ceefbee3043432334281848f91",
+      "slides": [
+        {
+          "page": 333,
+          "rows": [
+            1,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7232",
+      "type": "code",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7232,
+      "endLine": 7248,
+      "sourceSha256": "ebf3a1e36dee2f34d716b4ff7e65313e41994e686653ba09a997b045ec087685",
+      "slides": [
+        {
+          "page": 334
+        }
+      ]
+    },
+    {
+      "id": "code-7257",
+      "type": "code",
+      "anchor": "126-inputoutput-redirection",
+      "line": 7257,
+      "endLine": 7271,
+      "sourceSha256": "9914e75ed60361be0c3ad408c0d04243699e390c5ab1dcd60f845c019d39eb8a",
+      "slides": [
+        {
+          "page": 335
+        }
+      ]
+    },
+    {
+      "id": "code-7287",
+      "type": "code",
+      "anchor": "127-sequential-file-backed-pipelines",
+      "line": 7287,
+      "endLine": 7310,
+      "sourceSha256": "fc1babb2a9b6f582e06a3556070876ff0c2054bf678e5a9534e83413b2418bca",
+      "slides": [
+        {
+          "page": 336
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7314",
+      "type": "mermaid",
+      "anchor": "127-sequential-file-backed-pipelines",
+      "line": 7314,
+      "endLine": 7339,
+      "sourceSha256": "60aacf89f2732ede6875dc7986d624f64db47bf17aa61a90f59f787f6df880ae",
+      "slides": [
+        {
+          "page": 337
+        }
+      ]
+    },
+    {
+      "id": "code-7369",
+      "type": "code",
+      "anchor": "127-sequential-file-backed-pipelines",
+      "line": 7369,
+      "endLine": 7374,
+      "sourceSha256": "384eac211bd4f660f425454c4485880894537ca3b52fa88bd11af425bec5aa0a",
+      "slides": [
+        {
+          "page": 338
+        }
+      ]
+    },
+    {
+      "id": "table-7397",
+      "type": "table",
+      "anchor": "131-applications-library-calls-and-host-requests",
+      "line": 7397,
+      "endLine": 7416,
+      "sourceSha256": "12816f4b445c7a56e7051bbad2a7b7bcf1137ef517fc7aaca97909851b069d60",
+      "slides": [
+        {
+          "page": 339,
+          "rows": [
+            1,
+            10
+          ]
+        },
+        {
+          "page": 340,
+          "rows": [
+            11,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-7420",
+      "type": "table",
+      "anchor": "131-applications-library-calls-and-host-requests",
+      "line": 7420,
+      "endLine": 7423,
+      "sourceSha256": "2ea827ba752ecc1e7a502621f887e187c583d4b21b751d93bc1871fd48391ce3",
+      "slides": [
+        {
+          "page": 341,
+          "rows": [
+            1,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list-7434",
+      "type": "list",
+      "anchor": "1311-command-behavior-and-supported-options",
+      "line": 7434,
+      "endLine": 7488,
+      "sourceSha256": "0f3e05cbaf5b87996f6c1c83433f120f8b58966f84a46e452a30b6e27c47b55a",
+      "slides": [
+        {
+          "page": 342,
+          "items": [
+            1,
+            6
+          ]
+        },
+        {
+          "page": 343,
+          "items": [
+            7,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7494",
+      "type": "code",
+      "anchor": "1311-command-behavior-and-supported-options",
+      "line": 7494,
+      "endLine": 7517,
+      "sourceSha256": "d5104c3285d2873a6b1978994204863b71148ef17bf62471a275c56bf496e2d9",
+      "slides": [
+        {
+          "page": 344
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7556",
+      "type": "mermaid",
+      "anchor": "141-library-os-shell-and-boot-test-categories",
+      "line": 7556,
+      "endLine": 7569,
+      "sourceSha256": "61286b5c23d5c15ca9504ab4a8dddf60409178825e7f4d72be0d14b9465449f4",
+      "slides": [
+        {
+          "page": 346
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7577",
+      "type": "mermaid",
+      "anchor": "1411-files-that-make-up-a-test",
+      "line": 7577,
+      "endLine": 7585,
+      "sourceSha256": "5504544263a91d89999c13a69f6905bf0fab3660c91f0ad5b82cf75e65b78e5a",
+      "slides": [
+        {
+          "page": 347
+        }
+      ]
+    },
+    {
+      "id": "table-7591",
+      "type": "table",
+      "anchor": "1411-files-that-make-up-a-test",
+      "line": 7591,
+      "endLine": 7602,
+      "sourceSha256": "59022cae95183c176ac91f3c2a4e5c53344b9a615d8c72a48c949d436c53c6c8",
+      "slides": [
+        {
+          "page": 348,
+          "rows": [
+            1,
+            10
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7615",
+      "type": "code",
+      "anchor": "1412-library-test-example",
+      "line": 7615,
+      "endLine": 7626,
+      "sourceSha256": "ac276cb60a7d08315c73b2c844817cb900698a445561fb16d0e43ad14cf943e7",
+      "slides": [
+        {
+          "page": 349
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7640",
+      "type": "mermaid",
+      "anchor": "1412-library-test-example",
+      "line": 7640,
+      "endLine": 7648,
+      "sourceSha256": "674161702ca7af6003bb71d6d78b2d62db62937b639b4c29cd8ce354d926354a",
+      "slides": [
+        {
+          "page": 350
+        }
+      ]
+    },
+    {
+      "id": "code-7656",
+      "type": "code",
+      "anchor": "1413-os-test-example",
+      "line": 7656,
+      "endLine": 7660,
+      "sourceSha256": "eb2ef37a4253d2921267208fa3c309cf8fd85f5d59413741944323808a494838",
+      "slides": [
+        {
+          "page": 351
+        }
+      ]
+    },
+    {
+      "id": "code-7665",
+      "type": "code",
+      "anchor": "1413-os-test-example",
+      "line": 7665,
+      "endLine": 7680,
+      "sourceSha256": "4cd77e72da32e35209807c8cdb8128dcbbfab9b99d95ed8cd1ac1e597f7587c5",
+      "slides": [
+        {
+          "page": 352
+        }
+      ]
+    },
+    {
+      "id": "code-7684",
+      "type": "code",
+      "anchor": "1413-os-test-example",
+      "line": 7684,
+      "endLine": 7694,
+      "sourceSha256": "de37c549af1c23ebc38e240713b4d5b666b5a92fb342e4586c84d563b0bd4650",
+      "slides": [
+        {
+          "page": 353
+        }
+      ]
+    },
+    {
+      "id": "code-7698",
+      "type": "code",
+      "anchor": "1413-os-test-example",
+      "line": 7698,
+      "endLine": 7702,
+      "sourceSha256": "a40891d247bbc18a29954ecfe26010ad6c3ee29b11b76929aadee4c5bc83a073",
+      "slides": [
+        {
+          "page": 353
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7706",
+      "type": "mermaid",
+      "anchor": "1413-os-test-example",
+      "line": 7706,
+      "endLine": 7716,
+      "sourceSha256": "e41a72047d40b11579b8cf81ced2d11fee1c56f3ef3db9f91330f4afb3e60b99",
+      "slides": [
+        {
+          "page": 354
+        }
+      ]
+    },
+    {
+      "id": "code-7732",
+      "type": "code",
+      "anchor": "1414-shell-test-example",
+      "line": 7732,
+      "endLine": 7735,
+      "sourceSha256": "4c55a9719d26243d05dcbcd06f7270a68765d2fcd56ec0687a9b73250b365406",
+      "slides": [
+        {
+          "page": 355
+        }
+      ]
+    },
+    {
+      "id": "code-7740",
+      "type": "code",
+      "anchor": "1414-shell-test-example",
+      "line": 7740,
+      "endLine": 7746,
+      "sourceSha256": "e8fa8889e0b287482fb0daf88adec613749b92203b99381259ba6d2f4819323a",
+      "slides": [
+        {
+          "page": 355
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7752",
+      "type": "mermaid",
+      "anchor": "1414-shell-test-example",
+      "line": 7752,
+      "endLine": 7762,
+      "sourceSha256": "5915a8aec861c97c320a0b701148d0458f6b150fc01979dd8af161b4124afa92",
+      "slides": [
+        {
+          "page": 356
+        }
+      ]
+    },
+    {
+      "id": "code-7770",
+      "type": "code",
+      "anchor": "1415-boot-test-example",
+      "line": 7770,
+      "endLine": 7773,
+      "sourceSha256": "2272e0434bdda49961d9b7359e438538b1bf3e64a93a21a0ded582cadc4e14d6",
+      "slides": [
+        {
+          "page": 357
+        }
+      ]
+    },
+    {
+      "id": "code-7777",
+      "type": "code",
+      "anchor": "1415-boot-test-example",
+      "line": 7777,
+      "endLine": 7781,
+      "sourceSha256": "6f0e410c981e1b991f8820dc60c14abc3af2b62a743003a3c1c5f598176f84ec",
+      "slides": [
+        {
+          "page": 357
+        }
+      ]
+    },
+    {
+      "id": "mermaid-7787",
+      "type": "mermaid",
+      "anchor": "1415-boot-test-example",
+      "line": 7787,
+      "endLine": 7798,
+      "sourceSha256": "eae88f4f2f585757f11a921a02b9ac39e4ea392517f5545d812782204eb15413",
+      "slides": [
+        {
+          "page": 358
+        }
+      ]
+    },
+    {
+      "id": "table-7810",
+      "type": "table",
+      "anchor": "142-test-execution",
+      "line": 7810,
+      "endLine": 7815,
+      "sourceSha256": "d2c87a8c3efe861f11379f2b302712b651733f48b0b9de01282229deab5e8d83",
+      "slides": [
+        {
+          "page": 359,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-7831",
+      "type": "table",
+      "anchor": "1421-make-targets",
+      "line": 7831,
+      "endLine": 7840,
+      "sourceSha256": "55b42bf8b7548786db9048b0e28b195e3887019d4ea33aa8443af19e5905c29f",
+      "slides": [
+        {
+          "page": 360,
+          "rows": [
+            1,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-7858",
+      "type": "table",
+      "anchor": "151-operating-systems-topics",
+      "line": 7858,
+      "endLine": 7865,
+      "sourceSha256": "fd3372f33deccaaa6e5c4699e1bf614f86035d0852ce7cf96aa093d2a3dc7cb5",
+      "slides": [
+        {
+          "page": 361,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7877",
+      "type": "code",
+      "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
+      "line": 7877,
+      "endLine": 7880,
+      "sourceSha256": "6fa2707b897819fa7e85b9fe130bddb0fa79ecb22e77256c68478cbd03020248",
+      "slides": [
+        {
+          "page": 362
+        }
+      ]
+    },
+    {
+      "id": "code-7885",
+      "type": "code",
+      "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
+      "line": 7885,
+      "endLine": 7888,
+      "sourceSha256": "59cbc7758fdfbc8d5577d884df195ffb9cf30cfff0593c50b3d82c3a2d19fe9b",
+      "slides": [
+        {
+          "page": 362
+        }
+      ]
+    },
+    {
+      "id": "table-7894",
+      "type": "table",
+      "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
+      "line": 7894,
+      "endLine": 7901,
+      "sourceSha256": "7c22eecca8aa0340f1c0d694805845cf6f7e0dac2f0db9f0e438eba12a40af01",
+      "slides": [
+        {
+          "page": 363,
+          "rows": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-7907",
+      "type": "table",
+      "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
+      "line": 7907,
+      "endLine": 7912,
+      "sourceSha256": "7dcc2316290fdf2a6e9248cc45688e48f8df53ed2751df7088039b412dd071d6",
+      "slides": [
+        {
+          "page": 364,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-7930",
+      "type": "code",
+      "anchor": "1512-exploring-userspace-heap-allocation",
+      "line": 7930,
+      "endLine": 7964,
+      "sourceSha256": "7f976eed564af88395dbf28fdc9d1832550485f934f191515b064e9914bace86",
+      "slides": [
+        {
+          "page": 365
+        }
+      ]
+    },
+    {
+      "id": "code-7992",
+      "type": "code",
+      "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
+      "line": 7992,
+      "endLine": 7999,
+      "sourceSha256": "fe110714355c7fe4c4d9abeaec825de2f448425125aef57d70cbd5ccb3057f56",
+      "slides": [
+        {
+          "page": 366
+        }
+      ]
+    },
+    {
+      "id": "code-8003",
+      "type": "code",
+      "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
+      "line": 8003,
+      "endLine": 8005,
+      "sourceSha256": "0853bcce31be9a892d774e8178082e67296b6cbf606b3eafb8d68e0cf10ffd4d",
+      "slides": [
+        {
+          "page": 366
+        }
+      ]
+    },
+    {
+      "id": "code-8010",
+      "type": "code",
+      "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
+      "line": 8010,
+      "endLine": 8021,
+      "sourceSha256": "17a6696015d6bbf86a7dd25193f43666951acfd22dc61d9ae3975547edffe916",
+      "slides": [
+        {
+          "page": 367
+        }
+      ]
+    },
+    {
+      "id": "code-8027",
+      "type": "code",
+      "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
+      "line": 8027,
+      "endLine": 8030,
+      "sourceSha256": "3e474f672febf6b8944fe2511a593bfac51a3357690a24da9cfe6970cca5262a",
+      "slides": [
+        {
+          "page": 367
+        }
+      ]
+    },
+    {
+      "id": "table-8039",
+      "type": "table",
+      "anchor": "152-real-time-operating-systems-topics",
+      "line": 8039,
+      "endLine": 8044,
+      "sourceSha256": "795c6a7e8f7531645dc6dbe5c76b2470b293a4b7f2eed32d7bbf2c3f6b27b154",
+      "slides": [
+        {
+          "page": 368,
+          "rows": [
+            1,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-8050",
+      "type": "code",
+      "anchor": "152-real-time-operating-systems-topics",
+      "line": 8050,
+      "endLine": 8070,
+      "sourceSha256": "dee2dce1d0a05945bcb77049b9b407ce3238bd05b39b2bc733b440c14b25bf90",
+      "slides": [
+        {
+          "page": 369
+        }
+      ]
+    },
+    {
+      "id": "list-8127",
+      "type": "list",
+      "anchor": "17-limitations",
+      "line": 8127,
+      "endLine": 8156,
+      "sourceSha256": "2fc30b7bc839a822d723f1d72c33fe8b53a5fdee63d3fef41657e98609f12eac",
+      "slides": [
+        {
+          "page": 371,
+          "items": [
+            1,
+            6
+          ]
+        },
+        {
+          "page": 372,
+          "items": [
+            7,
+            11
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-8164",
+      "type": "table",
+      "anchor": "appendix-inspecting-bin-files-with-hexyl",
+      "line": 8164,
+      "endLine": 8170,
+      "sourceSha256": "a4243f46823a19a85040f9458b430eff3b3fda12ed2b440c1171951e41353e2c",
+      "slides": [
+        {
+          "page": 373,
+          "rows": [
+            1,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "code-8178",
+      "type": "code",
+      "anchor": "appendix-inspecting-bin-files-with-hexyl",
+      "line": 8178,
+      "endLine": 8181,
+      "sourceSha256": "6f276b021b028ba79b5ac611dc15259a07d66e4a2ebd1217dd135a7afe48949a",
+      "slides": [
+        {
+          "page": 374
+        }
+      ]
+    },
+    {
+      "id": "code-8189",
+      "type": "code",
+      "anchor": "appendix-inspecting-bin-files-with-hexyl",
+      "line": 8189,
+      "endLine": 8191,
+      "sourceSha256": "28cb4beed29f3aa28c39a0c08c3226f1d3b792891e0c9e0b6a19a52d13ecb1bf",
+      "slides": [
+        {
+          "page": 374
+        }
+      ]
+    }
+  ]
+}

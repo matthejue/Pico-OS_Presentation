@@ -1,0 +1,22 @@
+{
+"picoos": ["POSIX context", "PicoOS borrows Unix interface names and conventions, but implements a small subset and does not claim POSIX conformance."],
+"113-system-v-abi-stack-frames-and-call-cleanup": ["System V ABI", "The ABI model coordinates compiled functions, assembly wrappers, and startup code. PicoC adapts it to RETI; it does not implement the AMD64 ABI."],
+"116-program-sections-interrupt-table-entries-and-linker-placement": ["Calling convention", "Inline assembly calls the linked C helpers using the same RETI adaptation of the System V stack-frame rules."],
+"23-saved-interrupt-stack-frame": ["Linux comparison", "Linux saves syscall context on the kernel stack. RETI entry and RTI use the active SP; PicoOS saves context on the user stack and has no memory isolation."],
+"24-system-call-interface-and-execution": ["POSIX: source portability", "A library may expose familiar interfaces over different kernel syscalls. PicoOS also differs in signatures and behavior; familiar names do not imply binary compatibility."],
+"241-syscall-selectors-and-register-convention": ["ABI connection", "IN2 carries the syscall result just as it carries a PicoC function result. The wrapper and interrupt entry must agree on this register contract."],
+"422-initial-argc-argv-and-envp": ["System V / POSIX", "The Intel386 initial-stack model supplies the argc → argv → NULL → envp → NULL order. RETI adds an entry PC, uses word cells, fixes string order, and omits the auxiliary vector. POSIX defines the arrays and NAME=value strings, not their physical layout."],
+"4221-concrete-initial-stack-example": ["Reading the stack", "argc counts the program name too; argv and envp are NULL-terminated pointer arrays. PicoOS prepares them during run rather than POSIX exec."],
+"4321-parent-to-child-inheritance": ["fork versus load/run", "PicoOS loads a fresh image instead of cloning the parent's memory. Loading and running copy different parts of the parent state."],
+"4322-recording-termination-status": ["Unix terminology: reaping", "Reaping means final status collection and removal. PicoOS does not reparent orphaned children to init; it clears parent_pid and applies the configured parent-death signal."],
+"731-supported-signals-and-fixed-actions": ["POSIX / Linux signal 0", "The null signal probes existence and permission without delivery. PicoOS checks only existence, has no user permissions or process-group PID forms, and rejects zombies."],
+"734-fixed-picoos-signal-actions-compared-with-unix": ["Unix signal handling", "Unix/Linux allow catching or ignoring SIGINT, SIGTSTP, and SIGTTIN, but not SIGKILL or SIGSTOP. PicoOS gives all supported signals fixed actions."],
+"81-per-process-file-descriptor-table": ["Unix comparison", "Unix descriptors can share an open-file description. PicoOS copies paths and scalar state into independent entries; copied file offsets subsequently diverge."],
+"89-picoos-paths-working-directories-and-host-operations": ["Host OS boundary", "The emulator independently confines paths to its root. POSIX traversal refuses symlinks; Linux also uses RESOLVE_BENEATH, RESOLVE_NO_SYMLINKS, and RESOLVE_NO_XDEV. Windows rejects reparse points."],
+"1012-packing-arguments-and-executing-the-syscall": ["PicoOS waitpid versus POSIX", "PicoOS waitpid takes one PID and returns the child status. POSIX waitpid has a status output parameter and options. The internal syscall request still passes a status pointer."],
+"10291-streams-and-output-in-stdiopicoc": ["Variadic ABI", "printf and fprintf find variadic arguments using the same stack-frame convention as ordinary PicoC calls."],
+"1131-init-responsibilities": ["Init / PID 1", "Init is the userspace supervisor: configure the environment, start a shell, wait for it, then start another session. Kernel initialization and dispatch remain kernel jobs."],
+"126-inputoutput-redirection": ["Unix fork + exec / PicoOS load + run", "A Unix shell redirects descriptors in a forked child before exec. PicoOS redirects its own table, runs the child with a copied snapshot, then restores itself. Lack of paging alone does not explain this choice."],
+"1311-command-behavior-and-supported-options": ["Familiar Unix commands, smaller interfaces", "Names are familiar, but supported options differ. cd must be a shell built-in because it changes the shell's own working directory."],
+"17-limitations": ["Scope", "POSIX-like names support teaching comparisons; the implementation is an educational subset, not a conforming Unix environment."]
+}

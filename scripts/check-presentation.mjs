@@ -115,6 +115,17 @@ try {
       })
       assert.equal(xmlError, null, `Slide ${n}: valid SVG including HTML labels`)
     }
+    for (const visual of await layout.locator('.readme-visual').all()) {
+      await visual.evaluate(el => new Promise((resolve, reject) => {
+        const started = performance.now()
+        function check() {
+          if (Number(el.dataset.nativeHeight) > 1 && [...el.querySelectorAll('img')].every(img => img.complete && img.naturalWidth)) resolve()
+          else if (performance.now() - started > 10000) reject(new Error('Source visual did not finish fitting'))
+          else requestAnimationFrame(check)
+        }
+        check()
+      }))
+    }
     assert.equal(await layout.locator('pre').filter({ hasText: /(?:Parse|Syntax) error|Error:.*mermaid/i }).count(), 0, `Slide ${n}: no diagram parse error`)
     return layout
   }
@@ -137,6 +148,12 @@ try {
         if (child.tagName === 'PRE' && child.scrollWidth > child.clientWidth + 5)
           found.push(`Horizontally clipped code: ${child.textContent.slice(0, 70)}`)
       }
+      for (const child of element.querySelectorAll('.source-fit-stage, .context-note')) {
+        const r = child.getBoundingClientRect()
+        const body = element.querySelector('.deck-content').getBoundingClientRect()
+        if (r.top < body.top - 2 || r.bottom > bounds.bottom - 20 * scale || r.left < body.left - 2 || r.right > body.right + 2)
+          found.push(`Source visual overlaps the title or footer: ${child.textContent.slice(0, 70)}`)
+      }
       for (const host of element.querySelectorAll('.mermaid')) {
         const svg = host.shadowRoot?.querySelector('svg')
         if (!svg) { found.push('Missing Mermaid SVG'); continue }
@@ -156,12 +173,9 @@ try {
   assert.deepEqual(layoutIssues, [], 'Every slide fits its content area')
   assert.equal(await page.locator('svg[aria-roledescription="error"]').count(), 0, 'No Mermaid error SVGs left in the document')
 
-  const sampleSelectors = ['.mermaid', '.code-panel .slidev-code', '.compiler-showcase-code .slidev-code', '.shell-session .slidev-code', '.data-table', '.memory-visual', '.timeline', '.heap-hierarchy', '.heap-example', '.initial-stack', '.source-figure']
-  for (const selector of sampleSelectors) {
-    const className = selector.split(' ')[0].slice(1)
-    const sample = pages.find(p => selector === '.mermaid'
-      ? p.slide.includes('```mermaid')
-      : [...p.slide.matchAll(/class="([^"]+)"/g)].some(match => match[1].split(/\s+/).includes(className)))
+  for (const kind of ['mermaid', 'code', 'table', 'image']) {
+    const selector = `.readme-visual[data-kind="${kind}"]`
+    const sample = pages.find(p => p.slide.includes(`<ReadmeVisual kind="${kind}"`))
     assert.ok(sample, `Sample exists for ${selector}`)
     const layout = await navigate(sample.page)
     const target = layout.locator(selector).first()
@@ -170,7 +184,7 @@ try {
     const dialog = page.locator('dialog.visual-zoom[open]')
     await dialog.waitFor({ state: 'visible' })
     assert.equal(page.url(), before, `${selector}: opening does not advance`)
-    if (selector.includes('.slidev-code')) {
+    if (kind === 'code') {
       await dialog.locator('.zoom-content pre').first().hover()
       assert.equal(await dialog.locator('.zoom-content .slidev-code-copy, .zoom-content svg').count(), 0, `${selector}: no cloned clipboard controls or enlarged icon on hover`)
       assert.equal(await dialog.locator('.zoom-content code').first().textContent(), await target.locator('code').first().textContent(), `${selector}: complete code retained`)
@@ -182,7 +196,8 @@ try {
     assert.equal(page.url(), before, `${selector}: modal keys do not navigate`)
     await dialog.getByRole('button', { name: 'Fit', exact: true }).click()
     assert.ok(await dialog.locator('.zoom-content').evaluate(el => el.scrollHeight > 0), `${selector}: clone is visible`)
-    if (selector === '.mermaid') assert.ok(await dialog.locator('.zoom-content svg').count(), 'Shadow DOM SVG copied into viewer')
+    if (kind === 'mermaid') assert.ok(await dialog.locator('.zoom-content svg').count(), 'Shadow DOM SVG copied into viewer')
+    if (kind !== 'mermaid') assert.equal(await dialog.locator('.source-fit-content').evaluate(el => el.style.transform), 'none', `${kind}: enlargement uses unscaled original content`)
     await page.keyboard.press('Escape')
     await dialog.waitFor({ state: 'hidden' })
     assert.equal(page.url(), before, `${selector}: closing does not advance`)
@@ -194,6 +209,23 @@ try {
     await page.waitForTimeout(250)
     assert.notEqual(page.url(), before, 'Slide navigation resumes after closing')
   }
+
+  const longestCodePage = [...pages].sort((a, b) => {
+    const length = p => Math.max(0, ...[...p.slide.matchAll(/```(?!mermaid)[^\n]*\n([\s\S]*?)\n```/g)].map(m => m[1].length))
+    return length(b) - length(a)
+  })[0]
+  const longestLayout = await navigate(longestCodePage.page)
+  const longCode = longestLayout.locator('.readme-visual[data-kind="code"]').first()
+  const completeCode = await longCode.locator('code').textContent()
+  await longCode.click()
+  const longDialog = page.locator('dialog.visual-zoom[open]')
+  await longDialog.waitFor()
+  assert.equal(await longDialog.locator('code').textContent(), completeCode, 'Longest code example stays complete in the viewer')
+  const longStage = longDialog.locator('.zoom-stage')
+  assert.ok(await longStage.evaluate(el => el.scrollHeight > el.clientHeight), 'Long code can scroll beyond the slide preview')
+  await longStage.evaluate(el => { el.scrollTop = el.scrollHeight })
+  assert.ok(await longStage.evaluate(el => el.scrollTop > 0), 'Can reach the end of the complete code example')
+  await page.keyboard.press('Escape')
 
   const recordingSample = pages.find(p => p.slide.includes('<AsciinemaRecording'))
   assert.ok(recordingSample, 'A local terminal recording exists')
@@ -257,7 +289,7 @@ try {
     })
     routeBase = new URL('selectable-text/', base).href
   }
-  const codePage = pages.find(p => p.slide.includes('class="code-panel'))
+  const codePage = pages.find(p => p.slide.includes('<ReadmeVisual kind="code"'))
   await page.goto(slideURL(codePage.page, routeBase))
   const layout = await navigate(codePage.page)
   if (routeBase.includes('/selectable-text/')) assert.ok(await page.locator('html').evaluate(el => el.classList.contains('selectable-text')))
