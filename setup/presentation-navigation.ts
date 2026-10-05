@@ -8,7 +8,8 @@ export function usePresentationNavigation() {
   const { isPrintMode, isPresenter } = useNav()
   const router = useRouter()
   const contentSlides = computed(() => $nav.value.slides.filter(slide =>
-    !slide.meta.slide.frontmatter.sectionOverview && !slide.meta.slide.frontmatter.presentationContents))
+    !slide.meta.slide.frontmatter.presentationCover
+    && !slide.meta.slide.frontmatter.sectionOverview && !slide.meta.slide.frontmatter.presentationContents))
   const chapters = computed(() => sections.flatMap(section => {
     const slides = contentSlides.value.filter(slide => slide.meta.slide.frontmatter.readmeMajor === section.anchor)
     const overview = $nav.value.slides.find(slide => slide.meta.slide.frontmatter.sectionOverview

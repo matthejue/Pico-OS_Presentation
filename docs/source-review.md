@@ -4,7 +4,7 @@ The presentation uses the README at PicoOS commit
 `4a8c95017f28572d575993e72561d2380465edba`, including the compiler-pipeline clarification in
 section 1.1.1. `.source/Pico-OS-README.md` stores its exact bytes;
 `.source/source-state.json` records the commit, SHA-256, dirty state, date,
-and slide count. The full deck has 290 slides; the short deck has 285.
+and slide count. The full deck has 291 slides; the short deck has 286.
 
 ## Content and composition
 
@@ -138,7 +138,7 @@ For future updates:
 
 Existing exclusions follow unchanged artifact hashes, even when source lines
 move. Their merged placements now occupy five full-deck slides:
-4, 6, 7, 8, and 11. Changed assets and layouts need review.
+5, 7, 8, 9, and 12. Changed assets and layouts need review.
 
 ## Verification
 
@@ -190,3 +190,26 @@ Targeted Chromium checks of slide 14 passed in production and both normal
 and selectable-text development modes, including diagram bounds, summary
 text, enlargement, selectable diagram text, and return to the same slide.
 The full and short deck selections remain unchanged. No PDF was exported.
+
+## Introduction navigation · 4 October 2026
+
+The opening, unnumbered PicoOS README hierarchy now forms presentation section
+0. Introduction. Its overview follows Contents and links to all nine opening
+content slides. Contents lists it before section 1. Those content slides begin
+with the requested linked ancestor `Introductions`, followed by their existing
+README ancestors; the cover keeps its original title. PicoOS continuation
+subtitles now run from `(1)` to `(3)`.
+
+The generator derives the introduction topics from the README hierarchy.
+Navigation excludes the cover from section membership despite its shared
+`picoos` source anchor, and removes the introduction overview when no opening
+content survives in a shortened deck. Existing slide UUIDs and all five
+short-version exclusions are preserved. The full deck has 291 slides and the
+short deck has 286; coverage placements and selection numbers reflect the new
+overview. All 345 source artifacts remain unchanged.
+
+Validation passed source coverage, navigation and short-version regression
+checks, both static builds, all 291 slides in normal and selectable-text
+development modes, and all 18 section overviews in full and short decks.
+Existing UUID preservation was checked against the pre-update deck. No PDF was
+exported.

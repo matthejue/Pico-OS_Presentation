@@ -50,6 +50,19 @@ environment variable, update ordering, and failure behavior are documented in
 [short presentation version](docs/short-version.md). Existing presentation
 targets continue to produce the full deck.
 
+## Slide notes
+
+Press `Alt+N` on a slide to add or edit its Markdown note, and
+`Ctrl+Enter` / `Cmd+Enter` to save. `Alt+Shift+N` toggles the notes panel at the
+upper right. The same actions are available as buttons.
+
+Notes are saved in `notes/` with the slide number, title, and a persistent UUID
+in the filename. The UUID keeps each note linked when slides move or are
+renumbered, and the README rebuild preserves it when the slide can be matched
+unambiguously. Editing requires the development server; static presentations
+include saved notes for viewing. See [slide notes](docs/slide-notes.md) for
+identity rules, draft recovery, and concurrent-edit handling.
+
 ## Releases
 
 Pushing a tag whose name starts with `v` builds and uploads four assets to the
@@ -110,10 +123,14 @@ a topic to jump to its first slide, or a numbered link to choose an individual
 slide. Click the major section title in a content slide's ancestor heading to
 return to its overview; every overview also links back to Contents.
 
+The unnumbered opening README topics form section **0. Introduction**, whose
+overview follows Contents. Their content headings begin with the linked
+ancestor **Introductions**, followed by their original README ancestors.
+
 Navigation follows the generated README hierarchy and the active full or short
 deck. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 290 slides. Slides load on demand to
+content slides are excluded. The full deck contains 291 slides. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content

@@ -37,6 +37,11 @@ for (const { level, title } of headings(primary)) {
   hierarchy.set(anchor, { title, parents: [...stack], order: hierarchy.size })
   stack.push(title)
 }
+const openingSource = hierarchy.get('picoos')
+const contentsSource = hierarchy.get('contents')
+assert.ok(openingSource && contentsSource, 'README contains the opening PicoOS section and Contents')
+const isIntroduction = (anchor, source) => source.order < contentsSource.order
+  && (anchor === 'picoos' || source.parents[0] === openingSource.title)
 const occurrences = new Map()
 let lastOrder = -1
 const pages = slides.map((slide, i) => {
@@ -49,19 +54,34 @@ const pages = slides.map((slide, i) => {
     assert.ok(source.order >= lastOrder, `Slide ${i + 1}: README order`)
     lastOrder = source.order
   }
-  occurrences.set(anchor, (occurrences.get(anchor) || 0) + 1)
-  return { page: i + 1, slide, source, anchor }
+  const cover = i === 0
+  const overview = slide.includes('<SectionOverview ')
+  if (!cover && !overview) occurrences.set(anchor, (occurrences.get(anchor) || 0) + 1)
+  return { page: i + 1, slide, source, anchor, cover, overview }
 })
 const numbers = new Map()
-for (const { page, slide, source, anchor } of pages) {
+for (const { page, slide, source, anchor, cover, overview } of pages) {
   if (anchor === 'contents') {
     assert.equal(page, 2, 'Contents directly follows the title slide')
     assert.equal(headings(slide)[0].title, 'Contents')
     continue
   }
   const titles = headings(slide)
-  assert.equal(titles[0].title, source.parents.length ? source.parents.join(' · ') : source.title, `Slide ${page}: main title`)
-  if (source.parents.length) {
+  if (cover) {
+    assert.equal(anchor, 'picoos', 'Cover retains the PicoOS source anchor')
+    assert.equal(titles[0].title, openingSource.title, 'Cover retains the PicoOS title')
+    assert.ok(slide.includes('class="cover-title'), 'First slide is the presentation cover')
+    assert.equal(overview, false, 'Cover is separate from the introduction overview')
+    continue
+  }
+  if (overview) {
+    assert.equal(titles[0].title, anchor === 'picoos' ? '0. Introduction' : source.title, `Slide ${page}: overview title`)
+    continue
+  }
+  const introduction = isIntroduction(anchor, source)
+  const parents = introduction ? ['Introductions', ...source.parents] : source.parents
+  assert.equal(titles[0].title, parents.length ? parents.join(' · ') : source.title, `Slide ${page}: main title`)
+  if (parents.length) {
     const n = (numbers.get(anchor) || 0) + 1
     numbers.set(anchor, n)
     assert.equal(titles[1].title, source.title + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: subtitle`)
@@ -75,11 +95,28 @@ assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-v
 
 assert.equal(pages.filter(p => p.anchor === 'contents').length, 1, 'Exactly one presentation contents slide')
 const sectionOverviews = JSON.parse(await readFile(new URL('../config/section-overviews.json', import.meta.url)))
+assert.equal(sectionOverviews[0].anchor, 'picoos', 'Introduction is the first section')
+assert.equal(sectionOverviews[0].number, '0', 'Introduction is section 0')
+assert.equal(sectionOverviews[0].title, 'Introduction', 'Synthetic opening section has its presentation title')
 for (const section of sectionOverviews) {
-  const sectionPages = pages.filter(p => p.anchor === section.anchor || p.source.parents[0] === hierarchy.get(section.anchor).title)
-  assert.ok(sectionPages[0].slide.includes('<SectionOverview '), `${section.anchor}: overview precedes all section slides`)
-  assert.equal(sectionPages.filter(p => p.slide.includes('<SectionOverview ')).length, 1, `${section.anchor}: exactly one overview`)
-  assert.deepEqual(section.entries.map(entry => entry.anchor), [...hierarchy].filter(([, source]) => source.parents[0] === hierarchy.get(section.anchor).title).map(([anchor]) => anchor), `${section.anchor}: complete ordered README hierarchy`)
+  const sectionSource = hierarchy.get(section.anchor)
+  assert.ok(sectionSource, `${section.anchor}: section source exists`)
+  const belongs = (anchor, source) => section.anchor === 'picoos'
+    ? isIntroduction(anchor, source)
+    : anchor === section.anchor || source.parents[0] === sectionSource.title
+  const sectionPages = pages.filter(p => !p.cover && !p.slide.includes('<PresentationContents ') && belongs(p.anchor, p.source))
+  assert.ok(sectionPages[0]?.overview, `${section.anchor}: overview precedes all section slides`)
+  assert.equal(sectionPages.filter(p => p.overview).length, 1, `${section.anchor}: exactly one overview`)
+  const entries = [...hierarchy].filter(([anchor, source]) => anchor !== section.anchor && belongs(anchor, source))
+  assert.deepEqual(section.entries.map(entry => entry.anchor), entries.map(([anchor]) => anchor), `${section.anchor}: complete ordered README hierarchy`)
+  if (section.anchor === 'picoos') {
+    assert.equal(sectionPages[0].page, 3, 'Introduction overview directly follows Contents')
+    assert.ok(sectionPages.every(p => p.page > 2), 'Introduction contains no cover or Contents slide')
+    for (const entry of section.entries) {
+      assert.equal(entry.number, '', `${entry.anchor}: opening README headings remain unnumbered`)
+      assert.equal(entry.depth, hierarchy.get(entry.anchor).parents.length, `${entry.anchor}: original hierarchy depth`)
+    }
+  }
 }
 
 const browser = await chromium.launch({ executablePath, headless: true, args: ['--no-sandbox'] })

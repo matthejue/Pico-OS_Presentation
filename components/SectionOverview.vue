@@ -102,7 +102,7 @@ onBeforeUnmount(() => observer?.disconnect())
           <a class="section-topic-link" :href="href(entry.target!)"
             :aria-label="`${entry.number} ${entry.title}, slide ${entry.target}`"
             @click.stop.prevent="navigation.go(entry.target)">
-            <span class="section-topic-number">{{ entry.number }}</span>
+            <span v-if="entry.number" class="section-topic-number">{{ entry.number }}</span>
             <span class="section-topic-title" v-html="entry.titleHtml" />
           </a>
           <span v-if="entry.pages.length" class="section-slide-links" :aria-label="`${entry.number} slides`">

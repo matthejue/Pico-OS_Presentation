@@ -10,6 +10,10 @@ const project = process.env.PRESENTATION_PROJECT
 const markdown = await readFile(project ? `${project}/slides.md` : new URL('../slides.md', import.meta.url), 'utf8')
 const sections = JSON.parse(await readFile(project ? `${project}/config/section-overviews.json` : new URL('../config/section-overviews.json', import.meta.url)))
 const slides = presentationSlides(markdown, sections, short)
+assert.equal(sections[0].anchor, 'picoos', 'Introduction is the first section in the contents')
+assert.equal(sections[0].number, '0', 'Introduction is section 0')
+assert.equal(sections[0].title, 'Introduction', 'Opening section has its presentation title')
+assert.deepEqual(slides.filter(slide => slide.cover).map(slide => slide.page), [1], 'Only the presentation cover is marked as a cover')
 const url = n => new URL(mode === 'hash' ? `#/${n}` : `${n}`, base).href
 const browser = await chromium.launch({ executablePath: process.env.BROWSER || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] })
 try {
@@ -44,9 +48,14 @@ try {
   if (screenshots) await mainLayout.screenshot({ path: `${screenshots}/contents.png` })
   for (const section of sections) {
     const overview = slides.find(slide => slide.overview && slide.anchor === section.anchor)
-    const content = slides.filter(slide => !slide.overview && !slide.contents && (slide.anchor === section.anchor || section.entries.some(entry => entry.anchor === slide.anchor)))
+    const content = slides.filter(slide => !slide.cover && !slide.overview && !slide.contents && (slide.anchor === section.anchor || section.entries.some(entry => entry.anchor === slide.anchor)))
     if (!content.length) { assert.equal(overview, undefined, `${section.anchor}: empty section overview omitted`); continue }
     assert.ok(overview, `${section.anchor}: populated overview available`)
+    assert.ok(content.every(slide => slide.page > overview.page), `${section.anchor}: overview precedes every content slide`)
+    if (section.anchor === 'picoos') {
+      assert.equal(overview.page, 3, 'Introduction overview immediately follows Contents')
+      assert.ok(content.every(slide => slide.page > 3), 'Introduction content excludes cover and overview')
+    }
     await navigate(mainContents.page)
     const mainLink = mainLayout.locator(`[data-contents-anchor="${section.anchor}"]`)
     assert.equal(new URL(await mainLink.getAttribute('href'), base).href, url(overview.page))
@@ -69,6 +78,9 @@ try {
       if (target) assert.equal(new URL(await title.getAttribute('href'), base).href, url(target), `${entry.number}: title goes to first available slide`)
     }
     const intro = content.filter(slide => slide.anchor === section.anchor)
+    if (availableEntries.length) {
+      assert.deepEqual((await toc.locator('.section-introduction a').allTextContents()).map(Number), intro.map(slide => slide.page), `${section.number}: every section introduction slide linked, excluding the cover`)
+    }
     intro.forEach(slide => linked.add(slide.page))
     assert.deepEqual([...linked].sort((a, b) => a - b), content.map(slide => slide.page), `${section.number}: every slide reachable`)
     const issues = await layout.evaluate(el => {

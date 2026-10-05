@@ -12,12 +12,16 @@
     "rebuild:readme": "node scripts/rebuild-from-readme.mjs",
     "test:source": "node scripts/check-readme-coverage.mjs",
     "test:overviews": "node scripts/test-section-overviews.mjs",
-    "test:navigation": "node scripts/test-presentation-navigation.mjs"
+    "test:navigation": "node scripts/test-presentation-navigation.mjs",
+    "test:notes": "node scripts/test-slide-identities.mjs && node scripts/test-slide-notes.mjs",
+    "test:notes:browser": "node scripts/test-slide-notes-browser.mjs"
   },
   "devDependencies": {
     "@slidev/cli": "52.18.0",
+    "@slidev/parser": "52.18.0",
     "@slidev/theme-default": "0.25.0",
     "asciinema-player": "3.15.1",
+    "markdown-it": "^14.3.0",
     "pdf-lib": "1.17.1",
     "playwright-chromium": "1.62.0"
   }

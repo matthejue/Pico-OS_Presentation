@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { defineConfig } from 'vite'
 import { applySelection, syncSelection, toggleSelection } from './scripts/short-version.mjs'
+import createSlideNotesPlugin from './scripts/slide-notes-plugin.mjs'
 
 const maximumBodySize = 1024
 
@@ -23,6 +24,7 @@ function sendJson(response: ServerResponse, status: number, value: unknown) {
 
 export default defineConfig({
   plugins: [
+    createSlideNotesPlugin(),
     {
       name: 'picoos-short-version-editor',
       configureServer(server) {

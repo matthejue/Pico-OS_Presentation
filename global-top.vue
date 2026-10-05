@@ -1,4 +1,5 @@
 <template>
+  <SlideNotes />
   <VisualZoom />
   <ShortVersionStatus />
   <div v-if="$nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.presentationContents && !$nav.currentFrontmatter.shortVersion" class="zoom-hint">
@@ -13,6 +14,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import ShortVersionStatus from './components/ShortVersionStatus.vue'
+import SlideNotes from './components/SlideNotes.vue'
 import VisualZoom from './components/VisualZoom.vue'
 
 const isDevelopment = import.meta.env.DEV

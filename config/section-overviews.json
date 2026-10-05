@@ -1,5 +1,58 @@
 [
   {
+    "anchor": "picoos",
+    "number": "0",
+    "title": "Introduction",
+    "titleHtml": "Introduction",
+    "entries": [
+      {
+        "anchor": "build-and-run",
+        "number": "",
+        "title": "Build and run",
+        "titleHtml": "Build and run",
+        "depth": 1,
+        "descendants": [
+          "use-the-picoos-shell",
+          "release-archive-layout"
+        ]
+      },
+      {
+        "anchor": "use-the-picoos-shell",
+        "number": "",
+        "title": "Use the PicoOS shell",
+        "titleHtml": "Use the PicoOS shell",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "release-archive-layout",
+        "number": "",
+        "title": "Release archive layout",
+        "titleHtml": "Release archive layout",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "intended-physical-hardware",
+        "number": "",
+        "title": "Intended physical hardware",
+        "titleHtml": "Intended physical hardware",
+        "depth": 1,
+        "descendants": [
+          "reti-execution-model"
+        ]
+      },
+      {
+        "anchor": "reti-execution-model",
+        "number": "",
+        "title": "RETI execution model",
+        "titleHtml": "RETI execution model",
+        "depth": 2,
+        "descendants": []
+      }
+    ]
+  },
+  {
     "anchor": "1-toolchain-extensions-for-picoos",
     "number": "1",
     "title": "Toolchain extensions for PicoOS",

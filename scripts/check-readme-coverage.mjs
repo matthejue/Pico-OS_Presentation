@@ -5,7 +5,9 @@ import {readmeSource,md,hash,displayHtml,plain} from './readme-source.mjs'
 import {styleSourceSvg} from '../config/visual-palette.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '.source/Pico-OS-README.md'
-const source=await fs.readFile(sourcePath,'utf8'),deck=await fs.readFile('slides.md','utf8')
+const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
+// Persistent identity is invisible metadata, independent of source coverage.
+const deck=rawDeck.replace(/^<!-- SLIDE_ID [0-9a-f-]+ -->\r?\n/gmi,'')
 const inventory=JSON.parse(await fs.readFile('docs/readme-coverage.json','utf8'))
 const {assets}=readmeSource(source),fences=md.parse(deck,{}).filter(t=>t.type==='fence')
 const summaries=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))

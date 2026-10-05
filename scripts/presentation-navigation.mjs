@@ -9,12 +9,13 @@ export function presentationSlides(markdown, sections, short = false) {
     .map((match, index) => ({
       sourcePage: index + 1,
       anchor: match[1],
-      major: majorForAnchor(match[1], sections),
+      cover: index === 0,
+      major: index === 0 ? undefined : majorForAnchor(match[1], sections),
       overview: match[2].includes('<SectionOverview '),
       contents: match[2].includes('<PresentationContents '),
       excluded: match[2].includes('<!-- SHORT_VERSION_DISABLED -->'),
     }))
-  const populated = new Set(slides.filter(slide => !slide.overview && !slide.contents
+  const populated = new Set(slides.filter(slide => !slide.cover && !slide.overview && !slide.contents
     && (!short || !slide.excluded)).map(slide => slide.major))
   return slides.filter(slide => slide.contents || (slide.overview
     ? populated.has(slide.major)

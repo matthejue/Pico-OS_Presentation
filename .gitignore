@@ -8,3 +8,5 @@ picoos-presentation-short-static.tar.gz
 *.png
 !public/**/*.png
 .DS_Store
+notes/.slide-notes.lock
+notes/*.tmp-*

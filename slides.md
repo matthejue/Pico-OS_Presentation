@@ -19,6 +19,7 @@ fonts:
   mono: Fira Code
 ---
 
+<!-- SLIDE_ID ae05f179-6991-4eff-a56e-4c5163e704b0 -->
 <script setup>
 import releaseVersion from './config/presentation-release.txt?raw'
 const presentationVersion = releaseVersion.trim()
@@ -44,6 +45,7 @@ const presentationVersion = releaseVersion.trim()
 
 ---
 
+<!-- SLIDE_ID 988e6d34-596a-4db6-b274-080cfed2d346 -->
 <!-- SOURCE Pico-OS/README.md#contents -->
 
 <div class="eyebrow section-eyebrow">Presentation map</div>
@@ -54,9 +56,23 @@ const presentationVersion = releaseVersion.trim()
 
 ---
 
+<!-- SLIDE_ID b2553b33-9aa9-489b-8ba7-67a99e7ef424 -->
 <!-- SOURCE Pico-OS/README.md#picoos -->
 
-# PicoOS
+<div class="eyebrow section-eyebrow">Section 00 · Overview</div>
+
+# 0. Introduction
+
+<SectionOverview section="picoos" />
+
+---
+
+<!-- SLIDE_ID 4c009c56-9a69-47ea-a4c1-ad966ac42de9 -->
+<!-- SOURCE Pico-OS/README.md#picoos -->
+
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink>
+
+## PicoOS (1)
 
 <div class="deck-content readme-slide">
 
@@ -71,10 +87,13 @@ const presentationVersion = releaseVersion.trim()
 
 ---
 
+<!-- SLIDE_ID 4967a739-ea13-47c6-b204-537e59ce7f6b -->
 <!-- SOURCE Pico-OS/README.md#picoos -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# PicoOS
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink>
+
+## PicoOS (2)
 
 <div class="deck-content readme-slide">
 
@@ -106,9 +125,12 @@ const presentationVersion = releaseVersion.trim()
 
 ---
 
+<!-- SLIDE_ID 312ba581-d168-4c31-bb07-f74841e6aab7 -->
 <!-- SOURCE Pico-OS/README.md#picoos -->
 
-# PicoOS
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink>
+
+## PicoOS (3)
 
 <div class="deck-content readme-slide">
 
@@ -131,10 +153,11 @@ const presentationVersion = releaseVersion.trim()
 
 ---
 
+<!-- SLIDE_ID 204ea1c9-6227-4a6f-aae9-f69f49722046 -->
 <!-- SOURCE Pico-OS/README.md#build-and-run -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# PicoOS
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS
 
 ## Build and run
 
@@ -185,10 +208,11 @@ $ ./start-picoos.sh
 
 ---
 
+<!-- SLIDE_ID 026003bc-164e-49df-adec-470bfb3d6d47 -->
 <!-- SOURCE Pico-OS/README.md#use-the-picoos-shell -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# PicoOS · Build and run
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS · Build and run
 
 ## Use the PicoOS shell
 
@@ -221,10 +245,11 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID ba86f050-442d-48a8-a592-ea3687631e4a -->
 <!-- SOURCE Pico-OS/README.md#release-archive-layout -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# PicoOS · Build and run
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS · Build and run
 
 ## Release archive layout
 
@@ -253,9 +278,10 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID a3015a1e-f757-4cc5-b4be-3a39dae8b018 -->
 <!-- SOURCE Pico-OS/README.md#intended-physical-hardware -->
 
-# PicoOS
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS
 
 ## Intended physical hardware (1)
 
@@ -276,9 +302,10 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID 75654566-570b-442b-9e1a-4c115b04554c -->
 <!-- SOURCE Pico-OS/README.md#intended-physical-hardware -->
 
-# PicoOS
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS
 
 ## Intended physical hardware (2)
 
@@ -317,10 +344,11 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID 52d277d0-bd4e-4399-af49-3310a5c61d8c -->
 <!-- SOURCE Pico-OS/README.md#reti-execution-model -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# PicoOS · Intended physical hardware
+# <MajorSectionLink section="picoos">Introductions</MajorSectionLink> · PicoOS · Intended physical hardware
 
 ## RETI execution model
 
@@ -350,6 +378,7 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID e5fc9694-10a3-4b4e-b622-7e141f2fe56a -->
 <!-- SOURCE Pico-OS/README.md#1-toolchain-extensions-for-picoos -->
 
 <div class="eyebrow section-eyebrow">Section 01 · Overview</div>
@@ -360,6 +389,7 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID 465373e1-7294-419c-a097-78d11017d1e5 -->
 <!-- SOURCE Pico-OS/README.md#11-picoc-compiler-extensions -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
@@ -405,6 +435,7 @@ scheduler
 
 ---
 
+<!-- SLIDE_ID ae8ed70c-774e-4466-b9e8-fc5fddd04358 -->
 <!-- SOURCE Pico-OS/README.md#111-compilation-pipeline-and-compiler-passes -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -503,6 +534,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 04932a21-f8fc-45a5-8308-f0529e70e4a5 -->
 <!-- SOURCE Pico-OS/README.md#112-separate-compilation-reusable-artifacts-and-linking -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -571,6 +603,7 @@ binary/basic_string.sections
 
 ---
 
+<!-- SLIDE_ID c4daf64c-42a5-4ae5-9ee1-d306f607e85e -->
 <!-- SOURCE Pico-OS/README.md#112-separate-compilation-reusable-artifacts-and-linking -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -618,6 +651,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID bf43bceb-c022-4790-9018-2ba0c2304e17 -->
 <!-- SOURCE Pico-OS/README.md#113-system-v-abi-stack-frames-and-call-cleanup -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -638,6 +672,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 2d92951f-5f88-46ca-9959-9c45f246e965 -->
 <!-- SOURCE Pico-OS/README.md#1131-stack-frame-layout-and-caller-cleanup -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -674,6 +709,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID d012f102-ce27-48a3-90bc-fb698ee36af3 -->
 <!-- SOURCE Pico-OS/README.md#1132-shared-function-epilogue-and-return-values -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -724,6 +760,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID b07062cf-0509-47d2-bce5-60199deb0bca -->
 <!-- SOURCE Pico-OS/README.md#1132-shared-function-epilogue-and-return-values -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -809,6 +846,7 @@ main_epilogue:
 
 ---
 
+<!-- SLIDE_ID 2f40f602-7242-41c9-87e4-e8f605a73715 -->
 <!-- SOURCE Pico-OS/README.md#1132-shared-function-epilogue-and-return-values -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -921,6 +959,7 @@ main_epilogue:
 
 ---
 
+<!-- SLIDE_ID b981b309-dfa1-4187-90a6-693f3783622b -->
 <!-- SOURCE Pico-OS/README.md#1133-naked-functions-without-a-generated-frame -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -961,6 +1000,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 7a08b3f4-bbaa-45a0-b7e8-bde711db9230 -->
 <!-- SOURCE Pico-OS/README.md#1133-naked-functions-without-a-generated-frame -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
@@ -1049,6 +1089,7 @@ main_epilogue:
 
 ---
 
+<!-- SLIDE_ID 804a0181-49f5-409b-a863-ea8db17f8e26 -->
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1091,6 +1132,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID d32ee4a7-9057-473f-9391-0ceda660fb61 -->
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1180,6 +1222,7 @@ ordinary_table:
 
 ---
 
+<!-- SLIDE_ID 73d1a607-f2ce-48a1-a742-42edbde72042 -->
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1235,6 +1278,7 @@ SUBI SP 0
 
 ---
 
+<!-- SLIDE_ID 37c20bdd-a6c5-4b4c-9aa5-7cf440a5e5a8 -->
 <!-- SOURCE Pico-OS/README.md#1151-default-compiler-generated-_start -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
@@ -1268,6 +1312,7 @@ void _start(void) {
 
 ---
 
+<!-- SLIDE_ID b129a8dc-55a9-4ce5-b247-33259f0b9019 -->
 <!-- SOURCE Pico-OS/README.md#1152-picoos-libstart-startup-sequence -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
@@ -1329,6 +1374,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 2814405e-f7c3-4011-8d19-e9751be78c74 -->
 <!-- SOURCE Pico-OS/README.md#1153-startup-functions-used-by-picoos-images -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
@@ -1356,6 +1402,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 72e18091-38e6-4018-a9a1-48f57ef8c058 -->
 <!-- SOURCE Pico-OS/README.md#116-program-sections-interrupt-table-entries-and-linker-placement -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1429,6 +1476,7 @@ void syscall_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID ab62783f-7cea-4048-97a9-f381af81d6fb -->
 <!-- SOURCE Pico-OS/README.md#117-reti-pseudoinstructions -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1455,6 +1503,7 @@ void syscall_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID c88b8466-2934-4c68-9ae1-1e2d31e684c0 -->
 <!-- SOURCE Pico-OS/README.md#1171-interrupt-safe-push-and-pop -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.7 RETI pseudoinstructions
@@ -1505,6 +1554,7 @@ asm("POP ACC");
 
 ---
 
+<!-- SLIDE_ID 4c019dd2-999d-4ec3-bbca-cd155380886b -->
 <!-- SOURCE Pico-OS/README.md#1172-loading-32-bit-values-with-loadi32 -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.7 RETI pseudoinstructions
@@ -1577,6 +1627,7 @@ asm("MOVE ACC PC");
 
 ---
 
+<!-- SLIDE_ID 99e8bd96-623c-41ab-b95a-7630181c8141 -->
 <!-- SOURCE Pico-OS/README.md#1173-long-jumps-with-jump32 -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.7 RETI pseudoinstructions
@@ -1611,6 +1662,7 @@ MOVE ACC PC
 
 ---
 
+<!-- SLIDE_ID 6f5dbf33-cf1b-41a4-9c57-8de20b1fe668 -->
 <!-- SOURCE Pico-OS/README.md#1174-pseudoinstruction-expansion-during-linking -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.7 RETI pseudoinstructions
@@ -1651,6 +1703,7 @@ MOVE ACC PC
 
 ---
 
+<!-- SLIDE_ID 81605cda-d784-47a0-8afa-341ae1713278 -->
 <!-- SOURCE Pico-OS/README.md#118-linked-sections-metadata-and-the-five-word-binary-header -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1707,6 +1760,7 @@ MOVE ACC PC
 
 ---
 
+<!-- SLIDE_ID a6ca6e2c-6f7f-4971-bd91-91c7a2caec8d -->
 <!-- SOURCE Pico-OS/README.md#118-linked-sections-metadata-and-the-five-word-binary-header -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1735,6 +1789,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 8f7bf2b5-7f7d-43cc-809e-715d2084ac98 -->
 <!-- SOURCE Pico-OS/README.md#118-linked-sections-metadata-and-the-five-word-binary-header -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1789,6 +1844,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID 9b8bde65-0f92-402c-a765-ed0322f5daa1 -->
 <!-- SOURCE Pico-OS/README.md#119-generated-memory-constants-for-the-bootloader-and-kernel -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1827,6 +1883,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID acedb95c-a90e-46b5-9a9f-db0abaeb727a -->
 <!-- SOURCE Pico-OS/README.md#119-generated-memory-constants-for-the-bootloader-and-kernel -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1856,6 +1913,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID e720ab54-002a-4dae-b3e8-9c9be745c27e -->
 <!-- SOURCE Pico-OS/README.md#119-generated-memory-constants-for-the-bootloader-and-kernel -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
@@ -1905,6 +1963,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID b05e2276-e4e6-4ce4-8317-360eed060d41 -->
 <!-- SOURCE Pico-OS/README.md#12-reti-emulator-extensions -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
@@ -1940,6 +1999,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID 34f55380-203b-4af3-a00b-17ecd4efffaa -->
 <!-- SOURCE Pico-OS/README.md#12-reti-emulator-extensions -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
@@ -1974,6 +2034,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID 0dd731bf-b632-4826-9049-a7251b914a18 -->
 <!-- SOURCE Pico-OS/README.md#121-reti-machine-model-and-memory-mapped-peripherals -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2014,6 +2075,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID 8e540a13-2b32-4ddb-940e-629beddbda7d -->
 <!-- SOURCE Pico-OS/README.md#121-reti-machine-model-and-memory-mapped-peripherals -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2049,6 +2111,7 @@ $ hexyl -n 20 program.bin
 
 ---
 
+<!-- SLIDE_ID 753a8b08-b408-4320-a5db-49226bdd9146 -->
 <!-- SOURCE Pico-OS/README.md#122-atomic-test-and-set-with-tsl -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2096,6 +2159,7 @@ TSL DS ACC 2
 
 ---
 
+<!-- SLIDE_ID 4a101bfc-fce2-4590-993f-94aed4bb5790 -->
 <!-- SOURCE Pico-OS/README.md#122-atomic-test-and-set-with-tsl -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2137,6 +2201,7 @@ TSL DS ACC 2
 
 ---
 
+<!-- SLIDE_ID 2557cb88-4b56-4003-8f23-19544cff7e21 -->
 <!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2196,6 +2261,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID df2f9f45-0896-4380-a59d-d59780656a16 -->
 <!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2233,6 +2299,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID a8c9e247-d218-474a-9b6f-b6f7da9e2253 -->
 <!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2285,6 +2352,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID 6164bc4d-486b-47af-b6bd-951480b9f99f -->
 <!-- SOURCE Pico-OS/README.md#124-debugger-source-view-and-terminal-modes -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2305,6 +2373,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID f1f6efcb-5d26-4b6c-93da-0bba77656d9c -->
 <!-- SOURCE Pico-OS/README.md#124-debugger-source-view-and-terminal-modes -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 RETI-Emulator extensions
@@ -2332,6 +2401,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID 3bfdf250-5c22-4f71-9156-47cd007afa45 -->
 <!-- SOURCE Pico-OS/README.md#2-interrupts-system-calls-preemption-and-exceptions -->
 
 <div class="eyebrow section-eyebrow">Section 02 · Overview</div>
@@ -2342,6 +2412,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID f7b01e53-759c-45e2-b462-522d88c3b6c2 -->
 <!-- SOURCE Pico-OS/README.md#21-reti-interrupt-entry-and-the-interrupt-service-routine-table -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2379,6 +2450,7 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 
 ---
 
+<!-- SLIDE_ID 51cc154f-61d8-4fde-b7f4-1e76ee46db2c -->
 <!-- SOURCE Pico-OS/README.md#21-reti-interrupt-entry-and-the-interrupt-service-routine-table -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2431,6 +2503,7 @@ void syscall_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID e0e81c80-284f-43d0-ae54-be176ec057b4 -->
 <!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2505,6 +2578,7 @@ void interrupt_controller_initialize(void) {
 
 ---
 
+<!-- SLIDE_ID 5d5fd817-8f3f-4d2a-a44e-5fb6e8ea9272 -->
 <!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2528,6 +2602,7 @@ void interrupt_controller_initialize(void) {
 
 ---
 
+<!-- SLIDE_ID 5c622abb-4d75-42fb-b37c-42219899cd03 -->
 <!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2553,6 +2628,7 @@ void interrupt_controller_initialize(void) {
 
 ---
 
+<!-- SLIDE_ID d964847e-9b73-4174-bfc7-26ea59781692 -->
 <!-- SOURCE Pico-OS/README.md#23-saved-interrupt-stack-frame -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2586,6 +2662,7 @@ void interrupt_controller_initialize(void) {
 
 ---
 
+<!-- SLIDE_ID 3e086847-5994-44bf-be79-71199defe9a5 -->
 <!-- SOURCE Pico-OS/README.md#24-system-call-interface-and-execution -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -2605,6 +2682,7 @@ void interrupt_controller_initialize(void) {
 
 ---
 
+<!-- SLIDE_ID 5610fcdc-3101-4d89-822c-61d759f463b9 -->
 <!-- SOURCE Pico-OS/README.md#241-syscall-selectors-and-register-convention -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution
@@ -2646,6 +2724,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 4f527028-2edf-4c50-be41-bf91c29cb7ce -->
 <!-- SOURCE Pico-OS/README.md#241-syscall-selectors-and-register-convention -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution
@@ -2718,6 +2797,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 ---
 
+<!-- SLIDE_ID 7bf082a5-9341-4119-8209-d3e8a4566e96 -->
 <!-- SOURCE Pico-OS/README.md#2411-process-wait-signal-and-memory-request-structures -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
@@ -2753,6 +2833,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 ---
 
+<!-- SLIDE_ID 69782108-41d6-4092-94b7-751d479162e3 -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
@@ -2797,6 +2878,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 ---
 
+<!-- SLIDE_ID 1fb48dc6-bf1e-491e-871f-bdc0da7273b0 -->
 <!-- SOURCE Pico-OS/README.md#242-system-call-entry-execution-and-return-to-userspace -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution
@@ -2829,6 +2911,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 1a94f9ce-faf0-47ba-a001-4b2c63629846 -->
 <!-- SOURCE Pico-OS/README.md#242-system-call-entry-execution-and-return-to-userspace -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution
@@ -2940,6 +3023,7 @@ void syscall_interrupt_restore(void) {
 
 ---
 
+<!-- SLIDE_ID d96c5155-3f08-432b-8ef0-3a2a6df7554e -->
 <!-- SOURCE Pico-OS/README.md#242-system-call-entry-execution-and-return-to-userspace -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution
@@ -2982,6 +3066,7 @@ void syscall_interrupt_restore(void) {
 
 ---
 
+<!-- SLIDE_ID 8ff2e1d3-e134-4d33-a051-9fe5c9f4f5f5 -->
 <!-- SOURCE Pico-OS/README.md#2421-handle-syscall -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
@@ -3065,6 +3150,7 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 ---
 
+<!-- SLIDE_ID cf38293b-13ad-4a01-91e1-05d7f041e34c -->
 <!-- SOURCE Pico-OS/README.md#24211-system-call-groups -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace · 2.4.2.1 Handle Syscall
@@ -3093,6 +3179,7 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 ---
 
+<!-- SLIDE_ID 43920da9-515f-4ca2-b118-45378c7748a3 -->
 <!-- SOURCE Pico-OS/README.md#2422-selecting-the-return-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
@@ -3170,6 +3257,7 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 ---
 
+<!-- SLIDE_ID c276aed7-d90d-4f32-9092-8d3a724154e5 -->
 <!-- SOURCE Pico-OS/README.md#2423-stack-boundary-helpers -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
@@ -3234,6 +3322,7 @@ void activate_current_process_stack_boundary(void) {
 
 ---
 
+<!-- SLIDE_ID ba29ca55-5928-470a-99d7-5bfbc082325e -->
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3286,6 +3375,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 61a14640-2b86-4b74-a6eb-9aeac049ef14 -->
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3402,6 +3492,7 @@ void timer_interrupt_after_reschedule_request(void) {
 
 ---
 
+<!-- SLIDE_ID 682f6326-50b3-4a29-896b-a31fe3af1785 -->
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3438,6 +3529,7 @@ void timer_interrupt_after_reschedule_request(void) {
 
 ---
 
+<!-- SLIDE_ID cc4208ab-7708-4950-814b-a512185153e1 -->
 <!-- SOURCE Pico-OS/README.md#251-timer-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3478,6 +3570,7 @@ void timer_interrupt_after_reschedule_request(void) {
 
 ---
 
+<!-- SLIDE_ID 0f070827-5440-4ddc-ad2a-2a9f7742829c -->
 <!-- SOURCE Pico-OS/README.md#252-kernel-non-preemption-and-deferred-rescheduling -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3496,6 +3589,7 @@ void timer_interrupt_after_reschedule_request(void) {
 
 ---
 
+<!-- SLIDE_ID baa38261-7bb9-4d5a-b91d-7fd604f5bc9c -->
 <!-- SOURCE Pico-OS/README.md#253-shell-character-delay-for-different-timer-intervals -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
@@ -3519,6 +3613,7 @@ void timer_interrupt_after_reschedule_request(void) {
 
 ---
 
+<!-- SLIDE_ID f3e28112-442e-4896-9af7-d0db0008691c -->
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3549,6 +3644,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 4fd76d46-5d72-4812-ae33-90cf2c5cec55 -->
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3649,6 +3745,7 @@ void uart_interrupt_return(void) {
 
 ---
 
+<!-- SLIDE_ID f1e2d8a2-29b3-4c58-862e-b1a49caa3255 -->
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3698,6 +3795,7 @@ void handle_uart_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID e44a27b0-9786-4af3-9861-badb914e60a4 -->
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3720,6 +3818,7 @@ void handle_uart_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID f360b75e-37c9-45ed-be0d-17a41319453d -->
 <!-- SOURCE Pico-OS/README.md#261-borrowed-stack-entry-and-return -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
@@ -3738,6 +3837,7 @@ void handle_uart_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID 38159922-abcb-4e7f-a56d-695e80e8fd8e -->
 <!-- SOURCE Pico-OS/README.md#262-uart-nesting-and-interrupt-priorities -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
@@ -3767,6 +3867,7 @@ void handle_uart_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID cd705def-8c32-4475-805b-e495f5089a1c -->
 <!-- SOURCE Pico-OS/README.md#263-polled-uart-function-reference -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
@@ -3790,6 +3891,7 @@ void handle_uart_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID cc67bdbc-4313-468b-8f2d-6c173462a5b8 -->
 <!-- SOURCE Pico-OS/README.md#27-dma-completion-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3824,6 +3926,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 65276334-9e94-46da-9fee-3959911a398c -->
 <!-- SOURCE Pico-OS/README.md#27-dma-completion-interrupt-path -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
@@ -3926,6 +4029,7 @@ void handle_dma_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID 35bafbb7-db7e-4420-9a0f-ddde1d7d0ae5 -->
 <!-- SOURCE Pico-OS/README.md#281-cpu-exception-entry-and-registers -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
@@ -3975,6 +4079,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID d7bd7d9b-defb-4d4a-afb0-bd1fbbf1f63f -->
 <!-- SOURCE Pico-OS/README.md#281-cpu-exception-entry-and-registers -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
@@ -4057,6 +4162,7 @@ void cpu_exception_interrupt(void) {
 
 ---
 
+<!-- SLIDE_ID c1070f08-c1de-4d02-b2e8-e3004fb12bfb -->
 <!-- SOURCE Pico-OS/README.md#281-cpu-exception-entry-and-registers -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
@@ -4104,6 +4210,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 ---
 
+<!-- SLIDE_ID af6e54f6-acda-4b9a-9d9a-cc51542b3e98 -->
 <!-- SOURCE Pico-OS/README.md#282-supported-exceptions-and-allocation-errors -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
@@ -4132,6 +4239,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 ---
 
+<!-- SLIDE_ID 73fafbf3-3e12-4687-91a6-f033e517af88 -->
 <!-- SOURCE Pico-OS/README.md#283-exception-and-stack-boundary-function-reference -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
@@ -4155,6 +4263,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 ---
 
+<!-- SLIDE_ID 1e50e9af-47d3-4160-9fd9-f78649f0066a -->
 <!-- SOURCE Pico-OS/README.md#3-memory-management-and-shared-memory -->
 
 <div class="eyebrow section-eyebrow">Section 03 · Overview</div>
@@ -4165,6 +4274,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 ---
 
+<!-- SLIDE_ID 297b295b-5c1c-42e6-b88c-f6f51a081573 -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4203,6 +4313,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID f48c8de3-76a5-47a9-8415-b949101cfe3e -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4226,6 +4337,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 646538c7-c524-4339-bbce-fa097823898d -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4252,6 +4364,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 4d095311-07b0-4a03-a4a6-d3ab61fdf0ae -->
 <!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4277,6 +4390,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID a23f767b-3f90-4680-8174-22b3b48231ba -->
 <!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4300,6 +4414,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 7f8f5d5f-58e9-4066-b51d-d25327fed09c -->
 <!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
@@ -4339,6 +4454,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 6ac93f9b-4a09-4003-b90a-95c6141ca995 -->
 <!-- SOURCE Pico-OS/README.md#331-kernel-heap-blocks-and-kernel-objects -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.3 Kernel Heap
@@ -4356,6 +4472,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 31dfd74c-a228-40d6-bf69-ea41decd5c8a -->
 <!-- SOURCE Pico-OS/README.md#341-process-allocations -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
@@ -4374,6 +4491,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID d0ad5eef-dcb0-4c56-a251-df7249b9dd57 -->
 <!-- SOURCE Pico-OS/README.md#342-shared-data-allocations -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
@@ -4392,6 +4510,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 070478e0-d901-4b57-a7b0-9ecccc2dd2cd -->
 <!-- SOURCE Pico-OS/README.md#351-per-process-user-process-heap -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.5 User Process Heap
@@ -4410,6 +4529,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID 532cc55c-55e4-4e21-81d6-301b05c92f96 -->
 <!-- SOURCE Pico-OS/README.md#352-user-process-heap-allocator-function-reference -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.5 User Process Heap
@@ -4437,6 +4557,7 @@ struct Heap {
 
 ---
 
+<!-- SLIDE_ID f246d672-5b10-4a51-891f-6e15da0a7d71 -->
 <!-- SOURCE Pico-OS/README.md#361-common-allocator-linkage-and-function-reference -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
@@ -4469,6 +4590,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID e3663d1b-15d7-499f-8071-c87cd51fe3d2 -->
 <!-- SOURCE Pico-OS/README.md#361-common-allocator-linkage-and-function-reference -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
@@ -4495,6 +4617,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 50e7d2b0-fb2f-4230-92e0-b8b4150040b2 -->
 <!-- SOURCE Pico-OS/README.md#362-reallocation-decisions -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
@@ -4531,6 +4654,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID f741ffd6-149a-4d90-ad0d-629f154fa6f8 -->
 <!-- SOURCE Pico-OS/README.md#363-allocation-and-repeated-coalescing-example -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
@@ -4548,6 +4672,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID b2386cf5-167b-49c5-af14-3d616eadad4b -->
 <!-- SOURCE Pico-OS/README.md#3631-initial-state-and-first-fit-search -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference · 3.6.3 Allocation and repeated coalescing example
@@ -4571,6 +4696,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 0fb657aa-1ab6-4a86-b8a4-038d93abd916 -->
 <!-- SOURCE Pico-OS/README.md#3632-allocation-splits-d -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference · 3.6.3 Allocation and repeated coalescing example
@@ -4594,6 +4720,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID de024b48-ac9c-4e9c-a54e-518fcfc7e402 -->
 <!-- SOURCE Pico-OS/README.md#3633-free-d-and-merge-its-remainder -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference · 3.6.3 Allocation and repeated coalescing example
@@ -4624,6 +4751,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 6ce8dc47-971e-4d7d-8cea-fa90a4269094 -->
 <!-- SOURCE Pico-OS/README.md#3634-free-c-and-merge-repeatedly-at-b -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference · 3.6.3 Allocation and repeated coalescing example
@@ -4654,6 +4782,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 67ebd7d3-9816-4cc4-93a4-f7e4fb43bdfa -->
 <!-- SOURCE Pico-OS/README.md#3634-free-c-and-merge-repeatedly-at-b -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference · 3.6.3 Allocation and repeated coalescing example
@@ -4677,6 +4806,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID ef86f82f-79a8-414c-aba5-b2a07d9706bd -->
 <!-- SOURCE Pico-OS/README.md#4-processes-and-process-lifecycle -->
 
 <div class="eyebrow section-eyebrow">Section 04 · Overview</div>
@@ -4687,6 +4817,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 844582f6-5bf8-468e-8320-3fd88823c58a -->
 <!-- SOURCE Pico-OS/README.md#41-process-control-block-fields -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink>
@@ -4759,6 +4890,7 @@ struct ProcessControlBlock {
 
 ---
 
+<!-- SLIDE_ID bdcecc69-4db5-4798-9056-a428a679c0dd -->
 <!-- SOURCE Pico-OS/README.md#41-process-control-block-fields -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink>
@@ -4799,6 +4931,7 @@ struct ProcessControlBlock {
 
 ---
 
+<!-- SLIDE_ID 2e2cca8c-9aa4-4730-8f6a-f5309dfe9a0d -->
 <!-- SOURCE Pico-OS/README.md#411-process-states-and-transitions -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
@@ -4827,6 +4960,7 @@ struct ProcessControlBlock {
 
 ---
 
+<!-- SLIDE_ID 8525fe3a-5897-41bd-92d3-0a9498826c31 -->
 <!-- SOURCE Pico-OS/README.md#411-process-states-and-transitions -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
@@ -4871,6 +5005,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID 0c59ada4-9cdb-4df5-a083-aa81e226e474 -->
 <!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
@@ -4894,6 +5029,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID 4d93c478-a18a-4e56-9dca-d739751a44be -->
 <!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
@@ -4918,6 +5054,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID 41f3c519-7928-417e-8da6-18f5d5b59aea -->
 <!-- SOURCE Pico-OS/README.md#4121-from-pcbs-to-process-payloads-in-sram -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields · 4.1.2 Global process list and current process
@@ -4941,6 +5078,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID 59d3cb05-b937-4225-a082-d62b919580f5 -->
 <!-- SOURCE Pico-OS/README.md#421-user-process-stack-placement -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack
@@ -4964,6 +5102,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID 7a5a3778-76b4-4163-800c-5458c0395fda -->
 <!-- SOURCE Pico-OS/README.md#422-initial-argc-argv-and-envp -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack
@@ -4993,6 +5132,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID e359d1dd-0218-41b8-be1f-e4205cea5c38 -->
 <!-- SOURCE Pico-OS/README.md#422-initial-argc-argv-and-envp -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack
@@ -5029,6 +5169,7 @@ stateDiagram-v2
 
 ---
 
+<!-- SLIDE_ID a77054e6-d573-437d-80af-29f8d4e6bf49 -->
 <!-- SOURCE Pico-OS/README.md#422-initial-argc-argv-and-envp -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack
@@ -5062,6 +5203,7 @@ startup_cell_count = 1 + 1 + argc + 1 + envc + 1
 
 ---
 
+<!-- SLIDE_ID 1395b8ee-c3c3-480e-8e62-2db36b0c9e19 -->
 <!-- SOURCE Pico-OS/README.md#4221-concrete-initial-stack-example -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack · 4.2.2 Initial `argc`, `argv`, and `envp`
@@ -5130,6 +5272,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID cb71dff2-abb8-4454-a3e2-d98ef8ad4f28 -->
 <!-- SOURCE Pico-OS/README.md#4221-concrete-initial-stack-example -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Initial user process stack · 4.2.2 Initial `argc`, `argv`, and `envp`
@@ -5153,6 +5296,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID a35de8e7-e7d6-42cd-b432-d4731bac83ae -->
 <!-- SOURCE Pico-OS/README.md#431-loading-a-process-load-library-call -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process
@@ -5197,6 +5341,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 58227726-e6e7-4f99-8c4d-54741a609d3e -->
 <!-- SOURCE Pico-OS/README.md#431-loading-a-process-load-library-call -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process
@@ -5228,6 +5373,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID b0f58a23-0125-4a02-9036-28fb40b48586 -->
 <!-- SOURCE Pico-OS/README.md#4311-load-function-reference -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.1 Loading a process (`load` library call)
@@ -5251,6 +5397,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 41105c89-7e72-429c-b592-649185f7e1b4 -->
 <!-- SOURCE Pico-OS/README.md#432-starting-a-process-run-library-call -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process
@@ -5274,6 +5421,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID a1e867ef-b98a-4953-95e5-fe051c212c8f -->
 <!-- SOURCE Pico-OS/README.md#432-starting-a-process-run-library-call -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process
@@ -5297,6 +5445,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID ca737f35-be8a-42a5-b9e3-742ea351c813 -->
 <!-- SOURCE Pico-OS/README.md#4321-parent-to-child-inheritance -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5326,6 +5475,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 95ee971e-cc8a-48ee-a952-5dcd0022c5f7 -->
 <!-- SOURCE Pico-OS/README.md#4321-parent-to-child-inheritance -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5349,6 +5499,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 3120a431-6260-4682-8411-6fee2a801bf9 -->
 <!-- SOURCE Pico-OS/README.md#43211-environment-origin-and-propagation -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call) · 4.3.2.1 Parent-to-child inheritance
@@ -5384,6 +5535,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 1dfa7444-a609-44c8-8c24-4660dd93f81d -->
 <!-- SOURCE Pico-OS/README.md#43212-loading-bar-environment-variable -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call) · 4.3.2.1 Parent-to-child inheritance
@@ -5418,6 +5570,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 0a747ec2-be9b-434b-869b-49316c9b40ea -->
 <!-- SOURCE Pico-OS/README.md#4322-recording-termination-status -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5467,6 +5620,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 91cd8d95-cbfe-4b9b-92fb-cee279bf66f6 -->
 <!-- SOURCE Pico-OS/README.md#4322-recording-termination-status -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5494,6 +5648,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID d57d9311-c085-45fc-8246-3227b3c8555a -->
 <!-- SOURCE Pico-OS/README.md#4323-parent-collection-and-final-removal -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5519,6 +5674,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID b5cbf61c-d1ab-4aad-bcad-0021e7c2a41a -->
 <!-- SOURCE Pico-OS/README.md#4324-run-function-reference -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.3 Loading and starting a process · 4.3.2 Starting a process (`run` library call)
@@ -5542,6 +5698,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 5460fa62-55e8-4b83-9153-5401e5b215f0 -->
 <!-- SOURCE Pico-OS/README.md#44-process-list-pcb-metadata-and-lifecycle-function-reference -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink>
@@ -5570,6 +5727,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 7fb799da-b7b3-4637-a895-21cb7d93605f -->
 <!-- SOURCE Pico-OS/README.md#5-shared-memory-entries-and-mappings -->
 
 <div class="eyebrow section-eyebrow">Section 05 · Overview</div>
@@ -5580,6 +5738,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 2b44ee61-61ba-4c0b-aecf-608bbf89c331 -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
@@ -5622,6 +5781,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID 9ae316dc-f766-4ccb-98b9-697d7f8cbb59 -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
@@ -5658,6 +5818,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID 607fa109-63ed-4134-8f71-fca61dae476c -->
 <!-- SOURCE Pico-OS/README.md#511-global-shared-memory-list-and-entry-names -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink> · 5.1 Named entries and per-process attachments
@@ -5681,6 +5842,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID 5ce5e05d-40df-4a86-ac5f-875815e617c2 -->
 <!-- SOURCE Pico-OS/README.md#5111-from-shared-memory-entries-to-shared-data-payloads-in-sram -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink> · 5.1 Named entries and per-process attachments · 5.1.1 Global shared-memory list and entry names
@@ -5704,6 +5866,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID c0ad25dc-a8be-47bb-9c4f-9f3952883766 -->
 <!-- SOURCE Pico-OS/README.md#512-per-process-attachment-lists-in-sram -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink> · 5.1 Named entries and per-process attachments
@@ -5727,6 +5890,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID 5b777adf-cb2f-4602-9bad-5caaed6a7eda -->
 <!-- SOURCE Pico-OS/README.md#52-mapping-unlinking-and-deferred-destruction -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
@@ -5750,6 +5914,7 @@ struct SharedMemoryAttachment {
 
 ---
 
+<!-- SLIDE_ID 93a930be-b0de-415f-9722-c1532466d1c3 -->
 <!-- SOURCE Pico-OS/README.md#52-mapping-unlinking-and-deferred-destruction -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
@@ -5855,6 +6020,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID f8d6bae2-637d-4220-b86f-5834b9a56216 -->
 <!-- SOURCE Pico-OS/README.md#53-shared-memory-function-reference -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
@@ -5880,6 +6046,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID f7c115f9-4397-4644-a01e-e4b23c6cdc88 -->
 <!-- SOURCE Pico-OS/README.md#6-scheduling-and-context-switching -->
 
 <div class="eyebrow section-eyebrow">Section 06 · Overview</div>
@@ -5890,6 +6057,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 14abb8d4-4cfc-4b4e-8489-b436e3f5e8a5 -->
 <!-- SOURCE Pico-OS/README.md#6-scheduling-and-context-switching -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -5904,6 +6072,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 5353e1ee-c88f-4173-a3fa-43bac0f5a305 -->
 <!-- SOURCE Pico-OS/README.md#611-algorithm-and-round-robin-comparison -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink> · 6.1 Scheduler implementation
@@ -6008,6 +6177,7 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 ---
 
+<!-- SLIDE_ID 49890055-9e9d-4191-b511-f05cbdccaafb -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -6065,6 +6235,7 @@ struct ActivationRecord {
 
 ---
 
+<!-- SLIDE_ID c04528d3-5dde-4584-a088-58197281b79b -->
 <!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -6117,6 +6288,7 @@ void dispatcher_switch_from_context(int *caller_context) {
 
 ---
 
+<!-- SLIDE_ID aae956c1-0fcb-45ff-abd6-8870d0c0d020 -->
 <!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -6180,6 +6352,7 @@ void dispatcher_start_next_process(void) {
 
 ---
 
+<!-- SLIDE_ID 1bee18cf-5aca-4183-82aa-0725986ba243 -->
 <!-- SOURCE Pico-OS/README.md#64-restoring-the-selected-process-and-returning-with-rti -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -6262,6 +6435,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 ---
 
+<!-- SLIDE_ID 896216eb-936c-4189-b487-1c03dbebb269 -->
 <!-- SOURCE Pico-OS/README.md#65-dispatcher-function-reference -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
@@ -6285,6 +6459,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 ---
 
+<!-- SLIDE_ID 049f0d35-f0bc-4faa-9046-441339ca97eb -->
 <!-- SOURCE Pico-OS/README.md#7-blocking-wait-queues-signals-and-mutexes -->
 
 <div class="eyebrow section-eyebrow">Section 07 · Overview</div>
@@ -6295,6 +6470,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 ---
 
+<!-- SLIDE_ID a3c6ec64-eca2-4a39-96ab-203551c588a4 -->
 <!-- SOURCE Pico-OS/README.md#71-blocking-and-wakeup -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6318,6 +6494,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 ---
 
+<!-- SLIDE_ID 1bb88a1d-04ca-42de-afb2-b3cb95326ac7 -->
 <!-- SOURCE Pico-OS/README.md#71-blocking-and-wakeup -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6345,6 +6522,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 ---
 
+<!-- SLIDE_ID ee2eb84b-fca3-4138-a2e3-270a4ef03bdb -->
 <!-- SOURCE Pico-OS/README.md#72-wait-queues-and-pcb-links -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6409,6 +6587,7 @@ struct wait_queue {
 
 ---
 
+<!-- SLIDE_ID 7311ad58-2ead-4f75-9f64-735b85e96c9c -->
 <!-- SOURCE Pico-OS/README.md#72-wait-queues-and-pcb-links -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6445,6 +6624,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID ca6b46fb-8bce-4a93-8de5-df8f96e26838 -->
 <!-- SOURCE Pico-OS/README.md#721-blocking-with-sleep-and-waking-with-wakeup -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Wait queues and PCB links
@@ -6461,6 +6641,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 71c18a65-678a-4b02-a2e0-37c116bd640a -->
 <!-- SOURCE Pico-OS/README.md#722-child-waiting-with-waitpid -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Wait queues and PCB links
@@ -6500,6 +6681,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 07c8ffee-61bc-4ad7-b9ed-ed1910ca06ad -->
 <!-- SOURCE Pico-OS/README.md#723-wait-queue-function-reference -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Wait queues and PCB links
@@ -6535,6 +6717,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 6bf71b72-2720-40cf-bd7c-7ae316d60733 -->
 <!-- SOURCE Pico-OS/README.md#731-supported-signals-and-fixed-actions -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.3 Process signals
@@ -6577,6 +6760,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 9e1c482b-09ba-4d63-b334-275946b17151 -->
 <!-- SOURCE Pico-OS/README.md#732-stopping-and-continuing-a-process -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.3 Process signals
@@ -6594,6 +6778,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID fede9038-473c-4adc-91f0-c5eb37d85667 -->
 <!-- SOURCE Pico-OS/README.md#733-termination-ctrl-c-and-parent-collection -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.3 Process signals
@@ -6611,6 +6796,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 6373298c-55a3-4187-84e3-082412fcb600 -->
 <!-- SOURCE Pico-OS/README.md#734-fixed-picoos-signal-actions-compared-with-unix -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.3 Process signals
@@ -6630,6 +6816,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 053c1da5-d394-49ca-8c0e-deeb522db162 -->
 <!-- SOURCE Pico-OS/README.md#735-signal-function-reference -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.3 Process signals
@@ -6654,6 +6841,7 @@ int waitpid(int pid) {
 
 ---
 
+<!-- SLIDE_ID 88497705-af19-49fe-a160-b5c50853d5d3 -->
 <!-- SOURCE Pico-OS/README.md#74-mutexes-with-test-and-set-and-wait-queues -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6726,6 +6914,7 @@ void mutex_unlock(struct mutex *m) {
 
 ---
 
+<!-- SLIDE_ID 72b46939-79b4-4e9a-baf6-e153b4681cd4 -->
 <!-- SOURCE Pico-OS/README.md#74-mutexes-with-test-and-set-and-wait-queues -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6758,6 +6947,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID 13bb5e4a-484f-4859-b91f-5e4c3df1531c -->
 <!-- SOURCE Pico-OS/README.md#74-mutexes-with-test-and-set-and-wait-queues -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
@@ -6792,6 +6982,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID 735cbbbc-6449-47ea-8646-aa8a0e6537e0 -->
 <!-- SOURCE Pico-OS/README.md#8-terminal-file-descriptors-and-host-filesystem -->
 
 <div class="eyebrow section-eyebrow">Section 08 · Overview</div>
@@ -6802,6 +6993,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID 5fa2d4a4-0194-4dcf-84bb-0537a87c1e0d -->
 <!-- SOURCE Pico-OS/README.md#81-per-process-file-descriptor-table -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -6843,6 +7035,7 @@ struct FileDescriptorTable {
 
 ---
 
+<!-- SLIDE_ID 9ec4de6e-9678-471f-9cdc-0a8e8a545ea2 -->
 <!-- SOURCE Pico-OS/README.md#81-per-process-file-descriptor-table -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -6873,6 +7066,7 @@ struct FileDescriptorTable {
 
 ---
 
+<!-- SLIDE_ID 8fd417e9-a6d4-4698-99ae-743cdf2f4ad5 -->
 <!-- SOURCE Pico-OS/README.md#81-per-process-file-descriptor-table -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -6911,6 +7105,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 80a6f284-f5b9-4e56-ae5b-2e83ac701c3e -->
 <!-- SOURCE Pico-OS/README.md#81-per-process-file-descriptor-table -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -6950,6 +7145,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 29d5e48c-160b-4537-9cf5-e075e44a6f34 -->
 <!-- SOURCE Pico-OS/README.md#82-global-terminal-input-buffer -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7005,6 +7201,7 @@ struct Terminal {
 
 ---
 
+<!-- SLIDE_ID f0e36e0f-4385-4232-9fb9-f07f9f92efc5 -->
 <!-- SOURCE Pico-OS/README.md#83-blocking-and-completing-terminal-reads -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7109,6 +7306,7 @@ dispatcher_switch_from_context(caller_context);
 
 ---
 
+<!-- SLIDE_ID cf3d5efa-d681-46f2-bff5-3b1b2f3e9452 -->
 <!-- SOURCE Pico-OS/README.md#83-blocking-and-completing-terminal-reads -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7149,6 +7347,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 3b561c36-b8a7-41d9-a50b-8efc8a02205e -->
 <!-- SOURCE Pico-OS/README.md#84-foreground-input-ownership-and-terminal-generated-signals -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7199,6 +7398,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID f72c28a4-247e-4eae-bd8c-e30a7406d742 -->
 <!-- SOURCE Pico-OS/README.md#85-virtual-terminal-and-null-device-paths -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7223,6 +7423,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 27948d7a-be13-4e04-bd3d-d050209f1897 -->
 <!-- SOURCE Pico-OS/README.md#86-file-descriptor-creation-inheritance-duplication-and-cleanup -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7247,6 +7448,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID f4699dc0-c04d-4501-8296-d9f7f647244c -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7288,6 +7490,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 2114e8f5-c77b-440b-aa55-3bc144fef61e -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7314,6 +7517,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 8262335c-4d6d-419f-8328-aa9e96cc850d -->
 <!-- SOURCE Pico-OS/README.md#89-picoos-paths-working-directories-and-host-operations -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
@@ -7358,6 +7562,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID d295abff-5d07-4c24-bfbd-14013d9527eb -->
 <!-- SOURCE Pico-OS/README.md#9-kernel-data-structures-relationships-storage-and-lifetimes -->
 
 <div class="eyebrow section-eyebrow">Section 09 · Overview</div>
@@ -7368,6 +7573,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID bf08995c-e408-4ec0-b425-0d865d32a764 -->
 <!-- SOURCE Pico-OS/README.md#9-kernel-data-structures-relationships-storage-and-lifetimes -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7383,6 +7589,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 742a574c-a173-4326-b691-3d927f14ebc3 -->
 <!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7415,6 +7622,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID 0b015118-5396-44b7-9007-95da918f08d3 -->
 <!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7446,6 +7654,7 @@ process->state = PROCESS_STATE_READY;
 
 ---
 
+<!-- SLIDE_ID f7a585d0-ef32-4f4c-a757-8ab8f55ffef5 -->
 <!-- SOURCE Pico-OS/README.md#92-containment-and-reference-relationships -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7536,6 +7745,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID a01d2152-abec-4b6f-8af7-09329a350c16 -->
 <!-- SOURCE Pico-OS/README.md#93-kernel-global-variables-and-process-list-roots -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7575,6 +7785,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 5494b740-74f6-4539-95bc-82853b73c88d -->
 <!-- SOURCE Pico-OS/README.md#93-kernel-global-variables-and-process-list-roots -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7606,6 +7817,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 739441a9-1d89-4d70-9e04-caa7a3cd9eae -->
 <!-- SOURCE Pico-OS/README.md#94-wait-requests-and-queue-storage -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
@@ -7633,6 +7845,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 304a6166-5e15-4772-b9e2-8e853ac233e6 -->
 <!-- SOURCE Pico-OS/README.md#10-userspace-libraries -->
 
 <div class="eyebrow section-eyebrow">Section 10 · Overview</div>
@@ -7643,6 +7856,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID d36a56b2-04e2-40cb-b538-5d55d4226a76 -->
 <!-- SOURCE Pico-OS/README.md#10-userspace-libraries -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink>
@@ -7658,6 +7872,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID fbcb268f-997c-40b7-a089-0e38a2ee9d1d -->
 <!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
@@ -7708,6 +7923,7 @@ last_command_exit_status = waitpid(pid);
 
 ---
 
+<!-- SLIDE_ID 7054b030-fe52-40a0-b82c-8e5a2c40c4c4 -->
 <!-- SOURCE Pico-OS/README.md#1012-packing-arguments-and-executing-the-syscall -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
@@ -7765,6 +7981,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 78f579a3-c77e-463e-ac8a-74db22a02f4b -->
 <!-- SOURCE Pico-OS/README.md#1013-interrupt-entry-waiting-and-return -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
@@ -7800,6 +8017,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 0af3c4f9-bac1-45ff-b328-463980effb88 -->
 <!-- SOURCE Pico-OS/README.md#102-library-overview-and-dependencies -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink>
@@ -7837,6 +8055,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID f8f99ea8-a9eb-423f-a8e5-7b723fca685e -->
 <!-- SOURCE Pico-OS/README.md#10211-process-operations-in-processpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
@@ -7866,6 +8085,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 06822f91-611a-4795-a7ce-7e3645a7123e -->
 <!-- SOURCE Pico-OS/README.md#10212-descriptor-operations-in-iopicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
@@ -7894,6 +8114,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 5b082237-7bad-489f-a4c6-95ee9262e55e -->
 <!-- SOURCE Pico-OS/README.md#10213-working-directory-operations-in-working_directorypicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
@@ -7918,6 +8139,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 76448738-c898-4af5-a62d-427ddd97cbb2 -->
 <!-- SOURCE Pico-OS/README.md#10214-path-operations-in-file_removalpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
@@ -7944,6 +8166,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 43d7107e-d166-452c-800e-1df9e4c4c842 -->
 <!-- SOURCE Pico-OS/README.md#10215-wait-queue-operations-in-blockingpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
@@ -7969,6 +8192,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 92b75598-372d-408d-b393-744c3332e3cf -->
 <!-- SOURCE Pico-OS/README.md#1022-fcntl-opening-and-creating-files -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -7993,6 +8217,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 85a267ef-74fe-48fe-8ef8-77a649dab165 -->
 <!-- SOURCE Pico-OS/README.md#1023-syswait-waiting-for-children -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8017,6 +8242,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 68458579-f34d-41ca-a049-014ef436d742 -->
 <!-- SOURCE Pico-OS/README.md#1024-mutex-locking-and-waking-contenders -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8043,6 +8269,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID 71d0ab2b-a8ae-4f01-a1de-2c4a39c11e38 -->
 <!-- SOURCE Pico-OS/README.md#1025-sysmman-named-shared-memory -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8068,6 +8295,7 @@ int invoke_waitpid_syscall(int number, int argument) {
 
 ---
 
+<!-- SLIDE_ID ffedfe93-0b57-4453-9e8d-479157605d8c -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8108,6 +8336,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID fa86994b-6efd-4314-89e4-b34c95764f1f -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8145,6 +8374,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID 1bcc43f4-c6ba-4f9f-90c5-b52eaef9244a -->
 <!-- SOURCE Pico-OS/README.md#10271-heap-operations-in-mallocpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
@@ -8172,6 +8402,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID b7ffb9a1-d56a-4a19-91f2-8cc680b1c59a -->
 <!-- SOURCE Pico-OS/README.md#10272-decimal-conversion-in-atoipicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
@@ -8195,6 +8426,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID 7790ca2b-50f9-4144-b6f3-c5aa7fa70502 -->
 <!-- SOURCE Pico-OS/README.md#10273-environment-operations-in-envpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
@@ -8229,6 +8461,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID bf127f7a-3383-4ab6-a54f-59c0197e587b -->
 <!-- SOURCE Pico-OS/README.md#10274-process-exit-in-exitpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
@@ -8252,6 +8485,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID c2a7aaa4-f602-4bd6-9ae3-430c408dcc86 -->
 <!-- SOURCE Pico-OS/README.md#1028-string-copying-comparison-and-length -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8279,6 +8513,7 @@ struct DirectoryStream {
 
 ---
 
+<!-- SLIDE_ID 5ce52698-129c-4e47-adea-d8efc2174b29 -->
 <!-- SOURCE Pico-OS/README.md#1029-stdio-streams-formatting-and-scanning -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8326,6 +8561,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID 1f1799e4-8958-44c3-b618-73bc70dfca55 -->
 <!-- SOURCE Pico-OS/README.md#10291-streams-and-output-in-stdiopicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
@@ -8362,6 +8598,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID aa8595d3-4b7e-4fbe-aea1-064642e8bad9 -->
 <!-- SOURCE Pico-OS/README.md#10292-scanning-in-scanfpicoc -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
@@ -8389,6 +8626,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID 1ba66188-6bb1-4769-b9d1-4112842fab45 -->
 <!-- SOURCE Pico-OS/README.md#10210-start-entering-and-leaving-a-user-program -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8413,6 +8651,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID 56f3b78a-ab49-4757-947f-b04105efef7c -->
 <!-- SOURCE Pico-OS/README.md#10211-single-function-libraries -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
@@ -8440,6 +8679,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID d14ad219-e6dd-46fb-a9b6-019c534d9acb -->
 <!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
 
 <div class="eyebrow section-eyebrow">Section 11 · Overview</div>
@@ -8450,6 +8690,7 @@ struct PicoFile {
 
 ---
 
+<!-- SLIDE_ID 6ba983ff-bdeb-4422-a3ae-b519df29be46 -->
 <!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8497,6 +8738,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID e08cdffe-764a-4195-a7b6-36787b99a4e4 -->
 <!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8522,6 +8764,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID c52037df-3f0f-4210-8f37-bde800a69083 -->
 <!-- SOURCE Pico-OS/README.md#111-loading-the-kernel-from-the-eprom-bootloader -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8547,6 +8790,7 @@ sequenceDiagram
 
 ---
 
+<!-- SLIDE_ID bf2cd5cf-e3db-4b1b-a519-f0be33ab56cb -->
 <!-- SOURCE Pico-OS/README.md#111-loading-the-kernel-from-the-eprom-bootloader -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8587,6 +8831,7 @@ void _start(void) {
 
 ---
 
+<!-- SLIDE_ID ea0769e5-c963-4616-92ba-449ef9a48513 -->
 <!-- SOURCE Pico-OS/README.md#111-loading-the-kernel-from-the-eprom-bootloader -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8674,6 +8919,7 @@ void boot_main(void) {
 
 ---
 
+<!-- SLIDE_ID 6bb052fb-b414-4726-9828-a80e4521eb06 -->
 <!-- SOURCE Pico-OS/README.md#111-loading-the-kernel-from-the-eprom-bootloader -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8723,6 +8969,7 @@ void start_loaded_kernel(void) {
 
 ---
 
+<!-- SLIDE_ID 42af8283-8130-498e-8978-c3820bc7bbf1 -->
 <!-- SOURCE Pico-OS/README.md#112-kernel-startup -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8817,6 +9064,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID f1736ab8-9a1b-411d-8c7e-12ef88ce73a4 -->
 <!-- SOURCE Pico-OS/README.md#1121-loading-init-and-entering-normal-execution -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.2 Kernel startup
@@ -8861,6 +9109,7 @@ void reboot(void) {
 
 ---
 
+<!-- SLIDE_ID 6ce48ef8-591c-49ae-a58e-f7a99576e37f -->
 <!-- SOURCE Pico-OS/README.md#113-init-process -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
@@ -8922,6 +9171,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 9e2731c3-c572-4d7f-9ad0-078edba26eb5 -->
 <!-- SOURCE Pico-OS/README.md#1131-init-responsibilities -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -8949,6 +9199,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID cc487a97-4c03-4111-a5ba-87a158a402bb -->
 <!-- SOURCE Pico-OS/README.md#1132-initial-environment-configuration -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -8974,6 +9225,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID e863997f-127b-48bc-a440-da307ec302c7 -->
 <!-- SOURCE Pico-OS/README.md#1133-loading-starting-and-waiting-for-the-shell -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -9051,6 +9303,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 5bd4796d-e12d-4c12-8c43-d26718e7685e -->
 <!-- SOURCE Pico-OS/README.md#1134-shell-startup -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -9112,6 +9365,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 586ab56d-c506-40eb-bd57-d5ca8a404017 -->
 <!-- SOURCE Pico-OS/README.md#1135-loading-user-applications -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -9173,6 +9427,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID bdabf2d4-329b-4ea9-a1e2-0eec4a14928e -->
 <!-- SOURCE Pico-OS/README.md#1136-shell-exit-and-restart-policy -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -9190,6 +9445,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 3225bb76-16b0-49fd-8d6d-5aabecfa69c9 -->
 <!-- SOURCE Pico-OS/README.md#1137-when-init-terminates -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
@@ -9208,6 +9464,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID cc8695f4-0139-4e21-a4f6-468e914c6c30 -->
 <!-- SOURCE Pico-OS/README.md#12-shell -->
 
 <div class="eyebrow section-eyebrow">Section 12 · Overview</div>
@@ -9218,6 +9475,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 9ae26a61-ba92-41ff-b1a3-785737926a3c -->
 <!-- SOURCE Pico-OS/README.md#121-shell-owned-state -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9250,6 +9508,7 @@ void _start(int argc, char *first_argument) {
 
 ---
 
+<!-- SLIDE_ID 75ddbca6-30c7-4ab9-8c9a-f02aae80ffd1 -->
 <!-- SOURCE Pico-OS/README.md#121-shell-owned-state -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9293,6 +9552,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID e18cd8bf-39c7-44e1-b362-775224c97098 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9317,6 +9577,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 15bcbb9e-dd2b-43a5-8482-1008a2d62543 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9363,6 +9624,7 @@ int read_shell_character(char *character) {
 
 ---
 
+<!-- SLIDE_ID 1b1bfe90-5110-41cd-a4ed-cc48d59d87d9 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9394,6 +9656,7 @@ int read_shell_character(char *character) {
 
 ---
 
+<!-- SLIDE_ID 39309ee3-ec53-46bf-b8d0-7f648ee557f2 -->
 <!-- SOURCE Pico-OS/README.md#123-interactive-line-editing-and-command-history -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9426,6 +9689,7 @@ int read_shell_character(char *character) {
 
 ---
 
+<!-- SLIDE_ID 70987023-e41e-4938-b912-13bb2a590306 -->
 <!-- SOURCE Pico-OS/README.md#123-interactive-line-editing-and-command-history -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9474,6 +9738,7 @@ if (character == SHELL_CTRL_U) {
 
 ---
 
+<!-- SLIDE_ID 3faa4010-66f0-4bf9-bb05-aecebd3192ee -->
 <!-- SOURCE Pico-OS/README.md#124-command-parsing-expansion-and-execution -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9503,6 +9768,7 @@ if (character == SHELL_CTRL_U) {
 
 ---
 
+<!-- SLIDE_ID 0594b9f5-0bd9-4b7c-b21d-35371d14269f -->
 <!-- SOURCE Pico-OS/README.md#125-shell-built-in-commands -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9534,6 +9800,7 @@ if (character == SHELL_CTRL_U) {
 
 ---
 
+<!-- SLIDE_ID 67c051c0-5f86-42a1-b5d6-3b576585eaa1 -->
 <!-- SOURCE Pico-OS/README.md#1251-foreground-processes-background-processes-and-job-control-signals -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink> · 12.5 Shell built-in commands
@@ -9582,6 +9849,7 @@ if (!started) {
 
 ---
 
+<!-- SLIDE_ID 56091088-7299-4b8a-8425-f0e86aac3f36 -->
 <!-- SOURCE Pico-OS/README.md#1251-foreground-processes-background-processes-and-job-control-signals -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink> · 12.5 Shell built-in commands
@@ -9628,6 +9896,7 @@ int set_foreground_process(int pid) {
 
 ---
 
+<!-- SLIDE_ID 1d4b3cba-73b8-4df7-9cd0-a4b534929b48 -->
 <!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9660,6 +9929,7 @@ int set_foreground_process(int pid) {
 
 ---
 
+<!-- SLIDE_ID f2f26bfa-003c-49f8-8942-a4af7ee987d6 -->
 <!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9725,6 +9995,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID cd188a9b-5a81-4a32-a441-c8fb3fe44fd8 -->
 <!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9774,6 +10045,7 @@ bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
 
 ---
 
+<!-- SLIDE_ID 34c5db34-80c0-4e78-aadb-6840839ddd63 -->
 <!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9803,6 +10075,7 @@ bool mark_process_ready_with_arguments(struct RunProcessRequest *request) {
 
 ---
 
+<!-- SLIDE_ID 0db9556b-b978-4ee7-8dbc-a5c3cc6a3578 -->
 <!-- SOURCE Pico-OS/README.md#126-inputoutput-redirection -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9873,6 +10146,7 @@ return true;
 
 ---
 
+<!-- SLIDE_ID ebdfae59-d4ac-4457-9fb4-254a82382579 -->
 <!-- SOURCE Pico-OS/README.md#127-sequential-file-backed-pipelines -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9940,6 +10214,7 @@ unlink(shell_pipe_path);
 
 ---
 
+<!-- SLIDE_ID 31113768-c983-4f2d-95ba-38fce7a6547b -->
 <!-- SOURCE Pico-OS/README.md#127-sequential-file-backed-pipelines -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -9988,6 +10263,7 @@ flowchart TB
 
 ---
 
+<!-- SLIDE_ID 78265c34-14ce-47f5-8574-77aeae1f5b84 -->
 <!-- SOURCE Pico-OS/README.md#127-sequential-file-backed-pipelines -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
@@ -10021,6 +10297,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SLIDE_ID 0ad744b0-50aa-41c3-993e-7374636036d2 -->
 <!-- SOURCE Pico-OS/README.md#13-user-applications-and-commands -->
 
 <div class="eyebrow section-eyebrow">Section 13 · Overview</div>
@@ -10031,6 +10308,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SLIDE_ID 73704c54-cfe5-4c3e-87bd-5a375a1bda69 -->
 <!-- SOURCE Pico-OS/README.md#131-applications-library-calls-and-host-requests -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink>
@@ -10062,6 +10340,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SLIDE_ID 2df48754-99d4-4620-8452-a08b5dee9c9b -->
 <!-- SOURCE Pico-OS/README.md#131-applications-library-calls-and-host-requests -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink>
@@ -10093,6 +10372,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SLIDE_ID 9204e2d0-4668-4d63-b517-fcc62df0f1ea -->
 <!-- SOURCE Pico-OS/README.md#1311-command-behavior-and-supported-options -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.1 Applications, library calls, and host requests
@@ -10125,6 +10405,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 ---
 
+<!-- SLIDE_ID 17211802-dd5d-4f64-b59a-2c1c97236e61 -->
 <!-- SOURCE Pico-OS/README.md#1311-command-behavior-and-supported-options -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.1 Applications, library calls, and host requests
@@ -10192,6 +10473,7 @@ PicoOS> rmdir.bin demo
 
 ---
 
+<!-- SLIDE_ID d747ba3c-c6e0-4175-91ec-435448926146 -->
 <!-- SOURCE Pico-OS/README.md#1312-command-errors-and-exit-statuses -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.1 Applications, library calls, and host requests
@@ -10210,6 +10492,7 @@ PicoOS> rmdir.bin demo
 
 ---
 
+<!-- SLIDE_ID e7bf9f07-bf52-4512-8575-f30d3ff45a1a -->
 <!-- SOURCE Pico-OS/README.md#14-test-system -->
 
 <div class="eyebrow section-eyebrow">Section 14 · Overview</div>
@@ -10220,6 +10503,7 @@ PicoOS> rmdir.bin demo
 
 ---
 
+<!-- SLIDE_ID 5d2e52ac-ae0e-43b4-949b-975d4ad36df2 -->
 <!-- SOURCE Pico-OS/README.md#141-library-os-shell-and-boot-test-categories -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink>
@@ -10256,6 +10540,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID f29de854-80cc-455c-8c72-923791ea70c6 -->
 <!-- SOURCE Pico-OS/README.md#1411-files-that-make-up-a-test -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10287,6 +10572,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID f7808e70-3f36-4ff4-bcfe-b57ff57da51a -->
 <!-- SOURCE Pico-OS/README.md#1411-files-that-make-up-a-test -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10319,6 +10605,7 @@ flowchart TD
 
 ---
 
+<!-- SLIDE_ID 57e4a553-ad0a-4b31-bc89-f6bf842e9a62 -->
 <!-- SOURCE Pico-OS/README.md#1412-library-test-example -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10381,6 +10668,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID a87d49e1-9f07-4abf-b235-ef297d094a65 -->
 <!-- SOURCE Pico-OS/README.md#1413-os-test-example -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10440,6 +10728,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 6b8d0346-4320-42ee-981c-88a856407f14 -->
 <!-- SOURCE Pico-OS/README.md#1413-os-test-example -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10519,6 +10808,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID cc7cf3b9-8ee7-449d-9037-cdae09312d31 -->
 <!-- SOURCE Pico-OS/README.md#1414-shell-test-example -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10593,6 +10883,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID c445421a-f33e-4054-8992-a34ecc3e8b01 -->
 <!-- SOURCE Pico-OS/README.md#1415-boot-test-example -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
@@ -10666,6 +10957,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 676ac0c8-22e8-495c-81ed-cc7907b7330e -->
 <!-- SOURCE Pico-OS/README.md#142-test-execution -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink>
@@ -10692,6 +10984,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 10faac28-c869-4248-9589-d13d58d85d4c -->
 <!-- SOURCE Pico-OS/README.md#1421-make-targets -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.2 Test execution
@@ -10722,6 +11015,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 69148704-1813-4521-b66e-0b2c23602274 -->
 <!-- SOURCE Pico-OS/README.md#15-use-in-operating-systems-and-real-time-operating-systems-lectures -->
 
 <div class="eyebrow section-eyebrow">Section 15 · Overview</div>
@@ -10732,6 +11026,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID fcb9ea56-bb37-4004-bad3-22ce1187b9e9 -->
 <!-- SOURCE Pico-OS/README.md#15-use-in-operating-systems-and-real-time-operating-systems-lectures -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
@@ -10746,6 +11041,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 8f546600-0c50-43df-b2a0-31de316ffe17 -->
 <!-- SOURCE Pico-OS/README.md#151-operating-systems-topics -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
@@ -10774,6 +11070,7 @@ flowchart LR
 
 ---
 
+<!-- SLIDE_ID 254c42e4-b819-464d-8cb8-732df8a5e942 -->
 <!-- SOURCE Pico-OS/README.md#1511-inspecting-picoos-execution-in-the-reti-emulator -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
@@ -10850,6 +11147,7 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 
 ---
 
+<!-- SLIDE_ID 3837c397-435d-4f67-a71d-beedc4ecea98 -->
 <!-- SOURCE Pico-OS/README.md#1512-exploring-userspace-heap-allocation -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
@@ -10928,6 +11226,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 18132bd7-9ec3-4d17-921e-2b9400bfeb13 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
@@ -10963,6 +11262,7 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 13c7f45d-6850-4aae-9a0a-ebb653f1cc44 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
@@ -11039,6 +11339,7 @@ $ reti_emulator -d -c exercise.reti
 
 ---
 
+<!-- SLIDE_ID 51c924b8-7162-4b06-93a2-a3c488906514 -->
 <!-- SOURCE Pico-OS/README.md#152-real-time-operating-systems-topics -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
@@ -11065,6 +11366,7 @@ $ reti_emulator -d -c exercise.reti
 
 ---
 
+<!-- SLIDE_ID 687d8038-f828-4cd8-b700-6088d2fff5c1 -->
 <!-- SOURCE Pico-OS/README.md#152-real-time-operating-systems-topics -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
@@ -11113,6 +11415,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 9e84965b-64b6-4cae-b06b-04b9f8b7ed4c -->
 <!-- SOURCE Pico-OS/README.md#16-use-of-ai-in-the-project -->
 
 <div class="eyebrow section-eyebrow">Section 16 · Overview</div>
@@ -11123,6 +11426,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 84e3055c-f534-40fa-82b4-09c8e89af1eb -->
 <!-- SOURCE Pico-OS/README.md#16-use-of-ai-in-the-project -->
 
 # <MajorSectionLink section="16-use-of-ai-in-the-project">16. Use of AI in the project</MajorSectionLink>
@@ -11143,6 +11447,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 958eb9fc-b363-4736-9a58-111ae898958b -->
 <!-- SOURCE Pico-OS/README.md#17-limitations -->
 
 <div class="eyebrow section-eyebrow">Section 17 · Overview</div>
@@ -11153,6 +11458,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID e6126660-8ba5-4fb6-b371-4aae70da00fe -->
 <!-- SOURCE Pico-OS/README.md#17-limitations -->
 
 # <MajorSectionLink section="17-limitations">17. Limitations</MajorSectionLink>
@@ -11182,6 +11488,7 @@ int main(int argc, char **argv) {
 
 ---
 
+<!-- SLIDE_ID 2ca8219a-609d-4c55-ad26-903ce5f84775 -->
 <!-- SOURCE Pico-OS/README.md#appendix-inspecting-bin-files-with-hexyl -->
 
 # Appendix: Inspecting `.bin` files with `hexyl`
