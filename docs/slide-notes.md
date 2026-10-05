@@ -7,10 +7,14 @@ launch target. On any slide, use these shortcuts:
 | --- | --- |
 | `Alt+N` | Add or edit the current slide's Markdown note |
 | `Alt+Shift+N` | Show or hide notes in the panel at the upper right |
+| `H` | Show or hide the note buttons and other presentation hints |
 | `Ctrl+Enter` / `Cmd+Enter` | Save the note while editing |
 | `Escape` | Close the editor; unsaved changes require saving, keeping the draft, or discarding it |
 
-The buttons at the upper right provide the same editing and visibility actions.
+The buttons at the upper right start hidden. Press `H` outside the editor to
+show or hide them together with the other presentation hints. Whenever visible,
+the buttons show their `Alt+N` and `Alt+Shift+N` shortcuts. These shortcuts also
+work while the buttons are hidden. Reloading hides the buttons again.
 The visible panel follows the current slide as you navigate. Note text supports
 headings, lists, emphasis, links, and code. Notes are hidden from PDF exports.
 Saving requires the development server, which writes into this repository.
@@ -23,7 +27,7 @@ Saved notes live in `notes/` as Markdown files. A filename includes the current
 full-deck slide number, readable title, and persistent UUID, for example:
 
 ```text
-slide-006-picoos-build-and-run--204ea1c9-6227-4a6f-aae9-f69f49722046.md
+slide-007-introduction-build-and-run--204ea1c9-6227-4a6f-aae9-f69f49722046.md
 ```
 
 The file starts with YAML metadata followed by your Markdown:
@@ -31,8 +35,8 @@ The file starts with YAML metadata followed by your Markdown:
 ```markdown
 ---
 slide_id: "204ea1c9-6227-4a6f-aae9-f69f49722046"
-slide_number: 6
-slide_title: "PicoOS · Build and run"
+slide_number: 7
+slide_title: "Introduction · Build and run"
 source_anchor: "build-and-run"
 ---
 

@@ -1,5 +1,6 @@
 // Source artifacts stay intact. Reviewed bullets, table summaries and composition
-// are authored here/config; no source heading remap or code truncation is used.
+// are authored here/config; the opening PicoOS heading is displayed as
+// Introduction while source anchors and artifacts remain unchanged.
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import {readmeSource, md, hash, plain, displayHtml} from './readme-source.mjs'
@@ -20,7 +21,13 @@ for(const [key,shares] of Object.entries(columnConfig.shares))
  if(shares.length!==2||shares.some(n=>!Number.isFinite(n)||n<=0)||Math.abs(shares[0]+shares[1]-100)>0.01)throw Error('Invalid column shares: '+key)
 const columnShares=key=>columnConfig.shares[key]||[50,50]
 const columnAttributes=(key,extra='')=>`data-column-key="${key}" style="--readme-columns:minmax(0, ${columnShares(key)[0]}fr) minmax(0, ${columnShares(key)[1]}fr);${extra}"`
-const codeNeed=lines=>Math.max(420,...lines.map(l=>l.length*8.6+40))
+const rowAttributes=group=>{
+ const weights=columnConfig.rows?.['assets:'+group.map(a=>a.id).join('+')]
+ return weights?` style="--readme-rows:${weights.map(weight=>`minmax(0, ${weight}fr)`).join(' ')}"`:''
+}
+// Wrap unusually long source lines instead of making both columns tiny.
+const codeLineWidth=lines=>Math.max(...lines.map(line=>line.length*8.6+40))
+const codeNeed=lines=>Math.max(240,Math.min(560,codeLineWidth(lines)))
 const cover=await fs.readFile('config/title-slide.md','utf8')
 const previous=await fs.readFile('slides.md','utf8')
 const oldInventory=JSON.parse(await fs.readFile('docs/readme-coverage.json','utf8'))
@@ -103,7 +110,25 @@ function renderTable(a) {
   const html=`<div class="readme-tiles" v-pre>${a.compactRows.map(r=>`<div class="readme-tile"><div class="tile-name">${r.values[0].html}</div>${r.values.slice(1).map(v=>`<div class="tile-detail">${v.html}</div>`).join('')}</div>`).join('\n')}</div>`
   return visual('table',html,a.id==='table-5997'?1440:1280,`inventory-grid${a.id==='table-5997'?' library-grid':''}`)
  }
- const chunks=a.tableColumns===2?balanced(a.compactRows,Math.ceil(a.compactRows.length/2)):[a.compactRows]
+ let chunks=[a.compactRows]
+ if(a.tableColumns===2) {
+  // Keep source order, but balance the amount of text rather than row counts.
+  const weights=a.compactRows.map(row=>Math.max(...row.values.map(cell=>
+   Math.max(1,(cell.html.match(/<li>/g)||[]).length,Math.ceil(plain(cell.html).length/55)))))
+  const total=weights.reduce((sum,weight)=>sum+weight,0)
+  let cut=1,left=0,best=Infinity
+  for(let i=1;i<weights.length;i++) {
+   left+=weights[i-1]
+   const cost=Math.max(left,total-left)
+   if(cost<best){best=cost;cut=i}
+  }
+  const reviewedCut=columnConfig.tableBreaks?.[a.id+':'+a.compactRows.map(row=>row.sourceRow).join(',')]
+  if(reviewedCut!==undefined) {
+   if(!Number.isInteger(reviewedCut)||reviewedCut<1||reviewedCut>=a.compactRows.length)throw Error('Invalid table break: '+a.id)
+   cut=reviewedCut
+  }
+  chunks=[a.compactRows.slice(0,cut),a.compactRows.slice(cut)]
+ }
  const dims=chunks.map(rows=>widths(a,rows,a.tableColumns===2?650:columnConfig.tableWidths[a.id]||1080))
  // Both halves use the same column widths to make reading across them predictable.
  const maxWidth=Math.max(...dims.map(d=>d.width))
@@ -119,13 +144,14 @@ function renderCode(a) {
  const language=a.language==='reti'?'text':a.language
  const shares=columnShares('code:'+a.id)
  const budget=a.split?Math.max(...parts.map((lines,i)=>codeNeed(lines)/(shares[i]/100))):0
- const widths=a.split?shares.map(n=>budget*n/100):[a.nativeCodeWidth||Math.max(a.narrow?420:980,...sourceLines.map(l=>l.length*8.6+40))]
+ const widths=a.split?shares.map(n=>budget*n/100):[a.nativeCodeWidth||(a.narrow?codeNeed(sourceLines):Math.max(640,Math.min(980,codeLineWidth(sourceLines))))]
  let offset=0
  const boxes=parts.map((lines,i)=>{
   const start=offset+1;offset+=lines.length
   const partMarker=`<!-- README_CODE_PART ${a.id} lines=${start}-${offset} -->`
   const inner=`${partMarker}\n<div class="readme-code${a.language==='console'?' readme-terminal':''}">\n\n\`\`\`${language} {lines:false}\n${lines.join('\n')}\n\`\`\`\n\n</div>`
-  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${a.command?` style="flex:0 0 ${Math.round((a.codeLines*21+32)*0.86)}px"`:''}`)
+  const maximumWidth=Math.max(560,Math.min(760,widths[i]*1.15))
+  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${!a.split&&!a.narrow&&!a.command?` style="--code-max-width:${maximumWidth}px"`:''}`)
  })
  return a.split?`<div class="code-columns" ${columnAttributes('code:'+a.id,`--source-aspect:${(budget+24)/(parts[0].length*21+34)}`)}>\n\n${boxes.join('\n\n')}\n\n</div>`:boxes[0]
 }
@@ -199,8 +225,8 @@ for(const section of sections) {
   if(!group.length)content=`<div class="readme-list${summaries[section.anchor].length>6?' bullet-columns':''}">${bulletList(summaries[section.anchor])}</div>`
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
-  else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed})
-  else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
+  else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed,rowAttributes})
+  else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):layout==='stacked'?rowAttributes(group):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
   const fact=number===0?facts[section.anchor]:null
   if(fact)content+=`\n<aside class="context-note"><b>${esc(fact[0])}</b>${bulletList(fact[1])}</aside>`
   pages.push({section,group,layout,content,number:groups.length>1?number+1:null})
@@ -209,7 +235,7 @@ for(const section of sections) {
 // Overview entries retain every README heading, including headings whose
 // content is presented by descendants rather than a separate introduction.
 // The unnumbered opening README hierarchy is presentation section zero.
-// Keep its source anchors and headings intact beneath the requested ancestor.
+// Keep its source anchors intact and display its root heading as Introduction.
 const introduction=sections.find(s=>s.anchor==='picoos'&&!s.parents.length)
 const majorSections=sections.filter(s=>!s.parents.length && (s===introduction || /^\d+\. /.test(s.title)))
 const sectionNumber=s=>s===introduction?'0':s.title.match(/^\d+/)[0]
@@ -244,10 +270,11 @@ const body=deckPages.map((p,i)=>{
  const disabled=excludedAnchors.has(s.anchor)||p.group.some(a=>excludedHashes.has(a.sha256))
  for(const a of p.group)inventory.get(a.id).slides.push({page,layout:p.layout,...(a.type==='table'?{rows:a.compactRows.map(r=>r.sourceRow)}:{}),...(a.type==='list'?{items:a.itemIndices}:{}),...(a.type==='code'?{codeParts:a.split?2:1}:{}),...(a.borrowed?{repeated:true}:{})})
  const major=majorSections.find(major=>major===s||s.parents[0]===major.title)
- const majorTitle=title=>major && title===major.title?`<MajorSectionLink section="${major.anchor}">${title}</MajorSectionLink>`:title
- const ancestors=major===introduction?['<MajorSectionLink section="'+major.anchor+'">Introductions</MajorSectionLink>',...s.parents]:s.parents.map(majorTitle)
+ const displayTitle=title=>major===introduction && title===introduction.title?'Introduction':title
+ const majorTitle=title=>major && title===major.title?`<MajorSectionLink section="${major.anchor}">${displayTitle(title)}</MajorSectionLink>`:title
+ const ancestors=s.parents.map(majorTitle)
  const main=ancestors.length?ancestors.join(' · '):majorTitle(s.title)
- const subtitle=ancestors.length?`\n\n## ${s.title}${p.number?` (${p.number})`:''}`:''
+ const subtitle=ancestors.length||s===introduction?`\n\n## ${displayTitle(s.title)}${p.number?` (${p.number})`:''}`:''
  return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n# ${main}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'

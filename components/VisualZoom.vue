@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import { shortcutHintsVisible, toggleShortcutHints } from '../setup/shortcut-hints'
 
 const dialog = ref()
 const stage = ref()
@@ -161,6 +162,7 @@ function onKey(event) {
     // Native Tab remains available for the dialog's focus trap and controls.
     stop(event)
     if (event.key === 'Escape') { event.preventDefault(); close() }
+    else if (event.key.toLowerCase() === 'h' && !event.repeat && !event.ctrlKey && !event.metaKey && !event.altKey) { event.preventDefault(); toggleShortcutHints() }
     else if (event.key === '+' || event.key === '=') { event.preventDefault(); adjust(0.25) }
     else if (event.key === '-') { event.preventDefault(); adjust(-0.25) }
     else if (event.key.toLowerCase() === 'f') { event.preventDefault(); fit() }
@@ -186,7 +188,7 @@ function scan() {
       element.setAttribute('role', 'button')
       element.setAttribute('aria-label', 'Enlarge visual')
       element.setAttribute('aria-haspopup', 'dialog')
-      element.title = 'Click or press Enter to enlarge'
+      element.title = 'Click to enlarge'
     }
   })
 }
@@ -220,7 +222,7 @@ onBeforeUnmount(() => {
           <button aria-label="Zoom in" @click="adjust(0.25)">+</button>
           <button @click="fit">Fit</button>
           <button @click="scale = 2">200%</button>
-          <button data-close aria-label="Close enlarged view" @click="close">Close · Esc</button>
+          <button data-close aria-label="Close enlarged view" @click="close">Close<span v-if="shortcutHintsVisible"> · Esc</span></button>
         </div>
       </div>
       <div ref="stage" class="zoom-stage">
@@ -228,7 +230,7 @@ onBeforeUnmount(() => {
           <div ref="content" class="zoom-content" :style="{ width: `${width}px`, transform: `scale(${scale})` }" />
         </div>
       </div>
-      <div class="zoom-help">Scroll to explore · + / − to zoom · F to fit · Esc to return</div>
+      <div v-if="shortcutHintsVisible" class="zoom-help">Scroll to explore · + / − to zoom · F to fit · Esc to return · H: hide hints</div>
     </dialog>
   </Teleport>
 </template>

@@ -122,10 +122,21 @@ Each overview has a larger title and a clickable subsection hierarchy. Click
 a topic to jump to its first slide, or a numbered link to choose an individual
 slide. Click the major section title in a content slide's ancestor heading to
 return to its overview; every overview also links back to Contents.
+Section introduction slides appear in the first TOC entry, **Section Introduction**,
+above the subsection hierarchy, with individual slide-number links.
 
 The unnumbered opening README topics form section **0. Introduction**, whose
-overview follows Contents. Their content headings begin with the linked
-ancestor **Introductions**, followed by their original README ancestors.
+overview follows Contents. The README's opening **PicoOS** heading appears as
+**Introduction** in the presentation, including **Introduction (1)** through
+**Introduction (3)**. Its descendants use the linked ancestor **Introduction**,
+followed by any deeper README ancestors. Source anchors keep their README names.
+
+Shortcut hints start hidden in every presentation version. Press **H** to show
+or hide the content-slide control reminders and the overview's “Choose a topic
+or slide number ↗” hint. The setting persists while navigating and resets to
+hidden on reload. The same setting controls the contents prompt, note buttons
+(which always show their shortcuts when visible), and visual viewer help.
+Development editing reminders appear when hints are shown.
 
 Navigation follows the generated README hierarchy and the active full or short
 deck. Empty branches and sections disappear; ancestors remain when descendants
@@ -163,6 +174,15 @@ Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
 sizes. All 70 column layouts have been reviewed at slide size. Their proportions
 and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
+
+Code boxes and tables on the same slide share a displayed text size, including
+command strips. Long source lines wrap without changing the code.
+Short standalone examples use narrower, centered boxes. Tables reflow to fill
+their panels, with short list items sharing lines where space permits. Two-part
+tables divide by content length rather than equal row counts; reviewed breaks
+and initial stacked-row weights also live in the column configuration.
+Stacked groups redistribute spare height using their rendered content and
+stay centered with compact gaps. These rules survive README regeneration.
 
 Important list words and labels use selective bold color accents; Original and
 Extended compiler pipelines use amber and cyan labels. Table keys and inline

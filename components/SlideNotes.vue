@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { shortcutHintsVisible } from '../setup/shortcut-hints'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { lockShortcuts, useNav } from '@slidev/client'
@@ -241,7 +242,8 @@ async function openEditor() {
       editorLoading.value = false
       persisting = true
       await nextTick()
-      textarea.value?.focus()
+      if (editorOpen.value && request === editFetchNumber)
+        textarea.value?.focus()
     }
   }
 }
@@ -495,7 +497,7 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <div v-if="!nav.isPrintMode.value" class="slide-notes-controls">
+    <div v-if="shortcutHintsVisible && !nav.isPrintMode.value" class="slide-notes-controls">
       <button aria-label="Edit slide note" title="Add or edit a slide note · Alt+N" @click.stop="openEditor">Notes · Alt+N</button>
       <button aria-label="Toggle slide notes" :aria-expanded="visible" aria-controls="slide-notes-panel" title="Show or hide notes · Alt+Shift+N" @click.stop="toggleVisible">{{ visible ? 'Hide' : 'Show' }} · Alt+Shift+N</button>
     </div>
@@ -512,14 +514,14 @@ onBeforeUnmount(() => {
       <footer v-if="record?.filename">{{ record.filename }}</footer>
     </aside>
     <dialog v-if="!nav.isPrintMode.value" ref="editor" class="slide-note-editor" aria-label="Edit slide note" @cancel.prevent="closeEditor()" @click.stop>
-      <header><div><strong>Edit slide note</strong><span v-if="editTarget">{{ slideLabel(editTarget) }}</span></div><button :disabled="saving" aria-label="Close note editor" @click="closeEditor()">Close · Esc</button></header>
+      <header><div><strong>Edit slide note</strong><span v-if="editTarget">{{ slideLabel(editTarget) }}</span></div><button :disabled="saving" aria-label="Close note editor" @click="closeEditor()">Close<span v-if="shortcutHintsVisible"> · Esc</span></button></header>
       <div class="note-editor-body">
         <p v-if="editTarget && editTarget.slideId !== slideId" class="notes-help">The presentation changed. This editor still belongs to “{{ editTarget.slideTitle }}”.</p>
         <p v-if="editorLoading" role="status">Loading saved note…</p>
         <div v-if="otherDraft" class="draft-recovery"><p>An unsaved draft from another tab or session is available.</p><button :disabled="saving" @click="recoverOtherDraft">Recover draft</button><button @click="otherDraft = null">Dismiss</button></div>
         <label for="slide-note-markdown">Markdown note</label>
         <textarea id="slide-note-markdown" ref="textarea" v-model="buffer" aria-label="Markdown note" spellcheck="true" :disabled="editorLoading" :readonly="saving" placeholder="Write a note for this slide…" />
-        <p class="notes-help">Ctrl/Cmd+Enter to save · Escape to close · Notes stay linked when slides move.</p>
+        <p class="notes-help"><span v-if="shortcutHintsVisible">Ctrl/Cmd+Enter to save · Escape to close · </span>Notes stay linked when slides move.</p>
         <p v-if="!backupAvailable" role="alert">Browser draft backup is unavailable. Save your note before leaving this page.</p>
         <p v-if="editorError" class="note-error" role="alert">{{ editorError }}</p>
         <p v-if="editorStatus" role="status">{{ editorStatus }}</p>

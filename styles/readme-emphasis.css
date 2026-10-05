@@ -29,6 +29,8 @@
   display: grid;
   grid-template-rows: var(--readme-rows);
   gap: 0.85rem;
+  align-content: center;
 }
+.layout-composed:not(:has(.readme-visual)) { grid-template-rows: repeat(2, max-content); }
 .layout-composed > .composition-panel { min-width: 0; min-height: 0; }
 .composition-panel > .readme-list { padding: 0; }

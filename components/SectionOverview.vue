@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { usePresentationNavigation } from '../setup/presentation-navigation'
 import sections from '../config/section-overviews.json'
+import { shortcutHintsVisible } from '../setup/shortcut-hints'
 
 const props = defineProps<{ section: string }>()
 const { navigation, contentSlides: allContentSlides, contentsPage, href } = usePresentationNavigation()
@@ -17,12 +18,20 @@ const contentSlides = computed(() => allContentSlides.value.filter(slide => {
 const pagesFor = (anchor: string) => contentSlides.value
   .filter(slide => slide.meta.slide.frontmatter.readmeAnchor === anchor).map(slide => slide.no)
 const introduction = computed(() => pagesFor(props.section))
-const entries = computed(() => section.value.entries.map(entry => {
+const topicEntries = computed(() => section.value.entries.map(entry => {
   const pages = pagesFor(entry.anchor)
   const target = pages[0] ?? contentSlides.value.find(slide => entry.descendants
     .includes(slide.meta.slide.frontmatter.readmeAnchor))?.no
   return { ...entry, pages, target }
 }).filter(entry => entry.target))
+const entries = computed(() => [
+  ...(introduction.value.length ? [{
+    anchor: props.section, number: '', title: 'Section Introduction',
+    titleHtml: 'Section Introduction', depth: 0, descendants: [],
+    pages: introduction.value, target: introduction.value[0],
+  }] : []),
+  ...topicEntries.value,
+])
 
 // Read down each column, then continue at the top of the next. Choose the
 // contiguous partition with the smallest tallest column, retaining README order.
@@ -91,14 +100,14 @@ onBeforeUnmount(() => observer?.disconnect())
   <div class="section-overview" :data-section-anchor="section.anchor">
     <div class="section-overview-meta">
       <span>{{ entries.length }} topics <span class="overview-meta-dot">·</span> {{ contentSlides.length }} slides</span>
-      <span>Choose a topic or slide number <span aria-hidden="true">↗</span></span>
+      <span v-if="shortcutHintsVisible" class="section-navigation-hint">Choose a topic or slide number <span aria-hidden="true">↗</span> · H: hide hints</span>
     </div>
     <nav ref="frame" class="section-toc" :aria-label="`Section ${section.number} contents`"
       :style="{ '--toc-font-size': `${fontSize}px`, '--toc-columns': Math.max(1, columns.length) }">
       <ol v-for="(column, index) in columns" :key="index" class="section-toc-column">
         <li v-for="entry in column" :key="entry.anchor" class="section-toc-entry"
-          :class="{ 'toc-group': entry.depth === 1 }"
-          :style="{ '--toc-depth': entry.depth - 1 }" :data-topic-anchor="entry.anchor">
+          :class="{ 'toc-group': entry.depth === 1, 'toc-introduction': entry.depth === 0 }"
+          :style="{ '--toc-depth': entry.depth }" :data-topic-anchor="entry.anchor">
           <a class="section-topic-link" :href="href(entry.target!)"
             :aria-label="`${entry.number} ${entry.title}, slide ${entry.target}`"
             @click.stop.prevent="navigation.go(entry.target)">
@@ -125,11 +134,7 @@ onBeforeUnmount(() => observer?.disconnect())
       <a v-if="contentsPage" class="contents-back-link" :href="href(contentsPage)"
         @click.stop.prevent="navigation.go(contentsPage)">← Contents</a>
       <span class="section-overview-rule" />
-      <span v-if="introduction.length && entries.length" class="section-introduction">
-        Section introduction
-        <a v-for="page in introduction" :key="page" :href="href(page)" @click.stop.prevent="navigation.go(page)">{{ page }}</a>
-      </span>
-      <span v-else>README section {{ section.number }}</span>
+      <span>README section {{ section.number }}</span>
     </div>
   </div>
 </template>

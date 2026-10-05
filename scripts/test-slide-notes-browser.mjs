@@ -43,8 +43,10 @@ async function createFixture() {
   await Promise.all([
     cp(join(project, 'components/SlideNotes.vue'), join(fixtureDirectory, 'components/SlideNotes.vue')),
     cp(join(project, 'components/VisualZoom.vue'), join(fixtureDirectory, 'components/VisualZoom.vue')),
+    cp(join(project, 'components/ShortVersionStatus.vue'), join(fixtureDirectory, 'components/ShortVersionStatus.vue')),
     cp(join(project, 'setup/shortcuts.ts'), join(fixtureDirectory, 'setup/shortcuts.ts')),
-    writeFile(join(fixtureDirectory, 'global-top.vue'), `<script setup>\nimport SlideNotes from './components/SlideNotes.vue'\nimport VisualZoom from './components/VisualZoom.vue'\n</script>\n<template><SlideNotes /><VisualZoom /></template>\n`),
+    cp(join(project, 'setup/shortcut-hints.ts'), join(fixtureDirectory, 'setup/shortcut-hints.ts')),
+    cp(join(project, 'global-top.vue'), join(fixtureDirectory, 'global-top.vue')),
     writeFile(join(fixtureDirectory, 'setup/preparser.ts'), `import { definePreparserSetup } from '@slidev/types'\nexport default definePreparserSetup(() => [{ name: 'notes-fixture-identity', transformSlide(content, frontmatter) { frontmatter.noteId = content.match(/<!-- SLIDE_ID ([^ ]+) -->/)?.[1] } }])\n`),
     writeFile(join(fixtureDirectory, 'vite.config.mts'), `import { defineConfig } from 'vite'\nimport createSlideNotesPlugin from './scripts/slide-notes-plugin.mjs'\nexport default defineConfig({ plugins: [createSlideNotesPlugin()] })\n`),
     writeFile(join(fixtureDirectory, 'slides.md'), `---\ntheme: default\ntitle: Slide notes browser fixture\nfonts:\n  sans: Arial\n  mono: monospace\n---\n\n<!-- SLIDE_ID ${firstId} -->\n\n# Notes Alpha\n\nFirst note belongs here.\n\n<div class="zoomable">Zoomable fixture visual</div>\n\n---\n\n<!-- SLIDE_ID ${secondId} -->\n\n# Notes Beta\n\nSecond note belongs here.\n`),
@@ -144,7 +146,9 @@ try {
   assert.equal((await getNote(firstId)).content, first.content, 'Rejected HTTP requests do not modify saved notes')
 
   const executablePath = process.env.CHROMIUM_PATH || (existsSync('/usr/bin/chromium') ? '/usr/bin/chromium' : undefined)
-  browser = await chromium.launch({ headless: true, executablePath })
+  // Let reactive shortcut state settle between synthetic key presses, as it
+  // does with normal typing, before testing the next shortcut or navigation.
+  browser = await chromium.launch({ headless: true, executablePath, slowMo: 50 })
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } })
   const page = await context.newPage()
   const errors = []
@@ -152,8 +156,21 @@ try {
   page.on('pageerror', error => errors.push(error.message))
   page.on('request', request => { if (request.url().includes('/__short-version/')) shortVersionRequests.push(request.url()) })
   await page.goto(`${url}1`)
-  await page.getByRole('button', { name: 'Edit slide note', exact: true }).waitFor()
+  await page.locator('.slidev-page-1 .slidev-layout').first().waitFor({ state: 'visible' })
+  const noteButtons = page.locator('.slide-notes-controls')
+  assert.equal(await noteButtons.count(), 0, 'Note buttons start hidden')
+  await page.keyboard.press('h')
+  await noteButtons.waitFor({ state: 'visible' })
+  assert.equal(await page.getByRole('button', { name: 'Edit slide note', exact: true }).innerText(), 'Notes · Alt+N')
+  assert.equal(await page.getByRole('button', { name: 'Toggle slide notes' }).innerText(), 'Show · Alt+Shift+N')
+  await page.keyboard.press('h')
+  await noteButtons.waitFor({ state: 'hidden' })
+  assert.equal(page.url(), `${url}1`, 'H only toggles hints and buttons')
   let { dialog, input } = await editor(page)
+  await input.fill('h')
+  await page.keyboard.press('h')
+  assert.equal(await input.inputValue(), 'hh', 'Typing H edits a note without toggling its controls')
+  assert.equal(await noteButtons.count(), 0)
   const firstContent = '# Alpha speaker note\n\nRemember **the first slide** and ünicode.\n\n<script>window.noteExecuted = true</script>\n\n[Unsafe](javascript:alert(1))\n\n![No remote image](https://example.invalid/tracker.png)\n'
   await input.fill(firstContent)
   const editorUrl = page.url()
@@ -181,7 +198,8 @@ try {
   await page.keyboard.press('Alt+Shift+n')
   await panel.waitFor({ state: 'hidden' })
   await page.reload()
-  await page.getByRole('button', { name: 'Toggle slide notes' }).waitFor()
+  await page.locator('.slidev-page-1 .slidev-layout').first().waitFor({ state: 'visible' })
+  assert.equal(await noteButtons.count(), 0, 'Reload resets note buttons to hidden')
   assert.equal(await panel.count(), 0, 'The hidden preference survives reload')
   await page.keyboard.press('Alt+Shift+n')
   await panel.getByText('Alpha speaker note', { exact: true }).waitFor()
@@ -207,7 +225,7 @@ try {
   await dialog.waitFor({ state: 'hidden' })
   assert.equal((await getNote(firstId)).content, firstContent, 'A browser draft does not overwrite the repository note')
   await page.reload()
-  await page.getByRole('button', { name: 'Edit slide note', exact: true }).waitFor()
+  await page.locator('.slidev-page-1 .slidev-layout').first().waitFor({ state: 'visible' })
   ;({ dialog, input } = await editor(page))
   assert.equal(await input.inputValue(), draft, 'Unsaved drafts survive reload')
   await page.keyboard.press('Escape')

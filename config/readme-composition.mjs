@@ -19,7 +19,7 @@ const plans = {
   '26-uart-receive-interrupt-path': [1, [269, 125], 1, 1],
   '27-dma-completion-interrupt-path': [1, [285, 125]],
   '431-loading-a-process-load-library-call': [[150, 211], 1],
-  '52-mapping-unlinking-and-deferred-destruction': [1, [106, 284]],
+  '52-mapping-unlinking-and-deferred-destruction': [1, [316, 316]],
   '611-algorithm-and-round-robin-comparison': [[124, 266]],
   '62-saved-process-registers': [[208, 216]],
   '63-saving-the-current-process-and-selecting-the-next-process': [1, [218, 125]],
@@ -64,7 +64,7 @@ export function compactGroups(groups, section) {
   })
 }
 
-export function renderComposed({panels, weights}, render, {columnAttributes, columnShares, codeNeed}) {
+export function renderComposed({panels, weights}, render, {columnAttributes, columnShares, codeNeed, rowAttributes}) {
   const html = panels.map(({group, layout}) => {
     const columnKey = 'assets:' + group.map(asset => asset.id).join('+')
     if (layout === 'columns') {
@@ -75,7 +75,7 @@ export function renderComposed({panels, weights}, render, {columnAttributes, col
         group.forEach((asset, i) => asset.nativeCodeWidth = budget * shares[i] / 100)
       }
     }
-    return `<div class="readme-artifacts composition-panel layout-${layout}"${layout === 'columns' ? ' ' + columnAttributes(columnKey) : ''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
+    return `<div class="readme-artifacts composition-panel layout-${layout}"${layout === 'columns' ? ' ' + columnAttributes(columnKey) : layout === 'stacked' ? rowAttributes(group) : ''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
   }).join('\n\n')
   return `<div class="readme-artifacts layout-composed" style="--readme-rows:${weights.map(weight => `minmax(0, ${weight}fr)`).join(' ')}">\n\n${html}\n\n</div>`
 }

@@ -38,11 +38,13 @@ A message at the top of the browser confirms each operation. These editing
 shortcuts need the Slidev development server: a static archive cannot write back
 to its source checkout.
 
-The full development deck shows a subtle corner reminder of these shortcuts,
-plus the visual viewer and recording controls. The full static deck shows only
-the viewer and recording controls. Corner hints are hidden throughout the short
-deck and in PDF output. Visual controls apply to a focused visual or its open
-viewer; recording controls apply while the player has focus.
+Shortcut reminders start hidden in both full and short decks. Press `H` to show
+or hide the corner reminders and the overview's “Choose a topic or slide number
+↗” hint. The setting stays shared across slides and resets to hidden on reload.
+When shown, development decks include editing, visual viewer, and recording
+controls. Static decks include viewer and recording controls. Hints are hidden
+in PDF output. Visual controls apply to a focused visual or its open viewer.
+Recording controls apply while the player has focus.
 
 `m` only edits the text file. The short deck does not change until `Alt+A` is
 pressed or the apply script is run. This makes it possible to mark several

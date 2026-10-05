@@ -79,12 +79,13 @@ for (const { page, slide, source, anchor, cover, overview } of pages) {
     continue
   }
   const introduction = isIntroduction(anchor, source)
-  const parents = introduction ? ['Introductions', ...source.parents] : source.parents
-  assert.equal(titles[0].title, parents.length ? parents.join(' · ') : source.title, `Slide ${page}: main title`)
-  if (parents.length) {
+  const displayTitle = title => introduction && title === openingSource.title ? 'Introduction' : title
+  const parents = source.parents.map(displayTitle)
+  assert.equal(titles[0].title, parents.length ? parents.join(' · ') : displayTitle(source.title), `Slide ${page}: main title`)
+  if (parents.length || introduction && anchor === 'picoos') {
     const n = (numbers.get(anchor) || 0) + 1
     numbers.set(anchor, n)
-    assert.equal(titles[1].title, source.title + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: subtitle`)
+    assert.equal(titles[1].title, displayTitle(source.title) + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: subtitle`)
   }
 }
 if (!process.env.PRESENTATION_SOURCE)
@@ -210,9 +211,25 @@ try {
         if (Math.abs(frame.left - stage.left) > 2 || Math.abs(frame.right - stage.right) > 2)
           found.push('Code box does not fill its slide or column width')
       }
+      for (const kind of ['code', 'table']) {
+        const scales = [...element.querySelectorAll(`.readme-visual[data-kind="${kind}"] .source-fit-content`)]
+          .map(content => content.getBoundingClientRect().width / content.offsetWidth)
+        if (scales.length > 1 && Math.max(...scales) / Math.min(...scales) > 1.08)
+          found.push(`Comparable ${kind} visuals use inconsistent text sizes`)
+      }
+      const textSizes = [...element.querySelectorAll('.readme-visual[data-kind="code"], .readme-visual[data-kind="table"]')]
+        .map(visual => {
+          const content = visual.querySelector('.source-fit-content')
+          const text = visual.querySelector('.readme-code .slidev-code, .readme-table td, .readme-tile .tile-detail')
+          return text && parseFloat(getComputedStyle(text).fontSize) * content.getBoundingClientRect().width / content.offsetWidth
+        }).filter(Boolean)
+      if (textSizes.length > 1 && Math.max(...textSizes) / Math.min(...textSizes) > 1.18)
+        found.push('Mixed code and table body text uses inconsistent sizes')
       for (const visual of element.querySelectorAll('.readme-visual')) {
         const frame = visual.getBoundingClientRect()
         const stage = visual.querySelector('.source-fit-stage').getBoundingClientRect()
+        if (['code', 'table'].includes(visual.dataset.kind) && stage.height / scale < 20)
+          found.push('Collapsed text visual')
         const inColumns = visual.closest('.layout-columns, .artifact-columns, .code-columns, .content-columns')
         if (inColumns && Math.abs(frame.top - stage.top) > 2)
           found.push('Source visual is not aligned to the top of its column')
@@ -279,6 +296,13 @@ try {
     const dialog = page.locator('dialog.visual-zoom[open]')
     await dialog.waitFor({ state: 'visible' })
     assert.equal(page.url(), before, `${selector}: opening does not advance`)
+    assert.equal(await dialog.locator('.zoom-help').count(), 0, 'Viewer hints start hidden')
+    await page.keyboard.press('h')
+    await dialog.locator('.zoom-help').waitFor({ state: 'visible' })
+    assert.equal(page.url(), before, 'H toggles hints inside the viewer without navigating')
+    await page.keyboard.press('h')
+    await dialog.locator('.zoom-help').waitFor({ state: 'hidden' })
+    assert.equal(await dialog.locator('.zoom-help').count(), 0, 'H hides viewer hints again')
     if (kind === 'code') {
       await dialog.locator('.zoom-content pre').first().hover()
       assert.equal(await dialog.locator('.zoom-content .slidev-code-copy, .zoom-content svg').count(), 0, `${selector}: no cloned clipboard controls or enlarged icon on hover`)

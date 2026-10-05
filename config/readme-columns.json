@@ -185,8 +185,8 @@
       55
     ],
     "code:code-4371": [
-      71,
-      29
+      65,
+      35
     ],
     "code:code-4510": [
       63,
@@ -293,5 +293,38 @@
     "table-6186": 896,
     "table-7894": 770,
     "table-7907": 630
+  },
+  "rows": {
+    "assets:table-3189+table-3207": [
+      317,
+      276
+    ],
+    "assets:table-4957+table-4966": [
+      287,
+      401
+    ],
+    "assets:table-4990+table-5004": [
+      251,
+      410
+    ],
+    "assets:table-5247+table-5258": [
+      251,
+      341
+    ],
+    "assets:table-5430+table-5441": [
+      214,
+      208
+    ],
+    "assets:table-5543+table-5565": [
+      293,
+      680
+    ],
+    "assets:table-5646+table-5659": [
+      337,
+      412
+    ]
+  },
+  "tableBreaks": {
+    "table-6304:1,2,3,4,5,6,7,8,9,10,11,12": 7
   }
 }

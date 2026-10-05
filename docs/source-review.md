@@ -9,7 +9,8 @@ and slide count. The full deck has 291 slides; the short deck has 286.
 ## Content and composition
 
 The title slide is preserved exactly. Slide titles follow the README section
-order, exact headings, and complete ancestor hierarchy. Subtitles are numbered
+order and ancestor hierarchy. The opening `PicoOS` heading is displayed as
+`Introduction` in content slides and their ancestors. Subtitles are numbered
 from `(1)` when a section spans multiple slides. Introductions without separate
 content appear in descendant titles.
 
@@ -213,3 +214,78 @@ checks, both static builds, all 291 slides in normal and selectable-text
 development modes, and all 18 section overviews in full and short decks.
 Existing UUID preservation was checked against the pre-update deck. No PDF was
 exported.
+
+## Introduction titles, section TOCs, and hint visibility · 5 October 2026
+
+The opening content slides now display `Introduction (1)` through
+`Introduction (3)`. Their linked ancestor is `Introduction`. Descendants such
+as `Build and run` replace their root `PicoOS` ancestor with `Introduction`
+and retain any deeper README ancestors. The generator preserves this mapping
+while retaining the original source anchors and the PicoOS cover.
+
+Each section overview lists its direct introduction slides in the first TOC
+entry, `Section Introduction`, at depth zero above the subsection entries.
+The entry links to its first slide and includes every continuation slide as an
+individual numbered link. It disappears if the active deck excludes all its
+slides. Introduction links no longer appear in the overview footer.
+
+Shortcut remarks start hidden in both deck versions. `H` toggles shared hint
+visibility across content slides, section overviews, Contents, note controls,
+and the visual viewer. The viewer also handles `H` while its dialog is open.
+The setting persists across slide navigation and resets on reload. The previous
+short-deck-specific hint suppression is removed. PDF output hides hints.
+
+The requested generation rules are documented in
+`/home/areo/Documents/AI-Vault/skills/PicoOS/readme_documentation.md`.
+Regeneration preserved all 291 UUIDs and all five short-version exclusions.
+Validation passed all 345 source-artifact checks, navigation and PDF destination
+unit checks, short-version checks, slide identity and note persistence checks,
+all 291 slides in selectable-text development mode, the full production build,
+and all 18 section overviews in both deck versions. Browser checks exercise
+hint visibility, reload defaults, TOC links, hierarchy, layout, and viewer keys.
+The isolated notes browser suite passed with 50 ms action pacing to allow
+reactive shortcut updates between synthetic key presses. No PDF was exported.
+
+### H shortcut focus handling · 5 October 2026
+
+The generic Slidev shortcut skipped `H` while a link or button had focus.
+The global layer now handles `H` in the keyboard capture phase and consumes
+both keydown and keyup before other handlers can navigate. Editable fields,
+composition events, and Alt/Ctrl/Meta combinations are left to their normal
+handlers. Repeated keydown events do not toggle hints again. The visual viewer
+uses the same repeat and modifier rules while it captures its dialog keys.
+
+Browser verification passed all 18 section overviews in full and short decks,
+including focused note buttons, focused TOC links, uppercase H, held keys, and
+ordinary h input in the note editor. The production build passed. Its browser
+checks also passed focused TOC links, viewer hint toggling, key repeat, and
+normal arrow navigation after closing the viewer.
+
+## Presentation-wide visual balance · 5 October 2026
+
+Reviewed all 291 slides using browser measurements and slide-size screenshots.
+Code boxes and tables on each slide now share a displayed text size, including
+commands above examples. The command strip in
+`1.1.3.2 Shared function epilogue and return values (2)` now matches both code
+columns. Long source lines wrap visually while retaining their exact bytes.
+Short standalone examples use narrower centered boxes and larger text.
+
+Text tables reflow to their available width before shrinking. Short list items
+can share lines, and two-part tables split by their content weight while keeping
+source order. The streams/output table has a reviewed split. Stacked panels
+redistribute spare height according to rendered content, keeping the complete
+group centered and removing unnecessary gaps. Initial row weights and the
+shared-memory code column proportions are recorded in the generation config.
+
+All 291 slide UUIDs, source anchors, and five short-version exclusions are
+preserved. All 345 source artifacts remain complete. The browser suite now
+also checks that comparable code and table visuals have consistent text scales
+and rejects collapsed text visuals. No PDF was generated or exported.
+
+Validation passed source coverage, short-version and identity checks, navigation
+destination checks, the production build, and all 291 slides in normal,
+selectable-text, and production browser variants. The final compact address-map
+and table adjustment also passed targeted checks in all three variants,
+including enlargement, selectable table text, and returning to the same slide.
+Regeneration reproduces the slide source, overview data, and coverage inventory
+byte for byte.

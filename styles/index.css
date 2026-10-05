@@ -595,8 +595,8 @@ html.selectable-text .slidev-layout * {
 .source-fit-content img { width: 100%; height: auto; display: block; }
 .source-fit-content .mermaid { display: block; margin: 0; }
 .readme-code { border: 1px solid var(--line-strong); background: var(--code-background); }
-.readme-code .slidev-code { font-size: 14px !important; line-height: 1.5 !important; padding: 16px !important; margin: 0 !important; border: 0 !important; max-height: none !important; overflow: visible !important; white-space: pre !important; }
-.readme-code .slidev-code code, .readme-code .slidev-code .line { font-size: inherit !important; line-height: inherit !important; white-space: pre !important; }
+.readme-code .slidev-code { font-size: 14px !important; line-height: 1.5 !important; padding: 16px !important; margin: 0 !important; border: 0 !important; max-height: none !important; overflow: visible !important; white-space: pre-wrap !important; overflow-wrap: anywhere; }
+.readme-code .slidev-code code, .readme-code .slidev-code .line { font-size: inherit !important; line-height: inherit !important; white-space: pre-wrap !important; }
 .readme-terminal .slidev-code { color: var(--cyan-dim); background: var(--code-background); }
 .readme-table { background: #fff; border: 1px solid var(--line-strong); }
 .readme-table table { width: 100%; margin: 0; border-collapse: collapse; font-size: 17px; table-layout: auto; }
@@ -623,11 +623,12 @@ html.selectable-text .slidev-layout * {
 .readme-slide { gap: 0.7rem; justify-content: center; }
 .readme-artifacts { gap: 0.85rem; }
 .layout-columns, .artifact-columns, .code-columns { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 1rem; flex: 1; min-height: 0; }
-.layout-stacked { display: flex; flex-direction: column; }
+.layout-stacked { display: grid; grid-template-rows: var(--readme-rows, repeat(2, minmax(0, 1fr))); align-content: center; }
 .layout-command-above, .layout-compact-stacked { display: flex; flex-direction: column; justify-content: center; }
 .layout-command-above > .readme-visual, .layout-command-above > .code-columns,
 .layout-compact-stacked > .readme-visual { flex: 0 1 auto; aspect-ratio: var(--source-aspect); }
-.layout-command-above > .readme-visual:first-child { flex: 0 0 auto; max-height: 120px; }
+.layout-command-above > .command-strip { flex: none; height: var(--fitted-height, 54px); aspect-ratio: auto; }
+.layout-single > .readme-visual[data-kind="code"] { max-width: var(--code-max-width, 760px); align-self: center; }
 .code-columns > .readme-visual { width: 100%; min-width: 0; }
 .layout-single > .code-columns { flex: 1; }
 .readme-visual[data-kind="code"] { justify-items: start; align-items: center; }
@@ -646,7 +647,7 @@ html.selectable-text .slidev-layout * {
 .readme-table table { table-layout: fixed; }
 .readme-table th { font-size: 16px; line-height: 1.25; }
 .readme-table td, .readme-table th { padding: 8px 10px; overflow-wrap: normal; }
-.readme-table ul { padding-left: 16px; margin: 0; }
+.readme-table ul { display: flex; flex-wrap: wrap; column-gap: 1.25em; padding-left: 16px; margin: 0; }
 .readme-table li { margin: 2px 0; line-height: 1.3; }
 .readme-table td code { overflow-wrap: anywhere; }
 .readme-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }

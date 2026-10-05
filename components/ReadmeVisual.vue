@@ -5,10 +5,88 @@ const props = defineProps({ kind: String, width: { type: Number, default: 1024 }
 const frame = ref(), content = ref()
 const nativeWidth = ref(props.width), nativeHeight = ref(1), scale = ref(1)
 const sourceAspect = ref(props.width)
-let resize, mutation, raf, attempts = 0
+let resize, mutation, raf, fittingGroup, attempts = 0
+function rowBudget(item) {
+  const group = item.parentElement
+  if (!group?.matches('.layout-composed, .layout-stacked')) return item.clientHeight
+  const items = [...group.children]
+  let weights = group.dataset.fitRows ? JSON.parse(group.dataset.fitRows)
+    : [...group.style.getPropertyValue('--readme-rows').matchAll(/([\d.]+)fr/g)].map(match => Number(match[1]))
+  if (weights.length !== items.length) weights = items.map(() => 1)
+  const height = group.matches('.composition-panel') ? rowBudget(group) : group.clientHeight
+  const gap = parseFloat(getComputedStyle(group).rowGap)
+  return (height - gap * (items.length - 1)) * weights[items.indexOf(item)] / weights.reduce((sum, weight) => sum + weight, 0)
+}
+function occupiedHeight(item) {
+  if (item.matches('.readme-visual')) return item.querySelector('.source-fit-stage').offsetHeight
+  if (item.matches('.readme-list'))
+    return [...item.children].reduce((sum, child) => sum + child.getBoundingClientRect().height / (fittingGroup.getBoundingClientRect().width / fittingGroup.offsetWidth), 0)
+  const heights = [...item.children].map(occupiedHeight)
+  if (!heights.length) return item.offsetHeight
+  if (item.matches('.layout-columns, .code-columns, .artifact-columns')) return Math.max(...heights)
+  return heights.reduce((sum, height) => sum + height, 0) + (parseFloat(getComputedStyle(item).rowGap) || 0) * (heights.length - 1)
+}
+function balanceRows() {
+  if (!fittingGroup?.isConnected) return
+  let changed = false
+  for (const group of [...fittingGroup.querySelectorAll('.layout-composed, .layout-stacked')].reverse()) {
+    if ([...group.querySelectorAll('.readme-visual')].some(visual => Number(visual.dataset.nativeHeight) <= 1)) continue
+    const heights = [...group.children].map(occupiedHeight)
+    if (heights.every(height => height > 1)) {
+      group.style.gridTemplateRows = heights.map(height => `${height}px`).join(' ')
+      const total = heights.reduce((sum, height) => sum + height, 0)
+      const shares = heights.map(height => height / total)
+      const previous = group.dataset.fitRows ? JSON.parse(group.dataset.fitRows) : []
+      if (shares.some((share, i) => Math.abs(share - (previous[i] || 0)) > 0.002)) {
+        group.dataset.fitRows = JSON.stringify(shares)
+        changed = true
+      }
+    }
+  }
+  if (changed) fittingGroup.dispatchEvent(new Event('readme-fit'))
+}
+// Text examples on one slide share a displayed type size. Fit each at the width it will
+// actually occupy, allowing long lines/cells to wrap before reducing the type.
+function fitText(availableWidth, availableHeight) {
+  const preferred = Math.min(props.kind === 'code' ? 1.15 : 1, availableWidth / props.width)
+  const heightAt = value => {
+    content.value.style.width = `${availableWidth / value}px`
+    return content.value.scrollHeight
+  }
+  let limit = preferred
+  if (heightAt(limit) * limit > availableHeight) {
+    let low = Math.min(0.05, preferred / 2), high = limit
+    for (let i = 0; i < 12; i++) {
+      const candidate = (low + high) / 2
+      if (heightAt(candidate) * candidate <= availableHeight) low = candidate
+      else high = candidate
+    }
+    limit = low
+  }
+  const changed = Math.abs(Number(frame.value.dataset.fitLimit || 0) - limit) > 0.001
+  frame.value.dataset.fitLimit = String(limit)
+  const baseSize = props.kind === 'code' ? 14 : 17
+  const peers = fittingGroup?.querySelectorAll('.readme-visual[data-fit-limit]') || []
+  scale.value = Math.min(limit, ...[...peers].map(peer =>
+    Number(peer.dataset.fitLimit) * (peer.dataset.kind === 'code' ? 14 : 17) / baseSize))
+  nativeWidth.value = availableWidth / scale.value
+  nativeHeight.value = heightAt(scale.value)
+  sourceAspect.value = availableWidth / (nativeHeight.value * scale.value)
+  frame.value.style.setProperty('--fitted-height', `${nativeHeight.value * scale.value}px`)
+  const columns = frame.value.parentElement
+  if (columns?.matches('.code-columns')) {
+    const heights = [...columns.children].map(child => parseFloat(child.style.getPropertyValue('--fitted-height')) || 0)
+    columns.style.setProperty('--source-aspect', String(columns.clientWidth / Math.max(...heights, 1)))
+  }
+  if (changed) fittingGroup?.dispatchEvent(new Event('readme-fit'))
+  nextTick(balanceRows)
+}
 function measure() {
-  cancelAnimationFrame(raf)
+  // Keep an already scheduled measurement. A peer notification must not
+  // repeatedly postpone a later visual while the first one is fitting.
+  if (raf) return
   raf = requestAnimationFrame(() => {
+    raf = undefined
     if (!frame.value || !content.value) return
     const svg = content.value.querySelector('.mermaid')?.shadowRoot?.querySelector('svg')
     const img = content.value.querySelector('img')
@@ -27,12 +105,33 @@ function measure() {
     const parent = frame.value.parentElement
     const columns = parent?.matches('.layout-columns, .artifact-columns, .code-columns, .content-columns')
     const availableWidth = frame.value.clientWidth
-    const availableHeight = columns ? parent.clientHeight : frame.value.clientHeight
-    if (availableWidth && availableHeight) {
+    let availableHeight = columns ? parent.clientHeight : frame.value.clientHeight
+    const panel = frame.value.closest('.composition-panel')
+    if (panel) availableHeight = rowBudget(panel)
+    if (parent?.matches('.layout-stacked')) availableHeight = rowBudget(frame.value)
+    if (parent?.matches('.layout-compact-stacked')) {
+      const siblings = [...parent.children].filter(child => child !== frame.value)
+      availableHeight = parent.clientHeight - parseFloat(getComputedStyle(parent).rowGap) * siblings.length
+        - siblings.reduce((sum, sibling) => sum + occupiedHeight(sibling), 0)
+    }
+    const commandGroup = parent?.closest('.layout-command-above')
+    if (commandGroup) {
+      const commands = [...commandGroup.children].filter(child => child.matches('.command-strip'))
+      const gap = parseFloat(getComputedStyle(commandGroup).rowGap)
+      const budget = commandGroup.matches('.composition-panel') ? rowBudget(commandGroup) : commandGroup.clientHeight
+      if (commands.length === commandGroup.children.length) {
+        const weights = commands.map(command => command.querySelectorAll('.line').length * 21 + 34)
+        availableHeight = (budget - gap * (commands.length - 1)) * weights[commands.indexOf(frame.value)] / weights.reduce((sum, weight) => sum + weight, 0)
+      }
+      else availableHeight = frame.value.matches('.command-strip') ? budget
+        : budget - commands.reduce((sum, command) => sum + command.clientHeight, 0) - gap * commands.length
+    }
+    if (availableWidth > 0 && availableHeight > 0) {
+      if (props.kind === 'code' || props.kind === 'table') {
+        fitText(availableWidth, availableHeight)
+        return
+      }
       scale.value = Math.min(availableWidth / sourceWidth, availableHeight / nativeHeight.value)
-      // Keep a complete code box flush with both edges of its column even
-      // when a long example is scaled to fit the available height.
-      if (props.kind === 'code') nativeWidth.value = availableWidth / scale.value
     }
     if (box) {
       // Let the SVG viewBox scale its labels and geometry together. Scaling
@@ -41,10 +140,13 @@ function measure() {
       host.style.width = svg.style.width = `${sourceWidth * scale.value}px`
       host.style.height = svg.style.height = `${nativeHeight.value * scale.value}px`
     }
+    nextTick(balanceRows)
   })
 }
 onMounted(async () => {
   await nextTick()
+  fittingGroup = frame.value.closest('.deck-content')
+  fittingGroup?.addEventListener('readme-fit', measure)
   resize = new ResizeObserver(measure)
   resize.observe(frame.value); resize.observe(content.value)
   if (frame.value.parentElement?.matches('.layout-columns, .artifact-columns, .code-columns, .content-columns'))
@@ -55,7 +157,7 @@ onMounted(async () => {
   document.fonts.ready.then(measure)
   measure()
 })
-onBeforeUnmount(() => { resize?.disconnect(); mutation?.disconnect(); cancelAnimationFrame(raf) })
+onBeforeUnmount(() => { resize?.disconnect(); mutation?.disconnect(); fittingGroup?.removeEventListener('readme-fit', measure); cancelAnimationFrame(raf) })
 </script>
 
 <template>

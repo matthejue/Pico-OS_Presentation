@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onBeforeUnmount, ref } from 'vue'
 import { usePresentationNavigation } from '../setup/presentation-navigation'
+import { shortcutHintsVisible } from '../setup/shortcut-hints'
 
 const { navigation, chapters, href } = usePresentationNavigation()
 const columns = computed(() => chapters.value.length > 12 ? 3 : chapters.value.length > 5 ? 2 : 1)
@@ -36,7 +37,7 @@ onBeforeUnmount(() => observer?.disconnect())
   <div class="presentation-contents section-overview">
     <div class="section-overview-meta">
       <span>{{ chapters.length }} sections <span class="overview-meta-dot">·</span> PicoOS</span>
-      <span>Choose a section <span aria-hidden="true">↗</span></span>
+      <span v-if="shortcutHintsVisible" class="section-navigation-hint">Choose a section <span aria-hidden="true">↗</span> · H: hide hints</span>
     </div>
     <nav ref="frame" class="major-toc" aria-label="Presentation contents"
       :style="{ '--major-columns': columns, '--major-font-size': `${fontSize}px` }">

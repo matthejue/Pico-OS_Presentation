@@ -27,20 +27,23 @@
 .section-toc-column > .toc-group:first-child { margin-top: 0 !important; }
 .toc-group .section-topic-link { font-weight: 700; }
 .toc-group .section-topic-number { color: var(--amber); }
+.toc-introduction .section-topic-link { font-weight: 700; color: var(--cyan-dim); }
+.slidev-layout .section-toc-entry.toc-introduction { padding-bottom: 0.4em; margin-bottom: 0.3em !important; }
 .section-slide-links { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; max-width: 4em; gap: 0.3em; margin: 0.1em 0; }
-.section-slide-links a, .section-introduction a { border: 1px solid var(--line) !important; border-radius: 0.2rem; padding: 0.12em 0.4em; background: var(--panel-2); font: 500 0.7em/1.2 'Fira Code', monospace; text-decoration: none !important; }
-.section-toc a:hover, .section-introduction a:hover { color: var(--cyan-dim); background: #e3f2f2; }
-.section-toc a:focus-visible, .section-introduction a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.section-slide-links a { border: 1px solid var(--line) !important; border-radius: 0.2rem; padding: 0.12em 0.4em; background: var(--panel-2); font: 500 0.7em/1.2 'Fira Code', monospace; text-decoration: none !important; }
+.section-toc a:hover { color: var(--cyan-dim); background: #e3f2f2; }
+.section-toc a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
 .slidev-layout .contents-back-link { color: var(--cyan-dim); border: 0; text-decoration: none; font-weight: 600; }
 .contents-back-link:hover { text-decoration: underline; }
 .contents-back-link:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
 .section-overview-footer { flex: none; display: flex; gap: 1rem; align-items: center; color: var(--muted); font-size: 0.65rem; }
 .section-overview-rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--cyan), var(--line)); }
-.section-introduction { display: flex; align-items: center; gap: 0.45rem; }
-.section-introduction a { font-size: 0.9em; }
 .section-single-topic { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 1rem; }
 .section-single-number { font: 600 6rem/1 'Fira Code', monospace; color: var(--line-strong); letter-spacing: -0.06em; }
 .section-single-topic a { font-size: 1.15rem; }
+@media print {
+  .section-navigation-hint { display: none; }
+}
 @media (prefers-reduced-motion: no-preference) {
   .section-toc a { transition: color 120ms ease, background 120ms ease; }
 }

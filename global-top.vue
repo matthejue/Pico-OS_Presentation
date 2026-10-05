@@ -2,9 +2,9 @@
   <SlideNotes />
   <VisualZoom />
   <ShortVersionStatus />
-  <div v-if="$nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.presentationContents && !$nav.currentFrontmatter.shortVersion" class="zoom-hint">
+  <div v-if="shortcutHintsVisible && $nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.presentationContents" class="zoom-hint">
     <div v-if="isDevelopment">m: toggle short-deck exclusion · Alt+A: apply exclusions · Alt+S: sync list from slides</div>
-    <div>Visual: Enter/Space open · +/− zoom · F fit · arrows/PgUp/PgDn/Space scroll · Esc close · Recording: Space play/pause · ←/→ seek</div>
+    <div>Visual: Enter/Space open · +/− zoom · F fit · arrows/PgUp/PgDn/Space scroll · Esc close · Recording: Space play/pause · ←/→ seek · H: hide hints</div>
   </div>
   <div v-if="$nav.currentPage > 1" class="deck-page-number">
     {{ $nav.currentPage }} / {{ $nav.total }}
@@ -12,18 +12,39 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onBeforeUnmount, onMounted } from 'vue'
 import ShortVersionStatus from './components/ShortVersionStatus.vue'
 import SlideNotes from './components/SlideNotes.vue'
 import VisualZoom from './components/VisualZoom.vue'
+import { shortcutHintsVisible, toggleShortcutHints } from './setup/shortcut-hints'
 
 const isDevelopment = import.meta.env.DEV
 
+function onHintKey(event) {
+  if (event.key.toLowerCase() !== 'h' || event.isComposing || event.ctrlKey || event.metaKey || event.altKey)
+    return
+  if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])'))
+    return
+  // Handle this before Slidev's key tracking, including when a link or button
+  // has focus. Consuming the event prevents other handlers from navigating.
+  event.preventDefault()
+  event.stopImmediatePropagation()
+  if (event.type === 'keydown' && !event.repeat)
+    toggleShortcutHints()
+}
+
 onMounted(() => {
+  window.addEventListener('keydown', onHintKey, true)
+  window.addEventListener('keyup', onHintKey, true)
   document.documentElement.classList.toggle(
     'selectable-text',
     window.location.pathname.startsWith('/selectable-text/'),
   )
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onHintKey, true)
+  window.removeEventListener('keyup', onHintKey, true)
 })
 </script>
 
