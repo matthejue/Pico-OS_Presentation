@@ -30,6 +30,7 @@ await loadSourceState()
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'picoos-source-state-'))
 const oldRepository = process.env.README_REPOSITORY
 const oldCandidate = process.env.PRESENTATION_SOURCE
+const oldSourceCommit = process.env.PRESENTATION_SOURCE_COMMIT
 const oldLog = console.log
 const output = []
 try {
@@ -59,6 +60,7 @@ try {
   await fs.writeFile(path.join(presentation, 'docs/readme-coverage.json'), JSON.stringify({ sourceSha256: hash(before), slideCount: 1 }))
   process.env.README_REPOSITORY = repository
   delete process.env.PRESENTATION_SOURCE
+  delete process.env.PRESENTATION_SOURCE_COMMIT
   console.log = (...args) => output.push(args.join(' '))
   await saveSource(presentation)
   assert.equal((await fs.readdir(path.join(presentation, '.source'))).length, 2, 'Unchanged source is not archived')
@@ -98,6 +100,26 @@ try {
     const archived = JSON.parse(await fs.readFile(path.join(archive, file), 'utf8'))
     assert.equal(hash(await fs.readFile(path.join(presentation, archived.primarySource.snapshot))), archived.primarySource.contentSha256)
   }
+  const committedCandidate = path.join(temporary, 'committed-README.md')
+  await fs.writeFile(committedCandidate, after)
+  process.env.PRESENTATION_SOURCE = committedCandidate
+  process.env.PRESENTATION_SOURCE_COMMIT = (await git(repository,'rev-parse','HEAD')).toString().trim()
+  await fs.writeFile(path.join(presentation, 'docs/readme-coverage.json'), JSON.stringify({sourceSha256:hash(after),slideCount:1}))
+  await saveSource(presentation,new Date('2026-10-07T13:00:00Z'))
+  const pinned = await loadSourceState(presentation)
+  assert.equal(pinned.snapshot.toString(),after,'Pinned commit excludes dirty working-tree README edits')
+  assert.equal(pinned.state.primarySource.dirtyAtGeneration,false)
+  assert.equal(pinned.state.primarySource.workingTreeChangesExcluded,true)
+  assert.equal(await fs.readFile(path.join(repository,'README.md'),'utf8'),dirtyAgain,'Saving committed source leaves local edits untouched')
+  delete process.env.PRESENTATION_SOURCE
+  delete process.env.PRESENTATION_SOURCE_COMMIT
+  await fs.writeFile(path.join(presentation,'docs/readme-coverage.json'),JSON.stringify({sourceSha256:hash(dirtyAgain),slideCount:1}))
+  await saveSource(presentation,new Date('2026-10-07T14:00:00Z'))
+  const working = await loadSourceState(presentation)
+  assert.equal(working.snapshot.toString(),dirtyAgain)
+  assert.equal(working.state.primarySource.dirtyAtGeneration,true)
+  assert.equal(working.state.primarySource.selection,undefined,'A later working-tree save does not inherit commit-only metadata')
+  assert.equal(working.state.primarySource.workingTreeChangesExcluded,undefined)
   await fs.writeFile((await loadSourceState(presentation)).snapshotPath, 'Corrupted')
   await assert.rejects(loadSourceState(presentation), /hash does not match/)
 } finally {
@@ -106,6 +128,8 @@ try {
   else process.env.README_REPOSITORY = oldRepository
   if (oldCandidate === undefined) delete process.env.PRESENTATION_SOURCE
   else process.env.PRESENTATION_SOURCE = oldCandidate
+  if (oldSourceCommit === undefined) delete process.env.PRESENTATION_SOURCE_COMMIT
+  else process.env.PRESENTATION_SOURCE_COMMIT = oldSourceCommit
   await fs.rm(temporary, { recursive: true, force: true })
 }
 console.log(`Verified ${reconstruction.versions.length} recovered source pairs, dirty comparisons, validation guards, Berlin dates, asset-only commits, and archive preservation.`)

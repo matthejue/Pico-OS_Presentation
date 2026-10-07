@@ -1,394 +1,394 @@
 {
-  "table-1594/3/3": "D ← M[S+i]; M[S+i] ← 1",
-  "table-1985/12/1": "Shared-entry lookup name",
-  "table-2007/1/1": "Relative/absolute file or device path",
-  "table-2007/6/1": "Scan escapes; protect with literal-output",
-  "table-2247/2/1": [
+  "table-1584/3/3": "D ← M[S+i]; M[S+i] ← 1",
+  "table-1975/12/1": "Shared-entry lookup name",
+  "table-1997/1/1": "Relative/absolute file or device path",
+  "table-1997/6/1": "Scan escapes; protect with literal-output",
+  "table-2237/2/1": [
     "Load/run/list/unload/exit/wait/PID",
     "Foreground/signals/parent-death"
   ],
-  "table-2247/5/1": [
+  "table-2237/5/1": [
     "Availability/open/read/write/close/seek/dup",
     "Direct UART byte"
   ],
-  "table-2247/5/2": [
+  "table-2237/5/2": [
     "Availability → 1",
     "Descriptor operations + UART output"
   ],
-  "table-2247/6/1": [
+  "table-2237/6/1": [
     "chdir/getcwd/mkdir/readdir",
     "unlink/rmdir/move/touch"
   ],
-  "table-3034/1/2": [
+  "table-3024/1/2": [
     "0: disabled",
     "SP below boundary → exception",
     "Boundary: final heap cell"
   ],
-  "table-3034/2/2": [
+  "table-3024/2/2": [
     "0: none; 1: divide-by-zero",
     "2: stack overflow; 3: illegal instruction",
     "Read-only cause register"
   ],
-  "table-3225/1/1": "DIV/DIVI/MOD/MODI with zero divisor",
-  "table-3225/1/3": [
+  "table-3215/1/1": "DIV/DIVI/MOD/MODI with zero divisor",
+  "table-3215/1/3": [
     "Userspace → terminate",
     "Kernel → panic + shutdown"
   ],
-  "table-3225/2/1": "SP decreased below active boundary",
-  "table-3225/2/3": [
+  "table-3215/2/1": "SP decreased below active boundary",
+  "table-3215/2/3": [
     "Process overflow → terminate",
     "Kernel overflow → shutdown"
   ],
-  "table-3225/3/1": "Invalid/unsupported decoded RETI instruction",
-  "table-3225/3/3": "Same process/kernel fault policy",
-  "table-3225/4/3": "Print heap-full diagnostic; terminate process",
-  "table-3225/5/3": "UART panic; shut down kernel",
-  "table-3225/6/1": "No contiguous Process/Shared Data Payload",
-  "table-3225/6/3": [
+  "table-3215/3/1": "Invalid/unsupported decoded RETI instruction",
+  "table-3215/3/3": "Same process/kernel fault policy",
+  "table-3215/4/3": "Print heap-full diagnostic; terminate process",
+  "table-3215/5/3": "UART panic; shut down kernel",
+  "table-3215/6/1": "No contiguous Process/Shared Data Payload",
+  "table-3215/6/3": [
     "Load fails / shm_open returns −1",
     "Process + kernel continue"
   ],
-  "table-3837/1/1": "Absolute reserved payload base",
-  "table-3837/2/1": "Image + heap + stack cells",
-  "table-3837/8/1": "DMA transfer versus polling chunks",
-  "table-3837/9/1": "Owned binary path; range requests + PCB",
-  "table-4317/1/1": "Non-owning entry pointer; contributes one reference",
-  "table-4708/2/1": "Below saved PC; PC at sp + 1",
-  "table-5017/1/1": "Exact requested child PID",
-  "table-5017/2/1": "Pointer to stack-local status result",
-  "table-5017/3/0": "wait_queue.head + wait_queue.tail",
-  "table-5017/3/1": "FIFO endpoints; O(1) append; NULL when empty",
-  "table-5017/4/1": "Other processes waiting for this child",
-  "table-5017/5/1": "Parent's suspended stack-local status",
-  "table-5017/6/1": "Queue containing this PCB or NULL",
-  "table-5017/7/1": "Intrusive successor; one active queue",
-  "table-5017/8/1": "BLOCKED/runnable/STOPPED + completed wait",
-  "table-5017/9/1": "Parent validation + retained child state",
-  "table-5332/2/2": "Clear links; READY or completed beneath STOPPED",
-  "table-5332/3/1": "WAITPID → validate child → sleep_on_wait_queue",
-  "table-5332/3/2": [
+  "table-3827/1/1": "Absolute reserved payload base",
+  "table-3827/2/1": "Image + heap + stack cells",
+  "table-3827/8/1": "DMA transfer versus polling chunks",
+  "table-3827/9/1": "Owned binary path; range requests + PCB",
+  "table-4307/1/1": "Non-owning entry pointer; contributes one reference",
+  "table-4698/2/1": "Below saved PC; PC at sp + 1",
+  "table-5007/1/1": "Exact requested child PID",
+  "table-5007/2/1": "Pointer to stack-local status result",
+  "table-5007/3/0": "wait_queue.head + wait_queue.tail",
+  "table-5007/3/1": "FIFO endpoints; O(1) append; NULL when empty",
+  "table-5007/4/1": "Other processes waiting for this child",
+  "table-5007/5/1": "Parent's suspended stack-local status",
+  "table-5007/6/1": "Queue containing this PCB or NULL",
+  "table-5007/7/1": "Intrusive successor; one active queue",
+  "table-5007/8/1": "BLOCKED/runnable/STOPPED + completed wait",
+  "table-5007/9/1": "Parent validation + retained child state",
+  "table-5322/2/2": "Clear links; READY or completed beneath STOPPED",
+  "table-5322/3/1": "WAITPID → validate child → sleep_on_wait_queue",
+  "table-5322/3/2": [
     "Child exits/stops → status write",
     "Same FIFO wakeup primitive"
   ],
-  "table-5379/7/2": "Stop background terminal reader",
-  "table-5538/1/1": "Unlocked=false; TSL returns old, stores true",
-  "table-5947/3/2": "Read + write; O_ACCMODE extracts access bits",
-  "table-5947/6/2": "Every write uses current file end",
-  "table-5969/1/4": "file-size verifies existing file",
-  "table-5969/2/4": "Failed file-size → write → restore stdout",
-  "table-5969/3/4": "write creates/truncates; restore stdout",
-  "table-5969/4/4": "read-range; ≤1 KiB/syscall; 0 → EOF",
-  "table-5969/5/4": "write-at; optional literal-output; restore stdout",
-  "table-5969/6/2": "Place at end; save resulting offset",
-  "table-5969/6/4": "file-size → write-at end → restore stdout",
-  "table-6100/1/2": "Global list + current/queue pointers",
-  "table-6100/2/2": "Saved activation + queue back-reference",
-  "table-6100/4/3": "Completion transfers payload; cancellation frees it",
-  "table-6100/7/1": "Separate contiguous Kernel Heap array",
-  "table-6100/7/2": "entries pointer; indexed by descriptor number",
-  "table-6100/9/1": "Kernel .data; embedded ring + wait queue",
-  "table-6100/10/2": "Registry → entries; PCB → attachments → entry",
-  "table-6100/10/3": "Process removal; unlink + last reference",
-  "table-6100/11/2": "Same absolute address for every mapping",
-  "table-6100/11/3": "Entry destruction; independent of mapper image",
-  "table-6100/13/2": "Process heap blocks + environment array",
-  "table-6100/14/1": "In-region header immediately before payload",
-  "table-6100/14/3": "Allocator splits/merges; inner/outer lists separate",
-  "table-6100/15/1": "Caller chooses heap/data/stack/shared storage",
-  "table-6100/15/3": "Caller lifetime; retain until kernel completion",
-  "table-6100/16/1": "Stack-local request; user/kernel",
-  "table-6100/16/3": "Suspended call preserves retained result/buffer",
-  "table-6100/17/1": "PCB retains caller buffer + count",
-  "table-6100/17/3": "Clear fields; preserve buffer through blocked call",
-  "table-6100/19/1": "Interrupted process or kernel stack",
-  "table-6100/19/3": "Until restore; UART/DMA borrow same stack",
-  "table-6179/1/2": "First PCB or NULL; traversal starts here",
-  "table-6179/2/2": "Final PCB or NULL; O(1) append",
-  "table-6179/3/2": "Current PCB + scheduler scan position",
-  "table-6179/4/2": "Next PID; initial 1",
-  "table-6179/6/2": "Outer Process/Shared Data Heap descriptor",
-  "table-6179/7/2": "128-cell ring + indices/count + wait queue",
-  "table-6179/8/2": "Registry head; includes unlinked live entries",
-  "table-6179/9/2": "Next shared-memory ID; independent of PID",
-  "table-6179/10/2": "Standalone DMA wait queue; PCB endpoints",
-  "table-6179/12/2": "Deferred switch flag; cleared on selection",
-  "table-6179/13/2": [
+  "table-5369/7/2": "Stop background terminal reader",
+  "table-5528/1/1": "Unlocked=false; TSL returns old, stores true",
+  "table-5937/3/2": "Read + write; O_ACCMODE extracts access bits",
+  "table-5937/6/2": "Every write uses current file end",
+  "table-5959/1/4": "file-size verifies existing file",
+  "table-5959/2/4": "Failed file-size → write → restore stdout",
+  "table-5959/3/4": "write creates/truncates; restore stdout",
+  "table-5959/4/4": "read-range; ≤1 KiB/syscall; 0 → EOF",
+  "table-5959/5/4": "write-at; optional literal-output; restore stdout",
+  "table-5959/6/2": "Place at end; save resulting offset",
+  "table-5959/6/4": "file-size → write-at end → restore stdout",
+  "table-6090/1/2": "Global list + current/queue pointers",
+  "table-6090/2/2": "Saved activation + queue back-reference",
+  "table-6090/4/3": "Completion transfers payload; cancellation frees it",
+  "table-6090/7/1": "Separate contiguous Kernel Heap array",
+  "table-6090/7/2": "entries pointer; indexed by descriptor number",
+  "table-6090/9/1": "Kernel .data; embedded ring + wait queue",
+  "table-6090/10/2": "Registry → entries; PCB → attachments → entry",
+  "table-6090/10/3": "Process removal; unlink + last reference",
+  "table-6090/11/2": "Same absolute address for every mapping",
+  "table-6090/11/3": "Entry destruction; independent of mapper image",
+  "table-6090/13/2": "Process heap blocks + environment array",
+  "table-6090/14/1": "In-region header immediately before payload",
+  "table-6090/14/3": "Allocator splits/merges; inner/outer lists separate",
+  "table-6090/15/1": "Caller chooses heap/data/stack/shared storage",
+  "table-6090/15/3": "Caller lifetime; retain until kernel completion",
+  "table-6090/16/1": "Stack-local request; user/kernel",
+  "table-6090/16/3": "Suspended call preserves retained result/buffer",
+  "table-6090/17/1": "PCB retains caller buffer + count",
+  "table-6090/17/3": "Clear fields; preserve buffer through blocked call",
+  "table-6090/19/1": "Interrupted process or kernel stack",
+  "table-6090/19/3": "Until restore; UART/DMA borrow same stack",
+  "table-6169/1/2": "First PCB or NULL; traversal starts here",
+  "table-6169/2/2": "Final PCB or NULL; O(1) append",
+  "table-6169/3/2": "Current PCB + scheduler scan position",
+  "table-6169/4/2": "Next PID; initial 1",
+  "table-6169/6/2": "Outer Process/Shared Data Heap descriptor",
+  "table-6169/7/2": "128-cell ring + indices/count + wait queue",
+  "table-6169/8/2": "Registry head; includes unlinked live entries",
+  "table-6169/9/2": "Next shared-memory ID; independent of PID",
+  "table-6169/10/2": "Standalone DMA wait queue; PCB endpoints",
+  "table-6169/12/2": "Deferred switch flag; cleared on selection",
+  "table-6169/13/2": [
     "0: unregistered",
     "Positive: input + signals",
     "Negative: input; suppress signals"
   ],
-  "table-6179/14/2": "Timer/DMA/UART indices {1,4,2}",
-  "table-6179/16/2": "Image-local loading-bar setting; initially true",
-  "table-6179/17/2": "Five ISR addresses in .ivt",
-  "table-6209/1/1": "Caller queue address directly in IN1",
-  "table-6209/1/2": "Retained queue pointer + intrusive PCB links",
-  "table-6209/2/1": "Embedded mutex.waiters; stack or shared storage",
-  "table-6209/2/2": "Kernel writes PCB pointers into caller queue",
-  "table-6209/3/1": "Parent stack request/status; child's embedded waiters",
-  "table-6209/3/2": "Retain status pointer; suspended frame stays alive",
-  "table-6209/5/2": "Intrusive wait links + persistent load progress",
-  "table-6606/1/1": "Internal syscall bridge; result in IN2",
-  "table-6606/1/2": "Forward supplied selector + argument",
-  "table-6970/4/2": "Restart/power-off: no return; otherwise −1",
-  "table-6970/5/2": "0 success; −1 path/host error",
-  "table-7036/1/2": "Install EPROM CS/DS + temporary SRAM stack",
-  "table-7036/2/2": "Read five-word header; copy kernel payload",
-  "table-7036/2/3": [
+  "table-6169/14/2": "Timer/DMA/UART indices {1,4,2}",
+  "table-6169/16/2": "Image-local loading-bar setting; initially true",
+  "table-6169/17/2": "Five ISR addresses in .ivt",
+  "table-6199/1/1": "Caller queue address directly in IN1",
+  "table-6199/1/2": "Retained queue pointer + intrusive PCB links",
+  "table-6199/2/1": "Embedded mutex.waiters; stack or shared storage",
+  "table-6199/2/2": "Kernel writes PCB pointers into caller queue",
+  "table-6199/3/1": "Parent stack request/status; child's embedded waiters",
+  "table-6199/3/2": "Retain status pointer; suspended frame stays alive",
+  "table-6199/5/2": "Intrusive wait links + persistent load progress",
+  "table-6596/1/1": "Internal syscall bridge; result in IN2",
+  "table-6596/1/2": "Forward supplied selector + argument",
+  "table-6960/4/2": "Restart/power-off: no return; otherwise −1",
+  "table-6960/5/2": "0 success; −1 path/host error",
+  "table-7026/1/2": "Install EPROM CS/DS + temporary SRAM stack",
+  "table-7026/2/2": "Read five-word header; copy kernel payload",
+  "table-7026/2/3": [
     "UART host load; receive words",
     "Copy to SRAM; jump to kernel"
   ],
-  "table-7036/3/2": "Relative → absolute segments; replace boot stack",
-  "table-7322/1/2": "write → stderr diagnostic",
-  "table-7322/2/2": "Read config; setenv; release buffers",
-  "table-7322/3/1": "Setup/launch failure → 1; otherwise supervises",
-  "table-7470/2/1": [
+  "table-7026/3/2": "Relative → absolute segments; replace boot stack",
+  "table-7312/1/2": "write → stderr diagnostic",
+  "table-7312/2/2": "Read config; setenv; release buffers",
+  "table-7312/3/1": "Setup/launch failure → 1; otherwise supervises",
+  "table-7460/2/1": [
     "Background/stopped PID",
     "Used by $!, fg, bg"
   ],
-  "table-7470/5/1": "Eight-command ring; skip consecutive duplicates",
-  "table-7470/8/1": "Retain up to 128 read-ahead bytes",
-  "table-7470/10/1": "Next retained byte + valid byte count",
-  "table-7562/1/1": "1 byte; 0 EOF; negative error",
-  "table-7562/1/2": "Refill once; consume retained bytes",
-  "table-7562/2/2": "Batch echoes; edit line; navigate history",
-  "table-7562/3/2": "strcmp/strcpy; update eight-entry ring",
-  "table-7562/4/1": "Expanded buffer; bounded length; NULL on null",
-  "table-7562/4/2": "getenv + $?/$!; retain quote bytes",
-  "table-7562/5/2": "Search PATH; load candidates in order",
-  "table-7562/6/2": "Redirect; run; foreground/wait; update statuses",
-  "table-7562/9/2": "Initialize ownership; close scratch; command loop",
-  "table-7581/4/2": "No matching branch; discarded",
-  "table-7663/3/2": "Split final >; path stays unexpanded",
-  "table-7663/4/2": "Terminate name; retain raw argument suffix",
-  "table-7663/7/2": "Strip matching quotes; inherit FDs; READY",
-  "table-7697/1/1": "End current session",
-  "table-7697/5/2": "load; host file-size + read-range",
-  "table-7697/6/1": "Run child; background + redirection",
-  "table-7697/6/2": "Redirect → run → wait → restore",
-  "table-7697/8/1": "Continue job; foreground; wait",
-  "table-8042/1/3": "Child: independent 0–2 + file slots 3–4",
-  "table-8042/2/1": "Save stdin → 5; open IN as 0",
-  "table-8042/2/3": "Child reads 0; shell restores/closes 5",
-  "table-8042/3/3": "Child writes 1; shell restores/closes 6",
-  "table-8042/5/3": "Child writes 2; shell restores/closes 7",
-  "table-8042/6/1": "stdout → stderr → stdin; append optional",
-  "table-8042/6/2": "Combine save slots 5, 6, 7",
-  "table-8042/6/3": "Child gets endpoints; shell restores originals",
-  "table-8042/7/1": "LEFT > temporary; RIGHT < temporary",
-  "table-8042/7/2": "Save stdout → 6; stdin → 5",
-  "table-8042/7/3": "LEFT exits → RIGHT reads → unlink temporary",
-  "table-8326/1/1": "Interpret commands; interactive or redirected",
-  "table-8326/1/2": [
+  "table-7460/5/1": "Eight-command ring; skip consecutive duplicates",
+  "table-7460/8/1": "Retain up to 128 read-ahead bytes",
+  "table-7460/10/1": "Next retained byte + valid byte count",
+  "table-7552/1/1": "1 byte; 0 EOF; negative error",
+  "table-7552/1/2": "Refill once; consume retained bytes",
+  "table-7552/2/2": "Batch echoes; edit line; navigate history",
+  "table-7552/3/2": "strcmp/strcpy; update eight-entry ring",
+  "table-7552/4/1": "Expanded buffer; bounded length; NULL on null",
+  "table-7552/4/2": "getenv + $?/$!; retain quote bytes",
+  "table-7552/5/2": "Search PATH; load candidates in order",
+  "table-7552/6/2": "Redirect; run; foreground/wait; update statuses",
+  "table-7552/9/2": "Initialize ownership; close scratch; command loop",
+  "table-7571/4/2": "No matching branch; discarded",
+  "table-7653/3/2": "Split final >; path stays unexpanded",
+  "table-7653/4/2": "Terminate name; retain raw argument suffix",
+  "table-7653/7/2": "Strip matching quotes; inherit FDs; READY",
+  "table-7687/1/1": "End current session",
+  "table-7687/5/2": "load; host file-size + read-range",
+  "table-7687/6/1": "Run child; background + redirection",
+  "table-7687/6/2": "Redirect → run → wait → restore",
+  "table-7687/8/1": "Continue job; foreground; wait",
+  "table-8032/1/3": "Child: independent 0–2 + file slots 3–4",
+  "table-8032/2/1": "Save stdin → 5; open IN as 0",
+  "table-8032/2/3": "Child reads 0; shell restores/closes 5",
+  "table-8032/3/3": "Child writes 1; shell restores/closes 6",
+  "table-8032/5/3": "Child writes 2; shell restores/closes 7",
+  "table-8032/6/1": "stdout → stderr → stdin; append optional",
+  "table-8032/6/2": "Combine save slots 5, 6, 7",
+  "table-8032/6/3": "Child gets endpoints; shell restores originals",
+  "table-8032/7/1": "LEFT > temporary; RIGHT < temporary",
+  "table-8032/7/2": "Save stdout → 6; stdin → 5",
+  "table-8032/7/3": "LEFT exits → RIGHT reads → unlink temporary",
+  "table-8316/1/1": "Interpret commands; interactive or redirected",
+  "table-8316/1/2": [
     "Process + descriptor + environment APIs",
     "Host: load/read/output/directory requests"
   ],
-  "table-8326/2/1": "Join arguments; expand \\n; newline",
-  "table-8326/3/1": "Count + busy delay; yield",
-  "table-8326/4/1": "Files/stdin → stdout; editing",
-  "table-8326/4/2": [
+  "table-8316/2/1": "Join arguments; expand \\n; newline",
+  "table-8316/3/1": "Count + busy delay; yield",
+  "table-8316/4/1": "Files/stdin → stdout; editing",
+  "table-8316/4/2": [
     "open/read/write/lseek/close",
     "Host: file-size/read-range/output"
   ],
-  "table-8326/5/1": "Create file or update timestamps",
-  "table-8326/6/2": [
+  "table-8316/5/1": "Create file or update timestamps",
+  "table-8316/6/2": [
     "open/read/write/close",
     "Host: read-range/write-at"
   ],
-  "table-8326/8/1": "Insert/change/append/substitute stdin lines",
-  "table-8326/8/2": [
+  "table-8316/8/1": "Insert/change/append/substitute stdin lines",
+  "table-8316/8/2": [
     "lseek/read/write; malloc/free",
     "Host: file-size/read-range/output"
   ],
-  "table-8326/10/1": "Directory listing; optional -a",
-  "table-8326/11/2": [
+  "table-8316/10/1": "Directory listing; optional -a",
+  "table-8316/11/2": [
     "mkdir; host mkdir"
   ],
-  "table-8326/13/2": [
+  "table-8316/13/2": [
     "unlink; host unlink"
   ],
-  "table-8326/14/2": [
+  "table-8316/14/2": [
     "rmdir; host rmdir"
   ],
-  "table-8326/15/1": "Deliver signal; 0 probes PID",
-  "table-8326/15/2": [
+  "table-8316/15/1": "Deliver signal; 0 probes PID",
+  "table-8316/15/2": [
     "kill/atoi/yield; diagnostics output"
   ],
-  "table-8326/17/2": [
+  "table-8316/17/2": [
     "reboot(RESTART); host reloads kernel + init"
   ],
-  "table-8326/18/2": [
+  "table-8316/18/2": [
     "open/read/write/close",
     "Host: file-size/read-range/output"
   ],
-  "table-8679/1/4": "Output equals // expected; trim line endings",
-  "table-8679/2/4": "Raw → normalize terminal → compare expectation",
-  "table-8679/3/4": "Same normalized comparison as OS tests",
-  "table-8679/4/4": "Same normalized comparison as OS tests",
-  "table-7697/2/1": "Recursively evaluate command; same shell state",
-  "table-7697/3/1": "Expand assignment; update environment",
-  "table-7697/4/1": "Validate path; change shell directory",
-  "table-7697/5/1": "Load binary → NEW PCB",
-  "table-7697/7/1": "Remove noncurrent process",
-  "table-7697/9/1": "Continue job in background",
-  "table-7697/1/2": "libstart → exit(main_result)",
-  "table-7697/2/2": "eval; normal command APIs",
-  "table-7697/3/2": "getenv/setenv",
-  "table-7697/4/2": "chdir; host directory check",
-  "table-7697/7/2": "unload",
-  "table-7697/8/2": "Foreground ownership; SIGCONT; waitpid",
-  "table-7697/9/2": "kill(SIGCONT)",
-  "table-8326/6/1": "Copy file in 64-cell chunks",
-  "table-8326/7/1": "Move/rename file or directory",
-  "table-8326/9/1": "Print PIDs + binary paths",
-  "table-8326/11/1": "Create supplied directories",
-  "table-8326/12/1": "Print current working directory",
-  "table-8326/13/1": "Remove supplied files",
-  "table-8326/14/1": "Remove supplied empty directories",
-  "table-8326/16/1": "Halt PicoOS",
-  "table-8326/17/1": "Restart bootloader + kernel",
-  "table-8326/18/1": "Print installed PicoOS version",
-  "table-8326/2/2": [
+  "table-8669/1/4": "Output equals // expected; trim line endings",
+  "table-8669/2/4": "Raw → normalize terminal → compare expectation",
+  "table-8669/3/4": "Same normalized comparison as OS tests",
+  "table-8669/4/4": "Same normalized comparison as OS tests",
+  "table-7687/2/1": "Recursively evaluate command; same shell state",
+  "table-7687/3/1": "Expand assignment; update environment",
+  "table-7687/4/1": "Validate path; change shell directory",
+  "table-7687/5/1": "Load binary → NEW PCB",
+  "table-7687/7/1": "Remove noncurrent process",
+  "table-7687/9/1": "Continue job in background",
+  "table-7687/1/2": "libstart → exit(main_result)",
+  "table-7687/2/2": "eval; normal command APIs",
+  "table-7687/3/2": "getenv/setenv",
+  "table-7687/4/2": "chdir; host directory check",
+  "table-7687/7/2": "unload",
+  "table-7687/8/2": "Foreground ownership; SIGCONT; waitpid",
+  "table-7687/9/2": "kill(SIGCONT)",
+  "table-8316/6/1": "Copy file in 64-cell chunks",
+  "table-8316/7/1": "Move/rename file or directory",
+  "table-8316/9/1": "Print PIDs + binary paths",
+  "table-8316/11/1": "Create supplied directories",
+  "table-8316/12/1": "Print current working directory",
+  "table-8316/13/1": "Remove supplied files",
+  "table-8316/14/1": "Remove supplied empty directories",
+  "table-8316/16/1": "Halt PicoOS",
+  "table-8316/17/1": "Restart bootloader + kernel",
+  "table-8316/18/1": "Print installed PicoOS version",
+  "table-8316/2/2": [
     "printf; descriptor-based output"
   ],
-  "table-8326/3/2": [
+  "table-8316/3/2": [
     "printf/atoi/yield; descriptor-based output"
   ],
-  "table-8326/5/2": [
+  "table-8316/5/2": [
     "touch; host touch"
   ],
-  "table-8326/7/2": [
+  "table-8316/7/2": [
     "move; host move/rename"
   ],
-  "table-8326/9/2": [
+  "table-8316/9/2": [
     "list_processes; descriptor-based output"
   ],
-  "table-8326/10/2": [
+  "table-8316/10/2": [
     "opendir/readdir/closedir; host ls"
   ],
-  "table-8326/12/2": [
+  "table-8316/12/2": [
     "getcwd; descriptor-based output"
   ],
-  "table-8326/16/2": [
+  "table-8316/16/2": [
     "reboot(POWER_OFF); no host request"
   ],
-  "table-541/14/0": "ISR entries",
-  "table-541/23/0": "Debug trap + NOP",
-  "table-1078/5/2": "Application main()",
-  "table-1594/1/3": "Store S at DS-relative address",
-  "table-1985/1/1": "Binary path",
-  "table-1985/2/0": [
+  "table-531/14/0": "ISR entries",
+  "table-531/23/0": "Debug trap + NOP",
+  "table-1068/5/2": "Application main()",
+  "table-1584/1/3": "Store S at DS-relative address",
+  "table-1975/1/1": "Binary path",
+  "table-1975/2/0": [
     "`LoadProcessRequest`",
     "`.show_loading_bar`"
   ],
-  "table-1985/3/1": "Existing NEW PID",
-  "table-1985/4/1": "Argument string / NULL",
-  "table-4008/11/1": "Path character / \\0",
-  "table-4008/13/1": "Final \\0",
-  "table-4305/1/1": [
+  "table-1975/3/1": "Existing NEW PID",
+  "table-1975/4/1": "Argument string / NULL",
+  "table-3998/11/1": "Path character / \\0",
+  "table-3998/13/1": "Final \\0",
+  "table-4295/1/1": [
     "Owned lookup name",
     "Unlink → free + NULL"
   ],
-  "table-5106/2/1": "Child PCB waiters",
-  "table-5106/3/1": "Mutex waiters",
-  "table-5002/1/1": [
+  "table-5096/2/1": "Child PCB waiters",
+  "table-5096/3/1": "Mutex waiters",
+  "table-4992/1/1": [
     "First blocked PCB",
     "Empty → NULL"
   ],
-  "table-5002/2/1": [
+  "table-4992/2/1": [
     "Last blocked PCB",
     "O(1) append; empty → NULL"
   ],
-  "table-5379/5/3": [
+  "table-5369/5/3": [
     "STOPPED",
     "Status: 147"
   ],
-  "table-5379/6/3": [
+  "table-5369/6/3": [
     "STOPPED",
     "Status: 148"
   ],
-  "table-5379/7/3": [
+  "table-5369/7/3": [
     "STOPPED",
     "Status: 149"
   ],
-  "table-5543/1/2": "TSL; no syscall",
-  "table-5590/6/2": "open skips slot",
-  "table-5590/7/2": "open skips slot",
-  "table-5590/8/2": "open skips slot",
-  "table-5830/3/0": "Foreground child / fg",
-  "table-6050/1/0": "Relative dir",
-  "table-6050/2/0": ". / repeated separators",
-  "table-6050/2/1": "Skip . + empty segments",
-  "table-6050/4/0": "Parent/child combinations",
-  "table-6100/8/0": "Descriptor paths",
-  "table-6100/12/1": "Kernel .data globals",
-  "table-6100/14/2": "Descriptor → first → next header",
-  "table-6100/15/2": "DirectoryStream, environment, mutex",
-  "table-6209/4/1": "Kernel-global terminal.input_waiters",
-  "table-6209/5/1": "Kernel-global dma_waiters",
-  "table-6606/7/1": "Shell/child input owner",
-  "table-6970/2/2": [
+  "table-5533/1/2": "TSL; no syscall",
+  "table-5580/6/2": "open skips slot",
+  "table-5580/7/2": "open skips slot",
+  "table-5580/8/2": "open skips slot",
+  "table-5820/3/0": "Foreground child / fg",
+  "table-6040/1/0": "Relative dir",
+  "table-6040/2/0": ". / repeated separators",
+  "table-6040/2/1": "Skip . + empty segments",
+  "table-6040/4/0": "Parent/child combinations",
+  "table-6090/8/0": "Descriptor paths",
+  "table-6090/12/1": "Kernel .data globals",
+  "table-6090/14/2": "Descriptor → first → next header",
+  "table-6090/15/2": "DirectoryStream, environment, mutex",
+  "table-6199/4/1": "Kernel-global terminal.input_waiters",
+  "table-6199/5/1": "Kernel-global dma_waiters",
+  "table-6596/7/1": "Shell/child input owner",
+  "table-6960/2/2": [
     "0 / −1",
     "Signal 0: existence probe"
   ],
-  "table-7470/1/1": "$? status integer",
-  "table-7562/2/1": "Length; −1 EOF",
-  "table-8499/10/0": "Library build artifacts",
-  "table-3225/1/2": "Cause 1; IVT entry 3",
-  "table-3225/2/2": "Cause 2; IVT entry 3",
-  "table-3225/3/2": "Cause 3; IVT entry 3",
-  "table-5017/9/0": [
+  "table-7460/1/1": "$? status integer",
+  "table-7552/2/1": "Length; −1 EOF",
+  "table-8489/10/0": "Library build artifacts",
+  "table-3215/1/2": "Cause 1; IVT entry 3",
+  "table-3215/2/2": "Cause 2; IVT entry 3",
+  "table-3215/3/2": "Cause 3; IVT entry 3",
+  "table-5007/9/0": [
     "Child PCB: parent_pid",
     "exit_status + stop_signal"
   ],
-  "table-5379/4/3": "READY / original BLOCKED wait",
-  "table-6100/3/2": "PCB base/size + heap + saved registers",
-  "table-6100/19/2": "Saved frame; PC at activation.sp + 1",
-  "table-7581/6/0": "Up: ESC [ A / ESC O A",
-  "table-7581/7/0": "Down: ESC [ B / ESC O B",
-  "table-7581/8/0": "Left/right: ESC [ C/D / ESC O C/D",
-  "table-8042/3/1": "Open OUT: write/create/truncate; temporary slot 3",
-  "table-8042/3/2": "Save 1 → 6; install OUT; close temporary",
-  "table-8042/5/2": "Save 2 → 7; install ERR; close temporary",
-  "table-6546/1/1": [
+  "table-5369/4/3": "READY / original BLOCKED wait",
+  "table-6090/3/2": "PCB base/size + heap + saved registers",
+  "table-6090/19/2": "Saved frame; PC at activation.sp + 1",
+  "table-7571/6/0": "Up: ESC [ A / ESC O A",
+  "table-7571/7/0": "Down: ESC [ B / ESC O B",
+  "table-7571/8/0": "Left/right: ESC [ C/D / ESC O C/D",
+  "table-8032/3/1": "Open OUT: write/create/truncate; temporary slot 3",
+  "table-8032/3/2": "Save 1 → 6; install OUT; close temporary",
+  "table-8032/5/2": "Save 2 → 7; install ERR; close temporary",
+  "table-6536/1/1": [
     "Processes + descriptors",
     "Paths + wait queues"
   ],
-  "table-6546/3/1": "Child wait/stop status",
-  "table-6546/7/1": [
+  "table-6536/3/1": "Child wait/stop status",
+  "table-6536/7/1": [
     "Heap + environment",
     "Conversion + exit"
   ],
-  "table-6546/9/2": [
+  "table-6536/9/2": [
     "common/decimal.picoc",
     "Syscall helper"
   ],
-  "table-1332/1/1": "Emitted `.data` words from linked `.reti_blocks`",
-  "table-1332/2/1": "Largest global `addr + size` from `.st` symbols",
-  "table-1932/1/1": "`LOADIN BAF ACC 3`: first argument",
-  "table-1932/1/2": "`SYSCALL_WAITPID` selects kernel wait handler",
-  "table-1932/2/1": "`LOADIN BAF IN1 4`: second argument",
-  "table-1932/2/2": "Stack-local request: child PID + status destination",
-  "table-1932/3/1": "`STOREIN BAF IN2 0`: local completion result",
-  "table-1932/3/2": "Completion indicator; child status written through request pointer",
-  "table-3165/1/1": "Panic directly over UART; bypass process descriptors",
-  "table-3165/2/1": "Termination through process descriptor 1; follows redirection",
-  "table-6254/5/1": "Stopped-status constants for `WIFSTOPPED()`",
-  "table-6254/6/1": "Shared selector + child PID/status request layout",
-  "table-6254/7/1": "Reusable RETI code blocks; linker input",
-  "table-6254/8/1": "Function signatures + types; used alongside code blocks",
-  "table-9161/4/4": "Worker 2 queued; **BLOCKED**",
-  "table-9161/5/4": "Worker 2 dequeued; **READY**",
-  "table-6254/1/1": "Public `waitpid()` + `WIFSTOPPED()` declarations",
-  "table-6254/4/1": "Shared `bool`, `NULL`, `true`, and `false` definitions",
-  "table-5314/1/1": "Write exit status; wake waiting parent",
-  "table-5314/2/1": "Retain `exit_status`; mark **ZOMBIE**",
-  "table-5314/3/1": "No parent can collect status",
-  "table-5314/1/2": "`terminate_process()` removes PCB before dispatch",
-  "table-5314/2/2": "Later `wait_for_process_by_pid()` collects + removes PCB",
-  "table-5314/3/2": "`terminate_process()` removes PCB immediately",
-  "table-1344/1/1": "Words in `.ivt`",
-  "table-1344/2/1": "Words in `.ivt` + words in `.text`",
-  "table-1344/3/1": "`datasegment_start` + max(`.data` words, global-data extent)",
-  "table-1344/4/1": "`−1`",
-  "table-1344/5/1": "`−1`"
+  "table-1322/1/1": "Emitted `.data` words from linked `.reti_blocks`",
+  "table-1322/2/1": "Largest global `addr + size` from `.st` symbols",
+  "table-1922/1/1": "`LOADIN BAF ACC 3`: first argument",
+  "table-1922/1/2": "`SYSCALL_WAITPID` selects kernel wait handler",
+  "table-1922/2/1": "`LOADIN BAF IN1 4`: second argument",
+  "table-1922/2/2": "Stack-local request: child PID + status destination",
+  "table-1922/3/1": "`STOREIN BAF IN2 0`: local completion result",
+  "table-1922/3/2": "Completion indicator; child status written through request pointer",
+  "table-3155/1/1": "Panic directly over UART; bypass process descriptors",
+  "table-3155/2/1": "Termination through process descriptor 1; follows redirection",
+  "table-6244/5/1": "Stopped-status constants for `WIFSTOPPED()`",
+  "table-6244/6/1": "Shared selector + child PID/status request layout",
+  "table-6244/7/1": "Reusable RETI code blocks; linker input",
+  "table-6244/8/1": "Function signatures + types; used alongside code blocks",
+  "table-9151/4/4": "Worker 2 queued; **BLOCKED**",
+  "table-9151/5/4": "Worker 2 dequeued; **READY**",
+  "table-6244/1/1": "Public `waitpid()` + `WIFSTOPPED()` declarations",
+  "table-6244/4/1": "Shared `bool`, `NULL`, `true`, and `false` definitions",
+  "table-5304/1/1": "Write exit status; wake waiting parent",
+  "table-5304/2/1": "Retain `exit_status`; mark **ZOMBIE**",
+  "table-5304/3/1": "No parent can collect status",
+  "table-5304/1/2": "`terminate_process()` removes PCB before dispatch",
+  "table-5304/2/2": "Later `wait_for_process_by_pid()` collects + removes PCB",
+  "table-5304/3/2": "`terminate_process()` removes PCB immediately",
+  "table-1334/1/1": "Words in `.ivt`",
+  "table-1334/2/1": "Words in `.ivt` + words in `.text`",
+  "table-1334/3/1": "`datasegment_start` + max(`.data` words, global-data extent)",
+  "table-1334/4/1": "`−1`",
+  "table-1334/5/1": "`−1`"
 }

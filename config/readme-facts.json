@@ -1,9 +1,9 @@
 {
   "picoos": [
-    "POSIX context",
+    "POSIX / Unix",
     [
-      "Unix-inspired interfaces",
-      "Educational subset; reduced semantics"
+      "**Familiar interfaces:** processes, signals, files, shells",
+      "**Small subset:** no conformance claim"
     ]
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
@@ -14,7 +14,7 @@
     ]
   ],
   "116-program-sections-interrupt-table-entries-and-linker-placement": [
-    "Calling convention",
+    "System V ABI",
     [
       "C helpers + inline assembly",
       "Shared RETI stack-frame rules"
@@ -36,18 +36,19 @@
     ]
   ],
   "241-syscall-selectors-and-register-convention": [
-    "ABI connection",
+    "System V ABI",
     [
       "**IN2:** syscall + function result",
       "Wrapper and entry agree"
     ]
   ],
   "42212-initial-argc-argv-and-envp": [
-    "System V / POSIX",
+    "System V Intel386 / POSIX",
     [
-      "**Intel386:** argc → argv → envp",
-      "NULL ends pointer arrays",
-      "**RETI:** entry PC; no auxiliary vector"
+      "**Intel386 Fig. 3-31:** argc → argv → NULL → envp",
+      "**RETI:** entry PC, word characters; no auxiliary vector",
+      "**POSIX.1-2024:** arrays/environment; no physical layout",
+      "**PicoOS:** load + run; no exec replacement"
     ]
   ],
   "422121-concrete-initial-stack-example": [
@@ -73,10 +74,10 @@
     ]
   ],
   "721-supported-signals-and-fixed-actions": [
-    "POSIX / Linux: signal 0",
+    "POSIX / Linux null signal",
     [
-      "Probe without signal delivery",
-      "**PicoOS:** existence only; rejects zombies"
+      "**Signal 0:** existence + permission check; no delivery",
+      "**PicoOS:** no permissions/groups; rejects zombies"
     ]
   ],
   "724-fixed-picoos-signal-actions-compared-with-unix": [
@@ -95,11 +96,11 @@
     ]
   ],
   "89-picoos-paths-working-directories-and-host-operations": [
-    "Host OS boundary",
+    "POSIX / Linux / Windows hosts",
     [
-      "Root confinement; reject symlinks",
-      "**Linux:** RESOLVE_BENEATH/NO_SYMLINKS/NO_XDEV",
-      "**Windows:** reject reparse points"
+      "**POSIX:** reject symlink traversal",
+      "**Linux:** BENEATH / NO_SYMLINKS / NO_XDEV",
+      "**Windows:** reject reparse points + junctions"
     ]
   ],
   "1012-packing-arguments-and-executing-the-syscall": [
@@ -110,24 +111,25 @@
     ]
   ],
   "10291-streams-and-output-in-stdiopicoc": [
-    "Variadic ABI",
+    "System V-style variadic ABI",
     [
-      "**printf/fprintf:** stack-based arguments",
-      "Same PicoC frame convention"
+      "**printf / fprintf:** walk stack arguments",
+      "**Shared PicoC frame** convention"
     ]
   ],
   "1131-init-responsibilities": [
-    "Init / PID 1",
+    "Init / PID 1 analogy",
     [
-      "Environment → shell → wait → repeat",
-      "Userspace supervisor"
+      "**Userspace supervisor:** environment → shell → wait → repeat",
+      "**Kernel:** mechanisms; **init:** session policy"
     ]
   ],
   "126-inputoutput-redirection": [
-    "fork + exec / load + run",
+    "Unix fork + exec / PicoOS",
     [
-      "**Unix:** redirect forked child",
-      "**PicoOS:** redirect shell; copy; restore"
+      "**Unix:** redirect forked child; replace image",
+      "**PicoOS:** redirect shell; copy on run; restore",
+      "**No paging:** alone does not explain missing fork"
     ]
   ],
   "1321-command-behavior-and-supported-options": [
@@ -142,6 +144,49 @@
     [
       "Educational OS mechanisms",
       "POSIX-like interfaces; reduced behavior"
+    ]
+  ],
+  "112-separate-compilation-reusable-artifacts-and-linking": [
+    "GCC / Clang",
+    [
+      "**C object:** symbol table inside .o",
+      "**PicoC:** symbols in adjacent .st"
+    ]
+  ],
+  "1152-picoos-libstart-startup-sequence": [
+    "libc startup analogy",
+    [
+      "**Runtime preparation** before application main",
+      "**libstart:** heap/environment; main result → exit"
+    ]
+  ],
+  "1172-loading-32-bit-values-with-loadi32": [
+    "RISC-V / C arithmetic",
+    [
+      "**RISC-V:** shared low-product; separate high-product operations",
+      "**C signed overflow:** undefined; reconstruction remains in range"
+    ]
+  ],
+  "85-virtual-terminal-and-null-device-paths": [
+    "Device inode analogy",
+    [
+      "**Conventional OS:** special device inode",
+      "**PicoOS:** exact path selects virtual behavior"
+    ]
+  ],
+  "124-command-parsing-expansion-and-execution": [
+    "Conventional shell comparison",
+    [
+      "**PicoOS single quotes:** still expand variables",
+      "**echo:** interprets \\n itself; no shell escape pass"
+    ]
+  ],
+  "127-sequential-file-backed-pipelines": [
+    "Conventional pipe comparison",
+    [
+      "**Kernel buffer:** concurrent readers/writers; backpressure",
+      "**PicoOS file:** sequential; no unbounded/interactive stream",
+      "**Kernel pipe needs:** endpoints, queues, EOF, concurrent startup"
     ]
   ]
 }

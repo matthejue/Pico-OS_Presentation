@@ -7,16 +7,16 @@
     "commit": "7647e8be5d3c7b3f9ff3f92c6a00be29ca92517c",
     "contentSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569",
     "dirtyAtGeneration": false,
-    "snapshot": ".source/Pico-OS-README-2026-10-07.md",
+    "snapshot": ".source/history/Pico-OS-README-2026-10-07T17-55-00.303Z.md",
     "selection": "commit",
     "workingTreeChangesExcluded": false
   },
   "additionalSources": [],
-  "slideCount": 341,
+  "slideCount": 340,
   "sourceMarker": "<!-- SOURCE Pico-OS/README.md#... -->",
-  "savedAt": "2026-10-07T18:00:37.776Z",
+  "savedAt": "2026-10-07T17:55:00.303Z",
   "comparisonBase": {
-    "commit": "7647e8be5d3c7b3f9ff3f92c6a00be29ca92517c",
-    "contentSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569"
+    "commit": "551620232ed915a92e442891eafd03619b2a2d5e",
+    "contentSha256": "e5ab4df45534b0a55a68e05bee7b229e6a3b23707dc2c865a6ebc73843626b46"
   }
 }

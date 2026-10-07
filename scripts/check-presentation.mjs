@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
 import { inspectSlides, parseSlideNumbers } from './short-version.mjs'
 import { loadSourceState } from './source-state.mjs'
@@ -83,12 +84,11 @@ for (const { page, slide, source, anchor, cover, overview } of pages) {
   const introduction = isIntroduction(anchor, source)
   const displayTitle = title => introduction && title === openingSource.title ? 'Introduction' : title
   const parents = source.parents.map(displayTitle)
-  assert.equal(titles[0].title, parents.length ? parents.join(' · ') : displayTitle(source.title), `Slide ${page}: main title`)
-  if (parents.length || introduction && anchor === 'picoos') {
-    const n = (numbers.get(anchor) || 0) + 1
-    numbers.set(anchor, n)
-    assert.equal(titles[1].title, displayTitle(source.title) + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: subtitle`)
-  }
+  const n = (numbers.get(anchor) || 0) + 1
+  numbers.set(anchor, n)
+  if (parents.length) assert.equal(titles[0].title, parents.join(' · '), `Slide ${page}: ancestor heading`)
+  else assert.equal(titles.length, 1, `Slide ${page}: top-level content has no ancestor subtitle`)
+  assert.equal(titles.at(-1).title, displayTitle(source.title) + (occurrences.get(anchor) > 1 ? ` (${n})` : ''), `Slide ${page}: exact current heading and numbering`)
 }
 if (!process.env.PRESENTATION_SOURCE)
   assert.equal(baseline.state.slideCount, pages.length)
@@ -186,7 +186,9 @@ try {
   const cover = await navigate(1)
   assert.equal(await cover.locator('.cover-outline, .cover-chapter').count(), 0, 'Cover has no fixed topic outline')
 
-  const layoutIssues = []
+  const layoutIssues = [], slideAudit = []
+  const screenshotPages = new Set((process.env.SCREENSHOT_PAGES || '').split(',').map(Number))
+  if (process.env.SCREENSHOT_DIRECTORY) await mkdir(process.env.SCREENSHOT_DIRECTORY, { recursive: true })
   for (const { page: n } of pages) {
     const layout = await navigate(n)
     const issues = await layout.evaluate(element => {
@@ -227,6 +229,8 @@ try {
         }).filter(Boolean)
       if (textSizes.length > 1 && Math.max(...textSizes) / Math.min(...textSizes) > 1.18)
         found.push('Mixed code and table body text uses inconsistent sizes')
+      if (textSizes.some(size => size / scale < 5))
+        found.push('Code or table text is too small at native slide size')
       for (const visual of element.querySelectorAll('.readme-visual')) {
         const frame = visual.getBoundingClientRect()
         const stage = visual.querySelector('.source-fit-stage').getBoundingClientRect()
@@ -282,12 +286,22 @@ try {
       layoutIssues.push({ page: n, issues })
       console.log(`Layout ${n}: ${issues.join('; ')}`)
     }
+    const visuals = await layout.evaluate(element => [...element.querySelectorAll('.readme-visual')].map(visual => {
+      const content = visual.querySelector('.source-fit-content')
+      const text = visual.querySelector('.readme-code .slidev-code, .readme-table td')
+      return { kind: visual.dataset.kind, source: visual.dataset.codeSource || visual.dataset.tableKey || visual.querySelector('img')?.getAttribute('src'),
+        ...(text ? { fontSize: Number((parseFloat(getComputedStyle(text).fontSize) * content.getBoundingClientRect().width / content.offsetWidth).toFixed(2)) } : {}) }
+    }))
+    slideAudit.push({ page:n,anchor:pages[n-1].anchor,title:headings(pages[n-1].slide).at(-1)?.title,issues,visuals })
+    if (screenshotPages.has(n) && process.env.SCREENSHOT_DIRECTORY)
+      await layout.screenshot({ path:`${process.env.SCREENSHOT_DIRECTORY}/slide-${String(n).padStart(3,'0')}.png` })
     if (n % 25 === 0) console.log(`Checked ${n}/${pages.length}: ${base}`)
   }
+  if (process.env.SLIDE_AUDIT) await writeFile(process.env.SLIDE_AUDIT, JSON.stringify({ sourceSha256:createHash('sha256').update(primary).digest('hex'),slideCount:pages.length,slides:slideAudit },null,2)+'\n')
   assert.deepEqual(layoutIssues, [], 'Every slide fits its content area')
   assert.equal(await page.locator('svg[aria-roledescription="error"]').count(), 0, 'No Mermaid error SVGs left in the document')
 
-  for (const kind of ['mermaid', 'code', 'table', 'image']) {
+  for (const kind of ['mermaid', 'code', 'table', 'image', 'math']) {
     const selector = `.readme-visual[data-kind="${kind}"]`
     const sample = pages.find(p => p.slide.includes(`<ReadmeVisual kind="${kind}"`))
     // Current README diagrams are SVG images; Mermaid remains supported for

@@ -49,8 +49,26 @@ hash; no undated baseline copies are maintained.
    short-version selections.
 
 `README_REPOSITORY` can override the source repository. `PRESENTATION_SOURCE`
-can select a validation candidate; saving requires that its exact bytes match
-the current README in the source repository.
+can select a validation candidate; by default, saving requires that its exact
+bytes match the current README in the source repository.
+
+When the requested source is a committed README, export that commit to a
+temporary file and use it for rebuilding and validation. Pass the same file
+and commit when saving:
+
+```sh
+git -C ../Pico-OS show HEAD:README.md > /tmp/picoos-committed-README.md
+PRESENTATION_SOURCE=/tmp/picoos-committed-README.md yarn rebuild:readme
+PRESENTATION_SOURCE=/tmp/picoos-committed-README.md yarn test:source
+# Run the rendered full/short checks before saving.
+PRESENTATION_SOURCE=/tmp/picoos-committed-README.md \
+PRESENTATION_SOURCE_COMMIT=<validated-commit-hash> yarn source:save
+```
+
+The explicit commit mode verifies against `git show <commit>:README.md`, records
+`selection: "commit"`, and excludes working-tree edits without changing them.
+The commit must still exist in the source repository. Use the exact validated
+hash even if HEAD moves while the deck is being reviewed.
 
 Repeated saves of an unchanged clean source and deck do nothing. Source commits
 that change only diagrams still advance the recorded commit. Dirty repositories

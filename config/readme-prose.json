@@ -2,15 +2,17 @@
   "picoos": [
     "**Educational OS** for RETI",
     "**Bootloader** → kernel → init → shell",
-    "**Shared physical memory**; no MMU",
+    "**15 libraries** · **18 applications** · **37 syscalls**",
+    "**Shared physical memory**; no MMU or isolation",
     "**Host-backed files** via UART"
   ],
   "intended-physical-hardware": [
     "**Parts total:** €78.18 including VAT",
-    "**DigiKey Germany estimate:** 12 August 2026",
-    "**Excludes** wiring, PCB, cables, shipping",
-    "Proposed hardware; development uses **emulator**",
-    "Hardware needs **companion host service**"
+    "**DigiKey Germany:** 12 August 2026",
+    "**Excludes:** wiring, PCB, cables, shipping",
+    "**Proposed hardware**; development uses emulator",
+    "**Hardware:** companion serial host required",
+    "**Free SRAM:** 180,171 words before heaps/stacks"
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
     "**Shared convention:** C, assembly, startup, interrupts",
@@ -26,18 +28,18 @@
     "**ABI:** registers, layouts, result meanings"
   ],
   "252-kernel-non-preemption-and-deferred-rescheduling": [
-    "Kernel work completes before **process switch**",
-    "**Device interrupts** remain enabled",
-    "Timer → **deferred rescheduling** flag",
-    "Syscall return → **safe switching point**",
-    "**Polling:** bounded chunks; **DMA:** block"
+    "**Kernel operation:** completes before process switch",
+    "**Device interrupts:** remain enabled",
+    "**Block / yield / terminate:** earlier dispatch possible",
+    "**Polling:** ≤1 KiB per syscall; scheduling between chunks",
+    "**DMA:** one payload transfer; caller blocks",
+    "**All blocked:** wait for interrupt wakeup"
   ],
   "261-entering-kernel-segments-on-the-interrupted-stack": [
-    "**UART/DMA** borrow interrupted stack",
-    "Handler uses space below **saved frame**",
-    "Retain SP + **stack boundary**",
-    "Kernel **CS** classifies nested faults",
-    "**Return restores** interrupted execution"
+    "**UART / DMA:** borrow interrupted stack",
+    "**Calls:** free space below saved frame",
+    "**Retain SP + boundary:** suspended frames survive",
+    "**Kernel CS:** nested faults become kernel exceptions"
   ],
   "331-kernel-heap-blocks-and-kernel-objects": [
     "**Kernel Heap:** PCB, paths, shared metadata",
@@ -46,11 +48,11 @@
     "kernel_heap.first_block → **header chain**"
   ],
   "341-process-allocations": [
-    "PSDMalloc → complete **Process Payload**",
-    "PCB records **base_address + size**",
-    "Image + **user heap** + stack",
-    "remove_process → **PSDFree** whole payload",
-    "User free releases **inner allocation** only"
+    "**PSDMalloc:** complete Process Payload",
+    "**PCB:** base address + requested cell count",
+    "**Tiny remainder:** actual block may be larger",
+    "**remove_process:** PSDFree whole image/heap/stack",
+    "**User free:** inner allocation only"
   ],
   "342-shared-data-allocations": [
     "PSDMalloc → **Shared Data Payload**",
@@ -67,26 +69,27 @@
     "Restored DS selects **process-local globals**"
   ],
   "363-allocation-and-repeated-coalescing-example": [
-    "**Allocation** → free → repeated coalescing",
-    "<strong class=\"emphasis-amber\">Amber:</strong> headers; **cyan:** allocated payloads",
-    "<strong class=\"emphasis-green\">Green:</strong> free payloads",
-    "**Arrows:** next links; **offsets:** cells"
+    "**52 cells:** allocate, free, repeatedly merge",
+    "**Gray:** headers; **teal:** allocated; **green:** free",
+    "**Amber outline:** changed block",
+    "**Offsets:** cells; drawn widths illustrative"
   ],
   "6-scheduling-and-context-switching": [
-    "Save activation → **select PCB** → restore",
-    "**Lazy Round Robin** scans process list",
-    "Only **runnable processes** enter execution"
+    "**Scheduler:** selects runnable PCB",
+    "**Dispatcher:** saves + restores activation",
+    "**READY / RUNNING:** eligible states"
   ],
   "711-blocking-with-sleep-and-waking-with-wakeup": [
-    "sleep → **FIFO queue** + BLOCKED",
-    "wakeup → remove head; mark **READY**",
-    "Queue references PCBs; **owns no allocations**"
+    "**sleep:** wait for event; no fixed delay",
+    "**wakeup:** at most FIFO head; no immediate switch",
+    "**Stopped waiter:** stays STOPPED; prior state READY",
+    "**Queues:** reference PCBs; own no allocations"
   ],
   "722-stopping-and-continuing-a-process": [
-    "Stop saves **previous state** + signal",
-    "STOPPED processes stay in **process list**",
-    "Continue restores **prior state**",
-    "Terminal read also needs **input ownership**"
+    "**Stop:** save prior state + stop signal",
+    "**Terminal stop:** detach queue; retain read buffer/count",
+    "**Continue:** READY or unfinished nonterminal wait BLOCKED",
+    "**Stopped reader:** ownership + SIGCONT required"
   ],
   "723-termination-ctrl-c-and-parent-collection": [
     "**Current target:** defer until dispatch",
@@ -132,15 +135,27 @@
     "**Unchecked writes:** success may hide truncation"
   ],
   "16-use-of-ai-in-the-project": [
-    "**Core concepts + architecture:** author",
-    "**Manual debugging**; custom PicoC debugger",
-    "**GDB unavailable** for RETI",
-    "**AI:** repetitive, already-understood implementation",
-    "**Supporting applications**, tests, build scripts",
-    "**Author checks** calculations + integrates changes",
-    "**Freiburg guide:** transparency principles",
-    "**GitHub Copilot**; documented source-file usage",
-    "**Three semesters**; beyond 18 ECTS"
+    [
+      "**Author’s work**",
+      "**Core concepts, architecture, structural decisions**",
+      "**System understanding + integration**",
+      "**Manual debugging:** custom RETI source debugger",
+      "**No GDB:** custom CPU/runtime conventions"
+    ],
+    [
+      "**AI assistance**",
+      "**Known behavior + approach:** repetitive implementation",
+      "**Pointer arithmetic:** check calculations + correct errors",
+      "**Supporting applications, tests, Makefiles, scripts**",
+      "**Usage record:** documented by source file"
+    ],
+    [
+      "**Context**",
+      "**Freiburg writing guide:** principles adapted to code",
+      "**Guide:** does not explicitly cover code generation",
+      "**GitHub Copilot / Education:** more use near project end",
+      "**Three semesters:** beyond 18 ECTS"
+    ]
   ],
   "15-use-in-operating-systems-and-real-time-operating-systems-lectures": [
     "Inspect source + **live execution**",
@@ -156,10 +171,10 @@
     "**AST construction**, symbol/type checks, linking + startup"
   ],
   "2512-requesting-deferred-scheduling-for-kernel-work": [
-    "Kernel timer sets **reschedule_requested**",
-    "Retain interrupted **stack + boundary**",
-    "**RTI** resumes unfinished kernel instructions",
-    "Syscall return checks **deferred request**"
+    "**Kernel timer:** sets reschedule_requested only",
+    "**Activation + process state:** preserved",
+    "**Kernel:** no separate PCB",
+    "**Retain stack:** suspended call frames remain intact"
   ],
   "2515-saving-process-context-and-restoring-the-selected-process": [
     "Userspace timer enters **dispatcher directly**",
@@ -171,5 +186,838 @@
     "**Timer:** saved PC identifies kernel restore instructions",
     "**Exception:** interrupted CS identifies selected segments",
     "User CS during restore can **misclassify kernel faults**"
+  ],
+  "build-and-run": [
+    "**Windows:** `start-picoos.ps1`; **Android:** Termux",
+    "**Tools:** archive directory + PATH; optional downloads",
+    "**DMA:** other processes run during reception",
+    "**First launch:** optional cheatsheet download"
+  ],
+  "use-the-picoos-shell": [
+    [
+      "**Debug TUI**",
+      "**c + Enter:** continue startup",
+      "**V:** raw UART; **Ctrl+]** returns",
+      "**v:** normal terminal; **Escape** returns"
+    ],
+    [
+      "**Commands**",
+      "**/user:** executable name or path",
+      "**Pipeline:** left completes before right",
+      "**> topics.txt:** redirect final output"
+    ]
+  ],
+  "release-archive-layout": [
+    "**v* release:** runtime archive + `README.pdf`",
+    "**Extracted directory** becomes PicoOS `/`",
+    "**Host /tmp** remains outside PicoOS"
+  ],
+  "112-separate-compilation-reusable-artifacts-and-linking": [
+    "**PicoC:** `.reti_blocks` + adjacent `.st`",
+    "**Handwritten assembly:** symbols optional",
+    "**-o:** linked output name",
+    "**Layout/debug:** separate `.sections` / `.debuginfo`"
+  ],
+  "1131-stack-frame-layout-and-caller-cleanup": [
+    "**Arguments:** arg2 first, then arg1",
+    "**Aggregates:** full width; later offsets increase",
+    "**Variadic:** printf BAF+4; fprintf BAF+5",
+    "**Caller:** removes arguments after return"
+  ],
+  "1132-shared-function-epilogue-and-return-values": [
+    "**One epilogue** per ordinary function",
+    "**IN2:** result survives frame + argument cleanup",
+    "**ACC:** scratch for long jumps",
+    "**-c / -v / -w:** compile / annotate / save"
+  ],
+  "1133-naked-functions-without-a-generated-frame": [
+    "**naked:** own register setup + control transfer",
+    "**return value:** IN2 only; no epilogue jump",
+    "**Compile-only:** main optional",
+    "**Linked without main:** warning; no generated entry"
+  ],
+  "114-placing-globals-in-ivt-with-sectionivt": [
+    "**Explicit section:** only `ivt` supported",
+    "**-O1:** known initializers → IVTE words",
+    "**Handler:** offset 20 → `0x80000014`",
+    "**IVTE:** SRAM-base pointers; no arbitrary-image relocation"
+  ],
+  "1151-default-compiler-generated-_start": [
+    "**Global initializers** before main",
+    "**main result:** discarded; ACC ← 0",
+    "**JUMP 0:** self-jump; emulator stops"
+  ],
+  "1152-picoos-libstart-startup-sequence": [
+    "**-C:** custom source or `.reti_blocks` entry",
+    "**_start:** first in `.text`",
+    "**Global initializers:** before either entry",
+    "**Runtime:** heap + environment → main → exit"
+  ],
+  "116-program-sections-interrupt-table-entries-and-linker-placement": [
+    "**Order:** `.ivt` → `.text` → `.data`",
+    "**-O1:** known globals become words",
+    "**Runtime initializers:** execute at startup",
+    "**Linked labels:** assembly calls C helpers"
+  ],
+  "117-reti-pseudoinstructions": [
+    "**Hardware limits:** 22-bit immediates + relative jumps",
+    "**Conditional JUMP32:** compare ACC with zero",
+    "**Numeric operands:** direct; **symbols:** resolved after linking"
+  ],
+  "1171-interrupt-safe-push-and-pop": [
+    "**SP:** free cell below occupied stack",
+    "**PUSH:** reserve before write",
+    "**POP:** read before release",
+    "**Interrupts:** preserve unfinished stack update"
+  ],
+  "1172-loading-32-bit-values-with-loadi32": [
+    [
+      "**32-bit reconstruction**",
+      "**Upper 22 bits:** signed two’s complement",
+      "**Lower 10 bits:** inserted by ORI",
+      "**Label address:** add CS afterward"
+    ],
+    [
+      "**Arithmetic**",
+      "**Sign bit set:** subtract 2²²",
+      "**Products:** same low 32 bits",
+      "**Signed LOADI:** rejects unsigned upper 2097152",
+      "**C signed multiply:** remain within int32 range"
+    ]
+  ],
+  "1173-long-jumps-with-jump32": [
+    "**Symbol:** CS-relative target; add CS",
+    "**Numeric target:** absolute; omit ADD CS",
+    "**Conditional:** opposite short jump skips expansion",
+    "**Sizes:** symbolic 5/6; numeric 4/5 instructions"
+  ],
+  "1174-pseudoinstruction-expansion-during-linking": [
+    "**reti_patch:** PUSH/POP; numeric immediates; redundant jumps",
+    "**Count expanded sizes** before resolving labels",
+    "**reti pass:** expand LOADI32/JUMP32; resolve targets",
+    "**Concrete instructions** reach emulator"
+  ],
+  "118-linked-sections-metadata-and-the-five-word-binary-header": [
+    [
+      "**Linked metadata**",
+      "**Compile-only:** no `.sections` file",
+      "**Heap start:** max(data words, symbol storage)",
+      "**Explicit sizes:** cell offsets/counts"
+    ],
+    [
+      "**Binary loading**",
+      "**Header:** five big-endian words; 20 bytes",
+      "**ff ff ff ff:** −1 default marker",
+      "**Bootloader:** discards heap fields",
+      "**SRAM:** payload only; reserve process heap/stack"
+    ]
+  ],
+  "119-generated-memory-constants-for-the-bootloader-and-kernel": [
+    "**-k sram / eprom:** header-only generation",
+    "**Then compile:** include generated header",
+    "**Kernel:** 4,096 heap; 2,715 stack cells",
+    "**Header:** absolute addresses; **.sections:** relative offsets"
+  ],
+  "121-reti-machine-model-and-memory-mapped-peripherals": [
+    "**Periphery cell n:** `0x40000000 + n`",
+    "**SRAM base:** `0x80000000`",
+    "**Exception:** direct ISR 3",
+    "**Cell 10:** selected process’s final heap cell"
+  ],
+  "122-atomic-test-and-set-with-tsl": [
+    "**TSL:** old value → register; memory ← 1",
+    "**Read + write:** indivisible across interrupts/switches"
+  ],
+  "1221-test-and-set-in-sram": [
+    "**Offset 2:** two words; third cell",
+    "**D:** exact old word; any value",
+    "**S = D:** address saved before read",
+    "**SP / PC destinations:** special control effects"
+  ],
+  "1222-tsl-instruction-encoding": [
+    "**Encoded word:** `0xAEC00002`",
+    "**i:** signed 22-bit displacement",
+    "**testset:** old zero means lock acquired"
+  ],
+  "123-uart-host-service-protocol": [
+    [
+      "**Host service**",
+      "**Root:** emulator launch directory",
+      "**Paths:** normalize `..`; block symlink escapes",
+      "**Requests:** filesystem operations; debugger separate"
+    ],
+    [
+      "**Transfers**",
+      "**load failure:** UINT32_MAX",
+      "**Process loads:** DMA or 1 KiB polling chunks",
+      "**Between chunks:** UART available to other processes"
+    ],
+    [
+      "**Output**",
+      "**write / write-at:** select destination",
+      "**stdout / stderr:** change destination",
+      "**literal-output:** protect escape bytes"
+    ]
+  ],
+  "124-debugger-source-view-and-terminal-modes": [
+    "**Tab / Shift+Tab:** choose window",
+    "**a:** register/address; **j/k:** scroll; **C:** center",
+    "**PC + BAF:** source location + frame metadata",
+    "**Raw V:** forwards arrows, Ctrl+C, Ctrl+Z",
+    "**Ctrl+]:** return to debugger"
+  ],
+  "21-reti-interrupt-entry-and-the-interrupt-service-routine-table": [
+    "**ISR pointer:** direct PC load; no C frame",
+    "**INT 0:** saves instruction’s own PC",
+    "**Hardware/fault:** saves resume/retry PC minus one",
+    "**General registers:** saved explicitly by ISR"
+  ],
+  "22-interrupt-controller-mappings-and-priorities": [
+    "**Timer/DMA/UART:** ISR 1/4/2",
+    "**Priorities:** 1 / 1 / 2",
+    "**UART:** may nest; equal priorities wait"
+  ],
+  "221-interrupt-controller-initialization": [
+    "**Disable:** mapping 255; priority 0",
+    "**.data arrays:** indices + priorities",
+    "**.ivt array:** actual handler pointers",
+    "**Timer:** 5,000 instructions after init ready"
+  ],
+  "23-saved-interrupt-stack-frame": [
+    "**Live BAF:** saved-frame address; not saved BAF value",
+    "**Activation:** copy offsets 1–6; SP ← context+6",
+    "**Return PC:** process stack at activation.sp+1",
+    "**No isolation:** either stack/kernel memory writable"
+  ],
+  "241-syscall-selectors-and-register-convention": [
+    "**ACC:** selector; **IN1:** argument/request address",
+    "**IN2:** result; shared PicoC convention",
+    "**Request frame:** survives suspended syscall",
+    "**Kernel:** retains needed fields, not request pointer"
+  ],
+  "2412-file-and-directory-request-structures": [
+    "**load / file read:** reuse request across chunks",
+    "**Terminal read:** PCB retains buffer + count",
+    "**Single value:** PID, descriptor, path, queue pointer"
+  ],
+  "2421-entering-kernel-context": [
+    "**User stack:** saved interrupted registers remain",
+    "**Kernel stack:** only call arguments copied"
+  ],
+  "24211-stack-boundary-helpers": [
+    "**Cell 10:** lowest allowed free SP",
+    "**Zero:** disables protection",
+    "**Interrupt entry:** bypasses exhausted-stack check",
+    "**Kernel entry:** disable → load SP → install limit",
+    "**Borrowed stack:** retain existing boundary"
+  ],
+  "2423-selecting-the-return-path": [
+    "**Request flag:** no context save or switch",
+    "**Saved IN2:** preserves result across scheduling",
+    "**Block / yield / exit:** can dispatch inside syscall",
+    "**Check → RTI:** non-atomic; late request stays pending"
+  ],
+  "2424-restoring-process-context-with-rti": [
+    "**Direct return:** registers from saved user frame",
+    "**Scheduled return:** registers from selected PCB",
+    "**RTI:** read SP+1; SP++; PC ← saved PC+1"
+  ],
+  "25-timer-interrupts-and-userspace-preemption": [
+    "**5,000 instructions** per timer interval",
+    "**Instruction count:** independent of wall-clock time"
+  ],
+  "2511-saving-context-and-selecting-the-timer-branch": [
+    "**Saved PC ≤ kernel DS:** deferred kernel branch",
+    "**Saved PC > kernel DS:** immediate userspace branch",
+    "**PC test:** handles changing-CS restore windows"
+  ],
+  "2514-entering-kernel-context-for-userspace-preemption": [
+    "**Userspace branch:** dispatcher directly",
+    "**No deferred request** check",
+    "**Nested UART:** return, then continue switching"
+  ],
+  "253-shell-character-delay-for-different-timer-intervals": [
+    "**5,000 instructions:** chosen interval",
+    "**10,000:** similar measured character delay",
+    "**Shorter turns:** more switching overhead"
+  ],
+  "264-uart-nesting-and-interrupt-priorities": [
+    "**Ctrl+C:** deferred current-process termination",
+    "**Ctrl+Z:** state change; no reschedule request",
+    "**Timer:** one outstanding expiration; **DMA:** latched completion",
+    "**UART:** host queues later bytes while delivery waits",
+    "**Kernel ring full:** drops new byte"
+  ],
+  "272-completing-the-dma-wait": [
+    "**DMA:** one idle transfer; caller queues + dispatches",
+    "**Completion:** remove FIFO head; clear membership",
+    "**Stopped waiter:** STOPPED; prior state becomes READY",
+    "**Later execution:** select caller; check transfer result"
+  ],
+  "281-cpu-exception-entry-and-registers": [
+    "**ISR 3:** bypasses mappings + priorities",
+    "**Fault context:** never resumed"
+  ],
+  "2811-entering-kernel-context-after-a-fault": [
+    "**Exception entry:** abandon faulting stack",
+    "**General registers:** no resumable frame saved",
+    "**Interrupted CS:** preserve for classification"
+  ],
+  "2813-halting-the-kernel-or-terminating-the-process": [
+    "**Borrowed-stack handler:** kernel CS → panic",
+    "**Process heap exhaustion:** syscall → termination",
+    "**Neither path:** restore faulting instruction"
+  ],
+  "282-supported-exceptions-and-allocation-errors": [
+    "**CPU fault / heap exhaustion:** termination or halt",
+    "**Bad argument / missing file / image:** ordinary failure"
+  ],
+  "31-heap-block-layout-and-allocation-algorithm": [
+    "**Header:** three cells; payload follows immediately",
+    "**Allocation:** first fit; optional split",
+    "**Free:** repeatedly coalesce adjacent free blocks",
+    "**Realloc:** resize in place or move"
+  ],
+  "32-sram-image-and-heap-hierarchy": [
+    "**Sizes:** 32-bit RETI cells",
+    "**Current kernel offsets:** change after rebuilding",
+    "**Process base:** absolute; heap_start relative",
+    "**libstart:** heap-bounds syscalls initialize inner allocator"
+  ],
+  "361-common-allocator-linkage-and-function-reference": [
+    "**Same allocator:** kernel + each user image",
+    "**Region + failure policy:** chosen by wrappers",
+    "**free / realloc:** valid pointer in supplied heap",
+    "**Ownership check:** absent"
+  ],
+  "362-reallocation-decisions": [
+    "**Failed move:** old block preserved",
+    "**Growth:** absorbs at most one successor",
+    "**Shrink/free:** repeated merge scan"
+  ],
+  "36343-second-merge-at-b": [
+    "**Recheck same header:** merge entire free run",
+    "**Contiguous address order:** required by scan",
+    "**Example test:** first fit, split, merge, preserved data"
+  ],
+  "41-process-control-block-fields": [
+    "**PCB addresses:** physical; no MMU translation",
+    "**binary_path:** survives user changes to argv[0]"
+  ],
+  "411-process-states-and-transitions": [
+    "**NEW:** prevents scheduling + duplicate run setup",
+    "**NEW stop/continue:** can expose unstarted process",
+    "**READY / RUNNING:** scheduler accepts both",
+    "**ZOMBIE:** retains status + resources until collection"
+  ],
+  "412-global-process-list-and-current-process": [
+    "**Append:** creation order; O(1) through tail",
+    "**Scheduler:** head + next; never uses tail",
+    "**Shared registry:** prepend; no tail needed",
+    "**Lookup/removal:** predecessor search still linear",
+    "**next / wait_next:** independent list memberships"
+  ],
+  "42111-processload-transfer-record": [
+    "**Owner:** loading caller’s pending_load",
+    "**No child PCB:** until complete reception",
+    "**Success:** transfer payload; free record + path",
+    "**Failure:** cancel DMA; free partial payload + metadata"
+  ],
+  "4213-process-stack-after-load": [
+    "**NEW:** not yet runnable",
+    "**Initialized:** highest stack cell only",
+    "**No argc / argv / envp** yet",
+    "**Other cells:** unspecified; load does not zero"
+  ],
+  "422-starting-a-process-run-library-call": [
+    "**Arguments:** spaces/tabs; quoted whitespace preserved",
+    "**Kernel:** builds pointer arrays + copies strings",
+    "**READY:** permits scheduling; no immediate CPU load",
+    "**First dispatch:** libstart initializes heap + environment"
+  ],
+  "42211-user-process-stack-placement": [
+    "**Default heap:** 1,000 cells",
+    "**Default stack offset:** reserves 1,001 cells beyond heap",
+    "**Loader:** reject stack inside heap; add inclusive cell"
+  ],
+  "42212-initial-argc-argv-and-envp": [
+    "**argv[0]:** executable path without leading /",
+    "**Each character:** one RETI cell",
+    "**Strings + pointer arrays:** zero/null terminated",
+    "**argv / envp:** array addresses; no extra pointer cells",
+    "**Startup data:** no heap-boundary fit check"
+  ],
+  "422121-concrete-initial-stack-example": [
+    "**argc = 3; envc = 2:** 29 startup cells",
+    "**Entry PC:** base_address + size − 29",
+    "**waitpid result:** 5 after successful load/run"
+  ],
+  "42221-environment-origin-and-propagation": [
+    [
+      "**Environment source**",
+      "**Init:** empty; then config/environment.txt",
+      "**run(NULL):** calling process’s current environment",
+      "**Custom array:** replacement; no merge",
+      "**Empty array:** `{NULL}`; not NULL pointer"
+    ],
+    [
+      "**Independent copies**",
+      "**Kernel:** strings onto child stack",
+      "**libstart:** array + strings into child heap",
+      "**Local changes:** future children; existing copies unchanged",
+      "**PCB:** no environment pointer"
+    ]
+  ],
+  "42222-loading-bar-environment-variable": [
+    "**Presence:** enables bars; value false still enables",
+    "**unsetenv:** disables bars",
+    "**cat:** removes own entry; shell remains unchanged"
+  ],
+  "51-named-entries-and-per-process-attachments": [
+    "**Entry:** data region metadata; **attachment:** process-owned mapping",
+    "**Existing name:** reuse ID; ignores new requested size",
+    "**Missing name + size ≤0:** fail",
+    "**Payload:** initially unspecified; caller initializes"
+  ],
+  "52-mapping-unlinking-and-deferred-destruction": [
+    [
+      "**Mapping + unlink**",
+      "**Every mmap:** attachment + reference increment",
+      "**No munmap:** process removal releases mappings",
+      "**Unlink:** name removed; numeric ID remains usable",
+      "**Reopen name:** creates separate entry"
+    ],
+    [
+      "**Lifetime**",
+      "**Named + zero mappings:** stays allocated",
+      "**Zombie:** keeps attachments until final removal",
+      "**Destroyed:** unlinked + reference count zero",
+      "**Shared visibility:** synchronization still required"
+    ]
+  ],
+  "611-algorithm-and-round-robin-comparison": [
+    "**Lazy Round Robin:** scan after current; wrap at tail",
+    "**Each PCB:** inspected at most once",
+    "**No ready queue:** woken process keeps list position",
+    "**Timer:** voluntary switch does not reset interval",
+    "**Selected process:** may receive partial quantum"
+  ],
+  "6112-starting-at-the-head-after-the-last-process": [
+    "**Wraparound:** search reassignment to head",
+    "**Tail next:** stays NULL; list order unchanged"
+  ],
+  "6113-reaching-the-list-end-during-a-scan": [
+    "**Only current runnable:** can select it again",
+    "**None runnable:** NULL; dispatcher retries",
+    "**PCBs remain:** interrupts may wake processes",
+    "**Empty list:** return; no idle process"
+  ],
+  "6114-implementation": [
+    "**One list:** fewer state-change updates",
+    "**Worst case:** O(number of PCBs) selection"
+  ],
+  "62-saved-process-registers": [
+    "**Activation:** embedded; PCB allocation + lifetime",
+    "**Field order:** fixed assembly offsets",
+    "**PC:** remains on user stack; no activation field"
+  ],
+  "63-saving-the-current-process-and-selecting-the-next-process": [
+    "**Save first:** activation before state change",
+    "**RUNNING → READY:** ordinary resumable switch",
+    "**BLOCKED / STOPPED:** preserved during save",
+    "**Termination candidate:** reject + retry selection"
+  ],
+  "64-restoring-the-selected-process-and-returning-with-rti": [
+    "**PCB + boundary:** arguments on kernel stack",
+    "**Load saved SP:** switches to selected user stack",
+    "**Startup / termination:** no outgoing activation save"
+  ],
+  "71-wait-queues-and-pcb-links": [
+    "**Intrusive FIFO:** links embedded in PCBs",
+    "**One process:** one waiting queue at a time",
+    "**Queue owner:** must outlive linked waiters",
+    "**Zombie:** may remain linked until removal"
+  ],
+  "712-child-waiting-with-waitpid": [
+    "**Only recorded parent:** may collect exact child",
+    "**Pending result:** parent’s suspended stack integer",
+    "**Stopped/zombie child:** immediate status; no queueing",
+    "**Parent removed:** unlink waiter before freeing PCB"
+  ],
+  "7121-recording-termination-status": [
+    "**WaitPidRequest:** two cells; status integer separate",
+    "**Result:** write status; retain result pointer only",
+    "**unload:** status 0; forces final removal"
+  ],
+  "7122-parent-collection-and-final-removal": [
+    "**Zombie:** full PCB + resources + pending load retained",
+    "**Child stop:** report status; retain resumable child",
+    "**Waiting parent:** child can disappear before parent resumes"
+  ],
+  "721-supported-signals-and-fixed-actions": [
+    "**Six signals:** fixed actions; cannot catch/ignore",
+    "**Signal 0:** existing non-zombie PID → 0",
+    "**Invalid / zombie:** −1"
+  ],
+  "725-signal-function-reference": [
+    "**Parent removal:** children parent_pid ← 0",
+    "**Configured signal:** delivered to surviving direct children",
+    "**PR_SET_PDEATHSIG, 0:** disable inherited policy",
+    "**No background reaper** or child-exit notification signal"
+  ],
+  "73-mutexes-with-test-and-set-and-wait-queues": [
+    "**Shared mutex:** same lock + embedded queue",
+    "**Wakeup:** retry TSL; ownership not transferred",
+    "**Only TSL:** atomic",
+    "**Failed test → sleep:** lost-wakeup window under preemption"
+  ],
+  "81-per-process-file-descriptor-table": [
+    "**Open:** lowest free slot 0–4; exhaustion −1",
+    "**Slots 5–7:** shell backups; explicit dup2 allowed",
+    "**STDERR kind:** preserved when copied to other index",
+    "**No pipe kind:** pipelines use files",
+    "**Zombie:** retains descriptor allocations until collection"
+  ],
+  "82-global-terminal-input-buffer": [
+    "**128 cells:** all usable; count distinguishes full/empty",
+    "**Full ring:** drop incoming byte; no flow control",
+    "**Read:** available bytes; need not fill count",
+    "**Accessor:** exposes object without usable extern globals"
+  ],
+  "83-blocking-and-completing-terminal-reads": [
+    "**UART mask:** atomic buffer check + queue insertion",
+    "**PCB retains:** destination + count; not IoRequest",
+    "**One input owner:** one active queued terminal read",
+    "**Stopped read:** detached; buffer/count retained",
+    "**Restored syscall:** saved count; no application retry"
+  ],
+  "84-foreground-input-ownership-and-terminal-generated-signals": [
+    "**set_foreground_process(0):** store negative caller PID",
+    "**Nonowner read:** SIGTTIN even with buffered input",
+    "**fg:** ownership before SIGCONT",
+    "**bg:** pending terminal reader stays stopped",
+    "**Ctrl+D:** cat convention; kernel stores byte 4"
+  ],
+  "85-virtual-terminal-and-null-device-paths": [
+    "**Exact normalized paths:** select kernel behavior",
+    "**Marker contents:** no device state",
+    "**Other /device paths:** ordinary host files",
+    "**Null write:** count + logical offset; no UART"
+  ],
+  "88-opening-reading-writing-and-seeking": [
+    [
+      "**Reads + offsets**",
+      "**Regular read:** ≤1 KiB per syscall",
+      "**Partial error:** return transferred count",
+      "**Each return:** permits deferred scheduling",
+      "**Device seeks:** rejected"
+    ],
+    [
+      "**Writes**",
+      "**Append:** size request before each write",
+      "**Concurrent append:** unsupported; separate host operations",
+      "**Host write failure:** no acknowledgement; may report success",
+      "**Arbitrary data:** write protects escape bytes"
+    ]
+  ],
+  "89-picoos-paths-working-directories-and-host-operations": [
+    "**PicoOS chdir:** PCB only; host directory unchanged",
+    "**Relative paths:** prepend PCB working directory",
+    "**Normalize:** separators, dot, root-clamped dot-dot, PATH_MAX",
+    "**chdir failure:** old directory preserved",
+    "**getcwd:** copy stored path; no host request"
+  ],
+  "91-memory-layout-allocation-sources-and-lifetimes": [
+    "**Kernel locals:** kernel stack or borrowed interrupt stack",
+    "**Pointer field:** lives with containing object",
+    "**Target lifetime:** may differ from field lifetime"
+  ],
+  "92-containment-and-reference-relationships": [
+    "**Kernel requests:** local frames; no heap allocation",
+    "**next / wait_next:** different lists",
+    "**waiters / waiting_queue_ptr:** ownership versus membership",
+    "**parent_pid / device path:** IDs/names; not object pointers"
+  ],
+  "94-wait-requests-and-queue-storage": [
+    "**Queue:** two PCB pointers; no waiter-node allocation",
+    "**waitpid:** child PCB’s existing embedded queue",
+    "**Stack-local queue:** must outlive every waiter"
+  ],
+  "1011-header-implementation-and-linking": [
+    "**Header:** signatures; compiler checks calls",
+    "**Implementation:** linked into user image",
+    "**libwait:** private syscall bridge; no unistd dependency",
+    "**Kernel:** separate build; runtime INT 0 entry"
+  ],
+  "1012-packing-arguments-and-executing-the-syscall": [
+    "**Request + result:** stack-local; no heap allocation",
+    "**Helper zero:** retry",
+    "**Blocked wait resumes:** IN2=1; no busy polling",
+    "**Public result:** child status; no options argument"
+  ],
+  "102-library-overview-and-dependencies": [
+    "**Private syscall helpers:** avoid full unistd dependency",
+    "**Plain writers:** no stdio streams/format parser",
+    "**Short local loops:** avoid unused string library",
+    "**Smaller image:** more SRAM for heap + stack",
+    "**UART backend:** usable before userspace startup"
+  ],
+  "1024-mutex-locking-and-waking-contenders": [
+    "**Shared object:** lock + queue visible to participants",
+    "**Failed test → sleep:** lost-wakeup limitation"
+  ],
+  "1026-dirent-directory-streams": [
+    "**Listing:** fetched once; 512-cell owned buffer",
+    "**readdir:** reused embedded entry; copy before next call"
+  ],
+  "10271-heap-operations-in-mallocpicoc": [
+    "**Positive allocation failure:** heap-full syscall",
+    "**Diagnostic:** descriptor 1; redirected output possible"
+  ],
+  "10273-environment-operations-in-envpicoc": [
+    "**envp:** argv + argc + 1",
+    "**Startup:** stack array/strings → heap-owned environ",
+    "**Lookup:** exact name followed by =",
+    "**Empty value:** terminator pointer; **missing:** NULL",
+    "**Returned value:** existing string; no allocation"
+  ],
+  "1028-string-copying-comparison-and-length": [
+    "**Local memory only:** no syscall/allocation",
+    "**Sizes:** RETI cells; leave room for terminator"
+  ],
+  "1029-stdio-streams-formatting-and-scanning": [
+    "**Per image:** standard streams + five extra slots",
+    "**No private buffers** or EOF/error flags",
+    "**Scanning:** one-character pushback globals"
+  ],
+  "10291-streams-and-output-in-stdiopicoc": [
+    "**First use:** descriptor availability queried once",
+    "**Formats:** %d · %c · %s · %%"
+  ],
+  "10292-scanning-in-scanfpicoc": [
+    "**Formats:** %d · %c · %s",
+    "**Also:** literal characters + whitespace",
+    "**Pushback:** one character via image globals"
+  ],
+  "10211-single-function-libraries": [
+    "**Reboot:** EPROM → reload kernel + init",
+    "**Self termination signal:** may return before dispatch"
+  ],
+  "112-kernel-startup": [
+    "**Globals:** kernel .data",
+    "**init_request:** kernel-stack local",
+    "**Generated entry:** calls kernel main"
+  ],
+  "1121-loading-init-and-entering-normal-execution": [
+    "**Init:** PID 1; directory /; no parent",
+    "**Environment:** empty; argv[0] only",
+    "**First dispatch:** RTI → libstart; not main directly",
+    "**Load/run failure:** return to generated halt"
+  ],
+  "1131-init-responsibilities": [
+    "**Kernel:** execution + resources",
+    "**Init:** configure session; keep shell available",
+    "**Init path:** resolve from /; no pwd host request"
+  ],
+  "1132-initial-environment-configuration": [
+    "**257-cell buffer:** reject file ≥256 cells",
+    "**Records:** newline/CRLF-separated NAME=value",
+    "**Configuration failure:** init returns 1",
+    "**PATH=/user:** optional loading-bar entry"
+  ],
+  "1133-loading-starting-and-waiting-for-the-shell": [
+    "**Environment:** config parsed before shell loop",
+    "**waitpid:** exact shell PID; exit or stop",
+    "**Failure:** environment/load/run → status 1"
+  ],
+  "1134-shell-startup": [
+    "**Own heap + environment:** libstart before main",
+    "**Descriptors + input ownership:** then command loop",
+    "**Init waits:** shell return permits new session"
+  ],
+  "1135-loading-user-applications": [
+    "**External command:** fresh payload; load + run",
+    "**Built-in:** executes inside shell",
+    "**Foreground:** shell waits; **background:** next prompt"
+  ],
+  "121-shell-owned-state": [
+    "**.data:** history, read-ahead, pipeline scratch",
+    "**Stack:** 80-cell command array",
+    "**Input path:** terminal ring → shell buffer → command",
+    "**Environment:** separate User Process Heap allocations"
+  ],
+  "122-shell-startup-and-command-loop": [
+    "**Startup:** close 3–7; keep inherited standard streams",
+    "**Input ownership:** negative shell PID",
+    "**Parent-death policy:** SIGKILL",
+    "**Redirected stdin:** commands until EOF",
+    "**Read-ahead:** retain bytes after first newline"
+  ],
+  "123-interactive-line-editing-and-command-history": [
+    "**Command buffer:** 79 characters + terminator",
+    "**Ctrl+C / Ctrl+Z:** consumed before line editing",
+    "**Read-ahead:** up to 128 cells",
+    "**Echo:** batch printable bytes; flush before controls"
+  ],
+  "124-command-parsing-expansion-and-execution": [
+    "**One unquoted pipe:** balanced quotes required",
+    "**Arguments only:** $NAME, $?, $! expansion",
+    "**Names / redirection paths:** no expansion",
+    "**Quotes:** preserve whitespace; do not suppress expansion",
+    "**Backslashes:** no general shell escape pass",
+    "**PATH:** colon-separated; slash names load directly"
+  ],
+  "125-shell-built-in-commands": [
+    "**9 built-ins:** mutate shell’s own state",
+    "**No unset / wait** built-ins",
+    "**NAME=value alone:** external command",
+    "**Operands:** required; exit/fg/bg reject extras"
+  ],
+  "1251-foreground-processes-background-processes-and-job-control-signals": [
+    [
+      "**Job control**",
+      "**Foreground:** transfer input; exact-PID wait; reclaim",
+      "**Stopped child:** tracked by $! for fg/bg",
+      "**fg:** ownership → SIGCONT → wait",
+      "**Background:** independent redirected descriptors"
+    ],
+    [
+      "**Status + cleanup**",
+      "**$!:** one remembered PID; no job table",
+      "**Background completion:** no asynchronous status update",
+      "**Background zombies:** no automatic collection",
+      "**fg zombie:** SIGCONT fails; does not reap"
+    ]
+  ],
+  "126-inputoutput-redirection": [
+    [
+      "**Redirection rules**",
+      "**Backup slots:** stdin 5; stdout 6; stderr 7",
+      "**Open 0–4 full:** fail before starting child",
+      "**Operators:** input → stdout → stderr order",
+      "**Parse suffixes:** remove in reverse order"
+    ],
+    [
+      "**Lifetime + failures**",
+      "**Dup2:** separate path + offset copies",
+      "**Restore shell:** before foreground wait",
+      "**Setup failure:** close temporary + saved descriptors",
+      "**Nested shell:** keeps redirected 0–2"
+    ]
+  ],
+  "127-sequential-file-backed-pipelines": [
+    "**One pipeline:** finite foreground commands",
+    "**TMP:** `.picoos-pipe-<shell PID>.tmp`",
+    "**Existing TMP:** truncated, then removed",
+    "**Longer pipelines / &:** unsupported",
+    "**Whole producer result:** stored before consumer starts"
+  ],
+  "131-writing-a-simple-user-application": [
+    "**argc check:** two operands; failure status 1",
+    "**atoi + printf:** conversion + sum output",
+    "**--direct-source-link:** source compilation + link",
+    "**-C libstart:** heap/environment → main → exit",
+    "**stdout:** inherited; shell may redirect"
+  ],
+  "132-applications-library-calls-and-host-requests": [
+    "**Command loading:** parent shell’s operation",
+    "**Output routing:** depends on inherited descriptor",
+    "**Echo:** -h/--help ordinary text",
+    "**Other commands:** sole help argument recognized"
+  ],
+  "1321-command-behavior-and-supported-options": [
+    "**Killed counter:** probe fails; ps still shows zombie",
+    "**$!:** choose actual PID without hardcoding"
+  ],
+  "141-library-os-shell-and-boot-test-categories": [
+    "**63 classes:** 13 library; 23 OS; 26 shell; 1 boot",
+    "**49 System tests:** OS + shell",
+    "**Missing input/expectation:** directory excluded",
+    "**cat_binary:** shell fixture by exact input rule"
+  ],
+  "1411-files-that-make-up-a-test": [
+    "**Fixtures:** stage under binary/test",
+    "**Private applications:** compiled + assembled there",
+    "**Runner:** original input; **guest:** staged data"
+  ],
+  "1412-library-test-example": [
+    "**Library test:** linked ISR support; no PicoOS kernel",
+    "**Staged/direct:** same second-line expectation",
+    "**Compare:** ignore trailing whitespace per line",
+    "**Failure:** mismatch, error, missing output, 5-second timeout"
+  ],
+  "1413-os-test-example": [
+    "**OS category:** launcher + exact three-line input",
+    "**Launcher:** orchestrates processes/events without host commands"
+  ],
+  "1414-shell-test-example": [
+    "**Encoded keys:** arrows, Home, Escape, Backspace, controls",
+    "**Input:** send next line after new prompt",
+    "**Private programs/data:** optional"
+  ],
+  "1415-boot-test-example": [
+    "**One boot fixture:** no private PicoC program",
+    "**Same full startup:** bootloader → kernel → init → shell"
+  ],
+  "142-test-execution": [
+    "**Per class:** fresh emulator + temporary peripherals",
+    "**Staged:** reusable artifacts; **direct:** source linking",
+    "**Timeouts:** library 5 s; other categories 120 s",
+    "**CI:** all categories; direct linking + DMA"
+  ],
+  "1421-make-targets": [
+    "**run-os:** inspect OS_RUN_PATH; no expected-output comparison",
+    "**Non-debug:** still records output files"
+  ],
+  "151-operating-systems-topics": [
+    "**Compare:** PicoC → symbolic RETI → binary → live state",
+    "**Files:** descriptors + UART host requests"
+  ],
+  "1512-exploring-userspace-heap-allocation": [
+    "**Predict:** storage, aliases, required free address",
+    "**Single-step:** p3 retains allocation; inspect write through a",
+    "**Then:** longer reuse + block-merging traces"
+  ],
+  "1513-editing-and-executing-symbolic-reti-assembly": [
+    "**Labels + pseudoinstructions:** compiler resolves/expands",
+    "**Loop counter:** IN1: 3 → 2 → 1 → 0",
+    "**After POP:** initial IN1, ACC, SP restored",
+    "**-K:** inspect final state after JUMP 0"
+  ],
+  "152-real-time-operating-systems-topics": [
+    "**Inspect:** scheduling, waiting, synchronization",
+    "**Deadlines:** no real-time guarantees"
+  ],
+  "1521-parent-workers-and-shared-memory": [
+    "**Three processes:** parent + two identical workers",
+    "**One region:** counter + shared mutex",
+    "**Separate local mutexes:** would not protect common counter",
+    "**Two increments:** expected final value 2"
+  ],
+  "1522-minimal-launcher-and-worker-code": [
+    "**Initialize mutex:** before starting either child",
+    "**Open existing:** size 0 prevents accidental creation",
+    "**yield while locked:** permits contention; no order guarantee",
+    "**Unlink:** parent mapping retains data until removal"
+  ],
+  "1523-following-the-counter-and-mutex-through-execution": [
+    [
+      "**Wakeup**",
+      "**Queue:** shared memory; **PCB:** Kernel Heap",
+      "**Unlock:** waiter becomes READY",
+      "**Later dispatch:** retry TSL; acquire lock"
+    ],
+    [
+      "**Lost-update experiment**",
+      "**Split read/write:** yield between them; remove mutex",
+      "**Both read 0:** both write 1",
+      "**Original yield after write:** may still produce 2"
+    ]
+  ],
+  "appendix-inspecting-bin-files-with-hexyl": [
+    "**Header:** 20 bytes; words big-endian",
+    "**Transfer word count:** UART only; absent from file",
+    "**Image word 32:** byte 20 + 4×32 = 148",
+    "**Negative skip:** count backward from file end"
   ]
 }

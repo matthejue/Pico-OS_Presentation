@@ -109,9 +109,11 @@ function measure() {
     const panel = frame.value.closest('.composition-panel')
     if (panel) availableHeight = rowBudget(panel)
     if (parent?.matches('.layout-stacked')) availableHeight = rowBudget(frame.value)
-    if (parent?.matches('.layout-compact-stacked')) {
-      const siblings = [...parent.children].filter(child => child !== frame.value)
-      availableHeight = parent.clientHeight - parseFloat(getComputedStyle(parent).rowGap) * siblings.length
+    const compactGroup = frame.value.closest('.layout-compact-stacked')
+    if (compactGroup) {
+      const siblings = [...compactGroup.children].filter(child => !child.contains(frame.value))
+      const budget = compactGroup.matches('.composition-panel') ? rowBudget(compactGroup) : compactGroup.clientHeight
+      availableHeight = budget - parseFloat(getComputedStyle(compactGroup).rowGap) * siblings.length
         - siblings.reduce((sum, sibling) => sum + occupiedHeight(sibling), 0)
     }
     const commandGroup = parent?.closest('.layout-command-above')

@@ -58,11 +58,14 @@ export async function compareSource(directory = root) {
 export async function saveSource(directory = root, now = new Date()) {
   const baseline = await loadSourceState(directory)
   const repository = process.env.README_REPOSITORY || baseline.state.primarySource.repository
-  const commit = (await git(repository, 'rev-parse', 'HEAD')).trim()
-  const dirty = Boolean((await git(repository, 'status', '--porcelain')).length)
-  const readme = await fs.readFile(path.join(repository, 'README.md'))
+  const requestedCommit = process.env.PRESENTATION_SOURCE_COMMIT
+  const commit = (await git(repository, 'rev-parse', requestedCommit || 'HEAD')).trim()
+  const workingTreeDirty = Boolean((await git(repository, 'status', '--porcelain')).length)
+  const dirty = requestedCommit ? false : workingTreeDirty
+  const readme = requestedCommit ? Buffer.from(await git(repository, 'show', `${commit}:README.md`))
+    : await fs.readFile(path.join(repository, 'README.md'))
   const candidate = await fs.readFile(process.env.PRESENTATION_SOURCE || path.join(repository, 'README.md'))
-  if (!candidate.equals(readme)) throw new Error('Validated candidate must match the current Pico-OS README bytes')
+  if (!candidate.equals(readme)) throw new Error('Validated candidate must match the selected Pico-OS README bytes')
   const coverage = JSON.parse(await fs.readFile(path.join(directory, 'docs/readme-coverage.json'), 'utf8'))
   if (coverage.sourceSha256 !== hash(readme)) throw new Error('Deck coverage does not match the current README; rebuild and validate first')
   const slideCount = inspectSlides(await fs.readFile(path.join(directory, 'slides.md'), 'utf8')).slideCount
@@ -75,12 +78,16 @@ export async function saveSource(directory = root, now = new Date()) {
   const date = berlinDate(now)
   const snapshot = `.source/Pico-OS-README-${date}.md`
   const statePath = path.join(directory, `.source/source-state-${date}.json`)
+  const primarySource = { ...baseline.state.primarySource }
+  delete primarySource.selection
+  delete primarySource.workingTreeChangesExcluded
   const state = {
     ...baseline.state, generatedAt: date, savedAt: now.toISOString(), slideCount,
     primarySource: {
-      ...baseline.state.primarySource, repository, commit, snapshot,
+      ...primarySource, repository, commit, snapshot,
       contentSha256: hash(readme),
       dirtyAtGeneration: dirty,
+      ...(requestedCommit ? { selection: 'commit', workingTreeChangesExcluded: workingTreeDirty } : {}),
     },
     comparisonBase: {
       commit: baseline.state.primarySource.commit,

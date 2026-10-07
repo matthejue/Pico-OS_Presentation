@@ -628,11 +628,28 @@ html.selectable-text .slidev-layout * {
 .layout-command-above > .readme-visual, .layout-command-above > .code-columns,
 .layout-compact-stacked > .readme-visual { flex: 0 1 auto; aspect-ratio: var(--source-aspect); }
 .layout-command-above > .command-strip { flex: none; height: var(--fitted-height, 54px); aspect-ratio: auto; }
-.layout-single > .readme-visual[data-kind="code"] { max-width: var(--code-max-width, 760px); align-self: center; }
+.layout-single > .readme-visual[data-kind="code"] { width: 100%; align-self: stretch; }
 .code-columns > .readme-visual { width: 100%; min-width: 0; }
 .layout-single > .code-columns { flex: 1; }
 .readme-visual[data-kind="code"] { justify-items: start; align-items: center; }
 .readme-code { width: 100%; }
+.readme-math { padding: 16px; border: 1px solid var(--line-strong); background: #f4f8f8; font-size: 20px; }
+.readme-code-header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 9px 16px; background: var(--code-header); border-bottom: 1px solid var(--line); color: var(--cyan-dim); font: 600 13px/1.35 'Fira Code', monospace; overflow-wrap: anywhere; }
+.readme-code-header .code-range { flex: none; color: var(--muted); font-size: 11px; font-weight: 400; }
+.prose-summary { flex: none; padding: 0; font-size: 0.87rem; }
+.prose-summary > ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1.7rem; }
+.prose-summary li { margin: 0; }
+.prose-summary li ul { display: block; margin-top: 0.3rem; }
+.prose-summary li ul li { margin: 0.16rem 0; }
+.prose-with-code > .prose-summary > ul { display: block; }
+.prose-with-code .prose-summary { font-size: 0.93rem; }
+.prose-with-code .prose-summary li { margin: 0.45rem 0; }
+.summary-cards > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; list-style: none; padding: 0; }
+.summary-cards > ul > li { padding: 1rem; border: 1px solid var(--line-strong); border-top: 3px solid var(--cyan); background: #f4f8f8; font-size: 1rem; }
+.summary-cards > ul > li > ul { margin-top: 0.75rem; padding-left: 1.1rem; font-size: 0.93rem; }
+.layout-compact-stacked > .readme-list { flex: none; padding: 0; font-size: 0.9rem; }
+.layout-compact-stacked > .readme-list > ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.5rem; }
+.layout-compact-stacked > .readme-list li { margin: 0; }
 .readme-list { justify-content: center; padding: 0.65rem 0; font-size: 1.05rem; }
 .readme-list li { margin: 0.5rem 0; }
 .readme-list > .readme-item { margin: 0.5rem 0; }

@@ -168,9 +168,17 @@ try {
       await page.locator(`.slidev-page-${target} .slidev-layout`).first().waitFor({ state: 'visible' })
       assert.equal(page.url(), url(target), `${section.number}: click navigates to slide ${target}`)
       const breadcrumb = page.locator(`.slidev-page-${target} [data-overview-anchor="${section.anchor}"]`).first()
-      assert.equal(new URL(await breadcrumb.getAttribute('href'), base).href, url(overview.page))
-      await breadcrumb.click()
-      await page.waitForURL(url(overview.page))
+      if (slides.find(slide => slide.page === target).anchor === section.anchor) {
+        // Direct top-level content has no README ancestor and therefore no
+        // invented breadcrumb; nested slides retain the linked ancestor.
+        assert.equal(await breadcrumb.count(), 0, `${section.number}: no invented ancestor on top-level content`)
+        await navigate(overview.page)
+      }
+      else {
+        assert.equal(new URL(await breadcrumb.getAttribute('href'), base).href, url(overview.page))
+        await breadcrumb.click()
+        await page.waitForURL(url(overview.page))
+      }
     }
     // Slidev's floating toolbar can cover the bottom-left footer in dev mode.
     // Exercise the return link through its native keyboard activation.

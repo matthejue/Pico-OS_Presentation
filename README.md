@@ -116,7 +116,8 @@ The current revision and update workflow are documented in
 [source review](docs/source-review.md).
 
 The titles reproduce the README hierarchy: preceding heading levels are joined
-with middle dots in the main title, and the current heading is the subtitle.
+with middle dots in the smaller ancestor line, and the current heading is the
+main slide title. Top-level content has no ancestor line.
 Sections spanning multiple slides use consecutive `(1)`, `(2)`, … suffixes.
 Function catalogs retain operations exposed through or called by a library,
 directly or through a syscall. Internal-only operations are omitted. Table
@@ -133,7 +134,7 @@ above the subsection hierarchy, with individual slide-number links.
 The unnumbered opening README topics form section **0. Introduction**, whose
 overview follows Contents. The README's opening **PicoOS** heading appears as
 **Introduction** in the presentation, including **Introduction (1)** through
-**Introduction (3)**. Its descendants use the linked ancestor **Introduction**,
+**Introduction (2)**. Its descendants use the linked ancestor **Introduction**,
 followed by any deeper README ancestors. Source anchors keep their README names.
 
 Shortcut hints start hidden in every presentation version. Press **H** to show
@@ -147,16 +148,18 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 361 slides (356 in the short deck). Slides load on demand to
+content slides are excluded. The full deck contains 341 slides (336 in the short deck). Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
 
-The source inventory tracks 387 substantive README artifacts: 124 code
-examples, 139 tables, 92 images (91 SVGs and one PNG), one terminal recording,
-and 31 lists. The 38 former Mermaid diagrams now use their current source SVGs. All code, diagrams, images, recordings, and substantive list
+The source inventory tracks 387 substantive README artifacts: 123 code
+examples, 138 tables, 92 images (91 SVGs and one PNG), one terminal recording,
+31 lists, and two equations. The 38 former Mermaid diagrams now use their current source SVGs. All code, diagrams, images, recordings, and substantive list
 items are represented. Tables retain the reviewed library-facing operations;
-ten internal-only function catalogs are omitted. The two README navigation
+ten internal-only function catalogs are omitted. Retained tables keep all source
+columns, including callers, dependencies, types, and syscall relationships.
+The two README navigation
 lists are replaced by the dynamic contents slide and section overviews.
 
 Ordinary slide text and table descriptions stay brief. Use bullets for multiple
@@ -178,12 +181,13 @@ table share one slide.
 
 Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
-sizes. All 81 column layouts have been checked at slide size. Their proportions
+sizes. All 80 distinct column layouts have been checked at slide size. Their proportions
 and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
 
 Code boxes and tables on the same slide share a displayed text size, including
 command strips. Long source lines wrap without changing the code.
-Short standalone examples use narrower, centered boxes. Tables reflow to fill
+All code boxes fill their slide or column width and use a shared filename or
+terminal header. Tables reflow to fill
 their panels, with short list items sharing lines where space permits. Two-part
 tables divide by content length rather than equal row counts; reviewed breaks
 and initial stacked-row weights also live in the column configuration.
@@ -215,6 +219,11 @@ The source-to-slide inventory is in
 lines, slide numbers, retained/omitted table rows, and code-part counts make
 selection and placement reviewable. Check it
 with `yarn test:source` (or set `PRESENTATION_SOURCE` to a candidate README).
+[`docs/readme-prose-review.json`](docs/readme-prose-review.json) records every
+README heading and prose paragraph, its reviewed summary or visual treatment,
+and its slide placements. [`docs/slide-audit.json`](docs/slide-audit.json) records
+the rendered checks for every slide. Coverage checks ensure authored summaries
+and standards remarks actually appear beside the source assets.
 
 The reconstruction script is `yarn rebuild:readme`. It combines the original
 README artifacts with reviewed bullet summaries and contextual notes in

@@ -1,10 +1,22 @@
 {
   "list-26": [
-    "**Pico-Compiler:** compile + link",
-    "**RETI-Emulator:** assemble to machine code, execute, inspect",
-    "**PicoOS:** source includes bootloader, kernel, init process, user applications (shell)"
+    [
+      "**PicoC-Compiler:** compile + link",
+      "**PicoC subset** of C",
+      "**Sections + metadata:** RETI output"
+    ],
+    [
+      "**RETI-Emulator:** assemble + execute",
+      "**EPROM/SRAM + peripherals:** interrupts, UART, timer, exceptions",
+      "**Host service:** filesystem protocol"
+    ],
+    [
+      "**PicoOS:** operating-system sources",
+      "**Bootloader, kernel, libraries, init**",
+      "**Shell, applications, tests**"
+    ]
   ],
-  "list-186": [
+  "list-176": [
     [
       "**FPGA:** Alchitry Cu V2 — €55.66",
       "Lattice iCE40-HX8K",
@@ -26,7 +38,7 @@
       "**DMA:** four bytes → one word"
     ]
   ],
-  "list-2102": [
+  "list-2092": [
     "Save **six registers + PC**",
     "BAF → **saved frame**",
     "Install kernel segments + **stack boundary**",
@@ -34,150 +46,159 @@
     "Default **saved IN2** = 1",
     "**handle_syscall** → syscall_interrupt_return"
   ],
-  "list-2285": [
+  "list-2275": [
     "Save **IN2** in caller_context[4]",
     "Check **deferred rescheduling**",
     "Restore directly or **dispatch**"
   ],
-  "list-2403": [
+  "list-2393": [
     "SP ← **BAF**; discard scratch frames",
     "Restore caller **stack boundary**",
     "**Pop registers**; RTI restores PC"
   ],
-  "list-2232": [
+  "list-2222": [
     "Match selector; pass **saved context**",
     "**IN2** ← result; unknown selector → 0"
   ],
-  "list-2345": [
+  "list-2335": [
     "Outgoing RUNNING → **READY**",
     "Clear request; selected PCB → **RUNNING**",
     "Restore boundary + activation; **RTI**"
   ],
-  "list-2490": [
+  "list-2480": [
     "Save registers; **PC at SP + 7**",
     "Install kernel **CS + DS**",
     "Classify **saved PC** against kernel DS"
   ],
-  "list-2559": [
+  "list-2549": [
     "Pop registers; retain **stack boundary**",
     "**RTI**; reschedule at later safe point"
   ],
-  "list-2602": [
+  "list-2592": [
     "**BAF** preserves saved process frame",
     "Install kernel **SP** + boundary",
     "Push context + **dummy return**",
     "Enter dispatcher; **no deferred-request check**"
   ],
-  "list-2734": [
+  "list-2724": [
     "Save **registers + automatic PC**",
     "Retain interrupted **SP** + boundary",
     "**handle_uart_interrupt** → uart_interrupt_return"
   ],
-  "list-2830": [
+  "list-2820": [
     "SP ← **BAF**",
     "**Pop six registers**",
     "**RTI**; no scheduling check"
   ],
-  "list-2785": [
+  "list-2775": [
     "Find **foreground owner** + terminal",
     "Read byte; acknowledge **receive-ready**",
     "**Ctrl+C** → SIGINT; **Ctrl+Z** → SIGTSTP",
     "Buffer byte; complete **waiting read**"
   ],
-  "list-2925": [
+  "list-2915": [
     "Save **six registers**",
     "Borrow stack; install kernel **CS**/DS",
     "**handle_dma_interrupt** → dma_interrupt_return"
   ],
-  "list-2990": [
+  "list-2980": [
     "SP ← **BAF**",
     "**Pop six registers**",
     "**RTI**; retain borrowed-stack convention"
   ],
-  "list-3077": [
+  "list-3067": [
     "**BAF** ← interrupted CS",
     "Reset **kernel segments**, stack, boundary",
     "Compare interrupted **CS** with kernel CS",
     "Handle exception; **never return**"
   ],
-  "list-3196": [
+  "list-3186": [
     "**Kernel CS** → shutdown",
     "**Process CS** → terminate + dispatch",
     "Never **restore faulting context**"
   ],
-  "list-3929": [
+  "list-3919": [
     "Pack PID, **arguments**, environment",
     "Require **NEW** PCB",
     "Copy **inheritable descriptors**",
     "Build child stack; update SP/**BAF**",
     "NEW → **READY**"
   ],
-  "list-5199": [
+  "list-5189": [
     "Request points to **local status**",
     "Queue parent; mark **BLOCKED**",
     "**Child exits**; write status; wake parent",
     "Wrapper resumes; returns **child status**"
   ],
-  "list-5229": [
+  "list-5219": [
     "Creation records **parent PID**",
     "Find **caller** + requested child",
     "**Parent-only collection**; mismatch → −1"
   ],
-  "list-4727": [
+  "list-4717": [
     "Timer/**yield** → immediate switch",
     "**Blocking call** → save wait; switch",
     "**Deferred request** → switch on syscall return"
   ],
-  "list-4840": [
+  "list-4830": [
     "Ask **scheduler** for candidate",
     "Retry; interrupts can wake **blocked** processes",
     "Restore accepted process; **empty list** → return"
   ],
-  "list-4938": [
+  "list-4928": [
     "Install **saved SP** before boundary",
     "Write boundary **without C frame**",
     "Restore registers; **BAF last**",
     "**RTI** → saved PC or initial entry"
   ],
-  "list-8363": [
+  "list-8353": [
     [
-      "**echo:** spaces + newline; expands \\n",
-      "**No -n**; returns 0"
+      "**echo:** space-joined text + newline",
+      "**\\n:** embedded newline; **no -n**",
+      "**-h/--help:** ordinary text; status 0"
     ],
     [
-      "**count:** optional busy-loop delay",
-      "**Yield** after each value"
+      "**count:** at most one nonnegative busy-loop delay",
+      "**Delay:** not milliseconds",
+      "**Prints indefinitely:** yield after each value"
     ],
     [
-      "**cat:** files/stdin → stdout",
-      "**64-cell chunks**; terminal editing + Ctrl+D"
+      "**cat:** files or stdin; 64-cell chunks",
+      "**Terminal:** editable lines; Ctrl+D finishes",
+      "**Files:** preserve bytes; terminal escapes nonprintables"
     ],
     [
-      "**touch:** multiple paths",
-      "**cp/mv:** one source + destination",
-      "**cp:** 64-cell chunks; ps includes zombies"
+      "**touch:** multiple paths; **cp/mv:** source + destination",
+      "**cp:** 64-cell chunks",
+      "**ps:** includes zombies",
+      "**touch:** stop on first failure",
+      "**mv:** one host move request; no options",
+      "**cp:** disables loading bar"
     ],
     [
-      "**sed:** seekable stdin; no path operand",
-      "Insert/change/append; **first literal substitution**"
+      "**sed:** seekable stdin; no pathname operand",
+      "**i / c / a:** numbered-line insert/change/append",
+      "**s/old/new/:** first literal match; no regex",
+      "**/pattern/iTEXT:** insert before matching lines",
+      "**Whole input:** in memory; loading bar disabled"
     ],
     [
-      "**ls:** one directory; -a",
+      "**ls:** one directory; **-a:** hidden names",
       "**mkdir:** no -p; **rm:** nonrecursive",
-      "**rmdir:** empty directories; multiple paths"
+      "**rmdir:** multiple empty directories"
     ],
     [
-      "**kill:** default SIGKILL; names/numbers",
-      "**Signal 0** probes; zombies rejected",
-      "Accepted request → **yield**"
+      "**kill:** SIGKILL default; names or numbers",
+      "**Signal 0:** probe; zombies rejected",
+      "**Accepted request:** yield; no group PID forms"
     ],
     [
-      "**poweroff:** halt; **reboot:** restart",
+      "**poweroff:** halt; **reboot:** EPROM restart",
       "**uname:** installed version",
-      "**All three:** no operands"
+      "**No operands:** all three"
     ]
   ],
-  "list-9278": [
+  "list-9268": [
     "**No MMU**, isolation, or virtual memory",
     "Host files via **UART**",
     "**Eight descriptors**; independent copied state",
@@ -187,14 +208,17 @@
     "**Reduced libraries**, formatting, shell parsing",
     "**Hardware unimplemented**; instruction-count timing",
     "**No sound/LCD**; host terminal",
-    "**Static images**; no dynamic linking",
+    [
+      "**Static images:** no dynamic loader/shared libraries",
+      "**Reduced C library:** linked through libstart"
+    ],
     "**POSIX-like names**; reduced semantics"
   ],
-  "list-3153": [
+  "list-3143": [
     "Read **cause** + interrupted CS difference",
     "Classify cause; select **kernel/process diagnostic**"
   ],
-  "list-5279": [
+  "list-5269": [
     "**Exit syscall** → terminate_process",
     "Retain **status** in child PCB",
     "Wake parent; preserve **stopped state**",
@@ -203,25 +227,25 @@
     "Removal frees **PCB + owned resources**",
     "**Dispatch** next; empty list → shutdown"
   ],
-  "list-7119": [
+  "list-7109": [
     "Request **kernel.bin**; validate header size",
     "Read offsets; **−1 stack** → SRAM top",
     "Receive payload through **polling/DMA**",
     "Install kernel **registers**; enter code"
   ],
-  "list-7212": [
+  "list-7202": [
     "Initialize **heaps + stack boundary**",
     "Reset **terminal, process list, shared-memory registry**",
     "Initialize **DMA + interrupt controller**",
     "Load init; build **initial stack**; READY",
     "**Dispatch** init; startup never resumes"
   ],
-  "list-7277": [
+  "list-7267": [
     "**shutdown:** halt; retain allocations",
     "**reboot:** disable interrupts; clear timer/boundary",
     "PC ← **0**; restart EPROM bootloader"
   ],
-  "list-7376": [
+  "list-7366": [
     "Read config; set **loading-bar environment**",
     "**Load/run** shell; inherit environment + descriptors",
     "**Waitpid** exact PID; restart after exit/stop",

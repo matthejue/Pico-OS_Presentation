@@ -14,6 +14,7 @@ const {sections,assets}=readmeSource(source)
 const lists=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))
 const summaries=JSON.parse(await fs.readFile('config/readme-prose.json','utf8'))
 const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
+const codeLabels=JSON.parse(await fs.readFile('config/readme-code-labels.json','utf8'))
 const tableWidths=JSON.parse(await fs.readFile('config/readme-table-widths.json','utf8'))
 const columnConfig=JSON.parse(await fs.readFile('config/readme-columns.json','utf8'))
 for(const [key,shares] of Object.entries(columnConfig.shares))
@@ -54,7 +55,7 @@ const marker=a=>`<!-- README_ASSET ${a.id}${a.borrowed?' repeated':''} -->`
 const visual=(kind,inner,width=980,classes='',attributes='')=>`<ReadmeVisual kind="${kind}" :width="${width}"${classes?` class="${classes}"`:''}${attributes?` ${attributes}`:''}>\n\n${inner}\n\n</ReadmeVisual>`
 await fs.mkdir('public/readme',{recursive:true})
 for(const a of assets.filter(a=>a.type==='image')) {
- const bytes=await fs.readFile(path.resolve(path.dirname(sourcePath),a.path)), name=path.basename(a.path)
+ const bytes=await fs.readFile(path.resolve(process.env.README_REPOSITORY || path.dirname(sourcePath),a.path)), name=path.basename(a.path)
  a.outputPath=`/readme/${name}`
  if(name.endsWith('.svg')) {
   const svg=bytes.toString('utf8'),box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
@@ -63,8 +64,9 @@ for(const a of assets.filter(a=>a.type==='image')) {
  } else {a.aspect=1.5;await fs.writeFile(`public/readme/${name}`,bytes)}
  Object.assign(inventory.get(a.id),{copiedFile:`public/readme/${name}`,originalFileSha256:hash(bytes)})
 }
-const grids=new Set(['table-6546','table-8326','table-7697'])
-const preserveVertical=new Set(['table-654','table-4008','table-7116'])
+const grids=new Set(['table-6536','table-8316','table-7687'])
+const preserveVertical=new Set(['table-644','table-3998','table-7116'])
+const denseFieldTables=new Set(['table-1997','table-3653'])
 function balanced(items,capacity) {
  const count=Math.ceil(items.length/capacity),size=Math.ceil(items.length/count),result=[]
  for(let i=0;i<items.length;i+=size)result.push(items.slice(i,i+size))
@@ -76,17 +78,18 @@ function prepare(a) {
   Object.assign(entry,{retainedRows:t.retainedRows,omittedRows:t.omittedRows,displayColumns:t.headerLabels})
   if(!t.compactRows?.length){entry.excluded='Internal function table; no library-facing operation';return []}
   if(t.unresolved.length)throw Error('Missing reviewed table summary: '+JSON.stringify(t.unresolved))
-  const capacity=grids.has(a.id)?(a.id==='table-8326'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14
+  const capacity=denseFieldTables.has(a.id)?12:grids.has(a.id)?(a.id==='table-8316'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14
   return balanced(t.compactRows,capacity).map(rows=>({...t,compactRows:rows,grid:grids.has(a.id),tableColumns:rows.length>=10&&t.columns<=3&&!preserveVertical.has(a.id)?2:1}))
  }
  if(a.type==='list') {
   const items=lists[a.id]
   if(!items)throw Error(`Missing reviewed list: ${a.id}`)
-  return [{...a,items,itemIndices:items.map((_,i)=>i+1),listColumns:items.length>6?2:1,tiles:a.id==='list-186'}]
+  return [{...a,items,itemIndices:items.map((_,i)=>i+1),listColumns:items.length>6?2:1,tiles:['list-176','list-26'].includes(a.id)}]
  }
  if(a.type==='code') {
   const lines=a.content.trimEnd().split('\n')
-  return [{...a,codeLines:lines.length,split:lines.length>=22,command:a.language==='console'&&lines.length<=4}]
+  const terminal=a.language==='console'||/\/input\.txt$/.test(codeLabels[a.id]||'')
+  return [{...a,codeLines:lines.length,split:lines.length>=22,terminal,command:terminal&&lines.length<=4}]
  }
  if(a.type==='mermaid')return [{...a,aspect:/flowchart LR/.test(a.content)?4:/flowchart (TB|TD)/.test(a.content)?0.85:1.8}]
  return [a]
@@ -107,7 +110,7 @@ function widths(table,rows,target) {
 function renderTable(a) {
  if(a.grid) {
   const html=`<div class="readme-tiles" v-pre>${a.compactRows.map(r=>`<div class="readme-tile"><div class="tile-name">${r.values[0].html}</div>${r.values.slice(1).map(v=>`<div class="tile-detail">${v.html}</div>`).join('')}</div>`).join('\n')}</div>`
-  return visual('table',html,a.id==='table-6546'?1440:1280,`inventory-grid${a.id==='table-6546'?' library-grid':''}`)
+  return visual('table',html,a.id==='table-6536'?1440:1280,`inventory-grid${a.id==='table-6536'?' library-grid':''}`)
  }
  let chunks=[a.compactRows]
  if(a.tableColumns===2) {
@@ -118,13 +121,13 @@ function renderTable(a) {
   let cut=1,left=0,best=Infinity
   for(let i=1;i<weights.length;i++) {
    left+=weights[i-1]
-   const cost=Math.max(left,total-left)
+   const cost=left>=total-left?Math.max(left,total-left):Infinity
    if(cost<best){best=cost;cut=i}
   }
   const reviewedCut=columnConfig.tableBreaks?.[a.id+':'+a.compactRows.map(row=>row.sourceRow).join(',')]
   if(reviewedCut!==undefined) {
    if(!Number.isInteger(reviewedCut)||reviewedCut<1||reviewedCut>=a.compactRows.length)throw Error('Invalid table break: '+a.id)
-   cut=reviewedCut
+   if(weights.slice(0,reviewedCut).reduce((sum,n)=>sum+n,0)>=total/2)cut=reviewedCut
   }
   chunks=[a.compactRows.slice(0,cut),a.compactRows.slice(cut)]
  }
@@ -140,7 +143,8 @@ function renderTable(a) {
 function renderCode(a) {
  const sourceLines=a.content.split('\n');if(sourceLines.at(-1)==='')sourceLines.pop()
  const cut=Math.ceil(sourceLines.length/2),parts=a.split?[sourceLines.slice(0,cut),sourceLines.slice(cut)]:[sourceLines]
- const language=a.language==='reti'?'text':a.language
+ const language=a.terminal?'console':a.language==='reti'?'text':a.language
+ const label=codeLabels[a.id] || (a.terminal?(a.content.includes('PicoOS>')?'PicoOS terminal':'Host terminal'):a.language==='reti'?'RETI assembly':'PicoC example')
  const shares=columnShares('code:'+a.id)
  const budget=a.split?Math.max(...parts.map((lines,i)=>codeNeed(lines)/(shares[i]/100))):0
  const widths=a.split?shares.map(n=>budget*n/100):[a.nativeCodeWidth||(a.narrow?codeNeed(sourceLines):Math.max(640,Math.min(980,codeLineWidth(sourceLines))))]
@@ -148,9 +152,11 @@ function renderCode(a) {
  const boxes=parts.map((lines,i)=>{
   const start=offset+1;offset+=lines.length
   const partMarker=`<!-- README_CODE_PART ${a.id} lines=${start}-${offset} -->`
-  const inner=`${partMarker}\n<div class="readme-code${a.language==='console'?' readme-terminal':''}">\n\n\`\`\`${language} {lines:false}\n${lines.join('\n')}\n\`\`\`\n\n</div>`
-  const maximumWidth=Math.max(560,Math.min(760,widths[i]*1.15))
-  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${!a.split&&!a.narrow&&!a.command?` style="--code-max-width:${maximumWidth}px"`:''}`)
+  // Input fixtures are command examples too. Prompts are presentation-only;
+  // source ranges still identify and reconstruct the unmodified README code.
+  const displayed=lines.map(line=>a.terminal&&a.language!=='console'&&line.trim()?`PicoOS> ${line}`:line)
+  const inner=`${partMarker}\n<div class="readme-code${a.terminal?' readme-terminal':''}">\n<div class="readme-code-header" v-pre><span>${esc(label)}</span><span class="code-range">${a.split?`lines ${start}–${offset}`:''}</span></div>\n\n\`\`\`${language} {lines:false}\n${displayed.join('\n')}\n\`\`\`\n\n</div>`
+  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"`)
  })
  return a.split?`<div class="code-columns" ${columnAttributes('code:'+a.id,`--source-aspect:${(budget+24)/(parts[0].length*21+34)}`)}>\n\n${boxes.join('\n\n')}\n\n</div>`:boxes[0]
 }
@@ -158,6 +164,7 @@ function render(a) {
  if(a.type==='code')return marker(a)+'\n'+renderCode(a)
  if(a.type==='table')return marker(a)+'\n'+renderTable(a)
  if(a.type==='mermaid')return marker(a)+'\n'+visual('mermaid',`\`\`\`mermaid\n${a.content}\`\`\``)
+ if(a.type==='math')return marker(a)+'\n'+visual('math',`<div class="readme-math">\n\n${a.content}\n\n</div>`)
  if(a.type==='image')return marker(a)+'\n'+visual('image',`<img src="${a.outputPath}" alt="${esc(a.alt)}" />`)
  if(a.type==='list') {
   if(a.tiles)return marker(a)+`\n<div class="hardware-tiles">${a.items.map(item=>`<div class="readme-tile"><div class="tile-name">${prose(Array.isArray(item)?item[0]:item)}</div>${Array.isArray(item)?bulletList(item.slice(1)):''}</div>`).join('')}</div>`
@@ -176,13 +183,14 @@ const repeated={
 for(const s of sections)if(s.instructions.some(x=>/waitpid code/.test(x)))repeated[s.anchor]='1012-packing-arguments-and-executing-the-syscall'
 const introOnly=new Set(['122-atomic-test-and-set-with-tsl','22-interrupt-controller-mappings-and-priorities','3633-free-d-and-merge-its-remainder','3634-free-c-and-merge-repeatedly-at-b','421-loading-a-process-load-library-call','611-algorithm-and-round-robin-comparison','712-child-waiting-with-waitpid','1013-interrupt-entry-waiting-and-return','1-toolchain-extensions-for-picoos','115-selecting-a-startup-function-with--c----startup-source','2-interrupts-system-calls-preemption-and-exceptions','25-timer-interrupts-and-userspace-preemption','28-cpu-exceptions-and-runtime-errors','3-memory-management-and-shared-memory','33-kernel-heap','34-process-and-shared-data-heap','35-user-process-heap','36-heap-and-allocator-function-reference','4-processes-and-process-lifecycle','4221-initial-user-process-stack','42-loading-and-starting-a-process','5-shared-memory-entries-and-mappings','61-scheduler-implementation','7-blocking-wait-queues-signals-and-mutexes','72-process-signals','8-terminal-file-descriptors-and-host-filesystem','101-from-a-library-call-to-the-kernel-waitpid','1021-unistd-processes-descriptors-paths-and-wait-queues','1027-stdlib-process-heap-environment-conversion-and-exit','12-shell','13-user-applications-and-commands','14-test-system'])
 const diagram=a=>['mermaid','image'].includes(a.type)
-const shortCode=a=>a.type==='code'&&!a.split&&a.codeLines<=18
+const shortCode=a=>a.type==='code'&&!a.split&&a.codeLines<=21
 function compose(parts) {
  const groups=[]
  for(let i=0;i<parts.length;i++) {
   const a=parts[i],b=parts[i+1]
   let group=[a],layout='single'
   if(a.command&&b?.type==='code') {group.push(b);layout='command-above';i++}
+  else if(a.type==='code'&&a.split&&a.codeLines<=42&&b?.type==='list') {group.push(b);layout='compact-stacked';i++}
   else if(b && !(b.command && parts[i+2]?.type==='code')) {
    if(diagram(a)&&diagram(b)) {group.push(b);layout=(a.aspect>=2.8&&b.aspect>=2.8)?'stacked':'columns';i++}
    else if(shortCode(a)&&shortCode(b)) {group.push(b);layout='columns';i++}
@@ -208,9 +216,14 @@ for(const section of sections) {
  let groups=compactGroups(compose(parts),section)
  if(section.anchor==='reti-execution-model')groups=[{group:parts,layout:'compact-stacked'}]
  if(section.anchor==='intended-physical-hardware')groups=[{group:parts.filter(a=>a.type==='image'),layout:'single'},{group:parts.filter(a=>a.type==='list'||a.type==='table'),layout:'hardware'}]
- if(!groups.length && summaries[section.anchor] && !introOnly.has(section.anchor))groups=[{group:[],layout:'bullets'}]
+ if(!groups.length && summaries[section.anchor])groups=[{group:[],layout:'bullets'}]
  if(section.anchor==='picoos')groups.unshift({group:[],layout:'bullets'})
  if(!groups.length && !originals.length && section.paragraphs.length && !introOnly.has(section.anchor))throw Error('Missing reviewed prose bullets: '+section.anchor)
+ const summary=summaries[section.anchor]||[]
+ // Source lists stay complete. Additional prose summaries are distributed over
+ // existing artifact slides rather than silently dropped whenever assets exist.
+ const summaryParts=section.anchor==='picoos'||section.anchor==='intended-physical-hardware'||section.anchor==='111-compilation-pipeline-and-compiler-passes'
+  ? [] : groups.length ? balanced(summary,Math.max(2,Math.ceil(summary.length/groups.length))) : []
  groups.forEach(({group,layout,panels,weights},number)=>{
   let content
   const columnKey='assets:'+group.map(a=>a.id).join('+')
@@ -221,11 +234,20 @@ for(const section of sections) {
     group.forEach((a,i)=>a.nativeCodeWidth=budget*shares[i]/100)
    }
   }
-  if(!group.length)content=`<div class="readme-list${summaries[section.anchor].length>6?' bullet-columns':''}">${bulletList(summaries[section.anchor])}</div>`
+  if(!group.length)content=`<div class="readme-list${summary.length>6?' bullet-columns':''}${summary.length>=3&&summary.every(Array.isArray)?' summary-cards':''}">${bulletList(summary)}</div>`
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
   else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed,rowAttributes})
   else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):layout==='stacked'?rowAttributes(group):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
+  const additional=group.length?summaryParts[number]:null
+  if(additional?.length) {
+   const notes=`<div class="readme-list prose-summary${additional.some(Array.isArray)?' nested-summary':''}">${bulletList(additional)}</div>`
+   // Short standalone code shares a centered, top-aligned row with its prose.
+   // Wide diagrams and split examples retain the full slide width.
+   if(group.length===1&&group[0].type==='code'&&!group[0].split&&group[0].codeLines<=18)
+    content=`<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)">${notes}\n${render(group[0])}</div>`
+   else content+=`\n${notes}`
+  }
   const fact=number===0?facts[section.anchor]:null
   if(fact)content+=`\n<aside class="context-note"><b>${esc(fact[0])}</b>${bulletList(fact[1])}</aside>`
   pages.push({section,group,layout,content,number:groups.length>1?number+1:null})
@@ -272,9 +294,11 @@ const body=deckPages.map((p,i)=>{
  const displayTitle=title=>major===introduction && title===introduction.title?'Introduction':title
  const majorTitle=title=>major && title===major.title?`<MajorSectionLink section="${major.anchor}">${displayTitle(title)}</MajorSectionLink>`:title
  const ancestors=s.parents.map(majorTitle)
- const main=ancestors.length?ancestors.join(' · '):majorTitle(s.title)
- const subtitle=ancestors.length||s===introduction?`\n\n## ${displayTitle(s.title)}${p.number?` (${p.number})`:''}`:''
- return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n# ${main}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
+ // Top-level content has no invented/repeated ancestor line. Introduction
+ // keeps its explicit display mapping and consecutive title numbering.
+ const main=ancestors.length?ancestors.join(' · '):''
+ const subtitle=`## ${displayTitle(s.title)}${p.number?` (${p.number})`:''}`
+ return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
 const rebuilt=cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n'
@@ -282,4 +306,14 @@ await fs.writeFile('slides.md',ensureSlideIdentities(rebuilt,previous))
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('notes')}).syncMetadata()
 await fs.writeFile('config/section-overviews.json',JSON.stringify(sectionOverviews,null,2)+'\n')
 await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:deckPages.length+2,assets:[...inventory.values()]},null,2)+'\n')
+await fs.writeFile('docs/readme-prose-review.json',JSON.stringify({
+ sourceSha256:hash(source),
+ sections:sections.map(section=>({
+  anchor:section.anchor,title:section.title,line:section.line,
+  slides:deckPages.flatMap((page,i)=>!page.overview&&page.section===section?[i+3]:[]),
+  summary:summaries[section.anchor]||[],remark:facts[section.anchor]||null,
+  paragraphs:section.paragraphs.map(paragraph=>({line:paragraph.line,sourceSha256:hash(paragraph.text)})),
+  treatment:section.anchor==='contents'?'Dynamic contents and overview hierarchy':summaries[section.anchor]?'Concise reviewed bullets; omit repetitions of source visuals':section.assets.length?'Source artifacts; prose repeats their explanation or links to other sections':'Section heading introduces descendant slides; repeated introduction omitted',
+ })),
+},null,2)+'\n')
 console.log(`${deckPages.length+2} slides, including contents and ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)

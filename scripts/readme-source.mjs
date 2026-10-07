@@ -31,13 +31,15 @@ export function readmeSource(text) {
     else if (t.type === 'paragraph_open') {
       const inline = tokens[i + 1]
       images = (inline.children || []).flatMap(c => c.type === 'image' ? [{ alt: c.content, path: c.attrGet('src') }] : [])
-      if (images.length) type = images[0].path.includes('asciinema.org') ? 'recording' : 'image'
+      if (inline.content.startsWith('$$\n')) type = 'math'
+      else if (images.length) type = images[0].path.includes('asciinema.org') ? 'recording' : 'image'
       else if (!inline.content.startsWith('[\\[')) section.paragraphs.push({ line: t.map[0] + 1, text: inline.content })
     }
     if (type) {
       const raw = lines.slice(t.map[0], t.map[1]).join('\n')
       const asset = { id: `${type}-${t.map[0]+1}`, type, line: t.map[0]+1, endLine: t.map[1], anchor: section.anchor, raw, sha256: hash(raw) }
       if (type === 'code' || type === 'mermaid') { asset.language = t.info; asset.content = t.content }
+      if (type === 'math') asset.content = tokens[i + 1].content
       if (images.length) Object.assign(asset, images[0])
       if (type === 'table') {
         const html = t.type === 'html_block' ? t.content : md.renderer.render(tokens.slice(i, end + 1), md.options, {})
