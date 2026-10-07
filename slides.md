@@ -88,7 +88,6 @@ const presentationVersion = releaseVersion.trim()
 
 <!-- SLIDE_ID e40af357-b242-4d83-aeff-64600f29ee5d -->
 <!-- SOURCE Pico-OS/README.md#picoos -->
-<!-- SHORT_VERSION_DISABLED -->
 
 ## Introduction (2)
 
@@ -125,7 +124,6 @@ const presentationVersion = releaseVersion.trim()
 
 <!-- SLIDE_ID 204ea1c9-6227-4a6f-aae9-f69f49722046 -->
 <!-- SOURCE Pico-OS/README.md#build-and-run -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="picoos">Introduction</MajorSectionLink>
 
@@ -185,7 +183,6 @@ $ ./start-picoos.sh
 
 <!-- SLIDE_ID 026003bc-164e-49df-adec-470bfb3d6d47 -->
 <!-- SOURCE Pico-OS/README.md#use-the-picoos-shell -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="picoos">Introduction</MajorSectionLink> · Build and run
 
@@ -225,7 +222,6 @@ scheduler
 
 <!-- SLIDE_ID ba86f050-442d-48a8-a592-ea3687631e4a -->
 <!-- SOURCE Pico-OS/README.md#release-archive-layout -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="picoos">Introduction</MajorSectionLink> · Build and run
 
@@ -328,7 +324,6 @@ scheduler
 
 <!-- SLIDE_ID 52d277d0-bd4e-4399-af49-3310a5c61d8c -->
 <!-- SOURCE Pico-OS/README.md#reti-execution-model -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="picoos">Introduction</MajorSectionLink> · Intended physical hardware
 
