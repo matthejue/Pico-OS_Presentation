@@ -1,6 +1,6 @@
 {
   "sourceSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569",
-  "slideCount": 381,
+  "slideCount": 340,
   "assets": [
     {
       "id": "list-26",
@@ -695,7 +695,7 @@
           "codeParts": 1
         },
         {
-          "page": 301,
+          "page": 260,
           "layout": "single",
           "codeParts": 1,
           "repeated": true
@@ -716,19 +716,19 @@
           "codeParts": 1
         },
         {
-          "page": 304,
+          "page": 263,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
         },
         {
-          "page": 309,
+          "page": 268,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
         },
         {
-          "page": 310,
+          "page": 269,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
@@ -749,19 +749,19 @@
           "codeParts": 1
         },
         {
-          "page": 304,
+          "page": 263,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
         },
         {
-          "page": 309,
+          "page": 268,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
         },
         {
-          "page": 310,
+          "page": 269,
           "layout": "columns",
           "codeParts": 1,
           "repeated": true
@@ -1759,7 +1759,7 @@
         },
         {
           "page": 58,
-          "layout": "single",
+          "layout": "composed",
           "codeParts": 1
         }
       ]
@@ -1773,7 +1773,7 @@
       "sourceSha256": "3b9083a7b0299f1cf3eaf9313d1ffd0fa58d713d91dc0694f01f185157fa3a69",
       "slides": [
         {
-          "page": 59,
+          "page": 58,
           "layout": "composed",
           "rows": [
             1,
@@ -1813,7 +1813,7 @@
           "repeated": true
         },
         {
-          "page": 59,
+          "page": 58,
           "layout": "composed",
           "codeParts": 1
         }
@@ -1828,7 +1828,7 @@
       "sourceSha256": "b02904abaf16e4aed99ed0889f215ef5f9e8ce525b8f038db4032cde75b6f0ac",
       "slides": [
         {
-          "page": 61,
+          "page": 59,
           "layout": "single",
           "codeParts": 2
         }
@@ -1843,7 +1843,7 @@
       "sourceSha256": "4ab69730d1ee75fb192b07ea56418273981d1afdcfd11b5246e47dbb05ae329b",
       "slides": [
         {
-          "page": 62,
+          "page": 60,
           "layout": "composed"
         }
       ],
@@ -1860,7 +1860,7 @@
       "sourceSha256": "478d91cb5b545cd7e979834d7375e2fa213db6d5d1bb835863c275baf6fd6136",
       "slides": [
         {
-          "page": 62,
+          "page": 60,
           "layout": "composed",
           "rows": [
             1,
@@ -1954,7 +1954,7 @@
       "sourceSha256": "ada5cd5c91b04c384143742c8df1adddb0230470c72c3765545d915fee2e6bce",
       "slides": [
         {
-          "page": 64,
+          "page": 61,
           "layout": "single",
           "rows": [
             1,
@@ -1994,7 +1994,7 @@
       "sourceSha256": "9095e5aec35ef4c1896c279c786947e64ab3b3a6118c978e1fd754fc012aed5f",
       "slides": [
         {
-          "page": 68,
+          "page": 64,
           "layout": "single",
           "rows": [
             1,
@@ -2024,7 +2024,7 @@
       "sourceSha256": "3f821aa10efabfb216605f26fb8e796a71ba7754b36bd188e99241311c3673f3",
       "slides": [
         {
-          "page": 69,
+          "page": 65,
           "layout": "single",
           "codeParts": 2
         }
@@ -2039,7 +2039,7 @@
       "sourceSha256": "da05c74bb637302187a7c0f00aebe75d6de05742d4ed99aff36dee27b66a4785",
       "slides": [
         {
-          "page": 70,
+          "page": 66,
           "layout": "single",
           "rows": [
             1,
@@ -2089,7 +2089,7 @@
       "sourceSha256": "2c230d2c816f1350d539851b92de64981e2db88f195b64ba67f00e1349bbc9c0",
       "slides": [
         {
-          "page": 71,
+          "page": 67,
           "layout": "single",
           "rows": [
             1,
@@ -2103,7 +2103,7 @@
           ]
         },
         {
-          "page": 72,
+          "page": 68,
           "layout": "columns",
           "rows": [
             9,
@@ -2117,7 +2117,7 @@
           ]
         },
         {
-          "page": 72,
+          "page": 68,
           "layout": "columns",
           "rows": [
             17,
@@ -2169,7 +2169,7 @@
       "sourceSha256": "9aba1a3f885fd4544c1cbf62ea23de8e20184b24076cc435b3402f85575178d3",
       "slides": [
         {
-          "page": 74,
+          "page": 69,
           "layout": "single"
         }
       ],
@@ -2186,7 +2186,7 @@
       "sourceSha256": "fa025c0a34ca51e72f00269bf8466b8a3ea19a60b4b928072f64bee96bcba855",
       "slides": [
         {
-          "page": 75,
+          "page": 70,
           "layout": "single",
           "codeParts": 2
         }
@@ -2199,20 +2199,8 @@
       "line": 2092,
       "endLine": 2113,
       "sourceSha256": "beb46a74d45bdc1c2ceabc6127f1a8e017b8f2b77de902ff36406918734abdfe",
-      "slides": [
-        {
-          "page": 76,
-          "layout": "single",
-          "items": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2133",
@@ -2223,7 +2211,7 @@
       "sourceSha256": "b398c4f370719bff2bf03e0c7b1048f43e01d78caf1099c5f8f46a615c2ac8fa",
       "slides": [
         {
-          "page": 78,
+          "page": 71,
           "layout": "columns",
           "codeParts": 1
         }
@@ -2238,7 +2226,7 @@
       "sourceSha256": "73db604564cd7fb568b06a3deeba863b34e5d97666071d5c172122392c11314a",
       "slides": [
         {
-          "page": 78,
+          "page": 71,
           "layout": "columns",
           "codeParts": 1
         }
@@ -2253,8 +2241,8 @@
       "sourceSha256": "fd8abd62dfbfa899a719b03cfc729a559c8225c570bb6bf6ce56868a58ce5fca",
       "slides": [
         {
-          "page": 80,
-          "layout": "compact-stacked",
+          "page": 72,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -2266,16 +2254,8 @@
       "line": 2222,
       "endLine": 2227,
       "sourceSha256": "0c22a02080a6610451a2105e61b9b6656eefb0a400219afc4b86cdc418f29da4",
-      "slides": [
-        {
-          "page": 80,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-2237",
@@ -2286,7 +2266,7 @@
       "sourceSha256": "1dd797ab4981f3686abe384453662ad1a123cc21d3be41be1fc31690012655f5",
       "slides": [
         {
-          "page": 81,
+          "page": 73,
           "layout": "single",
           "rows": [
             1,
@@ -2322,8 +2302,8 @@
       "sourceSha256": "1897f52454c00fccea954dd8558476def0af6ddd1068de7d4cfe9932ba593e5b",
       "slides": [
         {
-          "page": 82,
-          "layout": "columns",
+          "page": 74,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2335,17 +2315,8 @@
       "line": 2275,
       "endLine": 2286,
       "sourceSha256": "b53d70c812cbcfe3b0b219cc2f35aa152c83113a09073aeb28b3e49ef87b99b8",
-      "slides": [
-        {
-          "page": 82,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2290",
@@ -2356,7 +2327,7 @@
       "sourceSha256": "231b863ebeb54d2b15374b8ff6172fbe1ae860b6f03f476f6596740a209a3cd3",
       "slides": [
         {
-          "page": 83,
+          "page": 75,
           "layout": "columns",
           "codeParts": 1
         }
@@ -2371,7 +2342,7 @@
       "sourceSha256": "81bb457b59894b1afae4f96dd82965b1f34fc3ada6fdae42f55c7f101bcacef8",
       "slides": [
         {
-          "page": 83,
+          "page": 75,
           "layout": "columns",
           "codeParts": 1
         }
@@ -2384,17 +2355,8 @@
       "line": 2335,
       "endLine": 2346,
       "sourceSha256": "b88cc8a9b456359accbcd350b7cc7e6348687a8def6b96c46af46c3a39935ad5",
-      "slides": [
-        {
-          "page": 84,
-          "layout": "single",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2375",
@@ -2405,8 +2367,8 @@
       "sourceSha256": "92f10bfb1e54e0a83d9f906d10f0933d926beef1680954c66924756ee460a90f",
       "slides": [
         {
-          "page": 85,
-          "layout": "columns",
+          "page": 76,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2418,17 +2380,8 @@
       "line": 2393,
       "endLine": 2401,
       "sourceSha256": "affd32df4d8f2e97cf7325c327ce8549dc5f5f474abc190f9edbc420c4983b76",
-      "slides": [
-        {
-          "page": 85,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-2407",
@@ -2439,7 +2392,7 @@
       "sourceSha256": "82d55acb1277c4503dea80f92299defcdb1a2d20f0133d10c6b43f6518e73afa",
       "slides": [
         {
-          "page": 86,
+          "page": 77,
           "layout": "single"
         }
       ],
@@ -2480,7 +2433,7 @@
       "sourceSha256": "f0b533952a1d401df54fa5e6a8127ffcc37ee3b5142d969199271e167fc2f4ad",
       "slides": [
         {
-          "page": 88,
+          "page": 78,
           "layout": "single"
         }
       ],
@@ -2497,8 +2450,8 @@
       "sourceSha256": "c2f639059e824afde7d7be59f1c504e88661636eae9ab8d505596727a46c645d",
       "slides": [
         {
-          "page": 89,
-          "layout": "compact-stacked",
+          "page": 79,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -2510,17 +2463,8 @@
       "line": 2480,
       "endLine": 2492,
       "sourceSha256": "1cb012ee4df04068461ac353576edd1c4444e26cad8026f3c6a5c0a6c658dd29",
-      "slides": [
-        {
-          "page": 89,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-2491",
@@ -2531,7 +2475,7 @@
       "sourceSha256": "3a21b57f6d5d952138734a1bcdb38e9ffe6362e88b54fc6c5f099a5ad07e41ea",
       "slides": [
         {
-          "page": 90,
+          "page": 80,
           "layout": "single"
         }
       ],
@@ -2548,8 +2492,8 @@
       "sourceSha256": "f7db29ac4626fb58b7d0c7c6b143ba99ec5e278210115249202ad8fe5d8e8b73",
       "slides": [
         {
-          "page": 93,
-          "layout": "columns",
+          "page": 81,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2561,16 +2505,8 @@
       "line": 2549,
       "endLine": 2557,
       "sourceSha256": "013fbb90ff6b9bc888027818009d6e9079637b64d206928ed9dbd32e4c93b32b",
-      "slides": [
-        {
-          "page": 93,
-          "layout": "columns",
-          "items": [
-            1,
-            2
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2567",
@@ -2581,8 +2517,8 @@
       "sourceSha256": "ce59c753f32214ef9b553c9e3efbe1f1fecf872f1404b34833648547cb6f1d25",
       "slides": [
         {
-          "page": 94,
-          "layout": "columns",
+          "page": 82,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2594,18 +2530,8 @@
       "line": 2592,
       "endLine": 2608,
       "sourceSha256": "7d3020527e555408a5ba84104e2be0e5c12281600f15a378b561205800d1b1f8",
-      "slides": [
-        {
-          "page": 94,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3,
-            4
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-2670",
@@ -2616,7 +2542,7 @@
       "sourceSha256": "fad0728823df234acdcad7929a1e5cb2dfeac5810c8568668be41c6374d7dbb7",
       "slides": [
         {
-          "page": 98,
+          "page": 83,
           "layout": "single"
         }
       ],
@@ -2633,7 +2559,7 @@
       "sourceSha256": "5098e0aac5282494d5f05ec01fab416681d52b545ac22820780d1727868555a4",
       "slides": [
         {
-          "page": 99,
+          "page": 84,
           "layout": "single"
         }
       ],
@@ -2650,8 +2576,8 @@
       "sourceSha256": "217f733356c72dcfac1c2af30b3dfa831b7b4bce3f829f617f669a4b36dac1fb",
       "slides": [
         {
-          "page": 100,
-          "layout": "compact-stacked",
+          "page": 85,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -2663,17 +2589,8 @@
       "line": 2724,
       "endLine": 2731,
       "sourceSha256": "063b7d3ba85155fe0f307bfd1f6df31bcc345870aefce2bfb60d7bdf65d44a04",
-      "slides": [
-        {
-          "page": 100,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2749",
@@ -2684,8 +2601,8 @@
       "sourceSha256": "82f778fe324162eaa25243d2cac3f48df0fbe08c650b3572ebe4ad7c10911945",
       "slides": [
         {
-          "page": 102,
-          "layout": "columns",
+          "page": 86,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2697,18 +2614,8 @@
       "line": 2775,
       "endLine": 2793,
       "sourceSha256": "e07c90085bacf4b8331bb3079059412f63b2e92aa167f7f5a9a378fa5ed79dc4",
-      "slides": [
-        {
-          "page": 102,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3,
-            4
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2802",
@@ -2719,8 +2626,8 @@
       "sourceSha256": "6e539620604483998dfec816e376603665044790f40a9c26d2b1cc77a44f321b",
       "slides": [
         {
-          "page": 103,
-          "layout": "columns",
+          "page": 87,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2732,17 +2639,8 @@
       "line": 2820,
       "endLine": 2824,
       "sourceSha256": "0a231a811d679b1d253ea82e238da4b096e8c03bec16516582463b1154e4ed28",
-      "slides": [
-        {
-          "page": 103,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-2832",
@@ -2753,7 +2651,7 @@
       "sourceSha256": "32dac6f3073fb6b87621db09526a7bcadf049e7380aba9770bf58b3f1ed1343e",
       "slides": [
         {
-          "page": 104,
+          "page": 88,
           "layout": "single",
           "rows": [
             1,
@@ -2791,7 +2689,7 @@
       "sourceSha256": "41b73d9e3df53dd3619e5f269f4c080fc9acff38800ef9f2b54322c8a747f8a0",
       "slides": [
         {
-          "page": 105,
+          "page": 89,
           "layout": "single",
           "rows": [
             1
@@ -2824,7 +2722,7 @@
       "sourceSha256": "eb7b85568a9031ae460e1cd184065de4ad742cd2f5a44a6552ff279e15a9cc3a",
       "slides": [
         {
-          "page": 106,
+          "page": 90,
           "layout": "single"
         }
       ],
@@ -2841,8 +2739,8 @@
       "sourceSha256": "6095de4b5ef06d87ed77019e1a31a9ee45f0c982baf1854c0085abc69247e357",
       "slides": [
         {
-          "page": 107,
-          "layout": "compact-stacked",
+          "page": 91,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -2854,17 +2752,8 @@
       "line": 2915,
       "endLine": 2922,
       "sourceSha256": "8bf1e60ceb602b195e6a2df7bc124f47b55af2c59ab4a33255551c60d93b2576",
-      "slides": [
-        {
-          "page": 107,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "code-2935",
@@ -2875,7 +2764,7 @@
       "sourceSha256": "b6c409dc35bf2a88a27ff296cd4d82542dedf9a9c3493a0bcf97efdb19af5883",
       "slides": [
         {
-          "page": 108,
+          "page": 92,
           "layout": "single",
           "codeParts": 1
         }
@@ -2890,8 +2779,8 @@
       "sourceSha256": "48e780032ca63997989023efafff15449988582d0f108ee66860cb9e50619d53",
       "slides": [
         {
-          "page": 109,
-          "layout": "columns",
+          "page": 93,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -2903,17 +2792,8 @@
       "line": 2980,
       "endLine": 2985,
       "sourceSha256": "f3d436dc78177945cdb8d0fdee6a91ab4dccb7d7e0d2e49965770762106f72a5",
-      "slides": [
-        {
-          "page": 109,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-2996",
@@ -2956,7 +2836,7 @@
       "sourceSha256": "430fc8ce72b5ead90f9c64ddb5209219960d33707443745c6091cc8e1df424bd",
       "slides": [
         {
-          "page": 110,
+          "page": 94,
           "layout": "single"
         }
       ],
@@ -2973,7 +2853,7 @@
       "sourceSha256": "4378fd99bf75ebe71e6e71e95b0fd3d7a6fde4f0cef5387b67dd6a4c52bac465",
       "slides": [
         {
-          "page": 111,
+          "page": 95,
           "layout": "single",
           "rows": [
             1,
@@ -3001,7 +2881,7 @@
       "sourceSha256": "576229a09a5edc4c6296c1f522e7181b4a4b1a1960e1c8eadf2f585e92c6356c",
       "slides": [
         {
-          "page": 112,
+          "page": 96,
           "layout": "single"
         }
       ],
@@ -3018,8 +2898,8 @@
       "sourceSha256": "3a274c982009dec03cc20c22a10b6c05c98ad416244e89b486aa672bf4b3baab",
       "slides": [
         {
-          "page": 113,
-          "layout": "compact-stacked",
+          "page": 97,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -3031,18 +2911,8 @@
       "line": 3067,
       "endLine": 3082,
       "sourceSha256": "1d07e6371591b6f9fa05f9127dfb361a0fc9fc941adf2eba3f991ee2e4e7514f",
-      "slides": [
-        {
-          "page": 113,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2,
-            3,
-            4
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-3098",
@@ -3053,7 +2923,7 @@
       "sourceSha256": "e052beed42e137a9dda06c579a8cc4b305abf7768b1e4df97fd2e0f1325e3b01",
       "slides": [
         {
-          "page": 114,
+          "page": 98,
           "layout": "single"
         }
       ],
@@ -3070,8 +2940,8 @@
       "sourceSha256": "ea35b648517a3a60363275bd9b6b4be9739f5e9089c73fa74e71cd177ec49c0e",
       "slides": [
         {
-          "page": 116,
-          "layout": "columns",
+          "page": 99,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -3083,16 +2953,8 @@
       "line": 3143,
       "endLine": 3147,
       "sourceSha256": "3af6528919e1995b434384b00fd427e0cf134e099eea9a01cf1ea5b391fa8f61",
-      "slides": [
-        {
-          "page": 116,
-          "layout": "columns",
-          "items": [
-            1,
-            2
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-3155",
@@ -3103,7 +2965,7 @@
       "sourceSha256": "ecd76e80949730b8b91581f2b9ff936d44fc52d49acc126370732679a478e150",
       "slides": [
         {
-          "page": 117,
+          "page": 100,
           "layout": "single",
           "rows": [
             1,
@@ -3131,8 +2993,8 @@
       "sourceSha256": "046ee7057716fea4f72ee50fa329aaf53d3d4023761eb3d161ff34a12aeefa49",
       "slides": [
         {
-          "page": 118,
-          "layout": "composed",
+          "page": 101,
+          "layout": "columns",
           "codeParts": 1
         }
       ]
@@ -3146,8 +3008,8 @@
       "sourceSha256": "aef4e7d8f662f0c38c1a470eb66f10b847fe12a0b6f788d38ba3a74980d1a5e1",
       "slides": [
         {
-          "page": 118,
-          "layout": "composed",
+          "page": 101,
+          "layout": "columns",
           "codeParts": 1
         }
       ]
@@ -3159,17 +3021,8 @@
       "line": 3186,
       "endLine": 3200,
       "sourceSha256": "91d321630a4542878b28e71e102205145c9bd250278557cb4095fa1557668c28",
-      "slides": [
-        {
-          "page": 118,
-          "layout": "composed",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-3215",
@@ -3180,7 +3033,7 @@
       "sourceSha256": "bfc47ab2a55bda89efb412af45d1ffdb82b5171a9433aa8bd0faf400f284a557",
       "slides": [
         {
-          "page": 120,
+          "page": 102,
           "layout": "single",
           "rows": [
             1,
@@ -3217,7 +3070,7 @@
       "sourceSha256": "8b16f2b07d1c2291d9a1ccf392bf244277dbb76826e28d9fe08b24e0fbefff2e",
       "slides": [
         {
-          "page": 121,
+          "page": 103,
           "layout": "single",
           "rows": [
             1
@@ -3266,7 +3119,7 @@
       "sourceSha256": "f4814f39f7797bdc7c47a70a7c28496909daaaaa18bc009398a7e4ddcfc9b322",
       "slides": [
         {
-          "page": 123,
+          "page": 105,
           "layout": "single",
           "codeParts": 1
         }
@@ -3281,7 +3134,7 @@
       "sourceSha256": "7c59871cdf437cda895a13b0c8ddf787407093e483092ea00aa8c61c1f6965ce",
       "slides": [
         {
-          "page": 124,
+          "page": 106,
           "layout": "composed"
         }
       ],
@@ -3298,7 +3151,7 @@
       "sourceSha256": "67d1a426ec4ea81df929abbfaef113866546e6022851f4e5451c0ba364db3068",
       "slides": [
         {
-          "page": 124,
+          "page": 106,
           "layout": "composed",
           "rows": [
             1,
@@ -3330,7 +3183,7 @@
       "sourceSha256": "6f2889ec35f4b04649ba8028fc04bb158c96d05237113901f583f4760ffe8b67",
       "slides": [
         {
-          "page": 126,
+          "page": 107,
           "layout": "single",
           "rows": [
             1,
@@ -3361,7 +3214,7 @@
       "sourceSha256": "0ffa714b102bbc0fc55976ee19049b64a2ee5e05a8b3ce918321cef5da06ffdb",
       "slides": [
         {
-          "page": 127,
+          "page": 108,
           "layout": "single"
         }
       ],
@@ -3378,7 +3231,7 @@
       "sourceSha256": "2e28a0e978e09d469e6bb9ab6dc17f0d632f2c20796b145527c5f238968ccbd2",
       "slides": [
         {
-          "page": 128,
+          "page": 109,
           "layout": "stacked",
           "rows": [
             1,
@@ -3415,7 +3268,7 @@
       "sourceSha256": "689e9f5dc2b1e47539d0e5f852141c98ae461b3e383b38abcd071cc9bd311ea6",
       "slides": [
         {
-          "page": 128,
+          "page": 109,
           "layout": "stacked",
           "rows": [
             1,
@@ -3525,7 +3378,7 @@
       "sourceSha256": "a96ae29365f7b0f15616786332ce15c5f11d19cfc4b4188489a7f17ac19ce8bc",
       "slides": [
         {
-          "page": 133,
+          "page": 110,
           "layout": "single",
           "rows": [
             1,
@@ -3562,7 +3415,7 @@
       "sourceSha256": "9fffa142e3d04914e2d15ac9a4faa44f0a60e02ac866e1546415876eaf20397c",
       "slides": [
         {
-          "page": 134,
+          "page": 111,
           "layout": "single"
         }
       ],
@@ -3579,7 +3432,7 @@
       "sourceSha256": "67c7abcaff1426814add1761d50fa20081dbd72d3d776a29b8a3870e1e077a0a",
       "slides": [
         {
-          "page": 135,
+          "page": 112,
           "layout": "single",
           "rows": [
             1,
@@ -3626,7 +3479,7 @@
       "sourceSha256": "04126805894861091bef97dc37e368310e6c4c33621e5377b44f51e7a29ffa06",
       "slides": [
         {
-          "page": 136,
+          "page": 113,
           "layout": "single"
         }
       ],
@@ -3643,7 +3496,7 @@
       "sourceSha256": "7cf4d733e939e54a3fabbfb6076d8b39f51d4b86030772092ff7f260d4a03683",
       "slides": [
         {
-          "page": 138,
+          "page": 114,
           "layout": "single"
         }
       ],
@@ -3660,7 +3513,7 @@
       "sourceSha256": "ade532b9a9c1a1bd58855c2221b1917719b1a8aa27aa0b37f88ffe4c62d5b15b",
       "slides": [
         {
-          "page": 139,
+          "page": 115,
           "layout": "single"
         }
       ],
@@ -3677,7 +3530,7 @@
       "sourceSha256": "3f64b75ec22fbefe84664b003af6746c576c08e3d559374f163f6cf5a9305108",
       "slides": [
         {
-          "page": 140,
+          "page": 116,
           "layout": "single"
         }
       ],
@@ -3694,7 +3547,7 @@
       "sourceSha256": "1b880001858363acbb335df7b7645ece55b1185a9aafabbc45b2706e2d43dadc",
       "slides": [
         {
-          "page": 141,
+          "page": 117,
           "layout": "single"
         }
       ],
@@ -3711,7 +3564,7 @@
       "sourceSha256": "1d9f501d88c251463f9843dd3ec31099fd4f8223d8429cca9d051832bfc9998c",
       "slides": [
         {
-          "page": 142,
+          "page": 118,
           "layout": "single"
         }
       ],
@@ -3728,7 +3581,7 @@
       "sourceSha256": "126e8c62f1b0214b0bfb3f1ca8f62683b62a41eec024c8e2cc3b9473166c2dd2",
       "slides": [
         {
-          "page": 143,
+          "page": 119,
           "layout": "single"
         }
       ],
@@ -3745,7 +3598,7 @@
       "sourceSha256": "6909ae233a0dbc12e55b621765dad2ef308f35a307a4f80be8096a839580cfd9",
       "slides": [
         {
-          "page": 144,
+          "page": 120,
           "layout": "single"
         }
       ],
@@ -3762,7 +3615,7 @@
       "sourceSha256": "c19e51e6d79054b1c90d8acbc98d75676b56fb729d52d6b923df962fc1cee869",
       "slides": [
         {
-          "page": 146,
+          "page": 122,
           "layout": "single",
           "codeParts": 2
         }
@@ -3777,7 +3630,7 @@
       "sourceSha256": "ce5ca22419ba5d09380026df0b1361cf5e456e086bbfd86b7a4eae3d550a9603",
       "slides": [
         {
-          "page": 147,
+          "page": 123,
           "layout": "single",
           "rows": [
             1,
@@ -3792,7 +3645,7 @@
           ]
         },
         {
-          "page": 148,
+          "page": 124,
           "layout": "single",
           "rows": [
             10,
@@ -3843,7 +3696,7 @@
       "sourceSha256": "18c6efe2a8e276fc73a8143d2b214f6752dcc662f97118f1441f5811719468af",
       "slides": [
         {
-          "page": 149,
+          "page": 125,
           "layout": "single",
           "rows": [
             1,
@@ -3880,7 +3733,7 @@
       "sourceSha256": "34d2c74092c017dc29ca1ca7e39ce706788d48348148faa218e260b53760cdd4",
       "slides": [
         {
-          "page": 150,
+          "page": 126,
           "layout": "single"
         }
       ],
@@ -3897,7 +3750,7 @@
       "sourceSha256": "bb5f5cbb4d2fe8280693e55e8eb80a9ddd1ccb1468bb4fc187384fa3624f98c1",
       "slides": [
         {
-          "page": 151,
+          "page": 127,
           "layout": "composed"
         }
       ],
@@ -3914,7 +3767,7 @@
       "sourceSha256": "8619c6ed401126e46824bd2c3f62217e92426d328308950887f512fce6e01b59",
       "slides": [
         {
-          "page": 151,
+          "page": 127,
           "layout": "composed",
           "rows": [
             1,
@@ -3942,7 +3795,7 @@
       "sourceSha256": "5179c2650708f193b160cb5a70e92b5e936206099363873080f6ff215423cd4f",
       "slides": [
         {
-          "page": 153,
+          "page": 128,
           "layout": "single"
         }
       ],
@@ -3959,7 +3812,7 @@
       "sourceSha256": "2b0d9c0895e3a7e4bbabbf70b05a350a17262b57e7ae89ed4833ff0883eb1520",
       "slides": [
         {
-          "page": 154,
+          "page": 130,
           "layout": "single"
         }
       ],
@@ -3976,7 +3829,7 @@
       "sourceSha256": "494a8bd903bdcba3b5de6cbc9317fbc3ea211520ee580b7d27048ec5719cbe70",
       "slides": [
         {
-          "page": 155,
+          "page": 131,
           "layout": "single",
           "rows": [
             1,
@@ -4018,7 +3871,7 @@
       "sourceSha256": "a2fcb53cf6db7900500640548c9adfcad0f0599944de2d4b342d16eeebe7e11d",
       "slides": [
         {
-          "page": 157,
+          "page": 132,
           "layout": "single"
         }
       ],
@@ -4035,7 +3888,7 @@
       "sourceSha256": "5d809e9c8ef1628811e9e87de0711ac0e02be41f35dcae8b7c4695ba550ddeca",
       "slides": [
         {
-          "page": 158,
+          "page": 133,
           "layout": "single"
         }
       ],
@@ -4052,7 +3905,7 @@
       "sourceSha256": "cc5c1948e7249ea02a59968482e18f95d88b11b9d6e03f0b29524d8ab2555162",
       "slides": [
         {
-          "page": 159,
+          "page": 134,
           "layout": "single",
           "rows": [
             1
@@ -4149,7 +4002,7 @@
       "sourceSha256": "109368f75c5b627da836d55033eb9d43af02e49533162dddb938cb9b18cda7ee",
       "slides": [
         {
-          "page": 160,
+          "page": 135,
           "layout": "single",
           "items": [
             1,
@@ -4170,7 +4023,7 @@
       "sourceSha256": "41325ac468b6bf3174f19849bc7b3fe4f4b35e6cc45c99779efe531317068948",
       "slides": [
         {
-          "page": 161,
+          "page": 136,
           "layout": "single"
         }
       ],
@@ -4187,7 +4040,7 @@
       "sourceSha256": "788107d74082c7d07fde61dbf01c977506fbe8db61fe4a91bab3982817cee32d",
       "slides": [
         {
-          "page": 162,
+          "page": 137,
           "layout": "single"
         }
       ],
@@ -4204,7 +4057,7 @@
       "sourceSha256": "faec34e3b19355d14963b19cce94f5a6104be6baab6aea4de4d77edf4014e798",
       "slides": [
         {
-          "page": 163,
+          "page": 138,
           "layout": "single",
           "rows": [
             1,
@@ -4236,7 +4089,7 @@
       "sourceSha256": "21b7d1186500f979d786f406734e0b2c9ff3acdb4af3205080c2587a08feebae",
       "slides": [
         {
-          "page": 164,
+          "page": 139,
           "layout": "single",
           "rows": [
             1,
@@ -4287,7 +4140,7 @@
       "sourceSha256": "272da2021f3c1445d329da7b57c949d870da26c976fde04531bd802f2a1cdee4",
       "slides": [
         {
-          "page": 165,
+          "page": 140,
           "layout": "single",
           "codeParts": 1
         }
@@ -4302,7 +4155,7 @@
       "sourceSha256": "7567ca73477272248b11eeaa841f28bacdac7429796758082b45f2b704b9fbb1",
       "slides": [
         {
-          "page": 167,
+          "page": 141,
           "layout": "columns",
           "codeParts": 1
         }
@@ -4317,7 +4170,7 @@
       "sourceSha256": "bdac77b76b5062b556a24bb0366f0995634064045c60d1434bea26d28c96c1da",
       "slides": [
         {
-          "page": 167,
+          "page": 141,
           "layout": "columns",
           "codeParts": 1
         }
@@ -4332,7 +4185,7 @@
       "sourceSha256": "f16afda91a507bb2297e0d21c63019e262701502ab5bbad63454be784c2679dc",
       "slides": [
         {
-          "page": 168,
+          "page": 142,
           "layout": "single"
         }
       ],
@@ -4349,7 +4202,7 @@
       "sourceSha256": "2957664cf34a90690e706a9a9f301fe96212322b19930c4e471efe8421c613ac",
       "slides": [
         {
-          "page": 169,
+          "page": 143,
           "layout": "single"
         }
       ],
@@ -4366,7 +4219,7 @@
       "sourceSha256": "5b989052df0bb1bb0d4516a28162117106929206d3e4c27b6cf865edd182cc4d",
       "slides": [
         {
-          "page": 170,
+          "page": 144,
           "layout": "single"
         }
       ],
@@ -4383,7 +4236,7 @@
       "sourceSha256": "ec4432189e61db44db327bfe44abd41a4df953743d5de62bb6780259e732a4f3",
       "slides": [
         {
-          "page": 171,
+          "page": 145,
           "layout": "single",
           "codeParts": 1
         }
@@ -4398,7 +4251,7 @@
       "sourceSha256": "cfcb11e689fc5e8c1323721aff1b1da8f35bfdc37738d7b381917b8c97464404",
       "slides": [
         {
-          "page": 172,
+          "page": 146,
           "layout": "single",
           "rows": [
             1
@@ -4459,7 +4312,7 @@
       "sourceSha256": "7fa5329bb23383ed5f1fbb0502d787dd71d73a36175a61ce82ec71c198448177",
       "slides": [
         {
-          "page": 173,
+          "page": 147,
           "layout": "single",
           "rows": [
             1,
@@ -4534,7 +4387,7 @@
       "sourceSha256": "b546cb1756e3ac50e700f0acb6e038dbacd751de2b721282f4aebffbac4955d6",
       "slides": [
         {
-          "page": 175,
+          "page": 149,
           "layout": "single",
           "codeParts": 1
         }
@@ -4549,7 +4402,7 @@
       "sourceSha256": "40966a291ea21a02c630df68a25f81fa6b5a1a1419f680b710126773852367e2",
       "slides": [
         {
-          "page": 176,
+          "page": 150,
           "layout": "composed",
           "rows": [
             1,
@@ -4585,7 +4438,7 @@
       "sourceSha256": "5a472a8075dcaf04bcd6adb4d6f8a29bea775c5b1443695165848ca47a5fdd7d",
       "slides": [
         {
-          "page": 176,
+          "page": 150,
           "layout": "composed",
           "rows": [
             1,
@@ -4613,7 +4466,7 @@
       "sourceSha256": "d3dfe14197dada592c89d6f619df855108162318066db5ff904e5f2a4dfeed64",
       "slides": [
         {
-          "page": 178,
+          "page": 151,
           "layout": "single"
         }
       ],
@@ -4630,7 +4483,7 @@
       "sourceSha256": "199ba8dfd467c8299c334bd0279acf9e005b2bb3790b83190a427d53c4fd18d6",
       "slides": [
         {
-          "page": 179,
+          "page": 152,
           "layout": "single"
         }
       ],
@@ -4647,7 +4500,7 @@
       "sourceSha256": "cfec91a7b437ecb6fcb4af68390ab4eb4f4a7af6ac717278688f62472075b795",
       "slides": [
         {
-          "page": 180,
+          "page": 153,
           "layout": "single"
         }
       ],
@@ -4664,7 +4517,7 @@
       "sourceSha256": "08f97074799fac55c4f703cd1839b7c5fb95547b266b4e295eeca4e2250f1241",
       "slides": [
         {
-          "page": 181,
+          "page": 154,
           "layout": "single"
         }
       ],
@@ -4681,7 +4534,7 @@
       "sourceSha256": "8eecff27f75d3d733a98ba25e60fcb68f43e31cb6820485ce630ae0f082c7efe",
       "slides": [
         {
-          "page": 182,
+          "page": 155,
           "layout": "composed",
           "codeParts": 2
         }
@@ -4696,7 +4549,7 @@
       "sourceSha256": "df0d667eccf446a35d864ccf80cef3b24a28dd83e56a8a5b08ab68dcfdcfe47e",
       "slides": [
         {
-          "page": 182,
+          "page": 155,
           "layout": "composed",
           "codeParts": 1
         }
@@ -4711,7 +4564,7 @@
       "sourceSha256": "83a48bed5c0ac3f98f767382f0be12ac08c8d5b817a3499988f8f84b4c6aff5a",
       "slides": [
         {
-          "page": 183,
+          "page": 156,
           "layout": "single",
           "rows": [
             1,
@@ -4756,7 +4609,7 @@
       "sourceSha256": "155ea0ba2774babc002d63876e9c071e716e7995e7d73132be83f4f68736f3d0",
       "slides": [
         {
-          "page": 187,
+          "page": 158,
           "layout": "single"
         }
       ],
@@ -4773,7 +4626,7 @@
       "sourceSha256": "34afa8e76a81b62392f21e39bd94fc8230f57dd70454779938c241aeba71805e",
       "slides": [
         {
-          "page": 188,
+          "page": 159,
           "layout": "single"
         }
       ],
@@ -4790,7 +4643,7 @@
       "sourceSha256": "72a77a09c2329c193d3f5d35be0b4083203a712dd619839e968b5ac0cfc7cad3",
       "slides": [
         {
-          "page": 189,
+          "page": 160,
           "layout": "single"
         }
       ],
@@ -4807,7 +4660,7 @@
       "sourceSha256": "2a5231704ba3327b05846c03d53406f9236a85d03139cd4882aed865e6454025",
       "slides": [
         {
-          "page": 190,
+          "page": 161,
           "layout": "single"
         }
       ],
@@ -4824,7 +4677,7 @@
       "sourceSha256": "403a23c3e1e421a746fe3a8eee079fb3797e0e56758c6bb63256837e8f247ea6",
       "slides": [
         {
-          "page": 191,
+          "page": 162,
           "layout": "single",
           "codeParts": 2
         }
@@ -4867,7 +4720,7 @@
       "sourceSha256": "cdb11cf05cb8f71fb850f80bb9f54a33998c04602ead123adb0ef983694cdda7",
       "slides": [
         {
-          "page": 192,
+          "page": 163,
           "layout": "single"
         }
       ],
@@ -4884,7 +4737,7 @@
       "sourceSha256": "260433f4e057fe7f7dbe0eda4ea38e536f7862fd1c7eb7feaf2f3bc45b1fcf40",
       "slides": [
         {
-          "page": 193,
+          "page": 164,
           "layout": "columns",
           "codeParts": 1
         }
@@ -4899,7 +4752,7 @@
       "sourceSha256": "71e1e6cfa43c58ba839fbe5680388391fd75eaa23550bda0ad6dec0620fc74f1",
       "slides": [
         {
-          "page": 193,
+          "page": 164,
           "layout": "columns",
           "rows": [
             1,
@@ -4931,17 +4784,8 @@
       "line": 4717,
       "endLine": 4722,
       "sourceSha256": "90e7fc5e7f361453e660e3d8064423ee8edf24a014bababd23d4ecec2815af49",
-      "slides": [
-        {
-          "page": 195,
-          "layout": "single",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-4746",
@@ -4952,7 +4796,7 @@
       "sourceSha256": "a7da8d6fd75dae5f6cbdc42c2f55954e3cde8f72ac9633db7a854e92edd90a90",
       "slides": [
         {
-          "page": 196,
+          "page": 165,
           "layout": "single"
         }
       ],
@@ -4969,7 +4813,7 @@
       "sourceSha256": "4350bf18e8c0a7fc3b35a9c1a0e38fd1efb0ff3707147ad1438d9a5cb0c194d2",
       "slides": [
         {
-          "page": 197,
+          "page": 166,
           "layout": "single",
           "codeParts": 1
         }
@@ -4984,7 +4828,7 @@
       "sourceSha256": "a74d2a00875284c17a2af1270ef0ab2cea7f0a85a44d172c4a835a4206193a18",
       "slides": [
         {
-          "page": 198,
+          "page": 167,
           "layout": "single"
         }
       ],
@@ -5001,8 +4845,8 @@
       "sourceSha256": "19fec4113daabbe214208a488d9f8b694461247eb8fed62cef62fbee6aa8585f",
       "slides": [
         {
-          "page": 199,
-          "layout": "columns",
+          "page": 168,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -5014,17 +4858,8 @@
       "line": 4830,
       "endLine": 4837,
       "sourceSha256": "524b85608aeaa141494190c5f5c8a69da3004e543203df9acf544471e1479a48",
-      "slides": [
-        {
-          "page": 199,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "image-4874",
@@ -5035,7 +4870,7 @@
       "sourceSha256": "209a4ef6297de24070ecaa77b2ce7af1a269f45f422156ac12005c928bc6f4ec",
       "slides": [
         {
-          "page": 200,
+          "page": 169,
           "layout": "single"
         }
       ],
@@ -5052,8 +4887,8 @@
       "sourceSha256": "71be107f3b64800ee69105fcbcba14e5a7019532a7864e599afecd209c4f0afa",
       "slides": [
         {
-          "page": 201,
-          "layout": "compact-stacked",
+          "page": 170,
+          "layout": "single",
           "codeParts": 2
         }
       ]
@@ -5065,18 +4900,8 @@
       "line": 4928,
       "endLine": 4942,
       "sourceSha256": "557e7d08fe9c48919933c6497f435420986a81eece5a550f27d002ec7d3096a5",
-      "slides": [
-        {
-          "page": 201,
-          "layout": "compact-stacked",
-          "items": [
-            1,
-            2,
-            3,
-            4
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-4954",
@@ -5087,7 +4912,7 @@
       "sourceSha256": "5b229aef46d42fd2b2624093cda8e94aa9442e06d848af892415a8944e13a891",
       "slides": [
         {
-          "page": 202,
+          "page": 171,
           "layout": "single",
           "rows": [
             1
@@ -5136,7 +4961,7 @@
       "sourceSha256": "790454d9a7ab70a292cc7ba302226aca21b77755bcd1eab12889c91160b65ae8",
       "slides": [
         {
-          "page": 204,
+          "page": 173,
           "layout": "single",
           "codeParts": 1
         }
@@ -5151,7 +4976,7 @@
       "sourceSha256": "273fa00d8fdf268f5b99b7d5eff261683f75085cf024762da357f130ef4794e2",
       "slides": [
         {
-          "page": 205,
+          "page": 174,
           "layout": "single",
           "rows": [
             1,
@@ -5179,7 +5004,7 @@
       "sourceSha256": "93d55b42cec9a42927b79dd16c8a7f167efb7fef3e5802bef585d456eea65a77",
       "slides": [
         {
-          "page": 206,
+          "page": 175,
           "layout": "single",
           "rows": [
             1,
@@ -5221,7 +5046,7 @@
       "sourceSha256": "f194b5899069871a4950ae30f348113eb45d5644ba87993e3b6ad4608a7c00db",
       "slides": [
         {
-          "page": 207,
+          "page": 176,
           "layout": "single"
         }
       ],
@@ -5238,7 +5063,7 @@
       "sourceSha256": "f2954c11d0134d93defd6292179d21b526c6d7cf3e729b9eeefa7970270527d0",
       "slides": [
         {
-          "page": 210,
+          "page": 177,
           "layout": "single"
         }
       ],
@@ -5255,7 +5080,7 @@
       "sourceSha256": "3bbe6e46f3fba86d89e11185df7965211aed4b4fa58810cf7ba79db082a8c622",
       "slides": [
         {
-          "page": 211,
+          "page": 178,
           "layout": "single",
           "rows": [
             1,
@@ -5289,7 +5114,7 @@
       "sourceSha256": "e01b78c8cd748ec8b5c2c8c89727febee686ce8b9187df589fc112b93e1a81b2",
       "slides": [
         {
-          "page": 213,
+          "page": 179,
           "layout": "single"
         }
       ],
@@ -5304,18 +5129,8 @@
       "line": 5189,
       "endLine": 5203,
       "sourceSha256": "d01b0eeddfe7aca23b06a9c0d298fa79816b618734564c4d88b5471e8ce90e79",
-      "slides": [
-        {
-          "page": 214,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3,
-            4
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "list-5219",
@@ -5324,17 +5139,8 @@
       "line": 5219,
       "endLine": 5240,
       "sourceSha256": "d76a6a43e79460a3bfd936c52f7ec06adc0203dfeb313e74bcaddd7617c1005e",
-      "slides": [
-        {
-          "page": 214,
-          "layout": "columns",
-          "items": [
-            1,
-            2,
-            3
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "list-5269",
@@ -5343,21 +5149,8 @@
       "line": 5269,
       "endLine": 5301,
       "sourceSha256": "d2ec5669481b1355c4d246dc00812938fa96ea8d381f7e4fbb54f862474565d0",
-      "slides": [
-        {
-          "page": 215,
-          "layout": "single",
-          "items": [
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7
-          ]
-        }
-      ]
+      "slides": [],
+      "excluded": "Standalone bullet lists omitted by request; table bullets retained"
     },
     {
       "id": "table-5304",
@@ -5368,7 +5161,7 @@
       "sourceSha256": "6fe47bed260b7fb6a2bd71ebd4f4eb88c8a69d11748e495da4b091eccfa54b63",
       "slides": [
         {
-          "page": 216,
+          "page": 180,
           "layout": "single",
           "rows": [
             1,
@@ -5398,7 +5191,7 @@
       "sourceSha256": "7aa37891f29e62cd5bb8f03da3c4ad8ddf4a4f000dcb14a6976773d0b2b608c3",
       "slides": [
         {
-          "page": 217,
+          "page": 181,
           "layout": "stacked",
           "rows": [
             1,
@@ -5428,7 +5221,7 @@
       "sourceSha256": "f4b0de6cd93cad1e203968d8f7d9279d1cabd7c63bbc1e732c32e6e66fe52243",
       "slides": [
         {
-          "page": 217,
+          "page": 181,
           "layout": "stacked",
           "rows": [
             1,
@@ -5479,7 +5272,7 @@
       "sourceSha256": "0d3975a19e250e056cdb32d8346c1a803f15bbf6e89bce230a7fc8c849d4c834",
       "slides": [
         {
-          "page": 218,
+          "page": 182,
           "layout": "single",
           "rows": [
             1,
@@ -5513,7 +5306,7 @@
       "sourceSha256": "eb38d64a2067b57f50042e8da5728a264e130d5d6f1164417da3f1fb49a20911",
       "slides": [
         {
-          "page": 219,
+          "page": 183,
           "layout": "single",
           "rows": [
             1,
@@ -5552,7 +5345,7 @@
       "sourceSha256": "fc79b85a2de194bdccff173f8bd7011d4dcfbb51084e86737f9bdc33b7061754",
       "slides": [
         {
-          "page": 224,
+          "page": 184,
           "layout": "single",
           "rows": [
             1,
@@ -5603,7 +5396,7 @@
       "sourceSha256": "1e8a504fe6454dd30237d5ab1a5d67a6d0d5d4e7aa491915f8f3d7c100cbb46b",
       "slides": [
         {
-          "page": 225,
+          "page": 185,
           "layout": "composed",
           "codeParts": 1
         }
@@ -5618,7 +5411,7 @@
       "sourceSha256": "5824b5c1f987c280e540e83d5a51d3a4f3fcf72ff21ffd84d2f097334d5dd889",
       "slides": [
         {
-          "page": 225,
+          "page": 185,
           "layout": "composed",
           "codeParts": 2
         }
@@ -5633,7 +5426,7 @@
       "sourceSha256": "5f3e1cfaf4f83013c6721b04503f5f41fdd33e18da8ea1f2e4309876a0654bb0",
       "slides": [
         {
-          "page": 226,
+          "page": 186,
           "layout": "single"
         }
       ],
@@ -5650,7 +5443,7 @@
       "sourceSha256": "7e3479a8166316f4d524deb28418193a71860ef0f2ac15845ae9bc9f84564ce3",
       "slides": [
         {
-          "page": 227,
+          "page": 187,
           "layout": "columns",
           "rows": [
             1,
@@ -5678,7 +5471,7 @@
       "sourceSha256": "6878e7434edc80e20b93a3369cca6d8590a7756a744df1c9747d4624192c8062",
       "slides": [
         {
-          "page": 227,
+          "page": 187,
           "layout": "columns",
           "rows": [
             1,
@@ -5710,7 +5503,7 @@
       "sourceSha256": "c2090c7e7c1057b10c5c0e1826eee66e6cdea4f8d4f1fdaf63f75649901bd7cf",
       "slides": [
         {
-          "page": 230,
+          "page": 189,
           "layout": "single"
         }
       ],
@@ -5727,7 +5520,7 @@
       "sourceSha256": "27ccfcfe1cb7b70951aa8f4eb96e27e342e6d2e40f5d20728c4c4e67aa59edb6",
       "slides": [
         {
-          "page": 231,
+          "page": 190,
           "layout": "single",
           "rows": [
             1,
@@ -5767,7 +5560,7 @@
       "sourceSha256": "67b2c62797a2299896b3a012ce02aba80660f94a1ca722877e90bbc9ebb2893d",
       "slides": [
         {
-          "page": 232,
+          "page": 191,
           "layout": "single"
         }
       ],
@@ -5784,7 +5577,7 @@
       "sourceSha256": "5e4149d0332aab5c1f784eda91987960d60ceec539d5a85284235e9755aa6977",
       "slides": [
         {
-          "page": 233,
+          "page": 192,
           "layout": "stacked",
           "rows": [
             1,
@@ -5818,7 +5611,7 @@
       "sourceSha256": "66a4765c5b25bebfb21c8a63b7737d40871940bdd3c85e8076bba7f4adc14bf8",
       "slides": [
         {
-          "page": 233,
+          "page": 192,
           "layout": "stacked",
           "rows": [
             1,
@@ -5855,7 +5648,7 @@
       "sourceSha256": "2be6d92b97e0cb56f7ed0ebd5f8dcb5726d0abb50446225bb939f937acb812ee",
       "slides": [
         {
-          "page": 234,
+          "page": 193,
           "layout": "single"
         }
       ],
@@ -5872,7 +5665,7 @@
       "sourceSha256": "4ee45ad077a024dd7d7ee14009a9382c48ea18b60993b307a4f1aa2689588338",
       "slides": [
         {
-          "page": 235,
+          "page": 194,
           "layout": "single",
           "rows": [
             1,
@@ -5906,7 +5699,7 @@
       "sourceSha256": "96f92331370d1d9596550e6d4be69c3f2f031fd6487ec569b52c011bf47c5be7",
       "slides": [
         {
-          "page": 236,
+          "page": 195,
           "layout": "columns",
           "codeParts": 1
         }
@@ -5921,7 +5714,7 @@
       "sourceSha256": "c90b86f6c173c36618a734a6a57f7c25449b2f99739e758d115b0544e878bd54",
       "slides": [
         {
-          "page": 236,
+          "page": 195,
           "layout": "columns",
           "codeParts": 1
         }
@@ -5936,7 +5729,7 @@
       "sourceSha256": "4b21262d7e4ea398593ef009776a9ee09fd4382460db10e0474d1aadfd592b0c",
       "slides": [
         {
-          "page": 237,
+          "page": 196,
           "layout": "columns",
           "codeParts": 1
         }
@@ -5951,7 +5744,7 @@
       "sourceSha256": "c9fa703f8d518f9fe6edf2a8aa1d742c8ac0305a815ecac4316cab29fe744540",
       "slides": [
         {
-          "page": 237,
+          "page": 196,
           "layout": "columns",
           "codeParts": 1
         }
@@ -5966,7 +5759,7 @@
       "sourceSha256": "6c3358bb1401ba34bc588ac4411aa0ae8272ceee39cb607a7b343070f0220a86",
       "slides": [
         {
-          "page": 238,
+          "page": 197,
           "layout": "single",
           "codeParts": 1
         }
@@ -5981,7 +5774,7 @@
       "sourceSha256": "714b8f55433b47125d2b4b4548e3d1ee6a1c656dbd3c1cd644142102199beb3d",
       "slides": [
         {
-          "page": 239,
+          "page": 198,
           "layout": "composed",
           "rows": [
             1,
@@ -6012,7 +5805,7 @@
       "sourceSha256": "231391f6aa5ba8edef782d4aff2c75e589561835606348ad1609bb48590e41de",
       "slides": [
         {
-          "page": 239,
+          "page": 198,
           "layout": "composed",
           "rows": [
             1,
@@ -6044,7 +5837,7 @@
       "sourceSha256": "4e61257927b5f0213b61129725eda7587680b2ecaef04a1afd794a39f663ea09",
       "slides": [
         {
-          "page": 239,
+          "page": 198,
           "layout": "composed",
           "rows": [
             1
@@ -6093,7 +5886,7 @@
       "sourceSha256": "55b0d47385ee5c9575df3cf8c83930fd531bd15265198da5a67363059ae18bea",
       "slides": [
         {
-          "page": 241,
+          "page": 200,
           "layout": "single",
           "rows": [
             1,
@@ -6121,7 +5914,7 @@
       "sourceSha256": "26b4d7007c79fa8a113a1bf31b21750301e3826fe6ddce67ba38d802d69067f0",
       "slides": [
         {
-          "page": 242,
+          "page": 201,
           "layout": "single",
           "rows": [
             1,
@@ -6236,7 +6029,7 @@
       "sourceSha256": "b79035b6f7cb6533e39aa1d1631bdf170f741db0124e460a7b9aecfe43f8c4e6",
       "slides": [
         {
-          "page": 243,
+          "page": 202,
           "layout": "single",
           "rows": [
             1,
@@ -6272,7 +6065,7 @@
       "sourceSha256": "5c543ccb0ace2e6f93af01d61117c2fa48824117d0be53526443b928e5b67713",
       "slides": [
         {
-          "page": 244,
+          "page": 203,
           "layout": "single",
           "rows": [
             1,
@@ -6312,7 +6105,7 @@
       "sourceSha256": "8739c9a99588f8e2f99b7aa83f363fefb8ad5d29d901479aff01a716fa1a52aa",
       "slides": [
         {
-          "page": 245,
+          "page": 204,
           "layout": "single",
           "rows": [
             1,
@@ -6355,7 +6148,7 @@
       "sourceSha256": "760026ee6cdaac3e0d4c4182c2a6326d09c8f19f41a5f021cdc16de09a7e9863",
       "slides": [
         {
-          "page": 247,
+          "page": 206,
           "layout": "single",
           "rows": [
             1,
@@ -6391,7 +6184,7 @@
       "sourceSha256": "b8d337657c793bd986dd6942ba5254829378d541c52e277a3ddfdb8088ba1298",
       "slides": [
         {
-          "page": 248,
+          "page": 207,
           "layout": "single",
           "rows": [
             1,
@@ -6444,7 +6237,7 @@
       "sourceSha256": "8d0fb02b4010b3ad8a67009e89917423a1882b16757629efc58db071ea8d4846",
       "slides": [
         {
-          "page": 251,
+          "page": 210,
           "layout": "single",
           "rows": [
             1,
@@ -6460,7 +6253,7 @@
           ]
         },
         {
-          "page": 252,
+          "page": 211,
           "layout": "single",
           "rows": [
             11,
@@ -6513,7 +6306,7 @@
       "sourceSha256": "fb12240fe2896b4150c07b62a7c06036235b0a37573d84679e8bd0d7c7151d05",
       "slides": [
         {
-          "page": 254,
+          "page": 213,
           "layout": "single"
         }
       ],
@@ -6530,7 +6323,7 @@
       "sourceSha256": "eb4b6b88b785d0a5e8e41cb4734d26948ac071c327af201aa77f925d4675daad",
       "slides": [
         {
-          "page": 255,
+          "page": 214,
           "layout": "single"
         }
       ],
@@ -6547,7 +6340,7 @@
       "sourceSha256": "55e455e70c99166e92fedc032df10a9d92e6e062b0f70bde088a7aba2eace7b3",
       "slides": [
         {
-          "page": 256,
+          "page": 215,
           "layout": "single",
           "rows": [
             1,
@@ -6605,7 +6398,7 @@
       "sourceSha256": "6887c6e182ebfa4215c72e9d0a0130c0b823215aa2269a3b358e7d84117668d1",
       "slides": [
         {
-          "page": 257,
+          "page": 216,
           "layout": "single",
           "rows": [
             1,
@@ -6639,7 +6432,7 @@
       "sourceSha256": "23629de2839315e462fa23aff185e8a66e87c8d8b4847df444a83418997d25bc",
       "slides": [
         {
-          "page": 260,
+          "page": 219,
           "layout": "single",
           "rows": [
             1,
@@ -6678,7 +6471,7 @@
       "sourceSha256": "5d8eaad0398ca3e8f01f2cbe1087e6bc0fb633811f5afbfb921ac4925c182c62",
       "slides": [
         {
-          "page": 261,
+          "page": 220,
           "layout": "composed",
           "codeParts": 1
         }
@@ -6693,7 +6486,7 @@
       "sourceSha256": "679cf8e49b348d0ebd04cafa4c383c43df72fa73eb7e60b82c05a82803175814",
       "slides": [
         {
-          "page": 261,
+          "page": 220,
           "layout": "composed",
           "codeParts": 1
         }
@@ -6708,7 +6501,7 @@
       "sourceSha256": "b6923de63b922cfd3fe1090f41cec0e184812a3a77ee6808f4041511853c4a8b",
       "slides": [
         {
-          "page": 261,
+          "page": 220,
           "layout": "composed",
           "codeParts": 1
         }
@@ -6723,13 +6516,13 @@
       "sourceSha256": "ad8d30fc84df20cbac17033149dbeebdde9a7dd9fb4e5e162468ae581975a30c",
       "slides": [
         {
-          "page": 66,
+          "page": 62,
           "layout": "single",
           "codeParts": 1,
           "repeated": true
         },
         {
-          "page": 262,
+          "page": 221,
           "layout": "single",
           "codeParts": 1
         }
@@ -6744,13 +6537,13 @@
       "sourceSha256": "c8522075aae24ebf911e4385b8a8d8421273b4f9b02e6966100162ade7a9dece",
       "slides": [
         {
-          "page": 67,
+          "page": 63,
           "layout": "single",
           "codeParts": 2,
           "repeated": true
         },
         {
-          "page": 263,
+          "page": 222,
           "layout": "single",
           "codeParts": 2
         }
@@ -6765,7 +6558,7 @@
       "sourceSha256": "bc5e91f32f095177bf5c555c1a978d5c9035d3e3101d9ca6e6165bdefa5e72ef",
       "slides": [
         {
-          "page": 264,
+          "page": 223,
           "layout": "single"
         }
       ],
@@ -6782,7 +6575,7 @@
       "sourceSha256": "4172a3de4d1c7ee9b72e75e5c5175e92f60d784f6682da45679ddfe8ed7e48a0",
       "slides": [
         {
-          "page": 265,
+          "page": 224,
           "layout": "single"
         }
       ],
@@ -6799,7 +6592,7 @@
       "sourceSha256": "9c088546b7ea647da5e81aeb6f15972850ff749661baa58d49217be85d5dd1e6",
       "slides": [
         {
-          "page": 266,
+          "page": 225,
           "layout": "single",
           "rows": [
             1,
@@ -6853,7 +6646,7 @@
       "sourceSha256": "6367588fc04d9604ba1db310b9a930e469b9839a0091fda39be62f4560c377c7",
       "slides": [
         {
-          "page": 267,
+          "page": 226,
           "layout": "single",
           "rows": [
             1,
@@ -6891,7 +6684,7 @@
       "sourceSha256": "eae8859b4230d4559ee61a9b1dd18fc234abf87a974c7957ede3cebb0f08ebd6",
       "slides": [
         {
-          "page": 268,
+          "page": 227,
           "layout": "single",
           "rows": [
             1,
@@ -6927,7 +6720,7 @@
       "sourceSha256": "4bdec54c210cc91ce800fdc36666258bedd7d2a38550007e7e7016bb69e3b6f8",
       "slides": [
         {
-          "page": 269,
+          "page": 228,
           "layout": "single",
           "rows": [
             1,
@@ -6955,7 +6748,7 @@
       "sourceSha256": "0a6fdd93b78151e9ff8bf948a7588380f2999e27bad8c3d312c22e694d9bb86b",
       "slides": [
         {
-          "page": 270,
+          "page": 229,
           "layout": "single",
           "rows": [
             1,
@@ -6987,7 +6780,7 @@
       "sourceSha256": "7a303cbbde0af8c5252e4de23348ac731d05bcd85c804fe8d433dd3b5ae50c92",
       "slides": [
         {
-          "page": 271,
+          "page": 230,
           "layout": "single",
           "rows": [
             1,
@@ -7017,7 +6810,7 @@
       "sourceSha256": "35e073ecca6a8e78df90bcf1013027c6ded1d986c85af54eac1a34956d61b2a4",
       "slides": [
         {
-          "page": 272,
+          "page": 231,
           "layout": "single",
           "rows": [
             1,
@@ -7045,7 +6838,7 @@
       "sourceSha256": "3f7363d4ab2506cf10b13c81b9cd70406cd9e4e35c5f4da365839f72119164ba",
       "slides": [
         {
-          "page": 273,
+          "page": 232,
           "layout": "single",
           "rows": [
             1,
@@ -7073,7 +6866,7 @@
       "sourceSha256": "684d03f513a60f60069b0ac031eae9c7de2021e4b8b57bbd75e9e14a0d778a63",
       "slides": [
         {
-          "page": 274,
+          "page": 233,
           "layout": "single",
           "rows": [
             1,
@@ -7105,7 +6898,7 @@
       "sourceSha256": "4983cc99c41437013a5dced437c54048456bc1343a7eca3c17add3314bd583c4",
       "slides": [
         {
-          "page": 275,
+          "page": 234,
           "layout": "single",
           "rows": [
             1,
@@ -7135,7 +6928,7 @@
       "sourceSha256": "43f3eeab878aac5f999d1341ff16353785c10fd5be8a05e77718d5c83685a179",
       "slides": [
         {
-          "page": 276,
+          "page": 235,
           "layout": "single",
           "codeParts": 1
         }
@@ -7150,7 +6943,7 @@
       "sourceSha256": "1e221fbd1fa4b7c3d0493d0424ef9882ef63b5b4c375316c432a7b501f884336",
       "slides": [
         {
-          "page": 277,
+          "page": 236,
           "layout": "single",
           "rows": [
             1,
@@ -7186,7 +6979,7 @@
       "sourceSha256": "48f8f77da39a0f65947ffd34fe7931bf9187aae422c280c8e49debfb26fb63b4",
       "slides": [
         {
-          "page": 278,
+          "page": 237,
           "layout": "single",
           "rows": [
             1,
@@ -7216,7 +7009,7 @@
       "sourceSha256": "35c0e4346fb7bc2702b0f3167d1da7e7ac95b8066041825bb6bc0fe0222c5b65",
       "slides": [
         {
-          "page": 280,
+          "page": 239,
           "layout": "single",
           "rows": [
             1,
@@ -7250,7 +7043,7 @@
       "sourceSha256": "23cb56191a355944e8b3d2a0cb95596580cf0fcc2a81f765ad875ff047e39566",
       "slides": [
         {
-          "page": 281,
+          "page": 240,
           "layout": "single",
           "rows": [
             1
@@ -7276,7 +7069,7 @@
       "sourceSha256": "e4f0fff5f3009b10631b23a6bb15a38672317c9ff4b38173bcde4da274b703e4",
       "slides": [
         {
-          "page": 282,
+          "page": 241,
           "layout": "single",
           "codeParts": 1
         }
@@ -7291,7 +7084,7 @@
       "sourceSha256": "3a54788fdfb1ebc4434d7444ce7b42c57702e85e916a59a2d2b8290ec7186bab",
       "slides": [
         {
-          "page": 283,
+          "page": 242,
           "layout": "columns",
           "rows": [
             1,
@@ -7303,7 +7096,7 @@
           ]
         },
         {
-          "page": 283,
+          "page": 242,
           "layout": "columns",
           "rows": [
             7,
@@ -7345,7 +7138,7 @@
       "sourceSha256": "56bd8ea8257d3f69f50a38bcdff2573e63ca6d0335d48ef86747e1ad704dcf92",
       "slides": [
         {
-          "page": 285,
+          "page": 244,
           "layout": "single",
           "rows": [
             1
@@ -7371,7 +7164,7 @@
       "sourceSha256": "023adefd07116a7225a1e55471e07abc07f23c66a63c092d55bac2b1549c2e58",
       "slides": [
         {
-          "page": 286,
+          "page": 245,
           "layout": "single",
           "rows": [
             1,
@@ -7405,7 +7198,7 @@
       "sourceSha256": "e6c020659c138a03a9072bdfcbd0b8054ba4829b5a35951db47e3da6659d988d",
       "slides": [
         {
-          "page": 287,
+          "page": 246,
           "layout": "composed",
           "codeParts": 1
         }
@@ -7420,7 +7213,7 @@
       "sourceSha256": "81610076dfe9e7e387d2b9fa58e3eccdd461e61a60b53c4b960cc674d682eff6",
       "slides": [
         {
-          "page": 287,
+          "page": 246,
           "layout": "composed",
           "rows": [
             1
@@ -7446,7 +7239,7 @@
       "sourceSha256": "3c2c22b496dca1bda647ed40efa6fe7c5af7734e247f8338fe78622ef8a756f3",
       "slides": [
         {
-          "page": 288,
+          "page": 247,
           "layout": "columns",
           "rows": [
             1,
@@ -7458,7 +7251,7 @@
           ]
         },
         {
-          "page": 288,
+          "page": 247,
           "layout": "columns",
           "rows": [
             7,
@@ -7500,7 +7293,7 @@
       "sourceSha256": "77560910d09091b02d2b5b674dda750d58dd5933c299716497dda6de5226b070",
       "slides": [
         {
-          "page": 290,
+          "page": 249,
           "layout": "single",
           "rows": [
             1,
@@ -7534,7 +7327,7 @@
       "sourceSha256": "520853b59d12d9bd72fbb2bd128c592c7123b792ed9596563d1cac82f01df1c7",
       "slides": [
         {
-          "page": 291,
+          "page": 250,
           "layout": "single",
           "rows": [
             1,
@@ -7562,7 +7355,7 @@
       "sourceSha256": "03c2fb95d04238e5060e7fea94aff505fb3e02c3917aafb83f0cf7fa94e02507",
       "slides": [
         {
-          "page": 292,
+          "page": 251,
           "layout": "single",
           "rows": [
             1,
@@ -7597,7 +7390,7 @@
       "sourceSha256": "495c9b7607fbe7cd44e5b4383e8a5cdda43c042ba95348771389ab4073001824",
       "slides": [
         {
-          "page": 294,
+          "page": 253,
           "layout": "single"
         }
       ],
@@ -7614,7 +7407,7 @@
       "sourceSha256": "9b03f7c832f543dda670d87f1931a4e0cefafb0a7e30a03d450db9e4b6d64816",
       "slides": [
         {
-          "page": 295,
+          "page": 254,
           "layout": "single",
           "rows": [
             1,
@@ -7648,7 +7441,7 @@
       "sourceSha256": "f7a13bd128ec99bacd3b536e71223958de714e4533112577458b88766c28f260",
       "slides": [
         {
-          "page": 296,
+          "page": 255,
           "layout": "columns",
           "rows": [
             1,
@@ -7680,7 +7473,7 @@
       "sourceSha256": "5e8225f3d2632ac43d04ca7efa57b4d44733a74ffedef3df526c5bc1eccae0d8",
       "slides": [
         {
-          "page": 296,
+          "page": 255,
           "layout": "columns",
           "codeParts": 1
         }
@@ -7695,7 +7488,7 @@
       "sourceSha256": "a6f577fe0ec2f9098a60c0f98fdd008cf620b5c2bf1fc77745126e4968e14d2d",
       "slides": [
         {
-          "page": 297,
+          "page": 256,
           "layout": "single"
         }
       ],
@@ -7712,7 +7505,7 @@
       "sourceSha256": "ffee9caefabf80c8115563f6a83377fff1cf78c6193edbdf96bbbaf8a5fb5cf9",
       "slides": [
         {
-          "page": 298,
+          "page": 257,
           "layout": "compact-stacked",
           "codeParts": 2
         }
@@ -7727,7 +7520,7 @@
       "sourceSha256": "158f019acad7affe8af39f38222f40b5d08573166855130cd4fa369cf44838b8",
       "slides": [
         {
-          "page": 298,
+          "page": 257,
           "layout": "compact-stacked",
           "items": [
             1,
@@ -7747,7 +7540,7 @@
       "sourceSha256": "fc51335906172eb4c587c2b3f5f609f3de57c2a5d08b1c846a1969748759f314",
       "slides": [
         {
-          "page": 299,
+          "page": 258,
           "layout": "single",
           "codeParts": 1
         }
@@ -7762,7 +7555,7 @@
       "sourceSha256": "79db6b4aaa59d52e427c01693ecf874c9e2d91f63f028d11de604c2660aee5fc",
       "slides": [
         {
-          "page": 300,
+          "page": 259,
           "layout": "single"
         }
       ],
@@ -7779,7 +7572,7 @@
       "sourceSha256": "74b6beb4d0ba43e305ccabcd23e8a38d459f8b0840ba44b312d4d31c3d423e5b",
       "slides": [
         {
-          "page": 302,
+          "page": 261,
           "layout": "compact-stacked",
           "codeParts": 2
         }
@@ -7794,7 +7587,7 @@
       "sourceSha256": "f067b630cb430f3882ac4332e9c8cad2d362fd723389b07ac719598d28a45eb7",
       "slides": [
         {
-          "page": 302,
+          "page": 261,
           "layout": "compact-stacked",
           "items": [
             1,
@@ -7815,7 +7608,7 @@
       "sourceSha256": "29d40365765d6370163fc30fef130e86048fd5cd8bf040734587c7e94949b0e6",
       "slides": [
         {
-          "page": 303,
+          "page": 262,
           "layout": "columns",
           "codeParts": 1
         }
@@ -7830,7 +7623,7 @@
       "sourceSha256": "0086fee8d91b57143bbc2946497f9a256bab601a24ab154c5d1e3c2de2f7ceb3",
       "slides": [
         {
-          "page": 303,
+          "page": 262,
           "layout": "columns",
           "items": [
             1,
@@ -7849,7 +7642,7 @@
       "sourceSha256": "910e6aa105983a9a0a6ab58c5f257fcc52dadee261bbcf06aa6595ead3adae67",
       "slides": [
         {
-          "page": 305,
+          "page": 264,
           "layout": "single",
           "rows": [
             1,
@@ -7878,7 +7671,7 @@
       "sourceSha256": "9945827bbc7fc03c860ff79d9a1bd6815c3a91b67434ae3855d5372a2ab9371a",
       "slides": [
         {
-          "page": 306,
+          "page": 265,
           "layout": "single",
           "rows": [
             1,
@@ -7908,7 +7701,7 @@
       "sourceSha256": "5367b3c0e75c6c9706e7170b1a15b440ea2ac5567106ccf1d38d156c14c5bd2d",
       "slides": [
         {
-          "page": 307,
+          "page": 266,
           "layout": "compact-stacked",
           "codeParts": 2
         }
@@ -7923,7 +7716,7 @@
       "sourceSha256": "9f21502557bc734212a4a94383c048ca62ceb862eaf1c7d7edf66eca0cbe224f",
       "slides": [
         {
-          "page": 307,
+          "page": 266,
           "layout": "compact-stacked",
           "items": [
             1,
@@ -7943,7 +7736,7 @@
       "sourceSha256": "17716d4c1799997272094f3cd9d25a82abdf89b1bdcf0f6ed3a83f52242136f7",
       "slides": [
         {
-          "page": 314,
+          "page": 273,
           "layout": "single",
           "rows": [
             1,
@@ -7986,7 +7779,7 @@
       "sourceSha256": "ba8291126b78e8aec765b20cece41a16b75cfc9f32c8ee491e8efd3c79722899",
       "slides": [
         {
-          "page": 315,
+          "page": 274,
           "layout": "single"
         }
       ],
@@ -8003,7 +7796,7 @@
       "sourceSha256": "78d4410c8acbb2b69b6bd363c9f012534e85d1e67f84a6e12d0935d79201b377",
       "slides": [
         {
-          "page": 316,
+          "page": 275,
           "layout": "columns",
           "rows": [
             1,
@@ -8038,7 +7831,7 @@
       "sourceSha256": "104d7888d5ac1dc1ba446a6c64b245d79e6f4184ef38906905c6cab1f0c066bc",
       "slides": [
         {
-          "page": 316,
+          "page": 275,
           "layout": "columns",
           "codeParts": 1
         }
@@ -8053,7 +7846,7 @@
       "sourceSha256": "c019899dc1db0bfc824cdbafab942a35e19bef5c8ee701f2475e2d254a30f381",
       "slides": [
         {
-          "page": 317,
+          "page": 276,
           "layout": "single",
           "rows": [
             1,
@@ -8095,7 +7888,7 @@
       "sourceSha256": "fe56997485c9245ac99d3aa6cafbe8d8446996faeeab498fb1022d6e722f58f3",
       "slides": [
         {
-          "page": 319,
+          "page": 278,
           "layout": "single",
           "rows": [
             1,
@@ -8139,7 +7932,7 @@
       "sourceSha256": "6b5c93c69f6641e25d485b4c652a9427f23dad41135546984a0a7d2f92468b26",
       "slides": [
         {
-          "page": 320,
+          "page": 279,
           "layout": "single",
           "codeParts": 2
         }
@@ -8154,7 +7947,7 @@
       "sourceSha256": "daa826df6a6776ec6bcf25dc0c0756ba9b359c56d71765e39abe95c6a00f9e1f",
       "slides": [
         {
-          "page": 322,
+          "page": 281,
           "layout": "single",
           "rows": [
             1,
@@ -8192,7 +7985,7 @@
       "sourceSha256": "f72e66ee9679fda69d386eb2cbc3ec61f0179174032d57125842db682116746a",
       "slides": [
         {
-          "page": 324,
+          "page": 283,
           "layout": "single",
           "rows": [
             1,
@@ -8234,7 +8027,7 @@
       "sourceSha256": "2959430a6a7b47df97134d8ecc484db5102973dede9c23b754539149649291e5",
       "slides": [
         {
-          "page": 325,
+          "page": 284,
           "layout": "single"
         }
       ],
@@ -8251,7 +8044,7 @@
       "sourceSha256": "90a2c52c0b7ed01b33d30fc737e5617fc7cf9b7127ba79bd5ebcdd8fc839725e",
       "slides": [
         {
-          "page": 326,
+          "page": 285,
           "layout": "single",
           "codeParts": 2
         }
@@ -8266,7 +8059,7 @@
       "sourceSha256": "f523b2d602bb981c6ebc3863881fd060845996d9ae4707e0a3f55d1317ab0d60",
       "slides": [
         {
-          "page": 327,
+          "page": 286,
           "layout": "single",
           "codeParts": 1
         }
@@ -8281,7 +8074,7 @@
       "sourceSha256": "24c64b8c449b1ad7be7a45ab64b149e63f41a94d0d6fe8580d6d9718ce7f6f6d",
       "slides": [
         {
-          "page": 328,
+          "page": 287,
           "layout": "single"
         }
       ],
@@ -8298,7 +8091,7 @@
       "sourceSha256": "d668ddddb6b32c50d0f80f1c1bbf6f5abc611167e7197003e49c14a8ceabf159",
       "slides": [
         {
-          "page": 329,
+          "page": 288,
           "layout": "single"
         }
       ],
@@ -8315,7 +8108,7 @@
       "sourceSha256": "fa97c6838ee8455d72f4d1708d15bb7698b0a5d718ec1d89f6079ca9e301cc9d",
       "slides": [
         {
-          "page": 330,
+          "page": 289,
           "layout": "single"
         }
       ],
@@ -8332,7 +8125,7 @@
       "sourceSha256": "269600e51a16b81d173669b13f971ca04415c6f0ee1cf60fa32ae9bec41e9744",
       "slides": [
         {
-          "page": 331,
+          "page": 290,
           "layout": "single"
         }
       ],
@@ -8349,7 +8142,7 @@
       "sourceSha256": "43d0cc6171f022c8a98c6b585f7cea50837e748116b401844b48d63078878aee",
       "slides": [
         {
-          "page": 332,
+          "page": 291,
           "layout": "single"
         }
       ],
@@ -8366,7 +8159,7 @@
       "sourceSha256": "eac0f354b0a0ea3ea148d1826c4a0a582a04e96baf08e5d26f6e74447361a18a",
       "slides": [
         {
-          "page": 333,
+          "page": 292,
           "layout": "single",
           "codeParts": 1
         }
@@ -8381,7 +8174,7 @@
       "sourceSha256": "6e6a6d01b89bd776f16e82567874233c2f1e908a5382ff6dd48a2f75294046ce",
       "slides": [
         {
-          "page": 334,
+          "page": 293,
           "layout": "single",
           "rows": [
             1,
@@ -8420,7 +8213,7 @@
       "sourceSha256": "91bc94b3414c6e45fc29e1ce3bebdf7987baecc00cf6c120b247bd6750630cdb",
       "slides": [
         {
-          "page": 335,
+          "page": 294,
           "layout": "single",
           "codeParts": 2
         }
@@ -8435,7 +8228,7 @@
       "sourceSha256": "d477c5b97da6119b1412d8f0556929667fb6ccd736fac7bc7724d310a2adc93d",
       "slides": [
         {
-          "page": 336,
+          "page": 295,
           "layout": "single",
           "codeParts": 1
         }
@@ -8450,7 +8243,7 @@
       "sourceSha256": "aaeb79a754e82f025fc16049812f9f0a395ec0937847da2f11c427b9dbfa508a",
       "slides": [
         {
-          "page": 337,
+          "page": 296,
           "layout": "single"
         }
       ],
@@ -8467,7 +8260,7 @@
       "sourceSha256": "bb550b7fd09f6cf3064ca2e8dbd77b39f84eb8080cd3a2754aaa96e6d829f35e",
       "slides": [
         {
-          "page": 338,
+          "page": 297,
           "layout": "single"
         }
       ],
@@ -8484,7 +8277,7 @@
       "sourceSha256": "e18686c4d02cb4104318d256cd466c662657506db590d1c63c62a6c42bff3e86",
       "slides": [
         {
-          "page": 339,
+          "page": 298,
           "layout": "single",
           "codeParts": 2
         }
@@ -8499,7 +8292,7 @@
       "sourceSha256": "384eac211bd4f660f425454c4485880894537ca3b52fa88bd11af425bec5aa0a",
       "slides": [
         {
-          "page": 340,
+          "page": 299,
           "layout": "single",
           "codeParts": 1
         }
@@ -8514,7 +8307,7 @@
       "sourceSha256": "34818b8626834b70e3bec6c806558ee4f2038405a567b669ff873eee728b0648",
       "slides": [
         {
-          "page": 342,
+          "page": 301,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8529,7 +8322,7 @@
       "sourceSha256": "3bcba7681bb1e1ae4fad9bb6f27f66f10056f2f3c7abf6fe881ae23ff544596a",
       "slides": [
         {
-          "page": 342,
+          "page": 301,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8544,7 +8337,7 @@
       "sourceSha256": "368d8f56f2d50a4b98b81a07456855dd9a480201be3dd2cc07c40ea75c5b933a",
       "slides": [
         {
-          "page": 342,
+          "page": 301,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8559,7 +8352,7 @@
       "sourceSha256": "ead1d0d6218e32fa2cdbfdd6870a4f6a403f876ba3ac2cdbf11c2b5b66fa4e4f",
       "slides": [
         {
-          "page": 344,
+          "page": 303,
           "layout": "single",
           "rows": [
             1,
@@ -8574,7 +8367,7 @@
           ]
         },
         {
-          "page": 345,
+          "page": 304,
           "layout": "single",
           "rows": [
             10,
@@ -8653,7 +8446,7 @@
       "sourceSha256": "3fe81d62860312632cc8bdf5ca46d4df006bf21ce69882898d4bf8dc2663d473",
       "slides": [
         {
-          "page": 346,
+          "page": 305,
           "layout": "single",
           "items": [
             1,
@@ -8677,7 +8470,7 @@
       "sourceSha256": "d5104c3285d2873a6b1978994204863b71148ef17bf62471a275c56bf496e2d9",
       "slides": [
         {
-          "page": 347,
+          "page": 306,
           "layout": "single",
           "codeParts": 2
         }
@@ -8692,7 +8485,7 @@
       "sourceSha256": "2de3ceab9dd4c5734b063108dab6fc0d2bbdd175de508699125ef788eaba98dd",
       "slides": [
         {
-          "page": 350,
+          "page": 309,
           "layout": "single"
         }
       ],
@@ -8709,7 +8502,7 @@
       "sourceSha256": "77ae907b38a2152a6d94ee52bf86dabea7c516d4b4a3391a2747bf53aa2dfcde",
       "slides": [
         {
-          "page": 351,
+          "page": 310,
           "layout": "single"
         }
       ],
@@ -8726,7 +8519,7 @@
       "sourceSha256": "59022cae95183c176ac91f3c2a4e5c53344b9a615d8c72a48c949d436c53c6c8",
       "slides": [
         {
-          "page": 352,
+          "page": 311,
           "layout": "single",
           "rows": [
             1,
@@ -8770,7 +8563,7 @@
       "sourceSha256": "ac276cb60a7d08315c73b2c844817cb900698a445561fb16d0e43ad14cf943e7",
       "slides": [
         {
-          "page": 353,
+          "page": 312,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8785,7 +8578,7 @@
       "sourceSha256": "e081456e8fa84752503f71810f3f82322b3f5012cc05bd179f6d87a4ef6b22e2",
       "slides": [
         {
-          "page": 353,
+          "page": 312,
           "layout": "composed"
         }
       ],
@@ -8802,7 +8595,7 @@
       "sourceSha256": "eb2ef37a4253d2921267208fa3c309cf8fd85f5d59413741944323808a494838",
       "slides": [
         {
-          "page": 355,
+          "page": 314,
           "layout": "command-above",
           "codeParts": 1
         }
@@ -8817,7 +8610,7 @@
       "sourceSha256": "4cd77e72da32e35209807c8cdb8128dcbbfab9b99d95ed8cd1ac1e597f7587c5",
       "slides": [
         {
-          "page": 355,
+          "page": 314,
           "layout": "command-above",
           "codeParts": 1
         }
@@ -8832,7 +8625,7 @@
       "sourceSha256": "de37c549af1c23ebc38e240713b4d5b666b5a92fb342e4586c84d563b0bd4650",
       "slides": [
         {
-          "page": 356,
+          "page": 315,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8847,7 +8640,7 @@
       "sourceSha256": "a40891d247bbc18a29954ecfe26010ad6c3ee29b11b76929aadee4c5bc83a073",
       "slides": [
         {
-          "page": 356,
+          "page": 315,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8862,7 +8655,7 @@
       "sourceSha256": "9da83325e644af81f3f0154ae5d0a106e0059908a398683abb7b744fb5673e59",
       "slides": [
         {
-          "page": 356,
+          "page": 315,
           "layout": "composed"
         }
       ],
@@ -8879,7 +8672,7 @@
       "sourceSha256": "4c55a9719d26243d05dcbcd06f7270a68765d2fcd56ec0687a9b73250b365406",
       "slides": [
         {
-          "page": 357,
+          "page": 316,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8894,7 +8687,7 @@
       "sourceSha256": "e8fa8889e0b287482fb0daf88adec613749b92203b99381259ba6d2f4819323a",
       "slides": [
         {
-          "page": 357,
+          "page": 316,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8909,7 +8702,7 @@
       "sourceSha256": "28418d97d41c369d251d9e1ed83e4b325553eb327de3cf06f12b8f931eba89fb",
       "slides": [
         {
-          "page": 357,
+          "page": 316,
           "layout": "composed"
         }
       ],
@@ -8926,7 +8719,7 @@
       "sourceSha256": "2272e0434bdda49961d9b7359e438538b1bf3e64a93a21a0ded582cadc4e14d6",
       "slides": [
         {
-          "page": 358,
+          "page": 317,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8941,7 +8734,7 @@
       "sourceSha256": "6f0e410c981e1b991f8820dc60c14abc3af2b62a743003a3c1c5f598176f84ec",
       "slides": [
         {
-          "page": 358,
+          "page": 317,
           "layout": "composed",
           "codeParts": 1
         }
@@ -8956,7 +8749,7 @@
       "sourceSha256": "e76c188de27fac82892eaa506cd9b796cebe87bfdbd07db5ac669f5db4d0c6ab",
       "slides": [
         {
-          "page": 358,
+          "page": 317,
           "layout": "composed"
         }
       ],
@@ -8973,7 +8766,7 @@
       "sourceSha256": "d2c87a8c3efe861f11379f2b302712b651733f48b0b9de01282229deab5e8d83",
       "slides": [
         {
-          "page": 359,
+          "page": 318,
           "layout": "single",
           "rows": [
             1,
@@ -9007,7 +8800,7 @@
       "sourceSha256": "55b42bf8b7548786db9048b0e28b195e3887019d4ea33aa8443af19e5905c29f",
       "slides": [
         {
-          "page": 360,
+          "page": 319,
           "layout": "single",
           "rows": [
             1,
@@ -9046,7 +8839,7 @@
       "sourceSha256": "11dcaff0bd8ffe5e4ef9bac1e03c7f363579578f184865c9e5cc4c13a4563604",
       "slides": [
         {
-          "page": 363,
+          "page": 322,
           "layout": "single",
           "rows": [
             1,
@@ -9081,7 +8874,7 @@
       "sourceSha256": "6fa2707b897819fa7e85b9fe130bddb0fa79ecb22e77256c68478cbd03020248",
       "slides": [
         {
-          "page": 364,
+          "page": 323,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9096,7 +8889,7 @@
       "sourceSha256": "59cbc7758fdfbc8d5577d884df195ffb9cf30cfff0593c50b3d82c3a2d19fe9b",
       "slides": [
         {
-          "page": 364,
+          "page": 323,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9111,7 +8904,7 @@
       "sourceSha256": "7c22eecca8aa0340f1c0d694805845cf6f7e0dac2f0db9f0e438eba12a40af01",
       "slides": [
         {
-          "page": 364,
+          "page": 323,
           "layout": "composed",
           "rows": [
             1,
@@ -9146,7 +8939,7 @@
       "sourceSha256": "7dcc2316290fdf2a6e9248cc45688e48f8df53ed2751df7088039b412dd071d6",
       "slides": [
         {
-          "page": 364,
+          "page": 323,
           "layout": "composed",
           "rows": [
             1,
@@ -9178,7 +8971,7 @@
       "sourceSha256": "7f976eed564af88395dbf28fdc9d1832550485f934f191515b064e9914bace86",
       "slides": [
         {
-          "page": 365,
+          "page": 324,
           "layout": "single",
           "codeParts": 2
         }
@@ -9193,7 +8986,7 @@
       "sourceSha256": "1e42f37f5d6cc062fd045d5606c2780fffe14087f838843ff9ed99fc006acba8",
       "slides": [
         {
-          "page": 367,
+          "page": 326,
           "layout": "single",
           "codeParts": 1
         }
@@ -9208,7 +9001,7 @@
       "sourceSha256": "9063f73a9ac238610be5d08d0313b9a1aa67c368e8519e71471201f837ff3e6d",
       "slides": [
         {
-          "page": 368,
+          "page": 327,
           "layout": "command-above",
           "codeParts": 1
         }
@@ -9223,7 +9016,7 @@
       "sourceSha256": "ee477f51cfe5d246c049cd8ace9c5bbf48a0d1c9a3210a78dad73c467100daa5",
       "slides": [
         {
-          "page": 368,
+          "page": 327,
           "layout": "command-above",
           "codeParts": 2
         }
@@ -9238,7 +9031,7 @@
       "sourceSha256": "0d45644eb9a2837bef35d729acee2ae38babfbc9a128106434829287177be6eb",
       "slides": [
         {
-          "page": 370,
+          "page": 329,
           "layout": "single",
           "rows": [
             1,
@@ -9269,7 +9062,7 @@
       "sourceSha256": "b658616a4cd8bf336b7d827ac56668bc96869dbeb0358d6c1a3cb322ffbd52fa",
       "slides": [
         {
-          "page": 371,
+          "page": 330,
           "layout": "single"
         }
       ],
@@ -9286,7 +9079,7 @@
       "sourceSha256": "1f7b9101f8c68ff195b2f7fc7aa22852218ef862f8cdb27d37b5ed0c4c10a54b",
       "slides": [
         {
-          "page": 372,
+          "page": 331,
           "layout": "single",
           "codeParts": 1
         }
@@ -9301,7 +9094,7 @@
       "sourceSha256": "86f92b34a217a47d6cf82edafe79fe24bcc32b1994b1f33dcd85a273be2eff65",
       "slides": [
         {
-          "page": 373,
+          "page": 332,
           "layout": "single",
           "codeParts": 2
         }
@@ -9316,7 +9109,7 @@
       "sourceSha256": "1dc6966266959b470c2b973c8f16ed8cb255024a063aff9e39a1cf1552a2640a",
       "slides": [
         {
-          "page": 374,
+          "page": 333,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9331,7 +9124,7 @@
       "sourceSha256": "8abd3d1689a6583f5ab6fe0df3d8ba986649ef81db1fe7495d6c1515db464618",
       "slides": [
         {
-          "page": 374,
+          "page": 333,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9346,7 +9139,7 @@
       "sourceSha256": "f329e8023b15b9d5e8116a08c40e067bb8da70c38e5cc6844145b2c31f8b6e2f",
       "slides": [
         {
-          "page": 374,
+          "page": 333,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9361,7 +9154,7 @@
       "sourceSha256": "3679bd660b4b2070a5f8d71b4f9ee6a4862decda1b9d0b96a72c00b6a8ff8c38",
       "slides": [
         {
-          "page": 376,
+          "page": 335,
           "layout": "single",
           "rows": [
             1,
@@ -9401,7 +9194,7 @@
       "sourceSha256": "77fe6104ed955efc3752c1432e9ec4c6da25cf87db7369092ce520a85e26a724",
       "slides": [
         {
-          "page": 380,
+          "page": 339,
           "layout": "single",
           "items": [
             1,
@@ -9428,7 +9221,7 @@
       "sourceSha256": "a4243f46823a19a85040f9458b430eff3b3fda12ed2b440c1171951e41353e2c",
       "slides": [
         {
-          "page": 381,
+          "page": 340,
           "layout": "composed",
           "rows": [
             1,
@@ -9462,7 +9255,7 @@
       "sourceSha256": "6f276b021b028ba79b5ac611dc15259a07d66e4a2ebd1217dd135a7afe48949a",
       "slides": [
         {
-          "page": 381,
+          "page": 340,
           "layout": "composed",
           "codeParts": 1
         }

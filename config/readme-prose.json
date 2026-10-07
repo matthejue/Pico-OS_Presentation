@@ -514,6 +514,12 @@
     "**Lookup/removal:** predecessor search still linear",
     "**next / wait_next:** independent list memberships"
   ],
+  "421-loading-a-process-load-library-call": [
+    "**load():** receive the program into a reserved Process Payload",
+    "**Reception:** caller owns transfer record; no child PCB",
+    "**After reception:** create the child PCB and return its PID",
+    "**Initial state:** NEW; run() prepares and starts the child"
+  ],
   "42111-processload-transfer-record": [
     "**Owner:** loading caller’s pending_load",
     "**No child PCB:** until complete reception",

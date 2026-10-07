@@ -267,6 +267,10 @@
     "table:table-8489:1,2,3,4,5,6,7,8,9,10": [
       52,
       48
+    ],
+    "assets:code-3169+code-3175": [
+      32,
+      68
     ]
   },
   "tableWidths": {
@@ -314,5 +318,15 @@
   },
   "tableBreaks": {
     "table-6906:1,2,3,4,5,6,7,8,9,10,11,12": 7
+  },
+  "codeTextScales": {
+    "code-3169": 1.2,
+    "code-3175": 1.2
+  },
+  "tableTextScales": {
+    "table-3489": 0.85,
+    "table-3892": 0.9,
+    "table-4213": 0.8,
+    "table-3460": 0.95
   }
 }

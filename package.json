@@ -14,6 +14,7 @@
     "source:save": "node scripts/source-state.mjs save",
     "test:source-state": "node scripts/test-source-state.mjs",
     "test:source": "node scripts/check-readme-coverage.mjs",
+    "test:rebuild": "node scripts/test-rebuild-protection.mjs",
     "test:overviews": "node scripts/test-section-overviews.mjs",
     "test:navigation": "node scripts/test-presentation-navigation.mjs",
     "test:notes": "node scripts/test-slide-identities.mjs && node scripts/test-slide-notes.mjs",

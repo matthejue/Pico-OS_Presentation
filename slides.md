@@ -567,6 +567,7 @@ binary/basic_string.sections
 
 <!-- SLIDE_ID 2d92951f-5f88-46ca-9959-9c45f246e965 -->
 <!-- SOURCE Pico-OS/README.md#1131-stack-frame-layout-and-caller-cleanup -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
 
@@ -754,7 +755,6 @@ main_epilogue:
 
 </div>
 
-
 </div>
 
 ---
@@ -884,6 +884,7 @@ main_epilogue:
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-822 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-822" data-code-part="1">
 
@@ -907,7 +908,9 @@ int main(void) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1015,6 +1018,7 @@ main_epilogue:
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-899 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-899" data-code-part="1">
 
@@ -1040,7 +1044,9 @@ int main(void) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1207,6 +1213,7 @@ SUBI SP 0
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-1004 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1004" data-code-part="1">
 
@@ -1224,7 +1231,9 @@ void _start(void) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1242,7 +1251,7 @@ void _start(void) {
 <div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-1029 -->
-<ReadmeVisual kind="code" :width="470" class="command-strip" data-code-source="code-1029" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" class="command-strip" data-code-source="code-1029" data-code-part="1">
 
 <!-- README_CODE_PART code-1029 lines=1-3 -->
 <div class="readme-code">
@@ -1259,7 +1268,7 @@ void _start(void) {
 </ReadmeVisual>
 
 <!-- README_ASSET code-1038 -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1038" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-1038" data-code-part="1">
 
 <!-- README_CODE_PART code-1038 lines=1-15 -->
 <div class="readme-code">
@@ -1402,7 +1411,7 @@ void syscall_interrupt(void) {
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
-## 1.1.7 RETI pseudoinstructions
+## 1.1.7 ReTI pseudoinstructions
 
 <div class="deck-content readme-slide">
 
@@ -1419,7 +1428,6 @@ void syscall_interrupt(void) {
 </ReadmeVisual>
 
 </div>
-
 
 </div>
 
@@ -1441,8 +1449,8 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1125 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1125:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><div class="table-lines"><div class="table-line"><code>SUBI SP 1</code></div><div class="table-line"><code>STOREIN SP ACC 1</code></div></div></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><div class="table-lines"><div class="table-line"><code>LOADIN SP ACC 1</code></div><div class="table-line"><code>ADDI SP 1</code></div></div></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1472,7 +1480,6 @@ asm("POP ACC");
 </div>
 
 </div>
-
 
 </div>
 
@@ -1618,6 +1625,7 @@ $$
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-1231 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1231" data-code-part="1">
 
@@ -1635,7 +1643,9 @@ MOVE ACC PC
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1678,7 +1688,6 @@ MOVE ACC PC
 
 </div>
 
-
 </div>
 
 ---
@@ -1693,6 +1702,7 @@ MOVE ACC PC
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-1292 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1292" data-code-part="1">
 
@@ -1712,7 +1722,9 @@ MOVE ACC PC
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1864,6 +1876,7 @@ $ hexyl -n 20 program.bin
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-1413 -->
 <ReadmeVisual kind="code" :width="736.6" data-code-source="code-1413" data-code-part="1">
 
@@ -1885,7 +1898,9 @@ $ hexyl -n 20 program.bin
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -1893,6 +1908,7 @@ $ hexyl -n 20 program.bin
 
 <!-- SLIDE_ID acedb95c-a90e-46b5-9a9f-db0abaeb727a -->
 <!-- SOURCE Pico-OS/README.md#119-generated-memory-constants-for-the-bootloader-and-kernel -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
@@ -1916,7 +1932,6 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
-
 
 </div>
 
@@ -1958,6 +1973,7 @@ $ hexyl -n 20 program.bin
 
 <!-- SLIDE_ID 14725512-8046-4b51-8536-43f32c77ced0 -->
 <!-- SOURCE Pico-OS/README.md#119-generated-memory-constants-for-the-bootloader-and-kernel -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
@@ -1987,7 +2003,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
 
-## 1.2 RETI-Emulator extensions (1)
+## 1.2 ReTI-Emulator extensions (1)
 
 <div class="deck-content readme-slide">
 
@@ -2023,7 +2039,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
 
-## 1.2 RETI-Emulator extensions (2)
+## 1.2 ReTI-Emulator extensions (2)
 
 <div class="deck-content readme-slide">
 
@@ -2058,7 +2074,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
-## 1.2.1 RETI machine model and memory-mapped peripherals (1)
+## 1.2.1 ReTI machine model and memory-mapped peripherals (1)
 
 <div class="deck-content readme-slide">
 
@@ -2090,7 +2106,6 @@ $ hexyl -n 20 program.bin
 
 </div>
 
-
 </div>
 
 ---
@@ -2100,7 +2115,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
-## 1.2.1 RETI machine model and memory-mapped peripherals (2)
+## 1.2.1 ReTI machine model and memory-mapped peripherals (2)
 
 <div class="deck-content readme-slide">
 
@@ -2126,7 +2141,6 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
-
 
 </div>
 
@@ -2219,7 +2233,6 @@ TSL DS ACC 2
 
 </div>
 
-
 </div>
 
 ---
@@ -2250,7 +2263,6 @@ TSL DS ACC 2
 </ReadmeVisual>
 
 </div>
-
 
 </div>
 
@@ -2342,7 +2354,6 @@ TSL DS ACC 2
 
 </div>
 
-
 </div>
 
 ---
@@ -2372,7 +2383,6 @@ TSL DS ACC 2
 
 </div>
 
-
 </div>
 
 ---
@@ -2393,14 +2403,16 @@ TSL DS ACC 2
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
-## 2.1 ReTI interrupt entry and the interrupt service routine table (1)
+## 2.1 ReTI interrupt entry and the interrupt service routine table
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>ISR pointer:</strong> direct PC load; no C frame</li>
-<li><strong>INT 0:</strong> saves instruction’s own PC</li></ul></div>
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 160fr) minmax(0, 220fr)">
+
+<div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-1713+code-1740" style="--readme-columns:minmax(0, 60fr) minmax(0, 40fr);">
+
 <!-- README_ASSET code-1713 -->
-<ReadmeVisual kind="code" :width="640" data-code-source="code-1713" data-code-part="1">
+<ReadmeVisual kind="code" :width="560" data-code-source="code-1713" data-code-part="1">
 
 <!-- README_CODE_PART code-1713 lines=1-8 -->
 <div class="readme-code">
@@ -2419,42 +2431,10 @@ void (*interrupt_vector_table[OS_INTERRUPT_VECTOR_COUNT])(void) = {
 
 </div>
 
-</ReadmeVisual></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 51cc154f-61d8-4fde-b7f4-1e76ee46db2c -->
-<!-- SOURCE Pico-OS/README.md#21-reti-interrupt-entry-and-the-interrupt-service-routine-table -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
-
-## 2.1 ReTI interrupt entry and the interrupt service routine table (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 216fr) minmax(0, 114fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET table-1724 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-1724:1,2,3,4,5">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.02%" /><col style="width:43.05%" /><col style="width:33.93%" /></colgroup><thead><tr><th>Index</th><th>Entry</th><th>Source</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td><span class="source-link"><code>syscall_interrupt()</code></span></td><td>Userspace INT 0</td></tr>
-<tr data-source-row="2"><td class="table-key">1</td><td><span class="source-link"><code>timer_interrupt()</code></span></td><td>Timer</td></tr>
-<tr data-source-row="3"><td class="table-key">2</td><td><span class="source-link"><code>uart_interrupt()</code></span></td><td>UART receive</td></tr>
-<tr data-source-row="4"><td class="table-key">3</td><td><span class="source-link"><code>cpu_exception_interrupt()</code></span></td><td>Synchronous CPU exception</td></tr>
-<tr data-source-row="5"><td class="table-key">4</td><td><span class="source-link"><code>dma_interrupt()</code></span></td><td>DMA completion; custom-device line</td></tr></tbody></table></div></div>
-
 </ReadmeVisual>
 
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
 <!-- README_ASSET code-1740 -->
-<ReadmeVisual kind="code" :width="640" data-code-source="code-1740" data-code-part="1">
+<ReadmeVisual kind="code" :width="373.33333333333337" data-code-source="code-1740" data-code-part="1">
 
 <!-- README_CODE_PART code-1740 lines=1-4 -->
 <div class="readme-code">
@@ -2473,27 +2453,22 @@ void syscall_interrupt(void) {
 
 </div>
 
-</div>
-<div class="readme-list prose-summary"><ul><li><strong>Hardware/fault:</strong> saves resume/retry PC minus one</li>
-<li><strong>General registers:</strong> saved explicitly by ISR</li></ul></div>
+<div class="readme-artifacts composition-panel layout-single">
+
+<!-- README_ASSET table-1724 -->
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-1724:1,2,3,4,5">
+
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.02%" /><col style="width:43.05%" /><col style="width:33.93%" /></colgroup><thead><tr><th>Index</th><th>Entry</th><th>Source</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td><span class="source-link"><code>syscall_interrupt()</code></span></td><td>Userspace INT 0</td></tr>
+<tr data-source-row="2"><td class="table-key">1</td><td><span class="source-link"><code>timer_interrupt()</code></span></td><td>Timer</td></tr>
+<tr data-source-row="3"><td class="table-key">2</td><td><span class="source-link"><code>uart_interrupt()</code></span></td><td>UART receive</td></tr>
+<tr data-source-row="4"><td class="table-key">3</td><td><span class="source-link"><code>cpu_exception_interrupt()</code></span></td><td>Synchronous CPU exception</td></tr>
+<tr data-source-row="5"><td class="table-key">4</td><td><span class="source-link"><code>dma_interrupt()</code></span></td><td>DMA completion; custom-device line</td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
 
 </div>
 
----
-
-<!-- SLIDE_ID c13b540d-219b-405e-b812-1bc4ba1b8b55 -->
-<!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
-
-## 2.2 Interrupt-controller mappings and priorities
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Timer/DMA/UART:</strong> ISR 1/4/2</li>
-<li><strong>Priorities:</strong> 1 / 1 / 2</li>
-<li><strong>UART:</strong> may nest; equal priorities wait</li></ul></div>
+</div>
 
 </div>
 
@@ -2571,8 +2546,6 @@ void interrupt_controller_initialize(void) {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Disable:</strong> mapping 255; priority 0</li>
-<li><strong>.data arrays:</strong> indices + priorities</li></ul></div>
 
 </div>
 
@@ -2619,23 +2592,6 @@ void interrupt_controller_initialize(void) {
 
 ---
 
-<!-- SLIDE_ID f48fac1c-ccf7-4d59-a3bd-6afa7c159a0c -->
-<!-- SOURCE Pico-OS/README.md#221-interrupt-controller-initialization -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.2 Interrupt-controller mappings and priorities
-
-## 2.2.1 Interrupt-controller initialization (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>.ivt array:</strong> actual handler pointers</li>
-<li><strong>Timer:</strong> 5,000 instructions after init ready</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID d964847e-9b73-4174-bfc7-26ea59781692 -->
 <!-- SOURCE Pico-OS/README.md#23-saved-interrupt-stack-frame -->
 
@@ -2662,34 +2618,7 @@ void interrupt_controller_initialize(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Live BAF:</strong> saved-frame address; not saved BAF value</li>
-<li><strong>Activation:</strong> copy offsets 1–6; SP ← context+6</li>
-<li><strong>Return PC:</strong> process stack at activation.sp+1</li>
-<li><strong>No isolation:</strong> either stack/kernel memory writable</li></ul></div>
-<aside class="context-note"><b>Linux comparison</b><ul><li><strong>Linux:</strong> context on kernel stack</li>
-<li><strong>PicoOS:</strong> context on user stack</li>
-<li>ReTI entry/RTI use active SP</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 3e086847-5994-44bf-be79-71199defe9a5 -->
-<!-- SOURCE Pico-OS/README.md#24-system-call-interface-and-execution -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
-
-## 2.4 System-call interface and execution
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Library wrapper</strong> → selector + request</li>
-<li>INT 0 → <strong>handle_syscall</strong></li>
-<li><strong>No hardcoded</strong> kernel function addresses</li>
-<li><strong>ABI:</strong> registers, layouts, result meanings</li></ul></div>
-<aside class="context-note"><b>POSIX portability</b><ul><li>Source interfaces across different kernels</li>
-<li>PicoOS signatures/behavior differ</li></ul></aside>
+<aside class="context-note"><b>Linux comparison</b><span><strong>Linux:</strong> context on kernel stack · <strong>PicoOS:</strong> context on user stack · ReTI entry/RTI use active SP</span></aside>
 
 </div>
 
@@ -2704,8 +2633,8 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>ACC:</strong> selector; <strong>IN1:</strong> argument/request address</li>
-<li><strong>IN2:</strong> result; shared PicoC convention</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-6306 repeated -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-6306" data-code-part="1">
 
@@ -2726,9 +2655,11 @@ struct WaitPidRequest {
 
 </div>
 
-</ReadmeVisual></div>
-<aside class="context-note"><b>System V ABI</b><ul><li><strong>IN2:</strong> syscall + function result</li>
-<li>Wrapper and entry agree</li></ul></aside>
+</ReadmeVisual>
+
+</div>
+<aside class="context-note"><b>System V ABI</b><span><strong>IN2:</strong> syscall + function result · Wrapper and entry agree</span></aside>
+<aside class="context-note"><b>POSIX portability</b><span>Source interfaces across different kernels · PicoOS signatures/behavior differ</span></aside>
 
 </div>
 
@@ -2807,8 +2738,6 @@ bool WIFSTOPPED(int status) {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Request frame:</strong> survives suspended syscall</li>
-<li><strong>Kernel:</strong> retains needed fields, not request pointer</li></ul></div>
 
 </div>
 
@@ -2917,6 +2846,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID 7bf082a5-9341-4119-8209-d3e8a4566e96 -->
 <!-- SOURCE Pico-OS/README.md#2411-process-wait-signal-and-memory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -2953,6 +2883,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID 0afb8f9a-6eba-40db-97d9-6d43b2de56ae -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -2984,6 +2915,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID c9bd20c7-754d-46fe-9a04-cd60348d798c -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -3025,24 +2957,6 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 ---
 
-<!-- SLIDE_ID 698d9219-5f90-4046-a4b1-62e64a52efa5 -->
-<!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
-
-## 2.4.1.2 File and directory request structures (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>load / file read:</strong> reuse request across chunks</li>
-<li><strong>Terminal read:</strong> PCB retains buffer + count</li>
-<li><strong>Single value:</strong> PID, descriptor, path, queue pointer</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 1fb48dc6-bf1e-491e-871f-bdc0da7273b0 -->
 <!-- SOURCE Pico-OS/README.md#242-system-call-entry-execution-and-return-to-userspace -->
 
@@ -3072,7 +2986,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
 
-## 2.4.2.1 Entering kernel context (1)
+## 2.4.2.1 Entering kernel context
 
 <div class="deck-content readme-slide">
 
@@ -3153,55 +3067,12 @@ void syscall_interrupt(void) {
 
 ---
 
-<!-- SLIDE_ID 20ad82b3-cd1f-47c4-8957-4e92701e6b1d -->
-<!-- SOURCE Pico-OS/README.md#2421-entering-kernel-context -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
-
-## 2.4.2.1 Entering kernel context (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET list-2092 -->
-<div class="readme-list"><ul><li>Save <strong>six registers + PC</strong></li>
-<li>BAF → <strong>saved frame</strong></li>
-<li>Install kernel segments + <strong>stack boundary</strong></li>
-<li><strong>Push</strong> context, argument, selector</li>
-<li>Default <strong>saved IN2</strong> = 1</li>
-<li><strong>handle_syscall</strong> → syscall_interrupt_return</li></ul></div>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID cf11c19f-7e11-4c01-8418-3f975e286ae7 -->
-<!-- SOURCE Pico-OS/README.md#2421-entering-kernel-context -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
-
-## 2.4.2.1 Entering kernel context (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>User stack:</strong> saved interrupted registers remain</li>
-<li><strong>Kernel stack:</strong> only call arguments copied</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID c276aed7-d90d-4f32-9092-8d3a724154e5 -->
 <!-- SOURCE Pico-OS/README.md#24211-stack-boundary-helpers -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace · 2.4.2.1 Entering kernel context
 
-## 2.4.2.1.1 Stack-boundary helpers (1)
+## 2.4.2.1.1 Stack-boundary helpers
 
 <div class="deck-content readme-slide">
 
@@ -3263,26 +3134,6 @@ void activate_current_process_stack_boundary(void) {
 
 ---
 
-<!-- SLIDE_ID 20ff63cf-c84e-4148-87cd-e098f5b0d179 -->
-<!-- SOURCE Pico-OS/README.md#24211-stack-boundary-helpers -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace · 2.4.2.1 Entering kernel context
-
-## 2.4.2.1.1 Stack-boundary helpers (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Cell 10:</strong> lowest allowed free SP</li>
-<li><strong>Zero:</strong> disables protection</li>
-<li><strong>Interrupt entry:</strong> bypasses exhausted-stack check</li>
-<li><strong>Kernel entry:</strong> disable → load SP → install limit</li>
-<li><strong>Borrowed stack:</strong> retain existing boundary</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 8ff2e1d3-e134-4d33-a051-9fe5c9f4f5f5 -->
 <!-- SOURCE Pico-OS/README.md#2422-handle-syscall -->
 
@@ -3292,7 +3143,7 @@ void activate_current_process_stack_boundary(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2191 -->
 <div class="code-columns" data-column-key="code:code-2191" style="--readme-columns:minmax(0, 46fr) minmax(0, 54fr);--source-aspect:4.04361988386914">
@@ -3351,10 +3202,6 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 </div>
 
-<!-- README_ASSET list-2222 -->
-<div class="readme-list"><ul><li>Match selector; pass <strong>saved context</strong></li>
-<li><strong>IN2</strong> ← result; unknown selector → 0</li></ul></div>
-
 </div>
 
 </div>
@@ -3399,10 +3246,10 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2255+list-2275" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2255 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2255" data-code-part="1">
+<ReadmeVisual kind="code" :width="745.1999999999999" data-code-source="code-2255" data-code-part="1">
 
 <!-- README_CODE_PART code-2255 lines=1-14 -->
 <div class="readme-code">
@@ -3429,14 +3276,7 @@ void syscall_interrupt_return(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-2275 -->
-<div class="readme-list"><ul><li>Save <strong>IN2</strong> in caller_context[4]</li>
-<li>Check <strong>deferred rescheduling</strong></li>
-<li>Restore directly or <strong>dispatch</strong></li></ul></div>
-
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Request flag:</strong> no context save or switch</li>
-<li><strong>Saved IN2:</strong> preserves result across scheduling</li></ul></div>
 
 </div>
 
@@ -3509,31 +3349,6 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 ---
 
-<!-- SLIDE_ID fc690734-85d3-4110-9481-4f52db87106d -->
-<!-- SOURCE Pico-OS/README.md#2423-selecting-the-return-path -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
-
-## 2.4.2.3 Selecting the return path (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET list-2335 -->
-<div class="readme-list"><ul><li>Outgoing RUNNING → <strong>READY</strong></li>
-<li>Clear request; selected PCB → <strong>RUNNING</strong></li>
-<li>Restore boundary + activation; <strong>RTI</strong></li></ul></div>
-
-</div>
-<div class="readme-list prose-summary"><ul><li><strong>Block / yield / exit:</strong> can dispatch inside syscall</li>
-<li><strong>Check → RTI:</strong> non-atomic; late request stays pending</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 9ae2bb06-7d13-49b7-9672-82640c51c2ad -->
 <!-- SOURCE Pico-OS/README.md#2424-restoring-process-context-with-rti -->
 
@@ -3543,10 +3358,10 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2375+list-2393" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2375 -->
-<ReadmeVisual kind="code" :width="435.59999999999997" data-code-source="code-2375" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-2375" data-code-part="1">
 
 <!-- README_CODE_PART code-2375 lines=1-12 -->
 <div class="readme-code">
@@ -3571,14 +3386,7 @@ void syscall_interrupt_restore(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-2393 -->
-<div class="readme-list"><ul><li>SP ← <strong>BAF</strong>; discard scratch frames</li>
-<li>Restore caller <strong>stack boundary</strong></li>
-<li><strong>Pop registers</strong>; RTI restores PC</li></ul></div>
-
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Direct return:</strong> registers from saved user frame</li>
-<li><strong>Scheduled return:</strong> registers from selected PCB</li></ul></div>
 
 </div>
 
@@ -3603,24 +3411,6 @@ void syscall_interrupt_restore(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>RTI:</strong> read SP+1; SP++; PC ← saved PC+1</div></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 6aea96b5-c9fa-485c-8027-9185cc45891e -->
-<!-- SOURCE Pico-OS/README.md#25-timer-interrupts-and-userspace-preemption -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
-
-## 2.5 Timer interrupts and userspace preemption
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>5,000 instructions</strong> per timer interval</li>
-<li><strong>Instruction count:</strong> independent of wall-clock time</li></ul></div>
 
 </div>
 
@@ -3659,7 +3449,7 @@ void syscall_interrupt_restore(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2445 -->
 <div class="code-columns" data-column-key="code:code-2445" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:3.2779369627507164">
@@ -3721,11 +3511,6 @@ void timer_interrupt(void) {
 
 </div>
 
-<!-- README_ASSET list-2480 -->
-<div class="readme-list"><ul><li>Save registers; <strong>PC at SP + 7</strong></li>
-<li>Install kernel <strong>CS + DS</strong></li>
-<li>Classify <strong>saved PC</strong> against kernel DS</li></ul></div>
-
 </div>
 
 </div>
@@ -3751,42 +3536,6 @@ void timer_interrupt(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>PC test:</strong> handles changing-CS restore windows</div></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 55822f1b-3cf0-4a41-9315-406046dfef20 -->
-<!-- SOURCE Pico-OS/README.md#2511-saving-context-and-selecting-the-timer-branch -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
-
-## 2.5.1.1 Saving context and selecting the timer branch (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Saved PC ≤ kernel DS:</strong> deferred kernel branch</li>
-<li><strong>Saved PC &gt; kernel DS:</strong> immediate userspace branch</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 754a8d48-d769-4614-9117-9bc48799da66 -->
-<!-- SOURCE Pico-OS/README.md#2512-requesting-deferred-scheduling-for-kernel-work -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
-
-## 2.5.1.2 Requesting deferred scheduling for kernel work
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Kernel timer:</strong> sets reschedule_requested only</li>
-<li><strong>Activation + process state:</strong> preserved</li>
-<li><strong>Kernel:</strong> no separate PCB</li>
-<li><strong>Retain stack:</strong> suspended call frames remain intact</li></ul></div>
 
 </div>
 
@@ -3801,10 +3550,10 @@ void timer_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2532+list-2549" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2532 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2532" data-code-part="1">
+<ReadmeVisual kind="code" :width="736.6" data-code-source="code-2532" data-code-part="1">
 
 <!-- README_CODE_PART code-2532 lines=1-11 -->
 <div class="readme-code">
@@ -3828,10 +3577,6 @@ void timer_interrupt_kernel_return(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-2549 -->
-<div class="readme-list"><ul><li>Pop registers; retain <strong>stack boundary</strong></li>
-<li><strong>RTI</strong>; reschedule at later safe point</li></ul></div>
-
 </div>
 
 </div>
@@ -3843,14 +3588,14 @@ void timer_interrupt_kernel_return(void) {
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
 
-## 2.5.1.4 Entering kernel context for userspace preemption (1)
+## 2.5.1.4 Entering kernel context for userspace preemption
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2567+list-2592" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2567 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2567" data-code-part="1">
+<ReadmeVisual kind="code" :width="702.1999999999999" data-code-source="code-2567" data-code-part="1">
 
 <!-- README_CODE_PART code-2567 lines=1-19 -->
 <div class="readme-code">
@@ -3882,71 +3627,7 @@ void timer_interrupt_process(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-2592 -->
-<div class="readme-list"><ul><li><strong>BAF</strong> preserves saved process frame</li>
-<li>Install kernel <strong>SP</strong> + boundary</li>
-<li>Push context + <strong>dummy return</strong></li>
-<li>Enter dispatcher; <strong>no deferred-request check</strong></li></ul></div>
-
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID d661e84b-0834-45ae-83b0-7176ec4bc529 -->
-<!-- SOURCE Pico-OS/README.md#2514-entering-kernel-context-for-userspace-preemption -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
-
-## 2.5.1.4 Entering kernel context for userspace preemption (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Userspace branch:</strong> dispatcher directly</li>
-<li><strong>No deferred request</strong> check</li>
-<li><strong>Nested UART:</strong> return, then continue switching</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 37afbff3-361d-4fd6-baad-8238b9e88da9 -->
-<!-- SOURCE Pico-OS/README.md#2515-saving-process-context-and-restoring-the-selected-process -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
-
-## 2.5.1.5 Saving process context and restoring the selected process
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li>Userspace timer enters <strong>dispatcher directly</strong></li>
-<li>Save outgoing <strong>activation</strong></li>
-<li>RUNNING → <strong>READY</strong>; preserve blocked/stopped state</li>
-<li>Select runnable PCB; <strong>restore + RTI</strong></li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 0f070827-5440-4ddc-ad2a-2a9f7742829c -->
-<!-- SOURCE Pico-OS/README.md#252-kernel-non-preemption-and-deferred-rescheduling -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
-
-## 2.5.2 Kernel non-preemption and deferred rescheduling
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Kernel operation:</strong> completes before process switch</li>
-<li><strong>Device interrupts:</strong> remain enabled</li>
-<li><strong>Block / yield / terminate:</strong> earlier dispatch possible</li>
-<li><strong>Polling:</strong> ≤1 KiB per syscall; scheduling between chunks</li>
-<li><strong>DMA:</strong> one payload transfer; caller blocks</li>
-<li><strong>All blocked:</strong> wait for interrupt wakeup</li></ul></div>
 
 </div>
 
@@ -3971,9 +3652,6 @@ void timer_interrupt_process(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>5,000 instructions:</strong> chosen interval</li>
-<li><strong>10,000:</strong> similar measured character delay</li>
-<li><strong>Shorter turns:</strong> more switching overhead</li></ul></div>
 
 </div>
 
@@ -4010,11 +3688,11 @@ void timer_interrupt_process(void) {
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
-## 2.6.1 Entering kernel segments on the interrupted stack (1)
+## 2.6.1 Entering kernel segments on the interrupted stack
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2694 -->
 <div class="code-columns" data-column-key="code:code-2694" style="--readme-columns:minmax(0, 53fr) minmax(0, 47fr);--source-aspect:4.249962803154293">
@@ -4071,31 +3749,7 @@ void uart_interrupt(void) {
 
 </div>
 
-<!-- README_ASSET list-2724 -->
-<div class="readme-list"><ul><li>Save <strong>registers + automatic PC</strong></li>
-<li>Retain interrupted <strong>SP</strong> + boundary</li>
-<li><strong>handle_uart_interrupt</strong> → uart_interrupt_return</li></ul></div>
-
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID de3d8ca6-4f42-4689-9326-b0442d9dd839 -->
-<!-- SOURCE Pico-OS/README.md#261-entering-kernel-segments-on-the-interrupted-stack -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
-
-## 2.6.1 Entering kernel segments on the interrupted stack (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>UART / DMA:</strong> borrow interrupted stack</li>
-<li><strong>Calls:</strong> free space below saved frame</li>
-<li><strong>Retain SP + boundary:</strong> suspended frames survive</li>
-<li><strong>Kernel CS:</strong> nested faults become kernel exceptions</li></ul></div>
 
 </div>
 
@@ -4111,10 +3765,10 @@ void uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2749+list-2775" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2749 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2749" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-2749" data-code-part="1">
 
 <!-- README_CODE_PART code-2749 lines=1-20 -->
 <div class="readme-code">
@@ -4147,12 +3801,6 @@ void handle_uart_interrupt(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-2775 -->
-<div class="readme-list"><ul><li>Find <strong>foreground owner</strong> + terminal</li>
-<li>Read byte; acknowledge <strong>receive-ready</strong></li>
-<li><strong>Ctrl+C</strong> → SIGINT; <strong>Ctrl+Z</strong> → SIGTSTP</li>
-<li>Buffer byte; complete <strong>waiting read</strong></li></ul></div>
-
 </div>
 
 </div>
@@ -4169,10 +3817,10 @@ void handle_uart_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2802+list-2820" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2802 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2802" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-2802" data-code-part="1">
 
 <!-- README_CODE_PART code-2802 lines=1-12 -->
 <div class="readme-code">
@@ -4196,11 +3844,6 @@ void uart_interrupt_return(void) {
 </div>
 
 </ReadmeVisual>
-
-<!-- README_ASSET list-2820 -->
-<div class="readme-list"><ul><li>SP ← <strong>BAF</strong></li>
-<li><strong>Pop six registers</strong></li>
-<li><strong>RTI</strong>; no scheduling check</li></ul></div>
 
 </div>
 
@@ -4234,11 +3877,6 @@ void uart_interrupt_return(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Ctrl+C:</strong> deferred current-process termination</li>
-<li><strong>Ctrl+Z:</strong> state change; no reschedule request</li>
-<li><strong>Timer:</strong> one outstanding expiration; <strong>DMA:</strong> latched completion</li>
-<li><strong>UART:</strong> host queues later bytes while delivery waits</li>
-<li><strong>Kernel ring full:</strong> drops new byte</li></ul></div>
 
 </div>
 
@@ -4304,7 +3942,7 @@ void uart_interrupt_return(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2887 -->
 <div class="code-columns" data-column-key="code:code-2887" style="--readme-columns:minmax(0, 53fr) minmax(0, 47fr);--source-aspect:4.209393817743878">
@@ -4359,11 +3997,6 @@ void dma_interrupt(void) {
 
 </div>
 
-<!-- README_ASSET list-2915 -->
-<div class="readme-list"><ul><li>Save <strong>six registers</strong></li>
-<li>Borrow stack; install kernel <strong>CS</strong>/DS</li>
-<li><strong>handle_dma_interrupt</strong> → dma_interrupt_return</li></ul></div>
-
 </div>
 
 </div>
@@ -4380,10 +4013,8 @@ void dma_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>DMA:</strong> one idle transfer; caller queues + dispatches</li>
-<li><strong>Completion:</strong> remove FIFO head; clear membership</li>
-<li><strong>Stopped waiter:</strong> STOPPED; prior state becomes READY</li>
-<li><strong>Later execution:</strong> select caller; check transfer result</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-2935 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-2935" data-code-part="1">
 
@@ -4399,7 +4030,9 @@ void handle_dma_interrupt(void) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -4415,10 +4048,10 @@ void handle_dma_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2962+list-2980" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2962 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2962" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-2962" data-code-part="1">
 
 <!-- README_CODE_PART code-2962 lines=1-12 -->
 <div class="readme-code">
@@ -4442,11 +4075,6 @@ void dma_interrupt_return(void) {
 </div>
 
 </ReadmeVisual>
-
-<!-- README_ASSET list-2980 -->
-<div class="readme-list"><ul><li>SP ← <strong>BAF</strong></li>
-<li><strong>Pop six registers</strong></li>
-<li><strong>RTI</strong>; retain borrowed-stack convention</li></ul></div>
 
 </div>
 
@@ -4473,8 +4101,6 @@ void dma_interrupt_return(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>ISR 3:</strong> bypasses mappings + priorities</li>
-<li><strong>Fault context:</strong> never resumed</li></ul></div>
 
 </div>
 
@@ -4500,8 +4126,6 @@ void dma_interrupt_return(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Exception entry:</strong> abandon faulting stack</li>
-<li><strong>General registers:</strong> no resumable frame saved</li></ul></div>
 
 </div>
 
@@ -4526,7 +4150,6 @@ void dma_interrupt_return(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Interrupted CS:</strong> preserve for classification</div></div>
 
 </div>
 
@@ -4541,7 +4164,7 @@ void dma_interrupt_return(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-3038 -->
 <div class="code-columns" data-column-key="code:code-3038" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:4">
@@ -4597,12 +4220,6 @@ void cpu_exception_interrupt(void) {
 
 </div>
 
-<!-- README_ASSET list-3067 -->
-<div class="readme-list"><ul><li><strong>BAF</strong> ← interrupted CS</li>
-<li>Reset <strong>kernel segments</strong>, stack, boundary</li>
-<li>Compare interrupted <strong>CS</strong> with kernel CS</li>
-<li>Handle exception; <strong>never return</strong></li></ul></div>
-
 </div>
 
 </div>
@@ -4633,24 +4250,6 @@ void cpu_exception_interrupt(void) {
 
 ---
 
-<!-- SLIDE_ID 4e260ae5-24f3-4b9b-a525-e97107af8a0d -->
-<!-- SOURCE Pico-OS/README.md#28111-comparing-exception-and-timer-context-tests -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers · 2.8.1.1 Entering kernel context after a fault
-
-## 2.8.1.1.1 Comparing exception and timer context tests
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Timer:</strong> saved PC identifies kernel restore instructions</li>
-<li><strong>Exception:</strong> interrupted CS identifies selected segments</li>
-<li>User CS during restore can <strong>misclassify kernel faults</strong></li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 2875c27d-2001-446b-a24f-3c46685d8bbc -->
 <!-- SOURCE Pico-OS/README.md#2812-reading-and-classifying-the-exception -->
 
@@ -4660,10 +4259,10 @@ void cpu_exception_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-3126+list-3143" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-3126 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-3126" data-code-part="1">
+<ReadmeVisual kind="code" :width="642" data-code-source="code-3126" data-code-part="1">
 
 <!-- README_CODE_PART code-3126 lines=1-11 -->
 <div class="readme-code">
@@ -4687,10 +4286,6 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-3143 -->
-<div class="readme-list"><ul><li>Read <strong>cause</strong> + interrupted CS difference</li>
-<li>Classify cause; select <strong>kernel/process diagnostic</strong></li></ul></div>
-
 </div>
 
 </div>
@@ -4699,6 +4294,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <!-- SLIDE_ID b9f76e07-90ea-4d3e-9aba-90dd8396edee -->
 <!-- SOURCE Pico-OS/README.md#28121-reporting-the-exception -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers · 2.8.1.2 Reading and classifying the exception
 
@@ -4727,16 +4323,14 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers
 
-## 2.8.1.3 Halting the kernel or terminating the process (1)
+## 2.8.1.3 Halting the kernel or terminating the process
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 160fr) minmax(0, 160fr)">
-
-<div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-3169+code-3175" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-3169+code-3175" style="--readme-columns:minmax(0, 32fr) minmax(0, 68fr);">
 
 <!-- README_ASSET code-3169 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-3169" data-code-part="1">
+<ReadmeVisual kind="code" :width="263.52941176470586" data-code-source="code-3169" data-code-part="1" :text-scale="1.2">
 
 <!-- README_CODE_PART code-3169 lines=1-3 -->
 <div class="readme-code">
@@ -4753,7 +4347,7 @@ void shutdown(void) {
 </ReadmeVisual>
 
 <!-- README_ASSET code-3175 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-3175" data-code-part="1">
+<ReadmeVisual kind="code" :width="560" data-code-source="code-3175" data-code-part="1" :text-scale="1.2">
 
 <!-- README_CODE_PART code-3175 lines=1-6 -->
 <div class="readme-code">
@@ -4773,35 +4367,6 @@ void exit_process(int status) {
 </ReadmeVisual>
 
 </div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET list-3186 -->
-<div class="readme-list"><ul><li><strong>Kernel CS</strong> → shutdown</li>
-<li><strong>Process CS</strong> → terminate + dispatch</li>
-<li>Never <strong>restore faulting context</strong></li></ul></div>
-
-</div>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 44d8fbf5-8f45-448f-b25b-aa2df36dd8bb -->
-<!-- SOURCE Pico-OS/README.md#2813-halting-the-kernel-or-terminating-the-process -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers
-
-## 2.8.1.3 Halting the kernel or terminating the process (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Borrowed-stack handler:</strong> kernel CS → panic</li>
-<li><strong>Process heap exhaustion:</strong> syscall → termination</li>
-<li><strong>Neither path:</strong> restore faulting instruction</li></ul></div>
 
 </div>
 
@@ -4831,8 +4396,6 @@ void exit_process(int status) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>CPU fault / heap exhaustion:</strong> termination or halt</li>
-<li><strong>Bad argument / missing file / image:</strong> ordinary failure</li></ul></div>
 
 </div>
 
@@ -4851,9 +4414,9 @@ void exit_process(int status) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-3232 -->
-<ReadmeVisual kind="table" :width="1138.6" data-table-key="table-3232:1">
+<ReadmeVisual kind="table" :width="1138.6" data-table-key="table-3232:1" :text-scale="0.85">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:28.21%" /><col style="width:9.49%" /><col style="width:10.21%" /><col style="width:26.05%" /><col style="width:26.05%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>handle_process_heap_full_exception()</code></td><td>Terminates process</td><td>Print diagnostic; terminate process</td><td><ul><li><code>write_process_exception_message()</code></li><li><code>exit_process()</code></li></ul></td><td><code>require_process_heap_allocation()</code></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.00%" /><col style="width:14.00%" /><col style="width:18.00%" /><col style="width:22.00%" /><col style="width:20.00%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>handle_process_heap_full_exception()</code></td><td>Terminates process</td><td>Print diagnostic; terminate process</td><td><ul><li><code>write_process_exception_message()</code></li><li><code>exit_process()</code></li></ul></td><td><code>require_process_heap_allocation()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4876,6 +4439,7 @@ void exit_process(int status) {
 
 <!-- SLIDE_ID 297b295b-5c1c-42e6-b88c-f6f51a081573 -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -4883,8 +4447,8 @@ void exit_process(int status) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Header:</strong> three cells; payload follows immediately</li>
-<li><strong>Allocation:</strong> first fit; optional split</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-3255 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-3255" data-code-part="1">
 
@@ -4906,7 +4470,9 @@ struct Heap {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -4914,6 +4480,7 @@ struct Heap {
 
 <!-- SLIDE_ID f48c8de3-76a5-47a9-8415-b949101cfe3e -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -4954,23 +4521,6 @@ struct Heap {
 
 ---
 
-<!-- SLIDE_ID a31dd55f-0712-4bed-98cf-6fd131b722be -->
-<!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
-
-## 3.1 Heap block layout and allocation algorithm (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Free:</strong> repeatedly coalesce adjacent free blocks</li>
-<li><strong>Realloc:</strong> resize in place or move</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 4d095311-07b0-4a03-a4a6-d3ab61fdf0ae -->
 <!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
 
@@ -4992,8 +4542,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Sizes:</strong> 32-bit ReTI cells</li>
-<li><strong>Current kernel offsets:</strong> change after rebuilding</li></ul></div>
 
 </div>
 
@@ -5018,8 +4566,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Process base:</strong> absolute; heap_start relative</li>
-<li><strong>libstart:</strong> heap-bounds syscalls initialize inner allocator</li></ul></div>
 
 </div>
 
@@ -5066,85 +4612,6 @@ struct Heap {
 
 ---
 
-<!-- SLIDE_ID 6ac93f9b-4a09-4003-b90a-95c6141ca995 -->
-<!-- SOURCE Pico-OS/README.md#331-kernel-heap-blocks-and-kernel-objects -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.3 Kernel Heap
-
-## 3.3.1 Kernel Heap blocks and kernel objects
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Kernel Heap:</strong> PCB, paths, shared metadata</li>
-<li><strong>Separate allocation</strong> for each object</li>
-<li>Metadata points into <strong>outer heap</strong></li>
-<li>kernel_heap.first_block → <strong>header chain</strong></li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 31dfd74c-a228-40d6-bf69-ea41decd5c8a -->
-<!-- SOURCE Pico-OS/README.md#341-process-allocations -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
-
-## 3.4.1 Process allocations
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>PSDMalloc:</strong> complete Process Payload</li>
-<li><strong>PCB:</strong> base address + requested cell count</li>
-<li><strong>Tiny remainder:</strong> actual block may be larger</li>
-<li><strong>remove_process:</strong> PSDFree whole image/heap/stack</li>
-<li><strong>User free:</strong> inner allocation only</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID d0ad5eef-dcb0-4c56-a251-df7249b9dd57 -->
-<!-- SOURCE Pico-OS/README.md#342-shared-data-allocations -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
-
-## 3.4.2 Shared Data allocations
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li>PSDMalloc → <strong>Shared Data Payload</strong></li>
-<li>Entry + name in <strong>Kernel Heap</strong></li>
-<li>Several mappings → same <strong>shared payload</strong></li>
-<li><strong>No nested user heap</strong></li>
-<li>Unlinked + unmapped → <strong>PSDFree</strong></li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 070478e0-d901-4b57-a7b0-9ecccc2dd2cd -->
-<!-- SOURCE Pico-OS/README.md#351-per-process-user-process-heap -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.5 User Process Heap
-
-## 3.5.1 Per-Process User Process Heap
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>process_heap</strong> stored in process .data</li>
-<li><strong>Startup obtains</strong> bounds through syscalls</li>
-<li>malloc/realloc/free → <strong>common allocator</strong></li>
-<li>Inner blocks; <strong>outer payload</strong> stays allocated</li>
-<li>Restored DS selects <strong>process-local globals</strong></li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 532cc55c-55e4-4e21-81d6-301b05c92f96 -->
 <!-- SOURCE Pico-OS/README.md#352-user-process-heap-allocator-function-reference -->
 <!-- SHORT_VERSION_DISABLED -->
@@ -5158,9 +4625,9 @@ struct Heap {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-3460 -->
-<ReadmeVisual kind="table" :width="1279.3999999999999" data-table-key="table-3460:1,2,3,4,5">
+<ReadmeVisual kind="table" :width="1279.3999999999999" data-table-key="table-3460:1,2,3,4,5" :text-scale="0.95">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.18%" /><col style="width:9.08%" /><col style="width:10.36%" /><col style="width:23.18%" /><col style="width:14.21%" /><col style="width:19.98%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Syscalls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>malloc()</code></td><td>Pointer / NULL / heap-full</td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>require_process_heap_allocation()</code></li><li><code>heap_alloc_from()</code></li></ul></td><td>Process-heap-full on positive-size failure</td><td><ul><li><code>opendir()</code></li><li><code>copy_environment_variable()</code></li><li><code>initialize_environment()</code></li><li><code>setenv()</code></li><li><code>clone_environment()</code></li></ul></td></tr>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.50%" /><col style="width:8.00%" /><col style="width:10.00%" /><col style="width:25.50%" /><col style="width:11.00%" /><col style="width:22.00%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Syscalls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>malloc()</code></td><td>Pointer / NULL / heap-full</td><td><ul><li>First-fit process allocation</li><li>Positive failure → terminate</li></ul></td><td><ul><li><code>require_process_heap_allocation()</code></li><li><code>heap_alloc_from()</code></li></ul></td><td>Process-heap-full on positive-size failure</td><td><ul><li><code>opendir()</code></li><li><code>copy_environment_variable()</code></li><li><code>initialize_environment()</code></li><li><code>setenv()</code></li><li><code>clone_environment()</code></li></ul></td></tr>
 <tr data-source-row="2"><td class="table-key"><code>realloc()</code></td><td>Pointer / NULL / heap-full</td><td><ul><li>Resize/move process allocation</li><li>Size 0 → free</li></ul></td><td><ul><li><code>require_process_heap_allocation()</code></li><li><code>heap_realloc_from()</code></li></ul></td><td>Process-heap-full on positive-size failure</td><td><code>store_environment_variable()</code></td></tr>
 <tr data-source-row="3"><td class="table-key"><code>free()</code></td><td>No value</td><td>Free + coalesce process blocks</td><td><code>heap_free_from()</code></td><td>None</td><td><ul><li><code>opendir()</code></li><li><code>closedir()</code></li><li><code>store_environment_variable()</code></li><li><code>unsetenv()</code></li><li><code>clearenv()</code></li><li><code>destroy_environment()</code></li></ul></td></tr>
 <tr data-source-row="4"><td class="table-key"><code>init_process_heap()</code></td><td>No value</td><td>Initialize process-local heap</td><td><code>heap_init_region()</code></td><td>Process-heap-start, process-heap-size</td><td><code>start_process()</code></td></tr>
@@ -5193,8 +4660,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Same allocator:</strong> kernel + each user image</li>
-<li><strong>Region + failure policy:</strong> chosen by wrappers</li></ul></div>
 
 </div>
 
@@ -5213,9 +4678,9 @@ struct Heap {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-3489 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-3489:1,2,3,4">
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3489:1,2,3,4" :text-scale="0.85">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:20.45%" /><col style="width:11.16%" /><col style="width:22.06%" /><col style="width:26.71%" /><col style="width:19.62%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>heap_init_region()</code></td><td>No value</td><td>Initialize one free header</td><td>None</td><td><code>init_process_heap()</code></td></tr>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.00%" /><col style="width:11.00%" /><col style="width:17.00%" /><col style="width:27.00%" /><col style="width:22.00%" /></colgroup><thead><tr><th>Function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>heap_init_region()</code></td><td>No value</td><td>Initialize one free header</td><td>None</td><td><code>init_process_heap()</code></td></tr>
 <tr data-source-row="2"><td class="table-key"><code>heap_alloc_from()</code></td><td>Pointer or NULL</td><td>First fit; split; mark allocated</td><td><code>heap_split_block()</code></td><td><code>malloc()</code></td></tr>
 <tr data-source-row="3"><td class="table-key"><code>heap_realloc_from()</code></td><td>Pointer or NULL; old block on failure</td><td>Shrink, grow, or allocate/copy/free</td><td><ul><li><code>heap_free_from()</code></li><li><code>heap_alloc_from()</code></li><li><code>heap_split_block()</code></li><li><code>heap_merge_free_blocks()</code></li><li><code>heap_copy_cells()</code></li></ul></td><td><code>realloc()</code></td></tr>
 <tr data-source-row="4"><td class="table-key"><code>heap_free_from()</code></td><td>No value</td><td>Mark free; coalesce neighbors</td><td><code>heap_merge_free_blocks()</code></td><td><code>free()</code></td></tr></tbody></table></div></div>
@@ -5223,8 +4688,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>free / realloc:</strong> valid pointer in supplied heap</li>
-<li><strong>Ownership check:</strong> absent</li></ul></div>
 
 </div>
 
@@ -5249,28 +4712,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Failed move:</strong> old block preserved</li>
-<li><strong>Growth:</strong> absorbs at most one successor</li>
-<li><strong>Shrink/free:</strong> repeated merge scan</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID f741ffd6-149a-4d90-ad0d-629f154fa6f8 -->
-<!-- SOURCE Pico-OS/README.md#363-allocation-and-repeated-coalescing-example -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
-
-## 3.6.3 Allocation and repeated coalescing example
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>52 cells:</strong> allocate, free, repeatedly merge</li>
-<li><strong>Gray:</strong> headers; <strong>teal:</strong> allocated; <strong>green:</strong> free</li>
-<li><strong>Amber outline:</strong> changed block</li>
-<li><strong>Offsets:</strong> cells; drawn widths illustrative</li></ul></div>
 
 </div>
 
@@ -5439,9 +4880,6 @@ struct Heap {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Recheck same header:</strong> merge entire free run</li>
-<li><strong>Contiguous address order:</strong> required by scan</li>
-<li><strong>Example test:</strong> first fit, split, merge, preserved data</li></ul></div>
 
 </div>
 
@@ -5528,8 +4966,6 @@ struct ProcessControlBlock {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>PCB addresses:</strong> physical; no MMU translation</li>
-<li><strong>binary_path:</strong> survives user changes to argv[0]</li></ul></div>
 
 </div>
 
@@ -5623,8 +5059,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>NEW:</strong> prevents scheduling + duplicate run setup</li>
-<li><strong>NEW stop/continue:</strong> can expose unstarted process</li></ul></div>
 
 </div>
 
@@ -5632,6 +5066,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 8525fe3a-5897-41bd-92d3-0a9498826c31 -->
 <!-- SOURCE Pico-OS/README.md#411-process-states-and-transitions -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
 
@@ -5649,8 +5084,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>READY / RUNNING:</strong> scheduler accepts both</li>
-<li><strong>ZOMBIE:</strong> retains status + resources until collection</li></ul></div>
 
 </div>
 
@@ -5658,10 +5091,11 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 3df40f5a-3655-46c7-97c5-0a952f67dfe8 -->
 <!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
 
-## 4.1.2 Global process list and current process (1)
+## 4.1.2 Global process list and current process
 
 <div class="deck-content readme-slide">
 
@@ -5696,26 +5130,6 @@ struct ProcessControlBlock {
 
 ---
 
-<!-- SLIDE_ID 2462b034-06c5-41c1-b08a-90f7ce308bce -->
-<!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
-
-## 4.1.2 Global process list and current process (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Append:</strong> creation order; O(1) through tail</li>
-<li><strong>Scheduler:</strong> head + next; never uses tail</li>
-<li><strong>Shared registry:</strong> prepend; no tail needed</li>
-<li><strong>Lookup/removal:</strong> predecessor search still linear</li>
-<li><strong>next / wait_next:</strong> independent list memberships</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 41f3c519-7928-417e-8da6-18f5d5b59aea -->
 <!-- SOURCE Pico-OS/README.md#4121-from-pcbs-to-process-payloads-in-sram -->
 
@@ -5735,6 +5149,24 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
+
+</div>
+
+---
+
+<!-- SLIDE_ID 124ee5e4-b4f2-438c-83d3-3889df1340d9 -->
+<!-- SOURCE Pico-OS/README.md#421-loading-a-process-load-library-call -->
+
+# <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process
+
+## 4.2.1 Loading a process (`load` library call)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-list"><ul><li><strong>load():</strong> receive the program into a reserved Process Payload</li>
+<li><strong>Reception:</strong> caller owns transfer record; no child PCB</li>
+<li><strong>After reception:</strong> create the child PCB and return its PID</li>
+<li><strong>Initial state:</strong> NEW; run() prepares and starts the child</li></ul></div>
 
 </div>
 
@@ -5770,7 +5202,7 @@ struct ProcessControlBlock {
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.1 Loading a process (`load` library call) · 4.2.1.1 Step 1: Receiving the process image
 
-## 4.2.1.1.1 `ProcessLoad` transfer record (1)
+## 4.2.1.1.1 `ProcessLoad` transfer record
 
 <div class="deck-content readme-slide">
 
@@ -5792,25 +5224,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 5ca516f5-027e-4e62-946f-e913c3ccad41 -->
-<!-- SOURCE Pico-OS/README.md#42111-processload-transfer-record -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.1 Loading a process (`load` library call) · 4.2.1.1 Step 1: Receiving the process image
-
-## 4.2.1.1.1 `ProcessLoad` transfer record (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Owner:</strong> loading caller’s pending_load</li>
-<li><strong>No child PCB:</strong> until complete reception</li>
-<li><strong>Success:</strong> transfer payload; free record + path</li>
-<li><strong>Failure:</strong> cancel DMA; free partial payload + metadata</li></ul></div>
 
 </div>
 
@@ -5859,10 +5272,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>NEW:</strong> not yet runnable</li>
-<li><strong>Initialized:</strong> highest stack cell only</li>
-<li><strong>No argc / argv / envp</strong> yet</li>
-<li><strong>Other cells:</strong> unspecified; load does not zero</li></ul></div>
 
 </div>
 
@@ -5881,9 +5290,9 @@ struct ProcessControlBlock {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-3892 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-3892:1">
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-3892:1" :text-scale="0.9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.48%" /><col style="width:14.06%" /><col style="width:20.66%" /><col style="width:31.73%" /><col style="width:11.07%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>load_process_chunk()</code></td><td>PID success; 0 failure; −1 pending</td><td><ul><li>Incremental load; preserve progress</li><li>Create NEW PCB on completion</li></ul></td><td><ul><li><code>begin_process_load()</code></li><li><code>continue_process_load()</code></li><li><code>current_process()</code></li><li><code>file-size &amp;lt;path&amp;gt;</code></li><li><code>read-range &amp;lt;offset&amp;gt; &amp;lt;count&amp;gt; &amp;lt;path&amp;gt;</code></li></ul></td><td><code>load()</code></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.00%" /><col style="width:14.00%" /><col style="width:22.00%" /><col style="width:27.00%" /><col style="width:11.00%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>load_process_chunk()</code></td><td>PID success; 0 failure; −1 pending</td><td><ul><li>Incremental load; preserve progress</li><li>Create NEW PCB on completion</li></ul></td><td><ul><li><code>begin_process_load()</code></li><li><code>continue_process_load()</code></li><li><code>current_process()</code></li><li><code>file-size &amp;lt;path&amp;gt;</code></li><li><code>read-range &amp;lt;offset&amp;gt; &amp;lt;count&amp;gt; &amp;lt;path&amp;gt;</code></li></ul></td><td><code>load()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5938,8 +5347,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>READY:</strong> permits scheduling; no immediate CPU load</li>
-<li><strong>First dispatch:</strong> libstart initializes heap + environment</li></ul></div>
 
 </div>
 
@@ -5964,9 +5371,6 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Default heap:</strong> 1,000 cells</li>
-<li><strong>Default stack offset:</strong> reserves 1,001 cells beyond heap</li>
-<li><strong>Loader:</strong> reject stack inside heap; add inclusive cell</li></ul></div>
 
 </div>
 
@@ -5995,12 +5399,7 @@ struct ProcessControlBlock {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>argv[0]:</strong> executable path without leading /</li>
-<li><strong>Each character:</strong> one ReTI cell</li></ul></div>
-<aside class="context-note"><b>System V Intel386 / POSIX</b><ul><li><strong>Intel386 Fig. 3-31:</strong> argc → argv → NULL → envp</li>
-<li><strong>ReTI:</strong> entry PC, word characters; no auxiliary vector</li>
-<li><strong>POSIX.1-2024:</strong> arrays/environment; no physical layout</li>
-<li><strong>PicoOS:</strong> load + run; no exec replacement</li></ul></aside>
+<aside class="context-note"><b>System V Intel386 / POSIX</b><span><strong>Intel386 Fig. 3-31:</strong> argc → argv → NULL → envp · <strong>ReTI:</strong> entry PC, word characters; no auxiliary vector · <strong>POSIX.1-2024:</strong> arrays/environment; no physical layout · <strong>PicoOS:</strong> load + run; no exec replacement</span></aside>
 
 </div>
 
@@ -6008,6 +5407,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID e359d1dd-0218-41b8-be1f-e4205cea5c38 -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -6045,6 +5445,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID a77054e6-d573-437d-80af-29f8d4e6bf49 -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -6052,7 +5453,8 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><div class="readme-item"><strong>Startup data:</strong> no heap-boundary fit check</div></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-4028 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-4028" data-code-part="1">
 
@@ -6069,24 +5471,9 @@ startup_cell_count = 1 + 1 + argc + 1 + envc + 1
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
 
 </div>
-
----
-
-<!-- SLIDE_ID 98ab55b4-9a45-480b-91c0-aaca32719a5f -->
-<!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
-
-## 4.2.2.1.2 Initial `argc`, `argv`, and `envp` (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Strings + pointer arrays:</strong> zero/null terminated</li>
-<li><strong>argv / envp:</strong> array addresses; no extra pointer cells</li></ul></div>
 
 </div>
 
@@ -6155,11 +5542,7 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>argc = 3; envc = 2:</strong> 29 startup cells</li>
-<li><strong>Entry PC:</strong> base_address + size − 29</li></ul></div>
-<aside class="context-note"><b>Reading the stack</b><ul><li>argc includes program name</li>
-<li><strong>argv/envp:</strong> NULL-terminated arrays</li>
-<li>PicoOS prepares stack during run</li></ul></aside>
+<aside class="context-note"><b>Reading the stack</b><span>argc includes program name · <strong>argv/envp:</strong> NULL-terminated arrays · PicoOS prepares stack during run</span></aside>
 
 </div>
 
@@ -6184,7 +5567,6 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>waitpid result:</strong> 5 after successful load/run</div></div>
 
 </div>
 
@@ -6209,8 +5591,7 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>fork / load + run</b><ul><li><strong>Unix fork:</strong> clone parent process</li>
-<li><strong>PicoOS:</strong> fresh image + copied state</li></ul></aside>
+<aside class="context-note"><b>fork / load + run</b><span><strong>Unix fork:</strong> clone parent process · <strong>PicoOS:</strong> fresh image + copied state</span></aside>
 
 </div>
 
@@ -6235,14 +5616,6 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary nested-summary"><ul><li><strong>Environment source</strong><ul><li><strong>Init:</strong> empty; then config/environment.txt</li>
-<li><strong>run(NULL):</strong> calling process’s current environment</li>
-<li><strong>Custom array:</strong> replacement; no merge</li>
-<li><strong>Empty array:</strong> <code>{NULL}</code>; not NULL pointer</li></ul></li>
-<li><strong>Independent copies</strong><ul><li><strong>Kernel:</strong> strings onto child stack</li>
-<li><strong>libstart:</strong> array + strings into child heap</li>
-<li><strong>Local changes:</strong> future children; existing copies unchanged</li>
-<li><strong>PCB:</strong> no environment pointer</li></ul></li></ul></div>
 
 </div>
 
@@ -6257,9 +5630,8 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Presence:</strong> enables bars; value false still enables</li>
-<li><strong>unsetenv:</strong> disables bars</li>
-<li><strong>cat:</strong> removes own entry; shell remains unchanged</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-4196 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-4196" data-code-part="1">
 
@@ -6277,7 +5649,9 @@ int main(int argc, char **argv) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -6296,9 +5670,9 @@ int main(int argc, char **argv) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-4213 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-4213:1">
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-4213:1" :text-scale="0.8">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.33%" /><col style="width:8.09%" /><col style="width:21.78%" /><col style="width:29.94%" /><col style="width:8.85%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>mark_process_ready_with_arguments()</code></td><td>true / false</td><td><ul><li>Build arguments/environment stack</li><li>Inherit descriptors; NEW → READY</li></ul></td><td><ul><li><code>current_process()</code></li><li><code>destroy_file_descriptor_table()</code></li><li><code>find_process_by_pid()</code></li><li><code>inherit_file_descriptors()</code></li><li><code>store_process_arguments()</code></li></ul></td><td><code>run()</code></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.00%" /><col style="width:7.00%" /><col style="width:19.00%" /><col style="width:33.00%" /><col style="width:8.00%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>mark_process_ready_with_arguments()</code></td><td>true / false</td><td><ul><li>Build arguments/environment stack</li><li>Inherit descriptors; NEW → READY</li></ul></td><td><ul><li><code>current_process()</code></li><li><code>destroy_file_descriptor_table()</code></li><li><code>find_process_by_pid()</code></li><li><code>inherit_file_descriptors()</code></li><li><code>store_process_arguments()</code></li></ul></td><td><code>run()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6351,6 +5725,7 @@ int main(int argc, char **argv) {
 
 <!-- SLIDE_ID f623a877-6c49-40a4-aaf8-8816379b491f -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
 
@@ -6358,8 +5733,8 @@ int main(int argc, char **argv) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Entry:</strong> data region metadata; <strong>attachment:</strong> process-owned mapping</li>
-<li><strong>Existing name:</strong> reuse ID; ignores new requested size</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-4270 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-4270" data-code-part="1">
 
@@ -6385,7 +5760,9 @@ struct SharedMemoryAttachment {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -6393,6 +5770,7 @@ struct SharedMemoryAttachment {
 
 <!-- SLIDE_ID 8df448ef-73ff-41ef-970e-a7f4d2bb2f5d -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
 
@@ -6431,23 +5809,6 @@ struct SharedMemoryAttachment {
 </div>
 
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 40b0e4fd-e150-4c05-ac2d-2fcde828dc56 -->
-<!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
-
-## 5.1 Named entries and per-process attachments (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Missing name + size ≤0:</strong> fail</li>
-<li><strong>Payload:</strong> initially unspecified; caller initializes</li></ul></div>
 
 </div>
 
@@ -6544,14 +5905,6 @@ struct SharedMemoryAttachment {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary nested-summary"><ul><li><strong>Mapping + unlink</strong><ul><li><strong>Every mmap:</strong> attachment + reference increment</li>
-<li><strong>No munmap:</strong> process removal releases mappings</li>
-<li><strong>Unlink:</strong> name removed; numeric ID remains usable</li>
-<li><strong>Reopen name:</strong> creates separate entry</li></ul></li>
-<li><strong>Lifetime</strong><ul><li><strong>Named + zero mappings:</strong> stays allocated</li>
-<li><strong>Zombie:</strong> keeps attachments until final removal</li>
-<li><strong>Destroyed:</strong> unlinked + reference count zero</li>
-<li><strong>Shared visibility:</strong> synchronization still required</li></ul></li></ul></div>
 
 </div>
 
@@ -6703,41 +6056,6 @@ int main(int argc, char **argv) {
 
 ---
 
-<!-- SLIDE_ID 14abb8d4-4cfc-4b4e-8489-b436e3f5e8a5 -->
-<!-- SOURCE Pico-OS/README.md#6-scheduling-and-context-switching -->
-
-## 6. Scheduling and context switching
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Scheduler:</strong> selects runnable PCB</li>
-<li><strong>Dispatcher:</strong> saves + restores activation</li>
-<li><strong>READY / RUNNING:</strong> eligible states</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID b16d4c21-8578-426e-aa1e-8ecf6a652b6e -->
-<!-- SOURCE Pico-OS/README.md#611-algorithm-and-round-robin-comparison -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink> · 6.1 Scheduler implementation
-
-## 6.1.1 Algorithm and Round Robin comparison
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Lazy Round Robin:</strong> scan after current; wrap at tail</li>
-<li><strong>Each PCB:</strong> inspected at most once</li>
-<li><strong>No ready queue:</strong> woken process keeps list position</li>
-<li><strong>Timer:</strong> voluntary switch does not reset interval</li>
-<li><strong>Selected process:</strong> may receive partial quantum</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 87572258-611d-4615-9bda-dd9f743c85d1 -->
 <!-- SOURCE Pico-OS/README.md#6111-selecting-the-next-runnable-process -->
 
@@ -6805,8 +6123,6 @@ int main(int argc, char **argv) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Wraparound:</strong> search reassignment to head</li>
-<li><strong>Tail next:</strong> stays NULL; list order unchanged</li></ul></div>
 
 </div>
 
@@ -6831,10 +6147,6 @@ int main(int argc, char **argv) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Only current runnable:</strong> can select it again</li>
-<li><strong>None runnable:</strong> NULL; dispatcher retries</li>
-<li><strong>PCBs remain:</strong> interrupts may wake processes</li>
-<li><strong>Empty list:</strong> return; no idle process</li></ul></div>
 
 </div>
 
@@ -6921,8 +6233,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>One list:</strong> fewer state-change updates</li>
-<li><strong>Worst case:</strong> O(number of PCBs) selection</li></ul></div>
 
 </div>
 
@@ -6930,6 +6240,7 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <!-- SLIDE_ID 83080d75-fbd2-460d-bbe7-fd8ff5b72e6d -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -6947,8 +6258,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Activation:</strong> embedded; PCB allocation + lifetime</li>
-<li><strong>Field order:</strong> fixed assembly offsets</li></ul></div>
 
 </div>
 
@@ -6956,6 +6265,7 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <!-- SLIDE_ID d977a719-8394-49ef-a97d-232d5a623935 -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -7005,53 +6315,12 @@ struct ActivationRecord {
 
 ---
 
-<!-- SLIDE_ID 5fa58c29-fc17-4d60-bb39-bb922d9b020d -->
-<!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
-
-## 6.2 Saved process registers (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><div class="readme-item"><strong>PC:</strong> remains on user stack; no activation field</div></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID aa3c9a96-8f89-46a6-bb13-e0428cbbbaf7 -->
-<!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
-
-## 6.3 Saving the current process and selecting the next process (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET list-4717 -->
-<div class="readme-list"><ul><li>Timer/<strong>yield</strong> → immediate switch</li>
-<li><strong>Blocking call</strong> → save wait; switch</li>
-<li><strong>Deferred request</strong> → switch on syscall return</li></ul></div>
-
-</div>
-<div class="readme-list prose-summary"><ul><li><strong>Save first:</strong> activation before state change</li>
-<li><strong>RUNNING → READY:</strong> ordinary resumable switch</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 98f2cdbc-c0b8-48da-be9a-906b3dbf57a6 -->
 <!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
-## 6.3 Saving the current process and selecting the next process (2)
+## 6.3 Saving the current process and selecting the next process (1)
 
 <div class="deck-content readme-slide">
 
@@ -7065,8 +6334,6 @@ struct ActivationRecord {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>BLOCKED / STOPPED:</strong> preserved during save</li>
-<li><strong>Termination candidate:</strong> reject + retry selection</li></ul></div>
 
 </div>
 
@@ -7077,7 +6344,7 @@ struct ActivationRecord {
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
-## 6.3 Saving the current process and selecting the next process (3)
+## 6.3 Saving the current process and selecting the next process (2)
 
 <div class="deck-content readme-slide">
 
@@ -7126,7 +6393,7 @@ void dispatcher_switch_from_context(int *caller_context) {
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
-## 6.3 Saving the current process and selecting the next process (4)
+## 6.3 Saving the current process and selecting the next process (3)
 
 <div class="deck-content readme-slide">
 
@@ -7150,14 +6417,14 @@ void dispatcher_switch_from_context(int *caller_context) {
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
-## 6.3 Saving the current process and selecting the next process (5)
+## 6.3 Saving the current process and selecting the next process (4)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-4809+list-4830" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4809 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-4809" data-code-part="1">
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-4809" data-code-part="1">
 
 <!-- README_CODE_PART code-4809 lines=1-15 -->
 <div class="readme-code">
@@ -7185,11 +6452,6 @@ void dispatcher_start_next_process(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-4830 -->
-<div class="readme-list"><ul><li>Ask <strong>scheduler</strong> for candidate</li>
-<li>Retry; interrupts can wake <strong>blocked</strong> processes</li>
-<li>Restore accepted process; <strong>empty list</strong> → return</li></ul></div>
-
 </div>
 
 </div>
@@ -7215,8 +6477,6 @@ void dispatcher_start_next_process(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>PCB + boundary:</strong> arguments on kernel stack</li>
-<li><strong>Load saved SP:</strong> switches to selected user stack</li></ul></div>
 
 </div>
 
@@ -7231,7 +6491,7 @@ void dispatcher_start_next_process(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4900 -->
 <div class="code-columns" data-column-key="code:code-4900" style="--readme-columns:minmax(0, 47fr) minmax(0, 53fr);--source-aspect:4.586752308309916">
@@ -7286,14 +6546,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 </div>
 
-<!-- README_ASSET list-4928 -->
-<div class="readme-list"><ul><li>Install <strong>saved SP</strong> before boundary</li>
-<li>Write boundary <strong>without C frame</strong></li>
-<li>Restore registers; <strong>BAF last</strong></li>
-<li><strong>RTI</strong> → saved PC or initial entry</li></ul></div>
-
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Startup / termination:</strong> no outgoing activation save</div></div>
 
 </div>
 
@@ -7337,6 +6590,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <!-- SLIDE_ID ee2eb84b-fca3-4138-a2e3-270a4ef03bdb -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7372,6 +6626,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID c3b9d33c-4dff-4d29-9232-c91eb5d52b9b -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7397,6 +6652,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 748188f1-e8cf-4333-b1a3-7a72a6188e7c -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7429,6 +6685,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 7311ad58-2ead-4f75-9f64-735b85e96c9c -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7446,44 +6703,6 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Queue owner:</strong> must outlive linked waiters</li>
-<li><strong>Zombie:</strong> may remain linked until removal</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 88d2fc65-952f-4ef5-9b6c-6d6e4cf85331 -->
-<!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
-
-## 7.1 Wait queues and PCB links (5)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Intrusive FIFO:</strong> links embedded in PCBs</li>
-<li><strong>One process:</strong> one waiting queue at a time</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID ca6b46fb-8bce-4a93-8de5-df8f96e26838 -->
-<!-- SOURCE Pico-OS/README.md#711-blocking-with-sleep-and-waking-with-wakeup -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links
-
-## 7.1.1 Blocking with `sleep` and waking with `wakeup`
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>sleep:</strong> wait for event; no fixed delay</li>
-<li><strong>wakeup:</strong> at most FIFO head; no immediate switch</li>
-<li><strong>Stopped waiter:</strong> stays STOPPED; prior state READY</li>
-<li><strong>Queues:</strong> reference PCBs; own no allocations</li></ul></div>
 
 </div>
 
@@ -7541,31 +6760,12 @@ struct wait_queue {
 
 ---
 
-<!-- SLIDE_ID 3558045c-2fb4-45bb-b1ed-9b0e60f8a800 -->
-<!-- SOURCE Pico-OS/README.md#712-child-waiting-with-waitpid -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links
-
-## 7.1.2 Child waiting with `waitpid`
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Only recorded parent:</strong> may collect exact child</li>
-<li><strong>Pending result:</strong> parent’s suspended stack integer</li>
-<li><strong>Stopped/zombie child:</strong> immediate status; no queueing</li>
-<li><strong>Parent removed:</strong> unlink waiter before freeing PCB</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 0a747ec2-be9b-434b-869b-49316c9b40ea -->
 <!-- SOURCE Pico-OS/README.md#7121-recording-termination-status -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
 
-## 7.1.2.1 Recording termination status (1)
+## 7.1.2.1 Recording termination status
 
 <div class="deck-content readme-slide">
 
@@ -7579,69 +6779,7 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>WaitPidRequest:</strong> two cells; status integer separate</li>
-<li><strong>Result:</strong> write status; retain result pointer only</li></ul></div>
-<aside class="context-note"><b>Unix: reaping</b><ul><li>Collect status; remove child</li>
-<li><strong>PicoOS:</strong> no reparenting to init</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 91cd8d95-cbfe-4b9b-92fb-cee279bf66f6 -->
-<!-- SOURCE Pico-OS/README.md#7121-recording-termination-status -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
-
-## 7.1.2.1 Recording termination status (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-columns" data-column-key="assets:list-5189+list-5219" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
-
-<!-- README_ASSET list-5189 -->
-<div class="readme-list"><ul><li>Request points to <strong>local status</strong></li>
-<li>Queue parent; mark <strong>BLOCKED</strong></li>
-<li><strong>Child exits</strong>; write status; wake parent</li>
-<li>Wrapper resumes; returns <strong>child status</strong></li></ul></div>
-
-<!-- README_ASSET list-5219 -->
-<div class="readme-list"><ul><li>Creation records <strong>parent PID</strong></li>
-<li>Find <strong>caller</strong> + requested child</li>
-<li><strong>Parent-only collection</strong>; mismatch → −1</li></ul></div>
-
-</div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>unload:</strong> status 0; forces final removal</div></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID a41cd5db-4c7e-4535-b799-83b887a6caba -->
-<!-- SOURCE Pico-OS/README.md#7122-parent-collection-and-final-removal -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
-
-## 7.1.2.2 Parent collection and final removal (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET list-5269 -->
-<div class="readme-list bullet-columns"><ul><li><strong>Exit syscall</strong> → terminate_process</li>
-<li>Retain <strong>status</strong> in child PCB</li>
-<li>Wake parent; preserve <strong>stopped state</strong></li>
-<li>Write status; set saved <strong>IN2 = 1</strong></li>
-<li>No parent → remove <strong>orphan</strong> immediately</li>
-<li>Removal frees <strong>PCB + owned resources</strong></li>
-<li><strong>Dispatch</strong> next; empty list → shutdown</li></ul></div>
-
-</div>
-<div class="readme-list prose-summary"><ul><li><strong>Zombie:</strong> full PCB + resources + pending load retained</li>
-<li><strong>Child stop:</strong> report status; retain resumable child</li></ul></div>
+<aside class="context-note"><b>Unix: reaping</b><span>Collect status; remove child · <strong>PicoOS:</strong> no reparenting to init</span></aside>
 
 </div>
 
@@ -7653,7 +6791,7 @@ struct wait_queue {
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
 
-## 7.1.2.2 Parent collection and final removal (2)
+## 7.1.2.2 Parent collection and final removal
 
 <div class="deck-content readme-slide">
 
@@ -7669,7 +6807,6 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Waiting parent:</strong> child can disappear before parent resumes</div></div>
 
 </div>
 
@@ -7735,8 +6872,7 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>POSIX / Linux null signal</b><ul><li><strong>Signal 0:</strong> existence + permission check; no delivery</li>
-<li><strong>PicoOS:</strong> no permissions/groups; rejects zombies</li></ul></aside>
+<aside class="context-note"><b>POSIX / Linux null signal</b><span><strong>Signal 0:</strong> existence + permission check; no delivery · <strong>PicoOS:</strong> no permissions/groups; rejects zombies</span></aside>
 
 </div>
 
@@ -7773,83 +6909,6 @@ struct wait_queue {
 
 ---
 
-<!-- SLIDE_ID 8bc78712-ece1-4afb-a28f-10a6d56ba66f -->
-<!-- SOURCE Pico-OS/README.md#721-supported-signals-and-fixed-actions -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
-
-## 7.2.1 Supported signals and fixed actions (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Six signals:</strong> fixed actions; cannot catch/ignore</li>
-<li><strong>Signal 0:</strong> existing non-zombie PID → 0</li>
-<li><strong>Invalid / zombie:</strong> −1</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 9e1c482b-09ba-4d63-b334-275946b17151 -->
-<!-- SOURCE Pico-OS/README.md#722-stopping-and-continuing-a-process -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
-
-## 7.2.2 Stopping and continuing a process
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Stop:</strong> save prior state + stop signal</li>
-<li><strong>Terminal stop:</strong> detach queue; retain read buffer/count</li>
-<li><strong>Continue:</strong> READY or unfinished nonterminal wait BLOCKED</li>
-<li><strong>Stopped reader:</strong> ownership + SIGCONT required</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID fede9038-473c-4adc-91f0-c5eb37d85667 -->
-<!-- SOURCE Pico-OS/README.md#723-termination-ctrl-c-and-parent-collection -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
-
-## 7.2.3 Termination, `Ctrl-C`, and parent collection
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Current target:</strong> defer until dispatch</li>
-<li><strong>Waiting parent:</strong> status + wakeup + removal</li>
-<li><strong>Otherwise:</strong> retain status as ZOMBIE</li>
-<li><strong>Ctrl+C</strong> → shell resumes with 130</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 6373298c-55a3-4187-84e3-082412fcb600 -->
-<!-- SOURCE Pico-OS/README.md#724-fixed-picoos-signal-actions-compared-with-unix -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
-
-## 7.2.4 Fixed PicoOS signal actions compared with Unix
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>PicoOS:</strong> fixed signal actions</li>
-<li><strong>Stop/continue</strong> update state immediately</li>
-<li>Current-process termination waits for <strong>dispatch</strong></li></ul></div>
-<aside class="context-note"><b>Unix signal handling</b><ul><li><strong>SIGINT/TSTP/TTIN:</strong> catch or ignore</li>
-<li><strong>SIGKILL/STOP:</strong> cannot catch</li>
-<li><strong>PicoOS:</strong> all actions fixed</li></ul></aside>
-
-</div>
-
----
-
 <!-- SLIDE_ID 053c1da5-d394-49ca-8c0e-deeb522db162 -->
 <!-- SOURCE Pico-OS/README.md#725-signal-function-reference -->
 <!-- SHORT_VERSION_DISABLED -->
@@ -7871,10 +6930,7 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Parent removal:</strong> children parent_pid ← 0</li>
-<li><strong>Configured signal:</strong> delivered to surviving direct children</li>
-<li><strong>PR_SET_PDEATHSIG, 0:</strong> disable inherited policy</li>
-<li><strong>No background reaper</strong> or child-exit notification signal</li></ul></div>
+<aside class="context-note"><b>Unix signal handling</b><span><strong>SIGINT/TSTP/TTIN:</strong> catch or ignore · <strong>SIGKILL/STOP:</strong> cannot catch · <strong>PicoOS:</strong> all actions fixed</span></aside>
 
 </div>
 
@@ -7882,6 +6938,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 837b3982-4b8b-4b02-afeb-90f5c62ec5f1 -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7983,6 +7040,7 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 88497705-af19-49fe-a160-b5c50853d5d3 -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -8000,8 +7058,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Only TSL:</strong> atomic</li>
-<li><strong>Failed test → sleep:</strong> lost-wakeup window under preemption</li></ul></div>
 
 </div>
 
@@ -8009,6 +7065,7 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 13bb5e4a-484f-4859-b91f-5e4c3df1531c -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -8037,23 +7094,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 1cb8a6bd-7fc5-4eec-ad14-28e1539a0ab0 -->
-<!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
-
-## 7.3 Mutexes with test-and-set and wait queues (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Shared mutex:</strong> same lock + embedded queue</li>
-<li><strong>Wakeup:</strong> retry TSL; ownership not transferred</li></ul></div>
 
 </div>
 
@@ -8445,6 +7485,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 3b561c36-b8a7-41d9-a50b-8efc8a02205e -->
 <!-- SOURCE Pico-OS/README.md#84-foreground-input-ownership-and-terminal-generated-signals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8572,6 +7613,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID f4699dc0-c04d-4501-8296-d9f7f647244c -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8601,6 +7643,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID e36757dd-db92-4a3b-8b84-61a05cd997ff -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8631,6 +7674,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 2114e8f5-c77b-440b-aa55-3bc144fef61e -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -9578,6 +8622,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID f6bcd08a-6154-4c36-93d4-3f904627dde5 -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -9620,6 +8665,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID 968bf2cd-df65-48bf-9422-f8939b2e8cd4 -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -9649,6 +8695,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID 80c1a868-2411-4706-875e-9ebdf81c57da -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -9949,6 +8996,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID 1f1799e4-8958-44c3-b618-73bc70dfca55 -->
 <!-- SOURCE Pico-OS/README.md#10291-streams-and-output-in-stdiopicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
 
@@ -12083,6 +11131,7 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <!-- SLIDE_ID a1a1e8d2-972e-43a3-a72f-0e84487d198d -->
 <!-- SOURCE Pico-OS/README.md#131-writing-a-simple-user-application -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink>
 
@@ -13041,6 +12090,7 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 
 <!-- SLIDE_ID 3837c397-435d-4f67-a71d-beedc4ecea98 -->
 <!-- SOURCE Pico-OS/README.md#1512-exploring-userspace-heap-allocation -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -13140,6 +12190,7 @@ int main(void) {
 
 <!-- SLIDE_ID 13c7f45d-6850-4aae-9a0a-ebb653f1cc44 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -13190,6 +12241,7 @@ done:
 
 <!-- SLIDE_ID 76d1ab88-1b2a-455d-8eeb-7c2a9e67d835 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -13367,6 +12419,7 @@ JUMP 0
 
 <!-- SLIDE_ID 56a43e1a-9177-498c-8c9e-1a64c1540974 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -13406,6 +12459,7 @@ struct SharedState {
 
 <!-- SLIDE_ID 7776d5b7-c6e8-4012-ac4e-3d8248599968 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -13485,6 +12539,7 @@ int main(void) {
 
 <!-- SLIDE_ID d0d41e3f-aa5f-439c-9c4a-07220adf33c0 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -13687,6 +12742,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID e6126660-8ba5-4fb6-b371-4aae70da00fe -->
 <!-- SOURCE Pico-OS/README.md#17-limitations -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## 17. Limitations
 

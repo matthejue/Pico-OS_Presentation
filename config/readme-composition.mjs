@@ -54,6 +54,10 @@ const single = asset => ({group: [asset], layout: 'single'})
 export function compactGroups(groups, section) {
   const parts = groups.flatMap(panel => panel.group)
   const types = parts.map(part => part.type).join(',')
+  // With the prose removed, the IVT declaration and naked ISR fit above the
+  // five-row interrupt table on one slide.
+  if (section.anchor === '21-reti-interrupt-entry-and-the-interrupt-service-routine-table' && types === 'code,table,code')
+    return [composed([{group: [parts[0], parts[2]], layout: 'columns'}, single(parts[1])], [160, 220])]
   // Stack the short include file above the runtime entry instead of leaving
   // most of one column empty.
   if (section.anchor === '1152-picoos-libstart-startup-sequence' && types === 'code,code') {

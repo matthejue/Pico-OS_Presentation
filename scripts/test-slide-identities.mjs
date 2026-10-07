@@ -39,6 +39,18 @@ assert.deepEqual(ids(ensureSlideIdentities(deck(source('shared', 'Shared', 'Upda
 const emptyPrevious = deck(`# One\n\n<!-- SLIDE_ID ${uuidA} -->`)
 assert.notEqual(ids(ensureSlideIdentities(deck('# Completely different'), emptyPrevious))[0], uuidA, 'empty bodies do not create a false match')
 
+const beforeListRemoval = deck(
+  source('shared', 'Shared (1)', 'Bullet overview', uuidA),
+  source('shared', 'Shared (2)', '<!-- README_ASSET code-100 -->\nCode\n<!-- README_ASSET list-110 -->\nBullets', uuidB),
+)
+const afterListRemoval = deck(source('shared', 'Shared', '<!-- README_ASSET code-100 -->\nCode'))
+assert.deepEqual(ids(ensureSlideIdentities(afterListRemoval, beforeListRemoval)), [uuidB],
+  'remaining code keeps its own UUID when list removal changes its body and numbered title')
+const sharedArtifacts = deck(source('shared', 'Shared', '<!-- README_ASSET code-100 -->\nA', uuidA),
+  source('shared', 'Shared', '<!-- README_ASSET code-100 -->\nB', uuidB))
+assert.ok(ids(ensureSlideIdentities(deck(source('changed', 'Changed', '<!-- README_ASSET code-100 -->\nNew')), sharedArtifacts))
+  .every(id => ![uuidA, uuidB].includes(id)), 'ambiguous asset reuse cannot arbitrarily transfer an identity')
+
 const frontmatter = `---\ntheme: default\ntitle: Front matter\n---\n\n# First\n\nBody\n\n---\nlayout: center\n---\n\n# Second\n\n\`\`\`md\n---\n<!-- SLIDE_ID not-a-real-id -->\n# Not the slide title\n\`\`\`\n\n<!--\nSpeaker note with a separator\n---\n-->\n`
 const frontmatterIdentified = ensureSlideIdentities(frontmatter)
 assert.equal(inspectSlideIdentities(frontmatterIdentified).length, 2, 'YAML, fenced separators and multiline comments follow Slidev parsing')

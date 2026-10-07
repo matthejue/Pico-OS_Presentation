@@ -13,6 +13,11 @@ It therefore moves with the slide when README-driven presentation updates insert
 or remove other slides. Do not add Slidev's permanent `disabled: true` property;
 that would also remove the slide from the full presentation.
 
+README rebuilds preserve this choice by the slide's stable UUID. An exclusion
+never transfers to another slide merely because it shares a section or asset.
+New slides are visible by default. A rebuild that loses any existing UUID stops
+before replacing outputs and lists the affected slides for review.
+
 [`short-version-disabled-slides.txt`](../short-version-disabled-slides.txt) is a
 temporary, human-editable selection expressed as whitespace-separated **full
 deck source slide numbers**. Spaces, tabs, and newlines are all accepted;

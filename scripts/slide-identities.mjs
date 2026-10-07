@@ -97,6 +97,16 @@ function sourceTitleKey(slide) {
   return `${slide.anchor}\0${slide.title}\0${role}`
 }
 
+function artifactKey(slide) {
+  // Retain a visual slide's identity when deleting a neighbouring bullet slide
+  // changes its numbered title, or removing its list panel changes its body.
+  // Matching must still be unique; a shared asset alone cannot pick a UUID.
+  const assets = [...outsideFences(slide.content).matchAll(/<!-- README_ASSET ([^\s]+)( repeated)? -->/g)]
+    .filter(match => !match[1].startsWith('list-'))
+    .map(match => `${match[1]}${match[2] || ''}`).sort()
+  return assets.length ? assets.join('\0') : undefined
+}
+
 function uniquePairs(current, previous, keyOf) {
   const index = slides => {
     const groups = new Map()
@@ -126,7 +136,7 @@ export function ensureSlideIdentities(markdown, previousMarkdown) {
     // Matching order matters: identical bodies distinguish slides sharing a
     // README anchor/title (for example the cover and repeated PicoOS slides).
     // No fallback ever uses page numbers or a slide's position in its section.
-    for (const keyOf of [bodyKey, sourceTitleKey]) {
+    for (const keyOf of [bodyKey, artifactKey, sourceTitleKey]) {
       for (const [current, old] of uniquePairs(remaining(), available(), keyOf)) {
         assigned.set(current.number, old.id)
         used.add(old.id)

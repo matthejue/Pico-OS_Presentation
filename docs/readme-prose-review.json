@@ -1182,22 +1182,16 @@
           "sourceSha256": "ce7f2493be68d1d73113077794c183801c8c2e7b3a838f1fc1f16446abc54e97"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
       "title": "2.1 ReTI interrupt entry and the interrupt service routine table",
       "line": 1707,
       "slides": [
-        58,
-        59
+        58
       ],
-      "summary": [
-        "**ISR pointer:** direct PC load; no C frame",
-        "**INT 0:** saves instruction’s own PC",
-        "**Hardware/fault:** saves resume/retry PC minus one",
-        "**General registers:** saved explicitly by ISR"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1217,20 +1211,14 @@
           "sourceSha256": "444e33e536a41f527b08ada1c519dfa5599e147c9da9b06c2a237e8fd15b935b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "22-interrupt-controller-mappings-and-priorities",
       "title": "2.2 Interrupt-controller mappings and priorities",
       "line": 1753,
-      "slides": [
-        60
-      ],
-      "summary": [
-        "**Timer/DMA/UART:** ISR 1/4/2",
-        "**Priorities:** 1 / 1 / 2",
-        "**UART:** may nest; equal priorities wait"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1238,23 +1226,17 @@
           "sourceSha256": "94b3b5e3ffec91c611c45ee3e997da2def83c402684aea4c9061838ec0fc301b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "221-interrupt-controller-initialization",
       "title": "2.2.1 Interrupt-controller initialization",
       "line": 1760,
       "slides": [
-        61,
-        62,
-        63
+        59,
+        60
       ],
-      "summary": [
-        "**Disable:** mapping 255; priority 0",
-        "**.data arrays:** indices + priorities",
-        "**.ivt array:** actual handler pointers",
-        "**Timer:** 5,000 instructions after init ready"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1278,7 +1260,7 @@
           "sourceSha256": "80461ec513e6c9e3fa36a210a83337339f29810743137db2023952323e9fda68"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "222-interrupt-controller-function-reference",
@@ -1293,7 +1275,7 @@
           "sourceSha256": "3456677cd745733670c259d28db7f14ec9aecb4d6efe46c2a995db504ec88d99"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "223-memory-mapped-periphery-function-reference",
@@ -1308,21 +1290,16 @@
           "sourceSha256": "9edc2958873762cd62aa784fbce460ae4494a5cc71fdc6f11131bfac66c80a9a"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "23-saved-interrupt-stack-frame",
       "title": "2.3 Saved interrupt stack frame",
       "line": 1849,
       "slides": [
-        64
+        61
       ],
-      "summary": [
-        "**Live BAF:** saved-frame address; not saved BAF value",
-        "**Activation:** copy offsets 1–6; SP ← context+6",
-        "**Return PC:** process stack at activation.sp+1",
-        "**No isolation:** either stack/kernel memory writable"
-      ],
+      "summary": [],
       "remark": [
         "Linux comparison",
         [
@@ -1349,21 +1326,14 @@
           "sourceSha256": "1e307b0c3ba7ab7a09ab13ca648a02fb76c44c5902c006130e848c5976951ed4"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "24-system-call-interface-and-execution",
       "title": "2.4 System-call interface and execution",
       "line": 1886,
-      "slides": [
-        65
-      ],
-      "summary": [
-        "**Library wrapper** → selector + request",
-        "INT 0 → **handle_syscall**",
-        "**No hardcoded** kernel function addresses",
-        "**ABI:** registers, layouts, result meanings"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": [
         "POSIX portability",
         [
@@ -1389,24 +1359,19 @@
           "sourceSha256": "3686988894837fab5b86fdc6da58d730191c7d8ba71b0ba58b564d935fd6ff66"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "241-syscall-selectors-and-register-convention",
       "title": "2.4.1 Syscall selectors and register convention",
       "line": 1907,
       "slides": [
-        66,
-        67,
-        68,
-        69
+        62,
+        63,
+        64,
+        65
       ],
-      "summary": [
-        "**ACC:** selector; **IN1:** argument/request address",
-        "**IN2:** result; shared PicoC convention",
-        "**Request frame:** survives suspended syscall",
-        "**Kernel:** retains needed fields, not request pointer"
-      ],
+      "summary": [],
       "remark": [
         "System V ABI",
         [
@@ -1436,14 +1401,14 @@
           "sourceSha256": "f211ae7bbf0afa7753c0352dbe9123cd588e7ea3a426749e351ff9683d44e256"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2411-process-wait-signal-and-memory-request-structures",
       "title": "2.4.1.1 Process, wait, signal, and memory request structures",
       "line": 1968,
       "slides": [
-        70
+        66
       ],
       "summary": [],
       "remark": null,
@@ -1453,22 +1418,17 @@
           "sourceSha256": "880cd2e07758a74d97713c00cb44ff6cc8b62a3aafc985cbbbe11dc0f18474c6"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2412-file-and-directory-request-structures",
       "title": "2.4.1.2 File and directory request structures",
       "line": 1991,
       "slides": [
-        71,
-        72,
-        73
+        67,
+        68
       ],
-      "summary": [
-        "**load / file read:** reuse request across chunks",
-        "**Terminal read:** PCB retains buffer + count",
-        "**Single value:** PID, descriptor, path, queue pointer"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1484,14 +1444,14 @@
           "sourceSha256": "36b09912c574223b0a18c9ed4512fab33ba5225926c51732500abfc71140c937"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "242-system-call-entry-execution-and-return-to-userspace",
       "title": "2.4.2 System-call entry, execution, and return to userspace",
       "line": 2030,
       "slides": [
-        74
+        69
       ],
       "summary": [],
       "remark": null,
@@ -1501,21 +1461,16 @@
           "sourceSha256": "e61b5a0c4d89f9d43e4724082d4a1f91eca2f6cb9fdb65dd4a83430195b187fa"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2421-entering-kernel-context",
       "title": "2.4.2.1 Entering kernel context",
       "line": 2040,
       "slides": [
-        75,
-        76,
-        77
+        70
       ],
-      "summary": [
-        "**User stack:** saved interrupted registers remain",
-        "**Kernel stack:** only call arguments copied"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1531,23 +1486,16 @@
           "sourceSha256": "6583758bac09dd3b3ce38bfaa65b39de978c3db84dec27b40e56f87c03d32e6e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "24211-stack-boundary-helpers",
       "title": "2.4.2.1.1 Stack-boundary helpers",
       "line": 2117,
       "slides": [
-        78,
-        79
+        71
       ],
-      "summary": [
-        "**Cell 10:** lowest allowed free SP",
-        "**Zero:** disables protection",
-        "**Interrupt entry:** bypasses exhausted-stack check",
-        "**Kernel entry:** disable → load SP → install limit",
-        "**Borrowed stack:** retain existing boundary"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1587,14 +1535,14 @@
           "sourceSha256": "c2ff405ac72cb87f15833ce169d62211a39c5a57a629331d8e22cf5dd26abc8f"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2422-handle-syscall",
       "title": "2.4.2.2 Handle Syscall",
       "line": 2184,
       "slides": [
-        80
+        72
       ],
       "summary": [],
       "remark": null,
@@ -1608,14 +1556,14 @@
           "sourceSha256": "0671f10cc0b6f78a0d011a46929924445df9a1230f76fe613743b946ea2285ba"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "24221-system-call-groups",
       "title": "2.4.2.2.1 System-call groups",
       "line": 2228,
       "slides": [
-        81
+        73
       ],
       "summary": [],
       "remark": null,
@@ -1629,23 +1577,17 @@
           "sourceSha256": "f4b73b41cb0c643ca7f3059a914712a7ade3cc1cbdb231f8e3aa88a8e1c85a8e"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2423-selecting-the-return-path",
       "title": "2.4.2.3 Selecting the return path",
       "line": 2246,
       "slides": [
-        82,
-        83,
-        84
+        74,
+        75
       ],
-      "summary": [
-        "**Request flag:** no context save or switch",
-        "**Saved IN2:** preserves result across scheduling",
-        "**Block / yield / exit:** can dispatch inside syscall",
-        "**Check → RTI:** non-atomic; late request stays pending"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1697,21 +1639,17 @@
           "sourceSha256": "d857b12eac3fd03498a6c9ba1427b5819ab8526a6d7a85f0fd0273a3eff857a8"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2424-restoring-process-context-with-rti",
       "title": "2.4.2.4 Restoring process context with `RTI`",
       "line": 2360,
       "slides": [
-        85,
-        86
+        76,
+        77
       ],
-      "summary": [
-        "**Direct return:** registers from saved user frame",
-        "**Scheduled return:** registers from selected PCB",
-        "**RTI:** read SP+1; SP++; PC ← saved PC+1"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1731,7 +1669,7 @@
           "sourceSha256": "c174d222a48e7bba9f46e3425da406b665540a49aa490bff1e3b39e8e65abc80"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "243-system-call-selection-function-reference",
@@ -1746,19 +1684,14 @@
           "sourceSha256": "98f0c4f2f7ef101ab01bd94eb0fffe233646928650c2ddbba31f23adb718c1d5"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "25-timer-interrupts-and-userspace-preemption",
       "title": "2.5 Timer interrupts and userspace preemption",
       "line": 2419,
-      "slides": [
-        87
-      ],
-      "summary": [
-        "**5,000 instructions** per timer interval",
-        "**Instruction count:** independent of wall-clock time"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1766,14 +1699,14 @@
           "sourceSha256": "5e18ca7e3f90f8bb1bb49375662df78e6b1ba76e03c51f68362c1879dc32d582"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "251-timer-interrupt-path",
       "title": "2.5.1 Timer interrupt path",
       "line": 2426,
       "slides": [
-        88
+        78
       ],
       "summary": [],
       "remark": null,
@@ -1783,22 +1716,17 @@
           "sourceSha256": "a94f240ec5866540408536e795059ed5ef443702c6b17bc652cc2f06e5ef7b43"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2511-saving-context-and-selecting-the-timer-branch",
       "title": "2.5.1.1 Saving context and selecting the timer branch",
       "line": 2438,
       "slides": [
-        89,
-        90,
-        91
+        79,
+        80
       ],
-      "summary": [
-        "**Saved PC ≤ kernel DS:** deferred kernel branch",
-        "**Saved PC > kernel DS:** immediate userspace branch",
-        "**PC test:** handles changing-CS restore windows"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1822,21 +1750,14 @@
           "sourceSha256": "2a9076cd70043abe504ab00f9dd633fef53ee12bd5ff8f229969654b9d2a36bc"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2512-requesting-deferred-scheduling-for-kernel-work",
       "title": "2.5.1.2 Requesting deferred scheduling for kernel work",
       "line": 2508,
-      "slides": [
-        92
-      ],
-      "summary": [
-        "**Kernel timer:** sets reschedule_requested only",
-        "**Activation + process state:** preserved",
-        "**Kernel:** no separate PCB",
-        "**Retain stack:** suspended call frames remain intact"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1848,14 +1769,14 @@
           "sourceSha256": "7b3caa5028dfe52c4d491d05ab93b0b0f7e1ea3048dcf88954fc65bc53e1b869"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2513-restoring-interrupted-kernel-context-with-rti",
       "title": "2.5.1.3 Restoring interrupted kernel context with `RTI`",
       "line": 2524,
       "slides": [
-        93
+        81
       ],
       "summary": [],
       "remark": null,
@@ -1869,21 +1790,16 @@
           "sourceSha256": "b8bc2f4b0424f343b13f8c089d8fceff6ef1676160ad6524b866d97b16a97c34"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2514-entering-kernel-context-for-userspace-preemption",
       "title": "2.5.1.4 Entering kernel context for userspace preemption",
       "line": 2558,
       "slides": [
-        94,
-        95
+        82
       ],
-      "summary": [
-        "**Userspace branch:** dispatcher directly",
-        "**No deferred request** check",
-        "**Nested UART:** return, then continue switching"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1899,21 +1815,14 @@
           "sourceSha256": "ed7758826e5aba8a8254d3d7d6aa8758e6b01a0c9232215f4b5fb9d6ad541400"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2515-saving-process-context-and-restoring-the-selected-process",
       "title": "2.5.1.5 Saving process context and restoring the selected process",
       "line": 2612,
-      "slides": [
-        96
-      ],
-      "summary": [
-        "Userspace timer enters **dispatcher directly**",
-        "Save outgoing **activation**",
-        "RUNNING → **READY**; preserve blocked/stopped state",
-        "Select runnable PCB; **restore + RTI**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1925,23 +1834,14 @@
           "sourceSha256": "9161ccb9d6fce17f40b8c91ae864ac42c6690dbd9afbca8a1c8b04d8864aa831"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "252-kernel-non-preemption-and-deferred-rescheduling",
       "title": "2.5.2 Kernel non-preemption and deferred rescheduling",
       "line": 2642,
-      "slides": [
-        97
-      ],
-      "summary": [
-        "**Kernel operation:** completes before process switch",
-        "**Device interrupts:** remain enabled",
-        "**Block / yield / terminate:** earlier dispatch possible",
-        "**Polling:** ≤1 KiB per syscall; scheduling between chunks",
-        "**DMA:** one payload transfer; caller blocks",
-        "**All blocked:** wait for interrupt wakeup"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1961,20 +1861,16 @@
           "sourceSha256": "248b8a2c001a060fedb9e6dfd4f85fe728520bacd8fedfb5d8f5d29281e5463d"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "253-shell-character-delay-for-different-timer-intervals",
       "title": "2.5.3 Shell character delay for different timer intervals",
       "line": 2663,
       "slides": [
-        98
+        83
       ],
-      "summary": [
-        "**5,000 instructions:** chosen interval",
-        "**10,000:** similar measured character delay",
-        "**Shorter turns:** more switching overhead"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -1986,14 +1882,14 @@
           "sourceSha256": "939181bdb12a9f36e6e72a81fec2f210f0ead9a7835d9e92e6fc1f6e8667e0ee"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "26-uart-receive-interrupt-path",
       "title": "2.6 UART receive interrupt path",
       "line": 2678,
       "slides": [
-        99
+        84
       ],
       "summary": [],
       "remark": null,
@@ -2003,22 +1899,16 @@
           "sourceSha256": "5a06ed188747d13264507b69f5b6dc68dd9e1b23b559daff196267b56df24af3"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "261-entering-kernel-segments-on-the-interrupted-stack",
       "title": "2.6.1 Entering kernel segments on the interrupted stack",
       "line": 2687,
       "slides": [
-        100,
-        101
+        85
       ],
-      "summary": [
-        "**UART / DMA:** borrow interrupted stack",
-        "**Calls:** free space below saved frame",
-        "**Retain SP + boundary:** suspended frames survive",
-        "**Kernel CS:** nested faults become kernel exceptions"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2042,14 +1932,14 @@
           "sourceSha256": "460554b4afb3a8afd4fa94eac97363bca978b7c3fd22302e74d114f6a02f8a6b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "262-handling-the-received-byte",
       "title": "2.6.2 Handling the received byte",
       "line": 2743,
       "slides": [
-        102
+        86
       ],
       "summary": [],
       "remark": null,
@@ -2063,14 +1953,14 @@
           "sourceSha256": "9ca0ad912bca18002774a12d4e1078ad68b7fd2b8431894c2c5addf3033118c7"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "263-restoring-interrupted-context-with-rti",
       "title": "2.6.3 Restoring interrupted context with `RTI`",
       "line": 2794,
       "slides": [
-        103
+        87
       ],
       "summary": [],
       "remark": null,
@@ -2084,22 +1974,16 @@
           "sourceSha256": "9ace52136e057c83a9292f1566ff14a8eddb2ad4ca616bbb109bb1b7d8941dc0"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "264-uart-nesting-and-interrupt-priorities",
       "title": "2.6.4 UART nesting and interrupt priorities",
       "line": 2825,
       "slides": [
-        104
+        88
       ],
-      "summary": [
-        "**Ctrl+C:** deferred current-process termination",
-        "**Ctrl+Z:** state change; no reschedule request",
-        "**Timer:** one outstanding expiration; **DMA:** latched completion",
-        "**UART:** host queues later bytes while delivery waits",
-        "**Kernel ring full:** drops new byte"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2119,14 +2003,14 @@
           "sourceSha256": "f9fbb61fc250c61775070f4266a2f147f7a99e0a56414239989ee0d6c949bae5"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "265-polled-uart-function-reference",
       "title": "2.6.5 Polled UART function reference",
       "line": 2857,
       "slides": [
-        105
+        89
       ],
       "summary": [],
       "remark": null,
@@ -2136,14 +2020,14 @@
           "sourceSha256": "f357730b1d16fe4de718ea315356b60e65e169a7751fc91f439458d94dceddbc"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "27-dma-completion-interrupt-path",
       "title": "2.7 DMA completion interrupt path",
       "line": 2869,
       "slides": [
-        106
+        90
       ],
       "summary": [],
       "remark": null,
@@ -2153,14 +2037,14 @@
           "sourceSha256": "020167a7720f03437dd9aea01ac06c814c26519bfacc3238d9f375f12570b6ba"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "271-entering-kernel-segments-on-the-interrupted-stack",
       "title": "2.7.1 Entering kernel segments on the interrupted stack",
       "line": 2880,
       "slides": [
-        107
+        91
       ],
       "summary": [],
       "remark": null,
@@ -2174,21 +2058,16 @@
           "sourceSha256": "16c232ce1a10f59481568dc1eda3c5ec4508dddac8163513879ac3fd0dca0bf2"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "272-completing-the-dma-wait",
       "title": "2.7.2 Completing the DMA wait",
       "line": 2923,
       "slides": [
-        108
+        92
       ],
-      "summary": [
-        "**DMA:** one idle transfer; caller queues + dispatches",
-        "**Completion:** remove FIFO head; clear membership",
-        "**Stopped waiter:** STOPPED; prior state becomes READY",
-        "**Later execution:** select caller; check transfer result"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2204,14 +2083,14 @@
           "sourceSha256": "f891ff2e624538331b8b491b1a97d1767236a1e7827b90edb67f39285f13cc9f"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "273-restoring-interrupted-context-with-rti",
       "title": "2.7.3 Restoring interrupted context with `RTI`",
       "line": 2955,
       "slides": [
-        109
+        93
       ],
       "summary": [],
       "remark": null,
@@ -2229,7 +2108,7 @@
           "sourceSha256": "28db94bdf97818e0f9fb925433c31cb93cb5dd210a23a3596e4c9d15c2a92ec2"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "274-dma-waiting-and-completion-function-reference",
@@ -2244,7 +2123,7 @@
           "sourceSha256": "53d1b608a43a914e2c411e153f55df5ef0fb11bb2db9eda9a9b132a460ed97b5"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "28-cpu-exceptions-and-runtime-errors",
@@ -2259,19 +2138,16 @@
           "sourceSha256": "cb90e67c1e71f13510c060a72bae9ab5a0b15d7ccc8a7e478a354b7d01ad40f5"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "281-cpu-exception-entry-and-registers",
       "title": "2.8.1 CPU exception entry and registers",
       "line": 3009,
       "slides": [
-        110
+        94
       ],
-      "summary": [
-        "**ISR 3:** bypasses mappings + priorities",
-        "**Fault context:** never resumed"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2279,23 +2155,19 @@
           "sourceSha256": "9b1c9d4ea545bd2d4c81a23f53a9d344ece1d46402fd05baf09e3ee20be5938a"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2811-entering-kernel-context-after-a-fault",
       "title": "2.8.1.1 Entering kernel context after a fault",
       "line": 3018,
       "slides": [
-        111,
-        112,
-        113,
-        114
+        95,
+        96,
+        97,
+        98
       ],
-      "summary": [
-        "**Exception entry:** abandon faulting stack",
-        "**General registers:** no resumable frame saved",
-        "**Interrupted CS:** preserve for classification"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2323,20 +2195,14 @@
           "sourceSha256": "2e67c2759ccd9ea7adad6339dbaab67f4a6c07688d2dc3b954c0fab7303c6869"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "28111-comparing-exception-and-timer-context-tests",
       "title": "2.8.1.1.1 Comparing exception and timer context tests",
       "line": 3100,
-      "slides": [
-        115
-      ],
-      "summary": [
-        "**Timer:** saved PC identifies kernel restore instructions",
-        "**Exception:** interrupted CS identifies selected segments",
-        "User CS during restore can **misclassify kernel faults**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2352,14 +2218,14 @@
           "sourceSha256": "8ffcffc203cd8bd26a31255afc140df2166a0e8ff037d16885d5b16a56867221"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2812-reading-and-classifying-the-exception",
       "title": "2.8.1.2 Reading and classifying the exception",
       "line": 3120,
       "slides": [
-        116
+        99
       ],
       "summary": [],
       "remark": null,
@@ -2373,14 +2239,14 @@
           "sourceSha256": "69c9db5978bb9c79abb8d3714b363b456f0abec6f4ffde0df05fb4b96eabb01c"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "28121-reporting-the-exception",
       "title": "2.8.1.2.1 Reporting the exception",
       "line": 3148,
       "slides": [
-        117
+        100
       ],
       "summary": [],
       "remark": null,
@@ -2390,21 +2256,16 @@
           "sourceSha256": "2741af704416c89c977a8771d83152c257712a7113531090adebe249a689c6bc"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "2813-halting-the-kernel-or-terminating-the-process",
       "title": "2.8.1.3 Halting the kernel or terminating the process",
       "line": 3160,
       "slides": [
-        118,
-        119
+        101
       ],
-      "summary": [
-        "**Borrowed-stack handler:** kernel CS → panic",
-        "**Process heap exhaustion:** syscall → termination",
-        "**Neither path:** restore faulting instruction"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2424,19 +2285,16 @@
           "sourceSha256": "6d4187ac48d21c67ec624a5dc749a86e13295daab8e43ddd723d9a34c93657aa"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "282-supported-exceptions-and-allocation-errors",
       "title": "2.8.2 Supported exceptions and allocation errors",
       "line": 3209,
       "slides": [
-        120
+        102
       ],
-      "summary": [
-        "**CPU fault / heap exhaustion:** termination or halt",
-        "**Bad argument / missing file / image:** ordinary failure"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2444,14 +2302,14 @@
           "sourceSha256": "4bc3a5489bba12d975e3f887fcc54f5ff39765ece794283b728b113a38665c80"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "283-exception-and-stack-boundary-function-reference",
       "title": "2.8.3 Exception and stack-boundary function reference",
       "line": 3224,
       "slides": [
-        121
+        103
       ],
       "summary": [],
       "remark": null,
@@ -2461,7 +2319,7 @@
           "sourceSha256": "6d0e4d4c31d1f6a3030110bf401a0c3bae5a4c80969a740531c6d71e82e98a49"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "3-memory-management-and-shared-memory",
@@ -2476,23 +2334,17 @@
           "sourceSha256": "679326dc8df26a7ed8fdb222141aadf8f90876b8588a244e958abcb65081e3d5"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "31-heap-block-layout-and-allocation-algorithm",
       "title": "3.1 Heap block layout and allocation algorithm",
       "line": 3248,
       "slides": [
-        123,
-        124,
-        125
+        105,
+        106
       ],
-      "summary": [
-        "**Header:** three cells; payload follows immediately",
-        "**Allocation:** first fit; optional split",
-        "**Free:** repeatedly coalesce adjacent free blocks",
-        "**Realloc:** resize in place or move"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2516,23 +2368,18 @@
           "sourceSha256": "674e1b49598228d33149459c3231a56fbe058adf571d52c0090ea9cec88651b8"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "32-sram-image-and-heap-hierarchy",
       "title": "3.2 SRAM image and heap hierarchy",
       "line": 3290,
       "slides": [
-        126,
-        127,
-        128
+        107,
+        108,
+        109
       ],
-      "summary": [
-        "**Sizes:** 32-bit ReTI cells",
-        "**Current kernel offsets:** change after rebuilding",
-        "**Process base:** absolute; heap_start relative",
-        "**libstart:** heap-bounds syscalls initialize inner allocator"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2564,7 +2411,7 @@
           "sourceSha256": "f5c8a7e2848a1d2a77ca1e1a9c3f539b145118cc17fb02efa4473561d3d41b48"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "33-kernel-heap",
@@ -2579,21 +2426,14 @@
           "sourceSha256": "de7032a91ea85947a7e561e0579065302f5bddd30fe405c5a5a18d4db55bf37c"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "331-kernel-heap-blocks-and-kernel-objects",
       "title": "3.3.1 Kernel Heap blocks and kernel objects",
       "line": 3354,
-      "slides": [
-        129
-      ],
-      "summary": [
-        "**Kernel Heap:** PCB, paths, shared metadata",
-        "**Separate allocation** for each object",
-        "Metadata points into **outer heap**",
-        "kernel_heap.first_block → **header chain**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2605,7 +2445,7 @@
           "sourceSha256": "2b789bf12765c67bd095550e7a55798f2d753f3afae41b29808e59ffb643b20e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "332-kernel-heap-allocator-function-reference",
@@ -2620,7 +2460,7 @@
           "sourceSha256": "e05bcde5fd6cd47f78451e49649376ccc6305ebcdc166f4fea3c5cba0fd535ab"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "34-process-and-shared-data-heap",
@@ -2635,22 +2475,14 @@
           "sourceSha256": "f8f2115e978e91a3e32f26cdff8e741000cb69c46b5fad4b324608c7db43f7ee"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "341-process-allocations",
       "title": "3.4.1 Process allocations",
       "line": 3385,
-      "slides": [
-        130
-      ],
-      "summary": [
-        "**PSDMalloc:** complete Process Payload",
-        "**PCB:** base address + requested cell count",
-        "**Tiny remainder:** actual block may be larger",
-        "**remove_process:** PSDFree whole image/heap/stack",
-        "**User free:** inner allocation only"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2666,22 +2498,14 @@
           "sourceSha256": "901d8ea8f1a66d641155e881a634c4e7f1c11dac0a98758ec5049a4e1a6a2b3b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "342-shared-data-allocations",
       "title": "3.4.2 Shared Data allocations",
       "line": 3400,
-      "slides": [
-        131
-      ],
-      "summary": [
-        "PSDMalloc → **Shared Data Payload**",
-        "Entry + name in **Kernel Heap**",
-        "Several mappings → same **shared payload**",
-        "**No nested user heap**",
-        "Unlinked + unmapped → **PSDFree**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2697,7 +2521,7 @@
           "sourceSha256": "f96a9e7e315037fa7b89447bfb6e4c32715c809ed9206f314ba11df783f21ac2"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "343-process-and-shared-data-heap-allocator-function-reference",
@@ -2716,7 +2540,7 @@
           "sourceSha256": "55d8cebb4dce8d3e47cd0e0e40f0efbaea85612f776921b279119982474d6598"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "35-user-process-heap",
@@ -2731,22 +2555,14 @@
           "sourceSha256": "80f198c2afef247683368e7a8e77f7f79b157574f52782e077a4e3291f1cdf2c"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "351-per-process-user-process-heap",
       "title": "3.5.1 Per-Process User Process Heap",
       "line": 3437,
-      "slides": [
-        132
-      ],
-      "summary": [
-        "**process_heap** stored in process .data",
-        "**Startup obtains** bounds through syscalls",
-        "malloc/realloc/free → **common allocator**",
-        "Inner blocks; **outer payload** stays allocated",
-        "Restored DS selects **process-local globals**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2762,14 +2578,14 @@
           "sourceSha256": "86283bf78f3580ec6eeecb91862b717237d5e53796d02ef2b440486ebfc6d78c"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "352-user-process-heap-allocator-function-reference",
       "title": "3.5.2 User Process Heap allocator function reference",
       "line": 3454,
       "slides": [
-        133
+        110
       ],
       "summary": [],
       "remark": null,
@@ -2779,7 +2595,7 @@
           "sourceSha256": "02ebf464b482079118f1f555695ea81730e02953413471f61fecc73af835d370"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36-heap-and-allocator-function-reference",
@@ -2794,22 +2610,17 @@
           "sourceSha256": "90c2a6b3472e54b5a82f0b7b0f1af6be844dbe325716055085f19a5a7e645c4f"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "361-common-allocator-linkage-and-function-reference",
       "title": "3.6.1 Common allocator linkage and function reference",
       "line": 3475,
       "slides": [
-        134,
-        135
+        111,
+        112
       ],
-      "summary": [
-        "**Same allocator:** kernel + each user image",
-        "**Region + failure policy:** chosen by wrappers",
-        "**free / realloc:** valid pointer in supplied heap",
-        "**Ownership check:** absent"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2821,20 +2632,16 @@
           "sourceSha256": "e78bd72730b677dabd3540ff07db3300fc4db65ac6ebc946c6f34ea5c2eaf8cc"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "362-reallocation-decisions",
       "title": "3.6.2 Reallocation decisions",
       "line": 3499,
       "slides": [
-        136
+        113
       ],
-      "summary": [
-        "**Failed move:** old block preserved",
-        "**Growth:** absorbs at most one successor",
-        "**Shrink/free:** repeated merge scan"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2846,21 +2653,14 @@
           "sourceSha256": "ed6baf43b7784da33bca0482c9204067826459c23f769509045017526279891f"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "363-allocation-and-repeated-coalescing-example",
       "title": "3.6.3 Allocation and repeated coalescing example",
       "line": 3511,
-      "slides": [
-        137
-      ],
-      "summary": [
-        "**52 cells:** allocate, free, repeatedly merge",
-        "**Gray:** headers; **teal:** allocated; **green:** free",
-        "**Amber outline:** changed block",
-        "**Offsets:** cells; drawn widths illustrative"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -2868,14 +2668,14 @@
           "sourceSha256": "d0974c2949a0232140f25357916039bf27b29077db633179a39824e707ba8a41"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "3631-initial-state-and-first-fit-search",
       "title": "3.6.3.1 Initial state and first-fit search",
       "line": 3519,
       "slides": [
-        138
+        114
       ],
       "summary": [],
       "remark": null,
@@ -2885,14 +2685,14 @@
           "sourceSha256": "ce7845f1e72ccf1df199c6bf4961f7b361c4181950e498868660e39061421769"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "3632-allocation-splits-d",
       "title": "3.6.3.2 Allocation splits D",
       "line": 3528,
       "slides": [
-        139
+        115
       ],
       "summary": [],
       "remark": null,
@@ -2906,7 +2706,7 @@
           "sourceSha256": "ed36e68f19ed00ec61d451fa3c356e479668f2626d4ae45f106bc5a3c33dcbe0"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "3633-free-d-and-merge-its-remainder",
@@ -2921,14 +2721,14 @@
           "sourceSha256": "f1bd3bbdae2b4a946af0bcbba8af7c6bdef061b7fd5bf47498a036f9b918697e"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36331-mark-d-free",
       "title": "3.6.3.3.1 Mark D free",
       "line": 3549,
       "slides": [
-        140
+        116
       ],
       "summary": [],
       "remark": null,
@@ -2938,14 +2738,14 @@
           "sourceSha256": "e7429190b88a272e944701948db26d2c7080539ca7f1fe5a816882017564a6e5"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36332-merge-d-and-its-remainder",
       "title": "3.6.3.3.2 Merge D and its remainder",
       "line": 3557,
       "slides": [
-        141
+        117
       ],
       "summary": [],
       "remark": null,
@@ -2959,7 +2759,7 @@
           "sourceSha256": "f95bdc6815493642b9bd651e3187f0cd34cde6e63f6d00c3e68f02615045cdf9"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "3634-free-c-and-merge-repeatedly-at-b",
@@ -2974,14 +2774,14 @@
           "sourceSha256": "3e63532dbcdceb56c92dd59988abe92cd973809236215bd66b27325a8983d3e2"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36341-mark-c-free",
       "title": "3.6.3.4.1 Mark C free",
       "line": 3574,
       "slides": [
-        142
+        118
       ],
       "summary": [],
       "remark": null,
@@ -2991,14 +2791,14 @@
           "sourceSha256": "d81eb51d4752944780b908c0d24645b15870d3a3e574baaf3cfade6bb6d5616a"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36342-first-merge-at-b",
       "title": "3.6.3.4.2 First merge at B",
       "line": 3582,
       "slides": [
-        143
+        119
       ],
       "summary": [],
       "remark": null,
@@ -3008,20 +2808,16 @@
           "sourceSha256": "9ffab60493fd9361bb9ae87cded862ad0e1d516263fec1a734ad08f98eb6a361"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "36343-second-merge-at-b",
       "title": "3.6.3.4.3 Second merge at B",
       "line": 3590,
       "slides": [
-        144
+        120
       ],
-      "summary": [
-        "**Recheck same header:** merge entire free run",
-        "**Contiguous address order:** required by scan",
-        "**Example test:** first fit, split, merge, preserved data"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3037,7 +2833,7 @@
           "sourceSha256": "306bbafe94f478dbb73011cb9dacf4cd6ba6c9d15bbfbd156c669e72b99a89be"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4-processes-and-process-lifecycle",
@@ -3052,21 +2848,18 @@
           "sourceSha256": "3d90ee238a58a1572307474097e587e23341b93a987bc129cd525d431efbf1bf"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "41-process-control-block-fields",
       "title": "4.1 Process control block fields",
       "line": 3616,
       "slides": [
-        146,
-        147,
-        148
+        122,
+        123,
+        124
       ],
-      "summary": [
-        "**PCB addresses:** physical; no MMU translation",
-        "**binary_path:** survives user changes to argv[0]"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3082,22 +2875,17 @@
           "sourceSha256": "68840745444d6c57dbc90b7a4cbff0d5c8511dc8e14d7dc651c9ac2a0fa5486d"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "411-process-states-and-transitions",
       "title": "4.1.1 Process states and transitions",
       "line": 3682,
       "slides": [
-        149,
-        150
+        125,
+        126
       ],
-      "summary": [
-        "**NEW:** prevents scheduling + duplicate run setup",
-        "**NEW stop/continue:** can expose unstarted process",
-        "**READY / RUNNING:** scheduler accepts both",
-        "**ZOMBIE:** retains status + resources until collection"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3125,23 +2913,16 @@
           "sourceSha256": "80c9f4ba13d464d8f8dca95caaf1e7e208657624c6fb7c5809865475cad4b7ae"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "412-global-process-list-and-current-process",
       "title": "4.1.2 Global process list and current process",
       "line": 3719,
       "slides": [
-        151,
-        152
+        127
       ],
-      "summary": [
-        "**Append:** creation order; O(1) through tail",
-        "**Scheduler:** head + next; never uses tail",
-        "**Shared registry:** prepend; no tail needed",
-        "**Lookup/removal:** predecessor search still linear",
-        "**next / wait_next:** independent list memberships"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3177,14 +2958,14 @@
           "sourceSha256": "d2703e4484e402fadbdf90eb43d42605c20161b3a720ca7176ffd97550f72469"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4121-from-pcbs-to-process-payloads-in-sram",
       "title": "4.1.2.1 From PCBs to Process Payloads in SRAM",
       "line": 3759,
       "slides": [
-        153
+        128
       ],
       "summary": [],
       "remark": null,
@@ -3202,7 +2983,7 @@
           "sourceSha256": "30a50dc726fa24f8dbed888b8e3fc7e5f9c3f0892851d3906c3c610676c3c528"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42-loading-and-starting-a-process",
@@ -3221,14 +3002,21 @@
           "sourceSha256": "20d7854812974602f5fb216fc2c01016b0bd65f2b70012fbdd85ecf8f223e007"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "421-loading-a-process-load-library-call",
       "title": "4.2.1 Loading a process (`load` library call)",
       "line": 3786,
-      "slides": [],
-      "summary": [],
+      "slides": [
+        129
+      ],
+      "summary": [
+        "**load():** receive the program into a reserved Process Payload",
+        "**Reception:** caller owns transfer record; no child PCB",
+        "**After reception:** create the child PCB and return its PID",
+        "**Initial state:** NEW; run() prepares and starts the child"
+      ],
       "remark": null,
       "paragraphs": [
         {
@@ -3236,14 +3024,14 @@
           "sourceSha256": "d0e94ef5981a9da496eaa0f7f28ad9f1cb3edddcee5a04d5c5b42e899a58f96e"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4211-step-1-receiving-the-process-image",
       "title": "4.2.1.1 Step 1: Receiving the process image",
       "line": 3795,
       "slides": [
-        154
+        130
       ],
       "summary": [],
       "remark": null,
@@ -3257,22 +3045,16 @@
           "sourceSha256": "6502bdf4322ec1655cf32b796d92bc308906a785602a3948be8b28d93e9e7c92"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42111-processload-transfer-record",
       "title": "4.2.1.1.1 `ProcessLoad` transfer record",
       "line": 3813,
       "slides": [
-        155,
-        156
+        131
       ],
-      "summary": [
-        "**Owner:** loading caller’s pending_load",
-        "**No child PCB:** until complete reception",
-        "**Success:** transfer payload; free record + path",
-        "**Failure:** cancel DMA; free partial payload + metadata"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3288,14 +3070,14 @@
           "sourceSha256": "401435a31ff10eccfd545fff986cfb1f5eccc45626400cae181a160b4ddcdc3b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4212-step-2-creating-the-child-pcb",
       "title": "4.2.1.2 Step 2: Creating the child PCB",
       "line": 3846,
       "slides": [
-        157
+        132
       ],
       "summary": [],
       "remark": null,
@@ -3305,21 +3087,16 @@
           "sourceSha256": "c5043e37e80dc32a36960ed72a85316e22a39f09b4ec876e60fb4fe58d3c228a"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4213-process-stack-after-load",
       "title": "4.2.1.3 Process stack after `load`",
       "line": 3856,
       "slides": [
-        158
+        133
       ],
-      "summary": [
-        "**NEW:** not yet runnable",
-        "**Initialized:** highest stack cell only",
-        "**No argc / argv / envp** yet",
-        "**Other cells:** unspecified; load does not zero"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3335,14 +3112,14 @@
           "sourceSha256": "2ee2441a746dc936b59eac7b6d54a81d7c96c0b67a5a23f6771cea3384e231d5"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4214-load-function-reference",
       "title": "4.2.1.4 Load function reference",
       "line": 3886,
       "slides": [
-        159
+        134
       ],
       "summary": [],
       "remark": null,
@@ -3356,21 +3133,19 @@
           "sourceSha256": "5815d61b4b4e5c2ab74be6a68e0f7014475e1a6ab140c821dcafb4f06658e961"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "422-starting-a-process-run-library-call",
       "title": "4.2.2 Starting a process (`run` library call)",
       "line": 3914,
       "slides": [
-        160,
-        161
+        135,
+        136
       ],
       "summary": [
         "**Arguments:** spaces/tabs; quoted whitespace preserved",
-        "**Kernel:** builds pointer arrays + copies strings",
-        "**READY:** permits scheduling; no immediate CPU load",
-        "**First dispatch:** libstart initializes heap + environment"
+        "**Kernel:** builds pointer arrays + copies strings"
       ],
       "remark": null,
       "paragraphs": [
@@ -3395,7 +3170,7 @@
           "sourceSha256": "19a0d7d508a82ac665467b262b8f9ac53c4d852fe5a6fb72c05f5acf006379e8"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4221-initial-user-process-stack",
@@ -3410,20 +3185,16 @@
           "sourceSha256": "5bdd83a1da77bcd191ea5657499904e9b9f31716786907ba3069fe5466dead44"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42211-user-process-stack-placement",
       "title": "4.2.2.1.1 User process stack placement",
       "line": 3958,
       "slides": [
-        162
+        137
       ],
-      "summary": [
-        "**Default heap:** 1,000 cells",
-        "**Default stack offset:** reserves 1,001 cells beyond heap",
-        "**Loader:** reject stack inside heap; add inclusive cell"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3439,25 +3210,18 @@
           "sourceSha256": "af056b9a54d5aa72500011d7a0aff8d109a5f5b9458e977d6c546c132cb58cf8"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42212-initial-argc-argv-and-envp",
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp`",
       "line": 3978,
       "slides": [
-        163,
-        164,
-        165,
-        166
+        138,
+        139,
+        140
       ],
-      "summary": [
-        "**argv[0]:** executable path without leading /",
-        "**Each character:** one ReTI cell",
-        "**Strings + pointer arrays:** zero/null terminated",
-        "**argv / envp:** array addresses; no extra pointer cells",
-        "**Startup data:** no heap-boundary fit check"
-      ],
+      "summary": [],
       "remark": [
         "System V Intel386 / POSIX",
         [
@@ -3505,21 +3269,17 @@
           "sourceSha256": "4e1d68e4377ba312103bb673c1be9d679db827104ef69abc97d7bc4e67b7fe63"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "422121-concrete-initial-stack-example",
       "title": "4.2.2.1.2.1 Concrete initial-stack example",
       "line": 4057,
       "slides": [
-        167,
-        168
+        141,
+        142
       ],
-      "summary": [
-        "**argc = 3; envc = 2:** 29 startup cells",
-        "**Entry PC:** base_address + size − 29",
-        "**waitpid result:** 5 after successful load/run"
-      ],
+      "summary": [],
       "remark": [
         "Reading the stack",
         [
@@ -3546,14 +3306,14 @@
           "sourceSha256": "aea0773d84af450c25b3cf5587a376069c1f2ee2ef45363af8151221723e3247"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4222-parent-to-child-inheritance",
       "title": "4.2.2.2 Parent-to-child inheritance",
       "line": 4106,
       "slides": [
-        169
+        143
       ],
       "summary": [],
       "remark": [
@@ -3569,31 +3329,16 @@
           "sourceSha256": "869e197726bbab494df7651dcf539f2bcf951ddb9419ee967176c3136eed18ad"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42221-environment-origin-and-propagation",
       "title": "4.2.2.2.1 Environment origin and propagation",
       "line": 4114,
       "slides": [
-        170
+        144
       ],
-      "summary": [
-        [
-          "**Environment source**",
-          "**Init:** empty; then config/environment.txt",
-          "**run(NULL):** calling process’s current environment",
-          "**Custom array:** replacement; no merge",
-          "**Empty array:** `{NULL}`; not NULL pointer"
-        ],
-        [
-          "**Independent copies**",
-          "**Kernel:** strings onto child stack",
-          "**libstart:** array + strings into child heap",
-          "**Local changes:** future children; existing copies unchanged",
-          "**PCB:** no environment pointer"
-        ]
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3637,20 +3382,16 @@
           "sourceSha256": "2c907fcd141f0945c7bff0aade4bef3c4a252900ccae64bd7d5fd27ec55e5447"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "42222-loading-bar-environment-variable",
       "title": "4.2.2.2.2 Loading-bar environment variable",
       "line": 4184,
       "slides": [
-        171
+        145
       ],
-      "summary": [
-        "**Presence:** enables bars; value false still enables",
-        "**unsetenv:** disables bars",
-        "**cat:** removes own entry; shell remains unchanged"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3670,14 +3411,14 @@
           "sourceSha256": "97ec6ec221ef9ec1215f59e22d78de6000edc84278a70cc78f21d7d260dbed0e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "4223-run-function-reference",
       "title": "4.2.2.3 Run function reference",
       "line": 4207,
       "slides": [
-        172
+        146
       ],
       "summary": [],
       "remark": null,
@@ -3687,14 +3428,14 @@
           "sourceSha256": "852e96e86c376da44f62c3d421702ef11fb467499408fa1c427ceab59cb2c84d"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "43-process-list-pcb-metadata-and-lifecycle-function-reference",
       "title": "4.3 Process list, PCB metadata, and lifecycle function reference",
       "line": 4226,
       "slides": [
-        173
+        147
       ],
       "summary": [],
       "remark": null,
@@ -3704,7 +3445,7 @@
           "sourceSha256": "127f5bb8ffe2e70e008a38fd9062176f59821b48acfd496a812b2d39dbd69f1f"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "5-shared-memory-entries-and-mappings",
@@ -3719,23 +3460,17 @@
           "sourceSha256": "2323a21e6700eee2bb0c97c4ed32ebca2e6956e5ff427b8b85ff31a52445dd4e"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "51-named-entries-and-per-process-attachments",
       "title": "5.1 Named entries and per-process attachments",
       "line": 4260,
       "slides": [
-        175,
-        176,
-        177
+        149,
+        150
       ],
-      "summary": [
-        "**Entry:** data region metadata; **attachment:** process-owned mapping",
-        "**Existing name:** reuse ID; ignores new requested size",
-        "**Missing name + size ≤0:** fail",
-        "**Payload:** initially unspecified; caller initializes"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3759,14 +3494,14 @@
           "sourceSha256": "1965705e645b0368f47b39956304e2d558743215609ef26bd347ce6d5ddd9a06"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "511-global-shared-memory-list-and-entry-names",
       "title": "5.1.1 Global shared-memory list and entry names",
       "line": 4312,
       "slides": [
-        178
+        151
       ],
       "summary": [],
       "remark": null,
@@ -3776,14 +3511,14 @@
           "sourceSha256": "482acc31473acbde6916c75e2a5e5252cf5d28c1f080aff2f6548c21f7071108"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram",
       "title": "5.1.1.1 From Shared Memory Entries to Shared Data Payloads in SRAM",
       "line": 4321,
       "slides": [
-        179
+        152
       ],
       "summary": [],
       "remark": null,
@@ -3801,14 +3536,14 @@
           "sourceSha256": "2e70a1dcd9e79fe70ab803664a9f71e43facc66212c98166ff6b3e245e307cf0"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "512-per-process-attachment-lists-in-sram",
       "title": "5.1.2 Per-process attachment lists in SRAM",
       "line": 4336,
       "slides": [
-        180
+        153
       ],
       "summary": [],
       "remark": null,
@@ -3818,32 +3553,17 @@
           "sourceSha256": "4c0307ec2f0dd7353c949b6fbc0b67c186ba16408b46990fad49e3ae295c422e"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "52-mapping-unlinking-and-deferred-destruction",
       "title": "5.2 Mapping, unlinking, and deferred destruction",
       "line": 4345,
       "slides": [
-        181,
-        182
+        154,
+        155
       ],
-      "summary": [
-        [
-          "**Mapping + unlink**",
-          "**Every mmap:** attachment + reference increment",
-          "**No munmap:** process removal releases mappings",
-          "**Unlink:** name removed; numeric ID remains usable",
-          "**Reopen name:** creates separate entry"
-        ],
-        [
-          "**Lifetime**",
-          "**Named + zero mappings:** stays allocated",
-          "**Zombie:** keeps attachments until final removal",
-          "**Destroyed:** unlinked + reference count zero",
-          "**Shared visibility:** synchronization still required"
-        ]
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3891,14 +3611,14 @@
           "sourceSha256": "baa86910250d4260ab078ecd4a979e10443f5f4c00d52e068ffeeb7fdc1b4112"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "53-shared-memory-function-reference",
       "title": "5.3 Shared Memory function reference",
       "line": 4438,
       "slides": [
-        183
+        156
       ],
       "summary": [],
       "remark": null,
@@ -3908,20 +3628,14 @@
           "sourceSha256": "7431da0f56900d26f9eb9d407ad7152367fb7cc0f0fed6fb6428e5b499e0c0f8"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "6-scheduling-and-context-switching",
       "title": "6. Scheduling and context switching",
       "line": 4461,
-      "slides": [
-        185
-      ],
-      "summary": [
-        "**Scheduler:** selects runnable PCB",
-        "**Dispatcher:** saves + restores activation",
-        "**READY / RUNNING:** eligible states"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3933,7 +3647,7 @@
           "sourceSha256": "bd6edd23daf47a5f0ca4daf05c4cfb60dde0f2719bbc012c94fd1facd790bb4b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "61-scheduler-implementation",
@@ -3948,22 +3662,14 @@
           "sourceSha256": "457b3cc5ced16c4ab4386ec4ef54e18bd08bb3fdab833815139ee2736b361ca4"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "611-algorithm-and-round-robin-comparison",
       "title": "6.1.1 Algorithm and Round Robin comparison",
       "line": 4478,
-      "slides": [
-        186
-      ],
-      "summary": [
-        "**Lazy Round Robin:** scan after current; wrap at tail",
-        "**Each PCB:** inspected at most once",
-        "**No ready queue:** woken process keeps list position",
-        "**Timer:** voluntary switch does not reset interval",
-        "**Selected process:** may receive partial quantum"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3983,15 +3689,15 @@
           "sourceSha256": "42466ccdbf1cbf95dee2bba0e174b9592847378197175241e3102061f6bc92d6"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "6111-selecting-the-next-runnable-process",
       "title": "6.1.1.1 Selecting the next runnable process",
       "line": 4498,
       "slides": [
-        187,
-        188
+        158,
+        159
       ],
       "summary": [],
       "remark": null,
@@ -4017,19 +3723,16 @@
           "sourceSha256": "0f63a5db45195b8e644057a0e732c41b63c2d5a7a96de2ac1f0c2736ecf8835f"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "6112-starting-at-the-head-after-the-last-process",
       "title": "6.1.1.2 Starting at the head after the last process",
       "line": 4551,
       "slides": [
-        189
+        160
       ],
-      "summary": [
-        "**Wraparound:** search reassignment to head",
-        "**Tail next:** stays NULL; list order unchanged"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4041,21 +3744,16 @@
           "sourceSha256": "ce6b71002cfae2cb3c9293e123daff4e10e293c1e4a994e6dd77d218be0c7133"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "6113-reaching-the-list-end-during-a-scan",
       "title": "6.1.1.3 Reaching the list end during a scan",
       "line": 4571,
       "slides": [
-        190
+        161
       ],
-      "summary": [
-        "**Only current runnable:** can select it again",
-        "**None runnable:** NULL; dispatcher retries",
-        "**PCBs remain:** interrupts may wake processes",
-        "**Empty list:** return; no idle process"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4071,19 +3769,16 @@
           "sourceSha256": "27a1729c7c79fde3d58ca0fb4b12f69e02d49ff1790dc5b830cd4bd3a7ade30d"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "6114-implementation",
       "title": "6.1.1.4 Implementation",
       "line": 4599,
       "slides": [
-        191
+        162
       ],
-      "summary": [
-        "**One list:** fewer state-change updates",
-        "**Worst case:** O(number of PCBs) selection"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4095,7 +3790,7 @@
           "sourceSha256": "38bb43480ddb28bec2f2e0b831f48dac1e77b4ed50112edd88a7988c63deed26"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "612-scheduler-function-reference",
@@ -4110,22 +3805,17 @@
           "sourceSha256": "d304ea38a539b902f8a50f5a732cc06b0cc2a80b26ec04020aea9fea8000a89e"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "62-saved-process-registers",
       "title": "6.2 Saved process registers",
       "line": 4658,
       "slides": [
-        192,
-        193,
-        194
+        163,
+        164
       ],
-      "summary": [
-        "**Activation:** embedded; PCB allocation + lifetime",
-        "**Field order:** fixed assembly offsets",
-        "**PC:** remains on user stack; no activation field"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4145,25 +3835,19 @@
           "sourceSha256": "5ee4b042056cd2cec74dc393d2b5792ac9eec1d70df7ba41f8d9ec176cab41f6"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process",
       "line": 4709,
       "slides": [
-        195,
-        196,
-        197,
-        198,
-        199
+        165,
+        166,
+        167,
+        168
       ],
-      "summary": [
-        "**Save first:** activation before state change",
-        "**RUNNING → READY:** ordinary resumable switch",
-        "**BLOCKED / STOPPED:** preserved during save",
-        "**Termination candidate:** reject + retry selection"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4215,21 +3899,17 @@
           "sourceSha256": "4da016bf0108222b7e16bce1944a2e4f097e37f317c985a80494bab1063486ba"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
       "title": "6.4 Restoring the selected process and returning with `RTI`",
       "line": 4841,
       "slides": [
-        200,
-        201
+        169,
+        170
       ],
-      "summary": [
-        "**PCB + boundary:** arguments on kernel stack",
-        "**Load saved SP:** switches to selected user stack",
-        "**Startup / termination:** no outgoing activation save"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4265,14 +3945,14 @@
           "sourceSha256": "19bc214d7a16a5ae05fdbc585d28054c80cddc67a5015765413b8dbee339c9a2"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "65-dispatcher-function-reference",
       "title": "6.5 Dispatcher function reference",
       "line": 4948,
       "slides": [
-        202
+        171
       ],
       "summary": [],
       "remark": null,
@@ -4282,7 +3962,7 @@
           "sourceSha256": "34851db2b10d45aa57721d0236bd79ec190fd84271a320974d18e2a9510d4f45"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "7-blocking-wait-queues-signals-and-mutexes",
@@ -4297,25 +3977,19 @@
           "sourceSha256": "de190b2df79a2eea7f9c34563691882146e034bc72b300338219315076c2a44a"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links",
       "line": 4973,
       "slides": [
-        204,
-        205,
-        206,
-        207,
-        208
+        173,
+        174,
+        175,
+        176
       ],
-      "summary": [
-        "**Intrusive FIFO:** links embedded in PCBs",
-        "**One process:** one waiting queue at a time",
-        "**Queue owner:** must outlive linked waiters",
-        "**Zombie:** may remain linked until removal"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4363,21 +4037,14 @@
           "sourceSha256": "4f687e3868a00ff20f32ea969cc7905caed3bf586bc00860482764d134abee4e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "711-blocking-with-sleep-and-waking-with-wakeup",
       "title": "7.1.1 Blocking with `sleep` and waking with `wakeup`",
       "line": 5050,
-      "slides": [
-        209
-      ],
-      "summary": [
-        "**sleep:** wait for event; no fixed delay",
-        "**wakeup:** at most FIFO head; no immediate switch",
-        "**Stopped waiter:** stays STOPPED; prior state READY",
-        "**Queues:** reference PCBs; own no allocations"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4393,15 +4060,15 @@
           "sourceSha256": "131abac14b3b30bf32c487378c2e387eb3bbf717228c43bc5982cbf9860c6e31"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "7111-from-blocking-to-resumed-execution",
       "title": "7.1.1.1 From blocking to resumed execution",
       "line": 5078,
       "slides": [
-        210,
-        211
+        177,
+        178
       ],
       "summary": [],
       "remark": null,
@@ -4419,21 +4086,14 @@
           "sourceSha256": "87c956199c8abc13b115fd11d58c2dcbdfea8713b680b9ff15e9e4709c39969d"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "712-child-waiting-with-waitpid",
       "title": "7.1.2 Child waiting with `waitpid`",
       "line": 5108,
-      "slides": [
-        212
-      ],
-      "summary": [
-        "**Only recorded parent:** may collect exact child",
-        "**Pending result:** parent’s suspended stack integer",
-        "**Stopped/zombie child:** immediate status; no queueing",
-        "**Parent removed:** unlink waiter before freeing PCB"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4453,21 +4113,16 @@
           "sourceSha256": "61f67bfa6b9f8f7d41654f4594257c5549cc730a016db08f734ecbbdd723559a"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "7121-recording-termination-status",
       "title": "7.1.2.1 Recording termination status",
       "line": 5152,
       "slides": [
-        213,
-        214
+        179
       ],
-      "summary": [
-        "**WaitPidRequest:** two cells; status integer separate",
-        "**Result:** write status; retain result pointer only",
-        "**unload:** status 0; forces final removal"
-      ],
+      "summary": [],
       "remark": [
         "Unix: reaping",
         [
@@ -4509,21 +4164,16 @@
           "sourceSha256": "b28ec2aea3f60e2fe50082ed5daca1b31fa82b4fabff1ecfe26f165eb3bbf055"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "7122-parent-collection-and-final-removal",
       "title": "7.1.2.2 Parent collection and final removal",
       "line": 5252,
       "slides": [
-        215,
-        216
+        180
       ],
-      "summary": [
-        "**Zombie:** full PCB + resources + pending load retained",
-        "**Child stop:** report status; retain resumable child",
-        "**Waiting parent:** child can disappear before parent resumes"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4543,14 +4193,14 @@
           "sourceSha256": "affd0228c897d8590d1d9d4f3c666b51ebfad614e744d6d952852843b711a9cd"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "713-wait-queue-function-reference",
       "title": "7.1.3 Wait queue function reference",
       "line": 5317,
       "slides": [
-        217
+        181
       ],
       "summary": [],
       "remark": null,
@@ -4564,7 +4214,7 @@
           "sourceSha256": "047a4c18bacfa5a1d2312533f964ca63ccc93cd4aebf52bfb812f40cde7193b8"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "72-process-signals",
@@ -4579,22 +4229,17 @@
           "sourceSha256": "e31fb481a6ab8d858135a72b3f3a877b8118ca8abf204143c71d71bdb9d36c18"
         }
       ],
-      "treatment": "Section heading introduces descendant slides; repeated introduction omitted"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "721-supported-signals-and-fixed-actions",
       "title": "7.2.1 Supported signals and fixed actions",
       "line": 5349,
       "slides": [
-        218,
-        219,
-        220
+        182,
+        183
       ],
-      "summary": [
-        "**Six signals:** fixed actions; cannot catch/ignore",
-        "**Signal 0:** existing non-zombie PID → 0",
-        "**Invalid / zombie:** −1"
-      ],
+      "summary": [],
       "remark": [
         "POSIX / Linux null signal",
         [
@@ -4624,21 +4269,14 @@
           "sourceSha256": "bc2a3d0d54f729c0a7382f134bccff4153d1124769f96ae52c392f6610b10f1b"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "722-stopping-and-continuing-a-process",
       "title": "7.2.2 Stopping and continuing a process",
       "line": 5389,
-      "slides": [
-        221
-      ],
-      "summary": [
-        "**Stop:** save prior state + stop signal",
-        "**Terminal stop:** detach queue; retain read buffer/count",
-        "**Continue:** READY or unfinished nonterminal wait BLOCKED",
-        "**Stopped reader:** ownership + SIGCONT required"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4650,21 +4288,14 @@
           "sourceSha256": "6f4831be13504aeaf58f5ac526ecece2ac6fe9f0ccc4b501f34351402997cbad"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "723-termination-ctrl-c-and-parent-collection",
       "title": "7.2.3 Termination, `Ctrl-C`, and parent collection",
       "line": 5402,
-      "slides": [
-        222
-      ],
-      "summary": [
-        "**Current target:** defer until dispatch",
-        "**Waiting parent:** status + wakeup + removal",
-        "**Otherwise:** retain status as ZOMBIE",
-        "**Ctrl+C** → shell resumes with 130"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4684,20 +4315,14 @@
           "sourceSha256": "7b029497c672ee12b9bc99bb25115726ae93d2115a1531d6d4e15aa2046daf59"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "724-fixed-picoos-signal-actions-compared-with-unix",
       "title": "7.2.4 Fixed PicoOS signal actions compared with Unix",
       "line": 5423,
-      "slides": [
-        223
-      ],
-      "summary": [
-        "**PicoOS:** fixed signal actions",
-        "**Stop/continue** update state immediately",
-        "Current-process termination waits for **dispatch**"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": [
         "Unix signal handling",
         [
@@ -4712,21 +4337,16 @@
           "sourceSha256": "d69ab6ce7e5b50d7a8039d6828eb6fb070e38ebc0dea06182208b98f629e084e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "725-signal-function-reference",
       "title": "7.2.5 Signal function reference",
       "line": 5431,
       "slides": [
-        224
+        184
       ],
-      "summary": [
-        "**Parent removal:** children parent_pid ← 0",
-        "**Configured signal:** delivered to surviving direct children",
-        "**PR_SET_PDEATHSIG, 0:** disable inherited policy",
-        "**No background reaper** or child-exit notification signal"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4738,24 +4358,18 @@
           "sourceSha256": "3be8752fe46a112614a5414afec55f6aa0c188e134c87e022aa14615901c3bf9"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
       "title": "7.3 Mutexes with test-and-set and wait queues",
       "line": 5453,
       "slides": [
-        225,
-        226,
-        227,
-        228
+        185,
+        186,
+        187
       ],
-      "summary": [
-        "**Shared mutex:** same lock + embedded queue",
-        "**Wakeup:** retry TSL; ownership not transferred",
-        "**Only TSL:** atomic",
-        "**Failed test → sleep:** lost-wakeup window under preemption"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4791,7 +4405,7 @@
           "sourceSha256": "5a034d1cf1ff3eff13f64c6f297b3bd64ed69d058c4860168c62d5c44febab58"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Source visuals without redundant bullet summaries; standards and analogies use plain notes"
     },
     {
       "anchor": "8-terminal-file-descriptors-and-host-filesystem",
@@ -4813,10 +4427,10 @@
       "title": "8.1 Per-process file-descriptor table",
       "line": 5552,
       "slides": [
-        230,
-        231,
-        232,
-        233
+        189,
+        190,
+        191,
+        192
       ],
       "summary": [
         "**Open:** lowest free slot 0–4; exhaustion −1",
@@ -4889,8 +4503,8 @@
       "title": "8.2 Global terminal input buffer",
       "line": 5639,
       "slides": [
-        234,
-        235
+        193,
+        194
       ],
       "summary": [
         "**128 cells:** all usable; count distinguishes full/empty",
@@ -4940,9 +4554,9 @@
       "title": "8.3 Blocking and completing terminal reads",
       "line": 5686,
       "slides": [
-        236,
-        237,
-        238
+        195,
+        196,
+        197
       ],
       "summary": [
         "**UART mask:** atomic buffer check + queue insertion",
@@ -5005,8 +4619,8 @@
       "title": "8.4 Foreground input ownership and terminal-generated signals",
       "line": 5813,
       "slides": [
-        239,
-        240
+        198,
+        199
       ],
       "summary": [
         "**set_foreground_process(0):** store negative caller PID",
@@ -5053,7 +4667,7 @@
       "title": "8.5 Virtual terminal and null-device paths",
       "line": 5874,
       "slides": [
-        241
+        200
       ],
       "summary": [
         "**Exact normalized paths:** select kernel behavior",
@@ -5089,7 +4703,7 @@
       "title": "8.6 File-descriptor creation, inheritance, duplication, and cleanup",
       "line": 5894,
       "slides": [
-        242
+        201
       ],
       "summary": [],
       "remark": null,
@@ -5121,10 +4735,10 @@
       "title": "8.8 Opening, reading, writing, and seeking",
       "line": 5931,
       "slides": [
-        243,
-        244,
-        245,
-        246
+        202,
+        203,
+        204,
+        205
       ],
       "summary": [
         [
@@ -5196,8 +4810,8 @@
       "title": "8.9 PicoOS paths, working directories, and host operations",
       "line": 6012,
       "slides": [
-        247,
-        248
+        206,
+        207
       ],
       "summary": [
         "**PicoOS chdir:** PCB only; host directory unchanged",
@@ -5251,7 +4865,7 @@
       "title": "9. Kernel data structures: relationships, storage, and lifetimes",
       "line": 6072,
       "slides": [
-        250
+        209
       ],
       "summary": [
         "**Containment:** embedded field",
@@ -5277,9 +4891,9 @@
       "title": "9.1 Memory layout, allocation sources, and lifetimes",
       "line": 6083,
       "slides": [
-        251,
-        252,
-        253
+        210,
+        211,
+        212
       ],
       "summary": [
         "**Kernel locals:** kernel stack or borrowed interrupt stack",
@@ -5304,8 +4918,8 @@
       "title": "9.2 Containment and reference relationships",
       "line": 6117,
       "slides": [
-        254,
-        255
+        213,
+        214
       ],
       "summary": [
         "**Kernel requests:** local frames; no heap allocation",
@@ -5347,7 +4961,7 @@
       "title": "9.3 Kernel global variables and process-list roots",
       "line": 6162,
       "slides": [
-        256
+        215
       ],
       "summary": [],
       "remark": null,
@@ -5364,7 +4978,7 @@
       "title": "9.4 Wait requests and queue storage",
       "line": 6189,
       "slides": [
-        257
+        216
       ],
       "summary": [
         "**Queue:** two PCB pointers; no waiter-node allocation",
@@ -5393,7 +5007,7 @@
       "title": "10. Userspace libraries",
       "line": 6211,
       "slides": [
-        259
+        218
       ],
       "summary": [
         "Local library code or **syscall wrapper**",
@@ -5434,8 +5048,8 @@
       "title": "10.1.1 Header, implementation, and linking",
       "line": 6232,
       "slides": [
-        260,
-        261
+        219,
+        220
       ],
       "summary": [
         "**Header:** signatures; compiler checks calls",
@@ -5485,8 +5099,8 @@
       "title": "10.1.2 Packing arguments and executing the syscall",
       "line": 6298,
       "slides": [
-        262,
-        263
+        221,
+        222
       ],
       "summary": [
         "**Request + result:** stack-local; no heap allocation",
@@ -5545,7 +5159,7 @@
       "title": "10.1.3.1 CPU execution and SRAM storage",
       "line": 6384,
       "slides": [
-        264
+        223
       ],
       "summary": [],
       "remark": null,
@@ -5578,7 +5192,7 @@
       "title": "10.1.3.2 Following entry and the two return paths",
       "line": 6432,
       "slides": [
-        265
+        224
       ],
       "summary": [],
       "remark": null,
@@ -5623,7 +5237,7 @@
       "title": "10.2 Library overview and dependencies",
       "line": 6529,
       "slides": [
-        266
+        225
       ],
       "summary": [
         "**Private syscall helpers:** avoid full unistd dependency",
@@ -5681,7 +5295,7 @@
       "title": "10.2.1.1 Process operations in `process.picoc`",
       "line": 6590,
       "slides": [
-        267
+        226
       ],
       "summary": [],
       "remark": null,
@@ -5702,7 +5316,7 @@
       "title": "10.2.1.2 Descriptor operations in `io.picoc`",
       "line": 6610,
       "slides": [
-        268
+        227
       ],
       "summary": [],
       "remark": null,
@@ -5719,7 +5333,7 @@
       "title": "10.2.1.3 Working-directory operations in `working_directory.picoc`",
       "line": 6625,
       "slides": [
-        269
+        228
       ],
       "summary": [],
       "remark": null,
@@ -5736,7 +5350,7 @@
       "title": "10.2.1.4 Path operations in `file_removal.picoc`",
       "line": 6636,
       "slides": [
-        270
+        229
       ],
       "summary": [],
       "remark": null,
@@ -5753,7 +5367,7 @@
       "title": "10.2.1.5 Wait-queue operations in `blocking.picoc`",
       "line": 6648,
       "slides": [
-        271
+        230
       ],
       "summary": [],
       "remark": null,
@@ -5770,7 +5384,7 @@
       "title": "10.2.2 fcntl: opening and creating files",
       "line": 6660,
       "slides": [
-        272
+        231
       ],
       "summary": [],
       "remark": null,
@@ -5787,7 +5401,7 @@
       "title": "10.2.3 sys/wait: waiting for children",
       "line": 6671,
       "slides": [
-        273
+        232
       ],
       "summary": [],
       "remark": null,
@@ -5804,7 +5418,7 @@
       "title": "10.2.4 mutex: locking and waking contenders",
       "line": 6682,
       "slides": [
-        274
+        233
       ],
       "summary": [
         "**Shared object:** lock + queue visible to participants",
@@ -5828,7 +5442,7 @@
       "title": "10.2.5 sys/mman: named shared memory",
       "line": 6698,
       "slides": [
-        275
+        234
       ],
       "summary": [],
       "remark": null,
@@ -5845,10 +5459,10 @@
       "title": "10.2.6 dirent: directory streams",
       "line": 6710,
       "slides": [
-        276,
-        277,
-        278,
-        279
+        235,
+        236,
+        237,
+        238
       ],
       "summary": [
         "**Listing:** fetched once; 512-cell owned buffer",
@@ -5891,7 +5505,7 @@
       "title": "10.2.7.1 Heap operations in `malloc.picoc`",
       "line": 6758,
       "slides": [
-        280
+        239
       ],
       "summary": [
         "**Positive allocation failure:** heap-full syscall",
@@ -5911,7 +5525,7 @@
       "title": "10.2.7.2 Decimal conversion in `atoi.picoc`",
       "line": 6774,
       "slides": [
-        281
+        240
       ],
       "summary": [],
       "remark": null,
@@ -5928,9 +5542,9 @@
       "title": "10.2.7.3 Environment operations in `env.picoc`",
       "line": 6784,
       "slides": [
-        282,
-        283,
-        284
+        241,
+        242,
+        243
       ],
       "summary": [
         "**envp:** argv + argc + 1",
@@ -5969,7 +5583,7 @@
       "title": "10.2.7.4 Process exit in `exit.picoc`",
       "line": 6849,
       "slides": [
-        285
+        244
       ],
       "summary": [],
       "remark": null,
@@ -5986,7 +5600,7 @@
       "title": "10.2.8 string: copying, comparison, and length",
       "line": 6861,
       "slides": [
-        286
+        245
       ],
       "summary": [
         "**Local memory only:** no syscall/allocation",
@@ -6006,7 +5620,7 @@
       "title": "10.2.9 stdio: streams, formatting, and scanning",
       "line": 6876,
       "slides": [
-        287
+        246
       ],
       "summary": [
         "**Per image:** standard streams + five extra slots",
@@ -6035,8 +5649,8 @@
       "title": "10.2.9.1 Streams and output in `stdio.picoc`",
       "line": 6899,
       "slides": [
-        288,
-        289
+        247,
+        248
       ],
       "summary": [
         "**First use:** descriptor availability queried once",
@@ -6066,7 +5680,7 @@
       "title": "10.2.9.2 Scanning in `scanf.picoc`",
       "line": 6925,
       "slides": [
-        290
+        249
       ],
       "summary": [
         "**Formats:** %d · %c · %s",
@@ -6087,7 +5701,7 @@
       "title": "10.2.10 start: entering and leaving a user program",
       "line": 6941,
       "slides": [
-        291
+        250
       ],
       "summary": [],
       "remark": null,
@@ -6104,7 +5718,7 @@
       "title": "10.2.11 Single-function libraries",
       "line": 6953,
       "slides": [
-        292
+        251
       ],
       "summary": [
         "**Reboot:** EPROM → reload kernel + init",
@@ -6132,8 +5746,8 @@
       "title": "11. Complete startup: bootloader, kernel, init, shell, and user applications",
       "line": 6976,
       "slides": [
-        294,
-        295
+        253,
+        254
       ],
       "summary": [],
       "remark": null,
@@ -6170,11 +5784,11 @@
       "title": "11.1 Loading the kernel from the EPROM bootloader",
       "line": 7015,
       "slides": [
-        296,
-        297,
-        298,
-        299,
-        300
+        255,
+        256,
+        257,
+        258,
+        259
       ],
       "summary": [],
       "remark": null,
@@ -6223,8 +5837,8 @@
       "title": "11.2 Kernel startup",
       "line": 7161,
       "slides": [
-        301,
-        302
+        260,
+        261
       ],
       "summary": [
         "**Globals:** kernel .data",
@@ -6257,7 +5871,7 @@
       "title": "11.2.1 Loading init and entering normal execution",
       "line": 7227,
       "slides": [
-        303
+        262
       ],
       "summary": [
         "**Init:** PID 1; directory /; no parent",
@@ -6299,7 +5913,7 @@
       "title": "11.3 Init process",
       "line": 7280,
       "slides": [
-        304
+        263
       ],
       "summary": [],
       "remark": null,
@@ -6316,7 +5930,7 @@
       "title": "11.3.1 Init responsibilities",
       "line": 7288,
       "slides": [
-        305
+        264
       ],
       "summary": [
         "**Kernel:** execution + resources",
@@ -6347,7 +5961,7 @@
       "title": "11.3.2 Initial environment configuration",
       "line": 7304,
       "slides": [
-        306
+        265
       ],
       "summary": [
         "**257-cell buffer:** reject file ≥256 cells",
@@ -6373,8 +5987,8 @@
       "title": "11.3.3 Loading, starting, and waiting for the shell",
       "line": 7322,
       "slides": [
-        307,
-        308
+        266,
+        267
       ],
       "summary": [
         "**Environment:** config parsed before shell loop",
@@ -6403,7 +6017,7 @@
       "title": "11.3.4 Shell startup",
       "line": 7385,
       "slides": [
-        309
+        268
       ],
       "summary": [
         "**Own heap + environment:** libstart before main",
@@ -6428,7 +6042,7 @@
       "title": "11.3.5 Loading user applications",
       "line": 7397,
       "slides": [
-        310
+        269
       ],
       "summary": [
         "**External command:** fresh payload; load + run",
@@ -6453,7 +6067,7 @@
       "title": "11.3.6 Shell exit and restart policy",
       "line": 7410,
       "slides": [
-        311
+        270
       ],
       "summary": [
         "**exit** → end session; init restarts shell",
@@ -6479,7 +6093,7 @@
       "title": "11.3.7 When init terminates",
       "line": 7421,
       "slides": [
-        312
+        271
       ],
       "summary": [
         "**PID 1** has no signal protection",
@@ -6533,8 +6147,8 @@
       "title": "12.1 Shell-owned state",
       "line": 7453,
       "slides": [
-        314,
-        315
+        273,
+        274
       ],
       "summary": [
         "**.data:** history, read-ahead, pipeline scratch",
@@ -6572,9 +6186,9 @@
       "title": "12.2 Shell startup and command loop",
       "line": 7504,
       "slides": [
-        316,
-        317,
-        318
+        275,
+        276,
+        277
       ],
       "summary": [
         "**Startup:** close 3–7; keep inherited standard streams",
@@ -6613,9 +6227,9 @@
       "title": "12.3 Interactive line editing and command history",
       "line": 7564,
       "slides": [
-        319,
-        320,
-        321
+        278,
+        279,
+        280
       ],
       "summary": [
         "**Command buffer:** 79 characters + terminator",
@@ -6649,8 +6263,8 @@
       "title": "12.4 Command parsing, expansion, and execution",
       "line": 7641,
       "slides": [
-        322,
-        323
+        281,
+        282
       ],
       "summary": [
         "**One unquoted pipe:** balanced quotes required",
@@ -6704,7 +6318,7 @@
       "title": "12.5 Shell built-in commands",
       "line": 7681,
       "slides": [
-        324
+        283
       ],
       "summary": [
         "**9 built-ins:** mutate shell’s own state",
@@ -6730,9 +6344,9 @@
       "title": "12.5.1 Foreground processes, background processes, and job-control signals",
       "line": 7704,
       "slides": [
-        325,
-        326,
-        327
+        284,
+        285,
+        286
       ],
       "summary": [
         [
@@ -6804,15 +6418,15 @@
       "title": "12.6 Input/output redirection",
       "line": 7859,
       "slides": [
-        328,
-        329,
-        330,
-        331,
-        332,
-        333,
-        334,
-        335,
-        336
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295
       ],
       "summary": [
         [
@@ -6939,10 +6553,10 @@
       "title": "12.7 Sequential file-backed pipelines",
       "line": 8124,
       "slides": [
-        337,
-        338,
-        339,
-        340
+        296,
+        297,
+        298,
+        299
       ],
       "summary": [
         "**One pipeline:** finite foreground commands",
@@ -7027,8 +6641,8 @@
       "title": "13.1 Writing a simple user application",
       "line": 8244,
       "slides": [
-        342,
-        343
+        301,
+        302
       ],
       "summary": [
         "**argc check:** two operands; failure status 1",
@@ -7071,8 +6685,8 @@
       "title": "13.2 Applications, library calls, and host requests",
       "line": 8303,
       "slides": [
-        344,
-        345
+        303,
+        304
       ],
       "summary": [
         "**Command loading:** parent shell’s operation",
@@ -7106,8 +6720,8 @@
       "title": "13.2.1 Command behavior and supported options",
       "line": 8347,
       "slides": [
-        346,
-        347
+        305,
+        306
       ],
       "summary": [
         "**Killed counter:** probe fails; ps still shows zombie",
@@ -7141,7 +6755,7 @@
       "title": "13.2.2 Command errors and exit statuses",
       "line": 8441,
       "slides": [
-        348
+        307
       ],
       "summary": [
         "Results → **stdout**; diagnostics → stderr",
@@ -7183,7 +6797,7 @@
       "title": "14.1 Library, OS, shell, and boot test categories",
       "line": 8460,
       "slides": [
-        350
+        309
       ],
       "summary": [
         "**63 classes:** 13 library; 23 OS; 26 shell; 1 boot",
@@ -7213,8 +6827,8 @@
       "title": "14.1.1 Files that make up a test",
       "line": 8477,
       "slides": [
-        351,
-        352
+        310,
+        311
       ],
       "summary": [
         "**Fixtures:** stage under binary/test",
@@ -7243,8 +6857,8 @@
       "title": "14.1.2 Library test example",
       "line": 8507,
       "slides": [
-        353,
-        354
+        312,
+        313
       ],
       "summary": [
         "**Library test:** linked ISR support; no PicoOS kernel",
@@ -7278,8 +6892,8 @@
       "title": "14.1.3 OS test example",
       "line": 8540,
       "slides": [
-        355,
-        356
+        314,
+        315
       ],
       "summary": [
         "**OS category:** launcher + exact three-line input",
@@ -7319,7 +6933,7 @@
       "title": "14.1.4 Shell test example",
       "line": 8601,
       "slides": [
-        357
+        316
       ],
       "summary": [
         "**Encoded keys:** arrows, Home, Escape, Backspace, controls",
@@ -7352,7 +6966,7 @@
       "title": "14.1.5 Boot test example",
       "line": 8634,
       "slides": [
-        358
+        317
       ],
       "summary": [
         "**One boot fixture:** no private PicoC program",
@@ -7384,7 +6998,7 @@
       "title": "14.2 Test execution",
       "line": 8662,
       "slides": [
-        359
+        318
       ],
       "summary": [
         "**Per class:** fresh emulator + temporary peripherals",
@@ -7414,7 +7028,7 @@
       "title": "14.2.1 Make targets",
       "line": 8685,
       "slides": [
-        360
+        319
       ],
       "summary": [
         "**run-os:** inspect OS_RUN_PATH; no expected-output comparison",
@@ -7438,7 +7052,7 @@
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "line": 8704,
       "slides": [
-        362
+        321
       ],
       "summary": [
         "Inspect source + **live execution**",
@@ -7459,7 +7073,7 @@
       "title": "15.1 Operating-systems topics",
       "line": 8711,
       "slides": [
-        363
+        322
       ],
       "summary": [
         "**Compare:** PicoC → symbolic ReTI → binary → live state",
@@ -7483,7 +7097,7 @@
       "title": "15.1.1 Inspecting PicoOS execution in the ReTI-Emulator",
       "line": 8729,
       "slides": [
-        364
+        323
       ],
       "summary": [],
       "remark": null,
@@ -7520,8 +7134,8 @@
       "title": "15.1.2 Exploring userspace heap allocation",
       "line": 8782,
       "slides": [
-        365,
-        366
+        324,
+        325
       ],
       "summary": [
         "**Predict:** storage, aliases, required free address",
@@ -7554,9 +7168,9 @@
       "title": "15.1.3 Editing and executing symbolic ReTI assembly",
       "line": 8837,
       "slides": [
-        367,
-        368,
-        369
+        326,
+        327,
+        328
       ],
       "summary": [
         "**Labels + pseudoinstructions:** compiler resolves/expands",
@@ -7602,7 +7216,7 @@
       "title": "15.2 Real-time operating-systems topics",
       "line": 8947,
       "slides": [
-        370
+        329
       ],
       "summary": [
         "**Inspect:** scheduling, waiting, synchronization",
@@ -7622,7 +7236,7 @@
       "title": "15.2.1 Parent, workers, and shared memory",
       "line": 8961,
       "slides": [
-        371
+        330
       ],
       "summary": [
         "**Three processes:** parent + two identical workers",
@@ -7660,10 +7274,10 @@
       "title": "15.2.2 Minimal launcher and worker code",
       "line": 9007,
       "slides": [
-        372,
-        373,
-        374,
-        375
+        331,
+        332,
+        333,
+        334
       ],
       "summary": [
         "**Initialize mutex:** before starting either child",
@@ -7705,7 +7319,7 @@
       "title": "15.2.3 Following the counter and mutex through execution",
       "line": 9136,
       "slides": [
-        376
+        335
       ],
       "summary": [
         [
@@ -7755,7 +7369,7 @@
       "title": "16. Use of AI in the project",
       "line": 9193,
       "slides": [
-        378
+        337
       ],
       "summary": [
         [
@@ -7818,7 +7432,7 @@
       "title": "17. Limitations",
       "line": 9262,
       "slides": [
-        380
+        339
       ],
       "summary": [],
       "remark": [
@@ -7841,7 +7455,7 @@
       "title": "Appendix: Inspecting `.bin` files with `hexyl`",
       "line": 9298,
       "slides": [
-        381
+        340
       ],
       "summary": [
         "**Header:** 20 bytes; words big-endian",

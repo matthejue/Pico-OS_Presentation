@@ -157,15 +157,16 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 381 slides. The short deck follows the saved exclusions. Slides load on demand to
+content slides are excluded. The full deck contains 355 slides. The short deck follows the saved exclusions. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
 
 The source inventory tracks 387 substantive README artifacts: 123 code
 examples, 138 tables, 92 images (91 SVGs and one PNG), one terminal recording,
-31 lists, and two equations. The 38 former Mermaid diagrams now use their current source SVGs. All code, diagrams, images, recordings, and substantive list
-items are represented. Tables retain the reviewed library-facing operations;
+31 lists, and two equations. The 38 former Mermaid diagrams now use their current source SVGs. All code, diagrams, images, recordings, and retained list
+items are represented. Sixteen source lists in section 2 are intentionally omitted.
+Tables retain the reviewed library-facing operations;
 ten internal-only function catalogs are omitted. Retained tables keep all source
 columns, including callers, dependencies, types, and syscall relationships.
 The two README navigation
@@ -184,9 +185,30 @@ slides include the setup, wiring, and README price estimates.
 In section 1, the first **Shared function epilogue and return values** slide
 retains its bullets; the later slides use code, tables, diagrams, and the
 recording without redundant bullet summaries. Eight former summary-only slides
-are omitted. Instruction expansions inside tables use plain lines, and
+are omitted. Bullet lists inside tables retain their formatting, and
 standards and analogy remarks use compact plain-text notes. This selection is
 preserved by [`config/readme-content-selection.mjs`](config/readme-content-selection.mjs).
+
+The complete section 2 also omits bullet summaries and source lists. Seventeen
+slides containing only those lists are removed, and the two interrupt-entry
+slides are merged into one. Code fills the freed columns;
+empty rows are collapsed. Table fields and their bullet lists remain complete, and
+Linux, POSIX, and System V comparisons remain in compact notes. The POSIX note
+from the removed syscall introduction accompanies its first surviving example.
+
+Sections 3 and 4 also omit bullet summaries and standalone lists, with two retained
+section 4 exceptions: **Loading a process (`load` library call)** and the first
+**Starting a process (`run` library call)** slide. Nine summary-only slides are
+removed. The remaining visuals fill the available space; contextual standards
+and analogy notes use plain text. The two exception slides keep their content.
+
+Sections 5, 6, and 7 follow the same rule: remove lists and summaries outside
+tables, preserve every table bullet, and expand surviving visuals into the
+available space. Fifteen slides containing only those bullets are intentionally
+removed across these three sections. The Unix signal comparison remains as a
+plain note beside the signal function table. Rebuild protection requires each
+intentional slide removal to be named by UUID; all surviving slide identities
+and short-version choices are preserved.
 
 Crowded examples use the full slide area. Their prose moves to a roomier next
 slide or a separate explanation slide in the same subsection. Useful bullets
@@ -256,6 +278,19 @@ README artifacts with reviewed bullet summaries and contextual notes in
 `config/readme-*.json`. `config/readme-tables.mjs` and the table-cell and
 column-width configurations describe the reviewed tables;
 `config/title-slide.md` preserves the title page.
+Before replacing any output, the rebuild checks every existing slide's stable
+UUID. Missing slides stop the rebuild and are listed by title and UUID, even
+when additions leave the total slide count unchanged. Short-version choices
+follow the same UUID; they never spread to other slides sharing a section or
+asset. New slides are included in both versions by default. Run
+`yarn test:rebuild` to verify these safeguards.
+
+If a removal is intentional, review the listed slide and explicitly name its
+UUID: `yarn rebuild:readme --remove-slide=<UUID>`. Repeat the argument for each
+intentional removal. There is no general bypass; stale or unknown UUIDs fail.
+If matching fails after a rename or layout change, correct the matching or
+retain the existing UUID rather than authorizing a content deletion.
+
 The rebuild also generates `config/section-overviews.json` for
 [`SectionOverview`](components/SectionOverview.vue),
 [`PresentationContents`](components/PresentationContents.vue), and the

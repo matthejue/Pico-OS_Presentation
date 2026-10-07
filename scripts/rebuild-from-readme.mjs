@@ -8,11 +8,13 @@ import {readmeSource, md, hash, plain, displayHtml, presentationText} from './re
 import {prepareTable} from '../config/readme-tables.mjs'
 import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 import {placeSummaries} from '../config/readme-readability.mjs'
-import {visualOnlySection, keepSummary, plainTableLines} from '../config/readme-content-selection.mjs'
+import {visualOnlySection, keepSummary, omitSourceLists, sourceListOmission, removeSourceListPanels, contextualNoteTargets} from '../config/readme-content-selection.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
+import {protectRebuild, rebuildRemovalIds} from './rebuild-protection.mjs'
 import {createSlideNotesStore} from './slide-notes.mjs'
 import {applySvgEdits} from '../config/readme-svg-edits.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '../Pico-OS/README.md'
+const allowedRemovalIds=rebuildRemovalIds(process.argv.slice(2))
 const source=await fs.readFile(sourcePath,'utf8')
 const {sections,assets}=readmeSource(source)
 const lists=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))
@@ -34,21 +36,16 @@ const codeLineWidth=lines=>Math.max(...lines.map(line=>line.length*8.6+40))
 const codeNeed=lines=>Math.max(240,Math.min(560,codeLineWidth(lines)))
 const cover=await fs.readFile('config/title-slide.md','utf8')
 const previous=await fs.readFile('slides.md','utf8')
-const oldInventory=JSON.parse(await fs.readFile('docs/readme-coverage.json','utf8'))
-const oldAssets=new Map(oldInventory.assets.map(a=>[a.id,a]))
-const excludedHashes=new Set(),excludedAnchors=new Set(),excludedOverviews=new Set()
-for(const block of previous.split(/(?=<!-- SOURCE Pico-OS\/README.md#)/)) {
- if(!block.includes('<!-- SHORT_VERSION_DISABLED -->'))continue
- const anchor=block.match(/<!-- SOURCE Pico-OS\/README.md#([^ ]+) -->/)?.[1]
- if(block.includes('<SectionOverview ')) {excludedOverviews.add(anchor);continue}
- const ids=[...block.matchAll(/<!-- README_ASSET (\S+)/g)].map(m=>m[1])
- if(ids.length) {
-  for(const id of ids)if(oldAssets.has(id))excludedHashes.add(oldAssets.get(id).sourceSha256)
- } else excludedAnchors.add(anchor)
-}
 const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by dynamic presentation contents and section overviews'}:{})}]))
+for(const section of sections.filter(omitSourceLists))for(const asset of section.assets.filter(a=>a.type==='list'))
+ inventory.get(asset.id).excluded=sourceListOmission
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 const prose=s=>displayHtml(md.renderInline(s))
+const contextRemarks=(section,fact)=>{
+ const notes=typeof fact[0]==='string'?[fact]:fact
+ const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
+ return notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks
+}
 const bulletList=(items,cls='',requestedSubBullet=false)=>{
  const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1),'',requestedSubBullet)}`:prose(item))
  if(!content.length)return ''
@@ -58,7 +55,7 @@ const bulletList=(items,cls='',requestedSubBullet=false)=>{
 }
 const marker=a=>`<!-- README_ASSET ${a.id}${a.borrowed?' repeated':''} -->`
 const visual=(kind,inner,width=980,classes='',attributes='')=>`<ReadmeVisual kind="${kind}" :width="${width}"${classes?` class="${classes}"`:''}${attributes?` ${attributes}`:''}>\n\n${inner}\n\n</ReadmeVisual>`
-await fs.mkdir('public/readme',{recursive:true})
+const imageOutputs=new Map()
 for(const a of assets.filter(a=>a.type==='image')) {
  const bytes=await fs.readFile(path.resolve(process.env.README_REPOSITORY || path.dirname(sourcePath),a.path)), name=path.basename(a.path)
  a.outputPath=`/readme/${name}`
@@ -66,8 +63,8 @@ for(const a of assets.filter(a=>a.type==='image')) {
   const svg=applySvgEdits(name,presentationText(bytes.toString('utf8')))
   const box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
   a.aspect=box[2]/box[3]
-  await fs.writeFile(`public/readme/${name}`,svg)
- } else {a.aspect=1.5;await fs.writeFile(`public/readme/${name}`,bytes)}
+  imageOutputs.set(`public/readme/${name}`,svg)
+ } else {a.aspect=1.5;imageOutputs.set(`public/readme/${name}`,bytes)}
  Object.assign(inventory.get(a.id),{copiedFile:`public/readme/${name}`,originalFileSha256:hash(bytes)})
 }
 const grids=new Set(['table-6536','table-8316','table-7687'])
@@ -154,7 +151,8 @@ function renderTable(a) {
   return row+(frame&&r.sourceRow===12?'\n<tr class="stack-callee stack-temporaries"><td class="table-key"><code>BAF - 2, …</code></td><td>Temporaries</td><td>Callee</td></tr>':'')
  }
  const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(rowHtml).join('\n')}</tbody></table></div>`).join('\n')
- const textScale=['table-227','table-251'].includes(a.id)?' :text-scale="0.85"':''
+ const reviewedScale=columnConfig.tableTextScales?.[a.id] ?? (['table-227','table-251','table-3232'].includes(a.id)?0.85:undefined)
+ const textScale=reviewedScale===undefined?'':` :text-scale="${reviewedScale}"`
  return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}"${chunks.length===2?' '+columnAttributes('table:'+tableKey):''} v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"${textScale}`)
 }
 function renderCode(a) {
@@ -173,7 +171,8 @@ function renderCode(a) {
   // source ranges still identify and reconstruct the unmodified README code.
   const displayed=lines.map(line=>a.terminal&&a.language!=='console'&&line.trim()?`PicoOS> ${line}`:line)
   const inner=`${partMarker}\n<div class="readme-code${a.terminal?' readme-terminal':''}">\n<div class="readme-code-header" v-pre><span>${esc(label)}</span><span class="code-range">${a.split?`lines ${start}–${offset}`:''}</span></div>\n\n\`\`\`${language} {lines:false}\n${displayed.join('\n')}\n\`\`\`\n\n</div>`
-  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"`)
+  const textScale=columnConfig.codeTextScales?.[a.id]
+  return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${textScale?' :text-scale="'+textScale+'"':''}`)
  })
  return a.split?`<div class="code-columns" ${columnAttributes('code:'+a.id,`--source-aspect:${(budget+24)/(parts[0].length*21+34)}`)}>\n\n${boxes.join('\n\n')}\n\n</div>`:boxes[0]
 }
@@ -198,7 +197,7 @@ const repeated={
  '1135-loading-user-applications':'1152-picoos-libstart-startup-sequence'
 }
 for(const s of sections)if(s.instructions.some(x=>/waitpid code/.test(x)))repeated[s.anchor]='1012-packing-arguments-and-executing-the-syscall'
-const introOnly=new Set(['122-atomic-test-and-set-with-tsl','22-interrupt-controller-mappings-and-priorities','3633-free-d-and-merge-its-remainder','3634-free-c-and-merge-repeatedly-at-b','421-loading-a-process-load-library-call','611-algorithm-and-round-robin-comparison','712-child-waiting-with-waitpid','1013-interrupt-entry-waiting-and-return','1-toolchain-extensions-for-picoos','115-selecting-a-startup-function-with--c----startup-source','2-interrupts-system-calls-preemption-and-exceptions','25-timer-interrupts-and-userspace-preemption','28-cpu-exceptions-and-runtime-errors','3-memory-management-and-shared-memory','33-kernel-heap','34-process-and-shared-data-heap','35-user-process-heap','36-heap-and-allocator-function-reference','4-processes-and-process-lifecycle','4221-initial-user-process-stack','42-loading-and-starting-a-process','5-shared-memory-entries-and-mappings','61-scheduler-implementation','7-blocking-wait-queues-signals-and-mutexes','72-process-signals','8-terminal-file-descriptors-and-host-filesystem','101-from-a-library-call-to-the-kernel-waitpid','1021-unistd-processes-descriptors-paths-and-wait-queues','1027-stdlib-process-heap-environment-conversion-and-exit','12-shell','13-user-applications-and-commands','14-test-system'])
+const introOnly=new Set(['122-atomic-test-and-set-with-tsl','22-interrupt-controller-mappings-and-priorities','3633-free-d-and-merge-its-remainder','3634-free-c-and-merge-repeatedly-at-b','611-algorithm-and-round-robin-comparison','712-child-waiting-with-waitpid','1013-interrupt-entry-waiting-and-return','1-toolchain-extensions-for-picoos','115-selecting-a-startup-function-with--c----startup-source','2-interrupts-system-calls-preemption-and-exceptions','25-timer-interrupts-and-userspace-preemption','28-cpu-exceptions-and-runtime-errors','3-memory-management-and-shared-memory','33-kernel-heap','34-process-and-shared-data-heap','35-user-process-heap','36-heap-and-allocator-function-reference','4-processes-and-process-lifecycle','4221-initial-user-process-stack','42-loading-and-starting-a-process','5-shared-memory-entries-and-mappings','61-scheduler-implementation','7-blocking-wait-queues-signals-and-mutexes','72-process-signals','8-terminal-file-descriptors-and-host-filesystem','101-from-a-library-call-to-the-kernel-waitpid','1021-unistd-processes-descriptors-paths-and-wait-queues','1027-stdlib-process-heap-environment-conversion-and-exit','12-shell','13-user-applications-and-commands','14-test-system'])
 const diagram=a=>['mermaid','image'].includes(a.type)
 const shortCode=a=>a.type==='code'&&!a.split&&a.codeLines<=21
 function compose(parts) {
@@ -242,6 +241,7 @@ for(const section of sections) {
  const summaryParts=section.anchor==='picoos'||section.anchor==='intended-physical-hardware'||section.anchor==='111-compilation-pipeline-and-compiler-passes'
   ? [] : groups.length ? balanced(summary,Math.max(2,Math.ceil(summary.length/groups.length))) : []
  groups=placeSummaries(groups,summaryParts,section)
+ if(omitSourceLists(section))groups=groups.map(removeSourceListPanels)
  if(visualOnlySection(section)) {
   groups=groups.filter((panel,i)=>panel.group.length||keepSummary(section,i))
     .map((panel,i)=>({...panel,summary:keepSummary(section,i)?panel.summary:[]}))
@@ -277,14 +277,17 @@ for(const section of sections) {
    else content+=`\n${notes}`
   }
   const fact=number===0?facts[section.anchor]:null
-  if(fact) {
-   const notes=typeof fact[0]==='string'?[fact]:fact
-   const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
-   content+=`\n${notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks}`
-  }
-  if(visualOnlySection(section))content=content.replace(/<div class="readme-table">[\s\S]*?<\/table><\/div>/g,plainTableLines)
+  if(fact)content+=`\n${contextRemarks(section,fact)}`
   pages.push({section,group,layout,content,summary:pageSummary,number:groups.length>1?number+1:null})
  })
+}
+// A removed introduction can still carry a required standards comparison.
+// Place that compact note with its first surviving descendant example.
+for(const section of sections.filter(s=>visualOnlySection(s)&&facts[s.anchor]&&!pages.some(p=>p.section===s))) {
+ const target=pages.find(p=>p.section.anchor===contextualNoteTargets[section.anchor])
+  || pages.find(p=>p.section.parents.includes(section.title))
+ if(!target)throw Error('No source visual for required contextual note: '+section.anchor)
+ target.content+=`\n${contextRemarks(section,facts[section.anchor])}`
 }
 // Overview entries retain every README heading, including headings whose
 // content is presented by descendants rather than a separate introduction.
@@ -320,8 +323,7 @@ for(const p of pages) {
 }
 const body=deckPages.map((p,i)=>{
  const page=i+3,s=p.section
- if(p.overview) return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${excludedOverviews.has(s.anchor)?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n<div class="eyebrow section-eyebrow">Section ${sectionNumber(s).padStart(2,'0')} · Overview</div>\n\n# ${sectionTitle(s)}\n\n<SectionOverview section="${s.anchor}" />`
- const disabled=excludedAnchors.has(s.anchor)||p.group.some(a=>excludedHashes.has(a.sha256))
+ if(p.overview) return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->\n\n<div class="eyebrow section-eyebrow">Section ${sectionNumber(s).padStart(2,'0')} · Overview</div>\n\n# ${sectionTitle(s)}\n\n<SectionOverview section="${s.anchor}" />`
  for(const a of p.group)inventory.get(a.id).slides.push({page,layout:p.layout,...(a.type==='table'?{rows:a.compactRows.map(r=>r.sourceRow)}:{}),...(a.type==='list'?{items:a.itemIndices}:{}),...(a.type==='code'?{codeParts:a.split?2:1}:{}),...(a.borrowed?{repeated:true}:{})})
  const major=majorSections.find(major=>major===s||s.parents[0]===major.title)
  const displayTitle=title=>major===introduction && title===introduction.title?'Introduction':title
@@ -331,11 +333,16 @@ const body=deckPages.map((p,i)=>{
  // keeps its explicit display mapping and consecutive title numbering.
  const main=ancestors.length?ancestors.join(' · '):''
  const subtitle=`## ${displayTitle(s.title)}${p.number?` (${p.number})`:''}`
- return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
+ return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
 const rebuilt=presentationText(cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
-await fs.writeFile('slides.md',ensureSlideIdentities(rebuilt,presentationText(previous)))
+const protectedDeck=protectRebuild(previous,ensureSlideIdentities(rebuilt,presentationText(previous)),allowedRemovalIds)
+// Generate and validate the whole candidate before replacing any output.
+if(await fs.readFile('slides.md','utf8')!==previous)throw Error('Slide source changed during the rebuild; no output was replaced. Re-run using the latest slides.md.')
+await fs.mkdir('public/readme',{recursive:true})
+for(const [filename,content] of imageOutputs)await fs.writeFile(filename,content)
+await fs.writeFile('slides.md',protectedDeck)
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('notes')}).syncMetadata()
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('Corrections'),corrections:true}).syncMetadata()
 await fs.writeFile('config/section-overviews.json',presentationText(JSON.stringify(sectionOverviews,null,2))+'\n')

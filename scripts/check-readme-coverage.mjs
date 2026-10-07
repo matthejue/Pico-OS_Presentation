@@ -5,7 +5,7 @@ import {readmeSource,md,hash,displayHtml,plain,presentationText} from './readme-
 import {prepareTable} from '../config/readme-tables.mjs'
 import {loadSourceState} from './source-state.mjs'
 import {applySvgEdits} from '../config/readme-svg-edits.mjs'
-import {visualOnlySection, plainTableLines} from '../config/readme-content-selection.mjs'
+import {visualOnlySection, keepSummary, omitSourceLists, sourceListOmission} from '../config/readme-content-selection.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || (await loadSourceState()).snapshotPath
 const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
 // Persistent identity is invisible metadata, independent of source coverage.
@@ -20,6 +20,12 @@ for(const a of assets) {
  const entry=inventory.assets.find(e=>e.id===a.id)
  assert.ok(entry,`${a.id}: inventoried`);assert.equal(entry.sourceSha256,a.sha256)
  if(a.navigationOnly){assert.ok(entry.excluded);continue}
+ if(a.type==='list'&&omitSourceLists(sectionFor(a.anchor))) {
+  assert.equal(entry.excluded,sourceListOmission,`${a.id}: intentional section 2 omission recorded`)
+  assert.equal(entry.slides.length,0,`${a.id}: no remaining list placement`)
+  assert.ok(!deck.includes(`<!-- README_ASSET ${a.id} -->`),`${a.id}: source list removed`)
+  continue
+ }
  if(a.type==='table') {
   const table=prepareTable(a)
   assert.equal(table.columns,a.columns,`${a.id}: all source table columns retained`)
@@ -27,7 +33,7 @@ for(const a of assets) {
   assert.equal(table.unresolved.length,0,`${a.id}: every verbose cell reviewed`)
   assert.deepEqual(entry.retainedRows,table.retainedRows,`${a.id}: library-facing row selection`)
   assert.deepEqual(entry.slides.filter(p=>!p.repeated).flatMap(p=>p.rows),table.retainedRows,`${a.id}: retained rows complete and ordered`)
-  for(const row of table.compactRows)for(const cell of row.values)assert.ok(deck.includes(visualOnlySection(sectionFor(a.anchor))?plainTableLines(cell.html):cell.html),`${a.id}: summarized cell present`)
+  for(const row of table.compactRows)for(const cell of row.values)assert.ok(deck.includes(cell.html),`${a.id}: summarized cell and table bullets present`)
  }
  assert.ok(entry.slides.length,`${a.id}: placed`)
  assert.ok(deck.includes(`<!-- README_ASSET ${a.id}`),`${a.id}: artifact marker`)
@@ -72,10 +78,13 @@ for(const [anchor,items] of Object.entries(prose))for(const item of (visualOnlyS
 for(const [anchor,fact] of Object.entries(facts))for(const item of remarks(fact).flatMap(note=>note[1]))
  assert.ok(deck.includes(displayHtml(md.renderInline(item))),`${anchor}: contextual/standards remark present`)
 assert.equal((deck.slice(cover.length).match(/<(?:p|div class="readme-explanation")\b/g)||[]).length,0,'No continuous slide prose')
+const sectionSlideIndices=new Map()
 for(const slide of rawDeck.split(/^---\s*$/m).slice(2)) {
  const anchor=slide.match(/<!-- SOURCE Pico-OS\/README.md#([^ ]+) -->/)?.[1]
  if(!anchor||!visualOnlySection(sectionFor(anchor))||slide.includes('<SectionOverview '))continue
- const firstEpilogue=anchor==='1132-shared-function-epilogue-and-return-values'&&slide.includes('return values (1)')
- if(!firstEpilogue)assert.ok(!/<(?:ul|ol)\b|class="readme-list/.test(slide),`${anchor}: no redundant bullet lists`)
+ const index=sectionSlideIndices.get(anchor)||0
+ sectionSlideIndices.set(anchor,index+1)
+ const outsideTables=slide.replace(/<table\b[\s\S]*?<\/table>/g,'')
+ if(!keepSummary(sectionFor(anchor),index))assert.ok(!/<(?:ul|ol)\b|class="readme-list/.test(outsideTables),`${anchor}: no redundant bullet lists outside tables`)
 }
-console.log(`Verified ${assets.filter(a=>!a.navigationOnly).length} source artifacts: full code/diagrams/images, all list items, reviewed table filtering/summaries, and brief slide text.`)
+console.log(`Verified ${assets.filter(a=>!a.navigationOnly).length} inventoried source artifacts: full code/diagrams/images, requested list omissions, reviewed tables, and brief slide text.`)
