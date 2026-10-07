@@ -4,6 +4,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
 import { inspectSlides, parseSlideNumbers } from './short-version.mjs'
 import { loadSourceState } from './source-state.mjs'
+import { presentationText } from './readme-source.mjs'
 
 // Test a real Slidev dev server or the built browser deck. This never exports
 // slides or executes PicoOS programs.
@@ -28,7 +29,7 @@ function headings(text) {
   for (const line of text.split('\n')) {
     if (line.startsWith('```')) fenced = !fenced
     const match = !fenced && /^(#{1,6}) (.+)$/.exec(line)
-    if (match) result.push({ level: match[1].length, title: match[2].replace(/<\/?MajorSectionLink\b[^>]*>/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') })
+    if (match) result.push({ level: match[1].length, title: presentationText(match[2].replace(/<\/?MajorSectionLink\b[^>]*>/g, '').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')) })
   }
   return result
 }

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
-import { copyFile, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, mkdtemp, readFile, readdir, rename, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { createSlideNotesStore, MAX_NOTE_BYTES } from './slide-notes.mjs'
+import { createSlideNotesStore, MAX_CORRECTION_IMAGE_BYTES, MAX_NOTE_BYTES } from './slide-notes.mjs'
 
 const firstId = 'ba1c5141-e8c1-4c85-bbde-fb4d6f038bec'
 const secondId = '34f22a0b-eb90-47e0-a64c-33b97ec16ae8'
@@ -14,12 +14,12 @@ const status = expected => error => {
   return true
 }
 
-async function withFixture(test) {
+async function withFixture(test, corrections = false) {
   const directory = await mkdtemp(join(tmpdir(), 'picoos-slide-notes-'))
   const slidesPath = join(directory, 'slides.md')
-  const notesDirectory = join(directory, 'notes')
+  const notesDirectory = join(directory, corrections ? 'Corrections' : 'notes')
   await writeFile(slidesPath, deck(slide(firstId, 'Alpha'), slide(secondId, 'Beta')))
-  const store = createSlideNotesStore({ slidesPath, notesDirectory })
+  const store = createSlideNotesStore({ slidesPath, notesDirectory, corrections })
   try {
     await test({ directory, slidesPath, notesDirectory, store })
   }
@@ -182,4 +182,182 @@ await withFixture(async ({ slidesPath, notesDirectory, store }) => {
   assert.equal((await store.read(firstId)).content, original.content, 'Reintroducing the identity reconnects the note')
 })
 
-console.log('Slide-note persistence, stable identity, metadata refresh, concurrency, corruption, validation, and orphan recovery passed.')
+const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aN1cAAAAASUVORK5CYII=', 'base64')
+await withFixture(async ({ notesDirectory, store }) => {
+  assert.equal((await store.read(firstId)).filename, null)
+  await store.syncMetadata()
+  for (const content of ['', '   \n\t\n']) {
+    const empty = await store.save(firstId, { content, revision: null })
+    assert.equal(empty.filename, null, 'Blank corrections do not create a Markdown file')
+    assert.equal(empty.revision, null)
+    assert.equal(empty.content, '')
+  }
+  const image = await store.saveImage(firstId, png)
+  const imageOnly = await store.read(firstId)
+  assert.equal(imageOnly.filename, null, 'Saving only a screenshot does not create Markdown')
+  assert.equal(imageOnly.revision, null)
+  await store.syncMetadata()
+  assert.ok(!(await readdir(notesDirectory)).some(filename => filename.endsWith('.md')))
+  await store.deleteImage(firstId, image.imageId)
+  const saved = await store.save(firstId, { content: '- Written correction\n', revision: null })
+  assert.ok(saved.filename)
+  const cleared = await store.save(firstId, { content: '', revision: saved.revision })
+  assert.equal(cleared.filename, saved.filename, 'Clearing existing text does not silently delete the file')
+}, true)
+
+await withFixture(async ({ directory, slidesPath, notesDirectory, store }) => {
+  const noteStore = createSlideNotesStore({ slidesPath, notesDirectory: join(directory, 'notes') })
+  await noteStore.save(firstId, { content: 'Independent speaker note', revision: null })
+  const content = '- Correct **the diagram**.\n- Rename the label.\n'
+  const saved = await store.save(firstId, { content, revision: null })
+  assert.match(await readFile(join(notesDirectory, saved.filename), 'utf8'), new RegExp(`slide_id: "${firstId}"`))
+  await assert.rejects(store.save(firstId, { content: 'Missing bullet', revision: saved.revision }), status(400))
+  await assert.rejects(store.save(firstId, { content: '- Good\nUnbulleted second line', revision: saved.revision }), status(400))
+  await assert.rejects(store.save(firstId, { content: '- Stale', revision: null }), status(409))
+  assert.equal((await noteStore.read(firstId)).content, 'Independent speaker note')
+  const image = await store.saveImage(firstId, png)
+  const secondImage = await store.saveImage(firstId, png)
+  const imageOnly = await store.saveImage(secondId, png)
+  assert.notEqual(image.imageId, secondImage.imageId, 'Multiple clipboard images cannot replace each other')
+  assert.deepEqual(await store.readImage(firstId, image.imageId), png)
+  assert.deepEqual(await store.readImage(secondId, imageOnly.imageId), png)
+  await assert.rejects(store.readImage(secondId, image.imageId), status(404))
+  await assert.rejects(store.readImage(firstId, '../../outside'), status(400))
+  await assert.rejects(store.saveImage(thirdId, png), status(404))
+  await assert.rejects(store.saveImage(firstId, Buffer.from('not PNG')), status(415))
+  await assert.rejects(store.saveImage(firstId, Buffer.concat([png, Buffer.alloc(MAX_CORRECTION_IMAGE_BYTES)])), status(413))
+  assert.equal((await store.read(firstId)).revision, saved.revision, 'Saving images leaves the Markdown revision intact')
+  assert.deepEqual((await store.read(firstId)).images, [image, secondImage].sort((a, b) => a.filename.localeCompare(b.filename)))
+  const metadata = JSON.parse(await readFile(join(notesDirectory, `${image.filename}.json`), 'utf8'))
+  assert.equal(metadata.slide_id, firstId)
+  assert.equal(metadata.slide_number, 1)
+  assert.equal(metadata.slide_title, 'Alpha')
+  assert.equal(metadata.filename, image.filename)
+  assert.equal(metadata.image_id, image.imageId)
+  assert.equal((await store.all())[secondId].images[0].imageId, imageOnly.imageId, 'Static builds include image-only corrections')
+
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta'), slide(firstId, 'Renamed Alpha', '<div class="new-layout">Changed layout</div>')))
+  await store.syncMetadata()
+  const moved = await store.read(firstId)
+  assert.equal(moved.content, content)
+  assert.equal(moved.slideNumber, 2)
+  assert.equal(moved.slideTitle, 'Renamed Alpha')
+  assert.match(moved.filename, new RegExp(`^slide-002-renamed-alpha--${firstId}\\.md$`))
+  for (const item of moved.images) {
+    assert.match(item.filename, new RegExp(`^slide-002-renamed-alpha--${firstId}--screenshot-`))
+    const refreshed = JSON.parse(await readFile(join(notesDirectory, `${item.filename}.json`), 'utf8'))
+    assert.equal(refreshed.slide_id, firstId)
+    assert.equal(refreshed.slide_number, 2)
+    assert.equal(refreshed.slide_title, 'Renamed Alpha')
+    assert.deepEqual(await store.readImage(firstId, item.imageId), png)
+  }
+  assert.ok(!(await readdir(notesDirectory)).includes(image.filename), 'Image renaming leaves no outdated duplicate')
+  const reopened = createSlideNotesStore({ slidesPath, notesDirectory, corrections: true })
+  assert.deepEqual(await reopened.read(firstId), moved, 'Corrections and screenshots survive a fresh store instance')
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta')))
+  await store.syncMetadata()
+  assert.ok((await readdir(notesDirectory)).includes(moved.images[0].filename), 'Removed slide screenshots are retained')
+  await assert.rejects(store.read(firstId), status(404))
+  await writeFile(slidesPath, deck(slide(firstId, 'Returned Alpha'), slide(secondId, 'Beta')))
+  await store.syncMetadata()
+  assert.equal((await store.read(firstId)).content, content)
+  assert.deepEqual(await store.readImage(firstId, image.imageId), png, 'Restoring a slide UUID reconnects its screenshots')
+}, true)
+
+await withFixture(async ({ directory, notesDirectory, store }) => {
+  const image = await store.saveImage(firstId, png)
+  const metadataPath = join(notesDirectory, `${image.filename}.json`)
+  const original = await readFile(metadataPath, 'utf8')
+  await writeFile(metadataPath, '{broken metadata')
+  await assert.rejects(store.read(firstId), status(500))
+  await assert.rejects(store.syncMetadata(), status(500))
+  await writeFile(metadataPath, original)
+  await rm(join(notesDirectory, image.filename))
+  const outside = join(directory, 'outside.png')
+  await writeFile(outside, png)
+  await symlink(outside, join(notesDirectory, image.filename))
+  await assert.rejects(store.readImage(firstId, image.imageId), status(500))
+  await assert.rejects(store.syncMetadata(), status(500))
+  assert.deepEqual(await readFile(outside), png)
+}, true)
+
+await withFixture(async ({ slidesPath, notesDirectory, store }) => {
+  const saved = await store.save(firstId, { content: '- Keep this text\n', revision: null })
+  const missing = await store.saveImage(firstId, png)
+  const missingPath = join(notesDirectory, missing.filename)
+  await rm(missingPath)
+  assert.deepEqual((await store.read(firstId)).images, [], 'A deleted PNG does not break correction loading')
+  assert.deepEqual((await store.all())[firstId].images, [], 'Missing images are omitted from static builds')
+  await assert.rejects(store.readImage(firstId, missing.imageId), status(404))
+  const replacement = await store.saveImage(firstId, png)
+  const otherSlide = await store.saveImage(secondId, png)
+  await assert.rejects(store.deleteImage(secondId, replacement.imageId), status(404))
+  assert.deepEqual(await store.readImage(firstId, replacement.imageId), png, 'Wrong-slide deletion cannot remove an image')
+  const deleted = await store.deleteImage(firstId, replacement.imageId)
+  assert.equal(deleted.content, saved.content)
+  assert.equal(deleted.revision, saved.revision, 'Deleting an image leaves the Markdown revision intact')
+  assert.deepEqual(deleted.images, [])
+  assert.ok(!(await readdir(notesDirectory)).includes(replacement.filename))
+  assert.ok(!(await readdir(notesDirectory)).includes(`${replacement.filename}.json`))
+  assert.deepEqual(await store.deleteImage(firstId, replacement.imageId), deleted, 'Repeated deletion succeeds')
+  await store.deleteImage(firstId, missing.imageId)
+  assert.ok(!(await readdir(notesDirectory)).includes(`${missing.filename}.json`), 'Deleting an already missing image removes its sidecar')
+  await assert.rejects(store.deleteImage(firstId, '../outside'), status(400))
+  await assert.rejects(store.deleteImage(thirdId, replacement.imageId), status(404))
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta renamed'), slide(firstId, 'Alpha')))
+  await store.syncMetadata()
+  assert.deepEqual(await store.readImage(secondId, otherSlide.imageId), png, 'Other slides remain intact')
+  const archived = await store.saveImage(firstId, png)
+  await rename(join(notesDirectory, archived.filename), join(notesDirectory, `x_${archived.filename}`))
+  await store.syncMetadata()
+  const archivedName = (await store.read(firstId)).images[0].filename
+  await store.deleteImage(firstId, archived.imageId)
+  assert.ok(!(await readdir(notesDirectory)).includes(archivedName), 'Excluded screenshots can be deleted in the editor')
+  assert.ok(!(await readdir(notesDirectory)).includes(`${archivedName}.json`))
+}, true)
+
+await withFixture(async ({ slidesPath, notesDirectory, store }) => {
+  const image = await store.saveImage(firstId, png)
+  await rm(join(notesDirectory, image.filename))
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta'), slide(firstId, 'Alpha renamed')))
+  await store.syncMetadata()
+  assert.deepEqual((await store.read(firstId)).images, [], 'Metadata refresh ignores missing screenshots')
+  assert.deepEqual(await store.all(), {}, 'An orphan sidecar alone does not create a correction record')
+  const replacement = await store.saveImage(firstId, png)
+  assert.deepEqual(await store.readImage(firstId, replacement.imageId), png, 'A replacement can be saved after reordering')
+}, true)
+
+await withFixture(async ({ slidesPath, notesDirectory, store }) => {
+  const content = '- Pending\n-[x] Compact completed\n- [X] Standard completed\n- [ ] Unchecked\n'
+  const saved = await store.save(firstId, { content, revision: null })
+  await rename(join(notesDirectory, saved.filename), join(notesDirectory, `x_${saved.filename}`))
+  const hidden = await store.read(firstId)
+  assert.equal(hidden.filename, `x_${saved.filename}`)
+  const edited = await store.save(firstId, { content: `${content}- New pending\n`, revision: hidden.revision })
+  assert.equal(edited.filename, hidden.filename, 'Editing does not clear a file exclusion')
+  for (const mode of ['image', 'sidecar', 'both']) {
+    const image = await store.saveImage(firstId, png)
+    const path = join(notesDirectory, image.filename)
+    if (mode !== 'sidecar') await rename(path, join(notesDirectory, `x_${image.filename}`))
+    if (mode !== 'image') await rename(`${path}.json`, join(notesDirectory, `x_${image.filename}.json`))
+    const listed = (await store.read(firstId)).images.find(item => item.imageId === image.imageId)
+    assert.ok(listed.filename.startsWith('x_'), 'Prefixing the image, sidecar, or both marks it hidden')
+    assert.deepEqual(await store.readImage(firstId, image.imageId), png, 'Excluded images remain accessible to the editor')
+  }
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta'), slide(firstId, 'Alpha renamed')))
+  await store.syncMetadata()
+  const moved = await store.read(firstId)
+  assert.match(moved.filename, /^x_slide-002-alpha-renamed--/)
+  assert.equal(moved.content, edited.content)
+  for (const image of moved.images) {
+    assert.match(image.filename, /^x_slide-002-alpha-renamed--/)
+    const metadata = JSON.parse(await readFile(join(notesDirectory, `${image.filename}.json`), 'utf8'))
+    assert.equal(metadata.slide_id, firstId)
+    assert.equal(metadata.filename, image.filename)
+    assert.deepEqual(await store.readImage(firstId, image.imageId), png)
+  }
+  await store.syncMetadata()
+  assert.deepEqual(await store.read(firstId), moved, 'Excluded filenames are stable across repeated synchronization')
+}, true)
+
+console.log('Notes and corrections: UUID associations, Markdown, screenshots, metadata refresh, conflicts, exclusions, validation, and recovery passed.')

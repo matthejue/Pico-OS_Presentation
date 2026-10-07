@@ -32,7 +32,7 @@ const introductionMarkdown = (keepLastChild = false) => slide('picoos', '# PicoO
   + slide('picoos', '<!-- SHORT_VERSION_DISABLED -->\n# PicoOS')
   + slide('about-picoos', '<!-- SHORT_VERSION_DISABLED -->\n# About PicoOS')
   + slide('intended-physical-hardware-reti-execution-model',
-    `${keepLastChild ? '' : '<!-- SHORT_VERSION_DISABLED -->\n'}# Intended physical hardware RETI execution model`)
+    `${keepLastChild ? '' : '<!-- SHORT_VERSION_DISABLED -->\n'}# Intended physical hardware ReTI execution model`)
   + slide('new-chapter', '<SectionOverview section="new-chapter" />')
   + slide('new-child', '# Newly added content')
 

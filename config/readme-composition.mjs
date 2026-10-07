@@ -2,7 +2,6 @@
 // their independently reviewed proportions stay nested inside each panel.
 // Weights reflect rendered content heights, rather than equal empty panels.
 const plans = {
-  'picoos': [[140, 250]],
   'build-and-run': [[132, 216]],
   '116-program-sections-interrupt-table-entries-and-linker-placement': [[148, 143]],
   '1171-interrupt-safe-push-and-pop': [[149, 132]],
@@ -55,6 +54,10 @@ const single = asset => ({group: [asset], layout: 'single'})
 export function compactGroups(groups, section) {
   const parts = groups.flatMap(panel => panel.group)
   const types = parts.map(part => part.type).join(',')
+  // The opening toolchain cards take only their content height, leaving the
+  // remaining area for the full-width build-and-boot diagram.
+  if (section.anchor === 'picoos' && types === 'list,image')
+    return [{group: parts, layout: 'toolchain-overview'}]
   // Restored caller/dependency columns make these tables wider and taller.
   // Give them full-width rows rather than shrinking unrelated companions.
   if (['88-opening-reading-writing-and-seeking',

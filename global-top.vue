@@ -1,9 +1,11 @@
 <template>
   <SlideNotes />
+  <SlideNotes corrections />
   <VisualZoom />
   <ShortVersionStatus />
   <div v-if="shortcutHintsVisible && $nav.currentPage > 1 && !$nav.currentFrontmatter.sectionOverview && !$nav.currentFrontmatter.presentationContents" class="zoom-hint">
     <div v-if="isDevelopment">m: toggle short-deck exclusion · Alt+A: apply exclusions · Alt+S: sync list from slides</div>
+    <div>Notes: Alt+N edit · Alt+Shift+N show/hide · Corrections: Alt+C edit · Alt+Shift+C show/hide</div>
     <div>Visual: Enter/Space open · +/− zoom · F fit · arrows/PgUp/PgDn/Space scroll · Esc close · Recording: Space play/pause · ←/→ seek · H: hide hints</div>
   </div>
   <div v-if="$nav.currentPage > 1" class="deck-page-number">

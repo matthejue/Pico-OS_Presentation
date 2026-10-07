@@ -93,7 +93,7 @@
                   <rect x="8" y="8" width="1180.3125" height="118" rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
                   <g class="cluster-label " transform="translate(545.4765625, 8)">
                     <g class="svg-label">
-                      <text x="0" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">RETI-Emulator</text></g>
+                      <text x="0" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">ReTI-Emulator</text></g>
                   </g>
                 </g>
               </g>
@@ -127,7 +127,7 @@
                   <g class="label" transform="translate(-51.828125, -24)">
                     <rect rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
                     <g class="svg-label">
-                      <text x="15.53125" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">PicoOS on</text><text x="0" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">emulated RETI</text></g>
+                      <text x="15.53125" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">PicoOS on</text><text x="0" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">emulated ReTI</text></g>
                   </g>
                 </g>
                 <g class="node default  " id="picoos-diagram-8-flowchart-UART-1" transform="translate(582.203125, 67)">

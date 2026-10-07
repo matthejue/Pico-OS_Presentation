@@ -39,7 +39,7 @@
     "Process overflow → terminate",
     "Kernel overflow → shutdown"
   ],
-  "table-3215/3/1": "Invalid/unsupported decoded RETI instruction",
+  "table-3215/3/1": "Invalid/unsupported decoded ReTI instruction",
   "table-3215/3/3": "Same process/kernel fault policy",
   "table-3215/4/3": "Print heap-full diagnostic; terminate process",
   "table-3215/5/3": "UART panic; shut down kernel",
@@ -374,7 +374,7 @@
   "table-3155/2/1": "Termination through process descriptor 1; follows redirection",
   "table-6244/5/1": "Stopped-status constants for `WIFSTOPPED()`",
   "table-6244/6/1": "Shared selector + child PID/status request layout",
-  "table-6244/7/1": "Reusable RETI code blocks; linker input",
+  "table-6244/7/1": "Reusable ReTI code blocks; linker input",
   "table-6244/8/1": "Function signatures + types; used alongside code blocks",
   "table-9151/4/4": "Worker 2 queued; **BLOCKED**",
   "table-9151/5/4": "Worker 2 dequeued; **READY**",

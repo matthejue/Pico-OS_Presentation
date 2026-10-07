@@ -660,10 +660,15 @@ html.selectable-text .slidev-layout * {
 .context-note b { flex-basis: 10rem; }
 .context-note > ul { flex: 1; display: flex; flex-wrap: wrap; column-gap: 1.8rem; row-gap: 0.25rem; padding-left: 1rem; margin: 0; }
 .context-note li { margin: 0; }
+.context-notes { flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.context-notes .context-note { flex-direction: column; gap: 0.4rem; font-size: 0.95rem; }
+.context-notes .context-note b { flex: none; }
+.context-notes .context-note > ul { display: block; }
+.context-notes .context-note li + li { margin-top: 0.25rem; }
 .table-panels-two { display: grid; grid-template-columns: var(--readme-columns, repeat(2, minmax(0, 1fr))); gap: 24px; align-items: start; }
 .readme-table table { table-layout: fixed; }
 .readme-table th { font-size: 16px; line-height: 1.25; }
-.readme-table td, .readme-table th { padding: 8px 10px; overflow-wrap: normal; }
+.readme-table td, .readme-table th { padding: 8px 10px; overflow-wrap: anywhere; }
 .readme-table ul { display: flex; flex-wrap: wrap; column-gap: 1.25em; padding-left: 16px; margin: 0; }
 .readme-table li { margin: 2px 0; line-height: 1.3; }
 .readme-table td code { overflow-wrap: anywhere; }
@@ -678,7 +683,9 @@ html.selectable-text .slidev-layout * {
 .hardware-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; flex: none; }
 .hardware-tiles .readme-tile { padding: 0.6rem 0.65rem; }
 .hardware-tiles .readme-tile ul { font-size: 0.81rem; }
+.hardware-tiles .readme-tile .readme-item { font-size: 0.81rem; line-height: 1.3; }
 .hardware-tiles .readme-tile .tile-name { font-size: 0.81rem; }
+.layout-toolchain-overview { display: grid; grid-template-rows: max-content minmax(0, 1fr); }
 .hardware-details { flex: 1; align-items: stretch; }
 .hardware-details .readme-list { font-size: 0.82rem; padding-top: 0; }
 .pipeline-panel { display: flex; flex-direction: column; border: 1px solid var(--line); background: #f4f8f880; padding: 0.65rem; gap: 0.4rem; }

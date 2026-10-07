@@ -1,19 +1,18 @@
 {
   "list-26": [
     [
-      "**PicoC-Compiler:** compile + link",
-      "**PicoC subset** of C",
-      "**Sections + metadata:** RETI output"
+      "**PicoOS Operating System**",
+      "Operating System Sources",
+      "Kernel and Bootloader Sources"
     ],
     [
-      "**RETI-Emulator:** assemble + execute",
-      "**EPROM/SRAM + peripherals:** interrupts, UART, timer, exceptions",
-      "**Host service:** filesystem protocol"
+      "**PicoCC Compiler**",
+      "Compile + Link",
+      "Produces `.reti` assembly and a `.sections` file"
     ],
     [
-      "**PicoOS:** operating-system sources",
-      "**Bootloader, kernel, libraries, init**",
-      "**Shell, applications, tests**"
+      "**ReTI Emulator**",
+      "Assemble + Execute"
     ]
   ],
   "list-176": [

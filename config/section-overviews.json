@@ -45,8 +45,8 @@
       {
         "anchor": "reti-execution-model",
         "number": "",
-        "title": "RETI execution model",
-        "titleHtml": "RETI execution model",
+        "title": "ReTI execution model",
+        "titleHtml": "ReTI execution model",
         "depth": 2,
         "descendants": []
       }
@@ -193,8 +193,8 @@
       {
         "anchor": "117-reti-pseudoinstructions",
         "number": "1.1.7",
-        "title": "RETI pseudoinstructions",
-        "titleHtml": "RETI pseudoinstructions",
+        "title": "ReTI pseudoinstructions",
+        "titleHtml": "ReTI pseudoinstructions",
         "depth": 2,
         "descendants": [
           "1171-interrupt-safe-push-and-pop",
@@ -254,8 +254,8 @@
       {
         "anchor": "12-reti-emulator-extensions",
         "number": "1.2",
-        "title": "RETI-Emulator extensions",
-        "titleHtml": "RETI-Emulator extensions",
+        "title": "ReTI-Emulator extensions",
+        "titleHtml": "ReTI-Emulator extensions",
         "depth": 1,
         "descendants": [
           "121-reti-machine-model-and-memory-mapped-peripherals",
@@ -269,8 +269,8 @@
       {
         "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
         "number": "1.2.1",
-        "title": "RETI machine model and memory-mapped peripherals",
-        "titleHtml": "RETI machine model and memory-mapped peripherals",
+        "title": "ReTI machine model and memory-mapped peripherals",
+        "titleHtml": "ReTI machine model and memory-mapped peripherals",
         "depth": 2,
         "descendants": []
       },
@@ -328,8 +328,8 @@
       {
         "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
         "number": "2.1",
-        "title": "RETI interrupt entry and the interrupt service routine table",
-        "titleHtml": "RETI interrupt entry and the interrupt service routine table",
+        "title": "ReTI interrupt entry and the interrupt service routine table",
+        "titleHtml": "ReTI interrupt entry and the interrupt service routine table",
         "depth": 1,
         "descendants": []
       },
@@ -2288,8 +2288,8 @@
       {
         "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
         "number": "15.1.1",
-        "title": "Inspecting PicoOS execution in the RETI-Emulator",
-        "titleHtml": "Inspecting PicoOS execution in the RETI-Emulator",
+        "title": "Inspecting PicoOS execution in the ReTI-Emulator",
+        "titleHtml": "Inspecting PicoOS execution in the ReTI-Emulator",
         "depth": 2,
         "descendants": []
       },
@@ -2304,8 +2304,8 @@
       {
         "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
         "number": "15.1.3",
-        "title": "Editing and executing symbolic RETI assembly",
-        "titleHtml": "Editing and executing symbolic RETI assembly",
+        "title": "Editing and executing symbolic ReTI assembly",
+        "titleHtml": "Editing and executing symbolic ReTI assembly",
         "depth": 2,
         "descendants": []
       },

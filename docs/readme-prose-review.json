@@ -10,17 +10,27 @@
         5
       ],
       "summary": [
-        "**Educational OS** for RETI",
-        "**Bootloader** → kernel → init → shell",
-        "**15 libraries** · **18 applications** · **37 syscalls**",
-        "**Shared physical memory**; no MMU or isolation",
-        "**Host-backed files** via UART"
+        "**Educational OS** running on **ReTI**",
+        "**Components:** Bootloader, Kernel, Init process, Shell, Libraries, Applications",
+        "**Non-preemptive kernel**",
+        "**No MMU or Isolation**",
+        "**Host-backed File System via UART**",
+        "**Unix / POSIX-inspired**; small subset; no conformance claim"
       ],
       "remark": [
-        "POSIX / Unix",
         [
-          "**Familiar interfaces:** processes, signals, files, shells",
-          "**Small subset:** no conformance claim"
+          "Unix",
+          [
+            "Multiuser · multitasking OS family",
+            "Shell + small, composable tools"
+          ]
+        ],
+        [
+          "POSIX",
+          [
+            "Portable interface standard",
+            "Common APIs + shell commands"
+          ]
         ]
       ],
       "paragraphs": [
@@ -223,7 +233,7 @@
     },
     {
       "anchor": "reti-execution-model",
-      "title": "RETI execution model",
+      "title": "ReTI execution model",
       "line": 240,
       "slides": [
         11
@@ -303,7 +313,7 @@
       "summary": [
         "**Original:** one source file",
         "**Lark:** parses source into a parse tree",
-        "**AST construction**, then single-file lowering to RETI",
+        "**AST construction**, then single-file lowering to ReTI",
         "**Extended:** reusable units, **Tree-sitter** replaces **Lark**",
         "**Tree-sitter:** parses preprocessed source into a parse tree",
         "**AST construction**, symbol/type checks, linking + startup"
@@ -379,7 +389,7 @@
       "remark": [
         "System V ABI",
         [
-          "General model adapted to RETI",
+          "General model adapted to ReTI",
           "Different from AMD64 ABI"
         ]
       ],
@@ -396,7 +406,8 @@
       "title": "1.1.3.1 Stack-frame layout and caller cleanup",
       "line": 631,
       "slides": [
-        18
+        18,
+        19
       ],
       "summary": [
         "**Arguments:** arg2 first, then arg1",
@@ -430,9 +441,9 @@
       "title": "1.1.3.2 Shared function epilogue and return values",
       "line": 671,
       "slides": [
-        19,
         20,
-        21
+        21,
+        22
       ],
       "summary": [
         "**One epilogue** per ordinary function",
@@ -474,8 +485,9 @@
       "title": "1.1.3.3 Naked functions without a generated frame",
       "line": 810,
       "slides": [
-        22,
-        23
+        23,
+        24,
+        25
       ],
       "summary": [
         "**naked:** own register setup + control transfer",
@@ -521,9 +533,10 @@
       "title": "1.1.4 Placing globals in `.ivt` with `section(\"ivt\")`",
       "line": 889,
       "slides": [
-        24,
-        25,
-        26
+        26,
+        27,
+        28,
+        29
       ],
       "summary": [
         "**Explicit section:** only `ivt` supported",
@@ -584,7 +597,7 @@
       "title": "1.1.5.1 Default compiler-generated `_start`",
       "line": 994,
       "slides": [
-        27
+        30
       ],
       "summary": [
         "**Global initializers** before main",
@@ -609,7 +622,8 @@
       "title": "1.1.5.2 PicoOS `libstart` startup sequence",
       "line": 1017,
       "slides": [
-        28
+        31,
+        32
       ],
       "summary": [
         "**-C:** custom source or `.reti_blocks` entry",
@@ -649,7 +663,7 @@
       "title": "1.1.5.3 Startup functions used by PicoOS images",
       "line": 1062,
       "slides": [
-        29
+        33
       ],
       "summary": [],
       "remark": null,
@@ -666,7 +680,8 @@
       "title": "1.1.6 Program sections, interrupt table entries, and linker placement",
       "line": 1076,
       "slides": [
-        30
+        34,
+        35
       ],
       "summary": [
         "**Order:** `.ivt` → `.text` → `.data`",
@@ -678,7 +693,7 @@
         "System V ABI",
         [
           "C helpers + inline assembly",
-          "Shared RETI stack-frame rules"
+          "Shared ReTI stack-frame rules"
         ]
       ],
       "paragraphs": [
@@ -699,10 +714,10 @@
     },
     {
       "anchor": "117-reti-pseudoinstructions",
-      "title": "1.1.7 RETI pseudoinstructions",
+      "title": "1.1.7 ReTI pseudoinstructions",
       "line": 1101,
       "slides": [
-        31
+        36
       ],
       "summary": [
         "**Hardware limits:** 22-bit immediates + relative jumps",
@@ -727,7 +742,7 @@
       "title": "1.1.7.1 Interrupt-safe `PUSH` and `POP`",
       "line": 1119,
       "slides": [
-        32
+        37
       ],
       "summary": [
         "**SP:** free cell below occupied stack",
@@ -757,8 +772,9 @@
       "title": "1.1.7.2 Loading 32-bit values with `LOADI32`",
       "line": 1147,
       "slides": [
-        33,
-        34
+        38,
+        39,
+        40
       ],
       "summary": [
         [
@@ -831,7 +847,7 @@
       "title": "1.1.7.3 Long jumps with `JUMP32`",
       "line": 1224,
       "slides": [
-        35
+        41
       ],
       "summary": [
         "**Symbol:** CS-relative target; add CS",
@@ -861,7 +877,7 @@
       "title": "1.1.7.4 Pseudoinstruction expansion during linking",
       "line": 1249,
       "slides": [
-        36
+        42
       ],
       "summary": [
         "**reti_patch:** PUSH/POP; numeric immediates; redundant jumps",
@@ -903,10 +919,10 @@
       "title": "1.1.8 Linked `.sections` metadata and the five-word binary header",
       "line": 1285,
       "slides": [
-        37,
-        38,
-        39,
-        40
+        43,
+        44,
+        45,
+        46
       ],
       "summary": [
         [
@@ -981,10 +997,10 @@
       "title": "1.1.9 Generated memory constants for the bootloader and kernel",
       "line": 1401,
       "slides": [
-        41,
-        42,
-        43,
-        44
+        47,
+        48,
+        49,
+        50
       ],
       "summary": [
         "**-k sram / eprom:** header-only generation",
@@ -1023,11 +1039,11 @@
     },
     {
       "anchor": "12-reti-emulator-extensions",
-      "title": "1.2 RETI-Emulator extensions",
+      "title": "1.2 ReTI-Emulator extensions",
       "line": 1461,
       "slides": [
-        45,
-        46
+        51,
+        52
       ],
       "summary": [],
       "remark": null,
@@ -1041,11 +1057,11 @@
     },
     {
       "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
-      "title": "1.2.1 RETI machine model and memory-mapped peripherals",
+      "title": "1.2.1 ReTI machine model and memory-mapped peripherals",
       "line": 1495,
       "slides": [
-        47,
-        48
+        53,
+        54
       ],
       "summary": [
         "**Periphery cell n:** `0x40000000 + n`",
@@ -1083,7 +1099,7 @@
       "title": "1.2.2 Atomic test-and-set with `TSL`",
       "line": 1540,
       "slides": [
-        49
+        55
       ],
       "summary": [
         "**TSL:** old value → register; memory ← 1",
@@ -1103,7 +1119,8 @@
       "title": "1.2.2.1 Test-and-set in SRAM",
       "line": 1547,
       "slides": [
-        50
+        56,
+        57
       ],
       "summary": [
         "**Offset 2:** two words; third cell",
@@ -1133,7 +1150,7 @@
       "title": "1.2.2.2 `TSL` instruction encoding",
       "line": 1570,
       "slides": [
-        51
+        58
       ],
       "summary": [
         "**Encoded word:** `0xAEC00002`",
@@ -1166,9 +1183,10 @@
       "title": "1.2.3 UART host-service protocol",
       "line": 1595,
       "slides": [
-        52,
-        53,
-        54
+        59,
+        60,
+        61,
+        62
       ],
       "summary": [
         [
@@ -1240,8 +1258,8 @@
       "title": "1.2.4 Debugger, source view, and terminal modes",
       "line": 1661,
       "slides": [
-        55,
-        56
+        63,
+        64
       ],
       "summary": [
         "**Tab / Shift+Tab:** choose window",
@@ -1300,11 +1318,11 @@
     },
     {
       "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
-      "title": "2.1 RETI interrupt entry and the interrupt service routine table",
+      "title": "2.1 ReTI interrupt entry and the interrupt service routine table",
       "line": 1707,
       "slides": [
-        58,
-        59
+        66,
+        67
       ],
       "summary": [
         "**ISR pointer:** direct PC load; no C frame",
@@ -1338,7 +1356,7 @@
       "title": "2.2 Interrupt-controller mappings and priorities",
       "line": 1753,
       "slides": [
-        60
+        68
       ],
       "summary": [
         "**Timer/DMA/UART:** ISR 1/4/2",
@@ -1359,8 +1377,9 @@
       "title": "2.2.1 Interrupt-controller initialization",
       "line": 1760,
       "slides": [
-        61,
-        62
+        69,
+        70,
+        71
       ],
       "summary": [
         "**Disable:** mapping 255; priority 0",
@@ -1428,7 +1447,7 @@
       "title": "2.3 Saved interrupt stack frame",
       "line": 1849,
       "slides": [
-        63
+        72
       ],
       "summary": [
         "**Live BAF:** saved-frame address; not saved BAF value",
@@ -1441,7 +1460,7 @@
         [
           "**Linux:** context on kernel stack",
           "**PicoOS:** context on user stack",
-          "RETI entry/RTI use active SP"
+          "ReTI entry/RTI use active SP"
         ]
       ],
       "paragraphs": [
@@ -1469,7 +1488,7 @@
       "title": "2.4 System-call interface and execution",
       "line": 1886,
       "slides": [
-        64
+        73
       ],
       "summary": [
         "**Library wrapper** → selector + request",
@@ -1509,10 +1528,10 @@
       "title": "2.4.1 Syscall selectors and register convention",
       "line": 1907,
       "slides": [
-        65,
-        66,
-        67,
-        68
+        74,
+        75,
+        76,
+        77
       ],
       "summary": [
         "**ACC:** selector; **IN1:** argument/request address",
@@ -1556,7 +1575,7 @@
       "title": "2.4.1.1 Process, wait, signal, and memory request structures",
       "line": 1968,
       "slides": [
-        69
+        78
       ],
       "summary": [],
       "remark": null,
@@ -1573,8 +1592,9 @@
       "title": "2.4.1.2 File and directory request structures",
       "line": 1991,
       "slides": [
-        70,
-        71
+        79,
+        80,
+        81
       ],
       "summary": [
         "**load / file read:** reuse request across chunks",
@@ -1603,7 +1623,7 @@
       "title": "2.4.2 System-call entry, execution, and return to userspace",
       "line": 2030,
       "slides": [
-        72
+        82
       ],
       "summary": [],
       "remark": null,
@@ -1620,7 +1640,9 @@
       "title": "2.4.2.1 Entering kernel context",
       "line": 2040,
       "slides": [
-        73
+        83,
+        84,
+        85
       ],
       "summary": [
         "**User stack:** saved interrupted registers remain",
@@ -1648,7 +1670,8 @@
       "title": "2.4.2.1.1 Stack-boundary helpers",
       "line": 2117,
       "slides": [
-        74
+        86,
+        87
       ],
       "summary": [
         "**Cell 10:** lowest allowed free SP",
@@ -1703,7 +1726,7 @@
       "title": "2.4.2.2 Handle Syscall",
       "line": 2184,
       "slides": [
-        75
+        88
       ],
       "summary": [],
       "remark": null,
@@ -1724,7 +1747,7 @@
       "title": "2.4.2.2.1 System-call groups",
       "line": 2228,
       "slides": [
-        76
+        89
       ],
       "summary": [],
       "remark": null,
@@ -1745,9 +1768,9 @@
       "title": "2.4.2.3 Selecting the return path",
       "line": 2246,
       "slides": [
-        77,
-        78,
-        79
+        90,
+        91,
+        92
       ],
       "summary": [
         "**Request flag:** no context save or switch",
@@ -1813,8 +1836,8 @@
       "title": "2.4.2.4 Restoring process context with `RTI`",
       "line": 2360,
       "slides": [
-        80,
-        81
+        93,
+        94
       ],
       "summary": [
         "**Direct return:** registers from saved user frame",
@@ -1862,7 +1885,7 @@
       "title": "2.5 Timer interrupts and userspace preemption",
       "line": 2419,
       "slides": [
-        82
+        95
       ],
       "summary": [
         "**5,000 instructions** per timer interval",
@@ -1882,7 +1905,7 @@
       "title": "2.5.1 Timer interrupt path",
       "line": 2426,
       "slides": [
-        83
+        96
       ],
       "summary": [],
       "remark": null,
@@ -1899,8 +1922,9 @@
       "title": "2.5.1.1 Saving context and selecting the timer branch",
       "line": 2438,
       "slides": [
-        84,
-        85
+        97,
+        98,
+        99
       ],
       "summary": [
         "**Saved PC ≤ kernel DS:** deferred kernel branch",
@@ -1937,7 +1961,7 @@
       "title": "2.5.1.2 Requesting deferred scheduling for kernel work",
       "line": 2508,
       "slides": [
-        86
+        100
       ],
       "summary": [
         "**Kernel timer:** sets reschedule_requested only",
@@ -1963,7 +1987,7 @@
       "title": "2.5.1.3 Restoring interrupted kernel context with `RTI`",
       "line": 2524,
       "slides": [
-        87
+        101
       ],
       "summary": [],
       "remark": null,
@@ -1984,7 +2008,8 @@
       "title": "2.5.1.4 Entering kernel context for userspace preemption",
       "line": 2558,
       "slides": [
-        88
+        102,
+        103
       ],
       "summary": [
         "**Userspace branch:** dispatcher directly",
@@ -2013,7 +2038,7 @@
       "title": "2.5.1.5 Saving process context and restoring the selected process",
       "line": 2612,
       "slides": [
-        89
+        104
       ],
       "summary": [
         "Userspace timer enters **dispatcher directly**",
@@ -2039,7 +2064,7 @@
       "title": "2.5.2 Kernel non-preemption and deferred rescheduling",
       "line": 2642,
       "slides": [
-        90
+        105
       ],
       "summary": [
         "**Kernel operation:** completes before process switch",
@@ -2075,7 +2100,7 @@
       "title": "2.5.3 Shell character delay for different timer intervals",
       "line": 2663,
       "slides": [
-        91
+        106
       ],
       "summary": [
         "**5,000 instructions:** chosen interval",
@@ -2100,7 +2125,7 @@
       "title": "2.6 UART receive interrupt path",
       "line": 2678,
       "slides": [
-        92
+        107
       ],
       "summary": [],
       "remark": null,
@@ -2117,7 +2142,8 @@
       "title": "2.6.1 Entering kernel segments on the interrupted stack",
       "line": 2687,
       "slides": [
-        93
+        108,
+        109
       ],
       "summary": [
         "**UART / DMA:** borrow interrupted stack",
@@ -2155,7 +2181,7 @@
       "title": "2.6.2 Handling the received byte",
       "line": 2743,
       "slides": [
-        94
+        110
       ],
       "summary": [],
       "remark": null,
@@ -2176,7 +2202,7 @@
       "title": "2.6.3 Restoring interrupted context with `RTI`",
       "line": 2794,
       "slides": [
-        95
+        111
       ],
       "summary": [],
       "remark": null,
@@ -2197,7 +2223,7 @@
       "title": "2.6.4 UART nesting and interrupt priorities",
       "line": 2825,
       "slides": [
-        96
+        112
       ],
       "summary": [
         "**Ctrl+C:** deferred current-process termination",
@@ -2232,7 +2258,7 @@
       "title": "2.6.5 Polled UART function reference",
       "line": 2857,
       "slides": [
-        97
+        113
       ],
       "summary": [],
       "remark": null,
@@ -2249,7 +2275,7 @@
       "title": "2.7 DMA completion interrupt path",
       "line": 2869,
       "slides": [
-        98
+        114
       ],
       "summary": [],
       "remark": null,
@@ -2266,7 +2292,7 @@
       "title": "2.7.1 Entering kernel segments on the interrupted stack",
       "line": 2880,
       "slides": [
-        99
+        115
       ],
       "summary": [],
       "remark": null,
@@ -2287,7 +2313,7 @@
       "title": "2.7.2 Completing the DMA wait",
       "line": 2923,
       "slides": [
-        100
+        116
       ],
       "summary": [
         "**DMA:** one idle transfer; caller queues + dispatches",
@@ -2317,7 +2343,7 @@
       "title": "2.7.3 Restoring interrupted context with `RTI`",
       "line": 2955,
       "slides": [
-        101
+        117
       ],
       "summary": [],
       "remark": null,
@@ -2372,7 +2398,7 @@
       "title": "2.8.1 CPU exception entry and registers",
       "line": 3009,
       "slides": [
-        102
+        118
       ],
       "summary": [
         "**ISR 3:** bypasses mappings + priorities",
@@ -2392,10 +2418,10 @@
       "title": "2.8.1.1 Entering kernel context after a fault",
       "line": 3018,
       "slides": [
-        103,
-        104,
-        105,
-        106
+        119,
+        120,
+        121,
+        122
       ],
       "summary": [
         "**Exception entry:** abandon faulting stack",
@@ -2436,7 +2462,7 @@
       "title": "2.8.1.1.1 Comparing exception and timer context tests",
       "line": 3100,
       "slides": [
-        107
+        123
       ],
       "summary": [
         "**Timer:** saved PC identifies kernel restore instructions",
@@ -2465,7 +2491,7 @@
       "title": "2.8.1.2 Reading and classifying the exception",
       "line": 3120,
       "slides": [
-        108
+        124
       ],
       "summary": [],
       "remark": null,
@@ -2486,7 +2512,7 @@
       "title": "2.8.1.2.1 Reporting the exception",
       "line": 3148,
       "slides": [
-        109
+        125
       ],
       "summary": [],
       "remark": null,
@@ -2503,7 +2529,8 @@
       "title": "2.8.1.3 Halting the kernel or terminating the process",
       "line": 3160,
       "slides": [
-        110
+        126,
+        127
       ],
       "summary": [
         "**Borrowed-stack handler:** kernel CS → panic",
@@ -2536,7 +2563,7 @@
       "title": "2.8.2 Supported exceptions and allocation errors",
       "line": 3209,
       "slides": [
-        111
+        128
       ],
       "summary": [
         "**CPU fault / heap exhaustion:** termination or halt",
@@ -2556,7 +2583,7 @@
       "title": "2.8.3 Exception and stack-boundary function reference",
       "line": 3224,
       "slides": [
-        112
+        129
       ],
       "summary": [],
       "remark": null,
@@ -2588,8 +2615,9 @@
       "title": "3.1 Heap block layout and allocation algorithm",
       "line": 3248,
       "slides": [
-        114,
-        115
+        131,
+        132,
+        133
       ],
       "summary": [
         "**Header:** three cells; payload follows immediately",
@@ -2627,12 +2655,12 @@
       "title": "3.2 SRAM image and heap hierarchy",
       "line": 3290,
       "slides": [
-        116,
-        117,
-        118
+        134,
+        135,
+        136
       ],
       "summary": [
-        "**Sizes:** 32-bit RETI cells",
+        "**Sizes:** 32-bit ReTI cells",
         "**Current kernel offsets:** change after rebuilding",
         "**Process base:** absolute; heap_start relative",
         "**libstart:** heap-bounds syscalls initialize inner allocator"
@@ -2690,7 +2718,7 @@
       "title": "3.3.1 Kernel Heap blocks and kernel objects",
       "line": 3354,
       "slides": [
-        119
+        137
       ],
       "summary": [
         "**Kernel Heap:** PCB, paths, shared metadata",
@@ -2746,7 +2774,7 @@
       "title": "3.4.1 Process allocations",
       "line": 3385,
       "slides": [
-        120
+        138
       ],
       "summary": [
         "**PSDMalloc:** complete Process Payload",
@@ -2777,7 +2805,7 @@
       "title": "3.4.2 Shared Data allocations",
       "line": 3400,
       "slides": [
-        121
+        139
       ],
       "summary": [
         "PSDMalloc → **Shared Data Payload**",
@@ -2842,7 +2870,7 @@
       "title": "3.5.1 Per-Process User Process Heap",
       "line": 3437,
       "slides": [
-        122
+        140
       ],
       "summary": [
         "**process_heap** stored in process .data",
@@ -2873,7 +2901,7 @@
       "title": "3.5.2 User Process Heap allocator function reference",
       "line": 3454,
       "slides": [
-        123
+        141
       ],
       "summary": [],
       "remark": null,
@@ -2905,8 +2933,8 @@
       "title": "3.6.1 Common allocator linkage and function reference",
       "line": 3475,
       "slides": [
-        124,
-        125
+        142,
+        143
       ],
       "summary": [
         "**Same allocator:** kernel + each user image",
@@ -2932,7 +2960,7 @@
       "title": "3.6.2 Reallocation decisions",
       "line": 3499,
       "slides": [
-        126
+        144
       ],
       "summary": [
         "**Failed move:** old block preserved",
@@ -2957,7 +2985,7 @@
       "title": "3.6.3 Allocation and repeated coalescing example",
       "line": 3511,
       "slides": [
-        127
+        145
       ],
       "summary": [
         "**52 cells:** allocate, free, repeatedly merge",
@@ -2979,7 +3007,7 @@
       "title": "3.6.3.1 Initial state and first-fit search",
       "line": 3519,
       "slides": [
-        128
+        146
       ],
       "summary": [],
       "remark": null,
@@ -2996,7 +3024,7 @@
       "title": "3.6.3.2 Allocation splits D",
       "line": 3528,
       "slides": [
-        129
+        147
       ],
       "summary": [],
       "remark": null,
@@ -3032,7 +3060,7 @@
       "title": "3.6.3.3.1 Mark D free",
       "line": 3549,
       "slides": [
-        130
+        148
       ],
       "summary": [],
       "remark": null,
@@ -3049,7 +3077,7 @@
       "title": "3.6.3.3.2 Merge D and its remainder",
       "line": 3557,
       "slides": [
-        131
+        149
       ],
       "summary": [],
       "remark": null,
@@ -3085,7 +3113,7 @@
       "title": "3.6.3.4.1 Mark C free",
       "line": 3574,
       "slides": [
-        132
+        150
       ],
       "summary": [],
       "remark": null,
@@ -3102,7 +3130,7 @@
       "title": "3.6.3.4.2 First merge at B",
       "line": 3582,
       "slides": [
-        133
+        151
       ],
       "summary": [],
       "remark": null,
@@ -3119,7 +3147,7 @@
       "title": "3.6.3.4.3 Second merge at B",
       "line": 3590,
       "slides": [
-        134
+        152
       ],
       "summary": [
         "**Recheck same header:** merge entire free run",
@@ -3163,9 +3191,9 @@
       "title": "4.1 Process control block fields",
       "line": 3616,
       "slides": [
-        136,
-        137,
-        138
+        154,
+        155,
+        156
       ],
       "summary": [
         "**PCB addresses:** physical; no MMU translation",
@@ -3193,8 +3221,8 @@
       "title": "4.1.1 Process states and transitions",
       "line": 3682,
       "slides": [
-        139,
-        140
+        157,
+        158
       ],
       "summary": [
         "**NEW:** prevents scheduling + duplicate run setup",
@@ -3236,7 +3264,8 @@
       "title": "4.1.2 Global process list and current process",
       "line": 3719,
       "slides": [
-        141
+        159,
+        160
       ],
       "summary": [
         "**Append:** creation order; O(1) through tail",
@@ -3287,7 +3316,7 @@
       "title": "4.1.2.1 From PCBs to Process Payloads in SRAM",
       "line": 3759,
       "slides": [
-        142
+        161
       ],
       "summary": [],
       "remark": null,
@@ -3346,7 +3375,7 @@
       "title": "4.2.1.1 Step 1: Receiving the process image",
       "line": 3795,
       "slides": [
-        143
+        162
       ],
       "summary": [],
       "remark": null,
@@ -3367,7 +3396,8 @@
       "title": "4.2.1.1.1 `ProcessLoad` transfer record",
       "line": 3813,
       "slides": [
-        144
+        163,
+        164
       ],
       "summary": [
         "**Owner:** loading caller’s pending_load",
@@ -3397,7 +3427,7 @@
       "title": "4.2.1.2 Step 2: Creating the child PCB",
       "line": 3846,
       "slides": [
-        145
+        165
       ],
       "summary": [],
       "remark": null,
@@ -3414,7 +3444,7 @@
       "title": "4.2.1.3 Process stack after `load`",
       "line": 3856,
       "slides": [
-        146
+        166
       ],
       "summary": [
         "**NEW:** not yet runnable",
@@ -3444,7 +3474,7 @@
       "title": "4.2.1.4 Load function reference",
       "line": 3886,
       "slides": [
-        147
+        167
       ],
       "summary": [],
       "remark": null,
@@ -3465,8 +3495,8 @@
       "title": "4.2.2 Starting a process (`run` library call)",
       "line": 3914,
       "slides": [
-        148,
-        149
+        168,
+        169
       ],
       "summary": [
         "**Arguments:** spaces/tabs; quoted whitespace preserved",
@@ -3519,7 +3549,7 @@
       "title": "4.2.2.1.1 User process stack placement",
       "line": 3958,
       "slides": [
-        150
+        170
       ],
       "summary": [
         "**Default heap:** 1,000 cells",
@@ -3548,13 +3578,14 @@
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp`",
       "line": 3978,
       "slides": [
-        151,
-        152,
-        153
+        171,
+        172,
+        173,
+        174
       ],
       "summary": [
         "**argv[0]:** executable path without leading /",
-        "**Each character:** one RETI cell",
+        "**Each character:** one ReTI cell",
         "**Strings + pointer arrays:** zero/null terminated",
         "**argv / envp:** array addresses; no extra pointer cells",
         "**Startup data:** no heap-boundary fit check"
@@ -3563,7 +3594,7 @@
         "System V Intel386 / POSIX",
         [
           "**Intel386 Fig. 3-31:** argc → argv → NULL → envp",
-          "**RETI:** entry PC, word characters; no auxiliary vector",
+          "**ReTI:** entry PC, word characters; no auxiliary vector",
           "**POSIX.1-2024:** arrays/environment; no physical layout",
           "**PicoOS:** load + run; no exec replacement"
         ]
@@ -3613,8 +3644,8 @@
       "title": "4.2.2.1.2.1 Concrete initial-stack example",
       "line": 4057,
       "slides": [
-        154,
-        155
+        175,
+        176
       ],
       "summary": [
         "**argc = 3; envc = 2:** 29 startup cells",
@@ -3654,7 +3685,7 @@
       "title": "4.2.2.2 Parent-to-child inheritance",
       "line": 4106,
       "slides": [
-        156
+        177
       ],
       "summary": [],
       "remark": [
@@ -3677,7 +3708,7 @@
       "title": "4.2.2.2.1 Environment origin and propagation",
       "line": 4114,
       "slides": [
-        157
+        178
       ],
       "summary": [
         [
@@ -3745,7 +3776,7 @@
       "title": "4.2.2.2.2 Loading-bar environment variable",
       "line": 4184,
       "slides": [
-        158
+        179
       ],
       "summary": [
         "**Presence:** enables bars; value false still enables",
@@ -3778,7 +3809,7 @@
       "title": "4.2.2.3 Run function reference",
       "line": 4207,
       "slides": [
-        159
+        180
       ],
       "summary": [],
       "remark": null,
@@ -3795,7 +3826,7 @@
       "title": "4.3 Process list, PCB metadata, and lifecycle function reference",
       "line": 4226,
       "slides": [
-        160
+        181
       ],
       "summary": [],
       "remark": null,
@@ -3827,8 +3858,9 @@
       "title": "5.1 Named entries and per-process attachments",
       "line": 4260,
       "slides": [
-        162,
-        163
+        183,
+        184,
+        185
       ],
       "summary": [
         "**Entry:** data region metadata; **attachment:** process-owned mapping",
@@ -3866,7 +3898,7 @@
       "title": "5.1.1 Global shared-memory list and entry names",
       "line": 4312,
       "slides": [
-        164
+        186
       ],
       "summary": [],
       "remark": null,
@@ -3883,7 +3915,7 @@
       "title": "5.1.1.1 From Shared Memory Entries to Shared Data Payloads in SRAM",
       "line": 4321,
       "slides": [
-        165
+        187
       ],
       "summary": [],
       "remark": null,
@@ -3908,7 +3940,7 @@
       "title": "5.1.2 Per-process attachment lists in SRAM",
       "line": 4336,
       "slides": [
-        166
+        188
       ],
       "summary": [],
       "remark": null,
@@ -3925,8 +3957,8 @@
       "title": "5.2 Mapping, unlinking, and deferred destruction",
       "line": 4345,
       "slides": [
-        167,
-        168
+        189,
+        190
       ],
       "summary": [
         [
@@ -3998,7 +4030,7 @@
       "title": "5.3 Shared Memory function reference",
       "line": 4438,
       "slides": [
-        169
+        191
       ],
       "summary": [],
       "remark": null,
@@ -4015,7 +4047,7 @@
       "title": "6. Scheduling and context switching",
       "line": 4461,
       "slides": [
-        171
+        193
       ],
       "summary": [
         "**Scheduler:** selects runnable PCB",
@@ -4055,7 +4087,7 @@
       "title": "6.1.1 Algorithm and Round Robin comparison",
       "line": 4478,
       "slides": [
-        172
+        194
       ],
       "summary": [
         "**Lazy Round Robin:** scan after current; wrap at tail",
@@ -4090,8 +4122,8 @@
       "title": "6.1.1.1 Selecting the next runnable process",
       "line": 4498,
       "slides": [
-        173,
-        174
+        195,
+        196
       ],
       "summary": [],
       "remark": null,
@@ -4124,7 +4156,7 @@
       "title": "6.1.1.2 Starting at the head after the last process",
       "line": 4551,
       "slides": [
-        175
+        197
       ],
       "summary": [
         "**Wraparound:** search reassignment to head",
@@ -4148,7 +4180,7 @@
       "title": "6.1.1.3 Reaching the list end during a scan",
       "line": 4571,
       "slides": [
-        176
+        198
       ],
       "summary": [
         "**Only current runnable:** can select it again",
@@ -4178,7 +4210,7 @@
       "title": "6.1.1.4 Implementation",
       "line": 4599,
       "slides": [
-        177
+        199
       ],
       "summary": [
         "**One list:** fewer state-change updates",
@@ -4217,8 +4249,9 @@
       "title": "6.2 Saved process registers",
       "line": 4658,
       "slides": [
-        178,
-        179
+        200,
+        201,
+        202
       ],
       "summary": [
         "**Activation:** embedded; PCB allocation + lifetime",
@@ -4251,11 +4284,11 @@
       "title": "6.3 Saving the current process and selecting the next process",
       "line": 4709,
       "slides": [
-        180,
-        181,
-        182,
-        183,
-        184
+        203,
+        204,
+        205,
+        206,
+        207
       ],
       "summary": [
         "**Save first:** activation before state change",
@@ -4321,8 +4354,8 @@
       "title": "6.4 Restoring the selected process and returning with `RTI`",
       "line": 4841,
       "slides": [
-        185,
-        186
+        208,
+        209
       ],
       "summary": [
         "**PCB + boundary:** arguments on kernel stack",
@@ -4371,7 +4404,7 @@
       "title": "6.5 Dispatcher function reference",
       "line": 4948,
       "slides": [
-        187
+        210
       ],
       "summary": [],
       "remark": null,
@@ -4403,8 +4436,11 @@
       "title": "7.1 Wait queues and PCB links",
       "line": 4973,
       "slides": [
-        189,
-        190
+        212,
+        213,
+        214,
+        215,
+        216
       ],
       "summary": [
         "**Intrusive FIFO:** links embedded in PCBs",
@@ -4466,7 +4502,7 @@
       "title": "7.1.1 Blocking with `sleep` and waking with `wakeup`",
       "line": 5050,
       "slides": [
-        191
+        217
       ],
       "summary": [
         "**sleep:** wait for event; no fixed delay",
@@ -4496,8 +4532,8 @@
       "title": "7.1.1.1 From blocking to resumed execution",
       "line": 5078,
       "slides": [
-        192,
-        193
+        218,
+        219
       ],
       "summary": [],
       "remark": null,
@@ -4522,7 +4558,7 @@
       "title": "7.1.2 Child waiting with `waitpid`",
       "line": 5108,
       "slides": [
-        194
+        220
       ],
       "summary": [
         "**Only recorded parent:** may collect exact child",
@@ -4556,8 +4592,8 @@
       "title": "7.1.2.1 Recording termination status",
       "line": 5152,
       "slides": [
-        195,
-        196
+        221,
+        222
       ],
       "summary": [
         "**WaitPidRequest:** two cells; status integer separate",
@@ -4612,8 +4648,8 @@
       "title": "7.1.2.2 Parent collection and final removal",
       "line": 5252,
       "slides": [
-        197,
-        198
+        223,
+        224
       ],
       "summary": [
         "**Zombie:** full PCB + resources + pending load retained",
@@ -4646,7 +4682,7 @@
       "title": "7.1.3 Wait queue function reference",
       "line": 5317,
       "slides": [
-        199
+        225
       ],
       "summary": [],
       "remark": null,
@@ -4682,7 +4718,9 @@
       "title": "7.2.1 Supported signals and fixed actions",
       "line": 5349,
       "slides": [
-        200
+        226,
+        227,
+        228
       ],
       "summary": [
         "**Six signals:** fixed actions; cannot catch/ignore",
@@ -4725,7 +4763,7 @@
       "title": "7.2.2 Stopping and continuing a process",
       "line": 5389,
       "slides": [
-        201
+        229
       ],
       "summary": [
         "**Stop:** save prior state + stop signal",
@@ -4751,7 +4789,7 @@
       "title": "7.2.3 Termination, `Ctrl-C`, and parent collection",
       "line": 5402,
       "slides": [
-        202
+        230
       ],
       "summary": [
         "**Current target:** defer until dispatch",
@@ -4785,7 +4823,7 @@
       "title": "7.2.4 Fixed PicoOS signal actions compared with Unix",
       "line": 5423,
       "slides": [
-        203
+        231
       ],
       "summary": [
         "**PicoOS:** fixed signal actions",
@@ -4813,7 +4851,7 @@
       "title": "7.2.5 Signal function reference",
       "line": 5431,
       "slides": [
-        204
+        232
       ],
       "summary": [
         "**Parent removal:** children parent_pid ← 0",
@@ -4839,9 +4877,10 @@
       "title": "7.3 Mutexes with test-and-set and wait queues",
       "line": 5453,
       "slides": [
-        205,
-        206,
-        207
+        233,
+        234,
+        235,
+        236
       ],
       "summary": [
         "**Shared mutex:** same lock + embedded queue",
@@ -4906,10 +4945,10 @@
       "title": "8.1 Per-process file-descriptor table",
       "line": 5552,
       "slides": [
-        209,
-        210,
-        211,
-        212
+        238,
+        239,
+        240,
+        241
       ],
       "summary": [
         "**Open:** lowest free slot 0–4; exhaustion −1",
@@ -4982,8 +5021,8 @@
       "title": "8.2 Global terminal input buffer",
       "line": 5639,
       "slides": [
-        213,
-        214
+        242,
+        243
       ],
       "summary": [
         "**128 cells:** all usable; count distinguishes full/empty",
@@ -5033,9 +5072,9 @@
       "title": "8.3 Blocking and completing terminal reads",
       "line": 5686,
       "slides": [
-        215,
-        216,
-        217
+        244,
+        245,
+        246
       ],
       "summary": [
         "**UART mask:** atomic buffer check + queue insertion",
@@ -5098,7 +5137,8 @@
       "title": "8.4 Foreground input ownership and terminal-generated signals",
       "line": 5813,
       "slides": [
-        218
+        247,
+        248
       ],
       "summary": [
         "**set_foreground_process(0):** store negative caller PID",
@@ -5145,7 +5185,7 @@
       "title": "8.5 Virtual terminal and null-device paths",
       "line": 5874,
       "slides": [
-        219
+        249
       ],
       "summary": [
         "**Exact normalized paths:** select kernel behavior",
@@ -5181,7 +5221,7 @@
       "title": "8.6 File-descriptor creation, inheritance, duplication, and cleanup",
       "line": 5894,
       "slides": [
-        220
+        250
       ],
       "summary": [],
       "remark": null,
@@ -5213,9 +5253,10 @@
       "title": "8.8 Opening, reading, writing, and seeking",
       "line": 5931,
       "slides": [
-        221,
-        222,
-        223
+        251,
+        252,
+        253,
+        254
       ],
       "summary": [
         [
@@ -5287,8 +5328,8 @@
       "title": "8.9 PicoOS paths, working directories, and host operations",
       "line": 6012,
       "slides": [
-        224,
-        225
+        255,
+        256
       ],
       "summary": [
         "**PicoOS chdir:** PCB only; host directory unchanged",
@@ -5342,7 +5383,7 @@
       "title": "9. Kernel data structures: relationships, storage, and lifetimes",
       "line": 6072,
       "slides": [
-        227
+        258
       ],
       "summary": [
         "**Containment:** embedded field",
@@ -5368,8 +5409,9 @@
       "title": "9.1 Memory layout, allocation sources, and lifetimes",
       "line": 6083,
       "slides": [
-        228,
-        229
+        259,
+        260,
+        261
       ],
       "summary": [
         "**Kernel locals:** kernel stack or borrowed interrupt stack",
@@ -5394,8 +5436,8 @@
       "title": "9.2 Containment and reference relationships",
       "line": 6117,
       "slides": [
-        230,
-        231
+        262,
+        263
       ],
       "summary": [
         "**Kernel requests:** local frames; no heap allocation",
@@ -5437,7 +5479,7 @@
       "title": "9.3 Kernel global variables and process-list roots",
       "line": 6162,
       "slides": [
-        232
+        264
       ],
       "summary": [],
       "remark": null,
@@ -5454,7 +5496,7 @@
       "title": "9.4 Wait requests and queue storage",
       "line": 6189,
       "slides": [
-        233
+        265
       ],
       "summary": [
         "**Queue:** two PCB pointers; no waiter-node allocation",
@@ -5483,7 +5525,7 @@
       "title": "10. Userspace libraries",
       "line": 6211,
       "slides": [
-        235
+        267
       ],
       "summary": [
         "Local library code or **syscall wrapper**",
@@ -5524,8 +5566,8 @@
       "title": "10.1.1 Header, implementation, and linking",
       "line": 6232,
       "slides": [
-        236,
-        237
+        268,
+        269
       ],
       "summary": [
         "**Header:** signatures; compiler checks calls",
@@ -5575,8 +5617,8 @@
       "title": "10.1.2 Packing arguments and executing the syscall",
       "line": 6298,
       "slides": [
-        238,
-        239
+        270,
+        271
       ],
       "summary": [
         "**Request + result:** stack-local; no heap allocation",
@@ -5635,7 +5677,7 @@
       "title": "10.1.3.1 CPU execution and SRAM storage",
       "line": 6384,
       "slides": [
-        240
+        272
       ],
       "summary": [],
       "remark": null,
@@ -5668,7 +5710,7 @@
       "title": "10.1.3.2 Following entry and the two return paths",
       "line": 6432,
       "slides": [
-        241
+        273
       ],
       "summary": [],
       "remark": null,
@@ -5713,7 +5755,7 @@
       "title": "10.2 Library overview and dependencies",
       "line": 6529,
       "slides": [
-        242
+        274
       ],
       "summary": [
         "**Private syscall helpers:** avoid full unistd dependency",
@@ -5771,7 +5813,7 @@
       "title": "10.2.1.1 Process operations in `process.picoc`",
       "line": 6590,
       "slides": [
-        243
+        275
       ],
       "summary": [],
       "remark": null,
@@ -5792,7 +5834,7 @@
       "title": "10.2.1.2 Descriptor operations in `io.picoc`",
       "line": 6610,
       "slides": [
-        244
+        276
       ],
       "summary": [],
       "remark": null,
@@ -5809,7 +5851,7 @@
       "title": "10.2.1.3 Working-directory operations in `working_directory.picoc`",
       "line": 6625,
       "slides": [
-        245
+        277
       ],
       "summary": [],
       "remark": null,
@@ -5826,7 +5868,7 @@
       "title": "10.2.1.4 Path operations in `file_removal.picoc`",
       "line": 6636,
       "slides": [
-        246
+        278
       ],
       "summary": [],
       "remark": null,
@@ -5843,7 +5885,7 @@
       "title": "10.2.1.5 Wait-queue operations in `blocking.picoc`",
       "line": 6648,
       "slides": [
-        247
+        279
       ],
       "summary": [],
       "remark": null,
@@ -5860,7 +5902,7 @@
       "title": "10.2.2 fcntl: opening and creating files",
       "line": 6660,
       "slides": [
-        248
+        280
       ],
       "summary": [],
       "remark": null,
@@ -5877,7 +5919,7 @@
       "title": "10.2.3 sys/wait: waiting for children",
       "line": 6671,
       "slides": [
-        249
+        281
       ],
       "summary": [],
       "remark": null,
@@ -5894,7 +5936,7 @@
       "title": "10.2.4 mutex: locking and waking contenders",
       "line": 6682,
       "slides": [
-        250
+        282
       ],
       "summary": [
         "**Shared object:** lock + queue visible to participants",
@@ -5918,7 +5960,7 @@
       "title": "10.2.5 sys/mman: named shared memory",
       "line": 6698,
       "slides": [
-        251
+        283
       ],
       "summary": [],
       "remark": null,
@@ -5935,7 +5977,10 @@
       "title": "10.2.6 dirent: directory streams",
       "line": 6710,
       "slides": [
-        252
+        284,
+        285,
+        286,
+        287
       ],
       "summary": [
         "**Listing:** fetched once; 512-cell owned buffer",
@@ -5978,7 +6023,7 @@
       "title": "10.2.7.1 Heap operations in `malloc.picoc`",
       "line": 6758,
       "slides": [
-        253
+        288
       ],
       "summary": [
         "**Positive allocation failure:** heap-full syscall",
@@ -5998,7 +6043,7 @@
       "title": "10.2.7.2 Decimal conversion in `atoi.picoc`",
       "line": 6774,
       "slides": [
-        254
+        289
       ],
       "summary": [],
       "remark": null,
@@ -6015,8 +6060,9 @@
       "title": "10.2.7.3 Environment operations in `env.picoc`",
       "line": 6784,
       "slides": [
-        255,
-        256
+        290,
+        291,
+        292
       ],
       "summary": [
         "**envp:** argv + argc + 1",
@@ -6055,7 +6101,7 @@
       "title": "10.2.7.4 Process exit in `exit.picoc`",
       "line": 6849,
       "slides": [
-        257
+        293
       ],
       "summary": [],
       "remark": null,
@@ -6072,11 +6118,11 @@
       "title": "10.2.8 string: copying, comparison, and length",
       "line": 6861,
       "slides": [
-        258
+        294
       ],
       "summary": [
         "**Local memory only:** no syscall/allocation",
-        "**Sizes:** RETI cells; leave room for terminator"
+        "**Sizes:** ReTI cells; leave room for terminator"
       ],
       "remark": null,
       "paragraphs": [
@@ -6092,7 +6138,7 @@
       "title": "10.2.9 stdio: streams, formatting, and scanning",
       "line": 6876,
       "slides": [
-        259
+        295
       ],
       "summary": [
         "**Per image:** standard streams + five extra slots",
@@ -6121,7 +6167,8 @@
       "title": "10.2.9.1 Streams and output in `stdio.picoc`",
       "line": 6899,
       "slides": [
-        260
+        296,
+        297
       ],
       "summary": [
         "**First use:** descriptor availability queried once",
@@ -6151,7 +6198,7 @@
       "title": "10.2.9.2 Scanning in `scanf.picoc`",
       "line": 6925,
       "slides": [
-        261
+        298
       ],
       "summary": [
         "**Formats:** %d · %c · %s",
@@ -6172,7 +6219,7 @@
       "title": "10.2.10 start: entering and leaving a user program",
       "line": 6941,
       "slides": [
-        262
+        299
       ],
       "summary": [],
       "remark": null,
@@ -6189,7 +6236,7 @@
       "title": "10.2.11 Single-function libraries",
       "line": 6953,
       "slides": [
-        263
+        300
       ],
       "summary": [
         "**Reboot:** EPROM → reload kernel + init",
@@ -6217,8 +6264,8 @@
       "title": "11. Complete startup: bootloader, kernel, init, shell, and user applications",
       "line": 6976,
       "slides": [
-        265,
-        266
+        302,
+        303
       ],
       "summary": [],
       "remark": null,
@@ -6255,10 +6302,11 @@
       "title": "11.1 Loading the kernel from the EPROM bootloader",
       "line": 7015,
       "slides": [
-        267,
-        268,
-        269,
-        270
+        304,
+        305,
+        306,
+        307,
+        308
       ],
       "summary": [],
       "remark": null,
@@ -6307,8 +6355,8 @@
       "title": "11.2 Kernel startup",
       "line": 7161,
       "slides": [
-        271,
-        272
+        309,
+        310
       ],
       "summary": [
         "**Globals:** kernel .data",
@@ -6341,7 +6389,7 @@
       "title": "11.2.1 Loading init and entering normal execution",
       "line": 7227,
       "slides": [
-        273
+        311
       ],
       "summary": [
         "**Init:** PID 1; directory /; no parent",
@@ -6383,7 +6431,7 @@
       "title": "11.3 Init process",
       "line": 7280,
       "slides": [
-        274
+        312
       ],
       "summary": [],
       "remark": null,
@@ -6400,7 +6448,7 @@
       "title": "11.3.1 Init responsibilities",
       "line": 7288,
       "slides": [
-        275
+        313
       ],
       "summary": [
         "**Kernel:** execution + resources",
@@ -6431,7 +6479,7 @@
       "title": "11.3.2 Initial environment configuration",
       "line": 7304,
       "slides": [
-        276
+        314
       ],
       "summary": [
         "**257-cell buffer:** reject file ≥256 cells",
@@ -6457,7 +6505,8 @@
       "title": "11.3.3 Loading, starting, and waiting for the shell",
       "line": 7322,
       "slides": [
-        277
+        315,
+        316
       ],
       "summary": [
         "**Environment:** config parsed before shell loop",
@@ -6486,7 +6535,7 @@
       "title": "11.3.4 Shell startup",
       "line": 7385,
       "slides": [
-        278
+        317
       ],
       "summary": [
         "**Own heap + environment:** libstart before main",
@@ -6511,7 +6560,7 @@
       "title": "11.3.5 Loading user applications",
       "line": 7397,
       "slides": [
-        279
+        318
       ],
       "summary": [
         "**External command:** fresh payload; load + run",
@@ -6536,7 +6585,7 @@
       "title": "11.3.6 Shell exit and restart policy",
       "line": 7410,
       "slides": [
-        280
+        319
       ],
       "summary": [
         "**exit** → end session; init restarts shell",
@@ -6562,7 +6611,7 @@
       "title": "11.3.7 When init terminates",
       "line": 7421,
       "slides": [
-        281
+        320
       ],
       "summary": [
         "**PID 1** has no signal protection",
@@ -6616,8 +6665,8 @@
       "title": "12.1 Shell-owned state",
       "line": 7453,
       "slides": [
-        283,
-        284
+        322,
+        323
       ],
       "summary": [
         "**.data:** history, read-ahead, pipeline scratch",
@@ -6655,8 +6704,9 @@
       "title": "12.2 Shell startup and command loop",
       "line": 7504,
       "slides": [
-        285,
-        286
+        324,
+        325,
+        326
       ],
       "summary": [
         "**Startup:** close 3–7; keep inherited standard streams",
@@ -6695,8 +6745,9 @@
       "title": "12.3 Interactive line editing and command history",
       "line": 7564,
       "slides": [
-        287,
-        288
+        327,
+        328,
+        329
       ],
       "summary": [
         "**Command buffer:** 79 characters + terminator",
@@ -6730,7 +6781,8 @@
       "title": "12.4 Command parsing, expansion, and execution",
       "line": 7641,
       "slides": [
-        289
+        330,
+        331
       ],
       "summary": [
         "**One unquoted pipe:** balanced quotes required",
@@ -6784,7 +6836,7 @@
       "title": "12.5 Shell built-in commands",
       "line": 7681,
       "slides": [
-        290
+        332
       ],
       "summary": [
         "**9 built-ins:** mutate shell’s own state",
@@ -6810,9 +6862,9 @@
       "title": "12.5.1 Foreground processes, background processes, and job-control signals",
       "line": 7704,
       "slides": [
-        291,
-        292,
-        293
+        333,
+        334,
+        335
       ],
       "summary": [
         [
@@ -6884,15 +6936,15 @@
       "title": "12.6 Input/output redirection",
       "line": 7859,
       "slides": [
-        294,
-        295,
-        296,
-        297,
-        298,
-        299,
-        300,
-        301,
-        302
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344
       ],
       "summary": [
         [
@@ -7019,10 +7071,10 @@
       "title": "12.7 Sequential file-backed pipelines",
       "line": 8124,
       "slides": [
-        303,
-        304,
-        305,
-        306
+        345,
+        346,
+        347,
+        348
       ],
       "summary": [
         "**One pipeline:** finite foreground commands",
@@ -7107,7 +7159,8 @@
       "title": "13.1 Writing a simple user application",
       "line": 8244,
       "slides": [
-        308
+        350,
+        351
       ],
       "summary": [
         "**argc check:** two operands; failure status 1",
@@ -7150,8 +7203,8 @@
       "title": "13.2 Applications, library calls, and host requests",
       "line": 8303,
       "slides": [
-        309,
-        310
+        352,
+        353
       ],
       "summary": [
         "**Command loading:** parent shell’s operation",
@@ -7185,8 +7238,8 @@
       "title": "13.2.1 Command behavior and supported options",
       "line": 8347,
       "slides": [
-        311,
-        312
+        354,
+        355
       ],
       "summary": [
         "**Killed counter:** probe fails; ps still shows zombie",
@@ -7220,7 +7273,7 @@
       "title": "13.2.2 Command errors and exit statuses",
       "line": 8441,
       "slides": [
-        313
+        356
       ],
       "summary": [
         "Results → **stdout**; diagnostics → stderr",
@@ -7262,7 +7315,7 @@
       "title": "14.1 Library, OS, shell, and boot test categories",
       "line": 8460,
       "slides": [
-        315
+        358
       ],
       "summary": [
         "**63 classes:** 13 library; 23 OS; 26 shell; 1 boot",
@@ -7292,8 +7345,8 @@
       "title": "14.1.1 Files that make up a test",
       "line": 8477,
       "slides": [
-        316,
-        317
+        359,
+        360
       ],
       "summary": [
         "**Fixtures:** stage under binary/test",
@@ -7322,7 +7375,8 @@
       "title": "14.1.2 Library test example",
       "line": 8507,
       "slides": [
-        318
+        361,
+        362
       ],
       "summary": [
         "**Library test:** linked ISR support; no PicoOS kernel",
@@ -7356,8 +7410,8 @@
       "title": "14.1.3 OS test example",
       "line": 8540,
       "slides": [
-        319,
-        320
+        363,
+        364
       ],
       "summary": [
         "**OS category:** launcher + exact three-line input",
@@ -7397,7 +7451,7 @@
       "title": "14.1.4 Shell test example",
       "line": 8601,
       "slides": [
-        321
+        365
       ],
       "summary": [
         "**Encoded keys:** arrows, Home, Escape, Backspace, controls",
@@ -7430,7 +7484,7 @@
       "title": "14.1.5 Boot test example",
       "line": 8634,
       "slides": [
-        322
+        366
       ],
       "summary": [
         "**One boot fixture:** no private PicoC program",
@@ -7462,7 +7516,7 @@
       "title": "14.2 Test execution",
       "line": 8662,
       "slides": [
-        323
+        367
       ],
       "summary": [
         "**Per class:** fresh emulator + temporary peripherals",
@@ -7492,7 +7546,7 @@
       "title": "14.2.1 Make targets",
       "line": 8685,
       "slides": [
-        324
+        368
       ],
       "summary": [
         "**run-os:** inspect OS_RUN_PATH; no expected-output comparison",
@@ -7516,7 +7570,7 @@
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "line": 8704,
       "slides": [
-        326
+        370
       ],
       "summary": [
         "Inspect source + **live execution**",
@@ -7537,10 +7591,10 @@
       "title": "15.1 Operating-systems topics",
       "line": 8711,
       "slides": [
-        327
+        371
       ],
       "summary": [
-        "**Compare:** PicoC → symbolic RETI → binary → live state",
+        "**Compare:** PicoC → symbolic ReTI → binary → live state",
         "**Files:** descriptors + UART host requests"
       ],
       "remark": null,
@@ -7558,10 +7612,10 @@
     },
     {
       "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
-      "title": "15.1.1 Inspecting PicoOS execution in the RETI-Emulator",
+      "title": "15.1.1 Inspecting PicoOS execution in the ReTI-Emulator",
       "line": 8729,
       "slides": [
-        328
+        372
       ],
       "summary": [],
       "remark": null,
@@ -7598,7 +7652,8 @@
       "title": "15.1.2 Exploring userspace heap allocation",
       "line": 8782,
       "slides": [
-        329
+        373,
+        374
       ],
       "summary": [
         "**Predict:** storage, aliases, required free address",
@@ -7628,11 +7683,12 @@
     },
     {
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
-      "title": "15.1.3 Editing and executing symbolic RETI assembly",
+      "title": "15.1.3 Editing and executing symbolic ReTI assembly",
       "line": 8837,
       "slides": [
-        330,
-        331
+        375,
+        376,
+        377
       ],
       "summary": [
         "**Labels + pseudoinstructions:** compiler resolves/expands",
@@ -7678,7 +7734,7 @@
       "title": "15.2 Real-time operating-systems topics",
       "line": 8947,
       "slides": [
-        332
+        378
       ],
       "summary": [
         "**Inspect:** scheduling, waiting, synchronization",
@@ -7698,7 +7754,7 @@
       "title": "15.2.1 Parent, workers, and shared memory",
       "line": 8961,
       "slides": [
-        333
+        379
       ],
       "summary": [
         "**Three processes:** parent + two identical workers",
@@ -7736,8 +7792,10 @@
       "title": "15.2.2 Minimal launcher and worker code",
       "line": 9007,
       "slides": [
-        334,
-        335
+        380,
+        381,
+        382,
+        383
       ],
       "summary": [
         "**Initialize mutex:** before starting either child",
@@ -7779,7 +7837,7 @@
       "title": "15.2.3 Following the counter and mutex through execution",
       "line": 9136,
       "slides": [
-        336
+        384
       ],
       "summary": [
         [
@@ -7829,14 +7887,14 @@
       "title": "16. Use of AI in the project",
       "line": 9193,
       "slides": [
-        338
+        386
       ],
       "summary": [
         [
           "**Author’s work**",
           "**Core concepts, architecture, structural decisions**",
           "**System understanding + integration**",
-          "**Manual debugging:** custom RETI source debugger",
+          "**Manual debugging:** custom ReTI source debugger",
           "**No GDB:** custom CPU/runtime conventions"
         ],
         [
@@ -7892,7 +7950,7 @@
       "title": "17. Limitations",
       "line": 9262,
       "slides": [
-        340
+        388
       ],
       "summary": [],
       "remark": [
@@ -7915,7 +7973,7 @@
       "title": "Appendix: Inspecting `.bin` files with `hexyl`",
       "line": 9298,
       "slides": [
-        341
+        389
       ],
       "summary": [
         "**Header:** 20 bytes; words big-endian",

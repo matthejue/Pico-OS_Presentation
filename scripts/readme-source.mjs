@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto'
 
 export const md = new MarkdownIt({ html: true })
 export const hash = text => createHash('sha256').update(text).digest('hex')
+// Normalize presentation spelling without modifying the hashed source snapshots.
+export const presentationText = text => text.replaceAll('RETI', 'ReTI')
 export const anchorFor = title => title.replaceAll('`', '').toLowerCase().replace(/[^\w -]/g, '').replaceAll(' ', '-')
 export const plain = text => md.renderInline(text).replace(/<[^>]+>/g, ' ').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim()
 export function readmeSource(text) {
@@ -65,5 +67,5 @@ export function readmeSource(text) {
 }
 export function displayHtml(html) {
   // Links in source tables are documentation references, not presentation navigation.
-  return html.replace(/<a\b[^>]*>/g, '<span class="source-link">').replaceAll('</a>', '</span>')
+  return presentationText(html.replace(/<a\b[^>]*>/g, '<span class="source-link">').replaceAll('</a>', '</span>'))
 }

@@ -93,7 +93,7 @@
           <g class="label" transform="translate(-85.03125, -12)">
             <rect rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
             <g class="svg-label">
-              <text x="0" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">Compiled RETI program</text></g>
+              <text x="0" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">Compiled ReTI program</text></g>
           </g>
         </g>
         <g class="node default  " id="picoos-diagram-25-flowchart-E-3" transform="translate(709.5, 47)">

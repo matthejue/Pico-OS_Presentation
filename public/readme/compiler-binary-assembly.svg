@@ -40,7 +40,7 @@
     <g class="root">
       <g class="clusters" />
       <g class="edgePaths">
-        <path d="M138,110L138,118.167C138,126.333,138,142.667,150.933,158.655C163.866,174.643,189.731,190.287,202.664,198.108L215.597,205.93" id="picoos-diagram-6-L_RETI_ASSEMBLE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" marker-end="url(#picoos-diagram-6_flowchart-v2-pointEnd)" fill="none" stroke="#167b84" stroke-width="1px" stroke-dasharray="0px" />
+        <path d="M138,110L138,118.167C138,126.333,138,142.667,150.933,158.655C163.866,174.643,189.731,190.287,202.664,198.108L215.597,205.93" id="picoos-diagram-6-L_ReTI_ASSEMBLE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" marker-end="url(#picoos-diagram-6_flowchart-v2-pointEnd)" fill="none" stroke="#167b84" stroke-width="1px" stroke-dasharray="0px" />
         <path d="M429.008,98L429.008,108.167C429.008,118.333,429.008,138.667,416.075,156.655C403.142,174.643,377.277,190.287,364.344,198.108L351.411,205.93" id="picoos-diagram-6-L_SECTIONS_ASSEMBLE_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" marker-end="url(#picoos-diagram-6_flowchart-v2-pointEnd)" fill="none" stroke="#167b84" stroke-width="1px" stroke-dasharray="0px" />
         <path d="M283.504,286L283.504,290.167C283.504,294.333,283.504,302.667,283.504,310.333C283.504,318,283.504,325,283.504,328.5L283.504,332" id="picoos-diagram-6-L_ASSEMBLE_BIN_0" class=" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" marker-end="url(#picoos-diagram-6_flowchart-v2-pointEnd)" fill="none" stroke="#167b84" stroke-width="1px" stroke-dasharray="0px" />
       </g>
@@ -66,12 +66,12 @@
         </g>
       </g>
       <g class="nodes">
-        <g class="node default  " id="picoos-diagram-6-flowchart-RETI-0" transform="translate(138, 59)">
+        <g class="node default  " id="picoos-diagram-6-flowchart-ReTI-0" transform="translate(138, 59)">
           <rect class="basic label-container" x="-130" y="-51" width="260" height="102" rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1.5px" />
           <g class="label" transform="translate(-100, -36)">
             <rect rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
             <g class="svg-label">
-              <text x="54.96875" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">program.reti</text><text x="0.015625" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">linked RETI instructions and </text><text x="84.359375" y="66" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">data</text></g>
+              <text x="54.96875" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">program.reti</text><text x="0.015625" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">linked ReTI instructions and </text><text x="84.359375" y="66" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">data</text></g>
           </g>
         </g>
         <g class="node default  " id="picoos-diagram-6-flowchart-ASSEMBLE-1" transform="translate(283.50390625, 247)">
@@ -95,7 +95,7 @@
           <g class="label" transform="translate(-100, -60)">
             <rect rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
             <g class="svg-label">
-              <text x="56" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">program.bin</text><text x="23.546875" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">five-word big-endian </text><text x="51.53125" y="66" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">layout header</text><text x="6.078125" y="90" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">encoded RETI instructions </text><text x="54.109375" y="114" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">+ data words</text></g>
+              <text x="56" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">program.bin</text><text x="23.546875" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">five-word big-endian </text><text x="51.53125" y="66" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">layout header</text><text x="6.078125" y="90" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">encoded ReTI instructions </text><text x="54.109375" y="114" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="1px">+ data words</text></g>
           </g>
         </g>
       </g>

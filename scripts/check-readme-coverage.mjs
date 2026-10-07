@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import {readmeSource,md,hash,displayHtml,plain} from './readme-source.mjs'
+import {readmeSource,md,hash,displayHtml,plain,presentationText} from './readme-source.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 import {loadSourceState} from './source-state.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || (await loadSourceState()).snapshotPath
@@ -28,24 +28,25 @@ for(const a of assets) {
  }
  assert.ok(entry.slides.length,`${a.id}: placed`)
  assert.ok(deck.includes(`<!-- README_ASSET ${a.id}`),`${a.id}: artifact marker`)
- if(a.type==='mermaid')assert.ok(fences.some(f=>f.content===a.content),`${a.id}: unchanged complete diagram`)
+ if(a.type==='mermaid')assert.ok(fences.some(f=>f.content===presentationText(a.content)),`${a.id}: complete diagram with presentation spelling`)
  if(a.type==='math')assert.ok(deck.includes(a.content),`${a.id}: complete source equation`)
  if(a.type==='code') {
   const lines=a.content.split('\n');if(lines.at(-1)==='')lines.pop()
   const parts=[...deck.matchAll(new RegExp(`<!-- README_CODE_PART ${a.id} lines=(\\d+)-(\\d+) -->[\\s\\S]*?\x60\x60\x60[^\\n]*\\n([\\s\\S]*?)\x60\x60\x60`,'g'))]
   assert.ok(parts.length,`${a.id}: code parts present`)
   const original=part=>a.language!=='console'&&/\/input\.txt$/.test(codeLabels[a.id]||'')?part.replace(/^PicoOS> /gm,''):part
-  for(const part of parts)assert.equal(original(part[3]),lines.slice(Number(part[1])-1,Number(part[2])).join('\n')+'\n',`${a.id}: exact original lines, apart from terminal prompts`)
+  for(const part of parts)assert.equal(original(part[3]),presentationText(lines.slice(Number(part[1])-1,Number(part[2])).join('\n')+'\n'),`${a.id}: exact original lines, apart from terminal prompts and presentation spelling`)
   const ranges=[...new Map(parts.map(p=>[p[1],p])).values()].sort((a,b)=>Number(a[1])-Number(b[1]))
   assert.equal(ranges[0][1],'1');assert.equal(Number(ranges.at(-1)[2]),lines.length)
   for(let i=1;i<ranges.length;i++)assert.equal(Number(ranges[i][1]),Number(ranges[i-1][2])+1,`${a.id}: no omitted/duplicated boundary lines`)
-  assert.equal(ranges.map(p=>original(p[3])).join(''),a.content,`${a.id}: split parts reconstruct the full example`)
+  assert.equal(ranges.map(p=>original(p[3])).join(''),presentationText(a.content),`${a.id}: split parts reconstruct the full example`)
   if(codeLabels[a.id])assert.ok(deck.includes(`<span>${codeLabels[a.id].replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')}</span>`),`${a.id}: filename visible in shared code header`)
  }
  if(a.type==='image') {
   const original=await fs.readFile(path.resolve(process.env.README_REPOSITORY||'../Pico-OS',a.path)),copied=await fs.readFile(entry.copiedFile)
   assert.equal(hash(original),entry.originalFileSha256)
-  assert.equal(copied.toString('base64'),original.toString('base64'),`${a.id}: exact source image retained`)
+  const expected=a.path.endsWith('.svg')?Buffer.from(presentationText(original.toString('utf8'))):original
+  assert.equal(copied.toString('base64'),expected.toString('base64'),`${a.id}: source image retained with presentation spelling`)
  }
  if(a.type==='list') {
   const count=md.parse(a.raw,{}).filter(t=>t.type==='list_item_open'&&t.level===1).length
@@ -59,11 +60,12 @@ assert.ok(deck.startsWith(cover.trimEnd()),'Cover unchanged')
 // Source code/diagram labels are preserved; authored slide text stays brief.
 const prose=JSON.parse(await fs.readFile('config/readme-prose.json','utf8'))
 const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
-const bullets=[...Object.values(summaries).flat(Infinity),...Object.values(prose).flat(Infinity),...Object.values(facts).flatMap(f=>f[1])]
+const remarks=fact=>typeof fact[0]==='string'?[fact]:fact
+const bullets=[...Object.values(summaries).flat(Infinity),...Object.values(prose).flat(Infinity),...Object.values(facts).flatMap(f=>remarks(f).flatMap(note=>note[1]))]
 for(const bullet of bullets)assert.ok(plain(bullet).split(/\s+/).length<=10,`Brief bullet: ${bullet}`)
 for(const [anchor,items] of Object.entries(prose))for(const item of items.flat(Infinity))
  assert.ok(deck.includes(displayHtml(md.renderInline(item))),`${anchor}: reviewed prose actually appears alongside its source assets`)
-for(const [anchor,fact] of Object.entries(facts))for(const item of fact[1])
+for(const [anchor,fact] of Object.entries(facts))for(const item of remarks(fact).flatMap(note=>note[1]))
  assert.ok(deck.includes(displayHtml(md.renderInline(item))),`${anchor}: contextual/standards remark present`)
 assert.equal((deck.slice(cover.length).match(/<(?:p|div class="readme-explanation")\b/g)||[]).length,0,'No continuous slide prose')
 console.log(`Verified ${assets.filter(a=>!a.navigationOnly).length} source artifacts: full code/diagrams/images, all list items, reviewed table filtering/summaries, and brief slide text.`)

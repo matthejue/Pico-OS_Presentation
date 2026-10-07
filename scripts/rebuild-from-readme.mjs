@@ -1,11 +1,13 @@
-// Source artifacts stay intact. Reviewed bullets, table summaries and composition
+// Source artifacts retain their content with normalized ReTI spelling.
+// Reviewed bullets, table summaries and composition
 // are authored here/config; the opening PicoOS heading is displayed as
 // Introduction while source anchors and artifacts remain unchanged.
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import {readmeSource, md, hash, plain, displayHtml} from './readme-source.mjs'
+import {readmeSource, md, hash, plain, displayHtml, presentationText} from './readme-source.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
+import {placeSummaries} from '../config/readme-readability.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
 import {createSlideNotesStore} from './slide-notes.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '../Pico-OS/README.md'
@@ -58,15 +60,18 @@ for(const a of assets.filter(a=>a.type==='image')) {
  const bytes=await fs.readFile(path.resolve(process.env.README_REPOSITORY || path.dirname(sourcePath),a.path)), name=path.basename(a.path)
  a.outputPath=`/readme/${name}`
  if(name.endsWith('.svg')) {
-  const svg=bytes.toString('utf8'),box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
+  const svg=presentationText(bytes.toString('utf8')),box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
   a.aspect=box[2]/box[3]
-  await fs.writeFile(`public/readme/${name}`,bytes)
+  await fs.writeFile(`public/readme/${name}`,svg)
  } else {a.aspect=1.5;await fs.writeFile(`public/readme/${name}`,bytes)}
  Object.assign(inventory.get(a.id),{copiedFile:`public/readme/${name}`,originalFileSha256:hash(bytes)})
 }
 const grids=new Set(['table-6536','table-8316','table-7687'])
 const preserveVertical=new Set(['table-644','table-3998','table-7116'])
 const denseFieldTables=new Set(['table-1997','table-3653'])
+// Long request fields and stream/environment function descriptions need fewer
+// rows per slide even when the accompanying prose has its own slide.
+const readableTableCapacities={'table-1997':8,'table-6830':7,'table-6906':7}
 function balanced(items,capacity) {
  const count=Math.ceil(items.length/capacity),size=Math.ceil(items.length/count),result=[]
  for(let i=0;i<items.length;i+=size)result.push(items.slice(i,i+size))
@@ -75,10 +80,10 @@ function balanced(items,capacity) {
 function prepare(a) {
  if(a.type==='table') {
   const t=prepareTable(a),entry=inventory.get(a.id)
-  Object.assign(entry,{retainedRows:t.retainedRows,omittedRows:t.omittedRows,displayColumns:t.headerLabels})
+  Object.assign(entry,{retainedRows:t.retainedRows,omittedRows:t.omittedRows,displayColumns:t.headerLabels.map(presentationText)})
   if(!t.compactRows?.length){entry.excluded='Internal function table; no library-facing operation';return []}
   if(t.unresolved.length)throw Error('Missing reviewed table summary: '+JSON.stringify(t.unresolved))
-  const capacity=denseFieldTables.has(a.id)?12:grids.has(a.id)?(a.id==='table-8316'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14
+  const capacity=readableTableCapacities[a.id] ?? (denseFieldTables.has(a.id)?12:grids.has(a.id)?(a.id==='table-8316'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14)
   return balanced(t.compactRows,capacity).map(rows=>({...t,compactRows:rows,grid:grids.has(a.id),tableColumns:rows.length>=10&&t.columns<=3&&!preserveVertical.has(a.id)?2:1}))
  }
  if(a.type==='list') {
@@ -144,7 +149,7 @@ function renderCode(a) {
  const sourceLines=a.content.split('\n');if(sourceLines.at(-1)==='')sourceLines.pop()
  const cut=Math.ceil(sourceLines.length/2),parts=a.split?[sourceLines.slice(0,cut),sourceLines.slice(cut)]:[sourceLines]
  const language=a.terminal?'console':a.language==='reti'?'text':a.language
- const label=codeLabels[a.id] || (a.terminal?(a.content.includes('PicoOS>')?'PicoOS terminal':'Host terminal'):a.language==='reti'?'RETI assembly':'PicoC example')
+ const label=codeLabels[a.id] || (a.terminal?(a.content.includes('PicoOS>')?'PicoOS terminal':'Host terminal'):a.language==='reti'?'ReTI assembly':'PicoC example')
  const shares=columnShares('code:'+a.id)
  const budget=a.split?Math.max(...parts.map((lines,i)=>codeNeed(lines)/(shares[i]/100))):0
  const widths=a.split?shares.map(n=>budget*n/100):[a.nativeCodeWidth||(a.narrow?codeNeed(sourceLines):Math.max(640,Math.min(980,codeLineWidth(sourceLines))))]
@@ -170,7 +175,7 @@ function render(a) {
   if(a.tiles)return marker(a)+`\n<div class="hardware-tiles">${a.items.map(item=>`<div class="readme-tile"><div class="tile-name">${prose(Array.isArray(item)?item[0]:item)}</div>${Array.isArray(item)?bulletList(item.slice(1)):''}</div>`).join('')}</div>`
   return marker(a)+`\n<div class="readme-list${a.listColumns===2?' bullet-columns':''}">${bulletList(a.items)}</div>`
  }
- if(a.type==='recording')return marker(a)+'\n<AsciinemaRecording src="/casts/reti_emulator.cast" title="RETI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />\n<div class="slide-note">Click to play; click outside to navigate</div>'
+ if(a.type==='recording')return marker(a)+'\n<AsciinemaRecording src="/casts/reti_emulator.cast" title="ReTI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />\n<div class="slide-note">Click to play; click outside to navigate</div>'
 }
 const repeated={
  '116-program-sections-interrupt-table-entries-and-linker-placement':'21-reti-interrupt-entry-and-the-interrupt-service-routine-table',
@@ -220,11 +225,12 @@ for(const section of sections) {
  if(section.anchor==='picoos')groups.unshift({group:[],layout:'bullets'})
  if(!groups.length && !originals.length && section.paragraphs.length && !introOnly.has(section.anchor))throw Error('Missing reviewed prose bullets: '+section.anchor)
  const summary=summaries[section.anchor]||[]
- // Source lists stay complete. Additional prose summaries are distributed over
- // existing artifact slides rather than silently dropped whenever assets exist.
+ // Source lists stay complete. Reviewed placements move explanations off dense
+ // examples while retaining useful summaries beside spacious source content.
  const summaryParts=section.anchor==='picoos'||section.anchor==='intended-physical-hardware'||section.anchor==='111-compilation-pipeline-and-compiler-passes'
   ? [] : groups.length ? balanced(summary,Math.max(2,Math.ceil(summary.length/groups.length))) : []
- groups.forEach(({group,layout,panels,weights},number)=>{
+ groups=placeSummaries(groups,summaryParts,section)
+ groups.forEach(({group,layout,panels,weights,summary:pageSummary},number)=>{
   let content
   const columnKey='assets:'+group.map(a=>a.id).join('+')
   if(layout==='columns') {
@@ -234,12 +240,15 @@ for(const section of sections) {
     group.forEach((a,i)=>a.nativeCodeWidth=budget*shares[i]/100)
    }
   }
-  if(!group.length)content=`<div class="readme-list${summary.length>6?' bullet-columns':''}${summary.length>=3&&summary.every(Array.isArray)?' summary-cards':''}">${bulletList(summary)}</div>`
+  if(!group.length) {
+   const items=pageSummary.length?pageSummary:summary
+   content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items)}</div>`
+  }
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
   else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed,rowAttributes})
   else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):layout==='stacked'?rowAttributes(group):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
-  const additional=group.length?summaryParts[number]:null
+  const additional=group.length?pageSummary:null
   if(additional?.length) {
    const notes=`<div class="readme-list prose-summary${additional.some(Array.isArray)?' nested-summary':''}">${bulletList(additional)}</div>`
    // Short standalone code shares a centered, top-aligned row with its prose.
@@ -249,7 +258,11 @@ for(const section of sections) {
    else content+=`\n${notes}`
   }
   const fact=number===0?facts[section.anchor]:null
-  if(fact)content+=`\n<aside class="context-note"><b>${esc(fact[0])}</b>${bulletList(fact[1])}</aside>`
+  if(fact) {
+   const notes=typeof fact[0]==='string'?[fact]:fact
+   const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${bulletList(items)}</aside>`).join('\n')
+   content+=`\n${notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks}`
+  }
   pages.push({section,group,layout,content,number:groups.length>1?number+1:null})
  })
 }
@@ -301,15 +314,16 @@ const body=deckPages.map((p,i)=>{
  return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->${disabled?'\n<!-- SHORT_VERSION_DISABLED -->':''}\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
 })
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
-const rebuilt=cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n'
-await fs.writeFile('slides.md',ensureSlideIdentities(rebuilt,previous))
+const rebuilt=presentationText(cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
+await fs.writeFile('slides.md',ensureSlideIdentities(rebuilt,presentationText(previous)))
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('notes')}).syncMetadata()
-await fs.writeFile('config/section-overviews.json',JSON.stringify(sectionOverviews,null,2)+'\n')
+await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('Corrections'),corrections:true}).syncMetadata()
+await fs.writeFile('config/section-overviews.json',presentationText(JSON.stringify(sectionOverviews,null,2))+'\n')
 await fs.writeFile('docs/readme-coverage.json',JSON.stringify({sourceSha256:hash(source),slideCount:deckPages.length+2,assets:[...inventory.values()]},null,2)+'\n')
 await fs.writeFile('docs/readme-prose-review.json',JSON.stringify({
  sourceSha256:hash(source),
  sections:sections.map(section=>({
-  anchor:section.anchor,title:section.title,line:section.line,
+  anchor:section.anchor,title:presentationText(section.title),line:section.line,
   slides:deckPages.flatMap((page,i)=>!page.overview&&page.section===section?[i+3]:[]),
   summary:summaries[section.anchor]||[],remark:facts[section.anchor]||null,
   paragraphs:section.paragraphs.map(paragraph=>({line:paragraph.line,sourceSha256:hash(paragraph.text)})),

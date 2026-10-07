@@ -1,4 +1,4 @@
-# Slide notes
+# Slide notes and corrections
 
 Start the presentation with `npm run dev`, `yarn dev`, or an existing Makefile
 launch target. On any slide, use these shortcuts:
@@ -7,19 +7,38 @@ launch target. On any slide, use these shortcuts:
 | --- | --- |
 | `Alt+N` | Add or edit the current slide's Markdown note |
 | `Alt+Shift+N` | Show or hide notes in the panel at the upper right |
-| `H` | Show or hide the note buttons and other presentation hints |
-| `Ctrl+Enter` / `Cmd+Enter` | Save the note while editing |
+| `Alt+C` | Add or edit the current slide's correction bullets |
+| `Alt+Shift+C` | Show or hide corrections below the notes, near the vertical center |
+| `H` | Show or hide note/correction buttons and other presentation hints |
+| `Ctrl+Enter` / `Cmd+Enter` | Save the note or corrections while editing |
 | `Escape` | Close the editor; unsaved changes require saving, keeping the draft, or discarding it |
 
-The buttons at the upper right start hidden. Press `H` outside the editor to
+The note and correction buttons start hidden. Press `H` outside the editor to
 show or hide them together with the other presentation hints. Whenever visible,
-the buttons show their `Alt+N` and `Alt+Shift+N` shortcuts. These shortcuts also
+the buttons show their edit and visibility shortcuts. These shortcuts also
 work while the buttons are hidden. Reloading hides the buttons again.
-The visible panel follows the current slide as you navigate. Note text supports
-headings, lists, emphasis, links, and code. Notes are hidden from PDF exports.
+Both panels follow the current slide as you navigate, with independent visibility
+preferences. They are wider, use larger text, and have slightly transparent
+backgrounds. The existing note editor keeps its size. Note text supports
+headings, lists, emphasis, links, and code. Corrections use one simple Markdown
+bullet per entry, with optional blank lines:
+
+```markdown
+- Correct the arrow direction in the diagram.
+- Add the missing syscall reference.
+```
+
+The `Alt+Shift+C` slide panel hides completed bullets (`-[x]`, `- [x]`,
+or `- [X]`) and correction Markdown/images whose filenames start with `x_`.
+They remain available in the correction editor. The `x_` prefix survives
+filename refreshes after reordering or renaming slides. To hide a screenshot,
+prefix its PNG filename with `x_`; its sidecar can be prefixed too, without
+editing the metadata. Normal notes are unaffected.
+
+Notes and corrections are hidden from PDF exports.
 Saving requires the development server, which writes into this repository.
-Static builds include the saved notes and allow viewing them without a server
-that can write to the repository.
+Static builds include saved notes, corrections and screenshots for viewing
+without a server that can write to the repository.
 
 ## Files and slide identity
 
@@ -75,6 +94,48 @@ to reflect current numbers and titles. This leaves the Markdown body intact.
 Removing a slide retains its note file. Commit `slides.md` and `notes/*.md`
 together to preserve the relationship when sharing or reverting the repository.
 
+Corrections reuse exactly the same persistent slide UUIDs and Markdown storage
+workflow in `Corrections/`. Their `.md` files use the same readable filename and
+YAML header shown above; `slide_id` is the authoritative association. A slide's
+number, title, content or layout can change without changing that UUID.
+Correction filenames and metadata refresh alongside notes when starting,
+building, editing the slide source or rebuilding from the README.
+
+## Clipboard screenshots
+
+In the correction editor, choose **Save clipboard image** after copying an
+annotated screenshot. Clipboard access requires a supported browser on localhost
+or HTTPS; accept the browser's clipboard permission if prompted. Images are saved
+as PNG files (up to 10 MiB), without changing unsaved correction text. An empty
+clipboard or denied access displays an error and leaves the draft intact.
+
+Each screenshot has its own identifier and a readable name, for example:
+
+```text
+slide-007-introduction-build-and-run--<slide UUID>--screenshot-<image UUID>.png
+```
+
+Alongside it, `<filename>.png.json` stores `slide_id`, `slide_number`,
+`slide_title`, `source_anchor`, `image_id`, and `filename`. The sidecar's
+`slide_id` associates the image with the slide. Multiple screenshots can belong
+to one slide, including slides without correction text. Screenshots appear in
+the correction panel and editor; click one to view its full image.
+
+Use **Delete image** below a screenshot in the correction editor to remove both
+the PNG and its metadata file. This leaves saved correction text and unsaved
+drafts intact. You can also delete a PNG directly in `Corrections/`; leftover
+metadata for a missing screenshot is ignored, so loading corrections and saving
+a replacement still work. File deletions refresh the editor's image list.
+
+Opening or closing the correction editor does not create a Markdown file.
+Neither does saving only a screenshot or submitting blank correction text.
+A new `.md` file is created when you save nonempty correction text.
+
+Reordering or renaming refreshes image filenames and sidecars while retaining
+their UUIDs and original pixels. Removing a slide retains its corrections and
+images for recovery. Commit `slides.md` and the Markdown, PNG and JSON files in
+`Corrections/` together. PNG corrections are explicitly allowed by `.gitignore`.
+
 ## Saving and recovery
 
 The editor keeps unsaved drafts in browser storage when available. It warns
@@ -90,6 +151,11 @@ File writes are atomic, and concurrent repository writers use a lock. Damaged
 note metadata and duplicate note UUIDs fail clearly; existing files are not
 silently replaced.
 
-Run `npm run test:notes` for identity, rebuild, file persistence and conflict
-checks. `npm run test:notes:browser` starts an isolated temporary presentation
-and checks the editor in Chromium without changing the real slide or note files.
+Corrections use the same draft recovery, revision checks and editor behavior,
+with separate browser storage so notes and corrections remain independent.
+
+Run `npm run test:notes` for identity, rebuild, note/correction persistence,
+screenshot association and conflict checks. `npm run test:notes:browser` starts
+an isolated temporary presentation
+and checks both editors, clipboard images, navigation, metadata refresh and
+static viewing in Chromium without changing the real slide or correction files.

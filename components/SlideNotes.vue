@@ -5,7 +5,9 @@ import { useRouter } from 'vue-router'
 import { lockShortcuts, useNav } from '@slidev/client'
 import MarkdownIt from 'markdown-it'
 import publishedNotes from 'virtual:picoos-slide-notes'
+import publishedCorrections from 'virtual:picoos-slide-corrections'
 
+type CorrectionImage = { imageId: string, filename: string, url?: string }
 type Note = {
   slideId: string
   slideNumber: number
@@ -13,13 +15,32 @@ type Note = {
   content: string
   revision: string | null
   filename: string | null
+  images?: CorrectionImage[]
 }
 type Draft = { content: string, baseContent: string, revision: string | null, updatedAt: number }
 
 const nav = useNav()
 const router = useRouter()
+// Both annotation kinds share the editor, drafts, shortcuts and persistence.
+const props = defineProps<{ corrections?: boolean }>()
+const kind = props.corrections ? 'corrections' : 'notes'
+const singular = props.corrections ? 'correction' : 'note'
+const plural = props.corrections ? 'corrections' : 'notes'
+const heading = `Slide ${plural}`
+const editorLabel = `Edit slide ${singular}`
+const keyLetter = props.corrections ? 'C' : 'N'
+const shortcut = `Alt+${keyLetter}`
+const toggleShortcut = `Alt+Shift+${keyLetter}`
+const panelId = `slide-${kind}-panel`
+const inputId = `slide-${singular}-markdown`
+const directory = props.corrections ? 'Corrections' : 'notes'
+const endpoint = `${import.meta.env.BASE_URL}__slide-${kind}/`
+const editorHeader = `X-PicoOS-Slide-${props.corrections ? 'Corrections' : 'Notes'}`
+const visibleKey = `picoos:slide-${kind}:visible`
+const tabKey = `picoos:slide-${kind}:tab`
+const changeEvent = `picoos:slide-${kind}-changed`
 const writable = import.meta.env.DEV
-const notes = publishedNotes as Record<string, Note>
+const notes = (props.corrections ? publishedCorrections : publishedNotes) as Record<string, Note>
 const markdown = new MarkdownIt({ html: false, linkify: false, breaks: true }).disable('image')
 const visible = ref(false)
 const record = ref<Note | null>(null)
@@ -31,6 +52,7 @@ const textarea = ref<HTMLTextAreaElement>()
 const editorOpen = ref(false)
 const editorLoading = ref(false)
 const saving = ref(false)
+const deletingImage = ref(false)
 const editTarget = ref<Note | null>(null)
 const buffer = ref('')
 const baseContent = ref('')
@@ -45,9 +67,16 @@ const backupAvailable = ref(true)
 const otherDraft = ref<Draft | null>(null)
 const slideId = computed(() => typeof nav.currentFrontmatter.value.noteId === 'string' ? nav.currentFrontmatter.value.noteId : '')
 const dirty = computed(() => buffer.value !== baseContent.value)
-const renderedNote = computed(() => markdown.render(record.value?.content || ''))
-const draftPrefix = 'picoos:slide-note:draft:'
-const savedPrefix = 'picoos:slide-note:saved:'
+const displayedContent = computed(() => {
+  const content = record.value?.content || ''
+  if (!props.corrections) return content
+  if (record.value?.filename?.startsWith('x_')) return ''
+  return content.split(/\r?\n/).filter(line => !/^\s*-\s*\[x\]/i.test(line)).join('\n').trim()
+})
+const renderedNote = computed(() => markdown.render(displayedContent.value))
+const displayedImages = computed(() => (record.value?.images || []).filter(image => !image.filename.startsWith('x_')))
+const draftPrefix = `picoos:slide-${singular}:draft:`
+const savedPrefix = `picoos:slide-${singular}:saved:`
 let tabId = ''
 let fetchNumber = 0
 let editFetchNumber = 0
@@ -90,13 +119,16 @@ function validateNote(value: unknown, id: string): Note {
   if (!note || note.slideId !== id || typeof note.content !== 'string' || typeof note.slideTitle !== 'string'
     || !Number.isInteger(note.slideNumber) || !(typeof note.revision === 'string' || note.revision === null)
     || !(typeof note.filename === 'string' || note.filename === null))
-    throw new Error('The notes server returned an invalid response. Your draft is safe.')
+    throw new Error(`The ${plural} server returned an invalid response. Your draft is safe.`)
+  if (props.corrections && (!Array.isArray(note.images) || note.images.some(image => !image
+    || !/^[0-9a-f-]{36}$/.test(image.imageId) || typeof image.filename !== 'string')))
+    throw new Error('The corrections server returned invalid image metadata. Your draft is safe.')
   return note
 }
 
 async function getNote(id: string, signal?: AbortSignal): Promise<Note> {
   if (!writable) return fallback(id)
-  const response = await fetch(`${import.meta.env.BASE_URL}__slide-notes/${encodeURIComponent(id)}`, {
+  const response = await fetch(`${endpoint}${encodeURIComponent(id)}`, {
     cache: 'no-store', signal,
   })
   if (!response.ok) {
@@ -105,7 +137,7 @@ async function getNote(id: string, signal?: AbortSignal): Promise<Note> {
       const error = (await response.json()).error
       if (typeof error === 'string') reason = error
     } catch { /* A non-JSON response still has a useful status code. */ }
-    throw new Error(`Could not load this slide's note (${response.status})${reason ? `: ${reason}` : '.'}`)
+    throw new Error(`Could not load this slide's ${singular} (${response.status})${reason ? `: ${reason}` : '.'}`)
   }
   return validateNote(await response.json(), id)
 }
@@ -132,7 +164,7 @@ async function loadCurrent() {
 
 function toggleVisible() {
   visible.value = !visible.value
-  try { localStorage.setItem('picoos:slide-notes:visible', String(visible.value)) } catch { /* Viewing works without browser storage. */ }
+  try { localStorage.setItem(visibleKey, String(visible.value)) } catch { /* Viewing works without browser storage. */ }
   if (visible.value) void loadCurrent()
 }
 
@@ -183,17 +215,17 @@ function restoreDraft(draft: Draft, saved: Note) {
 function setConflict(saved: Note) {
   if (conflict.value?.revision !== saved.revision) conflictDraft.value = buffer.value
   conflict.value = saved
-  editorError.value = 'The saved note changed. Your draft was kept. Review the saved version below, merge its changes into your draft, then mark the draft as merged.'
+  editorError.value = `The saved ${singular} changed. Your draft was kept. Review the saved version below, merge its changes into your draft, then mark the draft as merged.`
 }
 
 async function openEditor() {
   notice.value = ''
   if (nav.isPrintMode.value || editorOpen.value || document.querySelector('dialog[open]')) return
   const id = slideId.value
-  if (!id) { notice.value = 'This slide has no persistent note ID. Restart the development server to assign slide IDs.'; return }
+  if (!id) { notice.value = 'This slide has no persistent slide ID. Restart the development server to assign slide IDs.'; return }
   if (!writable) {
     visible.value = true
-    notice.value = 'This published presentation shows saved notes. Use npm run dev in the repository to add or edit notes.'
+    notice.value = `This published presentation shows saved ${plural}. Use npm run dev in the repository to add or edit ${plural}.`
     return
   }
   const request = ++editFetchNumber
@@ -248,13 +280,15 @@ async function openEditor() {
   }
 }
 
-async function refreshEditor() {
+async function refreshEditor(imagesOnly = false) {
   if (!editTarget.value || saving.value || editorLoading.value) return
   const id = editTarget.value.slideId
   const request = ++editFetchNumber
   try {
     const saved = await getNote(id)
     if (!editorOpen.value || editTarget.value?.slideId !== id || request !== editFetchNumber) return
+    editTarget.value = { ...editTarget.value, images: saved.images }
+    if (imagesOnly) return
     if (saved.revision !== revision.value && dirty.value) setConflict(saved)
     else if (!dirty.value) {
       editTarget.value = saved
@@ -290,14 +324,14 @@ function markMerged() {
 }
 
 function useSavedNote() {
-  if (!conflict.value || !window.confirm('Discard your unsaved draft and use the current saved note?')) return
+  if (!conflict.value || !window.confirm(`Discard your unsaved draft and use the current saved ${singular}?`)) return
   buffer.value = conflict.value.content
   baseContent.value = conflict.value.content
   revision.value = conflict.value.revision
   editTarget.value = conflict.value
   conflict.value = null
   editorError.value = ''
-  editorStatus.value = 'Loaded the current saved note.'
+  editorStatus.value = `Loaded the current saved ${singular}.`
   persistDraft()
 }
 
@@ -310,9 +344,9 @@ async function save() {
   const id = editTarget.value.slideId
   const content = buffer.value
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}__slide-notes/${encodeURIComponent(id)}`, {
+    const response = await fetch(`${endpoint}${encodeURIComponent(id)}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-PicoOS-Slide-Notes': '1' },
+      headers: { 'Content-Type': 'application/json', [editorHeader]: '1' },
       body: JSON.stringify({ content, revision: revision.value }),
     })
     if (response.status === 409) {
@@ -321,18 +355,18 @@ async function save() {
         const error = (await response.json()).error
         if (typeof error === 'string') reason = error
       } catch { /* The latest version can still resolve a conflict. */ }
-      editorError.value = 'The saved note changed. Your draft was kept. Reload the saved note to review and merge the changes.'
+      editorError.value = `The saved ${singular} changed. Your draft was kept. Reload the saved ${singular} to review and merge the changes.`
       canWrite.value = false
       const saved = await getNote(id)
       if (saved.revision !== revision.value) setConflict(saved)
-      else editorError.value = `${reason || 'Another note write is in progress.'} Your draft was kept. Try saving again.`
+      else editorError.value = `${reason || 'Another write is in progress.'} Your draft was kept. Try saving again.`
       canWrite.value = true
       return
     }
     if (!response.ok) {
       let reason = ''
       try { reason = (await response.json()).error || '' } catch { /* Keep the status if no JSON error was returned. */ }
-      throw new Error(`Could not save your note (${response.status})${reason ? `: ${reason}` : '.'} Your draft was kept.`)
+      throw new Error(`Could not save your ${singular} (${response.status})${reason ? `: ${reason}` : '.'} Your draft was kept.`)
     }
     const saved = validateNote(await response.json(), id)
     editTarget.value = saved
@@ -340,7 +374,7 @@ async function save() {
     revision.value = saved.revision
     buffer.value = saved.content
     if (slideId.value === id) record.value = saved
-    editorStatus.value = saved.filename ? `Saved to notes/${saved.filename}` : 'Note saved.'
+    editorStatus.value = saved.filename ? `Saved to ${directory}/${saved.filename}` : `${singular} saved.`
     closeWarning.value = false
     persistDraft()
     try { localStorage.setItem(`${savedPrefix}${id}`, JSON.stringify({ tabId, revision: saved.revision, time: Date.now() })) } catch { /* Revision checks also protect other tabs without storage. */ }
@@ -351,11 +385,83 @@ async function save() {
   } finally { saving.value = false }
 }
 
+function imageUrl(id: string, image: CorrectionImage) {
+  return image.url || `${endpoint}${encodeURIComponent(id)}/images/${encodeURIComponent(image.imageId)}`
+}
+
+async function saveClipboardImage() {
+  if (!props.corrections || !editTarget.value || saving.value || editorLoading.value || !canWrite.value) return
+  ++editFetchNumber
+  saving.value = true
+  editorError.value = ''
+  editorStatus.value = ''
+  persistDraft()
+  const target = editTarget.value
+  try {
+    if (!navigator.clipboard?.read) throw new Error('Clipboard images require a browser with clipboard access on localhost or HTTPS.')
+    const items = await navigator.clipboard.read()
+    const item = items.find(item => item.types.some(type => type.startsWith('image/')))
+    if (!item) throw new Error('The clipboard contains no image. Copy an annotated screenshot first.')
+    const type = item.types.includes('image/png') ? 'image/png' : item.types.find(type => type.startsWith('image/'))!
+    let blob = await item.getType(type)
+    if (type !== 'image/png') {
+      const bitmap = await createImageBitmap(blob)
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width = bitmap.width
+        canvas.height = bitmap.height
+        canvas.getContext('2d')!.drawImage(bitmap, 0, 0)
+        blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error('Could not convert clipboard image to PNG.')), 'image/png'))
+      } finally { bitmap.close() }
+    }
+    const response = await fetch(`${endpoint}${encodeURIComponent(target.slideId)}/images`, {
+      method: 'POST', headers: { 'Content-Type': 'image/png', [editorHeader]: '1' }, body: blob,
+    })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error || `Could not save clipboard image (${response.status}).`)
+    const saved = await getNote(target.slideId)
+    // Image sidecars do not change the Markdown revision or the current draft.
+    editTarget.value = { ...target, images: saved.images }
+    if (slideId.value === target.slideId) record.value = saved
+    editorStatus.value = `Saved image to Corrections/${result.filename}`
+    if (!visible.value) toggleVisible()
+  } catch (error) {
+    editorError.value = error instanceof Error ? error.message : String(error)
+  } finally { saving.value = false }
+}
+
+async function deleteScreenshot(image: CorrectionImage) {
+  if (!props.corrections || !editTarget.value || saving.value || editorLoading.value || !canWrite.value) return
+  ++editFetchNumber
+  saving.value = true
+  deletingImage.value = true
+  editorError.value = ''
+  editorStatus.value = ''
+  persistDraft()
+  const target = editTarget.value
+  try {
+    const response = await fetch(imageUrl(target.slideId, image), {
+      method: 'DELETE', headers: { [editorHeader]: '1' },
+    })
+    const result = await response.json()
+    if (!response.ok) throw new Error(result.error || `Could not delete image (${response.status}).`)
+    const saved = validateNote(result, target.slideId)
+    editTarget.value = { ...target, images: saved.images }
+    if (slideId.value === target.slideId) record.value = saved
+    editorStatus.value = 'Image deleted.'
+  } catch (error) {
+    editorError.value = error instanceof Error ? error.message : String(error)
+  } finally {
+    deletingImage.value = false
+    saving.value = false
+  }
+}
+
 function closeEditor(keepDraft = false) {
   if (saving.value) return
   if (dirty.value && !keepDraft) {
     closeWarning.value = true
-    editorStatus.value = 'Unsaved changes. Save your note, keep a browser draft, or discard the draft before closing.'
+    editorStatus.value = `Unsaved changes. Save your ${singular}, keep a browser draft, or discard the draft before closing.`
     return
   }
   persistDraft()
@@ -388,7 +494,7 @@ function onKey(event: KeyboardEvent) {
     return
   }
   if (event.type !== 'keydown' || event.repeat || event.isComposing || event.ctrlKey || event.metaKey || !event.altKey
-    || !(event.code === 'KeyN' || event.key.toLowerCase() === 'n') || document.querySelector('dialog[open]')) return
+    || !(event.code === `Key${keyLetter}` || event.key.toUpperCase() === keyLetter) || document.querySelector('dialog[open]')) return
   const target = event.target instanceof Element ? event.target : null
   if (target?.closest('input, textarea, select, [contenteditable="true"]')) return
   event.preventDefault()
@@ -410,7 +516,7 @@ function beforeUnload(event: BeforeUnloadEvent) {
 }
 
 function onStorage(event: StorageEvent) {
-  if (event.key === 'picoos:slide-notes:visible') visible.value = event.newValue === 'true'
+  if (event.key === visibleKey) { visible.value = event.newValue === 'true'; if (visible.value) void loadCurrent() }
   if (event.key === `${savedPrefix}${slideId.value}`) void loadCurrent()
   if (editorOpen.value && event.key === `${savedPrefix}${editTarget.value?.slideId}`) void refreshEditor()
 }
@@ -424,6 +530,8 @@ function onNotesChanged(data: { slideId?: string }) {
   if (!data.slideId || data.slideId === slideId.value) void loadCurrent()
   // Keep an open editor's revision pinned. A concurrent write is checked on
   // focus or save, and never replaces an in-progress draft through HMR.
+  if (props.corrections && editorOpen.value && (!data.slideId || data.slideId === editTarget.value?.slideId))
+    void refreshEditor(true)
 }
 
 watch(slideId, () => { notice.value = ''; void loadCurrent() })
@@ -431,22 +539,22 @@ watch([buffer, baseContent, revision], persistDraft, { flush: 'sync' })
 
 onMounted(() => {
   try {
-    visible.value = localStorage.getItem('picoos:slide-notes:visible') === 'true'
-    tabId = sessionStorage.getItem('picoos:slide-notes:tab') || uniqueToken()
-    sessionStorage.setItem('picoos:slide-notes:tab', tabId)
+    visible.value = localStorage.getItem(visibleKey) === 'true'
+    tabId = sessionStorage.getItem(tabKey) || uniqueToken()
+    sessionStorage.setItem(tabKey, tabId)
   } catch { tabId = `${Date.now()}-${Math.random().toString(36).slice(2)}` }
   if (nav.isPrintMode.value) return
   // Duplicating a browser tab also copies sessionStorage. Give the duplicate a
   // new backup namespace so two live editors cannot replace each other's draft.
   if (typeof BroadcastChannel !== 'undefined') {
     instanceId = uniqueToken()
-    tabChannel = new BroadcastChannel('picoos:slide-notes:tabs')
+    tabChannel = new BroadcastChannel(`picoos:slide-${kind}:tabs`)
     tabChannel.onmessage = ({ data }) => {
       if (!data || data.tabId !== tabId || data.instanceId === instanceId) return
       if (data.type === 'claim') tabChannel?.postMessage({ type: 'occupied', tabId, instanceId, recipient: data.instanceId })
       else if (data.type === 'occupied' && data.recipient === instanceId) {
         tabId = uniqueToken()
-        try { sessionStorage.setItem('picoos:slide-notes:tab', tabId) } catch { /* The new namespace remains valid for this page. */ }
+        try { sessionStorage.setItem(tabKey, tabId) } catch { /* The new namespace remains valid for this page. */ }
         persistDraft()
       }
     }
@@ -460,12 +568,12 @@ onMounted(() => {
   window.addEventListener('beforeunload', beforeUnload)
   window.addEventListener('storage', onStorage)
   window.addEventListener('focus', onFocus)
-  import.meta.hot?.on('picoos:slide-notes-changed', onNotesChanged)
+  import.meta.hot?.on(changeEvent, onNotesChanged)
   removeRouteGuard = router.beforeEach((to, from) => {
     if (!editorOpen.value || to.fullPath === from.fullPath) return true
     if (saving.value || dirty.value) {
       closeWarning.value = true
-      editorStatus.value = 'Save your note or keep the draft and close the editor before navigating.'
+      editorStatus.value = `Save your ${singular} or keep the draft and close the editor before navigating.`
       return false
     }
     closeEditor()
@@ -491,53 +599,63 @@ onBeforeUnmount(() => {
   window.removeEventListener('beforeunload', beforeUnload)
   window.removeEventListener('storage', onStorage)
   window.removeEventListener('focus', onFocus)
-  import.meta.hot?.off('picoos:slide-notes-changed', onNotesChanged)
+  import.meta.hot?.off(changeEvent, onNotesChanged)
 })
 </script>
 
 <template>
   <Teleport to="body">
-    <div v-if="shortcutHintsVisible && !nav.isPrintMode.value" class="slide-notes-controls">
-      <button aria-label="Edit slide note" title="Add or edit a slide note · Alt+N" @click.stop="openEditor">Notes · Alt+N</button>
-      <button aria-label="Toggle slide notes" :aria-expanded="visible" aria-controls="slide-notes-panel" title="Show or hide notes · Alt+Shift+N" @click.stop="toggleVisible">{{ visible ? 'Hide' : 'Show' }} · Alt+Shift+N</button>
+    <div v-if="shortcutHintsVisible && !nav.isPrintMode.value" class="slide-notes-controls" :class="{ 'slide-corrections-controls': corrections }">
+      <button :aria-label="editorLabel" :title="`Add or edit a slide ${singular} · ${shortcut}`" @click.stop="openEditor">{{ corrections ? 'Corrections' : 'Notes' }} · {{ shortcut }}</button>
+      <button :aria-label="`Toggle slide ${plural}`" :aria-expanded="visible" :aria-controls="panelId" :title="`Show or hide ${plural} · ${toggleShortcut}`" @click.stop="toggleVisible">{{ visible ? 'Hide' : 'Show' }} · {{ toggleShortcut }}</button>
     </div>
     <div v-if="notice && !nav.isPrintMode.value" class="slide-notes-notice" role="status">{{ notice }}</div>
-    <aside v-if="visible && !nav.isPrintMode.value" id="slide-notes-panel" class="slide-notes-panel" role="region" aria-label="Slide notes" @click.stop>
-      <header><div><strong>Slide notes</strong><span v-if="record">{{ slideLabel(record) }}</span></div><button aria-label="Hide slide notes" @click="toggleVisible">×</button></header>
-      <p v-if="!writable" class="notes-help">Saved notes · use npm run dev in the repository to edit.</p>
-      <p v-if="!slideId" role="status">This slide has no persistent note ID.</p>
-      <p v-else-if="loading" role="status">Loading note…</p>
+    <aside v-if="visible && !nav.isPrintMode.value" :id="panelId" class="slide-notes-panel" :class="{ 'slide-corrections-panel': corrections }" role="region" :aria-label="heading" @click.stop>
+      <header><div><strong>{{ heading }}</strong><span v-if="record">{{ slideLabel(record) }}</span></div><button :aria-label="`Hide slide ${plural}`" @click="toggleVisible">×</button></header>
+      <p v-if="!writable" class="notes-help">Saved {{ plural }} · use npm run dev in the repository to edit.</p>
+      <p v-if="!slideId" role="status">This slide has no persistent slide ID.</p>
+      <p v-else-if="loading" role="status">Loading {{ singular }}…</p>
       <div v-else-if="loadError" role="alert"><p>{{ loadError }}</p><button @click="loadCurrent">Retry</button></div>
-      <!-- HTML input and images are disabled; markdown-it escapes source markup and rejects unsafe link schemes. -->
-      <div v-else-if="record?.content" class="notes-markdown" v-html="renderedNote" />
-      <p v-else class="notes-help">No note for this slide yet. {{ writable ? 'Press Alt+N to add one.' : 'No note was saved when this presentation was built.' }}</p>
-      <footer v-if="record?.filename">{{ record.filename }}</footer>
+      <!-- Source HTML and Markdown images are disabled; screenshots use our local image endpoint. -->
+      <div v-else-if="displayedContent" class="notes-markdown" v-html="renderedNote" />
+      <p v-else class="notes-help">{{ corrections ? 'No active correction text for this slide.' : 'No note text for this slide yet.' }} {{ writable ? `Press ${shortcut} to add one.` : `No active ${singular} text is available in this presentation.` }}</p>
+      <div v-if="corrections && record && displayedImages.length && !loading && !loadError" class="correction-images">
+        <a v-for="image in displayedImages" :key="image.imageId" :href="imageUrl(record.slideId, image)" target="_blank" rel="noopener"><img :src="imageUrl(record.slideId, image)" :alt="`Correction screenshot for ${record.slideTitle}`" loading="lazy"><span>{{ image.filename }}</span></a>
+      </div>
+      <footer v-if="record?.filename && (!corrections || !record.filename.startsWith('x_'))">{{ record.filename }}</footer>
     </aside>
-    <dialog v-if="!nav.isPrintMode.value" ref="editor" class="slide-note-editor" aria-label="Edit slide note" @cancel.prevent="closeEditor()" @click.stop>
-      <header><div><strong>Edit slide note</strong><span v-if="editTarget">{{ slideLabel(editTarget) }}</span></div><button :disabled="saving" aria-label="Close note editor" @click="closeEditor()">Close<span v-if="shortcutHintsVisible"> · Esc</span></button></header>
+    <dialog v-if="!nav.isPrintMode.value" ref="editor" class="slide-note-editor" :aria-label="editorLabel" @cancel.prevent="closeEditor()" @click.stop>
+      <header><div><strong>{{ editorLabel }}</strong><span v-if="editTarget">{{ slideLabel(editTarget) }}</span></div><button :disabled="saving" :aria-label="`Close ${singular} editor`" @click="closeEditor()">Close<span v-if="shortcutHintsVisible"> · Esc</span></button></header>
       <div class="note-editor-body">
         <p v-if="editTarget && editTarget.slideId !== slideId" class="notes-help">The presentation changed. This editor still belongs to “{{ editTarget.slideTitle }}”.</p>
-        <p v-if="editorLoading" role="status">Loading saved note…</p>
+        <p v-if="editorLoading" role="status">Loading saved {{ singular }}…</p>
         <div v-if="otherDraft" class="draft-recovery"><p>An unsaved draft from another tab or session is available.</p><button :disabled="saving" @click="recoverOtherDraft">Recover draft</button><button @click="otherDraft = null">Dismiss</button></div>
-        <label for="slide-note-markdown">Markdown note</label>
-        <textarea id="slide-note-markdown" ref="textarea" v-model="buffer" aria-label="Markdown note" spellcheck="true" :disabled="editorLoading" :readonly="saving" placeholder="Write a note for this slide…" />
-        <p class="notes-help"><span v-if="shortcutHintsVisible">Ctrl/Cmd+Enter to save · Escape to close · </span>Notes stay linked when slides move.</p>
-        <p v-if="!backupAvailable" role="alert">Browser draft backup is unavailable. Save your note before leaving this page.</p>
+        <label :for="inputId">Markdown {{ singular }}</label>
+        <textarea :id="inputId" ref="textarea" v-model="buffer" :aria-label="`Markdown ${singular}`" spellcheck="true" :disabled="editorLoading" :readonly="saving" :placeholder="corrections ? '- correction text' : 'Write a note for this slide…'" />
+        <p class="notes-help"><span v-if="shortcutHintsVisible">Ctrl/Cmd+Enter to save · Escape to close · </span>{{ corrections ? 'Use one Markdown bullet per correction: - correction text' : 'Notes stay linked when slides move.' }}</p>
+        <button v-if="corrections" :disabled="saving || editorLoading || !canWrite" @click="saveClipboardImage">Save clipboard image</button>
+        <div v-if="corrections && editTarget?.images?.length" class="correction-images">
+          <div v-for="image in editTarget.images" :key="image.imageId" class="correction-image-entry">
+            <a :href="imageUrl(editTarget.slideId, image)" target="_blank" rel="noopener"><img :src="imageUrl(editTarget.slideId, image)" :alt="`Correction screenshot for ${editTarget.slideTitle}`" loading="lazy"><span>{{ image.filename }}</span></a>
+            <button :disabled="saving || editorLoading || !canWrite" :aria-label="`Delete screenshot ${image.filename}`" @click="deleteScreenshot(image)">Delete image</button>
+          </div>
+        </div>
+        <p v-if="!backupAvailable" role="alert">Browser draft backup is unavailable. Save your {{ singular }} before leaving this page.</p>
         <p v-if="editorError" class="note-error" role="alert">{{ editorError }}</p>
         <p v-if="editorStatus" role="status">{{ editorStatus }}</p>
         <div v-if="conflict" class="note-conflict">
-          <strong>Current saved version</strong><pre>{{ conflict.content || '(Empty note)' }}</pre>
+          <strong>Current saved version</strong><pre>{{ conflict.content || `(Empty ${singular})` }}</pre>
           <button :disabled="buffer === conflictDraft || saving" @click="markMerged">Mark draft as merged</button>
-          <button :disabled="saving" @click="useSavedNote">Use saved note</button>
+          <button :disabled="saving" @click="useSavedNote">Use saved {{ singular }}</button>
         </div>
-        <button v-if="!canWrite && !editorLoading" :disabled="saving" @click="refreshEditor">Reload saved note</button>
+        <button v-if="!canWrite && !editorLoading" :disabled="saving" @click="refreshEditor()">Reload saved {{ singular }}</button>
       </div>
       <footer>
-        <span>{{ saving ? 'Saving…' : dirty ? 'Unsaved draft' : 'All changes saved' }}</span>
+        <span>{{ saving ? deletingImage ? 'Deleting…' : 'Saving…' : dirty ? 'Unsaved draft' : 'All changes saved' }}</span>
         <div class="note-editor-actions">
           <button v-if="dirty || closeWarning" :disabled="saving || editorLoading || !backupAvailable" @click="closeEditor(true)">Keep draft &amp; close</button>
           <button v-if="closeWarning" :disabled="saving" @click="discardAndClose">Discard draft</button>
-          <button class="note-save" :disabled="!dirty || saving || editorLoading || !canWrite || !!conflict" @click="save">Save note</button>
+          <button class="note-save" :disabled="!dirty || saving || editorLoading || !canWrite || !!conflict" @click="save">Save {{ singular }}</button>
         </div>
       </footer>
     </dialog>
@@ -552,7 +670,15 @@ button:hover { background: #def2f2; }
 button:focus-visible, textarea:focus-visible { outline: 3px solid #de9b38; outline-offset: 2px; }
 button:disabled { cursor: default; opacity: .5; }
 .slide-notes-controls button { font-size: 11px; background: #f4fbfbee; box-shadow: 0 2px 8px #102b3310; }
-.slide-notes-panel { position: fixed; z-index: 102; top: 47px; right: 12px; width: min(360px, calc(100vw - 24px)); max-height: calc(100vh - 105px); display: flex; flex-direction: column; background: #f8fcfafa; border: 1px solid #9fbec2; border-radius: 8px; box-shadow: 0 10px 32px #102b3330; overflow: auto; overscroll-behavior: contain; -webkit-user-select: text; user-select: text; }
+.slide-notes-panel { position: fixed; z-index: 102; top: 47px; right: 12px; width: min(480px, calc(100vw - 24px)); max-height: calc(50vh - 90px); display: flex; flex-direction: column; font-size: 16px; background: #f8fcfae0; border: 1px solid #9fbec2; border-radius: 8px; box-shadow: 0 10px 32px #102b3330; overflow: auto; overscroll-behavior: contain; -webkit-user-select: text; user-select: text; }
+.slide-corrections-controls { top: calc(50% - 34px); }
+.slide-corrections-panel { top: 50%; max-height: calc(50vh - 24px); border-color: #c8a979; background: #fff9eee0; }
+.slide-notes-panel header strong { font-size: 18px; }
+.slide-notes-panel header span, .slide-notes-panel .notes-help { font-size: 14px; }
+.correction-images { display: flex; flex-direction: column; gap: 12px; padding-top: 12px; }
+.correction-images a { display: block; color: #087587; overflow-wrap: anywhere; font-size: 11px; }
+.correction-images img { display: block; max-width: 100%; max-height: 180px; object-fit: contain; border: 1px solid #c8a979; border-radius: 4px; margin-bottom: 4px; }
+.correction-image-entry { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .slide-notes-panel > header, .slide-note-editor > header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 14px 16px; border-bottom: 1px solid #c2d9d9; }
 header strong { display: block; font-size: 16px; }
 header span { display: block; margin-top: 3px; color: #4c6d73; font-size: 12px; overflow-wrap: anywhere; }

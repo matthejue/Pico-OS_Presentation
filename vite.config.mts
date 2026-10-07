@@ -25,6 +25,7 @@ function sendJson(response: ServerResponse, status: number, value: unknown) {
 export default defineConfig({
   plugins: [
     createSlideNotesPlugin(),
+    createSlideNotesPlugin({ corrections: true }),
     {
       name: 'picoos-short-version-editor',
       configureServer(server) {

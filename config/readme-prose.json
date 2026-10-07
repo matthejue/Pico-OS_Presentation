@@ -1,10 +1,11 @@
 {
   "picoos": [
-    "**Educational OS** for RETI",
-    "**Bootloader** → kernel → init → shell",
-    "**15 libraries** · **18 applications** · **37 syscalls**",
-    "**Shared physical memory**; no MMU or isolation",
-    "**Host-backed files** via UART"
+    "**Educational OS** running on **ReTI**",
+    "**Components:** Bootloader, Kernel, Init process, Shell, Libraries, Applications",
+    "**Non-preemptive kernel**",
+    "**No MMU or Isolation**",
+    "**Host-backed File System via UART**",
+    "**Unix / POSIX-inspired**; small subset; no conformance claim"
   ],
   "intended-physical-hardware": [
     "**Parts total:** €78.18 including VAT",
@@ -139,7 +140,7 @@
       "**Author’s work**",
       "**Core concepts, architecture, structural decisions**",
       "**System understanding + integration**",
-      "**Manual debugging:** custom RETI source debugger",
+      "**Manual debugging:** custom ReTI source debugger",
       "**No GDB:** custom CPU/runtime conventions"
     ],
     [
@@ -165,7 +166,7 @@
   "111-compilation-pipeline-and-compiler-passes": [
     "**Original:** one source file",
     "**Lark:** parses source into a parse tree",
-    "**AST construction**, then single-file lowering to RETI",
+    "**AST construction**, then single-file lowering to ReTI",
     "**Extended:** reusable units, **Tree-sitter** replaces **Lark**",
     "**Tree-sitter:** parses preprocessed source into a parse tree",
     "**AST construction**, symbol/type checks, linking + startup"
@@ -479,7 +480,7 @@
     "**Realloc:** resize in place or move"
   ],
   "32-sram-image-and-heap-hierarchy": [
-    "**Sizes:** 32-bit RETI cells",
+    "**Sizes:** 32-bit ReTI cells",
     "**Current kernel offsets:** change after rebuilding",
     "**Process base:** absolute; heap_start relative",
     "**libstart:** heap-bounds syscalls initialize inner allocator"
@@ -542,7 +543,7 @@
   ],
   "42212-initial-argc-argv-and-envp": [
     "**argv[0]:** executable path without leading /",
-    "**Each character:** one RETI cell",
+    "**Each character:** one ReTI cell",
     "**Strings + pointer arrays:** zero/null terminated",
     "**argv / envp:** array addresses; no extra pointer cells",
     "**Startup data:** no heap-boundary fit check"
@@ -783,7 +784,7 @@
   ],
   "1028-string-copying-comparison-and-length": [
     "**Local memory only:** no syscall/allocation",
-    "**Sizes:** RETI cells; leave room for terminator"
+    "**Sizes:** ReTI cells; leave room for terminator"
   ],
   "1029-stdio-streams-formatting-and-scanning": [
     "**Per image:** standard streams + five extra slots",
@@ -970,7 +971,7 @@
     "**Non-debug:** still records output files"
   ],
   "151-operating-systems-topics": [
-    "**Compare:** PicoC → symbolic RETI → binary → live state",
+    "**Compare:** PicoC → symbolic ReTI → binary → live state",
     "**Files:** descriptors + UART host requests"
   ],
   "1512-exploring-userspace-heap-allocation": [

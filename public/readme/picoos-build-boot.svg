@@ -12,7 +12,7 @@
 <text x="530" y="220" font-size="24" text-anchor="middle" font-weight="normal" fill="#17313a">Compile and link</text>
 <polyline points="310,220 385,220" fill="none" stroke="#637983" stroke-width="2.5" stroke-linejoin="miter" marker-end="url(#arrow)"/>
 <rect x="850" y="20" width="610" height="395" fill="#f4f8f8" stroke="#637983" stroke-width="2"/>
-<text x="1155" y="60" font-size="27" text-anchor="middle" font-weight="bold" fill="#17313a">RETI-Emulator</text>
+<text x="1155" y="60" font-size="27" text-anchor="middle" font-weight="bold" fill="#17313a">ReTI-Emulator</text>
 <rect x="900" y="95" width="500" height="85" fill="#eaf5f5" stroke="#637983" stroke-width="2"/>
 <text x="1150.0" y="129.5" font-size="22" text-anchor="middle" font-weight="normal" fill="#17313a">EEPROM: execute bootloader</text>
 <text x="1150.0" y="159.5" font-size="22" text-anchor="middle" font-weight="normal" fill="#17313a">-e bootloader.reti</text>

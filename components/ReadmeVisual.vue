@@ -48,7 +48,9 @@ function balanceRows() {
 // Text examples on one slide share a displayed type size. Fit each at the width it will
 // actually occupy, allowing long lines/cells to wrap before reducing the type.
 function fitText(availableWidth, availableHeight) {
-  const preferred = Math.min(props.kind === 'code' ? 1.15 : 1, availableWidth / props.width)
+  // A source's intrinsic width must not cap text size in a roomy panel. Reflow
+  // at a readable preferred size, then reduce it only when height requires it.
+  const preferred = props.kind === 'code' ? 1.35 : 1.1
   const heightAt = value => {
     content.value.style.width = `${availableWidth / value}px`
     return content.value.scrollHeight

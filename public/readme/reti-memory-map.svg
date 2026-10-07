@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="144" viewBox="0 46 1440 144" role="img" aria-labelledby="title desc">
-  <title id="title">RETI address space</title>
+  <title id="title">ReTI address space</title>
   <desc id="desc">The two highest bits of a 32-bit word address select EPROM with prefix 00, periphery with prefix 01, or SRAM with prefix 10 or 11. EPROM and periphery each occupy one quarter of the address space, while SRAM occupies one half. Region widths show address ranges, not installed memory capacity.</desc>
   <g font-family="Cantarell, sans-serif" fill="#17313a">
     <!-- Shared boundaries, with region widths in the ratio 1:1:2. -->

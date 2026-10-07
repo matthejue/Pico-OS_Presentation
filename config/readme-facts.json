@@ -1,15 +1,24 @@
 {
   "picoos": [
-    "POSIX / Unix",
     [
-      "**Familiar interfaces:** processes, signals, files, shells",
-      "**Small subset:** no conformance claim"
+      "Unix",
+      [
+        "Multiuser · multitasking OS family",
+        "Shell + small, composable tools"
+      ]
+    ],
+    [
+      "POSIX",
+      [
+        "Portable interface standard",
+        "Common APIs + shell commands"
+      ]
     ]
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
     "System V ABI",
     [
-      "General model adapted to RETI",
+      "General model adapted to ReTI",
       "Different from AMD64 ABI"
     ]
   ],
@@ -17,7 +26,7 @@
     "System V ABI",
     [
       "C helpers + inline assembly",
-      "Shared RETI stack-frame rules"
+      "Shared ReTI stack-frame rules"
     ]
   ],
   "23-saved-interrupt-stack-frame": [
@@ -25,7 +34,7 @@
     [
       "**Linux:** context on kernel stack",
       "**PicoOS:** context on user stack",
-      "RETI entry/RTI use active SP"
+      "ReTI entry/RTI use active SP"
     ]
   ],
   "24-system-call-interface-and-execution": [
@@ -46,7 +55,7 @@
     "System V Intel386 / POSIX",
     [
       "**Intel386 Fig. 3-31:** argc → argv → NULL → envp",
-      "**RETI:** entry PC, word characters; no auxiliary vector",
+      "**ReTI:** entry PC, word characters; no auxiliary vector",
       "**POSIX.1-2024:** arrays/environment; no physical layout",
       "**PicoOS:** load + run; no exec replacement"
     ]

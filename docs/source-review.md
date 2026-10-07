@@ -11,10 +11,12 @@ The source repository advanced during review. Its final commit removes the
 appendix's negative-offset hexyl example; that example is also removed here.
 Only committed source bytes are used. The source repository was not edited.
 
-The full deck has 341 slides, compared with 361 previously; the short deck has
-336. Neighboring content was merged where it fits. The title page, saved cover
-note, recording, shortcuts, zoom viewer, and five short-version exclusions are
-preserved. Exclusions now occupy full-deck slides 5, 6, 7, 8, and 11.
+The initial source update produced 341 slides, compared with 361 previously.
+The subsequent [readability review](readability-review.md) expands the full deck
+to 389 slides by moving explanations and separating crowded artifacts.
+Neighboring content remains merged where it fits. The title page, saved cover
+note, recording, shortcuts, and zoom viewer are preserved. The short deck follows
+the current saved exclusions.
 306 existing slide UUIDs remain. New or substantially changed compositions have
 separate identities; regeneration preserves the resulting UUIDs.
 

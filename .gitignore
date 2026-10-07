@@ -7,6 +7,9 @@ picoos-presentation-short-static.tar.gz
 *.pptx
 *.png
 !public/**/*.png
+!Corrections/*.png
 .DS_Store
 notes/.slide-notes.lock
 notes/*.tmp-*
+Corrections/.slide-notes.lock
+Corrections/*.tmp-*

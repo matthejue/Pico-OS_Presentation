@@ -50,17 +50,26 @@ environment variable, update ordering, and failure behavior are documented in
 [short presentation version](docs/short-version.md). Existing presentation
 targets continue to produce the full deck.
 
-## Slide notes
+## Slide notes and corrections
 
 Press `Alt+N` on a slide to add or edit its Markdown note, and
 `Ctrl+Enter` / `Cmd+Enter` to save. `Alt+Shift+N` toggles the notes panel at the
 upper right. The same actions are available as buttons.
+Use `Alt+C` to edit correction bullets (`- correction text`) and `Alt+Shift+C`
+to show or hide corrections below the notes, near the vertical center.
+Press `H` to show both sets of buttons and shortcut hints. Both displayed
+blocks are larger and slightly transparent; the editor retains its size.
+The correction editor's **Save clipboard image** button saves an annotated
+screenshot into `Corrections/` with a metadata sidecar.
 
 Notes are saved in `notes/` with the slide number, title, and a persistent UUID
 in the filename. The UUID keeps each note linked when slides move or are
 renumbered, and the README rebuild preserves it when the slide can be matched
 unambiguously. Editing requires the development server; static presentations
-include saved notes for viewing. See [slide notes](docs/slide-notes.md) for
+include saved notes, corrections and screenshots for viewing. Correction
+Markdown and screenshot sidecars use `slide_id` as the authoritative
+association; their readable filenames track the current number and title.
+See [slide notes and corrections](docs/slide-notes.md) for
 identity rules, draft recovery, and concurrent-edit handling.
 
 ## Releases
@@ -140,7 +149,7 @@ followed by any deeper README ancestors. Source anchors keep their README names.
 Shortcut hints start hidden in every presentation version. Press **H** to show
 or hide the content-slide control reminders and the overview's “Choose a topic
 or slide number ↗” hint. The setting persists while navigating and resets to
-hidden on reload. The same setting controls the contents prompt, note buttons
+hidden on reload. The same setting controls the contents prompt, note and correction buttons
 (which always show their shortcuts when visible), and visual viewer help.
 Development editing reminders appear when hints are shown.
 
@@ -148,7 +157,7 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 341 slides (336 in the short deck). Slides load on demand to
+content slides are excluded. The full deck contains 389 slides. The short deck follows the saved exclusions. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -172,16 +181,23 @@ boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware
 slides include the setup, wiring, and README price estimates.
 
+Crowded examples use the full slide area. Their prose moves to a roomier next
+slide or a separate explanation slide in the same subsection. Useful bullets
+stay beside examples where they fit. Reviewed placements and the remaining
+artifact splits live in [`config/readme-readability.mjs`](config/readme-readability.mjs).
+Text reflows at a larger preferred size and shrinks when the available height
+requires it. See the [readability review](docs/readability-review.md).
+
 Side-by-side content shares a common top edge while the whole group stays
 vertically centered in its available slide or panel area. This applies to
 paired tables, code boxes, lists, and columns within stacked panels. Standalone
 visuals are vertically centered within their panels. Command strips and their
-code examples stay together as one group. The RETI address map and its usage
+code examples stay together as one group. The ReTI address map and its usage
 table share one slide.
 
 Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
-sizes. All 80 distinct column layouts have been checked at slide size. Their proportions
+sizes. Column layouts are checked at slide size. Their proportions
 and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
 
 Code boxes and tables on the same slide share a displayed text size, including
@@ -202,8 +218,9 @@ content on one slide, including Build and run. Stacked panels retain the
 existing column proportions and allocate height to match their content.
 The emphasis styles are in [`styles/readme-emphasis.css`](styles/readme-emphasis.css).
 
-Images in `public/readme/` are copied byte for byte from the current README
-assets. Their existing colors, fonts, shapes, labels, and composition already
+Images in `public/readme/` retain the current README assets, with ReTI spelling
+normalized in SVG labels and identifiers. Source snapshots and source hashes
+retain the original bytes. Their existing colors, fonts, shapes, labels, and composition already
 match the presentation. Expanded memory views, redirection stages, and the
 producer/consumer pipeline diagrams use full-width slides. The enlarged viewer
 inlines source SVGs so their labels remain selectable. Unix/Linux and ABI

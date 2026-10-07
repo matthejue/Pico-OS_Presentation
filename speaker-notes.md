@@ -4,7 +4,7 @@ These notes follow the 37 slides in `slides.md` in order. The transition at the 
 
 ## Slide 1 — PicoOS
 
-Good morning, and welcome to my master project presentation. My project is called PicoOS. It is a small educational operating system for the RETI teaching CPU. The goal was not to reproduce Linux or to build a POSIX-compliant Unix system. Instead, I wanted to create a complete but understandable system in which the important operating-system mechanisms can be followed from source code down to individual RETI instructions. Today I will show how PicoOS boots, how it manages processes and memory, how user programs interact with the kernel, and how I verified that all these parts work together.
+Good morning, and welcome to my master project presentation. My project is called PicoOS. It is a small educational operating system running on the ReTI teaching CPU. The goal was not to reproduce Linux or to build a POSIX-compliant Unix system. Instead, I wanted to create a complete but understandable system in which the important operating-system mechanisms can be followed from source code down to individual ReTI instructions. Today I will show how PicoOS boots, how it manages processes and memory, how user programs interact with the kernel, and how I verified that all these parts work together.
 
 **Transition:** I will begin with why I built a deliberately small operating system in the first place.
 
@@ -30,7 +30,7 @@ The finished project contains much more than a kernel in isolation. First, there
 
 ## Slide 5 — From PicoC source to a running system
 
-PicoOS is one of three closely connected projects. The operating system is written in PicoC, a deliberately small subset of C. The PicoC compiler turns that source into symbolic RETI assembly and `.sections` metadata; the emulator's assembler prepends the five section-and-memory-layout words and emits the executable binary image. The compiler also generates the memory constants compiled into the bootloader and kernel. Those images run either in the RETI emulator or, in the intended physical setup, on an FPGA implementation of the same teaching CPU. The emulator models EPROM, SRAM, the interrupt controller, the timer, and UART. UART connects the operating system to terminal input and host-side services, while timer interrupts preempt userspace. This shared interface lets the software architecture remain the same for the emulator and planned hardware.
+PicoOS is one of three closely connected projects. The operating system is written in PicoC, a deliberately small subset of C. The PicoC compiler turns that source into symbolic ReTI assembly and `.sections` metadata; the emulator's assembler prepends the five section-and-memory-layout words and emits the executable binary image. The compiler also generates the memory constants compiled into the bootloader and kernel. Those images run either in the ReTI emulator or, in the intended physical setup, on an FPGA implementation of the same teaching CPU. The emulator models EPROM, SRAM, the interrupt controller, the timer, and UART. UART connects the operating system to terminal input and host-side services, while timer interrupts preempt userspace. This shared interface lets the software architecture remain the same for the emulator and planned hardware.
 
 **Transition:** With that context, I can separate the project into the main areas that I designed and connected.
 
@@ -66,13 +66,13 @@ Kernel initialization follows a deliberate order. It first activates the kernel 
 
 ## Slide 11 — Starting the init process
 
-At this point, the CPU is still in kernel context and init is the only ready process. Its process control block already contains an initial register set and an initial stack. One stack cell contains the address of the userspace start function minus one. The dispatcher marks init as running, loads its stack pointer, base-address frame register, code segment, data segment, and general registers, and then executes `RTI`. RETI normally returns from an interrupt, but here it also provides a clean way to enter a process. It takes the saved program counter, advances it, and begins exactly at `_start`. The same mechanism will later resume interrupted processes.
+At this point, the CPU is still in kernel context and init is the only ready process. Its process control block already contains an initial register set and an initial stack. One stack cell contains the address of the userspace start function minus one. The dispatcher marks init as running, loads its stack pointer, base-address frame register, code segment, data segment, and general registers, and then executes `RTI`. ReTI normally returns from an interrupt, but here it also provides a clean way to enter a process. It takes the saved program counter, advances it, and begins exactly at `_start`. The same mechanism will later resume interrupted processes.
 
-**Transition:** To see why this works, we need to look at how RETI finds interrupt handlers and how those handlers save context.
+**Transition:** To see why this works, we need to look at how ReTI finds interrupt handlers and how those handlers save context.
 
 ## Slide 12 — Interrupt vector table
 
-The binary begins with an interrupt vector table, followed by text and data sections. PicoOS defines four vector entries. Vector zero handles software system calls, vector one handles timer interrupts, vector two handles UART input, and vector three handles CPU exceptions. When an interrupt occurs, the RETI CPU saves only the program counter automatically and jumps through the selected vector. That is intentionally minimal. PicoOS must preserve every other live register itself before it can run ordinary kernel code. At the end of the path, `RTI` restores control using the saved program counter. This small hardware contract is the foundation for system calls, preemption, input, and exception recovery.
+The binary begins with an interrupt vector table, followed by text and data sections. PicoOS defines four vector entries. Vector zero handles software system calls, vector one handles timer interrupts, vector two handles UART input, and vector three handles CPU exceptions. When an interrupt occurs, the ReTI CPU saves only the program counter automatically and jumps through the selected vector. That is intentionally minimal. PicoOS must preserve every other live register itself before it can run ordinary kernel code. At the end of the path, `RTI` restores control using the saved program counter. This small hardware contract is the foundation for system calls, preemption, input, and exception recovery.
 
 **Transition:** The four vector entries lead to handlers with different purposes but a common low-level structure.
 
@@ -96,7 +96,7 @@ A userspace wrapper places the syscall number in `ACC`, one scalar value or a po
 
 ## Slide 16 — Function stack frames and `BAF`
 
-RETI stacks grow from high addresses toward low addresses, and `SP` points to the first free cell below the occupied stack. Function arguments are pushed from right to left. The caller then pushes a continuation address, while the called function saves the previous `BAF` and reserves its local variables. This means the first parameter is always at `BAF + 3`, and further or variadic parameters follow at increasing addresses. The same layout is used by library code and handwritten low-level handlers. On interrupt entry, the saved program counter and the six explicitly saved registers extend this stack image. Because the layout is fixed, the dispatcher can copy a suspended context into a process control block and later reconstruct it exactly.
+ReTI stacks grow from high addresses toward low addresses, and `SP` points to the first free cell below the occupied stack. Function arguments are pushed from right to left. The caller then pushes a continuation address, while the called function saves the previous `BAF` and reserves its local variables. This means the first parameter is always at `BAF + 3`, and further or variadic parameters follow at increasing addresses. The same layout is used by library code and handwritten low-level handlers. On interrupt entry, the saved program counter and the six explicitly saved registers extend this stack image. Because the layout is fixed, the dispatcher can copy a suspended context into a process control block and later reconstruct it exactly.
 
 **Transition:** With this shared context format in place, hardware events can either resume the current work or make another process runnable.
 

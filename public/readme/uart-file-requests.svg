@@ -4,7 +4,7 @@
     <line id="actor3" x1="447" y1="45" x2="447" y2="2000" class="actor-line 200" stroke-width="2px" stroke="#637983" name="H" fill="#f4f8f8" />
     <g id="root-3">
       <rect x="357" y="0" fill="#fff1d6" stroke="#c8861a" width="180" height="45" name="H" rx="0" ry="0" class="actor actor-top" stroke-width="1.5px" />
-      <text x="447" y="22.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" fill="#f4f8f8" stroke="#637983" stroke-width="1px" font-family="Cantarell, sans-serif" font-size="16px" text-anchor="middle"><tspan x="447" dy="0" fill="#17313a" stroke="none" stroke-width="1px" font-family="Cantarell, sans-serif" font-size="16px" text-anchor="middle" dominant-baseline="central">RETI-Emulator host</tspan></text></g>
+      <text x="447" y="22.5" dominant-baseline="central" alignment-baseline="central" class="actor actor-box" fill="#f4f8f8" stroke="#637983" stroke-width="1px" font-family="Cantarell, sans-serif" font-size="16px" text-anchor="middle"><tspan x="447" dy="0" fill="#17313a" stroke="none" stroke-width="1px" font-family="Cantarell, sans-serif" font-size="16px" text-anchor="middle" dominant-baseline="central">ReTI-Emulator host</tspan></text></g>
   </g>
   <g>
     <line id="actor2" x1="90" y1="45" x2="90" y2="2000" class="actor-line 200" stroke-width="2px" stroke="#637983" name="P" fill="#f4f8f8" />
