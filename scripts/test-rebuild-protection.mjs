@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { ensureSlideIdentities, inspectSlideIdentities } from './slide-identities.mjs'
-import { protectRebuild, rebuildRemovalIds } from './rebuild-protection.mjs'
+import { protectRebuild, rebuildRemovalIds, remapRebuildSelection } from './rebuild-protection.mjs'
 import { loadSourceState } from './source-state.mjs'
 
 const uuidA = '9d30b5de-5530-4a48-a81e-a986707db9fb'
@@ -33,6 +33,27 @@ assert.deepEqual(inspectSlideIdentities(result).map(slide => [slide.id, slide.ex
   [uuidB, true], [uuidC, false], [uuidA, false],
 ], 'reordering, renaming and content edits retain choices by UUID; new slides stay visible')
 assert.equal(protectRebuild(previous, result), result, 'protection is idempotent')
+assert.deepEqual(remapRebuildSelection(previous, result, [2]), [1], 'applied selections follow UUIDs after reordering')
+assert.deepEqual(remapRebuildSelection(previous, result, [1]), [3], 'pending additions and removals survive without being applied')
+assert.deepEqual(remapRebuildSelection(previous, result, []), [], 'new slides do not inherit exclusions')
+assert.throws(() => remapRebuildSelection(previous, result, [3]), /outside the previous/)
+assert.throws(() => remapRebuildSelection(previous, '# Missing identity\n', [1]), /stable SLIDE_ID/)
+
+// Reproduce the section 13/15 bug: a visible code example and a hidden
+// text-only commentary slide share the same README subsection anchor.
+for (const anchor of ['131-writing-a-simple-user-application', '1512-exploring-userspace-heap-allocation',
+  '1513-editing-and-executing-symbolic-reti-assembly', '1522-minimal-launcher-and-worker-code']) {
+  const oldExample = deck(slide(uuidA, 'Example (1)', '<!-- README_ASSET code-100 -->\nExample code'),
+    slide(uuidB, 'Example (2)', 'Commentary', true)).replaceAll('#shared', `#${anchor}`)
+  const generated = deck(slide(uuidB, 'Example (2)', 'Commentary'),
+    slide(uuidC, 'New example', '<!-- README_ASSET code-100 -->\nNew code', true),
+    slide(uuidA, 'Example (1)', '<!-- README_ASSET code-100 -->\nExample code', true))
+    .replaceAll('#shared', `#${anchor}`).replace(/^<!-- SLIDE_ID [^\n]+ -->\n/gm, '')
+  const protectedExample = protectRebuild(oldExample, ensureSlideIdentities(generated, oldExample))
+  assert.deepEqual(inspectSlideIdentities(protectedExample).map(s => s.excluded), [true, false, false],
+    `${anchor}: hiding commentary never hides code or new slides sharing its anchor/asset`)
+  assert.deepEqual(remapRebuildSelection(oldExample, protectedExample, [2]), [1])
+}
 assert.equal(protectRebuild(previous.replaceAll('\n', '\r\n'), reordered.replaceAll('\n', '\r\n')).replaceAll('\r\n', '\n'), result, 'CRLF deck retains slide identity and selection')
 assert.ok(!/(?<!\r)\n/.test(protectRebuild(previous.replaceAll('\n', '\r\n'), reordered.replaceAll('\n', '\r\n'))), 'inserted markers preserve CRLF line endings')
 
@@ -47,6 +68,7 @@ assert.throws(() => protectRebuild(previous, frontmatter.replace('layout: center
 
 const deliberatelyRemoved = protectRebuild(previous, deck(slide(uuidA, 'One')), [uuidB])
 assert.equal(inspectSlideIdentities(deliberatelyRemoved).length, 1, 'explicit removal of one exact UUID is supported')
+assert.deepEqual(remapRebuildSelection(previous, deliberatelyRemoved, [1, 2]), [1], 'an authorized removal drops only that slide from the selection')
 assert.throws(() => protectRebuild(previous, deck(slide(uuidA, 'One')), [uuidC]), /must identify an existing slide/)
 assert.throws(() => protectRebuild(previous, previous, [uuidB]), /must identify an existing slide/, 'stale removal authorizations fail')
 assert.deepEqual(rebuildRemovalIds([`--remove-slide=${uuidB.toUpperCase()}`]), [uuidB])
@@ -71,6 +93,7 @@ try {
   for (const directory of ['scripts', 'config', 'docs'])
     await cp(path.join(root, directory), path.join(fixture, directory), { recursive: true })
   await writeFile(path.join(fixture, 'slides.md'), actual)
+  await cp(path.join(root, 'short-version-disabled-slides.txt'), path.join(fixture, 'short-version-disabled-slides.txt'))
   await symlink(path.join(root, 'node_modules'), path.join(fixture, 'node_modules'), 'dir')
   const configPath = path.join(fixture, 'config/readme-prose.json')
   const prose = JSON.parse(await readFile(configPath, 'utf8'))
@@ -79,7 +102,7 @@ try {
   const generatorPath = path.join(fixture, 'scripts/rebuild-from-readme.mjs')
   const generator = await readFile(generatorPath, 'utf8')
   await writeFile(generatorPath, generator.replace('const introOnly=new Set([', "const introOnly=new Set(['421-loading-a-process-load-library-call',"))
-  const outputs = ['slides.md', 'config/section-overviews.json', 'docs/readme-coverage.json', 'docs/readme-prose-review.json']
+  const outputs = ['slides.md', 'short-version-disabled-slides.txt', 'config/section-overviews.json', 'docs/readme-coverage.json', 'docs/readme-prose-review.json']
   const before = await Promise.all(outputs.map(filename => readFile(path.join(fixture, filename), 'utf8')))
   process.chdir(fixture)
   process.argv = [process.execPath, generatorPath]

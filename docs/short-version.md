@@ -18,6 +18,11 @@ never transfers to another slide merely because it shares a section or asset.
 New slides are visible by default. A rebuild that loses any existing UUID stops
 before replacing outputs and lists the affected slides for review.
 
+README rebuilds also update the number selection automatically by UUID, including
+pending choices made with `m`. They do not apply those pending choices. Inserting,
+removing, or reordering slides therefore cannot make the next Apply operation
+target a different slide just because its number changed.
+
 [`short-version-disabled-slides.txt`](../short-version-disabled-slides.txt) is a
 temporary, human-editable selection expressed as whitespace-separated **full
 deck source slide numbers**. Spaces, tabs, and newlines are all accepted;
@@ -68,8 +73,8 @@ This operation is exact: markers not represented in the text file are removed,
 and markers for all listed numbers are added. Invalid or out-of-range values
 stop the operation without changing `slides.md`.
 
-After slides have been inserted, removed, or reordered, rebuild the number file
-from the persistent markers:
+README rebuilds refresh the number file automatically. After manually inserting,
+removing, or reordering slides, refresh it from the persistent markers:
 
 ```sh
 make sync-short-version-selection
@@ -78,7 +83,7 @@ make sync-short-version-selection
 
 This second direction intentionally overwrites the text file. Any number that
 was toggled with `m` but never applied to `slides.md` is therefore lost. The
-safe update workflow is:
+safe workflow for manual slide edits is:
 
 1. Press `Alt+A` (or run the apply target) before updating the deck.
 2. Update `slides.md`; preserve every `SHORT_VERSION_DISABLED` marker with its slide.

@@ -2036,6 +2036,7 @@ $ hexyl -n 20 program.bin
 
 <!-- SLIDE_ID 34f55380-203b-4af3-a00b-17ecd4efffaa -->
 <!-- SOURCE Pico-OS/README.md#12-reti-emulator-extensions -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
 
@@ -12090,7 +12091,6 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 
 <!-- SLIDE_ID 3837c397-435d-4f67-a71d-beedc4ecea98 -->
 <!-- SOURCE Pico-OS/README.md#1512-exploring-userspace-heap-allocation -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -12190,7 +12190,6 @@ int main(void) {
 
 <!-- SLIDE_ID 13c7f45d-6850-4aae-9a0a-ebb653f1cc44 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -12241,7 +12240,6 @@ done:
 
 <!-- SLIDE_ID 76d1ab88-1b2a-455d-8eeb-7c2a9e67d835 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -12419,7 +12417,6 @@ JUMP 0
 
 <!-- SLIDE_ID 56a43e1a-9177-498c-8c9e-1a64c1540974 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -12427,7 +12424,9 @@ JUMP 0
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-single">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 150fr) minmax(0, 240fr)">
+
+<div class="readme-artifacts composition-panel layout-single">
 
 <!-- README_ASSET code-9017 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-9017" data-code-part="1">
@@ -12453,21 +12452,7 @@ struct SharedState {
 
 </div>
 
-</div>
-
----
-
-<!-- SLIDE_ID 7776d5b7-c6e8-4012-ac4e-3d8248599968 -->
-<!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
-
-## 15.2.2 Minimal launcher and worker code (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
+<div class="readme-artifacts composition-panel layout-single">
 
 <!-- README_ASSET code-9034 -->
 <div class="code-columns" data-column-key="code:code-9034" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:3.091891891891892">
@@ -12535,15 +12520,16 @@ int main(void) {
 
 </div>
 
+</div>
+
 ---
 
 <!-- SLIDE_ID d0d41e3f-aa5f-439c-9c4a-07220adf33c0 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
-## 15.2.2 Minimal launcher and worker code (3)
+## 15.2.2 Minimal launcher and worker code (2)
 
 <div class="deck-content readme-slide">
 
@@ -12643,7 +12629,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
-## 15.2.2 Minimal launcher and worker code (4)
+## 15.2.2 Minimal launcher and worker code (3)
 
 <div class="deck-content readme-slide">
 

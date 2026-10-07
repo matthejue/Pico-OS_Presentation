@@ -142,7 +142,6 @@ const separateArtifacts = new Set([
   'table-5355', // signal actions and signal delivery
   'code-6716', // directory example and two function tables
   'code-7125', // bootloader code and its transfer diagram
-  'code-9017', // launcher declarations and the worker body
 ])
 
 export function placeSummaries(groups, summaries, section) {

@@ -10,7 +10,8 @@ import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 import {placeSummaries} from '../config/readme-readability.mjs'
 import {visualOnlySection, keepSummary, omitSourceLists, sourceListOmission, removeSourceListPanels, contextualNoteTargets} from '../config/readme-content-selection.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
-import {protectRebuild, rebuildRemovalIds} from './rebuild-protection.mjs'
+import {protectRebuild, rebuildRemovalIds, remapRebuildSelection} from './rebuild-protection.mjs'
+import {parseSlideNumbers, formatSlideNumbers} from './short-version.mjs'
 import {createSlideNotesStore} from './slide-notes.mjs'
 import {applySvgEdits} from '../config/readme-svg-edits.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '../Pico-OS/README.md'
@@ -36,6 +37,7 @@ const codeLineWidth=lines=>Math.max(...lines.map(line=>line.length*8.6+40))
 const codeNeed=lines=>Math.max(240,Math.min(560,codeLineWidth(lines)))
 const cover=await fs.readFile('config/title-slide.md','utf8')
 const previous=await fs.readFile('slides.md','utf8')
+const previousSelection=await fs.readFile('short-version-disabled-slides.txt','utf8')
 const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by dynamic presentation contents and section overviews'}:{})}]))
 for(const section of sections.filter(omitSourceLists))for(const asset of section.assets.filter(a=>a.type==='list'))
  inventory.get(asset.id).excluded=sourceListOmission
@@ -338,11 +340,14 @@ const body=deckPages.map((p,i)=>{
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
 const rebuilt=presentationText(cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
 const protectedDeck=protectRebuild(previous,ensureSlideIdentities(rebuilt,presentationText(previous)),allowedRemovalIds)
+const rebuiltSelection=formatSlideNumbers(remapRebuildSelection(previous,protectedDeck,parseSlideNumbers(previousSelection)))
 // Generate and validate the whole candidate before replacing any output.
 if(await fs.readFile('slides.md','utf8')!==previous)throw Error('Slide source changed during the rebuild; no output was replaced. Re-run using the latest slides.md.')
+if(await fs.readFile('short-version-disabled-slides.txt','utf8')!==previousSelection)throw Error('Short-version selection changed during the rebuild; no output was replaced. Re-run using the latest selection.')
 await fs.mkdir('public/readme',{recursive:true})
 for(const [filename,content] of imageOutputs)await fs.writeFile(filename,content)
 await fs.writeFile('slides.md',protectedDeck)
+await fs.writeFile('short-version-disabled-slides.txt',rebuiltSelection)
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('notes')}).syncMetadata()
 await createSlideNotesStore({slidesPath:path.resolve('slides.md'),notesDirectory:path.resolve('Corrections'),corrections:true}).syncMetadata()
 await fs.writeFile('config/section-overviews.json',presentationText(JSON.stringify(sectionOverviews,null,2))+'\n')

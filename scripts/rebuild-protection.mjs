@@ -10,6 +10,22 @@ export function rebuildRemovalIds(args) {
   })
 }
 
+// The editable selection can contain pending choices that differ from the
+// markers. Move those choices with their UUIDs instead of keeping old numbers
+// or overwriting them with the currently applied markers.
+export function remapRebuildSelection(previousMarkdown, candidateMarkdown, numbers) {
+  const previous = inspectSlideIdentities(previousMarkdown)
+  const candidate = inspectSlideIdentities(candidateMarkdown)
+  if ([...previous, ...candidate].some(slide => !slide.id))
+    throw new Error('Selection remapping requires a stable SLIDE_ID on every slide.')
+  const selectedIds = new Set(numbers.map(number => {
+    if (!Number.isSafeInteger(number) || number < 1 || number > previous.length)
+      throw new Error(`Selection slide ${number} is outside the previous 1-${previous.length} range; no output was replaced.`)
+    return previous[number - 1].id
+  }))
+  return candidate.filter(slide => selectedIds.has(slide.id)).map(slide => slide.number)
+}
+
 // Check individual identities, not counts: a new slide cannot conceal the loss
 // of another slide. Matching uncertainty stops the rebuild for review.
 export function protectRebuild(previousMarkdown, candidateMarkdown, allowedRemovalIds = []) {
