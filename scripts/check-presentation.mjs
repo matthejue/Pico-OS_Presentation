@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import { chromium } from 'playwright-chromium'
 import { inspectSlides, parseSlideNumbers } from './short-version.mjs'
+import { loadSourceState } from './source-state.mjs'
 
 // Test a real Slidev dev server or the built browser deck. This never exports
 // slides or executes PicoOS programs.
@@ -17,7 +18,8 @@ const shortSelection = parseSlideNumbers(
 const slides = markdown.split(/^---\s*$/m).slice(2)
 // Validate a candidate against its exact source before replacing the last
 // successful source snapshot. Normal checks continue to use the saved baseline.
-const primary = await readFile(process.env.PRESENTATION_SOURCE || new URL('../.source/Pico-OS-README.md', import.meta.url), 'utf8')
+const baseline = process.env.PRESENTATION_SOURCE ? undefined : await loadSourceState()
+const primary = await readFile(process.env.PRESENTATION_SOURCE || baseline.snapshotPath, 'utf8')
 
 function headings(text) {
   let fenced = false
@@ -89,7 +91,7 @@ for (const { page, slide, source, anchor, cover, overview } of pages) {
   }
 }
 if (!process.env.PRESENTATION_SOURCE)
-  assert.equal(JSON.parse(await readFile(new URL('../.source/source-state.json', import.meta.url))).slideCount, pages.length)
+  assert.equal(baseline.state.slideCount, pages.length)
 const shortVersion = inspectSlides(markdown)
 assert.equal(shortVersion.slideCount, pages.length, 'Short-version parser sees every source slide')
 assert.ok(shortSelection.every(slide => slide <= pages.length), 'Pending short-version slide numbers are in range')

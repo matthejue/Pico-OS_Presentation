@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-04",
+  "primarySource": {
+    "repository": "/home/areo/Documents/Studium/Pico-OS",
+    "file": "README.md",
+    "commit": "412263b504a292cf9b8b451773d2fb9e64bde764",
+    "contentSha256": "5caf0b5fd1ddc5f68e75e9bea725668a220a35dd11aee9e2758f44a28d136032",
+    "dirtyAtGeneration": true,
+    "snapshot": ".source/history/Pico-OS-README-2026-10-04T11-42-32+02-00.md"
+  },
+  "additionalSources": [],
+  "slideCount": 256,
+  "sourceMarker": "<!-- SOURCE Pico-OS/README.md#... -->"
+}

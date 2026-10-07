@@ -3,7 +3,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import {readmeSource,md,hash,displayHtml,plain} from './readme-source.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
-const sourcePath=process.env.PRESENTATION_SOURCE || '.source/Pico-OS-README.md'
+import {loadSourceState} from './source-state.mjs'
+const sourcePath=process.env.PRESENTATION_SOURCE || (await loadSourceState()).snapshotPath
 const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
 // Persistent identity is invisible metadata, independent of source coverage.
 const deck=rawDeck.replace(/^<!-- SLIDE_ID [0-9a-f-]+ -->\r?\n/gmi,'')

@@ -7,8 +7,8 @@ with uncommitted compiler-pipeline corrections. The update compares both the
 commit history and the exact saved README bytes, so those corrections remain
 part of the old-content comparison.
 
-`.source/Pico-OS-README.md` stores the exact current input;
-`.source/source-state.json` records its commit, SHA-256, dirty state, update
+`.source/Pico-OS-README-2026-10-07.md` stores the exact current input;
+`.source/source-state-2026-10-07.json` records its commit, SHA-256, dirty state, update
 date, and slide count. The full deck contains 361 slides; the shortened deck
 contains 356. The cover, saved cover note, recording, keyboard shortcuts,
 source markers, and all five short-version exclusions are preserved.
@@ -73,16 +73,28 @@ The numbered selection file is synchronized with the slide-local markers.
 ## Update workflow
 
 Follow the supplied `presentation.md` and `short-version.md` in
-`/home/areo/Documents/AI-Vault/skills/PicoOS_Presentation/`. No AGENTS.md was
-found in this checkout or its parent paths.
+`/home/areo/Documents/AI-Vault/skills/PicoOS_Presentation/` and the source-update
+rule in [source history](source-history.md).
 
 1. Apply pending numbered short-version selections.
-2. Compare the recorded commit and exact source snapshot with the candidate.
+2. Run `yarn source:compare`. Compare the latest dated state's source commit
+   with current Pico-OS HEAD and its working tree, including assets and
+   generators that affect README display. Compare the exact saved README
+   bytes with the candidate as well, preserving any old uncommitted edits.
 3. Remap moved headings and source artifacts, then review layout and summaries.
 4. Rebuild using `PRESENTATION_SOURCE`, check coverage, build, and verify the
    rendered deck before replacing the previous source baseline.
-5. Save the exact successful source bytes and metadata, then synchronize
-   short-version selections.
+5. Run `yarn source:save` after validation. Archive the previous pair in
+   `.source/history/` and save the exact successful source bytes and current
+   commit in `.source/Pico-OS-README-<date>.md` and
+   `.source/source-state-<date>.json`, then synchronize short-version selections.
+
+The missing archive was recovered from presentation Git history on 7 October
+2026. It contains 17 earlier saved pairs; timestamps retain multiple revisions
+from the same day. See [source history](source-history.md) and its provenance
+manifest. The current input is unchanged and still matches Pico-OS HEAD
+`551620232ed915a92e442891eafd03619b2a2d5e`; this bookkeeping correction requires
+no slide regeneration.
 
 The generator copies current images unchanged. The coverage inventory records
 source hashes, lines, retained/omitted rows, and placements. Changes to source

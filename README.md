@@ -105,8 +105,13 @@ The slide source is
 [`slides.md`](slides.md); global styling is in [`styles/index.css`](styles/index.css).
 Each slide contains an invisible `SOURCE` comment that maps it back to a stable
 Pico-OS README heading. The exact input bytes are saved in
-[`.source/Pico-OS-README.md`](.source/Pico-OS-README.md), with their commit, hash,
-dirty state, date, and slide count in [`.source/source-state.json`](.source/source-state.json).
+[`.source/Pico-OS-README-2026-10-07.md`](.source/Pico-OS-README-2026-10-07.md),
+with their commit, hash, dirty state, date, and slide count in
+[`.source/source-state-2026-10-07.json`](.source/source-state-2026-10-07.json).
+Each source update archives the previous dated pair in `.source/history/`.
+Run `yarn source:compare` before updating slides and `yarn source:save` after
+validation. The repository rule, recovered versions, and complete workflow
+are in [source history](docs/source-history.md).
 The current revision and update workflow are documented in
 [source review](docs/source-review.md).
 
@@ -296,7 +301,8 @@ node scripts/check-presentation.mjs
 
 While updating, set `PRESENTATION_SOURCE` to the exact candidate README path
 to validate its hierarchy before replacing the last successful source snapshot.
-After validation, save those exact bytes and refresh `.source/source-state.json`.
+After validation, run `yarn source:save` to archive the previous pair and save
+those exact bytes with the current source commit in the new dated pair.
 
 Also check both development launch variants, because successful production
 bundling does not guarantee that development imports load correctly. Start each
