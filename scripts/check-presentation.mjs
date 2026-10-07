@@ -270,7 +270,7 @@ try {
           found.push(`Horizontally clipped table cell: ${cell.textContent.slice(0, 70)}`)
       }
       for (const list of element.querySelectorAll('.readme-slide ul, .readme-slide ol')) {
-        if (list.querySelectorAll(':scope > li').length < 2)
+        if (list.querySelectorAll(':scope > li').length < 2 && !list.matches('ul.requested-sub-bullet'))
           found.push(`List has fewer than two items: ${list.textContent.slice(0, 70)}`)
       }
       for (const host of element.querySelectorAll('.mermaid')) {

@@ -373,12 +373,14 @@
         17
       ],
       "summary": [
-        "**Caller:** pushes arg2, then arg1, then the **return address**",
-        "**Callee:** pushes caller’s **BAF**; BAF points to first local",
-        "**Return:** callee restores BAF; result in **IN2**",
+        [
+          "For `fun(arg1, arg2)`, first pushes **arg2**, then **arg1**",
+          "**Variadic functions:** argument count doesn't matter"
+        ],
+        "**Callee:** pushes **caller BAF**; **BAF → first local**",
+        "**Return:** restores **BAF**; result in **IN2**",
         "**Caller:** removes arguments after return",
-        "**Variadic calls:** fixed offsets; callee need not know argument count",
-        "**Interrupt handlers:** reuse the same stack-frame rules"
+        "**Callee handles BAF + arguments** → elegant **interrupt service routines**"
       ],
       "remark": [
         "System V ABI",

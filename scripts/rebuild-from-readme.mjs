@@ -48,10 +48,11 @@ for(const block of previous.split(/(?=<!-- SOURCE Pico-OS\/README.md#)/)) {
 const inventory=new Map(assets.map(a=>[a.id,{id:a.id,type:a.type,anchor:a.anchor,line:a.line,endLine:a.endLine,sourceSha256:a.sha256,slides:[],...(a.path?{sourcePath:a.path}:{}),...(a.navigationOnly?{excluded:'Navigation replaced by dynamic presentation contents and section overviews'}:{})}]))
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 const prose=s=>displayHtml(md.renderInline(s))
-const bulletList=(items,cls='')=>{
- const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1))}`:prose(item))
+const bulletList=(items,cls='',requestedSubBullet=false)=>{
+ const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1),'',requestedSubBullet)}`:prose(item))
  if(!content.length)return ''
- if(content.length===1)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
+ if(content.length===1&&!requestedSubBullet)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
+ if(content.length===1&&requestedSubBullet)cls='requested-sub-bullet'
  return `<ul${cls?` class="${cls}"`:''}>${content.map(item=>`<li>${item}</li>`).join('\n')}</ul>`
 }
 const marker=a=>`<!-- README_ASSET ${a.id}${a.borrowed?' repeated':''} -->`
@@ -252,7 +253,7 @@ for(const section of sections) {
   }
   if(!group.length) {
    const items=pageSummary.length?pageSummary:summary
-   content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items)}</div>`
+   content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items,'',section.anchor==='113-system-v-abi-stack-frames-and-call-cleanup')}</div>`
   }
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>{

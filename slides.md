@@ -552,12 +552,11 @@ binary/basic_string.sections
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li><strong>Caller:</strong> pushes arg2, then arg1, then the <strong>return address</strong></li>
-<li><strong>Callee:</strong> pushes caller’s <strong>BAF</strong>; BAF points to first local</li>
-<li><strong>Return:</strong> callee restores BAF; result in <strong>IN2</strong></li>
+<div class="readme-list"><ul><li>For <code>fun(arg1, arg2)</code>, first pushes <strong>arg2</strong>, then <strong>arg1</strong><ul class="requested-sub-bullet"><li><strong>Variadic functions:</strong> argument count doesn't matter</li></ul></li>
+<li><strong>Callee:</strong> pushes <strong>caller BAF</strong>; <strong>BAF → first local</strong></li>
+<li><strong>Return:</strong> restores <strong>BAF</strong>; result in <strong>IN2</strong></li>
 <li><strong>Caller:</strong> removes arguments after return</li>
-<li><strong>Variadic calls:</strong> fixed offsets; callee need not know argument count</li>
-<li><strong>Interrupt handlers:</strong> reuse the same stack-frame rules</li></ul></div>
+<li><strong>Callee handles BAF + arguments</strong> → elegant <strong>interrupt service routines</strong></li></ul></div>
 <aside class="context-note"><b>System V ABI</b><ul><li>Binary interface rules</li>
 <li>Calls: arguments, registers, stack</li>
 <li>PicoOS adapts the stack convention to ReTI</li></ul></aside>
