@@ -314,6 +314,23 @@ export function createSlideNotesStore({
         const slides = await loadSlides()
         const notes = await loadNotes()
         const images = await loadImages()
+        if (corrections) {
+          const knownImages = new Set((await loadImages({ includeMissing: true })).map(image => image.image_id))
+          for (const filename of (await readdir(notesDirectory)).sort()) {
+            const ids = filename.match(/^(?:x_)?slide-\d+-.*--([0-9a-f-]{36})--screenshot-([0-9a-f-]{36})\.png$/)
+            if (!ids || !uuidPattern.test(ids[1]) || !uuidPattern.test(ids[2]) || knownImages.has(ids[2])) continue
+            const slide = slides.find(slide => slide.id === ids[1])
+            if (!slide) continue
+            // Recover a missing sidecar using only the persistent UUIDs in
+            // our screenshot filename. Existing metadata remains authoritative.
+            await imageFile(filename, MAX_CORRECTION_IMAGE_BYTES, false)
+            const metadata = { ...imageMetadata(slide, ids[2]), filename }
+            const sidecarFilename = `${filename}.json`
+            await atomicWrite(resolve(notesDirectory, sidecarFilename), `${JSON.stringify(metadata, null, 2)}\n`)
+            images.push({ ...metadata, sidecarFilename })
+            knownImages.add(ids[2])
+          }
+        }
         for (const slide of slides) {
           const previous = notes.get(slide.id)
           if (previous) await persist(slide, previous, previous.content)

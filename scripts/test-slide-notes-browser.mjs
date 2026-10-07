@@ -54,7 +54,12 @@ async function createFixture() {
     writeFile(join(fixtureDirectory, 'slides.md'), `---\ntheme: default\ntitle: Slide notes browser fixture\nfonts:\n  sans: Arial\n  mono: monospace\n---\n\n<!-- SLIDE_ID ${firstId} -->\n\n# Notes Alpha\n\nFirst note belongs here.\n\n<div class="zoomable">Zoomable fixture visual</div>\n\n---\n\n<!-- SLIDE_ID ${secondId} -->\n\n# Notes Beta\n\nSecond note belongs here.\n`),
   ])
   const port = await unusedPort()
+  startFixtureServer(port)
+}
+
+function startFixtureServer(port) {
   url = `http://localhost:${port}${fixtureBase}`
+  serverOutput = ''
   server = spawn(process.execPath, [join(project, 'node_modules/@slidev/cli/bin/slidev.mjs'), 'slides.md', '--port', String(port), '--base', fixtureBase, '--log', 'error'], {
     cwd: fixtureDirectory,
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -453,6 +458,23 @@ try {
     await rename(hiddenScreenshotPath, screenshotPath)
     await correctionPanel.getByText('Correct the Alpha label.', { exact: true }).waitFor()
     await page.waitForFunction(() => document.querySelector('#slide-corrections-panel img')?.naturalWidth === 4)
+
+    // Reproduce a real dev-server restart with an older PNG whose sidecar
+    // is missing. Recovery must reconnect the image from its stable UUID.
+    await page.goto('about:blank')
+    const stopped = once(server, 'exit')
+    server.kill('SIGTERM')
+    await stopped
+    await rm(`${screenshotPath}.json`)
+    startFixtureServer(await unusedPort())
+    await waitForServer()
+    await page.goto(`${url}2`)
+    await page.locator('.slidev-page-2 .slidev-layout').first().waitFor({ state: 'visible' })
+    await page.keyboard.press('Alt+Shift+c')
+    await correctionPanel.getByText('Correct the Alpha label.', { exact: true }).waitFor()
+    await page.waitForFunction(() => document.querySelector('#slide-corrections-panel img')?.naturalWidth === 4)
+    assert.equal((await getNote(firstId, true)).images[0].imageId, image.imageId, 'Server restart recovers an older image with missing metadata')
+    assert.equal(JSON.parse(await readFile(`${screenshotPath}.json`, 'utf8')).slide_id, firstId)
 
     await promisify(execFile)(process.execPath, [join(project, 'node_modules/@slidev/cli/bin/slidev.mjs'), 'build', 'slides.md', '--base', fixtureBase], {
       cwd: fixtureDirectory, timeout: 60000, maxBuffer: 1024 * 1024, env: { ...process.env, SLIDES_SHORT: '0' },

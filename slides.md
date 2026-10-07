@@ -616,6 +616,7 @@ binary/basic_string.sections
 
 <!-- SLIDE_ID d3b58fba-a68f-4657-8b39-c3ca3629d36b -->
 <!-- SOURCE Pico-OS/README.md#1131-stack-frame-layout-and-caller-cleanup -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
 

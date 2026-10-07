@@ -360,4 +360,42 @@ await withFixture(async ({ slidesPath, notesDirectory, store }) => {
   assert.deepEqual(await store.read(firstId), moved, 'Excluded filenames are stable across repeated synchronization')
 }, true)
 
-console.log('Notes and corrections: UUID associations, Markdown, screenshots, metadata refresh, conflicts, exclusions, validation, and recovery passed.')
+await withFixture(async ({ slidesPath, notesDirectory, store }) => {
+  const first = await store.saveImage(firstId, png)
+  const second = await store.saveImage(secondId, png)
+  const excluded = await store.saveImage(firstId, png)
+  const existingMetadata = await store.saveImage(secondId, png)
+  await rm(join(notesDirectory, existingMetadata.filename))
+  const misleadingFilename = `slide-999-alpha--${firstId}--screenshot-${existingMetadata.imageId}.png`
+  await writeFile(join(notesDirectory, misleadingFilename), png)
+  for (const image of [first, second, excluded]) await rm(join(notesDirectory, `${image.filename}.json`))
+  await rename(join(notesDirectory, excluded.filename), join(notesDirectory, `x_${excluded.filename}`))
+  const staleFilename = `slide-999-wrong-number-and-title--${firstId}--screenshot-${first.imageId}.png`
+  await rename(join(notesDirectory, first.filename), join(notesDirectory, staleFilename))
+  const unknownFilename = `slide-001-alpha--${thirdId}--screenshot-60bed78a-d5b0-4e49-a2b7-c609224cdd35.png`
+  await writeFile(join(notesDirectory, unknownFilename), png)
+  await writeFile(slidesPath, deck(slide(secondId, 'Beta moved'), slide(firstId, 'Alpha renamed', '<div>New layout</div>')))
+  const restarted = createSlideNotesStore({ slidesPath, notesDirectory, corrections: true })
+  await restarted.syncMetadata()
+  const recovered = await restarted.read(firstId)
+  assert.equal(recovered.images.length, 2, 'Restart reconnects screenshots whose sidecars are missing')
+  assert.equal(recovered.slideNumber, 2)
+  for (const image of recovered.images) {
+    assert.match(image.filename, /^(?:x_)?slide-002-alpha-renamed--/)
+    const metadata = JSON.parse(await readFile(join(notesDirectory, `${image.filename}.json`), 'utf8'))
+    assert.equal(metadata.slide_id, firstId, 'Recovery uses the UUID, never the old number or title')
+    assert.equal(metadata.slide_title, 'Alpha renamed')
+    assert.equal(metadata.image_id, image.imageId)
+    assert.deepEqual(await restarted.readImage(firstId, image.imageId), png)
+  }
+  assert.ok(recovered.images.find(image => image.imageId === excluded.imageId).filename.startsWith('x_'))
+  assert.equal((await restarted.read(secondId)).images[0].imageId, second.imageId)
+  assert.deepEqual(await restarted.readImage(secondId, second.imageId), png)
+  await restarted.syncMetadata()
+  assert.deepEqual(await restarted.read(firstId), recovered, 'Recovery is idempotent')
+  assert.ok(!(await readdir(notesDirectory)).includes(`${unknownFilename}.json`), 'Unrecognized slide UUIDs are never reassigned by number or title')
+  assert.deepEqual(await readFile(join(notesDirectory, unknownFilename)), png)
+  assert.ok(!(await readdir(notesDirectory)).includes(`${misleadingFilename}.json`), 'Existing metadata stays authoritative even when its PNG is missing')
+}, true)
+
+console.log('Notes and corrections: UUID associations, Markdown, screenshots, metadata refresh, conflicts, exclusions, validation, and restart recovery passed.')

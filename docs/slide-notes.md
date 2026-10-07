@@ -121,6 +121,12 @@ Alongside it, `<filename>.png.json` stores `slide_id`, `slide_number`,
 to one slide, including slides without correction text. Screenshots appear in
 the correction panel and editor; click one to view its full image.
 
+Keep each PNG and its `.png.json` sidecar together. If a sidecar is missing,
+starting or building the presentation restores it from the slide UUID and image
+UUID embedded in the original screenshot filename. Recovery preserves `x_`
+exclusions and never associates an image by slide number or title. Screenshots
+with unknown slide UUIDs remain untouched for manual recovery.
+
 Use **Delete image** below a screenshot in the correction editor to remove both
 the PNG and its metadata file. This leaves saved correction text and unsaved
 drafts intact. You can also delete a PNG directly in `Corrections/`; leftover
