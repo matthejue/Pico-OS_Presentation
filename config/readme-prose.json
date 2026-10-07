@@ -32,7 +32,7 @@
     "Syscall return → **safe switching point**",
     "**Polling:** bounded chunks; **DMA:** block"
   ],
-  "261-borrowed-stack-entry-and-return": [
+  "261-entering-kernel-segments-on-the-interrupted-stack": [
     "**UART/DMA** borrow interrupted stack",
     "Handler uses space below **saved frame**",
     "Retain SP + **stack boundary**",
@@ -77,24 +77,24 @@
     "**Lazy Round Robin** scans process list",
     "Only **runnable processes** enter execution"
   ],
-  "721-blocking-with-sleep-and-waking-with-wakeup": [
+  "711-blocking-with-sleep-and-waking-with-wakeup": [
     "sleep → **FIFO queue** + BLOCKED",
     "wakeup → remove head; mark **READY**",
     "Queue references PCBs; **owns no allocations**"
   ],
-  "732-stopping-and-continuing-a-process": [
+  "722-stopping-and-continuing-a-process": [
     "Stop saves **previous state** + signal",
     "STOPPED processes stay in **process list**",
     "Continue restores **prior state**",
     "Terminal read also needs **input ownership**"
   ],
-  "733-termination-ctrl-c-and-parent-collection": [
+  "723-termination-ctrl-c-and-parent-collection": [
     "**Current target:** defer until dispatch",
     "**Waiting parent:** status + wakeup + removal",
     "**Otherwise:** retain status as ZOMBIE",
     "**Ctrl+C** → shell resumes with 130"
   ],
-  "734-fixed-picoos-signal-actions-compared-with-unix": [
+  "724-fixed-picoos-signal-actions-compared-with-unix": [
     "**PicoOS:** fixed signal actions",
     "**Stop/continue** update state immediately",
     "Current-process termination waits for **dispatch**"
@@ -124,7 +124,7 @@
     "Survivors continue; **init** never restarted",
     "**Final-candidate deletion:** dispatcher limitation"
   ],
-  "1312-command-errors-and-exit-statuses": [
+  "1322-command-errors-and-exit-statuses": [
     "Results → **stdout**; diagnostics → stderr",
     "**Multiple paths:** continue; retain failure",
     "**Foreground result** stored in $?",
@@ -154,5 +154,22 @@
     "**Extended:** reusable units, **Tree-sitter** replaces **Lark**",
     "**Tree-sitter:** parses preprocessed source into a parse tree",
     "**AST construction**, symbol/type checks, linking + startup"
+  ],
+  "2512-requesting-deferred-scheduling-for-kernel-work": [
+    "Kernel timer sets **reschedule_requested**",
+    "Retain interrupted **stack + boundary**",
+    "**RTI** resumes unfinished kernel instructions",
+    "Syscall return checks **deferred request**"
+  ],
+  "2515-saving-process-context-and-restoring-the-selected-process": [
+    "Userspace timer enters **dispatcher directly**",
+    "Save outgoing **activation**",
+    "RUNNING → **READY**; preserve blocked/stopped state",
+    "Select runnable PCB; **restore + RTI**"
+  ],
+  "28111-comparing-exception-and-timer-context-tests": [
+    "**Timer:** saved PC identifies kernel restore instructions",
+    "**Exception:** interrupted CS identifies selected segments",
+    "User CS during restore can **misclassify kernel faults**"
   ]
 }

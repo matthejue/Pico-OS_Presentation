@@ -260,6 +260,8 @@
         "descendants": [
           "121-reti-machine-model-and-memory-mapped-peripherals",
           "122-atomic-test-and-set-with-tsl",
+          "1221-test-and-set-in-sram",
+          "1222-tsl-instruction-encoding",
           "123-uart-host-service-protocol",
           "124-debugger-source-view-and-terminal-modes"
         ]
@@ -278,6 +280,25 @@
         "title": "Atomic test-and-set with TSL",
         "titleHtml": "Atomic test-and-set with <code>TSL</code>",
         "depth": 2,
+        "descendants": [
+          "1221-test-and-set-in-sram",
+          "1222-tsl-instruction-encoding"
+        ]
+      },
+      {
+        "anchor": "1221-test-and-set-in-sram",
+        "number": "1.2.2.1",
+        "title": "Test-and-set in SRAM",
+        "titleHtml": "Test-and-set in SRAM",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "1222-tsl-instruction-encoding",
+        "number": "1.2.2.2",
+        "title": "TSL instruction encoding",
+        "titleHtml": "<code>TSL</code> instruction encoding",
+        "depth": 3,
         "descendants": []
       },
       {
@@ -319,21 +340,30 @@
         "titleHtml": "Interrupt-controller mappings and priorities",
         "depth": 1,
         "descendants": [
-          "221-interrupt-controller-function-reference",
-          "222-memory-mapped-periphery-function-reference"
+          "221-interrupt-controller-initialization",
+          "222-interrupt-controller-function-reference",
+          "223-memory-mapped-periphery-function-reference"
         ]
       },
       {
-        "anchor": "221-interrupt-controller-function-reference",
+        "anchor": "221-interrupt-controller-initialization",
         "number": "2.2.1",
+        "title": "Interrupt-controller initialization",
+        "titleHtml": "Interrupt-controller initialization",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "222-interrupt-controller-function-reference",
+        "number": "2.2.2",
         "title": "Interrupt-controller function reference",
         "titleHtml": "Interrupt-controller function reference",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "222-memory-mapped-periphery-function-reference",
-        "number": "2.2.2",
+        "anchor": "223-memory-mapped-periphery-function-reference",
+        "number": "2.2.3",
         "title": "Memory-mapped periphery function reference",
         "titleHtml": "Memory-mapped periphery function reference",
         "depth": 2,
@@ -358,10 +388,12 @@
           "2411-process-wait-signal-and-memory-request-structures",
           "2412-file-and-directory-request-structures",
           "242-system-call-entry-execution-and-return-to-userspace",
-          "2421-handle-syscall",
-          "24211-system-call-groups",
-          "2422-selecting-the-return-path",
-          "2423-stack-boundary-helpers",
+          "2421-entering-kernel-context",
+          "24211-stack-boundary-helpers",
+          "2422-handle-syscall",
+          "24221-system-call-groups",
+          "2423-selecting-the-return-path",
+          "2424-restoring-process-context-with-rti",
           "243-system-call-selection-function-reference"
         ]
       },
@@ -399,43 +431,63 @@
         "titleHtml": "System-call entry, execution, and return to userspace",
         "depth": 2,
         "descendants": [
-          "2421-handle-syscall",
-          "24211-system-call-groups",
-          "2422-selecting-the-return-path",
-          "2423-stack-boundary-helpers"
+          "2421-entering-kernel-context",
+          "24211-stack-boundary-helpers",
+          "2422-handle-syscall",
+          "24221-system-call-groups",
+          "2423-selecting-the-return-path",
+          "2424-restoring-process-context-with-rti"
         ]
       },
       {
-        "anchor": "2421-handle-syscall",
+        "anchor": "2421-entering-kernel-context",
         "number": "2.4.2.1",
+        "title": "Entering kernel context",
+        "titleHtml": "Entering kernel context",
+        "depth": 3,
+        "descendants": [
+          "24211-stack-boundary-helpers"
+        ]
+      },
+      {
+        "anchor": "24211-stack-boundary-helpers",
+        "number": "2.4.2.1.1",
+        "title": "Stack-boundary helpers",
+        "titleHtml": "Stack-boundary helpers",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "2422-handle-syscall",
+        "number": "2.4.2.2",
         "title": "Handle Syscall",
         "titleHtml": "Handle Syscall",
         "depth": 3,
         "descendants": [
-          "24211-system-call-groups"
+          "24221-system-call-groups"
         ]
       },
       {
-        "anchor": "24211-system-call-groups",
-        "number": "2.4.2.1.1",
+        "anchor": "24221-system-call-groups",
+        "number": "2.4.2.2.1",
         "title": "System-call groups",
         "titleHtml": "System-call groups",
         "depth": 4,
         "descendants": []
       },
       {
-        "anchor": "2422-selecting-the-return-path",
-        "number": "2.4.2.2",
+        "anchor": "2423-selecting-the-return-path",
+        "number": "2.4.2.3",
         "title": "Selecting the return path",
         "titleHtml": "Selecting the return path",
         "depth": 3,
         "descendants": []
       },
       {
-        "anchor": "2423-stack-boundary-helpers",
-        "number": "2.4.2.3",
-        "title": "Stack-boundary helpers",
-        "titleHtml": "Stack-boundary helpers",
+        "anchor": "2424-restoring-process-context-with-rti",
+        "number": "2.4.2.4",
+        "title": "Restoring process context with RTI",
+        "titleHtml": "Restoring process context with <code>RTI</code>",
         "depth": 3,
         "descendants": []
       },
@@ -455,6 +507,11 @@
         "depth": 1,
         "descendants": [
           "251-timer-interrupt-path",
+          "2511-saving-context-and-selecting-the-timer-branch",
+          "2512-requesting-deferred-scheduling-for-kernel-work",
+          "2513-restoring-interrupted-kernel-context-with-rti",
+          "2514-entering-kernel-context-for-userspace-preemption",
+          "2515-saving-process-context-and-restoring-the-selected-process",
           "252-kernel-non-preemption-and-deferred-rescheduling",
           "253-shell-character-delay-for-different-timer-intervals"
         ]
@@ -465,6 +522,52 @@
         "title": "Timer interrupt path",
         "titleHtml": "Timer interrupt path",
         "depth": 2,
+        "descendants": [
+          "2511-saving-context-and-selecting-the-timer-branch",
+          "2512-requesting-deferred-scheduling-for-kernel-work",
+          "2513-restoring-interrupted-kernel-context-with-rti",
+          "2514-entering-kernel-context-for-userspace-preemption",
+          "2515-saving-process-context-and-restoring-the-selected-process"
+        ]
+      },
+      {
+        "anchor": "2511-saving-context-and-selecting-the-timer-branch",
+        "number": "2.5.1.1",
+        "title": "Saving context and selecting the timer branch",
+        "titleHtml": "Saving context and selecting the timer branch",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2512-requesting-deferred-scheduling-for-kernel-work",
+        "number": "2.5.1.2",
+        "title": "Requesting deferred scheduling for kernel work",
+        "titleHtml": "Requesting deferred scheduling for kernel work",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2513-restoring-interrupted-kernel-context-with-rti",
+        "number": "2.5.1.3",
+        "title": "Restoring interrupted kernel context with RTI",
+        "titleHtml": "Restoring interrupted kernel context with <code>RTI</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2514-entering-kernel-context-for-userspace-preemption",
+        "number": "2.5.1.4",
+        "title": "Entering kernel context for userspace preemption",
+        "titleHtml": "Entering kernel context for userspace preemption",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "2515-saving-process-context-and-restoring-the-selected-process",
+        "number": "2.5.1.5",
+        "title": "Saving process context and restoring the selected process",
+        "titleHtml": "Saving process context and restoring the selected process",
+        "depth": 3,
         "descendants": []
       },
       {
@@ -490,30 +593,48 @@
         "titleHtml": "UART receive interrupt path",
         "depth": 1,
         "descendants": [
-          "261-borrowed-stack-entry-and-return",
-          "262-uart-nesting-and-interrupt-priorities",
-          "263-polled-uart-function-reference"
+          "261-entering-kernel-segments-on-the-interrupted-stack",
+          "262-handling-the-received-byte",
+          "263-restoring-interrupted-context-with-rti",
+          "264-uart-nesting-and-interrupt-priorities",
+          "265-polled-uart-function-reference"
         ]
       },
       {
-        "anchor": "261-borrowed-stack-entry-and-return",
+        "anchor": "261-entering-kernel-segments-on-the-interrupted-stack",
         "number": "2.6.1",
-        "title": "Borrowed-stack entry and return",
-        "titleHtml": "Borrowed-stack entry and return",
+        "title": "Entering kernel segments on the interrupted stack",
+        "titleHtml": "Entering kernel segments on the interrupted stack",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "262-uart-nesting-and-interrupt-priorities",
+        "anchor": "262-handling-the-received-byte",
         "number": "2.6.2",
+        "title": "Handling the received byte",
+        "titleHtml": "Handling the received byte",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "263-restoring-interrupted-context-with-rti",
+        "number": "2.6.3",
+        "title": "Restoring interrupted context with RTI",
+        "titleHtml": "Restoring interrupted context with <code>RTI</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "264-uart-nesting-and-interrupt-priorities",
+        "number": "2.6.4",
         "title": "UART nesting and interrupt priorities",
         "titleHtml": "UART nesting and interrupt priorities",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "263-polled-uart-function-reference",
-        "number": "2.6.3",
+        "anchor": "265-polled-uart-function-reference",
+        "number": "2.6.5",
         "title": "Polled UART function reference",
         "titleHtml": "Polled UART function reference",
         "depth": 2,
@@ -526,12 +647,39 @@
         "titleHtml": "DMA completion interrupt path",
         "depth": 1,
         "descendants": [
-          "271-dma-waiting-and-completion-function-reference"
+          "271-entering-kernel-segments-on-the-interrupted-stack",
+          "272-completing-the-dma-wait",
+          "273-restoring-interrupted-context-with-rti",
+          "274-dma-waiting-and-completion-function-reference"
         ]
       },
       {
-        "anchor": "271-dma-waiting-and-completion-function-reference",
+        "anchor": "271-entering-kernel-segments-on-the-interrupted-stack",
         "number": "2.7.1",
+        "title": "Entering kernel segments on the interrupted stack",
+        "titleHtml": "Entering kernel segments on the interrupted stack",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "272-completing-the-dma-wait",
+        "number": "2.7.2",
+        "title": "Completing the DMA wait",
+        "titleHtml": "Completing the DMA wait",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "273-restoring-interrupted-context-with-rti",
+        "number": "2.7.3",
+        "title": "Restoring interrupted context with RTI",
+        "titleHtml": "Restoring interrupted context with <code>RTI</code>",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "274-dma-waiting-and-completion-function-reference",
+        "number": "2.7.4",
         "title": "DMA waiting and completion function reference",
         "titleHtml": "DMA waiting and completion function reference",
         "depth": 2,
@@ -545,6 +693,11 @@
         "depth": 1,
         "descendants": [
           "281-cpu-exception-entry-and-registers",
+          "2811-entering-kernel-context-after-a-fault",
+          "28111-comparing-exception-and-timer-context-tests",
+          "2812-reading-and-classifying-the-exception",
+          "28121-reporting-the-exception",
+          "2813-halting-the-kernel-or-terminating-the-process",
           "282-supported-exceptions-and-allocation-errors",
           "283-exception-and-stack-boundary-function-reference"
         ]
@@ -555,6 +708,56 @@
         "title": "CPU exception entry and registers",
         "titleHtml": "CPU exception entry and registers",
         "depth": 2,
+        "descendants": [
+          "2811-entering-kernel-context-after-a-fault",
+          "28111-comparing-exception-and-timer-context-tests",
+          "2812-reading-and-classifying-the-exception",
+          "28121-reporting-the-exception",
+          "2813-halting-the-kernel-or-terminating-the-process"
+        ]
+      },
+      {
+        "anchor": "2811-entering-kernel-context-after-a-fault",
+        "number": "2.8.1.1",
+        "title": "Entering kernel context after a fault",
+        "titleHtml": "Entering kernel context after a fault",
+        "depth": 3,
+        "descendants": [
+          "28111-comparing-exception-and-timer-context-tests"
+        ]
+      },
+      {
+        "anchor": "28111-comparing-exception-and-timer-context-tests",
+        "number": "2.8.1.1.1",
+        "title": "Comparing exception and timer context tests",
+        "titleHtml": "Comparing exception and timer context tests",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "2812-reading-and-classifying-the-exception",
+        "number": "2.8.1.2",
+        "title": "Reading and classifying the exception",
+        "titleHtml": "Reading and classifying the exception",
+        "depth": 3,
+        "descendants": [
+          "28121-reporting-the-exception"
+        ]
+      },
+      {
+        "anchor": "28121-reporting-the-exception",
+        "number": "2.8.1.2.1",
+        "title": "Reporting the exception",
+        "titleHtml": "Reporting the exception",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "2813-halting-the-kernel-or-terminating-the-process",
+        "number": "2.8.1.3",
+        "title": "Halting the kernel or terminating the process",
+        "titleHtml": "Halting the kernel or terminating the process",
+        "depth": 3,
         "descendants": []
       },
       {
@@ -700,7 +903,12 @@
           "3631-initial-state-and-first-fit-search",
           "3632-allocation-splits-d",
           "3633-free-d-and-merge-its-remainder",
-          "3634-free-c-and-merge-repeatedly-at-b"
+          "36331-mark-d-free",
+          "36332-merge-d-and-its-remainder",
+          "3634-free-c-and-merge-repeatedly-at-b",
+          "36341-mark-c-free",
+          "36342-first-merge-at-b",
+          "36343-second-merge-at-b"
         ]
       },
       {
@@ -729,7 +937,12 @@
           "3631-initial-state-and-first-fit-search",
           "3632-allocation-splits-d",
           "3633-free-d-and-merge-its-remainder",
-          "3634-free-c-and-merge-repeatedly-at-b"
+          "36331-mark-d-free",
+          "36332-merge-d-and-its-remainder",
+          "3634-free-c-and-merge-repeatedly-at-b",
+          "36341-mark-c-free",
+          "36342-first-merge-at-b",
+          "36343-second-merge-at-b"
         ]
       },
       {
@@ -754,6 +967,25 @@
         "title": "Free D and merge its remainder",
         "titleHtml": "Free D and merge its remainder",
         "depth": 3,
+        "descendants": [
+          "36331-mark-d-free",
+          "36332-merge-d-and-its-remainder"
+        ]
+      },
+      {
+        "anchor": "36331-mark-d-free",
+        "number": "3.6.3.3.1",
+        "title": "Mark D free",
+        "titleHtml": "Mark D free",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "36332-merge-d-and-its-remainder",
+        "number": "3.6.3.3.2",
+        "title": "Merge D and its remainder",
+        "titleHtml": "Merge D and its remainder",
+        "depth": 4,
         "descendants": []
       },
       {
@@ -762,6 +994,34 @@
         "title": "Free C and merge repeatedly at B",
         "titleHtml": "Free C and merge repeatedly at B",
         "depth": 3,
+        "descendants": [
+          "36341-mark-c-free",
+          "36342-first-merge-at-b",
+          "36343-second-merge-at-b"
+        ]
+      },
+      {
+        "anchor": "36341-mark-c-free",
+        "number": "3.6.3.4.1",
+        "title": "Mark C free",
+        "titleHtml": "Mark C free",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "36342-first-merge-at-b",
+        "number": "3.6.3.4.2",
+        "title": "First merge at B",
+        "titleHtml": "First merge at B",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "36343-second-merge-at-b",
+        "number": "3.6.3.4.3",
+        "title": "Second merge at B",
+        "titleHtml": "Second merge at B",
+        "depth": 4,
         "descendants": []
       }
     ]
@@ -811,148 +1071,178 @@
         "descendants": []
       },
       {
-        "anchor": "42-initial-user-process-stack",
+        "anchor": "42-loading-and-starting-a-process",
         "number": "4.2",
-        "title": "Initial user process stack",
-        "titleHtml": "Initial user process stack",
-        "depth": 1,
-        "descendants": [
-          "421-user-process-stack-placement",
-          "422-initial-argc-argv-and-envp",
-          "4221-concrete-initial-stack-example"
-        ]
-      },
-      {
-        "anchor": "421-user-process-stack-placement",
-        "number": "4.2.1",
-        "title": "User process stack placement",
-        "titleHtml": "User process stack placement",
-        "depth": 2,
-        "descendants": []
-      },
-      {
-        "anchor": "422-initial-argc-argv-and-envp",
-        "number": "4.2.2",
-        "title": "Initial argc , argv , and envp",
-        "titleHtml": "Initial <code>argc</code>, <code>argv</code>, and <code>envp</code>",
-        "depth": 2,
-        "descendants": [
-          "4221-concrete-initial-stack-example"
-        ]
-      },
-      {
-        "anchor": "4221-concrete-initial-stack-example",
-        "number": "4.2.2.1",
-        "title": "Concrete initial-stack example",
-        "titleHtml": "Concrete initial-stack example",
-        "depth": 3,
-        "descendants": []
-      },
-      {
-        "anchor": "43-loading-and-starting-a-process",
-        "number": "4.3",
         "title": "Loading and starting a process",
         "titleHtml": "Loading and starting a process",
         "depth": 1,
         "descendants": [
-          "431-loading-a-process-load-library-call",
-          "4311-load-function-reference",
-          "432-starting-a-process-run-library-call",
-          "4321-parent-to-child-inheritance",
-          "43211-environment-origin-and-propagation",
-          "43212-loading-bar-environment-variable",
-          "4322-recording-termination-status",
-          "4323-parent-collection-and-final-removal",
-          "4324-run-function-reference"
+          "421-loading-a-process-load-library-call",
+          "4211-step-1-receiving-the-process-image",
+          "42111-processload-transfer-record",
+          "4212-step-2-creating-the-child-pcb",
+          "4213-process-stack-after-load",
+          "4214-load-function-reference",
+          "422-starting-a-process-run-library-call",
+          "4221-initial-user-process-stack",
+          "42211-user-process-stack-placement",
+          "42212-initial-argc-argv-and-envp",
+          "422121-concrete-initial-stack-example",
+          "4222-parent-to-child-inheritance",
+          "42221-environment-origin-and-propagation",
+          "42222-loading-bar-environment-variable",
+          "4223-run-function-reference"
         ]
       },
       {
-        "anchor": "431-loading-a-process-load-library-call",
-        "number": "4.3.1",
+        "anchor": "421-loading-a-process-load-library-call",
+        "number": "4.2.1",
         "title": "Loading a process ( load library call)",
         "titleHtml": "Loading a process (<code>load</code> library call)",
         "depth": 2,
         "descendants": [
-          "4311-load-function-reference"
+          "4211-step-1-receiving-the-process-image",
+          "42111-processload-transfer-record",
+          "4212-step-2-creating-the-child-pcb",
+          "4213-process-stack-after-load",
+          "4214-load-function-reference"
         ]
       },
       {
-        "anchor": "4311-load-function-reference",
-        "number": "4.3.1.1",
+        "anchor": "4211-step-1-receiving-the-process-image",
+        "number": "4.2.1.1",
+        "title": "Step 1: Receiving the process image",
+        "titleHtml": "Step 1: Receiving the process image",
+        "depth": 3,
+        "descendants": [
+          "42111-processload-transfer-record"
+        ]
+      },
+      {
+        "anchor": "42111-processload-transfer-record",
+        "number": "4.2.1.1.1",
+        "title": "ProcessLoad transfer record",
+        "titleHtml": "<code>ProcessLoad</code> transfer record",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "4212-step-2-creating-the-child-pcb",
+        "number": "4.2.1.2",
+        "title": "Step 2: Creating the child PCB",
+        "titleHtml": "Step 2: Creating the child PCB",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "4213-process-stack-after-load",
+        "number": "4.2.1.3",
+        "title": "Process stack after load",
+        "titleHtml": "Process stack after <code>load</code>",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "4214-load-function-reference",
+        "number": "4.2.1.4",
         "title": "Load function reference",
         "titleHtml": "Load function reference",
         "depth": 3,
         "descendants": []
       },
       {
-        "anchor": "432-starting-a-process-run-library-call",
-        "number": "4.3.2",
+        "anchor": "422-starting-a-process-run-library-call",
+        "number": "4.2.2",
         "title": "Starting a process ( run library call)",
         "titleHtml": "Starting a process (<code>run</code> library call)",
         "depth": 2,
         "descendants": [
-          "4321-parent-to-child-inheritance",
-          "43211-environment-origin-and-propagation",
-          "43212-loading-bar-environment-variable",
-          "4322-recording-termination-status",
-          "4323-parent-collection-and-final-removal",
-          "4324-run-function-reference"
+          "4221-initial-user-process-stack",
+          "42211-user-process-stack-placement",
+          "42212-initial-argc-argv-and-envp",
+          "422121-concrete-initial-stack-example",
+          "4222-parent-to-child-inheritance",
+          "42221-environment-origin-and-propagation",
+          "42222-loading-bar-environment-variable",
+          "4223-run-function-reference"
         ]
       },
       {
-        "anchor": "4321-parent-to-child-inheritance",
-        "number": "4.3.2.1",
+        "anchor": "4221-initial-user-process-stack",
+        "number": "4.2.2.1",
+        "title": "Initial user process stack",
+        "titleHtml": "Initial user process stack",
+        "depth": 3,
+        "descendants": [
+          "42211-user-process-stack-placement",
+          "42212-initial-argc-argv-and-envp",
+          "422121-concrete-initial-stack-example"
+        ]
+      },
+      {
+        "anchor": "42211-user-process-stack-placement",
+        "number": "4.2.2.1.1",
+        "title": "User process stack placement",
+        "titleHtml": "User process stack placement",
+        "depth": 4,
+        "descendants": []
+      },
+      {
+        "anchor": "42212-initial-argc-argv-and-envp",
+        "number": "4.2.2.1.2",
+        "title": "Initial argc , argv , and envp",
+        "titleHtml": "Initial <code>argc</code>, <code>argv</code>, and <code>envp</code>",
+        "depth": 4,
+        "descendants": [
+          "422121-concrete-initial-stack-example"
+        ]
+      },
+      {
+        "anchor": "422121-concrete-initial-stack-example",
+        "number": "4.2.2.1.2.1",
+        "title": "Concrete initial-stack example",
+        "titleHtml": "Concrete initial-stack example",
+        "depth": 5,
+        "descendants": []
+      },
+      {
+        "anchor": "4222-parent-to-child-inheritance",
+        "number": "4.2.2.2",
         "title": "Parent-to-child inheritance",
         "titleHtml": "Parent-to-child inheritance",
         "depth": 3,
         "descendants": [
-          "43211-environment-origin-and-propagation",
-          "43212-loading-bar-environment-variable"
+          "42221-environment-origin-and-propagation",
+          "42222-loading-bar-environment-variable"
         ]
       },
       {
-        "anchor": "43211-environment-origin-and-propagation",
-        "number": "4.3.2.1.1",
+        "anchor": "42221-environment-origin-and-propagation",
+        "number": "4.2.2.2.1",
         "title": "Environment origin and propagation",
         "titleHtml": "Environment origin and propagation",
         "depth": 4,
         "descendants": []
       },
       {
-        "anchor": "43212-loading-bar-environment-variable",
-        "number": "4.3.2.1.2",
+        "anchor": "42222-loading-bar-environment-variable",
+        "number": "4.2.2.2.2",
         "title": "Loading-bar environment variable",
         "titleHtml": "Loading-bar environment variable",
         "depth": 4,
         "descendants": []
       },
       {
-        "anchor": "4322-recording-termination-status",
-        "number": "4.3.2.2",
-        "title": "Recording termination status",
-        "titleHtml": "Recording termination status",
-        "depth": 3,
-        "descendants": []
-      },
-      {
-        "anchor": "4323-parent-collection-and-final-removal",
-        "number": "4.3.2.3",
-        "title": "Parent collection and final removal",
-        "titleHtml": "Parent collection and final removal",
-        "depth": 3,
-        "descendants": []
-      },
-      {
-        "anchor": "4324-run-function-reference",
-        "number": "4.3.2.4",
+        "anchor": "4223-run-function-reference",
+        "number": "4.2.2.3",
         "title": "Run function reference",
         "titleHtml": "Run function reference",
         "depth": 3,
         "descendants": []
       },
       {
-        "anchor": "44-process-list-pcb-metadata-and-lifecycle-function-reference",
-        "number": "4.4",
+        "anchor": "43-process-list-pcb-metadata-and-lifecycle-function-reference",
+        "number": "4.3",
         "title": "Process list, PCB metadata, and lifecycle function reference",
         "titleHtml": "Process list, PCB metadata, and lifecycle function reference",
         "depth": 1,
@@ -1036,6 +1326,10 @@
         "depth": 1,
         "descendants": [
           "611-algorithm-and-round-robin-comparison",
+          "6111-selecting-the-next-runnable-process",
+          "6112-starting-at-the-head-after-the-last-process",
+          "6113-reaching-the-list-end-during-a-scan",
+          "6114-implementation",
           "612-scheduler-function-reference"
         ]
       },
@@ -1045,6 +1339,43 @@
         "title": "Algorithm and Round Robin comparison",
         "titleHtml": "Algorithm and Round Robin comparison",
         "depth": 2,
+        "descendants": [
+          "6111-selecting-the-next-runnable-process",
+          "6112-starting-at-the-head-after-the-last-process",
+          "6113-reaching-the-list-end-during-a-scan",
+          "6114-implementation"
+        ]
+      },
+      {
+        "anchor": "6111-selecting-the-next-runnable-process",
+        "number": "6.1.1.1",
+        "title": "Selecting the next runnable process",
+        "titleHtml": "Selecting the next runnable process",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "6112-starting-at-the-head-after-the-last-process",
+        "number": "6.1.1.2",
+        "title": "Starting at the head after the last process",
+        "titleHtml": "Starting at the head after the last process",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "6113-reaching-the-list-end-during-a-scan",
+        "number": "6.1.1.3",
+        "title": "Reaching the list end during a scan",
+        "titleHtml": "Reaching the list end during a scan",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "6114-implementation",
+        "number": "6.1.1.4",
+        "title": "Implementation",
+        "titleHtml": "Implementation",
+        "depth": 3,
         "descendants": []
       },
       {
@@ -1096,106 +1427,130 @@
     "titleHtml": "Blocking, wait queues, signals, and mutexes",
     "entries": [
       {
-        "anchor": "71-blocking-and-wakeup",
+        "anchor": "71-wait-queues-and-pcb-links",
         "number": "7.1",
-        "title": "Blocking and wakeup",
-        "titleHtml": "Blocking and wakeup",
-        "depth": 1,
-        "descendants": []
-      },
-      {
-        "anchor": "72-wait-queues-and-pcb-links",
-        "number": "7.2",
         "title": "Wait queues and PCB links",
         "titleHtml": "Wait queues and PCB links",
         "depth": 1,
         "descendants": [
-          "721-blocking-with-sleep-and-waking-with-wakeup",
-          "722-child-waiting-with-waitpid",
-          "723-wait-queue-function-reference"
+          "711-blocking-with-sleep-and-waking-with-wakeup",
+          "7111-from-blocking-to-resumed-execution",
+          "712-child-waiting-with-waitpid",
+          "7121-recording-termination-status",
+          "7122-parent-collection-and-final-removal",
+          "713-wait-queue-function-reference"
         ]
       },
       {
-        "anchor": "721-blocking-with-sleep-and-waking-with-wakeup",
-        "number": "7.2.1",
+        "anchor": "711-blocking-with-sleep-and-waking-with-wakeup",
+        "number": "7.1.1",
         "title": "Blocking with sleep and waking with wakeup",
         "titleHtml": "Blocking with <code>sleep</code> and waking with <code>wakeup</code>",
         "depth": 2,
+        "descendants": [
+          "7111-from-blocking-to-resumed-execution"
+        ]
+      },
+      {
+        "anchor": "7111-from-blocking-to-resumed-execution",
+        "number": "7.1.1.1",
+        "title": "From blocking to resumed execution",
+        "titleHtml": "From blocking to resumed execution",
+        "depth": 3,
         "descendants": []
       },
       {
-        "anchor": "722-child-waiting-with-waitpid",
-        "number": "7.2.2",
+        "anchor": "712-child-waiting-with-waitpid",
+        "number": "7.1.2",
         "title": "Child waiting with waitpid",
         "titleHtml": "Child waiting with <code>waitpid</code>",
         "depth": 2,
+        "descendants": [
+          "7121-recording-termination-status",
+          "7122-parent-collection-and-final-removal"
+        ]
+      },
+      {
+        "anchor": "7121-recording-termination-status",
+        "number": "7.1.2.1",
+        "title": "Recording termination status",
+        "titleHtml": "Recording termination status",
+        "depth": 3,
         "descendants": []
       },
       {
-        "anchor": "723-wait-queue-function-reference",
-        "number": "7.2.3",
+        "anchor": "7122-parent-collection-and-final-removal",
+        "number": "7.1.2.2",
+        "title": "Parent collection and final removal",
+        "titleHtml": "Parent collection and final removal",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "713-wait-queue-function-reference",
+        "number": "7.1.3",
         "title": "Wait queue function reference",
         "titleHtml": "Wait queue function reference",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "73-process-signals",
-        "number": "7.3",
+        "anchor": "72-process-signals",
+        "number": "7.2",
         "title": "Process signals",
         "titleHtml": "Process signals",
         "depth": 1,
         "descendants": [
-          "731-supported-signals-and-fixed-actions",
-          "732-stopping-and-continuing-a-process",
-          "733-termination-ctrl-c-and-parent-collection",
-          "734-fixed-picoos-signal-actions-compared-with-unix",
-          "735-signal-function-reference"
+          "721-supported-signals-and-fixed-actions",
+          "722-stopping-and-continuing-a-process",
+          "723-termination-ctrl-c-and-parent-collection",
+          "724-fixed-picoos-signal-actions-compared-with-unix",
+          "725-signal-function-reference"
         ]
       },
       {
-        "anchor": "731-supported-signals-and-fixed-actions",
-        "number": "7.3.1",
+        "anchor": "721-supported-signals-and-fixed-actions",
+        "number": "7.2.1",
         "title": "Supported signals and fixed actions",
         "titleHtml": "Supported signals and fixed actions",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "732-stopping-and-continuing-a-process",
-        "number": "7.3.2",
+        "anchor": "722-stopping-and-continuing-a-process",
+        "number": "7.2.2",
         "title": "Stopping and continuing a process",
         "titleHtml": "Stopping and continuing a process",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "733-termination-ctrl-c-and-parent-collection",
-        "number": "7.3.3",
+        "anchor": "723-termination-ctrl-c-and-parent-collection",
+        "number": "7.2.3",
         "title": "Termination, Ctrl-C , and parent collection",
         "titleHtml": "Termination, <code>Ctrl-C</code>, and parent collection",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "734-fixed-picoos-signal-actions-compared-with-unix",
-        "number": "7.3.4",
+        "anchor": "724-fixed-picoos-signal-actions-compared-with-unix",
+        "number": "7.2.4",
         "title": "Fixed PicoOS signal actions compared with Unix",
         "titleHtml": "Fixed PicoOS signal actions compared with Unix",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "735-signal-function-reference",
-        "number": "7.3.5",
+        "anchor": "725-signal-function-reference",
+        "number": "7.2.5",
         "title": "Signal function reference",
         "titleHtml": "Signal function reference",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "74-mutexes-with-test-and-set-and-wait-queues",
-        "number": "7.4",
+        "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
+        "number": "7.3",
         "title": "Mutexes with test-and-set and wait queues",
         "titleHtml": "Mutexes with test-and-set and wait queues",
         "depth": 1,
@@ -1338,7 +1693,9 @@
         "descendants": [
           "1011-header-implementation-and-linking",
           "1012-packing-arguments-and-executing-the-syscall",
-          "1013-interrupt-entry-waiting-and-return"
+          "1013-interrupt-entry-waiting-and-return",
+          "10131-cpu-execution-and-sram-storage",
+          "10132-following-entry-and-the-two-return-paths"
         ]
       },
       {
@@ -1363,6 +1720,25 @@
         "title": "Interrupt entry, waiting, and return",
         "titleHtml": "Interrupt entry, waiting, and return",
         "depth": 2,
+        "descendants": [
+          "10131-cpu-execution-and-sram-storage",
+          "10132-following-entry-and-the-two-return-paths"
+        ]
+      },
+      {
+        "anchor": "10131-cpu-execution-and-sram-storage",
+        "number": "10.1.3.1",
+        "title": "CPU execution and SRAM storage",
+        "titleHtml": "CPU execution and SRAM storage",
+        "depth": 3,
+        "descendants": []
+      },
+      {
+        "anchor": "10132-following-entry-and-the-two-return-paths",
+        "number": "10.1.3.2",
+        "title": "Following entry and the two return paths",
+        "titleHtml": "Following entry and the two return paths",
+        "depth": 3,
         "descendants": []
       },
       {
@@ -1775,27 +2151,35 @@
     "titleHtml": "User applications and commands",
     "entries": [
       {
-        "anchor": "131-applications-library-calls-and-host-requests",
+        "anchor": "131-writing-a-simple-user-application",
         "number": "13.1",
+        "title": "Writing a simple user application",
+        "titleHtml": "Writing a simple user application",
+        "depth": 1,
+        "descendants": []
+      },
+      {
+        "anchor": "132-applications-library-calls-and-host-requests",
+        "number": "13.2",
         "title": "Applications, library calls, and host requests",
         "titleHtml": "Applications, library calls, and host requests",
         "depth": 1,
         "descendants": [
-          "1311-command-behavior-and-supported-options",
-          "1312-command-errors-and-exit-statuses"
+          "1321-command-behavior-and-supported-options",
+          "1322-command-errors-and-exit-statuses"
         ]
       },
       {
-        "anchor": "1311-command-behavior-and-supported-options",
-        "number": "13.1.1",
+        "anchor": "1321-command-behavior-and-supported-options",
+        "number": "13.2.1",
         "title": "Command behavior and supported options",
         "titleHtml": "Command behavior and supported options",
         "depth": 2,
         "descendants": []
       },
       {
-        "anchor": "1312-command-errors-and-exit-statuses",
-        "number": "13.1.2",
+        "anchor": "1322-command-errors-and-exit-statuses",
+        "number": "13.2.2",
         "title": "Command errors and exit statuses",
         "titleHtml": "Command errors and exit statuses",
         "depth": 2,
@@ -1931,6 +2315,34 @@
         "title": "Real-time operating-systems topics",
         "titleHtml": "Real-time operating-systems topics",
         "depth": 1,
+        "descendants": [
+          "1521-parent-workers-and-shared-memory",
+          "1522-minimal-launcher-and-worker-code",
+          "1523-following-the-counter-and-mutex-through-execution"
+        ]
+      },
+      {
+        "anchor": "1521-parent-workers-and-shared-memory",
+        "number": "15.2.1",
+        "title": "Parent, workers, and shared memory",
+        "titleHtml": "Parent, workers, and shared memory",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1522-minimal-launcher-and-worker-code",
+        "number": "15.2.2",
+        "title": "Minimal launcher and worker code",
+        "titleHtml": "Minimal launcher and worker code",
+        "depth": 2,
+        "descendants": []
+      },
+      {
+        "anchor": "1523-following-the-counter-and-mutex-through-execution",
+        "number": "15.2.3",
+        "title": "Following the counter and mutex through execution",
+        "titleHtml": "Following the counter and mutex through execution",
+        "depth": 2,
         "descendants": []
       }
     ]

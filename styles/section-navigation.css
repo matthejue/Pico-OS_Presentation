@@ -17,11 +17,15 @@
 .section-toc { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(var(--toc-columns), minmax(0, 1fr)); gap: 1.35rem; font-size: var(--toc-font-size); }
 .slidev-layout .section-toc-column { list-style: none; padding: 0; margin: 0; align-self: start; }
 .section-toc-column + .section-toc-column { border-left: 1px solid var(--line); padding-left: 1.1rem; }
+.section-toc.toc-dense { gap: 0.75rem; }
+.toc-dense .section-toc-column + .section-toc-column { padding-left: 0.7rem; }
+.slidev-layout .toc-dense .section-toc-entry { padding: 0.08em 0 0.08em calc(var(--toc-depth) * 0.35em); line-height: 1.18; }
+.toc-dense .section-topic-link { padding-block: 0.05em; }
 .slidev-layout .section-toc-entry { display: flex; align-items: baseline; gap: 0.35em; margin: 0 !important; padding: 0.14em 0 0.14em calc(var(--toc-depth) * 0.55em); line-height: 1.24; }
-.section-topic-link { display: flex; flex: 1; min-width: 0; gap: 0.5em; align-items: baseline; border: 0 !important; border-radius: 0.2rem; padding: 0.1em 0.2em; text-decoration: none !important; }
+.section-topic-link { display: block; flex: 1; min-width: 0; border: 0 !important; border-radius: 0.2rem; padding: 0.1em 0.2em; text-decoration: none !important; }
 .slidev-layout .section-topic-link { color: var(--ink); }
-.section-topic-number { flex: none; color: var(--cyan-dim); font: 500 0.8em/1.3 'Fira Code', monospace; }
-.section-topic-title { min-width: 0; }
+.section-topic-number { margin-right: 0.5em; color: var(--cyan-dim); font: 500 0.8em/1.3 'Fira Code', monospace; }
+.section-topic-title { min-width: 0; overflow-wrap: anywhere; }
 .slidev-layout .section-topic-title code { font-size: 0.88em; background: none; padding: 0; color: var(--cyan-dim); }
 .section-toc-entry.toc-group { border-top: 2px solid var(--line-strong); padding-top: 0.35em; margin-top: 0.25em !important; }
 .section-toc-column > .toc-group:first-child { margin-top: 0 !important; }
@@ -29,7 +33,7 @@
 .toc-group .section-topic-number { color: var(--amber); }
 .toc-introduction .section-topic-link { font-weight: 700; color: var(--cyan-dim); }
 .slidev-layout .section-toc-entry.toc-introduction { padding-bottom: 0.4em; margin-bottom: 0.3em !important; }
-.section-slide-links { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; max-width: 4em; gap: 0.3em; margin: 0.1em 0; }
+.section-slide-links { flex: none; display: flex; flex-wrap: wrap; justify-content: flex-end; max-width: 5em; gap: 0.3em; margin: 0.1em 0; }
 .section-slide-links a { border: 1px solid var(--line) !important; border-radius: 0.2rem; padding: 0.12em 0.4em; background: var(--panel-2); font: 500 0.7em/1.2 'Fira Code', monospace; text-decoration: none !important; }
 .section-toc a:hover { color: var(--cyan-dim); background: #e3f2f2; }
 .section-toc a:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }

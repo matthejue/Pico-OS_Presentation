@@ -13,18 +13,18 @@ const plans = {
   '121-reti-machine-model-and-memory-mapped-peripherals': [[116, 143], 1],
   '21-reti-interrupt-entry-and-the-interrupt-service-routine-table': [1, [216, 114]],
   '242-system-call-entry-execution-and-return-to-userspace': [1, 1, [230, 125]],
-  '2421-handle-syscall': [[173, 90]],
-  '2422-selecting-the-return-path': [[204, 130]],
+  '2422-handle-syscall': [[173, 90]],
+  '2423-selecting-the-return-path': [[204, 130]],
   '251-timer-interrupt-path': [1, 1, [125, 183], [120, 120]],
   '26-uart-receive-interrupt-path': [1, [269, 125], 1, 1],
   '27-dma-completion-interrupt-path': [1, [285, 125]],
-  '431-loading-a-process-load-library-call': [[150, 211], 1],
+  '421-loading-a-process-load-library-call': [[150, 211], 1],
   '52-mapping-unlinking-and-deferred-destruction': [1, [316, 316]],
   '611-algorithm-and-round-robin-comparison': [[124, 266]],
   '62-saved-process-registers': [[208, 216]],
   '63-saving-the-current-process-and-selecting-the-next-process': [1, [218, 125]],
   '64-restoring-the-selected-process-and-returning-with-rti': [[129, 185]],
-  '72-wait-queues-and-pcb-links': [[114, 213], 1],
+  '71-wait-queues-and-pcb-links': [[114, 213], 1],
   '82-global-terminal-input-buffer': [[170, 216]],
   '83-blocking-and-completing-terminal-reads': [[157, 173], 1],
   '84-foreground-input-ownership-and-terminal-generated-signals': [[365, 86]],
@@ -47,6 +47,19 @@ const single = asset => ({group: [asset], layout: 'single'})
 export function compactGroups(groups, section) {
   const parts = groups.flatMap(panel => panel.group)
   const types = parts.map(part => part.type).join(',')
+  // Expanded storage views and redirection stages need the complete slide width.
+  // Their source diagrams already contain the explanations and detail panels.
+  const fullWidthSections = new Set([
+    '6111-selecting-the-next-runnable-process',
+    '92-containment-and-reference-relationships',
+    '126-inputoutput-redirection',
+    '127-sequential-file-backed-pipelines',
+    '82-global-terminal-input-buffer',
+  ])
+  if (fullWidthSections.has(section.anchor)) {
+    return groups.flatMap(panel => panel.group.some(part => part.type === 'image')
+      ? panel.group.map(single) : [panel])
+  }
   // These sequences benefit from moving the page boundary inside an old pair.
   if (section.anchor === '122-atomic-test-and-set-with-tsl' && types === 'code,image,image,table')
     return [composed(parts.slice(0, 2).map(single), [95, 247]), composed(parts.slice(2).map(single), [189, 180])]

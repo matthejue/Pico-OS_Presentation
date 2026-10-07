@@ -2,7 +2,6 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import {readmeSource,md,hash,displayHtml,plain} from './readme-source.mjs'
-import {styleSourceSvg} from '../config/visual-palette.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '.source/Pico-OS-README.md'
 const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
@@ -40,7 +39,7 @@ for(const a of assets) {
  if(a.type==='image') {
   const original=await fs.readFile(path.resolve(process.env.README_REPOSITORY||'../Pico-OS',a.path)),copied=await fs.readFile(entry.copiedFile)
   assert.equal(hash(original),entry.originalFileSha256)
-  assert.equal(copied.toString('base64'),(a.path.endsWith('.svg')?Buffer.from(styleSourceSvg(original.toString())):original).toString('base64'),`${a.id}: original composition retained`)
+  assert.equal(copied.toString('base64'),original.toString('base64'),`${a.id}: exact source image retained`)
  }
  if(a.type==='list') {
   const count=md.parse(a.raw,{}).filter(t=>t.type==='list_item_open'&&t.level===1).length

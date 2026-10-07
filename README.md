@@ -139,16 +139,17 @@ hidden on reload. The same setting controls the contents prompt, note buttons
 Development editing reminders appear when hints are shown.
 
 Navigation follows the generated README hierarchy and the active full or short
-deck. Empty branches and sections disappear; ancestors remain when descendants
+deck. Dense section overviews adapt to four measured columns, with continuation
+slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 291 slides. Slides load on demand to
+content slides are excluded. The full deck contains 361 slides (356 in the short deck). Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
 
-The source inventory tracks 345 substantive README artifacts: 109 code
-examples, 38 Mermaid diagrams, 136 tables, 32 images, one terminal recording,
-and 29 lists. All code, diagrams, images, recordings, and substantive list
+The source inventory tracks 387 substantive README artifacts: 124 code
+examples, 139 tables, 92 images (91 SVGs and one PNG), one terminal recording,
+and 31 lists. The 38 former Mermaid diagrams now use their current source SVGs. All code, diagrams, images, recordings, and substantive list
 items are represented. Tables retain the reviewed library-facing operations;
 ten internal-only function catalogs are omitted. The two README navigation
 lists are replaced by the dynamic contents slide and section overviews.
@@ -172,7 +173,7 @@ table share one slide.
 
 Column proportions follow the content. The hardware table gets more width than
 its short companion list; paired tables and code examples use compatible text
-sizes. All 70 column layouts have been reviewed at slide size. Their proportions
+sizes. All 81 column layouts have been checked at slide size. Their proportions
 and paired-table sizing are stored in [`config/readme-columns.json`](config/readme-columns.json).
 
 Code boxes and tables on the same slide share a displayed text size, including
@@ -192,12 +193,13 @@ content on one slide, including Build and run. Stacked panels retain the
 existing column proportions and allocate height to match their content.
 The emphasis styles are in [`styles/readme-emphasis.css`](styles/readme-emphasis.css).
 
-SVGs in `public/readme/` are copied from the README assets. Styling changes
-their colors, font, and rectangle corners; their coordinates, paths, labels,
-and composition stay intact. Mermaid diagrams retain their source structure
-and layout directives. Cyan, amber, and green accents are shared across
-diagrams, memory maps, and tables. Unix/Linux and ABI comparisons appear in
-small contextual notes.
+Images in `public/readme/` are copied byte for byte from the current README
+assets. Their existing colors, fonts, shapes, labels, and composition already
+match the presentation. Expanded memory views, redirection stages, and the
+producer/consumer pipeline diagrams use full-width slides. The enlarged viewer
+inlines source SVGs so their labels remain selectable. Unix/Linux and ABI
+comparisons appear in small contextual notes. The previous-to-current diagram
+mapping is recorded in [visualization changes](docs/visualization-update.md).
 
 [`ReadmeVisual`](components/ReadmeVisual.vue) fits each complete visual into
 the available slide area. Click it to inspect the full content in the zoom

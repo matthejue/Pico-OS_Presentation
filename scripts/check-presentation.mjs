@@ -288,7 +288,9 @@ try {
   for (const kind of ['mermaid', 'code', 'table', 'image']) {
     const selector = `.readme-visual[data-kind="${kind}"]`
     const sample = pages.find(p => p.slide.includes(`<ReadmeVisual kind="${kind}"`))
-    assert.ok(sample, `Sample exists for ${selector}`)
+    // Current README diagrams are SVG images; Mermaid remains supported for
+    // sources that actually contain it.
+    if (!sample) continue
     const layout = await navigate(sample.page)
     const target = layout.locator(selector).first()
     const before = page.url()
@@ -307,6 +309,24 @@ try {
       await dialog.locator('.zoom-content pre').first().hover()
       assert.equal(await dialog.locator('.zoom-content .slidev-code-copy, .zoom-content svg').count(), 0, `${selector}: no cloned clipboard controls or enlarged icon on hover`)
       assert.equal(await dialog.locator('.zoom-content code').first().textContent(), await target.locator('code').first().textContent(), `${selector}: complete code retained`)
+    }
+    if (kind === 'image' && (await target.locator('img').first().getAttribute('src')).endsWith('.svg')) {
+      const vector = dialog.locator('.zoom-content svg').first()
+      await vector.waitFor({ state: 'visible' })
+      const selected = await vector.evaluate(svg => {
+        const label = svg.querySelector('text, .nodeLabel')
+        if (!label) return ''
+        const range = document.createRange()
+        range.selectNodeContents(label)
+        const selection = window.getSelection()
+        selection.removeAllRanges()
+        selection.addRange(range)
+        const text = selection.toString()
+        selection.removeAllRanges()
+        return text
+      })
+      assert.ok(selected.trim(), 'Source SVG labels remain selectable in the enlarged viewer')
+      assert.equal(await dialog.locator('parsererror').count(), 0, 'Enlarged source SVG is valid XML')
     }
     const initial = await dialog.locator('output').textContent()
     await dialog.getByRole('button', { name: 'Zoom in', exact: true }).click()

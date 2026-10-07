@@ -1,22 +1,147 @@
 {
-"picoos": ["POSIX context", ["Unix-inspired interfaces", "Educational subset; reduced semantics"]],
-"113-system-v-abi-stack-frames-and-call-cleanup": ["System V ABI", ["General model adapted to RETI", "Different from AMD64 ABI"]],
-"116-program-sections-interrupt-table-entries-and-linker-placement": ["Calling convention", ["C helpers + inline assembly", "Shared RETI stack-frame rules"]],
-"23-saved-interrupt-stack-frame": ["Linux comparison", ["**Linux:** context on kernel stack", "**PicoOS:** context on user stack", "RETI entry/RTI use active SP"]],
-"24-system-call-interface-and-execution": ["POSIX portability", ["Source interfaces across different kernels", "PicoOS signatures/behavior differ"]],
-"241-syscall-selectors-and-register-convention": ["ABI connection", ["**IN2:** syscall + function result", "Wrapper and entry agree"]],
-"422-initial-argc-argv-and-envp": ["System V / POSIX", ["**Intel386:** argc → argv → envp", "NULL ends pointer arrays", "**RETI:** entry PC; no auxiliary vector"]],
-"4221-concrete-initial-stack-example": ["Reading the stack", ["argc includes program name", "**argv/envp:** NULL-terminated arrays", "PicoOS prepares stack during run"]],
-"4321-parent-to-child-inheritance": ["fork / load + run", ["**Unix fork:** clone parent process", "**PicoOS:** fresh image + copied state"]],
-"4322-recording-termination-status": ["Unix: reaping", ["Collect status; remove child", "**PicoOS:** no reparenting to init"]],
-"731-supported-signals-and-fixed-actions": ["POSIX / Linux: signal 0", ["Probe without signal delivery", "**PicoOS:** existence only; rejects zombies"]],
-"734-fixed-picoos-signal-actions-compared-with-unix": ["Unix signal handling", ["**SIGINT/TSTP/TTIN:** catch or ignore", "**SIGKILL/STOP:** cannot catch", "**PicoOS:** all actions fixed"]],
-"81-per-process-file-descriptor-table": ["Unix comparison", ["**Unix:** shared open-file descriptions", "**PicoOS:** independent copied entries/offsets"]],
-"89-picoos-paths-working-directories-and-host-operations": ["Host OS boundary", ["Root confinement; reject symlinks", "**Linux:** RESOLVE_BENEATH/NO_SYMLINKS/NO_XDEV", "**Windows:** reject reparse points"]],
-"1012-packing-arguments-and-executing-the-syscall": ["waitpid / POSIX", ["**PicoOS:** one PID; returns child status", "**POSIX:** output parameter + options"]],
-"10291-streams-and-output-in-stdiopicoc": ["Variadic ABI", ["**printf/fprintf:** stack-based arguments", "Same PicoC frame convention"]],
-"1131-init-responsibilities": ["Init / PID 1", ["Environment → shell → wait → repeat", "Userspace supervisor"]],
-"126-inputoutput-redirection": ["fork + exec / load + run", ["**Unix:** redirect forked child", "**PicoOS:** redirect shell; copy; restore"]],
-"1311-command-behavior-and-supported-options": ["Unix command names", ["Reduced option sets", "**cd:** built-in changes shell directory"]],
-"17-limitations": ["Scope", ["Educational OS mechanisms", "POSIX-like interfaces; reduced behavior"]]
+  "picoos": [
+    "POSIX context",
+    [
+      "Unix-inspired interfaces",
+      "Educational subset; reduced semantics"
+    ]
+  ],
+  "113-system-v-abi-stack-frames-and-call-cleanup": [
+    "System V ABI",
+    [
+      "General model adapted to RETI",
+      "Different from AMD64 ABI"
+    ]
+  ],
+  "116-program-sections-interrupt-table-entries-and-linker-placement": [
+    "Calling convention",
+    [
+      "C helpers + inline assembly",
+      "Shared RETI stack-frame rules"
+    ]
+  ],
+  "23-saved-interrupt-stack-frame": [
+    "Linux comparison",
+    [
+      "**Linux:** context on kernel stack",
+      "**PicoOS:** context on user stack",
+      "RETI entry/RTI use active SP"
+    ]
+  ],
+  "24-system-call-interface-and-execution": [
+    "POSIX portability",
+    [
+      "Source interfaces across different kernels",
+      "PicoOS signatures/behavior differ"
+    ]
+  ],
+  "241-syscall-selectors-and-register-convention": [
+    "ABI connection",
+    [
+      "**IN2:** syscall + function result",
+      "Wrapper and entry agree"
+    ]
+  ],
+  "42212-initial-argc-argv-and-envp": [
+    "System V / POSIX",
+    [
+      "**Intel386:** argc → argv → envp",
+      "NULL ends pointer arrays",
+      "**RETI:** entry PC; no auxiliary vector"
+    ]
+  ],
+  "422121-concrete-initial-stack-example": [
+    "Reading the stack",
+    [
+      "argc includes program name",
+      "**argv/envp:** NULL-terminated arrays",
+      "PicoOS prepares stack during run"
+    ]
+  ],
+  "4222-parent-to-child-inheritance": [
+    "fork / load + run",
+    [
+      "**Unix fork:** clone parent process",
+      "**PicoOS:** fresh image + copied state"
+    ]
+  ],
+  "7121-recording-termination-status": [
+    "Unix: reaping",
+    [
+      "Collect status; remove child",
+      "**PicoOS:** no reparenting to init"
+    ]
+  ],
+  "721-supported-signals-and-fixed-actions": [
+    "POSIX / Linux: signal 0",
+    [
+      "Probe without signal delivery",
+      "**PicoOS:** existence only; rejects zombies"
+    ]
+  ],
+  "724-fixed-picoos-signal-actions-compared-with-unix": [
+    "Unix signal handling",
+    [
+      "**SIGINT/TSTP/TTIN:** catch or ignore",
+      "**SIGKILL/STOP:** cannot catch",
+      "**PicoOS:** all actions fixed"
+    ]
+  ],
+  "81-per-process-file-descriptor-table": [
+    "Unix comparison",
+    [
+      "**Unix:** shared open-file descriptions",
+      "**PicoOS:** independent copied entries/offsets"
+    ]
+  ],
+  "89-picoos-paths-working-directories-and-host-operations": [
+    "Host OS boundary",
+    [
+      "Root confinement; reject symlinks",
+      "**Linux:** RESOLVE_BENEATH/NO_SYMLINKS/NO_XDEV",
+      "**Windows:** reject reparse points"
+    ]
+  ],
+  "1012-packing-arguments-and-executing-the-syscall": [
+    "waitpid / POSIX",
+    [
+      "**PicoOS:** one PID; returns child status",
+      "**POSIX:** output parameter + options"
+    ]
+  ],
+  "10291-streams-and-output-in-stdiopicoc": [
+    "Variadic ABI",
+    [
+      "**printf/fprintf:** stack-based arguments",
+      "Same PicoC frame convention"
+    ]
+  ],
+  "1131-init-responsibilities": [
+    "Init / PID 1",
+    [
+      "Environment → shell → wait → repeat",
+      "Userspace supervisor"
+    ]
+  ],
+  "126-inputoutput-redirection": [
+    "fork + exec / load + run",
+    [
+      "**Unix:** redirect forked child",
+      "**PicoOS:** redirect shell; copy; restore"
+    ]
+  ],
+  "1321-command-behavior-and-supported-options": [
+    "Unix command names",
+    [
+      "Reduced option sets",
+      "**cd:** built-in changes shell directory"
+    ]
+  ],
+  "17-limitations": [
+    "Scope",
+    [
+      "Educational OS mechanisms",
+      "POSIX-like interfaces; reduced behavior"
+    ]
+  ]
 }

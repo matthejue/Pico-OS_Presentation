@@ -8,6 +8,7 @@ const props = defineProps<{ section: string }>()
 const { navigation, contentSlides: allContentSlides, contentsPage, href } = usePresentationNavigation()
 const frame = ref<HTMLElement>()
 const fontSize = ref(14.5)
+const columnCount = ref(1)
 const measuredWeights = ref<Record<string, number>>({})
 const section = computed(() => sections.find(item => item.anchor === props.section)!)
 const contentSlides = computed(() => allContentSlides.value.filter(slide => {
@@ -37,7 +38,7 @@ const entries = computed(() => [
 // contiguous partition with the smallest tallest column, retaining README order.
 const columns = computed(() => {
   if (!entries.value.length) return []
-  const count = entries.value.length > 18 ? 3 : entries.value.length > 6 ? 2 : 1
+  const count = Math.min(entries.value.length, columnCount.value)
   const weight = (entry: typeof entries.value[number]) =>
     measuredWeights.value[entry.anchor] ?? 1.4 + Math.floor((entry.title.length + entry.pages.length * 3) / (count === 3 ? 33 : 54))
   const total = [0]
@@ -71,17 +72,23 @@ async function fit() {
   if (measuring || !frame.value?.clientHeight) return
   measuring = true
   try {
-    fontSize.value = 14.5
-    await nextTick()
-    if (!frame.value) return
-    // Actual wrapping and the slide badges determine row height. Measuring at
-    // the preferred size avoids overloading a column with short-looking labels.
-    measuredWeights.value = Object.fromEntries([...frame.value.querySelectorAll<HTMLElement>('[data-topic-anchor]')]
-      .map(row => [row.dataset.topicAnchor!, row.offsetHeight + parseFloat(getComputedStyle(row).marginTop)]))
-    await nextTick()
-    while (frame.value && frame.value.scrollHeight > frame.value.clientHeight + 1 && fontSize.value > 10) {
-      fontSize.value -= 0.25
+    const preferredColumns = entries.value.length > 18 ? 3 : entries.value.length > 6 ? 2 : 1
+    // Expanded README hierarchies can need a fourth column. Measure each
+    // candidate at its actual width before balancing and reducing the font.
+    for (let count = preferredColumns; count <= Math.min(4, entries.value.length); count++) {
+      columnCount.value = count
+      fontSize.value = 14.5
+      measuredWeights.value = {}
       await nextTick()
+      if (!frame.value) return
+      measuredWeights.value = Object.fromEntries([...frame.value.querySelectorAll<HTMLElement>('[data-topic-anchor]')]
+        .map(row => [row.dataset.topicAnchor!, row.offsetHeight + parseFloat(getComputedStyle(row).marginTop)]))
+      await nextTick()
+      while (frame.value && frame.value.scrollHeight > frame.value.clientHeight + 1 && fontSize.value > 10) {
+        fontSize.value -= 0.25
+        await nextTick()
+      }
+      if (!frame.value || frame.value.scrollHeight <= frame.value.clientHeight + 1) break
     }
   }
   finally { measuring = false }
@@ -102,7 +109,7 @@ onBeforeUnmount(() => observer?.disconnect())
       <span>{{ entries.length }} topics <span class="overview-meta-dot">·</span> {{ contentSlides.length }} slides</span>
       <span v-if="shortcutHintsVisible" class="section-navigation-hint">Choose a topic or slide number <span aria-hidden="true">↗</span> · H: hide hints</span>
     </div>
-    <nav ref="frame" class="section-toc" :aria-label="`Section ${section.number} contents`"
+    <nav ref="frame" class="section-toc" :class="{ 'toc-dense': columns.length === 4 }" :aria-label="`Section ${section.number} contents`"
       :style="{ '--toc-font-size': `${fontSize}px`, '--toc-columns': Math.max(1, columns.length) }">
       <ol v-for="(column, index) in columns" :key="index" class="section-toc-column">
         <li v-for="entry in column" :key="entry.anchor" class="section-toc-entry"

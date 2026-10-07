@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1120" height="240" viewBox="0 0 1120 240" role="img" aria-labelledby="title desc">
 <title id="title">TSL DS ACC 2 instruction encoding</title><desc id="desc">Bits 31 to 30 are type 10, bits 29 to 28 mode 10, bits 27 to 25 source register DS 111, bits 24 to 22 destination register ACC 011, and bits 21 to 0 the signed immediate 2. The complete instruction is hexadecimal AEC00002.</desc>
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#167b84"/></marker></defs>
-<rect width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#637983"/></marker></defs>
 <g font-family="Cantarell, sans-serif" fill="#17313a">
 <text x="51" y="37" font-size="16" text-anchor="start" font-weight="normal" fill="#17313a">31</text>
 <text x="109" y="37" font-size="16" text-anchor="end" font-weight="normal" fill="#17313a">30</text>
@@ -12,7 +11,7 @@
 <text x="80.0" y="188" font-size="13" text-anchor="middle" font-weight="normal" fill="#17313a">Move</text>
 <text x="115" y="37" font-size="16" text-anchor="start" font-weight="normal" fill="#17313a">29</text>
 <text x="173" y="37" font-size="16" text-anchor="end" font-weight="normal" fill="#17313a">28</text>
-<rect x="112" y="52" width="64" height="88" fill="#f6dfab" stroke="#637983" stroke-width="2"/>
+<rect x="112" y="52" width="64" height="88" fill="#fff1d6" stroke="#637983" stroke-width="2"/>
 <text x="144.0" y="88.0" font-size="18" text-anchor="middle" font-weight="normal" fill="#17313a">M</text>
 <text x="144.0" y="118.0" font-size="18" text-anchor="middle" font-weight="normal" fill="#17313a">10</text>
 <text x="144.0" y="178" font-size="18" text-anchor="middle" font-weight="normal" fill="#17313a">TSL</text>

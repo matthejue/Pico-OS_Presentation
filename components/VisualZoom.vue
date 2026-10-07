@@ -17,6 +17,7 @@ let pointerStart
 let observer
 let scanFrame
 let oldOverflow
+let opening = false
 
 function targetFor(target) {
   if (!(target instanceof Element) || !target.closest('.slidev-layout') || target.closest('dialog, a, button, input, textarea, [contenteditable="true"]'))
@@ -39,7 +40,8 @@ function adjust(amount) {
 }
 
 async function enlarge(element) {
-  if (open.value) return
+  if (open.value || opening) return
+  opening = true
   sourceElement = element.matches('[data-zoom-ready]') ? element : element.querySelector('[data-zoom-ready]') || element
   previousFocus = document.activeElement
   width.value = element.offsetWidth || element.getBoundingClientRect().width
@@ -65,6 +67,28 @@ async function enlarge(element) {
   // Cloned Slidev controls have no Vue handlers. Remove them, including the
   // hover-only clipboard SVG, before looking for a diagram to fit.
   for (const control of clone.querySelectorAll('.slidev-code-copy')) control.remove()
+  // Source SVGs stay untouched on disk. Inline the local vector in the viewer
+  // so diagram labels remain selectable, just like the former Mermaid labels.
+  for (const image of clone.querySelectorAll('img')) {
+    const url = new URL(image.src, location.href)
+    if (url.origin !== location.origin || !url.pathname.endsWith('.svg')) continue
+    try {
+      const response = await fetch(url)
+      if (!response.ok) continue
+      const document = new DOMParser().parseFromString(await response.text(), 'image/svg+xml')
+      const svg = document.documentElement
+      if (document.querySelector('parsererror') || svg.localName !== 'svg') continue
+      svg.setAttribute('aria-label', image.alt)
+      // Documentation references are labels in the presentation viewer.
+      for (const link of svg.querySelectorAll('a')) {
+        link.removeAttribute('href')
+        link.removeAttributeNS('http://www.w3.org/1999/xlink', 'href')
+      }
+      image.replaceWith(svg)
+    } catch {
+      // An unavailable vector still enlarges using the already loaded image.
+    }
+  }
   // Copy inherited typography without rasterizing code or SVG diagrams.
   const style = getComputedStyle(element)
   for (const property of ['fontFamily', 'fontSize', 'lineHeight', 'color', 'letterSpacing'])
@@ -99,10 +123,11 @@ async function enlarge(element) {
     }
   }
   open.value = true
+  opening = false
   await nextTick()
   content.value.replaceChildren(clone)
   // Preserve the diagram's full vector viewBox, including very tall sequences.
-  const svg = clone.matches('svg') ? clone : clone.querySelector('.mermaid svg')
+  const svg = clone.matches('svg') ? clone : clone.querySelector('svg')
   if (svg?.viewBox?.baseVal?.width) {
     const box = svg.viewBox.baseVal
     width.value = Math.max(800, box.width)

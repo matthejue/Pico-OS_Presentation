@@ -4,7 +4,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import {readmeSource, md, hash, plain, displayHtml} from './readme-source.mjs'
-import {styleSourceSvg} from '../config/visual-palette.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
@@ -60,12 +59,12 @@ for(const a of assets.filter(a=>a.type==='image')) {
  if(name.endsWith('.svg')) {
   const svg=bytes.toString('utf8'),box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
   a.aspect=box[2]/box[3]
-  await fs.writeFile(`public/readme/${name}`,styleSourceSvg(svg))
+  await fs.writeFile(`public/readme/${name}`,bytes)
  } else {a.aspect=1.5;await fs.writeFile(`public/readme/${name}`,bytes)}
  Object.assign(inventory.get(a.id),{copiedFile:`public/readme/${name}`,originalFileSha256:hash(bytes)})
 }
-const grids=new Set(['table-5997','table-7397','table-6992'])
-const preserveVertical=new Set(['table-689','table-3726','table-7116'])
+const grids=new Set(['table-6546','table-8326','table-7697'])
+const preserveVertical=new Set(['table-654','table-4008','table-7116'])
 function balanced(items,capacity) {
  const count=Math.ceil(items.length/capacity),size=Math.ceil(items.length/count),result=[]
  for(let i=0;i<items.length;i+=size)result.push(items.slice(i,i+size))
@@ -77,13 +76,13 @@ function prepare(a) {
   Object.assign(entry,{retainedRows:t.retainedRows,omittedRows:t.omittedRows,displayColumns:t.headerLabels})
   if(!t.compactRows?.length){entry.excluded='Internal function table; no library-facing operation';return []}
   if(t.unresolved.length)throw Error('Missing reviewed table summary: '+JSON.stringify(t.unresolved))
-  const capacity=grids.has(a.id)?(a.id==='table-7397'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14
+  const capacity=grids.has(a.id)?(a.id==='table-8326'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14
   return balanced(t.compactRows,capacity).map(rows=>({...t,compactRows:rows,grid:grids.has(a.id),tableColumns:rows.length>=10&&t.columns<=3&&!preserveVertical.has(a.id)?2:1}))
  }
  if(a.type==='list') {
   const items=lists[a.id]
   if(!items)throw Error(`Missing reviewed list: ${a.id}`)
-  return [{...a,items,itemIndices:items.map((_,i)=>i+1),listColumns:items.length>6?2:1,tiles:a.id==='list-185'}]
+  return [{...a,items,itemIndices:items.map((_,i)=>i+1),listColumns:items.length>6?2:1,tiles:a.id==='list-186'}]
  }
  if(a.type==='code') {
   const lines=a.content.trimEnd().split('\n')
@@ -108,7 +107,7 @@ function widths(table,rows,target) {
 function renderTable(a) {
  if(a.grid) {
   const html=`<div class="readme-tiles" v-pre>${a.compactRows.map(r=>`<div class="readme-tile"><div class="tile-name">${r.values[0].html}</div>${r.values.slice(1).map(v=>`<div class="tile-detail">${v.html}</div>`).join('')}</div>`).join('\n')}</div>`
-  return visual('table',html,a.id==='table-5997'?1440:1280,`inventory-grid${a.id==='table-5997'?' library-grid':''}`)
+  return visual('table',html,a.id==='table-6546'?1440:1280,`inventory-grid${a.id==='table-6546'?' library-grid':''}`)
  }
  let chunks=[a.compactRows]
  if(a.tableColumns===2) {
@@ -168,14 +167,14 @@ function render(a) {
 }
 const repeated={
  '116-program-sections-interrupt-table-entries-and-linker-placement':'21-reti-interrupt-entry-and-the-interrupt-service-routine-table',
- '241-syscall-selectors-and-register-convention':'722-child-waiting-with-waitpid',
+ '241-syscall-selectors-and-register-convention':'1012-packing-arguments-and-executing-the-syscall',
  '112-kernel-startup':'1151-default-compiler-generated-_start',
  '113-init-process':'1152-picoos-libstart-startup-sequence',
  '1134-shell-startup':'1152-picoos-libstart-startup-sequence',
  '1135-loading-user-applications':'1152-picoos-libstart-startup-sequence'
 }
-for(const s of sections)if(s.instructions.some(x=>/waitpid code/.test(x)))repeated[s.anchor]=sections.find(s=>s.title.startsWith('7.2.2 ')).anchor
-const introOnly=new Set(['1-toolchain-extensions-for-picoos','115-selecting-a-startup-function-with--c----startup-source','2-interrupts-system-calls-preemption-and-exceptions','25-timer-interrupts-and-userspace-preemption','28-cpu-exceptions-and-runtime-errors','3-memory-management-and-shared-memory','33-kernel-heap','34-process-and-shared-data-heap','35-user-process-heap','36-heap-and-allocator-function-reference','4-processes-and-process-lifecycle','42-initial-user-process-stack','43-loading-and-starting-a-process','5-shared-memory-entries-and-mappings','61-scheduler-implementation','7-blocking-wait-queues-signals-and-mutexes','73-process-signals','8-terminal-file-descriptors-and-host-filesystem','101-from-a-library-call-to-the-kernel-waitpid','1021-unistd-processes-descriptors-paths-and-wait-queues','1027-stdlib-process-heap-environment-conversion-and-exit','12-shell','13-user-applications-and-commands','14-test-system'])
+for(const s of sections)if(s.instructions.some(x=>/waitpid code/.test(x)))repeated[s.anchor]='1012-packing-arguments-and-executing-the-syscall'
+const introOnly=new Set(['122-atomic-test-and-set-with-tsl','22-interrupt-controller-mappings-and-priorities','3633-free-d-and-merge-its-remainder','3634-free-c-and-merge-repeatedly-at-b','421-loading-a-process-load-library-call','611-algorithm-and-round-robin-comparison','712-child-waiting-with-waitpid','1013-interrupt-entry-waiting-and-return','1-toolchain-extensions-for-picoos','115-selecting-a-startup-function-with--c----startup-source','2-interrupts-system-calls-preemption-and-exceptions','25-timer-interrupts-and-userspace-preemption','28-cpu-exceptions-and-runtime-errors','3-memory-management-and-shared-memory','33-kernel-heap','34-process-and-shared-data-heap','35-user-process-heap','36-heap-and-allocator-function-reference','4-processes-and-process-lifecycle','4221-initial-user-process-stack','42-loading-and-starting-a-process','5-shared-memory-entries-and-mappings','61-scheduler-implementation','7-blocking-wait-queues-signals-and-mutexes','72-process-signals','8-terminal-file-descriptors-and-host-filesystem','101-from-a-library-call-to-the-kernel-waitpid','1021-unistd-processes-descriptors-paths-and-wait-queues','1027-stdlib-process-heap-environment-conversion-and-exit','12-shell','13-user-applications-and-commands','14-test-system'])
 const diagram=a=>['mermaid','image'].includes(a.type)
 const shortCode=a=>a.type==='code'&&!a.split&&a.codeLines<=18
 function compose(parts) {
