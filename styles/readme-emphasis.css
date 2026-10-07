@@ -20,9 +20,23 @@
 .pipeline-panel:first-child { border-left: 3px solid var(--amber); }
 .pipeline-panel:last-child { border-left: 3px solid var(--cyan); }
 .pipeline-panel:first-child .readme-list strong { color: #805916; }
-.pipeline-panel .readme-list > ul > li:first-child { flex-basis: 100%; }
-.pipeline-panel .readme-list > ul > li:first-child::marker { content: ''; }
-.pipeline-panel .readme-list > ul > li:first-child strong { font-size: 1.08em; }
+.pipeline-panel:first-child .readme-list li::marker { color: var(--amber); }
+.pipeline-heading { font-size: 0.88rem; }
+.pipeline-heading > strong { color: var(--cyan-dim); }
+.pipeline-heading > strong:first-child { font-size: 1.08em; }
+.pipeline-panel:first-child .pipeline-heading > strong { color: #805916; }
+.pipeline-heading > strong:first-child::after { content: '▪'; color: var(--cyan); margin: 0 0.65rem 0 0.85rem; }
+.pipeline-panel:first-child .pipeline-heading > strong:first-child::after { color: var(--amber); }
+.pipeline-panel .readme-list > ul { padding-left: 1.15rem; }
+
+/* Caller and callee frames keep the diagram palette, without zebra striping. */
+.readme-table tbody tr.stack-caller { background: #fff8e9; }
+.readme-table tbody tr.stack-callee { background: #eaf5f5; }
+.readme-table tr.stack-caller .table-key,
+.readme-table tr.stack-caller .table-key :is(code, strong) { color: #805916; }
+.readme-table tr.stack-callee[data-source-row="7"] td { border-top: 3px solid var(--cyan); }
+.readme-table :is(tr[data-source-row="3"].stack-caller, tr[data-source-row="4"].stack-caller) td:nth-child(2) { color: #805916; font-weight: 650; }
+.readme-table :is(tr[data-source-row="9"].stack-callee, tr[data-source-row="10"].stack-callee) td:nth-child(2) { color: var(--cyan-dim); font-weight: 650; }
 
 /* Merged slides retain the reviewed columns inside their stacked panels. */
 .readme-artifacts.layout-composed {

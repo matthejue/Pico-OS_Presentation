@@ -18,23 +18,18 @@
   "list-176": [
     [
       "**FPGA:** Alchitry Cu V2 — €55.66",
-      "Lattice iCE40-HX8K",
-      "CPU / IRQ / **UART** / DMA",
+      "CPU / IRQ / UART / DMA",
       "Timer + buffer + SRAM arbitration"
     ],
     [
       "**SRAM:** 2 × ISSI chips",
-      "IS61WV25616BLL-10TLI",
       "2 × €5.80 = €11.60",
       "Shared address + control",
       "Combined 32-bit bus; 1 MiB"
     ],
     [
       "**USB–UART:** SparkFun CH340C",
-      "**Price:** €10.92",
-      "TXO → RX; RXI ← TX",
-      "Common ground; matching serial format",
-      "**DMA:** four bytes → one word"
+      "**Price:** €10.92"
     ]
   ],
   "list-2092": [

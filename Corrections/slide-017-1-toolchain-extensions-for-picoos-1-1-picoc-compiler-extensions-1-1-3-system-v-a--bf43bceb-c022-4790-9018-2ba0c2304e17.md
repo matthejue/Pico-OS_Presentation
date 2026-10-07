@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extension
 source_anchor: "113-system-v-abi-stack-frames-and-call-cleanup"
 ---
 
-- for fun(arg1, arg2), first arg2 first, then arg1, then doesn't need to know number of arguments
+- [x] for fun(arg1, arg2), first arg2 first, then arg1, then doesn't need to know number of arguments

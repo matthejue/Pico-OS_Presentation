@@ -10,6 +10,7 @@ import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 import {placeSummaries} from '../config/readme-readability.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
 import {createSlideNotesStore} from './slide-notes.mjs'
+import {applySvgEdits} from '../config/readme-svg-edits.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || '../Pico-OS/README.md'
 const source=await fs.readFile(sourcePath,'utf8')
 const {sections,assets}=readmeSource(source)
@@ -60,7 +61,8 @@ for(const a of assets.filter(a=>a.type==='image')) {
  const bytes=await fs.readFile(path.resolve(process.env.README_REPOSITORY || path.dirname(sourcePath),a.path)), name=path.basename(a.path)
  a.outputPath=`/readme/${name}`
  if(name.endsWith('.svg')) {
-  const svg=presentationText(bytes.toString('utf8')),box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
+  const svg=applySvgEdits(name,presentationText(bytes.toString('utf8')))
+  const box=svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number)
   a.aspect=box[2]/box[3]
   await fs.writeFile(`public/readme/${name}`,svg)
  } else {a.aspect=1.5;await fs.writeFile(`public/readme/${name}`,bytes)}
@@ -142,8 +144,16 @@ function renderTable(a) {
  const merged=widths(a,a.compactRows,maxWidth)
  const tableKey=a.id+':'+a.compactRows.map(r=>r.sourceRow).join(',')
  if(tableWidths[tableKey]?.length===merged.columns.length)merged.columns=tableWidths[tableKey]
- const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr data-source-row="${r.sourceRow}">${r.values.map((v,i)=>`<td${i===0?' class="table-key"':''}>${v.html}</td>`).join('')}</tr>`).join('\n')}</tbody></table></div>`).join('\n')
- return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}"${chunks.length===2?' '+columnAttributes('table:'+tableKey):''} v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"`)
+ const rowHtml=r=>{
+  const frame=a.id==='table-644'
+  const cls=frame?` class="${r.sourceRow<=6?'stack-caller':'stack-callee'}"`:''
+  const row=`<tr data-source-row="${r.sourceRow}"${cls}>${r.values.map((v,i)=>`<td${i===0?' class="table-key"':''}>${v.html}</td>`).join('')}</tr>`
+  // Split the source's combined locals/temporaries row for a clearer frame.
+  return row+(frame&&r.sourceRow===12?'\n<tr class="stack-callee stack-temporaries"><td class="table-key"><code>BAF - 2, …</code></td><td>Temporaries</td><td>Callee</td></tr>':'')
+ }
+ const html=chunks.map(rows=>`<div class="readme-table"><table><colgroup>${merged.columns.map(w=>`<col style="width:${w.toFixed(2)}%" />`).join('')}</colgroup><thead><tr>${merged.labels.map(label=>`<th>${prose(label)}</th>`).join('')}</tr></thead><tbody>${rows.map(rowHtml).join('\n')}</tbody></table></div>`).join('\n')
+ const textScale=['table-227','table-251'].includes(a.id)?' :text-scale="0.85"':''
+ return visual('table',`<div class="table-panels${chunks.length===2?' table-panels-two':''}"${chunks.length===2?' '+columnAttributes('table:'+tableKey):''} v-pre>${html}</div>`,chunks.length===2?merged.width*2+24:merged.width,'',`data-table-key="${tableKey}"${textScale}`)
 }
 function renderCode(a) {
  const sourceLines=a.content.split('\n');if(sourceLines.at(-1)==='')sourceLines.pop()
@@ -245,7 +255,10 @@ for(const section of sections) {
    content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items)}</div>`
   }
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
-  else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>`<div class="pipeline-panel"><div class="readme-list">${bulletList(summaries[section.anchor].slice(i*3,i*3+3))}</div>\n\n${render(a)}\n\n</div>`).join('\n\n')}</div>`
+  else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>{
+   const items=summaries[section.anchor].slice(i*3,i*3+3)
+   return `<div class="pipeline-panel"><div class="pipeline-heading">${prose(items[0])}</div><div class="readme-list">${bulletList(items.slice(1))}</div>\n\n${render(a)}\n\n</div>`
+  }).join('\n\n')}</div>`
   else if(layout==='composed')content=renderComposed({panels,weights},render,{columnAttributes,columnShares,codeNeed,rowAttributes})
   else content=`<div class="readme-artifacts layout-${layout}"${layout==='columns'?' '+columnAttributes(columnKey):layout==='stacked'?rowAttributes(group):''}>\n\n${group.map(render).join('\n\n')}\n\n</div>`
   const additional=group.length?pageSummary:null

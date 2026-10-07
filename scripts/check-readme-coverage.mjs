@@ -4,6 +4,7 @@ import path from 'node:path'
 import {readmeSource,md,hash,displayHtml,plain,presentationText} from './readme-source.mjs'
 import {prepareTable} from '../config/readme-tables.mjs'
 import {loadSourceState} from './source-state.mjs'
+import {applySvgEdits} from '../config/readme-svg-edits.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || (await loadSourceState()).snapshotPath
 const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
 // Persistent identity is invisible metadata, independent of source coverage.
@@ -45,8 +46,8 @@ for(const a of assets) {
  if(a.type==='image') {
   const original=await fs.readFile(path.resolve(process.env.README_REPOSITORY||'../Pico-OS',a.path)),copied=await fs.readFile(entry.copiedFile)
   assert.equal(hash(original),entry.originalFileSha256)
-  const expected=a.path.endsWith('.svg')?Buffer.from(presentationText(original.toString('utf8'))):original
-  assert.equal(copied.toString('base64'),expected.toString('base64'),`${a.id}: source image retained with presentation spelling`)
+  const expected=a.path.endsWith('.svg')?Buffer.from(applySvgEdits(path.basename(a.path),presentationText(original.toString('utf8')))):original
+  assert.equal(copied.toString('base64'),expected.toString('base64'),`${a.id}: source image retained with reviewed presentation corrections`)
  }
  if(a.type==='list') {
   const count=md.parse(a.raw,{}).filter(t=>t.type==='list_item_open'&&t.level===1).length

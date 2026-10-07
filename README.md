@@ -219,7 +219,9 @@ existing column proportions and allocate height to match their content.
 The emphasis styles are in [`styles/readme-emphasis.css`](styles/readme-emphasis.css).
 
 Images in `public/readme/` retain the current README assets, with ReTI spelling
-normalized in SVG labels and identifiers. Source snapshots and source hashes
+normalized in SVG labels and identifiers. Reviewed SVG label and readability
+corrections are preserved by [`config/readme-svg-edits.json`](config/readme-svg-edits.json)
+when rebuilding; a changed source label requires another review. Source snapshots and source hashes
 retain the original bytes. Their existing colors, fonts, shapes, labels, and composition already
 match the presentation. Expanded memory views, redirection stages, and the
 producer/consumer pipeline diagrams use full-width slides. The enlarged viewer

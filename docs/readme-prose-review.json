@@ -190,9 +190,7 @@
         "**Parts total:** €78.18 including VAT",
         "**DigiKey Germany:** 12 August 2026",
         "**Excludes:** wiring, PCB, cables, shipping",
-        "**Proposed hardware**; development uses emulator",
-        "**Hardware:** companion serial host required",
-        "**Free SRAM:** 180,171 words before heaps/stacks"
+        "**Hardware:** computer connected via USB–UART"
       ],
       "remark": null,
       "paragraphs": [
@@ -339,12 +337,7 @@
         15,
         16
       ],
-      "summary": [
-        "**PicoC:** `.reti_blocks` + adjacent `.st`",
-        "**Handwritten assembly:** symbols optional",
-        "**-o:** linked output name",
-        "**Layout/debug:** separate `.sections` / `.debuginfo`"
-      ],
+      "summary": [],
       "remark": [
         "GCC / Clang",
         [
@@ -380,17 +373,19 @@
         17
       ],
       "summary": [
-        "**Shared convention:** C, assembly, startup, interrupts",
-        "**BAF** identifies stack frame",
-        "Caller pushes **arguments** + continuation",
-        "Caller removes **arguments** after return",
-        "Callee restores **BAF**; result in IN2"
+        "**Caller:** pushes arg2, then arg1, then the **return address**",
+        "**Callee:** pushes caller’s **BAF**; BAF points to first local",
+        "**Return:** callee restores BAF; result in **IN2**",
+        "**Caller:** removes arguments after return",
+        "**Variadic calls:** fixed offsets; callee need not know argument count",
+        "**Interrupt handlers:** reuse the same stack-frame rules"
       ],
       "remark": [
         "System V ABI",
         [
-          "General model adapted to ReTI",
-          "Different from AMD64 ABI"
+          "Binary interface rules",
+          "Calls: arguments, registers, stack",
+          "PicoOS adapts the stack convention to ReTI"
         ]
       ],
       "paragraphs": [

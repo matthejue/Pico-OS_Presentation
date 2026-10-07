@@ -11,16 +11,15 @@
     "**Parts total:** €78.18 including VAT",
     "**DigiKey Germany:** 12 August 2026",
     "**Excludes:** wiring, PCB, cables, shipping",
-    "**Proposed hardware**; development uses emulator",
-    "**Hardware:** companion serial host required",
-    "**Free SRAM:** 180,171 words before heaps/stacks"
+    "**Hardware:** computer connected via USB–UART"
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
-    "**Shared convention:** C, assembly, startup, interrupts",
-    "**BAF** identifies stack frame",
-    "Caller pushes **arguments** + continuation",
-    "Caller removes **arguments** after return",
-    "Callee restores **BAF**; result in IN2"
+    "**Caller:** pushes arg2, then arg1, then the **return address**",
+    "**Callee:** pushes caller’s **BAF**; BAF points to first local",
+    "**Return:** callee restores BAF; result in **IN2**",
+    "**Caller:** removes arguments after return",
+    "**Variadic calls:** fixed offsets; callee need not know argument count",
+    "**Interrupt handlers:** reuse the same stack-frame rules"
   ],
   "24-system-call-interface-and-execution": [
     "**Library wrapper** → selector + request",
@@ -213,12 +212,7 @@
     "**Extracted directory** becomes PicoOS `/`",
     "**Host /tmp** remains outside PicoOS"
   ],
-  "112-separate-compilation-reusable-artifacts-and-linking": [
-    "**PicoC:** `.reti_blocks` + adjacent `.st`",
-    "**Handwritten assembly:** symbols optional",
-    "**-o:** linked output name",
-    "**Layout/debug:** separate `.sections` / `.debuginfo`"
-  ],
+  "112-separate-compilation-reusable-artifacts-and-linking": [],
   "1131-stack-frame-layout-and-caller-cleanup": [
     "**Arguments:** arg2 first, then arg1",
     "**Aggregates:** full width; later offsets increase",

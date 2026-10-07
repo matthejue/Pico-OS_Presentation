@@ -390,5 +390,10 @@
   "table-1334/2/1": "Words in `.ivt` + words in `.text`",
   "table-1334/3/1": "`datasegment_start` + max(`.data` words, global-data extent)",
   "table-1334/4/1": "`−1`",
-  "table-1334/5/1": "`−1`"
+  "table-1334/5/1": "`−1`",
+  "table-644/4/1": "Saved BAF",
+  "table-644/9/1": "Return address",
+  "table-644/10/1": "Saved BAF",
+  "table-644/12/0": "**`BAF - 1`**",
+  "table-644/12/1": "Second local"
 }

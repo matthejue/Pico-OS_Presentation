@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 
-const props = defineProps({ kind: String, width: { type: Number, default: 1024 } })
+const props = defineProps({ kind: String, width: { type: Number, default: 1024 }, textScale: Number })
 const frame = ref(), content = ref()
 const nativeWidth = ref(props.width), nativeHeight = ref(1), scale = ref(1)
 const sourceAspect = ref(props.width)
@@ -50,7 +50,7 @@ function balanceRows() {
 function fitText(availableWidth, availableHeight) {
   // A source's intrinsic width must not cap text size in a roomy panel. Reflow
   // at a readable preferred size, then reduce it only when height requires it.
-  const preferred = props.kind === 'code' ? 1.35 : 1.1
+  const preferred = props.textScale ?? (props.kind === 'code' ? 1.35 : 1.1)
   const heightAt = value => {
     content.value.style.width = `${availableWidth / value}px`
     return content.value.scrollHeight

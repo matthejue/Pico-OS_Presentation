@@ -286,24 +286,17 @@ scheduler
 <div class="deck-content readme-slide">
 
 <!-- README_ASSET list-176 -->
-<div class="hardware-tiles"><div class="readme-tile"><div class="tile-name"><strong>FPGA:</strong> Alchitry Cu V2 — €55.66</div><ul><li>Lattice iCE40-HX8K</li>
-<li>CPU / IRQ / <strong>UART</strong> / DMA</li>
-<li>Timer + buffer + SRAM arbitration</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>SRAM:</strong> 2 × ISSI chips</div><ul><li>IS61WV25616BLL-10TLI</li>
-<li>2 × €5.80 = €11.60</li>
+<div class="hardware-tiles"><div class="readme-tile"><div class="tile-name"><strong>FPGA:</strong> Alchitry Cu V2 — €55.66</div><ul><li>CPU / IRQ / UART / DMA</li>
+<li>Timer + buffer + SRAM arbitration</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>SRAM:</strong> 2 × ISSI chips</div><ul><li>2 × €5.80 = €11.60</li>
 <li>Shared address + control</li>
-<li>Combined 32-bit bus; 1 MiB</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>USB–UART:</strong> SparkFun CH340C</div><ul><li><strong>Price:</strong> €10.92</li>
-<li>TXO → RX; RXI ← TX</li>
-<li>Common ground; matching serial format</li>
-<li><strong>DMA:</strong> four bytes → one word</li></ul></div></div>
+<li>Combined 32-bit bus; 1 MiB</li></ul></div><div class="readme-tile"><div class="tile-name"><strong>USB–UART:</strong> SparkFun CH340C</div><div class="readme-item"><strong>Price:</strong> €10.92</div></div></div>
 <div class="artifact-columns hardware-details" data-column-key="hardware:details" style="--readme-columns:minmax(0, 39fr) minmax(0, 61fr);"><div class="readme-list"><ul><li><strong>Parts total:</strong> €78.18 including VAT</li>
 <li><strong>DigiKey Germany:</strong> 12 August 2026</li>
 <li><strong>Excludes:</strong> wiring, PCB, cables, shipping</li>
-<li><strong>Proposed hardware</strong>; development uses emulator</li>
-<li><strong>Hardware:</strong> companion serial host required</li>
-<li><strong>Free SRAM:</strong> 180,171 words before heaps/stacks</li></ul></div>
+<li><strong>Hardware:</strong> computer connected via USB–UART</li></ul></div>
 
 <!-- README_ASSET table-227 -->
-<ReadmeVisual kind="table" :width="760" data-table-key="table-227:1,2,3,4,5">
+<ReadmeVisual kind="table" :width="760" data-table-key="table-227:1,2,3,4,5" :text-scale="0.85">
 
 <div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:44.91%" /><col style="width:26.47%" /><col style="width:28.62%" /></colgroup><thead><tr><th>Image</th><th>32-bit words</th><th>Size</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>kernel.bin</code></span> (<span class="source-link"><code>kernel.picoc</code></span>)</td><td>41,502</td><td>0.166008 MB</td></tr>
 <tr data-source-row="2"><td class="table-key"><span class="source-link"><code>init.bin</code></span> (<span class="source-link"><code>init.picoc</code></span>)</td><td>10,824</td><td>0.043296 MB</td></tr>
@@ -338,7 +331,7 @@ scheduler
 </ReadmeVisual>
 
 <!-- README_ASSET table-251 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-251:1,2,3">
+<ReadmeVisual kind="table" :width="1080" data-table-key="table-251:1,2,3" :text-scale="0.85">
 
 <div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.82%" /><col style="width:30.15%" /><col style="width:45.02%" /></colgroup><thead><tr><th>High bits</th><th>Address space</th><th>PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>00</code></td><td>EPROM</td><td>Bootloader</td></tr>
 <tr data-source-row="2"><td class="table-key"><code>01</code></td><td>Memory-mapped periphery</td><td>UART, interrupts, timer, exceptions, DMA</td></tr>
@@ -418,8 +411,7 @@ scheduler
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts pipeline-comparison"><div class="pipeline-panel"><div class="readme-list"><ul><li><strong>Original:</strong> one source file</li>
-<li><strong>Lark:</strong> parses source into a parse tree</li>
+<div class="readme-artifacts pipeline-comparison"><div class="pipeline-panel"><div class="pipeline-heading"><strong>Original:</strong> one source file</div><div class="readme-list"><ul><li><strong>Lark:</strong> parses source into a parse tree</li>
 <li><strong>AST construction</strong>, then single-file lowering to ReTI</li></ul></div>
 
 <!-- README_ASSET image-564 -->
@@ -431,8 +423,7 @@ scheduler
 
 </div>
 
-<div class="pipeline-panel"><div class="readme-list"><ul><li><strong>Extended:</strong> reusable units, <strong>Tree-sitter</strong> replaces <strong>Lark</strong></li>
-<li><strong>Tree-sitter:</strong> parses preprocessed source into a parse tree</li>
+<div class="pipeline-panel"><div class="pipeline-heading"><strong>Extended:</strong> reusable units, <strong>Tree-sitter</strong> replaces <strong>Lark</strong></div><div class="readme-list"><ul><li><strong>Tree-sitter:</strong> parses preprocessed source into a parse tree</li>
 <li><strong>AST construction</strong>, symbol/type checks, linking + startup</li></ul></div>
 
 <!-- README_ASSET image-570 -->
@@ -514,8 +505,6 @@ binary/basic_string.sections
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>PicoC:</strong> <code>.reti_blocks</code> + adjacent <code>.st</code></li>
-<li><strong>Handwritten assembly:</strong> symbols optional</li></ul></div>
 <aside class="context-note"><b>GCC / Clang</b><ul><li><strong>C object:</strong> symbol table inside .o</li>
 <li><strong>PicoC:</strong> symbols in adjacent .st</li></ul></aside>
 
@@ -549,8 +538,6 @@ binary/basic_string.sections
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>-o:</strong> linked output name</li>
-<li><strong>Layout/debug:</strong> separate <code>.sections</code> / <code>.debuginfo</code></li></ul></div>
 
 </div>
 
@@ -565,13 +552,15 @@ binary/basic_string.sections
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li><strong>Shared convention:</strong> C, assembly, startup, interrupts</li>
-<li><strong>BAF</strong> identifies stack frame</li>
-<li>Caller pushes <strong>arguments</strong> + continuation</li>
-<li>Caller removes <strong>arguments</strong> after return</li>
-<li>Callee restores <strong>BAF</strong>; result in IN2</li></ul></div>
-<aside class="context-note"><b>System V ABI</b><ul><li>General model adapted to ReTI</li>
-<li>Different from AMD64 ABI</li></ul></aside>
+<div class="readme-list"><ul><li><strong>Caller:</strong> pushes arg2, then arg1, then the <strong>return address</strong></li>
+<li><strong>Callee:</strong> pushes caller’s <strong>BAF</strong>; BAF points to first local</li>
+<li><strong>Return:</strong> callee restores BAF; result in <strong>IN2</strong></li>
+<li><strong>Caller:</strong> removes arguments after return</li>
+<li><strong>Variadic calls:</strong> fixed offsets; callee need not know argument count</li>
+<li><strong>Interrupt handlers:</strong> reuse the same stack-frame rules</li></ul></div>
+<aside class="context-note"><b>System V ABI</b><ul><li>Binary interface rules</li>
+<li>Calls: arguments, registers, stack</li>
+<li>PicoOS adapts the stack convention to ReTI</li></ul></aside>
 
 </div>
 
@@ -591,20 +580,21 @@ binary/basic_string.sections
 <!-- README_ASSET table-644 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-644:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27.60%" /><col style="width:44.05%" /><col style="width:28.36%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><strong>Higher addresses ↑</strong></td><td>Earlier stack contents</td><td>Earlier calls</td></tr>
-<tr data-source-row="2"><td class="table-key"><em><code>caller BAF + 3</code></em></td><td>Caller argument</td><td>Caller’s caller</td></tr>
-<tr data-source-row="3"><td class="table-key"><em><code>caller BAF + 2</code></em></td><td>Caller return address</td><td>Caller’s caller</td></tr>
-<tr data-source-row="4"><td class="table-key"><em><code>caller BAF + 1</code></em></td><td>Saved caller frame pointer</td><td>Caller frame</td></tr>
-<tr data-source-row="5"><td class="table-key"><em><code>caller BAF</code></em></td><td>Caller local</td><td>Caller frame</td></tr>
-<tr data-source-row="6"><td class="table-key"><em><code>caller BAF - 1</code></em></td><td>Retained temporary expression</td><td>Caller expression</td></tr>
-<tr data-source-row="7"><td class="table-key"><strong><code>BAF + 4</code></strong></td><td>Second argument (arg2)</td><td>Caller</td></tr>
-<tr data-source-row="8"><td class="table-key"><strong><code>BAF + 3</code></strong></td><td>First argument (arg1)</td><td>Caller</td></tr>
-<tr data-source-row="9"><td class="table-key"><strong><code>BAF + 2</code></strong></td><td>Return continuation address</td><td>Caller</td></tr>
-<tr data-source-row="10"><td class="table-key"><strong><code>BAF + 1</code></strong></td><td>Saved caller BAF</td><td>Callee</td></tr>
-<tr data-source-row="11"><td class="table-key"><strong><code>BAF</code></strong></td><td>First local</td><td>Callee</td></tr>
-<tr data-source-row="12"><td class="table-key"><strong><code>BAF - 1</code>, ...</strong></td><td>More locals + temporaries</td><td>Callee</td></tr>
-<tr data-source-row="13"><td class="table-key"><strong><code>SP</code></strong></td><td>Free cell below occupied stack</td><td>Current stack boundary</td></tr>
-<tr data-source-row="14"><td class="table-key"><strong>Lower addresses ↓</strong></td><td>Stack grows toward lower addresses</td><td></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.49%" /><col style="width:40.26%" /><col style="width:30.25%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1" class="stack-caller"><td class="table-key"><strong>Higher addresses ↑</strong></td><td>Earlier stack contents</td><td>Earlier calls</td></tr>
+<tr data-source-row="2" class="stack-caller"><td class="table-key"><em><code>caller BAF + 3</code></em></td><td>Caller argument</td><td>Caller’s caller</td></tr>
+<tr data-source-row="3" class="stack-caller"><td class="table-key"><em><code>caller BAF + 2</code></em></td><td>Caller return address</td><td>Caller’s caller</td></tr>
+<tr data-source-row="4" class="stack-caller"><td class="table-key"><em><code>caller BAF + 1</code></em></td><td>Saved BAF</td><td>Caller frame</td></tr>
+<tr data-source-row="5" class="stack-caller"><td class="table-key"><em><code>caller BAF</code></em></td><td>Caller local</td><td>Caller frame</td></tr>
+<tr data-source-row="6" class="stack-caller"><td class="table-key"><em><code>caller BAF - 1</code></em></td><td>Retained temporary expression</td><td>Caller expression</td></tr>
+<tr data-source-row="7" class="stack-callee"><td class="table-key"><strong><code>BAF + 4</code></strong></td><td>Second argument (arg2)</td><td>Caller</td></tr>
+<tr data-source-row="8" class="stack-callee"><td class="table-key"><strong><code>BAF + 3</code></strong></td><td>First argument (arg1)</td><td>Caller</td></tr>
+<tr data-source-row="9" class="stack-callee"><td class="table-key"><strong><code>BAF + 2</code></strong></td><td>Return address</td><td>Caller</td></tr>
+<tr data-source-row="10" class="stack-callee"><td class="table-key"><strong><code>BAF + 1</code></strong></td><td>Saved BAF</td><td>Callee</td></tr>
+<tr data-source-row="11" class="stack-callee"><td class="table-key"><strong><code>BAF</code></strong></td><td>First local</td><td>Callee</td></tr>
+<tr data-source-row="12" class="stack-callee"><td class="table-key"><strong><code>BAF - 1</code></strong></td><td>Second local</td><td>Callee</td></tr>
+<tr class="stack-callee stack-temporaries"><td class="table-key"><code>BAF - 2, …</code></td><td>Temporaries</td><td>Callee</td></tr>
+<tr data-source-row="13" class="stack-callee"><td class="table-key"><strong><code>SP</code></strong></td><td>Free cell below occupied stack</td><td>Current stack boundary</td></tr>
+<tr data-source-row="14" class="stack-callee"><td class="table-key"><strong>Lower addresses ↓</strong></td><td>Stack grows toward lower addresses</td><td></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2263,6 +2253,7 @@ $ hexyl -n 20 program.bin
 
 <!-- SLIDE_ID ee2e83d8-5624-47e2-81d2-936d18397b36 -->
 <!-- SOURCE Pico-OS/README.md#122-atomic-test-and-set-with-tsl -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
@@ -2328,6 +2319,7 @@ TSL DS ACC 2
 
 <!-- SLIDE_ID c361ed8e-fb6d-4596-901d-731eddc64c6e -->
 <!-- SOURCE Pico-OS/README.md#1221-test-and-set-in-sram -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions · 1.2.2 Atomic test-and-set with `TSL`
 
@@ -2497,6 +2489,7 @@ TSL DS ACC 2
 
 <!-- SLIDE_ID ddbd39a5-c131-4da7-9964-70f003521242 -->
 <!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
@@ -2538,6 +2531,7 @@ TSL DS ACC 2
 
 <!-- SLIDE_ID f1f6efcb-5d26-4b6c-93da-0bba77656d9c -->
 <!-- SOURCE Pico-OS/README.md#124-debugger-source-view-and-terminal-modes -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
@@ -2672,6 +2666,7 @@ void syscall_interrupt(void) {
 
 <!-- SLIDE_ID c13b540d-219b-405e-b812-1bc4ba1b8b55 -->
 <!-- SOURCE Pico-OS/README.md#22-interrupt-controller-mappings-and-priorities -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
@@ -2809,6 +2804,7 @@ void interrupt_controller_initialize(void) {
 
 <!-- SLIDE_ID f48fac1c-ccf7-4d59-a3bd-6afa7c159a0c -->
 <!-- SOURCE Pico-OS/README.md#221-interrupt-controller-initialization -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.2 Interrupt-controller mappings and priorities
 
@@ -2863,6 +2859,7 @@ void interrupt_controller_initialize(void) {
 
 <!-- SLIDE_ID 3e086847-5994-44bf-be79-71199defe9a5 -->
 <!-- SOURCE Pico-OS/README.md#24-system-call-interface-and-execution -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
@@ -3213,6 +3210,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID 698d9219-5f90-4046-a4b1-62e64a52efa5 -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -3340,6 +3338,7 @@ void syscall_interrupt(void) {
 
 <!-- SLIDE_ID 20ad82b3-cd1f-47c4-8957-4e92701e6b1d -->
 <!-- SOURCE Pico-OS/README.md#2421-entering-kernel-context -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
 
@@ -3365,6 +3364,7 @@ void syscall_interrupt(void) {
 
 <!-- SLIDE_ID cf11c19f-7e11-4c01-8418-3f975e286ae7 -->
 <!-- SOURCE Pico-OS/README.md#2421-entering-kernel-context -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
 
@@ -3448,6 +3448,7 @@ void activate_current_process_stack_boundary(void) {
 
 <!-- SLIDE_ID 20ff63cf-c84e-4148-87cd-e098f5b0d179 -->
 <!-- SOURCE Pico-OS/README.md#24211-stack-boundary-helpers -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace · 2.4.2.1 Entering kernel context
 
@@ -3693,6 +3694,7 @@ void dispatcher_switch_to_process(struct ProcessControlBlock *process) {
 
 <!-- SLIDE_ID fc690734-85d3-4110-9481-4f52db87106d -->
 <!-- SOURCE Pico-OS/README.md#2423-selecting-the-return-path -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace
 
@@ -3792,6 +3794,7 @@ void syscall_interrupt_restore(void) {
 
 <!-- SLIDE_ID 6aea96b5-c9fa-485c-8027-9185cc45891e -->
 <!-- SOURCE Pico-OS/README.md#25-timer-interrupts-and-userspace-preemption -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
@@ -3955,6 +3958,7 @@ void timer_interrupt(void) {
 
 <!-- SLIDE_ID 754a8d48-d769-4614-9117-9bc48799da66 -->
 <!-- SOURCE Pico-OS/README.md#2512-requesting-deferred-scheduling-for-kernel-work -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
 
@@ -4075,6 +4079,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID d661e84b-0834-45ae-83b0-7176ec4bc529 -->
 <!-- SOURCE Pico-OS/README.md#2514-entering-kernel-context-for-userspace-preemption -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
 
@@ -4092,6 +4097,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID 37afbff3-361d-4fd6-baad-8238b9e88da9 -->
 <!-- SOURCE Pico-OS/README.md#2515-saving-process-context-and-restoring-the-selected-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption · 2.5.1 Timer interrupt path
 
@@ -4110,6 +4116,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID 0f070827-5440-4ddc-ad2a-2a9f7742829c -->
 <!-- SOURCE Pico-OS/README.md#252-kernel-non-preemption-and-deferred-rescheduling -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
 
@@ -4258,6 +4265,7 @@ void uart_interrupt(void) {
 
 <!-- SLIDE_ID de3d8ca6-4f42-4689-9326-b0442d9dd839 -->
 <!-- SOURCE Pico-OS/README.md#261-entering-kernel-segments-on-the-interrupted-stack -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4800,6 +4808,7 @@ void cpu_exception_interrupt(void) {
 
 <!-- SLIDE_ID 4e260ae5-24f3-4b9b-a525-e97107af8a0d -->
 <!-- SOURCE Pico-OS/README.md#28111-comparing-exception-and-timer-context-tests -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers · 2.8.1.1 Entering kernel context after a fault
 
@@ -4955,6 +4964,7 @@ void exit_process(int status) {
 
 <!-- SLIDE_ID 44d8fbf5-8f45-448f-b25b-aa2df36dd8bb -->
 <!-- SOURCE Pico-OS/README.md#2813-halting-the-kernel-or-terminating-the-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers
 
@@ -5003,6 +5013,7 @@ void exit_process(int status) {
 
 <!-- SLIDE_ID 73fafbf3-3e12-4687-91a6-f033e517af88 -->
 <!-- SOURCE Pico-OS/README.md#283-exception-and-stack-boundary-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.8 CPU exceptions and runtime errors
 
@@ -5118,6 +5129,7 @@ struct Heap {
 
 <!-- SLIDE_ID a31dd55f-0712-4bed-98cf-6fd131b722be -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -5188,6 +5200,7 @@ struct Heap {
 
 <!-- SLIDE_ID 7f8f5d5f-58e9-4066-b51d-d25327fed09c -->
 <!-- SOURCE Pico-OS/README.md#32-sram-image-and-heap-hierarchy -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -5228,6 +5241,7 @@ struct Heap {
 
 <!-- SLIDE_ID 6ac93f9b-4a09-4003-b90a-95c6141ca995 -->
 <!-- SOURCE Pico-OS/README.md#331-kernel-heap-blocks-and-kernel-objects -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.3 Kernel Heap
 
@@ -5246,6 +5260,7 @@ struct Heap {
 
 <!-- SLIDE_ID 31dfd74c-a228-40d6-bf69-ea41decd5c8a -->
 <!-- SOURCE Pico-OS/README.md#341-process-allocations -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
 
@@ -5265,6 +5280,7 @@ struct Heap {
 
 <!-- SLIDE_ID d0ad5eef-dcb0-4c56-a251-df7249b9dd57 -->
 <!-- SOURCE Pico-OS/README.md#342-shared-data-allocations -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.4 Process and Shared Data Heap
 
@@ -5284,6 +5300,7 @@ struct Heap {
 
 <!-- SLIDE_ID 070478e0-d901-4b57-a7b0-9ecccc2dd2cd -->
 <!-- SOURCE Pico-OS/README.md#351-per-process-user-process-heap -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.5 User Process Heap
 
@@ -5303,6 +5320,7 @@ struct Heap {
 
 <!-- SLIDE_ID 532cc55c-55e4-4e21-81d6-301b05c92f96 -->
 <!-- SOURCE Pico-OS/README.md#352-user-process-heap-allocator-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.5 User Process Heap
 
@@ -5357,6 +5375,7 @@ struct Heap {
 
 <!-- SLIDE_ID e3663d1b-15d7-499f-8071-c87cd51fe3d2 -->
 <!-- SOURCE Pico-OS/README.md#361-common-allocator-linkage-and-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
 
@@ -5413,6 +5432,7 @@ struct Heap {
 
 <!-- SLIDE_ID f741ffd6-149a-4d90-ad0d-629f154fa6f8 -->
 <!-- SOURCE Pico-OS/README.md#363-allocation-and-repeated-coalescing-example -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink> · 3.6 Heap and allocator function reference
 
@@ -5851,6 +5871,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 2462b034-06c5-41c1-b08a-90f7ce308bce -->
 <!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
 
@@ -5918,6 +5939,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 2d668bec-0d09-4df4-96de-02f882097ee3 -->
 <!-- SOURCE Pico-OS/README.md#42111-processload-transfer-record -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.1 Loading a process (`load` library call) · 4.2.1.1 Step 1: Receiving the process image
 
@@ -5950,6 +5972,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 5ca516f5-027e-4e62-946f-e913c3ccad41 -->
 <!-- SOURCE Pico-OS/README.md#42111-processload-transfer-record -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.1 Loading a process (`load` library call) · 4.2.1.1 Step 1: Receiving the process image
 
@@ -6020,6 +6043,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID b0f58a23-0125-4a02-9036-28fb40b48586 -->
 <!-- SOURCE Pico-OS/README.md#4214-load-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.1 Loading a process (`load` library call)
 
@@ -6123,6 +6147,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 7a5a3778-76b4-4163-800c-5458c0395fda -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -6225,6 +6250,7 @@ startup_cell_count = 1 + 1 + argc + 1 + envc + 1
 
 <!-- SLIDE_ID 98ab55b4-9a45-480b-91c0-aaca32719a5f -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -6432,6 +6458,7 @@ int main(int argc, char **argv) {
 
 <!-- SLIDE_ID b5cbf61c-d1ab-4aad-bcad-0021e7c2a41a -->
 <!-- SOURCE Pico-OS/README.md#4223-run-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call)
 
@@ -6456,6 +6483,7 @@ int main(int argc, char **argv) {
 
 <!-- SLIDE_ID 5460fa62-55e8-4b83-9153-5401e5b215f0 -->
 <!-- SOURCE Pico-OS/README.md#43-process-list-pcb-metadata-and-lifecycle-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink>
 
@@ -6583,6 +6611,7 @@ struct SharedMemoryAttachment {
 
 <!-- SLIDE_ID 40b0e4fd-e150-4c05-ac2d-2fcde828dc56 -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
 
@@ -6864,6 +6893,7 @@ int main(int argc, char **argv) {
 
 <!-- SLIDE_ID b16d4c21-8578-426e-aa1e-8ecf6a652b6e -->
 <!-- SOURCE Pico-OS/README.md#611-algorithm-and-round-robin-comparison -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink> · 6.1 Scheduler implementation
 
@@ -7150,6 +7180,7 @@ struct ActivationRecord {
 
 <!-- SLIDE_ID 5fa58c29-fc17-4d60-bb39-bb922d9b020d -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -7165,6 +7196,7 @@ struct ActivationRecord {
 
 <!-- SLIDE_ID aa3c9a96-8f89-46a6-bb13-e0428cbbbaf7 -->
 <!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -7442,6 +7474,7 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <!-- SLIDE_ID 896216eb-936c-4189-b487-1c03dbebb269 -->
 <!-- SOURCE Pico-OS/README.md#65-dispatcher-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -7595,6 +7628,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 88d2fc65-952f-4ef5-9b6c-6d6e4cf85331 -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7611,6 +7645,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID ca6b46fb-8bce-4a93-8de5-df8f96e26838 -->
 <!-- SOURCE Pico-OS/README.md#711-blocking-with-sleep-and-waking-with-wakeup -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links
 
@@ -7681,6 +7716,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 3558045c-2fb4-45bb-b1ed-9b0e60f8a800 -->
 <!-- SOURCE Pico-OS/README.md#712-child-waiting-with-waitpid -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links
 
@@ -7727,6 +7763,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 91cd8d95-cbfe-4b9b-92fb-cee279bf66f6 -->
 <!-- SOURCE Pico-OS/README.md#7121-recording-termination-status -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
 
@@ -7756,6 +7793,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID a41cd5db-4c7e-4535-b799-83b887a6caba -->
 <!-- SOURCE Pico-OS/README.md#7122-parent-collection-and-final-removal -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
 
@@ -7784,6 +7822,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID d57d9311-c085-45fc-8246-3227b3c8555a -->
 <!-- SOURCE Pico-OS/README.md#7122-parent-collection-and-final-removal -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with `waitpid`
 
@@ -7847,6 +7886,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 6bf71b72-2720-40cf-bd7c-7ae316d60733 -->
 <!-- SOURCE Pico-OS/README.md#721-supported-signals-and-fixed-actions -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7877,6 +7917,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 1dc45d9c-4a04-40d3-bc7a-3fc695fe320f -->
 <!-- SOURCE Pico-OS/README.md#721-supported-signals-and-fixed-actions -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7907,6 +7948,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 8bc78712-ece1-4afb-a28f-10a6d56ba66f -->
 <!-- SOURCE Pico-OS/README.md#721-supported-signals-and-fixed-actions -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7924,6 +7966,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 9e1c482b-09ba-4d63-b334-275946b17151 -->
 <!-- SOURCE Pico-OS/README.md#722-stopping-and-continuing-a-process -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7942,6 +7985,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID fede9038-473c-4adc-91f0-c5eb37d85667 -->
 <!-- SOURCE Pico-OS/README.md#723-termination-ctrl-c-and-parent-collection -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7960,6 +8004,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 6373298c-55a3-4187-84e3-082412fcb600 -->
 <!-- SOURCE Pico-OS/README.md#724-fixed-picoos-signal-actions-compared-with-unix -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -7980,6 +8025,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 053c1da5-d394-49ca-8c0e-deeb522db162 -->
 <!-- SOURCE Pico-OS/README.md#725-signal-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink> · 7.2 Process signals
 
@@ -8171,6 +8217,7 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 1cb8a6bd-7fc5-4eec-ad14-28e1539a0ab0 -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -8380,6 +8427,7 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 7d57f9a5-c4c5-46cb-9091-e3d85b3f2d55 -->
 <!-- SOURCE Pico-OS/README.md#83-blocking-and-completing-terminal-reads -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8444,6 +8492,7 @@ int read(int file_descriptor, void *buffer, int count) {
 
 <!-- SLIDE_ID f9c3fc8f-0a29-419c-b33f-1e9bf2392cec -->
 <!-- SOURCE Pico-OS/README.md#83-blocking-and-completing-terminal-reads -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8620,6 +8669,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID fbc27ec9-38f9-4a7a-b116-8323816941e8 -->
 <!-- SOURCE Pico-OS/README.md#84-foreground-input-ownership-and-terminal-generated-signals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8781,6 +8831,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 2f1aeab6-0574-41ef-8cdc-8a8f909be21c -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8881,6 +8932,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID bf08995c-e408-4ec0-b425-0d865d32a764 -->
 <!-- SOURCE Pico-OS/README.md#9-kernel-data-structures-relationships-storage-and-lifetimes -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## 9. Kernel data structures: relationships, storage, and lifetimes
 
@@ -8897,6 +8949,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 742a574c-a173-4326-b691-3d927f14ebc3 -->
 <!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
 
@@ -8930,6 +8983,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 0b015118-5396-44b7-9007-95da918f08d3 -->
 <!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
 
@@ -8962,6 +9016,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID cdb13a00-f3d0-4aeb-91ee-2abada037622 -->
 <!-- SOURCE Pico-OS/README.md#91-memory-layout-allocation-sources-and-lifetimes -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
 
@@ -9071,6 +9126,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 739441a9-1d89-4d70-9e04-caa7a3cd9eae -->
 <!-- SOURCE Pico-OS/README.md#94-wait-requests-and-queue-storage -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="9-kernel-data-structures-relationships-storage-and-lifetimes">9. Kernel data structures: relationships, storage, and lifetimes</MajorSectionLink>
 
@@ -9113,6 +9169,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID d36a56b2-04e2-40cb-b538-5d55d4226a76 -->
 <!-- SOURCE Pico-OS/README.md#10-userspace-libraries -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## 10. Userspace libraries
 
@@ -9359,6 +9416,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID c97fa599-e01c-4809-8260-ddaa492474b8 -->
 <!-- SOURCE Pico-OS/README.md#10131-cpu-execution-and-sram-storage -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid · 10.1.3 Interrupt entry, waiting, and return
 
@@ -9383,6 +9441,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 2a9f965e-ea7e-4c55-836b-1ce4fe34ed42 -->
 <!-- SOURCE Pico-OS/README.md#10132-following-entry-and-the-two-return-paths -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid · 10.1.3 Interrupt entry, waiting, and return
 
@@ -9789,6 +9848,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID 8a3b483d-aeed-4720-bbdf-f3d4f54f1f69 -->
 <!-- SOURCE Pico-OS/README.md#1026-dirent-directory-streams -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -10105,6 +10165,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID 1c5fb565-a097-46d9-971a-81f83d981b87 -->
 <!-- SOURCE Pico-OS/README.md#10291-streams-and-output-in-stdiopicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
 
@@ -11149,6 +11210,7 @@ void _start(int argc, char *first_argument) {
 
 <!-- SLIDE_ID e18cd8bf-39c7-44e1-b362-775224c97098 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11205,6 +11267,7 @@ int read_shell_character(char *character) {
 
 <!-- SLIDE_ID 15bcbb9e-dd2b-43a5-8482-1008a2d62543 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11239,6 +11302,7 @@ int read_shell_character(char *character) {
 
 <!-- SLIDE_ID b85a5ba9-2bda-4751-aeeb-8ff324aec2d4 -->
 <!-- SOURCE Pico-OS/README.md#122-shell-startup-and-command-loop -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11256,6 +11320,7 @@ int read_shell_character(char *character) {
 
 <!-- SLIDE_ID 39309ee3-ec53-46bf-b8d0-7f648ee557f2 -->
 <!-- SOURCE Pico-OS/README.md#123-interactive-line-editing-and-command-history -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11291,6 +11356,7 @@ int read_shell_character(char *character) {
 
 <!-- SLIDE_ID 70987023-e41e-4938-b912-13bb2a590306 -->
 <!-- SOURCE Pico-OS/README.md#123-interactive-line-editing-and-command-history -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11382,6 +11448,7 @@ int read_line(char *buffer, int capacity) {
 
 <!-- SLIDE_ID ba16f374-23ba-4d79-be8a-fc6487e0c0a1 -->
 <!-- SOURCE Pico-OS/README.md#123-interactive-line-editing-and-command-history -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11398,6 +11465,7 @@ int read_line(char *buffer, int capacity) {
 
 <!-- SLIDE_ID 3faa4010-66f0-4bf9-bb05-aecebd3192ee -->
 <!-- SOURCE Pico-OS/README.md#124-command-parsing-expansion-and-execution -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11430,6 +11498,7 @@ int read_line(char *buffer, int capacity) {
 
 <!-- SLIDE_ID 3c6ad1ca-5134-4994-9462-70c611d1b964 -->
 <!-- SOURCE Pico-OS/README.md#124-command-parsing-expansion-and-execution -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink>
 
@@ -11486,6 +11555,7 @@ int read_line(char *buffer, int capacity) {
 
 <!-- SLIDE_ID 8e95c7a9-b606-42dd-a4eb-43ec401962d1 -->
 <!-- SOURCE Pico-OS/README.md#1251-foreground-processes-background-processes-and-job-control-signals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink> · 12.5 Shell built-in commands
 
@@ -11518,6 +11588,7 @@ int read_line(char *buffer, int capacity) {
 
 <!-- SLIDE_ID 67c051c0-5f86-42a1-b5d6-3b576585eaa1 -->
 <!-- SOURCE Pico-OS/README.md#1251-foreground-processes-background-processes-and-job-control-signals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink> · 12.5 Shell built-in commands
 
@@ -11622,6 +11693,7 @@ bool run_process(
 
 <!-- SLIDE_ID 56091088-7299-4b8a-8425-f0e86aac3f36 -->
 <!-- SOURCE Pico-OS/README.md#1251-foreground-processes-background-processes-and-job-control-signals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="12-shell">12. Shell</MajorSectionLink> · 12.5 Shell built-in commands
 
@@ -12271,6 +12343,7 @@ PicoOS> /documentation/add.bin 7 5
 
 <!-- SLIDE_ID e317355e-4693-4b64-b349-029343f3abe3 -->
 <!-- SOURCE Pico-OS/README.md#131-writing-a-simple-user-application -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink>
 
@@ -12472,6 +12545,7 @@ PicoOS> rmdir.bin demo
 
 <!-- SLIDE_ID d747ba3c-c6e0-4175-91ec-435448926146 -->
 <!-- SOURCE Pico-OS/README.md#1322-command-errors-and-exit-statuses -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
 
@@ -12937,6 +13011,7 @@ process with pid 4 created
 
 <!-- SLIDE_ID 676ac0c8-22e8-495c-81ed-cc7907b7330e -->
 <!-- SOURCE Pico-OS/README.md#142-test-execution -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink>
 
@@ -12968,6 +13043,7 @@ process with pid 4 created
 
 <!-- SLIDE_ID 10faac28-c869-4248-9589-d13d58d85d4c -->
 <!-- SOURCE Pico-OS/README.md#1421-make-targets -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.2 Test execution
 
@@ -13027,6 +13103,7 @@ process with pid 4 created
 
 <!-- SLIDE_ID 8f546600-0c50-43df-b2a0-31de316ffe17 -->
 <!-- SOURCE Pico-OS/README.md#151-operating-systems-topics -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
 
@@ -13218,6 +13295,7 @@ int main(void) {
 
 <!-- SLIDE_ID 899a4a82-ced4-430d-a4b0-059d54015785 -->
 <!-- SOURCE Pico-OS/README.md#1512-exploring-userspace-heap-allocation -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -13385,6 +13463,7 @@ JUMP 0
 
 <!-- SLIDE_ID 56ecfc98-f6e0-4305-a8eb-9ea34ceb5278 -->
 <!-- SOURCE Pico-OS/README.md#1513-editing-and-executing-symbolic-reti-assembly -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.1 Operating-systems topics
 
@@ -13403,6 +13482,7 @@ JUMP 0
 
 <!-- SLIDE_ID 51c924b8-7162-4b06-93a2-a3c488906514 -->
 <!-- SOURCE Pico-OS/README.md#152-real-time-operating-systems-topics -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink>
 
@@ -13677,6 +13757,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID a5625633-6778-40bc-b5ab-164d28dccb33 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -13695,6 +13776,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID 84f122ac-5802-4436-b911-2fca7e4f2342 -->
 <!-- SOURCE Pico-OS/README.md#1523-following-the-counter-and-mutex-through-execution -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
@@ -13742,6 +13824,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID 84e3055c-f534-40fa-82b4-09c8e89af1eb -->
 <!-- SOURCE Pico-OS/README.md#16-use-of-ai-in-the-project -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## 16. Use of AI in the project
 
@@ -13807,6 +13890,7 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID 2ca8219a-609d-4c55-ad26-903ce5f84775 -->
 <!-- SOURCE Pico-OS/README.md#appendix-inspecting-bin-files-with-hexyl -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## Appendix: Inspecting `.bin` files with `hexyl`
 

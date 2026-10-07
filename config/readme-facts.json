@@ -18,8 +18,9 @@
   "113-system-v-abi-stack-frames-and-call-cleanup": [
     "System V ABI",
     [
-      "General model adapted to ReTI",
-      "Different from AMD64 ABI"
+      "Binary interface rules",
+      "Calls: arguments, registers, stack",
+      "PicoOS adapts the stack convention to ReTI"
     ]
   ],
   "116-program-sections-interrupt-table-entries-and-linker-placement": [
