@@ -115,6 +115,20 @@ try {
   assert.deepEqual(await Promise.all(outputs.map(filename => readFile(path.join(fixture, filename), 'utf8'))), before,
     'a rejected rebuild leaves the deck and all generated metadata untouched')
   await assert.rejects(stat(path.join(fixture, 'public')), { code: 'ENOENT' }, 'a rejected rebuild writes no image outputs')
+
+  // Run a successful rebuild too: the real generator must preserve visibility
+  // and remap the editable list, including an unapplied choice on a code slide.
+  await cp(path.join(root, 'config/readme-prose.json'), configPath)
+  await writeFile(generatorPath, generator)
+  const pendingNumber = inspectSlideIdentities(actual).find(s => !s.excluded && s.content.includes('<!-- README_ASSET code-')).number
+  await writeFile(path.join(fixture, 'short-version-disabled-slides.txt'), `${pendingNumber}\n`)
+  await import(`${pathToFileURL(generatorPath).href}?successful`)
+  const successful = await readFile(path.join(fixture, 'slides.md'), 'utf8')
+  const previousChoices = new Map(inspectSlideIdentities(actual).map(s => [s.id, s.excluded]))
+  for (const slide of inspectSlideIdentities(successful))
+    assert.equal(slide.excluded, previousChoices.get(slide.id) ?? false, 'real rebuild preserves only each slide UUID’s exclusion')
+  assert.equal(await readFile(path.join(fixture, 'short-version-disabled-slides.txt'), 'utf8'),
+    `${remapRebuildSelection(actual, successful, [pendingNumber]).join(' ')}\n`, 'real rebuild remaps pending selection instead of applying or discarding it')
 } finally {
   process.chdir(originalCwd)
   process.argv = originalArgs
@@ -124,4 +138,4 @@ try {
   else process.env.README_REPOSITORY = originalRepository
   await rm(fixture, { recursive: true, force: true })
 }
-console.log('Rebuild protection passed: slide loss, replacements, exact removals, visibility, full-deck identities, and a real rejected rebuild with unchanged outputs.')
+console.log('Rebuild protection passed: slide loss, subsection exclusion isolation, UUID selection remapping, and real rejected/successful rebuilds.')

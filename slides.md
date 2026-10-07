@@ -11132,7 +11132,6 @@ PicoOS> rm.bin pipeline-input.txt pipeline-output.txt
 
 <!-- SLIDE_ID a1a1e8d2-972e-43a3-a72f-0e84487d198d -->
 <!-- SOURCE Pico-OS/README.md#131-writing-a-simple-user-application -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink>
 
