@@ -54,6 +54,12 @@ const single = asset => ({group: [asset], layout: 'single'})
 export function compactGroups(groups, section) {
   const parts = groups.flatMap(panel => panel.group)
   const types = parts.map(part => part.type).join(',')
+  // Stack the short include file above the runtime entry instead of leaving
+  // most of one column empty.
+  if (section.anchor === '1152-picoos-libstart-startup-sequence' && types === 'code,code') {
+    parts[0].command = true
+    return [{group: parts, layout: 'command-above'}]
+  }
   // The opening toolchain cards take only their content height, leaving the
   // remaining area for the full-width build-and-boot diagram.
   if (section.anchor === 'picoos' && types === 'list,image')

@@ -6,3 +6,4 @@ source_anchor: "113-system-v-abi-stack-frames-and-call-cleanup"
 ---
 
 - [x] for fun(arg1, arg2), first arg2 first, then arg1, then doesn't need to know number of arguments
+- just write Caller:, Calle: and then what they do, keep it consistent and verify it in the PicoOS README

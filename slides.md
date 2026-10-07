@@ -753,8 +753,7 @@ main_epilogue:
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>ACC:</strong> scratch for long jumps</li>
-<li><strong>-c / -v / -w:</strong> compile / annotate / save</li></ul></div>
+
 
 </div>
 
@@ -884,8 +883,7 @@ main_epilogue:
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>naked:</strong> own register setup + control transfer</li>
-<li><strong>return value:</strong> IN2 only; no epilogue jump</li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-822 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-822" data-code-part="1">
 
@@ -1007,22 +1005,6 @@ main_epilogue:
 
 ---
 
-<!-- SLIDE_ID 92f40761-2358-4367-8157-73dfc1392052 -->
-<!-- SOURCE Pico-OS/README.md#1133-naked-functions-without-a-generated-frame -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
-
-## 1.1.3.3 Naked functions without a generated frame (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Compile-only:</strong> main optional</li>
-<li><strong>Linked without main:</strong> warning; no generated entry</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 804a0181-49f5-409b-a863-ea8db17f8e26 -->
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
@@ -1032,8 +1014,7 @@ main_epilogue:
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Explicit section:</strong> only <code>ivt</code> supported</li>
-<li><strong>-O1:</strong> known initializers → IVTE words</li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-899 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-899" data-code-part="1">
 
@@ -1158,28 +1139,12 @@ ordinary_table:
 
 ---
 
-<!-- SLIDE_ID 73d1a607-f2ce-48a1-a742-42edbde72042 -->
-<!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
-
-## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Handler:</strong> offset 20 → <code>0x80000014</code></li>
-<li><strong>IVTE:</strong> SRAM-base pointers; no arbitrary-image relocation</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID a5987db8-4136-4b5c-b298-8add0c47e720 -->
 <!-- SOURCE Pico-OS/README.md#114-placing-globals-in-ivt-with-sectionivt -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
-## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (4)
+## 1.1.4 Placing globals in `.ivt` with `section("ivt")` (3)
 
 <div class="deck-content readme-slide">
 
@@ -1241,9 +1206,7 @@ SUBI SP 0
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Global initializers</strong> before main</li>
-<li><strong>main result:</strong> discarded; ACC ← 0</li>
-<li><strong>JUMP 0:</strong> self-jump; emulator stops</li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-1004 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1004" data-code-part="1">
 
@@ -1272,14 +1235,14 @@ void _start(void) {
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
 
-## 1.1.5.2 PicoOS `libstart` startup sequence (1)
+## 1.1.5.2 PicoOS `libstart` startup sequence
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-1029+code-1038" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-command-above">
 
 <!-- README_ASSET code-1029 -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1029" data-code-part="1">
+<ReadmeVisual kind="code" :width="470" class="command-strip" data-code-source="code-1029" data-code-part="1">
 
 <!-- README_CODE_PART code-1029 lines=1-3 -->
 <div class="readme-code">
@@ -1325,26 +1288,7 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>libc startup analogy</b><ul><li><strong>Runtime preparation</strong> before application main</li>
-<li><strong>libstart:</strong> heap/environment; main result → exit</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 68ab7f45-9865-4165-a192-bf59a5a14593 -->
-<!-- SOURCE Pico-OS/README.md#1152-picoos-libstart-startup-sequence -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.5 Selecting a startup function with `-C` / `--startup-source`
-
-## 1.1.5.2 PicoOS `libstart` startup sequence (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>-C:</strong> custom source or <code>.reti_blocks</code> entry</li>
-<li><strong>_start:</strong> first in <code>.text</code></li>
-<li><strong>Global initializers:</strong> before either entry</li>
-<li><strong>Runtime:</strong> heap + environment → main → exit</li></ul></div>
+<aside class="context-note"><b>libc startup analogy</b><span><strong>Runtime preparation</strong> before application main · <strong>libstart:</strong> heap/environment; main result → exit</span></aside>
 
 </div>
 
@@ -1383,7 +1327,7 @@ void _start(int argc, char *first_argument) {
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
-## 1.1.6 Program sections, interrupt table entries, and linker placement (1)
+## 1.1.6 Program sections, interrupt table entries, and linker placement
 
 <div class="deck-content readme-slide">
 
@@ -1447,26 +1391,7 @@ void syscall_interrupt(void) {
 </div>
 
 </div>
-<aside class="context-note"><b>System V ABI</b><ul><li>C helpers + inline assembly</li>
-<li>Shared ReTI stack-frame rules</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 0096a42a-37f3-4490-a3a3-89c2b9bcd061 -->
-<!-- SOURCE Pico-OS/README.md#116-program-sections-interrupt-table-entries-and-linker-placement -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
-
-## 1.1.6 Program sections, interrupt table entries, and linker placement (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Order:</strong> <code>.ivt</code> → <code>.text</code> → <code>.data</code></li>
-<li><strong>-O1:</strong> known globals become words</li>
-<li><strong>Runtime initializers:</strong> execute at startup</li>
-<li><strong>Linked labels:</strong> assembly calls C helpers</li></ul></div>
+<aside class="context-note"><b>System V ABI</b><span>C helpers + inline assembly · Shared ReTI stack-frame rules</span></aside>
 
 </div>
 
@@ -1477,7 +1402,7 @@ void syscall_interrupt(void) {
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
-## 1.1.7 ReTI pseudoinstructions
+## 1.1.7 RETI pseudoinstructions
 
 <div class="deck-content readme-slide">
 
@@ -1494,9 +1419,7 @@ void syscall_interrupt(void) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Hardware limits:</strong> 22-bit immediates + relative jumps</li>
-<li><strong>Conditional JUMP32:</strong> compare ACC with zero</li>
-<li><strong>Numeric operands:</strong> direct; <strong>symbols:</strong> resolved after linking</li></ul></div>
+
 
 </div>
 
@@ -1518,8 +1441,8 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1125 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1125:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><div class="table-lines"><div class="table-line"><code>SUBI SP 1</code></div><div class="table-line"><code>STOREIN SP ACC 1</code></div></div></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><div class="table-lines"><div class="table-line"><code>LOADIN SP ACC 1</code></div><div class="table-line"><code>ADDI SP 1</code></div></div></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1549,10 +1472,7 @@ asm("POP ACC");
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>SP:</strong> free cell below occupied stack</li>
-<li><strong>PUSH:</strong> reserve before write</li>
-<li><strong>POP:</strong> read before release</li>
-<li><strong>Interrupts:</strong> preserve unfinished stack update</li></ul></div>
+
 
 </div>
 
@@ -1627,8 +1547,7 @@ ORI ACC 5
 </div>
 
 </div>
-<aside class="context-note"><b>RISC-V / C arithmetic</b><ul><li><strong>RISC-V:</strong> shared low-product; separate high-product operations</li>
-<li><strong>C signed overflow:</strong> undefined; reconstruction remains in range</li></ul></aside>
+<aside class="context-note"><b>RISC-V / C arithmetic</b><span><strong>RISC-V:</strong> shared low-product; separate high-product operations · <strong>C signed overflow:</strong> undefined; reconstruction remains in range</span></aside>
 
 </div>
 
@@ -1689,27 +1608,6 @@ $$
 
 ---
 
-<!-- SLIDE_ID a7782b46-dd5d-4b3c-9c9d-c7fe1349ec95 -->
-<!-- SOURCE Pico-OS/README.md#1172-loading-32-bit-values-with-loadi32 -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.7 ReTI pseudoinstructions
-
-## 1.1.7.2 Loading 32-bit values with `LOADI32` (3)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>32-bit reconstruction</strong><ul><li><strong>Upper 22 bits:</strong> signed two’s complement</li>
-<li><strong>Lower 10 bits:</strong> inserted by ORI</li>
-<li><strong>Label address:</strong> add CS afterward</li></ul></li>
-<li><strong>Arithmetic</strong><ul><li><strong>Sign bit set:</strong> subtract 2²²</li>
-<li><strong>Products:</strong> same low 32 bits</li>
-<li><strong>Signed LOADI:</strong> rejects unsigned upper 2097152</li>
-<li><strong>C signed multiply:</strong> remain within int32 range</li></ul></li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 99e8bd96-623c-41ab-b95a-7630181c8141 -->
 <!-- SOURCE Pico-OS/README.md#1173-long-jumps-with-jump32 -->
 
@@ -1719,10 +1617,7 @@ $$
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Symbol:</strong> CS-relative target; add CS</li>
-<li><strong>Numeric target:</strong> absolute; omit ADD CS</li>
-<li><strong>Conditional:</strong> opposite short jump skips expansion</li>
-<li><strong>Sizes:</strong> symbolic 5/6; numeric 4/5 instructions</li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-1231 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1231" data-code-part="1">
 
@@ -1782,10 +1677,7 @@ MOVE ACC PC
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>reti_patch:</strong> PUSH/POP; numeric immediates; redundant jumps</li>
-<li><strong>Count expanded sizes</strong> before resolving labels</li>
-<li><strong>reti pass:</strong> expand LOADI32/JUMP32; resolve targets</li>
-<li><strong>Concrete instructions</strong> reach emulator</li></ul></div>
+
 
 </div>
 
@@ -1800,13 +1692,7 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary nested-summary"><ul><li><strong>Linked metadata</strong><ul><li><strong>Compile-only:</strong> no <code>.sections</code> file</li>
-<li><strong>Heap start:</strong> max(data words, symbol storage)</li>
-<li><strong>Explicit sizes:</strong> cell offsets/counts</li></ul></li>
-<li><strong>Binary loading</strong><ul><li><strong>Header:</strong> five big-endian words; 20 bytes</li>
-<li><strong>ff ff ff ff:</strong> −1 default marker</li>
-<li><strong>Bootloader:</strong> discards heap fields</li>
-<li><strong>SRAM:</strong> payload only; reserve process heap/stack</li></ul></li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-1292 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1292" data-code-part="1">
 
@@ -1977,8 +1863,7 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>-k sram / eprom:</strong> header-only generation</li>
-<li><strong>Then compile:</strong> include generated header</li></ul></div>
+<div class="readme-artifacts layout-single">
 <!-- README_ASSET code-1413 -->
 <ReadmeVisual kind="code" :width="736.6" data-code-source="code-1413" data-code-part="1">
 
@@ -2031,8 +1916,7 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Kernel:</strong> 4,096 heap; 2,715 stack cells</li>
-<li><strong>Header:</strong> absolute addresses; <strong>.sections:</strong> relative offsets</li></ul></div>
+
 
 </div>
 
@@ -2103,7 +1987,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
 
-## 1.2 ReTI-Emulator extensions (1)
+## 1.2 RETI-Emulator extensions (1)
 
 <div class="deck-content readme-slide">
 
@@ -2139,7 +2023,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink>
 
-## 1.2 ReTI-Emulator extensions (2)
+## 1.2 RETI-Emulator extensions (2)
 
 <div class="deck-content readme-slide">
 
@@ -2174,7 +2058,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
-## 1.2.1 ReTI machine model and memory-mapped peripherals (1)
+## 1.2.1 RETI machine model and memory-mapped peripherals (1)
 
 <div class="deck-content readme-slide">
 
@@ -2205,8 +2089,7 @@ $ hexyl -n 20 program.bin
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Periphery cell n:</strong> <code>0x40000000 + n</code></li>
-<li><strong>SRAM base:</strong> <code>0x80000000</code></li></ul></div>
+
 
 </div>
 
@@ -2217,7 +2100,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
 
-## 1.2.1 ReTI machine model and memory-mapped peripherals (2)
+## 1.2.1 RETI machine model and memory-mapped peripherals (2)
 
 <div class="deck-content readme-slide">
 
@@ -2243,25 +2126,7 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Exception:</strong> direct ISR 3</li>
-<li><strong>Cell 10:</strong> selected process’s final heap cell</li></ul></div>
 
-</div>
-
----
-
-<!-- SLIDE_ID ee2e83d8-5624-47e2-81d2-936d18397b36 -->
-<!-- SOURCE Pico-OS/README.md#122-atomic-test-and-set-with-tsl -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
-
-## 1.2.2 Atomic test-and-set with `TSL`
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>TSL:</strong> old value → register; memory ← 1</li>
-<li><strong>Read + write:</strong> indivisible across interrupts/switches</li></ul></div>
 
 </div>
 
@@ -2272,7 +2137,7 @@ $ hexyl -n 20 program.bin
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions · 1.2.2 Atomic test-and-set with `TSL`
 
-## 1.2.2.1 Test-and-set in SRAM (1)
+## 1.2.2.1 Test-and-set in SRAM
 
 <div class="deck-content readme-slide">
 
@@ -2316,25 +2181,6 @@ TSL DS ACC 2
 
 ---
 
-<!-- SLIDE_ID c361ed8e-fb6d-4596-901d-731eddc64c6e -->
-<!-- SOURCE Pico-OS/README.md#1221-test-and-set-in-sram -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions · 1.2.2 Atomic test-and-set with `TSL`
-
-## 1.2.2.1 Test-and-set in SRAM (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Offset 2:</strong> two words; third cell</li>
-<li><strong>D:</strong> exact old word; any value</li>
-<li><strong>S = D:</strong> address saved before read</li>
-<li><strong>SP / PC destinations:</strong> special control effects</li></ul></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 020f5573-7ae4-43af-bce6-92c5f857f45f -->
 <!-- SOURCE Pico-OS/README.md#1222-tsl-instruction-encoding -->
 
@@ -2372,9 +2218,7 @@ TSL DS ACC 2
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Encoded word:</strong> <code>0xAEC00002</code></li>
-<li><strong>i:</strong> signed 22-bit displacement</li>
-<li><strong>testset:</strong> old zero means lock acquired</li></ul></div>
+
 
 </div>
 
@@ -2406,12 +2250,7 @@ TSL DS ACC 2
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary nested-summary"><ul><li><strong>Host service</strong><ul><li><strong>Root:</strong> emulator launch directory</li>
-<li><strong>Paths:</strong> normalize <code>..</code>; block symlink escapes</li>
-<li><strong>Requests:</strong> filesystem operations; debugger separate</li></ul></li>
-<li><strong>Transfers</strong><ul><li><strong>load failure:</strong> UINT32_MAX</li>
-<li><strong>Process loads:</strong> DMA or 1 KiB polling chunks</li>
-<li><strong>Between chunks:</strong> UART available to other processes</li></ul></li></ul></div>
+
 
 </div>
 
@@ -2486,24 +2325,6 @@ TSL DS ACC 2
 
 ---
 
-<!-- SLIDE_ID ddbd39a5-c131-4da7-9964-70f003521242 -->
-<!-- SOURCE Pico-OS/README.md#123-uart-host-service-protocol -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.2 ReTI-Emulator extensions
-
-## 1.2.3 UART host-service protocol (4)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><div class="readme-item"><strong>Output</strong><ul><li><strong>write / write-at:</strong> select destination</li>
-<li><strong>stdout / stderr:</strong> change destination</li>
-<li><strong>literal-output:</strong> protect escape bytes</li></ul></div></div>
-
-</div>
-
----
-
 <!-- SLIDE_ID 6164bc4d-486b-47af-b6bd-951480b9f99f -->
 <!-- SOURCE Pico-OS/README.md#124-debugger-source-view-and-terminal-modes -->
 
@@ -2520,9 +2341,7 @@ TSL DS ACC 2
 <div class="slide-note">Click to play; click outside to navigate</div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Tab / Shift+Tab:</strong> choose window</li>
-<li><strong>a:</strong> register/address; <strong>j/k:</strong> scroll; <strong>C:</strong> center</li>
-<li><strong>PC + BAF:</strong> source location + frame metadata</li></ul></div>
+
 
 </div>
 
@@ -2552,8 +2371,7 @@ TSL DS ACC 2
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Raw V:</strong> forwards arrows, Ctrl+C, Ctrl+Z</li>
-<li><strong>Ctrl+]:</strong> return to debugger</li></ul></div>
+
 
 </div>
 
@@ -4163,6 +3981,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID f3e28112-442e-4896-9af7-d0db0008691c -->
 <!-- SOURCE Pico-OS/README.md#26-uart-receive-interrupt-path -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
@@ -4187,6 +4006,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID 531319ff-0eac-4780-bce5-94d36d36f300 -->
 <!-- SOURCE Pico-OS/README.md#261-entering-kernel-segments-on-the-interrupted-stack -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4283,6 +4103,7 @@ void uart_interrupt(void) {
 
 <!-- SLIDE_ID fa1fbfd5-8459-4797-af38-8940037ccda8 -->
 <!-- SOURCE Pico-OS/README.md#262-handling-the-received-byte -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4340,6 +4161,7 @@ void handle_uart_interrupt(void) {
 
 <!-- SLIDE_ID b7ceb77b-c199-4a83-8151-8d10aa9713bc -->
 <!-- SOURCE Pico-OS/README.md#263-restoring-interrupted-context-with-rti -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4388,6 +4210,7 @@ void uart_interrupt_return(void) {
 
 <!-- SLIDE_ID 38159922-abcb-4e7f-a56d-695e80e8fd8e -->
 <!-- SOURCE Pico-OS/README.md#264-uart-nesting-and-interrupt-priorities -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4423,6 +4246,7 @@ void uart_interrupt_return(void) {
 
 <!-- SLIDE_ID cd705def-8c32-4475-805b-e495f5089a1c -->
 <!-- SOURCE Pico-OS/README.md#265-polled-uart-function-reference -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.6 UART receive interrupt path
 
@@ -4447,6 +4271,7 @@ void uart_interrupt_return(void) {
 
 <!-- SLIDE_ID cc67bdbc-4313-468b-8f2d-6c173462a5b8 -->
 <!-- SOURCE Pico-OS/README.md#27-dma-completion-interrupt-path -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink>
 
@@ -4471,6 +4296,7 @@ void uart_interrupt_return(void) {
 
 <!-- SLIDE_ID d085fea4-8f2d-4b10-821a-e1424f7fefad -->
 <!-- SOURCE Pico-OS/README.md#271-entering-kernel-segments-on-the-interrupted-stack -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.7 DMA completion interrupt path
 
@@ -4546,6 +4372,7 @@ void dma_interrupt(void) {
 
 <!-- SLIDE_ID aa5357e1-6d53-40ac-8cee-c8f0b703d125 -->
 <!-- SOURCE Pico-OS/README.md#272-completing-the-dma-wait -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.7 DMA completion interrupt path
 
@@ -4580,6 +4407,7 @@ void handle_dma_interrupt(void) {
 
 <!-- SLIDE_ID 04cc4554-f045-42a8-add8-59318100f5a0 -->
 <!-- SOURCE Pico-OS/README.md#273-restoring-interrupted-context-with-rti -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.7 DMA completion interrupt path
 

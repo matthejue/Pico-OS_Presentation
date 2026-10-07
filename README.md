@@ -157,7 +157,7 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 389 slides. The short deck follows the saved exclusions. Slides load on demand to
+content slides are excluded. The full deck contains 381 slides. The short deck follows the saved exclusions. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -180,6 +180,13 @@ bodies stay complete. Long code examples split into balanced columns, with
 boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware
 slides include the setup, wiring, and README price estimates.
+
+In section 1, the first **Shared function epilogue and return values** slide
+retains its bullets; the later slides use code, tables, diagrams, and the
+recording without redundant bullet summaries. Eight former summary-only slides
+are omitted. Instruction expansions inside tables use plain lines, and
+standards and analogy remarks use compact plain-text notes. This selection is
+preserved by [`config/readme-content-selection.mjs`](config/readme-content-selection.mjs).
 
 Crowded examples use the full slide area. Their prose moves to a roomier next
 slide or a separate explanation slide in the same subsection. Useful bullets

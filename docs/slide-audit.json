@@ -1,6 +1,6 @@
 {
   "sourceSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569",
-  "slideCount": 389,
+  "slideCount": 381,
   "slides": [
     {
       "page": 1,
@@ -107,7 +107,7 @@
         {
           "kind": "table",
           "source": "table-227:1,2,3,4,5",
-          "fontSize": 22.33
+          "fontSize": 21.22
         }
       ]
     },
@@ -119,12 +119,12 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjE0NCIgdmlld0JveD0iMCA0NiAxNDQwIDE0NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPgogIDx0aXRsZSBpZD0idGl0bGUiPlJlVEkgYWRkcmVzcyBzcGFjZTwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlRoZSB0d28gaGlnaGVzdCBiaXRzIG9mIGEgMzItYml0IHdvcmQgYWRkcmVzcyBzZWxlY3QgRVBST00gd2l0aCBwcmVmaXggMDAsIHBlcmlwaGVyeSB3aXRoIHByZWZpeCAwMSwgb3IgU1JBTSB3aXRoIHByZWZpeCAxMCBvciAxMS4gRVBST00gYW5kIHBlcmlwaGVyeSBlYWNoIG9jY3VweSBvbmUgcXVhcnRlciBvZiB0aGUgYWRkcmVzcyBzcGFjZSwgd2hpbGUgU1JBTSBvY2N1cGllcyBvbmUgaGFsZi4gUmVnaW9uIHdpZHRocyBzaG93IGFkZHJlc3MgcmFuZ2VzLCBub3QgaW5zdGFsbGVkIG1lbW9yeSBjYXBhY2l0eS48L2Rlc2M+CiAgPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZmlsbD0iIzE3MzEzYSI+CiAgICA8IS0tIFNoYXJlZCBib3VuZGFyaWVzLCB3aXRoIHJlZ2lvbiB3aWR0aHMgaW4gdGhlIHJhdGlvIDE6MToyLiAtLT4KICAgIDxyZWN0IHg9IjYwIiB5PSI2NiIgd2lkdGg9IjEzMjAiIGhlaWdodD0iMTA0IiBmaWxsPSIjZjRmOGY4IiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTM5MCA2NiBWMTcwIE03MjAgNjYgVjE3MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxnIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgICA8dGV4dCB4PSIyMjUiIHk9IjEwNyIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiPjAwOiBFUFJPTTwvdGV4dD4KICAgICAgPHRleHQgeD0iNTU1IiB5PSIxMDciIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj4wMTogcGVyaXBoZXJ5PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxMDciIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj4xMCAvIDExOiBTUkFNPC90ZXh0PgogICAgICA8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3Ij4KICAgICAgICA8dGV4dCB4PSIyMjUiIHk9IjE0MyI+MHgwMDAwMDAwMC4uMHgzZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NTUiIHk9IjE0MyI+MHg0MDAwMDAwMC4uMHg3ZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxNDMiPjB4ODAwMDAwMDAuLjB4ZmZmZmZmZmY8L3RleHQ+CiAgICAgIDwvZz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo="
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjE4OCIgdmlld0JveD0iMCA0NiAxNDQwIDE4OCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPgogIDx0aXRsZSBpZD0idGl0bGUiPlJlVEkgYWRkcmVzcyBzcGFjZTwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlRoZSB0d28gaGlnaGVzdCBiaXRzIG9mIGEgMzItYml0IHdvcmQgYWRkcmVzcyBzZWxlY3QgRVBST00gd2l0aCBwcmVmaXggMDAsIHBlcmlwaGVyeSB3aXRoIHByZWZpeCAwMSwgb3IgU1JBTSB3aXRoIHByZWZpeCAxMCBvciAxMS4gRVBST00gYW5kIHBlcmlwaGVyeSBlYWNoIG9jY3VweSBvbmUgcXVhcnRlciBvZiB0aGUgYWRkcmVzcyBzcGFjZSwgd2hpbGUgU1JBTSBvY2N1cGllcyBvbmUgaGFsZi4gUmVnaW9uIHdpZHRocyBzaG93IGFkZHJlc3MgcmFuZ2VzLCBub3QgaW5zdGFsbGVkIG1lbW9yeSBjYXBhY2l0eS48L2Rlc2M+CiAgPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZmlsbD0iIzE3MzEzYSI+CiAgICA8IS0tIFNoYXJlZCBib3VuZGFyaWVzLCB3aXRoIHJlZ2lvbiB3aWR0aHMgaW4gdGhlIHJhdGlvIDE6MToyLiAtLT4KICAgIDxyZWN0IHg9IjYwIiB5PSI2NiIgd2lkdGg9IjEzMjAiIGhlaWdodD0iMTQ4IiBmaWxsPSIjZjRmOGY4IiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTM5MCA2NiBWMjE0IE03MjAgNjYgVjIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxnIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgICA8dGV4dCB4PSIyMjUiIHk9IjExNiIgZm9udC1zaXplPSIzNCIgZm9udC13ZWlnaHQ9ImJvbGQiPjAwOiBFUFJPTTwvdGV4dD4KICAgICAgPHRleHQgeD0iNTU1IiB5PSIxMTYiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSJib2xkIj4wMTogcGVyaXBoZXJ5PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxMTYiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSJib2xkIj4xMCAvIDExOiBTUkFNPC90ZXh0PgogICAgICA8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIzIj4KICAgICAgICA8dGV4dCB4PSIyMjUiIHk9IjE2OSI+MHgwMDAwMDAwMC4uMHgzZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NTUiIHk9IjE2OSI+MHg0MDAwMDAwMC4uMHg3ZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxNjkiPjB4ODAwMDAwMDAuLjB4ZmZmZmZmZmY8L3RleHQ+CiAgICAgIDwvZz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo="
         },
         {
           "kind": "table",
           "source": "table-251:1,2,3",
-          "fontSize": 27.43
+          "fontSize": 21.2
         }
       ]
     },
@@ -173,12 +173,12 @@
         {
           "kind": "code",
           "source": "code-582",
-          "fontSize": 14.91
+          "fontSize": 18.27
         },
         {
           "kind": "code",
           "source": "code-582",
-          "fontSize": 14.91
+          "fontSize": 18.27
         }
       ]
     },
@@ -214,7 +214,7 @@
         {
           "kind": "table",
           "source": "table-644:1,2,3,4,5,6,7,8,9,10,11,12,13,14",
-          "fontSize": 15.9
+          "fontSize": 14.84
         }
       ]
     },
@@ -251,17 +251,17 @@
         {
           "kind": "code",
           "source": "code-696",
-          "fontSize": 14.02
+          "fontSize": 17.58
         },
         {
           "kind": "code",
           "source": "code-702",
-          "fontSize": 14.02
+          "fontSize": 17.58
         },
         {
           "kind": "code",
           "source": "code-702",
-          "fontSize": 14.08
+          "fontSize": 17.59
         }
       ]
     },
@@ -292,7 +292,7 @@
         {
           "kind": "code",
           "source": "code-822",
-          "fontSize": 26.56
+          "fontSize": 26.59
         }
       ]
     },
@@ -305,29 +305,22 @@
         {
           "kind": "code",
           "source": "code-839",
-          "fontSize": 16.13
+          "fontSize": 16.07
         },
         {
           "kind": "code",
           "source": "code-846",
-          "fontSize": 16.06
+          "fontSize": 16.12
         },
         {
           "kind": "code",
           "source": "code-846",
-          "fontSize": 16.06
+          "fontSize": 16.12
         }
       ]
     },
     {
       "page": 25,
-      "anchor": "1133-naked-functions-without-a-generated-frame",
-      "title": "1.1.3.3 Naked functions without a generated frame (3)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 26,
       "anchor": "114-placing-globals-in-ivt-with-sectionivt",
       "title": "1.1.4 Placing globals in `.ivt` with `section(\"ivt\")` (1)",
       "issues": [],
@@ -335,12 +328,12 @@
         {
           "kind": "code",
           "source": "code-899",
-          "fontSize": 23.36
+          "fontSize": 23.34
         }
       ]
     },
     {
-      "page": 27,
+      "page": 26,
       "anchor": "114-placing-globals-in-ivt-with-sectionivt",
       "title": "1.1.4 Placing globals in `.ivt` with `section(\"ivt\")` (2)",
       "issues": [],
@@ -363,16 +356,9 @@
       ]
     },
     {
-      "page": 28,
+      "page": 27,
       "anchor": "114-placing-globals-in-ivt-with-sectionivt",
       "title": "1.1.4 Placing globals in `.ivt` with `section(\"ivt\")` (3)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 29,
-      "anchor": "114-placing-globals-in-ivt-with-sectionivt",
-      "title": "1.1.4 Placing globals in `.ivt` with `section(\"ivt\")` (4)",
       "issues": [],
       "visuals": [
         {
@@ -388,7 +374,7 @@
       ]
     },
     {
-      "page": 30,
+      "page": 28,
       "anchor": "1151-default-compiler-generated-_start",
       "title": "1.1.5.1 Default compiler-generated `_start`",
       "issues": [],
@@ -396,37 +382,30 @@
         {
           "kind": "code",
           "source": "code-1004",
-          "fontSize": 27.72
+          "fontSize": 27.73
         }
       ]
     },
     {
-      "page": 31,
+      "page": 29,
       "anchor": "1152-picoos-libstart-startup-sequence",
-      "title": "1.1.5.2 PicoOS `libstart` startup sequence (1)",
+      "title": "1.1.5.2 PicoOS `libstart` startup sequence",
       "issues": [],
       "visuals": [
         {
           "kind": "code",
           "source": "code-1029",
-          "fontSize": 17.05
+          "fontSize": 12.21
         },
         {
           "kind": "code",
           "source": "code-1038",
-          "fontSize": 17.05
+          "fontSize": 12.21
         }
       ]
     },
     {
-      "page": 32,
-      "anchor": "1152-picoos-libstart-startup-sequence",
-      "title": "1.1.5.2 PicoOS `libstart` startup sequence (2)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 33,
+      "page": 30,
       "anchor": "1153-startup-functions-used-by-picoos-images",
       "title": "1.1.5.3 Startup functions used by PicoOS images",
       "issues": [],
@@ -439,9 +418,9 @@
       ]
     },
     {
-      "page": 34,
+      "page": 31,
       "anchor": "116-program-sections-interrupt-table-entries-and-linker-placement",
-      "title": "1.1.6 Program sections, interrupt table entries, and linker placement (1)",
+      "title": "1.1.6 Program sections, interrupt table entries, and linker placement",
       "issues": [],
       "visuals": [
         {
@@ -462,14 +441,7 @@
       ]
     },
     {
-      "page": 35,
-      "anchor": "116-program-sections-interrupt-table-entries-and-linker-placement",
-      "title": "1.1.6 Program sections, interrupt table entries, and linker placement (2)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 36,
+      "page": 32,
       "anchor": "117-reti-pseudoinstructions",
       "title": "1.1.7 ReTI pseudoinstructions",
       "issues": [],
@@ -477,12 +449,12 @@
         {
           "kind": "table",
           "source": "table-1108:1,2,3,4",
-          "fontSize": 26
+          "fontSize": 27.43
         }
       ]
     },
     {
-      "page": 37,
+      "page": 33,
       "anchor": "1171-interrupt-safe-push-and-pop",
       "title": "1.1.7.1 Interrupt-safe `PUSH` and `POP`",
       "issues": [],
@@ -490,17 +462,17 @@
         {
           "kind": "table",
           "source": "table-1125:1,2",
-          "fontSize": 18.15
+          "fontSize": 23.97
         },
         {
           "kind": "code",
           "source": "code-1139",
-          "fontSize": 18.14
+          "fontSize": 23.96
         }
       ]
     },
     {
-      "page": 38,
+      "page": 34,
       "anchor": "1172-loading-32-bit-values-with-loadi32",
       "title": "1.1.7.2 Loading 32-bit values with `LOADI32` (1)",
       "issues": [],
@@ -521,7 +493,7 @@
       ]
     },
     {
-      "page": 39,
+      "page": 35,
       "anchor": "1172-loading-32-bit-values-with-loadi32",
       "title": "1.1.7.2 Loading 32-bit values with `LOADI32` (2)",
       "issues": [],
@@ -537,14 +509,7 @@
       ]
     },
     {
-      "page": 40,
-      "anchor": "1172-loading-32-bit-values-with-loadi32",
-      "title": "1.1.7.2 Loading 32-bit values with `LOADI32` (3)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 41,
+      "page": 36,
       "anchor": "1173-long-jumps-with-jump32",
       "title": "1.1.7.3 Long jumps with `JUMP32`",
       "issues": [],
@@ -552,12 +517,12 @@
         {
           "kind": "code",
           "source": "code-1231",
-          "fontSize": 27.72
+          "fontSize": 27.73
         }
       ]
     },
     {
-      "page": 42,
+      "page": 37,
       "anchor": "1174-pseudoinstruction-expansion-during-linking",
       "title": "1.1.7.4 Pseudoinstruction expansion during linking",
       "issues": [],
@@ -569,12 +534,12 @@
         {
           "kind": "table",
           "source": "table-1266:1,2,3",
-          "fontSize": 14.37
+          "fontSize": 25.2
         }
       ]
     },
     {
-      "page": 43,
+      "page": 38,
       "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
       "title": "1.1.8 Linked `.sections` metadata and the five-word binary header (1)",
       "issues": [],
@@ -582,12 +547,12 @@
         {
           "kind": "code",
           "source": "code-1292",
-          "fontSize": 27.72
+          "fontSize": 27.73
         }
       ]
     },
     {
-      "page": 44,
+      "page": 39,
       "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
       "title": "1.1.8 Linked `.sections` metadata and the five-word binary header (2)",
       "issues": [],
@@ -605,7 +570,7 @@
       ]
     },
     {
-      "page": 45,
+      "page": 40,
       "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
       "title": "1.1.8 Linked `.sections` metadata and the five-word binary header (3)",
       "issues": [],
@@ -622,7 +587,7 @@
       ]
     },
     {
-      "page": 46,
+      "page": 41,
       "anchor": "118-linked-sections-metadata-and-the-five-word-binary-header",
       "title": "1.1.8 Linked `.sections` metadata and the five-word binary header (4)",
       "issues": [],
@@ -640,7 +605,7 @@
       ]
     },
     {
-      "page": 47,
+      "page": 42,
       "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
       "title": "1.1.9 Generated memory constants for the bootloader and kernel (1)",
       "issues": [],
@@ -648,12 +613,12 @@
         {
           "kind": "code",
           "source": "code-1413",
-          "fontSize": 20.92
+          "fontSize": 25.72
         }
       ]
     },
     {
-      "page": 48,
+      "page": 43,
       "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
       "title": "1.1.9 Generated memory constants for the bootloader and kernel (2)",
       "issues": [],
@@ -661,12 +626,12 @@
         {
           "kind": "table",
           "source": "table-1427:1,2,3,4,5,6,7",
-          "fontSize": 21.81
+          "fontSize": 27.43
         }
       ]
     },
     {
-      "page": 49,
+      "page": 44,
       "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
       "title": "1.1.9 Generated memory constants for the bootloader and kernel (3)",
       "issues": [],
@@ -679,7 +644,7 @@
       ]
     },
     {
-      "page": 50,
+      "page": 45,
       "anchor": "119-generated-memory-constants-for-the-bootloader-and-kernel",
       "title": "1.1.9 Generated memory constants for the bootloader and kernel (4)",
       "issues": [],
@@ -692,7 +657,7 @@
       ]
     },
     {
-      "page": 51,
+      "page": 46,
       "anchor": "12-reti-emulator-extensions",
       "title": "1.2 ReTI-Emulator extensions (1)",
       "issues": [],
@@ -705,7 +670,7 @@
       ]
     },
     {
-      "page": 52,
+      "page": 47,
       "anchor": "12-reti-emulator-extensions",
       "title": "1.2 ReTI-Emulator extensions (2)",
       "issues": [],
@@ -718,7 +683,7 @@
       ]
     },
     {
-      "page": 53,
+      "page": 48,
       "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
       "title": "1.2.1 ReTI machine model and memory-mapped peripherals (1)",
       "issues": [],
@@ -735,7 +700,7 @@
       ]
     },
     {
-      "page": 54,
+      "page": 49,
       "anchor": "121-reti-machine-model-and-memory-mapped-peripherals",
       "title": "1.2.1 ReTI machine model and memory-mapped peripherals (2)",
       "issues": [],
@@ -743,21 +708,14 @@
         {
           "kind": "table",
           "source": "table-1520:1,2,3,4,5,6,7,8,9,10,11,12,13",
-          "fontSize": 19.9
+          "fontSize": 21.27
         }
       ]
     },
     {
-      "page": 55,
-      "anchor": "122-atomic-test-and-set-with-tsl",
-      "title": "1.2.2 Atomic test-and-set with `TSL`",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 56,
+      "page": 50,
       "anchor": "1221-test-and-set-in-sram",
-      "title": "1.2.2.1 Test-and-set in SRAM (1)",
+      "title": "1.2.2.1 Test-and-set in SRAM",
       "issues": [],
       "visuals": [
         {
@@ -772,14 +730,7 @@
       ]
     },
     {
-      "page": 57,
-      "anchor": "1221-test-and-set-in-sram",
-      "title": "1.2.2.1 Test-and-set in SRAM (2)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 58,
+      "page": 51,
       "anchor": "1222-tsl-instruction-encoding",
       "title": "1.2.2.2 `TSL` instruction encoding",
       "issues": [],
@@ -791,12 +742,12 @@
         {
           "kind": "table",
           "source": "table-1584:1,2,3,4",
-          "fontSize": 17.45
+          "fontSize": 26.28
         }
       ]
     },
     {
-      "page": 59,
+      "page": 52,
       "anchor": "123-uart-host-service-protocol",
       "title": "1.2.3 UART host-service protocol (1)",
       "issues": [],
@@ -812,7 +763,7 @@
       ]
     },
     {
-      "page": 60,
+      "page": 53,
       "anchor": "123-uart-host-service-protocol",
       "title": "1.2.3 UART host-service protocol (2)",
       "issues": [],
@@ -825,7 +776,7 @@
       ]
     },
     {
-      "page": 61,
+      "page": 54,
       "anchor": "123-uart-host-service-protocol",
       "title": "1.2.3 UART host-service protocol (3)",
       "issues": [],
@@ -841,21 +792,14 @@
       ]
     },
     {
-      "page": 62,
-      "anchor": "123-uart-host-service-protocol",
-      "title": "1.2.3 UART host-service protocol (4)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 63,
+      "page": 55,
       "anchor": "124-debugger-source-view-and-terminal-modes",
       "title": "1.2.4 Debugger, source view, and terminal modes (1)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 64,
+      "page": 56,
       "anchor": "124-debugger-source-view-and-terminal-modes",
       "title": "1.2.4 Debugger, source view, and terminal modes (2)",
       "issues": [],
@@ -868,14 +812,14 @@
       ]
     },
     {
-      "page": 65,
+      "page": 57,
       "anchor": "2-interrupts-system-calls-preemption-and-exceptions",
       "title": "2. Interrupts, system calls, preemption, and exceptions",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 66,
+      "page": 58,
       "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
       "title": "2.1 ReTI interrupt entry and the interrupt service routine table (1)",
       "issues": [],
@@ -888,7 +832,7 @@
       ]
     },
     {
-      "page": 67,
+      "page": 59,
       "anchor": "21-reti-interrupt-entry-and-the-interrupt-service-routine-table",
       "title": "2.1 ReTI interrupt entry and the interrupt service routine table (2)",
       "issues": [],
@@ -906,14 +850,14 @@
       ]
     },
     {
-      "page": 68,
+      "page": 60,
       "anchor": "22-interrupt-controller-mappings-and-priorities",
       "title": "2.2 Interrupt-controller mappings and priorities",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 69,
+      "page": 61,
       "anchor": "221-interrupt-controller-initialization",
       "title": "2.2.1 Interrupt-controller initialization (1)",
       "issues": [],
@@ -931,7 +875,7 @@
       ]
     },
     {
-      "page": 70,
+      "page": 62,
       "anchor": "221-interrupt-controller-initialization",
       "title": "2.2.1 Interrupt-controller initialization (2)",
       "issues": [],
@@ -948,14 +892,14 @@
       ]
     },
     {
-      "page": 71,
+      "page": 63,
       "anchor": "221-interrupt-controller-initialization",
       "title": "2.2.1 Interrupt-controller initialization (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 72,
+      "page": 64,
       "anchor": "23-saved-interrupt-stack-frame",
       "title": "2.3 Saved interrupt stack frame",
       "issues": [],
@@ -968,14 +912,14 @@
       ]
     },
     {
-      "page": 73,
+      "page": 65,
       "anchor": "24-system-call-interface-and-execution",
       "title": "2.4 System-call interface and execution",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 74,
+      "page": 66,
       "anchor": "241-syscall-selectors-and-register-convention",
       "title": "2.4.1 Syscall selectors and register convention (1)",
       "issues": [],
@@ -988,7 +932,7 @@
       ]
     },
     {
-      "page": 75,
+      "page": 67,
       "anchor": "241-syscall-selectors-and-register-convention",
       "title": "2.4.1 Syscall selectors and register convention (2)",
       "issues": [],
@@ -1006,7 +950,7 @@
       ]
     },
     {
-      "page": 76,
+      "page": 68,
       "anchor": "241-syscall-selectors-and-register-convention",
       "title": "2.4.1 Syscall selectors and register convention (3)",
       "issues": [],
@@ -1019,7 +963,7 @@
       ]
     },
     {
-      "page": 77,
+      "page": 69,
       "anchor": "241-syscall-selectors-and-register-convention",
       "title": "2.4.1 Syscall selectors and register convention (4)",
       "issues": [],
@@ -1037,7 +981,7 @@
       ]
     },
     {
-      "page": 78,
+      "page": 70,
       "anchor": "2411-process-wait-signal-and-memory-request-structures",
       "title": "2.4.1.1 Process, wait, signal, and memory request structures",
       "issues": [],
@@ -1050,7 +994,7 @@
       ]
     },
     {
-      "page": 79,
+      "page": 71,
       "anchor": "2412-file-and-directory-request-structures",
       "title": "2.4.1.2 File and directory request structures (1)",
       "issues": [],
@@ -1063,7 +1007,7 @@
       ]
     },
     {
-      "page": 80,
+      "page": 72,
       "anchor": "2412-file-and-directory-request-structures",
       "title": "2.4.1.2 File and directory request structures (2)",
       "issues": [],
@@ -1081,14 +1025,14 @@
       ]
     },
     {
-      "page": 81,
+      "page": 73,
       "anchor": "2412-file-and-directory-request-structures",
       "title": "2.4.1.2 File and directory request structures (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 82,
+      "page": 74,
       "anchor": "242-system-call-entry-execution-and-return-to-userspace",
       "title": "2.4.2 System-call entry, execution, and return to userspace",
       "issues": [],
@@ -1100,7 +1044,7 @@
       ]
     },
     {
-      "page": 83,
+      "page": 75,
       "anchor": "2421-entering-kernel-context",
       "title": "2.4.2.1 Entering kernel context (1)",
       "issues": [],
@@ -1118,21 +1062,21 @@
       ]
     },
     {
-      "page": 84,
+      "page": 76,
       "anchor": "2421-entering-kernel-context",
       "title": "2.4.2.1 Entering kernel context (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 85,
+      "page": 77,
       "anchor": "2421-entering-kernel-context",
       "title": "2.4.2.1 Entering kernel context (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 86,
+      "page": 78,
       "anchor": "24211-stack-boundary-helpers",
       "title": "2.4.2.1.1 Stack-boundary helpers (1)",
       "issues": [],
@@ -1150,14 +1094,14 @@
       ]
     },
     {
-      "page": 87,
+      "page": 79,
       "anchor": "24211-stack-boundary-helpers",
       "title": "2.4.2.1.1 Stack-boundary helpers (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 88,
+      "page": 80,
       "anchor": "2422-handle-syscall",
       "title": "2.4.2.2 Handle Syscall",
       "issues": [],
@@ -1175,7 +1119,7 @@
       ]
     },
     {
-      "page": 89,
+      "page": 81,
       "anchor": "24221-system-call-groups",
       "title": "2.4.2.2.1 System-call groups",
       "issues": [],
@@ -1188,7 +1132,7 @@
       ]
     },
     {
-      "page": 90,
+      "page": 82,
       "anchor": "2423-selecting-the-return-path",
       "title": "2.4.2.3 Selecting the return path (1)",
       "issues": [],
@@ -1201,7 +1145,7 @@
       ]
     },
     {
-      "page": 91,
+      "page": 83,
       "anchor": "2423-selecting-the-return-path",
       "title": "2.4.2.3 Selecting the return path (2)",
       "issues": [],
@@ -1219,14 +1163,14 @@
       ]
     },
     {
-      "page": 92,
+      "page": 84,
       "anchor": "2423-selecting-the-return-path",
       "title": "2.4.2.3 Selecting the return path (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 93,
+      "page": 85,
       "anchor": "2424-restoring-process-context-with-rti",
       "title": "2.4.2.4 Restoring process context with `RTI` (1)",
       "issues": [],
@@ -1239,7 +1183,7 @@
       ]
     },
     {
-      "page": 94,
+      "page": 86,
       "anchor": "2424-restoring-process-context-with-rti",
       "title": "2.4.2.4 Restoring process context with `RTI` (2)",
       "issues": [],
@@ -1251,14 +1195,14 @@
       ]
     },
     {
-      "page": 95,
+      "page": 87,
       "anchor": "25-timer-interrupts-and-userspace-preemption",
       "title": "2.5 Timer interrupts and userspace preemption",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 96,
+      "page": 88,
       "anchor": "251-timer-interrupt-path",
       "title": "2.5.1 Timer interrupt path",
       "issues": [],
@@ -1270,7 +1214,7 @@
       ]
     },
     {
-      "page": 97,
+      "page": 89,
       "anchor": "2511-saving-context-and-selecting-the-timer-branch",
       "title": "2.5.1.1 Saving context and selecting the timer branch (1)",
       "issues": [],
@@ -1288,7 +1232,7 @@
       ]
     },
     {
-      "page": 98,
+      "page": 90,
       "anchor": "2511-saving-context-and-selecting-the-timer-branch",
       "title": "2.5.1.1 Saving context and selecting the timer branch (2)",
       "issues": [],
@@ -1300,21 +1244,21 @@
       ]
     },
     {
-      "page": 99,
+      "page": 91,
       "anchor": "2511-saving-context-and-selecting-the-timer-branch",
       "title": "2.5.1.1 Saving context and selecting the timer branch (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 100,
+      "page": 92,
       "anchor": "2512-requesting-deferred-scheduling-for-kernel-work",
       "title": "2.5.1.2 Requesting deferred scheduling for kernel work",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 101,
+      "page": 93,
       "anchor": "2513-restoring-interrupted-kernel-context-with-rti",
       "title": "2.5.1.3 Restoring interrupted kernel context with `RTI`",
       "issues": [],
@@ -1327,7 +1271,7 @@
       ]
     },
     {
-      "page": 102,
+      "page": 94,
       "anchor": "2514-entering-kernel-context-for-userspace-preemption",
       "title": "2.5.1.4 Entering kernel context for userspace preemption (1)",
       "issues": [],
@@ -1340,28 +1284,28 @@
       ]
     },
     {
-      "page": 103,
+      "page": 95,
       "anchor": "2514-entering-kernel-context-for-userspace-preemption",
       "title": "2.5.1.4 Entering kernel context for userspace preemption (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 104,
+      "page": 96,
       "anchor": "2515-saving-process-context-and-restoring-the-selected-process",
       "title": "2.5.1.5 Saving process context and restoring the selected process",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 105,
+      "page": 97,
       "anchor": "252-kernel-non-preemption-and-deferred-rescheduling",
       "title": "2.5.2 Kernel non-preemption and deferred rescheduling",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 106,
+      "page": 98,
       "anchor": "253-shell-character-delay-for-different-timer-intervals",
       "title": "2.5.3 Shell character delay for different timer intervals",
       "issues": [],
@@ -1373,7 +1317,7 @@
       ]
     },
     {
-      "page": 107,
+      "page": 99,
       "anchor": "26-uart-receive-interrupt-path",
       "title": "2.6 UART receive interrupt path",
       "issues": [],
@@ -1385,7 +1329,7 @@
       ]
     },
     {
-      "page": 108,
+      "page": 100,
       "anchor": "261-entering-kernel-segments-on-the-interrupted-stack",
       "title": "2.6.1 Entering kernel segments on the interrupted stack (1)",
       "issues": [],
@@ -1403,14 +1347,14 @@
       ]
     },
     {
-      "page": 109,
+      "page": 101,
       "anchor": "261-entering-kernel-segments-on-the-interrupted-stack",
       "title": "2.6.1 Entering kernel segments on the interrupted stack (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 110,
+      "page": 102,
       "anchor": "262-handling-the-received-byte",
       "title": "2.6.2 Handling the received byte",
       "issues": [],
@@ -1423,7 +1367,7 @@
       ]
     },
     {
-      "page": 111,
+      "page": 103,
       "anchor": "263-restoring-interrupted-context-with-rti",
       "title": "2.6.3 Restoring interrupted context with `RTI`",
       "issues": [],
@@ -1436,7 +1380,7 @@
       ]
     },
     {
-      "page": 112,
+      "page": 104,
       "anchor": "264-uart-nesting-and-interrupt-priorities",
       "title": "2.6.4 UART nesting and interrupt priorities",
       "issues": [],
@@ -1449,7 +1393,7 @@
       ]
     },
     {
-      "page": 113,
+      "page": 105,
       "anchor": "265-polled-uart-function-reference",
       "title": "2.6.5 Polled UART function reference",
       "issues": [],
@@ -1462,7 +1406,7 @@
       ]
     },
     {
-      "page": 114,
+      "page": 106,
       "anchor": "27-dma-completion-interrupt-path",
       "title": "2.7 DMA completion interrupt path",
       "issues": [],
@@ -1474,7 +1418,7 @@
       ]
     },
     {
-      "page": 115,
+      "page": 107,
       "anchor": "271-entering-kernel-segments-on-the-interrupted-stack",
       "title": "2.7.1 Entering kernel segments on the interrupted stack",
       "issues": [],
@@ -1492,7 +1436,7 @@
       ]
     },
     {
-      "page": 116,
+      "page": 108,
       "anchor": "272-completing-the-dma-wait",
       "title": "2.7.2 Completing the DMA wait",
       "issues": [],
@@ -1505,7 +1449,7 @@
       ]
     },
     {
-      "page": 117,
+      "page": 109,
       "anchor": "273-restoring-interrupted-context-with-rti",
       "title": "2.7.3 Restoring interrupted context with `RTI`",
       "issues": [],
@@ -1518,7 +1462,7 @@
       ]
     },
     {
-      "page": 118,
+      "page": 110,
       "anchor": "281-cpu-exception-entry-and-registers",
       "title": "2.8.1 CPU exception entry and registers",
       "issues": [],
@@ -1530,7 +1474,7 @@
       ]
     },
     {
-      "page": 119,
+      "page": 111,
       "anchor": "2811-entering-kernel-context-after-a-fault",
       "title": "2.8.1.1 Entering kernel context after a fault (1)",
       "issues": [],
@@ -1543,7 +1487,7 @@
       ]
     },
     {
-      "page": 120,
+      "page": 112,
       "anchor": "2811-entering-kernel-context-after-a-fault",
       "title": "2.8.1.1 Entering kernel context after a fault (2)",
       "issues": [],
@@ -1555,7 +1499,7 @@
       ]
     },
     {
-      "page": 121,
+      "page": 113,
       "anchor": "2811-entering-kernel-context-after-a-fault",
       "title": "2.8.1.1 Entering kernel context after a fault (3)",
       "issues": [],
@@ -1573,7 +1517,7 @@
       ]
     },
     {
-      "page": 122,
+      "page": 114,
       "anchor": "2811-entering-kernel-context-after-a-fault",
       "title": "2.8.1.1 Entering kernel context after a fault (4)",
       "issues": [],
@@ -1585,14 +1529,14 @@
       ]
     },
     {
-      "page": 123,
+      "page": 115,
       "anchor": "28111-comparing-exception-and-timer-context-tests",
       "title": "2.8.1.1.1 Comparing exception and timer context tests",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 124,
+      "page": 116,
       "anchor": "2812-reading-and-classifying-the-exception",
       "title": "2.8.1.2 Reading and classifying the exception",
       "issues": [],
@@ -1605,7 +1549,7 @@
       ]
     },
     {
-      "page": 125,
+      "page": 117,
       "anchor": "28121-reporting-the-exception",
       "title": "2.8.1.2.1 Reporting the exception",
       "issues": [],
@@ -1618,7 +1562,7 @@
       ]
     },
     {
-      "page": 126,
+      "page": 118,
       "anchor": "2813-halting-the-kernel-or-terminating-the-process",
       "title": "2.8.1.3 Halting the kernel or terminating the process (1)",
       "issues": [],
@@ -1636,14 +1580,14 @@
       ]
     },
     {
-      "page": 127,
+      "page": 119,
       "anchor": "2813-halting-the-kernel-or-terminating-the-process",
       "title": "2.8.1.3 Halting the kernel or terminating the process (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 128,
+      "page": 120,
       "anchor": "282-supported-exceptions-and-allocation-errors",
       "title": "2.8.2 Supported exceptions and allocation errors",
       "issues": [],
@@ -1656,7 +1600,7 @@
       ]
     },
     {
-      "page": 129,
+      "page": 121,
       "anchor": "283-exception-and-stack-boundary-function-reference",
       "title": "2.8.3 Exception and stack-boundary function reference",
       "issues": [],
@@ -1669,14 +1613,14 @@
       ]
     },
     {
-      "page": 130,
+      "page": 122,
       "anchor": "3-memory-management-and-shared-memory",
       "title": "3. Memory management and shared memory",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 131,
+      "page": 123,
       "anchor": "31-heap-block-layout-and-allocation-algorithm",
       "title": "3.1 Heap block layout and allocation algorithm (1)",
       "issues": [],
@@ -1689,7 +1633,7 @@
       ]
     },
     {
-      "page": 132,
+      "page": 124,
       "anchor": "31-heap-block-layout-and-allocation-algorithm",
       "title": "3.1 Heap block layout and allocation algorithm (2)",
       "issues": [],
@@ -1706,14 +1650,14 @@
       ]
     },
     {
-      "page": 133,
+      "page": 125,
       "anchor": "31-heap-block-layout-and-allocation-algorithm",
       "title": "3.1 Heap block layout and allocation algorithm (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 134,
+      "page": 126,
       "anchor": "32-sram-image-and-heap-hierarchy",
       "title": "3.2 SRAM image and heap hierarchy (1)",
       "issues": [],
@@ -1726,7 +1670,7 @@
       ]
     },
     {
-      "page": 135,
+      "page": 127,
       "anchor": "32-sram-image-and-heap-hierarchy",
       "title": "3.2 SRAM image and heap hierarchy (2)",
       "issues": [],
@@ -1738,7 +1682,7 @@
       ]
     },
     {
-      "page": 136,
+      "page": 128,
       "anchor": "32-sram-image-and-heap-hierarchy",
       "title": "3.2 SRAM image and heap hierarchy (3)",
       "issues": [],
@@ -1756,35 +1700,35 @@
       ]
     },
     {
-      "page": 137,
+      "page": 129,
       "anchor": "331-kernel-heap-blocks-and-kernel-objects",
       "title": "3.3.1 Kernel Heap blocks and kernel objects",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 138,
+      "page": 130,
       "anchor": "341-process-allocations",
       "title": "3.4.1 Process allocations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 139,
+      "page": 131,
       "anchor": "342-shared-data-allocations",
       "title": "3.4.2 Shared Data allocations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 140,
+      "page": 132,
       "anchor": "351-per-process-user-process-heap",
       "title": "3.5.1 Per-Process User Process Heap",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 141,
+      "page": 133,
       "anchor": "352-user-process-heap-allocator-function-reference",
       "title": "3.5.2 User Process Heap allocator function reference",
       "issues": [],
@@ -1797,7 +1741,7 @@
       ]
     },
     {
-      "page": 142,
+      "page": 134,
       "anchor": "361-common-allocator-linkage-and-function-reference",
       "title": "3.6.1 Common allocator linkage and function reference (1)",
       "issues": [],
@@ -1809,7 +1753,7 @@
       ]
     },
     {
-      "page": 143,
+      "page": 135,
       "anchor": "361-common-allocator-linkage-and-function-reference",
       "title": "3.6.1 Common allocator linkage and function reference (2)",
       "issues": [],
@@ -1822,7 +1766,7 @@
       ]
     },
     {
-      "page": 144,
+      "page": 136,
       "anchor": "362-reallocation-decisions",
       "title": "3.6.2 Reallocation decisions",
       "issues": [],
@@ -1834,14 +1778,14 @@
       ]
     },
     {
-      "page": 145,
+      "page": 137,
       "anchor": "363-allocation-and-repeated-coalescing-example",
       "title": "3.6.3 Allocation and repeated coalescing example",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 146,
+      "page": 138,
       "anchor": "3631-initial-state-and-first-fit-search",
       "title": "3.6.3.1 Initial state and first-fit search",
       "issues": [],
@@ -1853,7 +1797,7 @@
       ]
     },
     {
-      "page": 147,
+      "page": 139,
       "anchor": "3632-allocation-splits-d",
       "title": "3.6.3.2 Allocation splits D",
       "issues": [],
@@ -1865,7 +1809,7 @@
       ]
     },
     {
-      "page": 148,
+      "page": 140,
       "anchor": "36331-mark-d-free",
       "title": "3.6.3.3.1 Mark D free",
       "issues": [],
@@ -1877,7 +1821,7 @@
       ]
     },
     {
-      "page": 149,
+      "page": 141,
       "anchor": "36332-merge-d-and-its-remainder",
       "title": "3.6.3.3.2 Merge D and its remainder",
       "issues": [],
@@ -1889,7 +1833,7 @@
       ]
     },
     {
-      "page": 150,
+      "page": 142,
       "anchor": "36341-mark-c-free",
       "title": "3.6.3.4.1 Mark C free",
       "issues": [],
@@ -1901,7 +1845,7 @@
       ]
     },
     {
-      "page": 151,
+      "page": 143,
       "anchor": "36342-first-merge-at-b",
       "title": "3.6.3.4.2 First merge at B",
       "issues": [],
@@ -1913,7 +1857,7 @@
       ]
     },
     {
-      "page": 152,
+      "page": 144,
       "anchor": "36343-second-merge-at-b",
       "title": "3.6.3.4.3 Second merge at B",
       "issues": [],
@@ -1925,14 +1869,14 @@
       ]
     },
     {
-      "page": 153,
+      "page": 145,
       "anchor": "4-processes-and-process-lifecycle",
       "title": "4. Processes and process lifecycle",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 154,
+      "page": 146,
       "anchor": "41-process-control-block-fields",
       "title": "4.1 Process control block fields (1)",
       "issues": [],
@@ -1950,7 +1894,7 @@
       ]
     },
     {
-      "page": 155,
+      "page": 147,
       "anchor": "41-process-control-block-fields",
       "title": "4.1 Process control block fields (2)",
       "issues": [],
@@ -1963,7 +1907,7 @@
       ]
     },
     {
-      "page": 156,
+      "page": 148,
       "anchor": "41-process-control-block-fields",
       "title": "4.1 Process control block fields (3)",
       "issues": [],
@@ -1976,7 +1920,7 @@
       ]
     },
     {
-      "page": 157,
+      "page": 149,
       "anchor": "411-process-states-and-transitions",
       "title": "4.1.1 Process states and transitions (1)",
       "issues": [],
@@ -1989,7 +1933,7 @@
       ]
     },
     {
-      "page": 158,
+      "page": 150,
       "anchor": "411-process-states-and-transitions",
       "title": "4.1.1 Process states and transitions (2)",
       "issues": [],
@@ -2001,7 +1945,7 @@
       ]
     },
     {
-      "page": 159,
+      "page": 151,
       "anchor": "412-global-process-list-and-current-process",
       "title": "4.1.2 Global process list and current process (1)",
       "issues": [],
@@ -2018,14 +1962,14 @@
       ]
     },
     {
-      "page": 160,
+      "page": 152,
       "anchor": "412-global-process-list-and-current-process",
       "title": "4.1.2 Global process list and current process (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 161,
+      "page": 153,
       "anchor": "4121-from-pcbs-to-process-payloads-in-sram",
       "title": "4.1.2.1 From PCBs to Process Payloads in SRAM",
       "issues": [],
@@ -2037,7 +1981,7 @@
       ]
     },
     {
-      "page": 162,
+      "page": 154,
       "anchor": "4211-step-1-receiving-the-process-image",
       "title": "4.2.1.1 Step 1: Receiving the process image",
       "issues": [],
@@ -2049,7 +1993,7 @@
       ]
     },
     {
-      "page": 163,
+      "page": 155,
       "anchor": "42111-processload-transfer-record",
       "title": "4.2.1.1.1 `ProcessLoad` transfer record (1)",
       "issues": [],
@@ -2062,14 +2006,14 @@
       ]
     },
     {
-      "page": 164,
+      "page": 156,
       "anchor": "42111-processload-transfer-record",
       "title": "4.2.1.1.1 `ProcessLoad` transfer record (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 165,
+      "page": 157,
       "anchor": "4212-step-2-creating-the-child-pcb",
       "title": "4.2.1.2 Step 2: Creating the child PCB",
       "issues": [],
@@ -2081,7 +2025,7 @@
       ]
     },
     {
-      "page": 166,
+      "page": 158,
       "anchor": "4213-process-stack-after-load",
       "title": "4.2.1.3 Process stack after `load`",
       "issues": [],
@@ -2093,7 +2037,7 @@
       ]
     },
     {
-      "page": 167,
+      "page": 159,
       "anchor": "4214-load-function-reference",
       "title": "4.2.1.4 Load function reference",
       "issues": [],
@@ -2106,14 +2050,14 @@
       ]
     },
     {
-      "page": 168,
+      "page": 160,
       "anchor": "422-starting-a-process-run-library-call",
       "title": "4.2.2 Starting a process (`run` library call) (1)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 169,
+      "page": 161,
       "anchor": "422-starting-a-process-run-library-call",
       "title": "4.2.2 Starting a process (`run` library call) (2)",
       "issues": [],
@@ -2125,7 +2069,7 @@
       ]
     },
     {
-      "page": 170,
+      "page": 162,
       "anchor": "42211-user-process-stack-placement",
       "title": "4.2.2.1.1 User process stack placement",
       "issues": [],
@@ -2137,7 +2081,7 @@
       ]
     },
     {
-      "page": 171,
+      "page": 163,
       "anchor": "42212-initial-argc-argv-and-envp",
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp` (1)",
       "issues": [],
@@ -2150,7 +2094,7 @@
       ]
     },
     {
-      "page": 172,
+      "page": 164,
       "anchor": "42212-initial-argc-argv-and-envp",
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp` (2)",
       "issues": [],
@@ -2163,7 +2107,7 @@
       ]
     },
     {
-      "page": 173,
+      "page": 165,
       "anchor": "42212-initial-argc-argv-and-envp",
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp` (3)",
       "issues": [],
@@ -2176,14 +2120,14 @@
       ]
     },
     {
-      "page": 174,
+      "page": 166,
       "anchor": "42212-initial-argc-argv-and-envp",
       "title": "4.2.2.1.2 Initial `argc`, `argv`, and `envp` (4)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 175,
+      "page": 167,
       "anchor": "422121-concrete-initial-stack-example",
       "title": "4.2.2.1.2.1 Concrete initial-stack example (1)",
       "issues": [],
@@ -2201,7 +2145,7 @@
       ]
     },
     {
-      "page": 176,
+      "page": 168,
       "anchor": "422121-concrete-initial-stack-example",
       "title": "4.2.2.1.2.1 Concrete initial-stack example (2)",
       "issues": [],
@@ -2213,7 +2157,7 @@
       ]
     },
     {
-      "page": 177,
+      "page": 169,
       "anchor": "4222-parent-to-child-inheritance",
       "title": "4.2.2.2 Parent-to-child inheritance",
       "issues": [],
@@ -2225,7 +2169,7 @@
       ]
     },
     {
-      "page": 178,
+      "page": 170,
       "anchor": "42221-environment-origin-and-propagation",
       "title": "4.2.2.2.1 Environment origin and propagation",
       "issues": [],
@@ -2237,7 +2181,7 @@
       ]
     },
     {
-      "page": 179,
+      "page": 171,
       "anchor": "42222-loading-bar-environment-variable",
       "title": "4.2.2.2.2 Loading-bar environment variable",
       "issues": [],
@@ -2250,7 +2194,7 @@
       ]
     },
     {
-      "page": 180,
+      "page": 172,
       "anchor": "4223-run-function-reference",
       "title": "4.2.2.3 Run function reference",
       "issues": [],
@@ -2263,7 +2207,7 @@
       ]
     },
     {
-      "page": 181,
+      "page": 173,
       "anchor": "43-process-list-pcb-metadata-and-lifecycle-function-reference",
       "title": "4.3 Process list, PCB metadata, and lifecycle function reference",
       "issues": [],
@@ -2276,14 +2220,14 @@
       ]
     },
     {
-      "page": 182,
+      "page": 174,
       "anchor": "5-shared-memory-entries-and-mappings",
       "title": "5. Shared Memory Entries and Mappings",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 183,
+      "page": 175,
       "anchor": "51-named-entries-and-per-process-attachments",
       "title": "5.1 Named entries and per-process attachments (1)",
       "issues": [],
@@ -2296,7 +2240,7 @@
       ]
     },
     {
-      "page": 184,
+      "page": 176,
       "anchor": "51-named-entries-and-per-process-attachments",
       "title": "5.1 Named entries and per-process attachments (2)",
       "issues": [],
@@ -2314,14 +2258,14 @@
       ]
     },
     {
-      "page": 185,
+      "page": 177,
       "anchor": "51-named-entries-and-per-process-attachments",
       "title": "5.1 Named entries and per-process attachments (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 186,
+      "page": 178,
       "anchor": "511-global-shared-memory-list-and-entry-names",
       "title": "5.1.1 Global shared-memory list and entry names",
       "issues": [],
@@ -2333,7 +2277,7 @@
       ]
     },
     {
-      "page": 187,
+      "page": 179,
       "anchor": "5111-from-shared-memory-entries-to-shared-data-payloads-in-sram",
       "title": "5.1.1.1 From Shared Memory Entries to Shared Data Payloads in SRAM",
       "issues": [],
@@ -2345,7 +2289,7 @@
       ]
     },
     {
-      "page": 188,
+      "page": 180,
       "anchor": "512-per-process-attachment-lists-in-sram",
       "title": "5.1.2 Per-process attachment lists in SRAM",
       "issues": [],
@@ -2357,7 +2301,7 @@
       ]
     },
     {
-      "page": 189,
+      "page": 181,
       "anchor": "52-mapping-unlinking-and-deferred-destruction",
       "title": "5.2 Mapping, unlinking, and deferred destruction (1)",
       "issues": [],
@@ -2369,7 +2313,7 @@
       ]
     },
     {
-      "page": 190,
+      "page": 182,
       "anchor": "52-mapping-unlinking-and-deferred-destruction",
       "title": "5.2 Mapping, unlinking, and deferred destruction (2)",
       "issues": [],
@@ -2392,7 +2336,7 @@
       ]
     },
     {
-      "page": 191,
+      "page": 183,
       "anchor": "53-shared-memory-function-reference",
       "title": "5.3 Shared Memory function reference",
       "issues": [],
@@ -2405,28 +2349,28 @@
       ]
     },
     {
-      "page": 192,
+      "page": 184,
       "anchor": "6-scheduling-and-context-switching",
       "title": "6. Scheduling and context switching",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 193,
+      "page": 185,
       "anchor": "6-scheduling-and-context-switching",
       "title": "6. Scheduling and context switching",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 194,
+      "page": 186,
       "anchor": "611-algorithm-and-round-robin-comparison",
       "title": "6.1.1 Algorithm and Round Robin comparison",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 195,
+      "page": 187,
       "anchor": "6111-selecting-the-next-runnable-process",
       "title": "6.1.1.1 Selecting the next runnable process (1)",
       "issues": [],
@@ -2438,7 +2382,7 @@
       ]
     },
     {
-      "page": 196,
+      "page": 188,
       "anchor": "6111-selecting-the-next-runnable-process",
       "title": "6.1.1.1 Selecting the next runnable process (2)",
       "issues": [],
@@ -2450,7 +2394,7 @@
       ]
     },
     {
-      "page": 197,
+      "page": 189,
       "anchor": "6112-starting-at-the-head-after-the-last-process",
       "title": "6.1.1.2 Starting at the head after the last process",
       "issues": [],
@@ -2462,7 +2406,7 @@
       ]
     },
     {
-      "page": 198,
+      "page": 190,
       "anchor": "6113-reaching-the-list-end-during-a-scan",
       "title": "6.1.1.3 Reaching the list end during a scan",
       "issues": [],
@@ -2474,7 +2418,7 @@
       ]
     },
     {
-      "page": 199,
+      "page": 191,
       "anchor": "6114-implementation",
       "title": "6.1.1.4 Implementation",
       "issues": [],
@@ -2492,7 +2436,7 @@
       ]
     },
     {
-      "page": 200,
+      "page": 192,
       "anchor": "62-saved-process-registers",
       "title": "6.2 Saved process registers (1)",
       "issues": [],
@@ -2504,7 +2448,7 @@
       ]
     },
     {
-      "page": 201,
+      "page": 193,
       "anchor": "62-saved-process-registers",
       "title": "6.2 Saved process registers (2)",
       "issues": [],
@@ -2522,21 +2466,21 @@
       ]
     },
     {
-      "page": 202,
+      "page": 194,
       "anchor": "62-saved-process-registers",
       "title": "6.2 Saved process registers (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 203,
+      "page": 195,
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process (1)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 204,
+      "page": 196,
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process (2)",
       "issues": [],
@@ -2548,7 +2492,7 @@
       ]
     },
     {
-      "page": 205,
+      "page": 197,
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process (3)",
       "issues": [],
@@ -2561,7 +2505,7 @@
       ]
     },
     {
-      "page": 206,
+      "page": 198,
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process (4)",
       "issues": [],
@@ -2573,7 +2517,7 @@
       ]
     },
     {
-      "page": 207,
+      "page": 199,
       "anchor": "63-saving-the-current-process-and-selecting-the-next-process",
       "title": "6.3 Saving the current process and selecting the next process (5)",
       "issues": [],
@@ -2586,7 +2530,7 @@
       ]
     },
     {
-      "page": 208,
+      "page": 200,
       "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
       "title": "6.4 Restoring the selected process and returning with `RTI` (1)",
       "issues": [],
@@ -2598,7 +2542,7 @@
       ]
     },
     {
-      "page": 209,
+      "page": 201,
       "anchor": "64-restoring-the-selected-process-and-returning-with-rti",
       "title": "6.4 Restoring the selected process and returning with `RTI` (2)",
       "issues": [],
@@ -2616,7 +2560,7 @@
       ]
     },
     {
-      "page": 210,
+      "page": 202,
       "anchor": "65-dispatcher-function-reference",
       "title": "6.5 Dispatcher function reference",
       "issues": [],
@@ -2629,14 +2573,14 @@
       ]
     },
     {
-      "page": 211,
+      "page": 203,
       "anchor": "7-blocking-wait-queues-signals-and-mutexes",
       "title": "7. Blocking, wait queues, signals, and mutexes",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 212,
+      "page": 204,
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links (1)",
       "issues": [],
@@ -2649,7 +2593,7 @@
       ]
     },
     {
-      "page": 213,
+      "page": 205,
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links (2)",
       "issues": [],
@@ -2662,7 +2606,7 @@
       ]
     },
     {
-      "page": 214,
+      "page": 206,
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links (3)",
       "issues": [],
@@ -2675,7 +2619,7 @@
       ]
     },
     {
-      "page": 215,
+      "page": 207,
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links (4)",
       "issues": [],
@@ -2687,21 +2631,21 @@
       ]
     },
     {
-      "page": 216,
+      "page": 208,
       "anchor": "71-wait-queues-and-pcb-links",
       "title": "7.1 Wait queues and PCB links (5)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 217,
+      "page": 209,
       "anchor": "711-blocking-with-sleep-and-waking-with-wakeup",
       "title": "7.1.1 Blocking with `sleep` and waking with `wakeup`",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 218,
+      "page": 210,
       "anchor": "7111-from-blocking-to-resumed-execution",
       "title": "7.1.1.1 From blocking to resumed execution (1)",
       "issues": [],
@@ -2713,7 +2657,7 @@
       ]
     },
     {
-      "page": 219,
+      "page": 211,
       "anchor": "7111-from-blocking-to-resumed-execution",
       "title": "7.1.1.1 From blocking to resumed execution (2)",
       "issues": [],
@@ -2726,14 +2670,14 @@
       ]
     },
     {
-      "page": 220,
+      "page": 212,
       "anchor": "712-child-waiting-with-waitpid",
       "title": "7.1.2 Child waiting with `waitpid`",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 221,
+      "page": 213,
       "anchor": "7121-recording-termination-status",
       "title": "7.1.2.1 Recording termination status (1)",
       "issues": [],
@@ -2745,21 +2689,21 @@
       ]
     },
     {
-      "page": 222,
+      "page": 214,
       "anchor": "7121-recording-termination-status",
       "title": "7.1.2.1 Recording termination status (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 223,
+      "page": 215,
       "anchor": "7122-parent-collection-and-final-removal",
       "title": "7.1.2.2 Parent collection and final removal (1)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 224,
+      "page": 216,
       "anchor": "7122-parent-collection-and-final-removal",
       "title": "7.1.2.2 Parent collection and final removal (2)",
       "issues": [],
@@ -2772,7 +2716,7 @@
       ]
     },
     {
-      "page": 225,
+      "page": 217,
       "anchor": "713-wait-queue-function-reference",
       "title": "7.1.3 Wait queue function reference",
       "issues": [],
@@ -2790,7 +2734,7 @@
       ]
     },
     {
-      "page": 226,
+      "page": 218,
       "anchor": "721-supported-signals-and-fixed-actions",
       "title": "7.2.1 Supported signals and fixed actions (1)",
       "issues": [],
@@ -2803,7 +2747,7 @@
       ]
     },
     {
-      "page": 227,
+      "page": 219,
       "anchor": "721-supported-signals-and-fixed-actions",
       "title": "7.2.1 Supported signals and fixed actions (2)",
       "issues": [],
@@ -2816,35 +2760,35 @@
       ]
     },
     {
-      "page": 228,
+      "page": 220,
       "anchor": "721-supported-signals-and-fixed-actions",
       "title": "7.2.1 Supported signals and fixed actions (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 229,
+      "page": 221,
       "anchor": "722-stopping-and-continuing-a-process",
       "title": "7.2.2 Stopping and continuing a process",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 230,
+      "page": 222,
       "anchor": "723-termination-ctrl-c-and-parent-collection",
       "title": "7.2.3 Termination, `Ctrl-C`, and parent collection",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 231,
+      "page": 223,
       "anchor": "724-fixed-picoos-signal-actions-compared-with-unix",
       "title": "7.2.4 Fixed PicoOS signal actions compared with Unix",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 232,
+      "page": 224,
       "anchor": "725-signal-function-reference",
       "title": "7.2.5 Signal function reference",
       "issues": [],
@@ -2857,7 +2801,7 @@
       ]
     },
     {
-      "page": 233,
+      "page": 225,
       "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
       "title": "7.3 Mutexes with test-and-set and wait queues (1)",
       "issues": [],
@@ -2880,7 +2824,7 @@
       ]
     },
     {
-      "page": 234,
+      "page": 226,
       "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
       "title": "7.3 Mutexes with test-and-set and wait queues (2)",
       "issues": [],
@@ -2892,7 +2836,7 @@
       ]
     },
     {
-      "page": 235,
+      "page": 227,
       "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
       "title": "7.3 Mutexes with test-and-set and wait queues (3)",
       "issues": [],
@@ -2910,21 +2854,21 @@
       ]
     },
     {
-      "page": 236,
+      "page": 228,
       "anchor": "73-mutexes-with-test-and-set-and-wait-queues",
       "title": "7.3 Mutexes with test-and-set and wait queues (4)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 237,
+      "page": 229,
       "anchor": "8-terminal-file-descriptors-and-host-filesystem",
       "title": "8. Terminal, file descriptors, and host filesystem",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 238,
+      "page": 230,
       "anchor": "81-per-process-file-descriptor-table",
       "title": "8.1 Per-process file-descriptor table (1)",
       "issues": [],
@@ -2936,7 +2880,7 @@
       ]
     },
     {
-      "page": 239,
+      "page": 231,
       "anchor": "81-per-process-file-descriptor-table",
       "title": "8.1 Per-process file-descriptor table (2)",
       "issues": [],
@@ -2949,7 +2893,7 @@
       ]
     },
     {
-      "page": 240,
+      "page": 232,
       "anchor": "81-per-process-file-descriptor-table",
       "title": "8.1 Per-process file-descriptor table (3)",
       "issues": [],
@@ -2961,7 +2905,7 @@
       ]
     },
     {
-      "page": 241,
+      "page": 233,
       "anchor": "81-per-process-file-descriptor-table",
       "title": "8.1 Per-process file-descriptor table (4)",
       "issues": [],
@@ -2979,7 +2923,7 @@
       ]
     },
     {
-      "page": 242,
+      "page": 234,
       "anchor": "82-global-terminal-input-buffer",
       "title": "8.2 Global terminal input buffer (1)",
       "issues": [],
@@ -2991,7 +2935,7 @@
       ]
     },
     {
-      "page": 243,
+      "page": 235,
       "anchor": "82-global-terminal-input-buffer",
       "title": "8.2 Global terminal input buffer (2)",
       "issues": [],
@@ -3004,7 +2948,7 @@
       ]
     },
     {
-      "page": 244,
+      "page": 236,
       "anchor": "83-blocking-and-completing-terminal-reads",
       "title": "8.3 Blocking and completing terminal reads (1)",
       "issues": [],
@@ -3022,7 +2966,7 @@
       ]
     },
     {
-      "page": 245,
+      "page": 237,
       "anchor": "83-blocking-and-completing-terminal-reads",
       "title": "8.3 Blocking and completing terminal reads (2)",
       "issues": [],
@@ -3040,7 +2984,7 @@
       ]
     },
     {
-      "page": 246,
+      "page": 238,
       "anchor": "83-blocking-and-completing-terminal-reads",
       "title": "8.3 Blocking and completing terminal reads (3)",
       "issues": [],
@@ -3053,7 +2997,7 @@
       ]
     },
     {
-      "page": 247,
+      "page": 239,
       "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
       "title": "8.4 Foreground input ownership and terminal-generated signals (1)",
       "issues": [],
@@ -3076,14 +3020,14 @@
       ]
     },
     {
-      "page": 248,
+      "page": 240,
       "anchor": "84-foreground-input-ownership-and-terminal-generated-signals",
       "title": "8.4 Foreground input ownership and terminal-generated signals (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 249,
+      "page": 241,
       "anchor": "85-virtual-terminal-and-null-device-paths",
       "title": "8.5 Virtual terminal and null-device paths",
       "issues": [],
@@ -3096,7 +3040,7 @@
       ]
     },
     {
-      "page": 250,
+      "page": 242,
       "anchor": "86-file-descriptor-creation-inheritance-duplication-and-cleanup",
       "title": "8.6 File-descriptor creation, inheritance, duplication, and cleanup",
       "issues": [],
@@ -3109,7 +3053,7 @@
       ]
     },
     {
-      "page": 251,
+      "page": 243,
       "anchor": "88-opening-reading-writing-and-seeking",
       "title": "8.8 Opening, reading, writing, and seeking (1)",
       "issues": [],
@@ -3122,7 +3066,7 @@
       ]
     },
     {
-      "page": 252,
+      "page": 244,
       "anchor": "88-opening-reading-writing-and-seeking",
       "title": "8.8 Opening, reading, writing, and seeking (2)",
       "issues": [],
@@ -3135,7 +3079,7 @@
       ]
     },
     {
-      "page": 253,
+      "page": 245,
       "anchor": "88-opening-reading-writing-and-seeking",
       "title": "8.8 Opening, reading, writing, and seeking (3)",
       "issues": [],
@@ -3148,14 +3092,14 @@
       ]
     },
     {
-      "page": 254,
+      "page": 246,
       "anchor": "88-opening-reading-writing-and-seeking",
       "title": "8.8 Opening, reading, writing, and seeking (4)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 255,
+      "page": 247,
       "anchor": "89-picoos-paths-working-directories-and-host-operations",
       "title": "8.9 PicoOS paths, working directories, and host operations (1)",
       "issues": [],
@@ -3168,7 +3112,7 @@
       ]
     },
     {
-      "page": 256,
+      "page": 248,
       "anchor": "89-picoos-paths-working-directories-and-host-operations",
       "title": "8.9 PicoOS paths, working directories, and host operations (2)",
       "issues": [],
@@ -3181,21 +3125,21 @@
       ]
     },
     {
-      "page": 257,
+      "page": 249,
       "anchor": "9-kernel-data-structures-relationships-storage-and-lifetimes",
       "title": "9. Kernel data structures: relationships, storage, and lifetimes",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 258,
+      "page": 250,
       "anchor": "9-kernel-data-structures-relationships-storage-and-lifetimes",
       "title": "9. Kernel data structures: relationships, storage, and lifetimes",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 259,
+      "page": 251,
       "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
       "title": "9.1 Memory layout, allocation sources, and lifetimes (1)",
       "issues": [],
@@ -3208,7 +3152,7 @@
       ]
     },
     {
-      "page": 260,
+      "page": 252,
       "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
       "title": "9.1 Memory layout, allocation sources, and lifetimes (2)",
       "issues": [],
@@ -3221,14 +3165,14 @@
       ]
     },
     {
-      "page": 261,
+      "page": 253,
       "anchor": "91-memory-layout-allocation-sources-and-lifetimes",
       "title": "9.1 Memory layout, allocation sources, and lifetimes (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 262,
+      "page": 254,
       "anchor": "92-containment-and-reference-relationships",
       "title": "9.2 Containment and reference relationships (1)",
       "issues": [],
@@ -3240,7 +3184,7 @@
       ]
     },
     {
-      "page": 263,
+      "page": 255,
       "anchor": "92-containment-and-reference-relationships",
       "title": "9.2 Containment and reference relationships (2)",
       "issues": [],
@@ -3252,7 +3196,7 @@
       ]
     },
     {
-      "page": 264,
+      "page": 256,
       "anchor": "93-kernel-global-variables-and-process-list-roots",
       "title": "9.3 Kernel global variables and process-list roots",
       "issues": [],
@@ -3265,7 +3209,7 @@
       ]
     },
     {
-      "page": 265,
+      "page": 257,
       "anchor": "94-wait-requests-and-queue-storage",
       "title": "9.4 Wait requests and queue storage",
       "issues": [],
@@ -3278,21 +3222,21 @@
       ]
     },
     {
-      "page": 266,
+      "page": 258,
       "anchor": "10-userspace-libraries",
       "title": "10. Userspace libraries",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 267,
+      "page": 259,
       "anchor": "10-userspace-libraries",
       "title": "10. Userspace libraries",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 268,
+      "page": 260,
       "anchor": "1011-header-implementation-and-linking",
       "title": "10.1.1 Header, implementation, and linking (1)",
       "issues": [],
@@ -3305,7 +3249,7 @@
       ]
     },
     {
-      "page": 269,
+      "page": 261,
       "anchor": "1011-header-implementation-and-linking",
       "title": "10.1.1 Header, implementation, and linking (2)",
       "issues": [],
@@ -3328,7 +3272,7 @@
       ]
     },
     {
-      "page": 270,
+      "page": 262,
       "anchor": "1012-packing-arguments-and-executing-the-syscall",
       "title": "10.1.2 Packing arguments and executing the syscall (1)",
       "issues": [],
@@ -3341,7 +3285,7 @@
       ]
     },
     {
-      "page": 271,
+      "page": 263,
       "anchor": "1012-packing-arguments-and-executing-the-syscall",
       "title": "10.1.2 Packing arguments and executing the syscall (2)",
       "issues": [],
@@ -3359,7 +3303,7 @@
       ]
     },
     {
-      "page": 272,
+      "page": 264,
       "anchor": "10131-cpu-execution-and-sram-storage",
       "title": "10.1.3.1 CPU execution and SRAM storage",
       "issues": [],
@@ -3371,7 +3315,7 @@
       ]
     },
     {
-      "page": 273,
+      "page": 265,
       "anchor": "10132-following-entry-and-the-two-return-paths",
       "title": "10.1.3.2 Following entry and the two return paths",
       "issues": [],
@@ -3383,7 +3327,7 @@
       ]
     },
     {
-      "page": 274,
+      "page": 266,
       "anchor": "102-library-overview-and-dependencies",
       "title": "10.2 Library overview and dependencies",
       "issues": [],
@@ -3394,7 +3338,7 @@
       ]
     },
     {
-      "page": 275,
+      "page": 267,
       "anchor": "10211-process-operations-in-processpicoc",
       "title": "10.2.1.1 Process operations in `process.picoc`",
       "issues": [],
@@ -3407,7 +3351,7 @@
       ]
     },
     {
-      "page": 276,
+      "page": 268,
       "anchor": "10212-descriptor-operations-in-iopicoc",
       "title": "10.2.1.2 Descriptor operations in `io.picoc`",
       "issues": [],
@@ -3420,7 +3364,7 @@
       ]
     },
     {
-      "page": 277,
+      "page": 269,
       "anchor": "10213-working-directory-operations-in-working_directorypicoc",
       "title": "10.2.1.3 Working-directory operations in `working_directory.picoc`",
       "issues": [],
@@ -3433,7 +3377,7 @@
       ]
     },
     {
-      "page": 278,
+      "page": 270,
       "anchor": "10214-path-operations-in-file_removalpicoc",
       "title": "10.2.1.4 Path operations in `file_removal.picoc`",
       "issues": [],
@@ -3446,7 +3390,7 @@
       ]
     },
     {
-      "page": 279,
+      "page": 271,
       "anchor": "10215-wait-queue-operations-in-blockingpicoc",
       "title": "10.2.1.5 Wait-queue operations in `blocking.picoc`",
       "issues": [],
@@ -3459,7 +3403,7 @@
       ]
     },
     {
-      "page": 280,
+      "page": 272,
       "anchor": "1022-fcntl-opening-and-creating-files",
       "title": "10.2.2 fcntl: opening and creating files",
       "issues": [],
@@ -3472,7 +3416,7 @@
       ]
     },
     {
-      "page": 281,
+      "page": 273,
       "anchor": "1023-syswait-waiting-for-children",
       "title": "10.2.3 sys/wait: waiting for children",
       "issues": [],
@@ -3485,7 +3429,7 @@
       ]
     },
     {
-      "page": 282,
+      "page": 274,
       "anchor": "1024-mutex-locking-and-waking-contenders",
       "title": "10.2.4 mutex: locking and waking contenders",
       "issues": [],
@@ -3498,7 +3442,7 @@
       ]
     },
     {
-      "page": 283,
+      "page": 275,
       "anchor": "1025-sysmman-named-shared-memory",
       "title": "10.2.5 sys/mman: named shared memory",
       "issues": [],
@@ -3511,7 +3455,7 @@
       ]
     },
     {
-      "page": 284,
+      "page": 276,
       "anchor": "1026-dirent-directory-streams",
       "title": "10.2.6 dirent: directory streams (1)",
       "issues": [],
@@ -3524,7 +3468,7 @@
       ]
     },
     {
-      "page": 285,
+      "page": 277,
       "anchor": "1026-dirent-directory-streams",
       "title": "10.2.6 dirent: directory streams (2)",
       "issues": [],
@@ -3537,7 +3481,7 @@
       ]
     },
     {
-      "page": 286,
+      "page": 278,
       "anchor": "1026-dirent-directory-streams",
       "title": "10.2.6 dirent: directory streams (3)",
       "issues": [],
@@ -3550,14 +3494,14 @@
       ]
     },
     {
-      "page": 287,
+      "page": 279,
       "anchor": "1026-dirent-directory-streams",
       "title": "10.2.6 dirent: directory streams (4)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 288,
+      "page": 280,
       "anchor": "10271-heap-operations-in-mallocpicoc",
       "title": "10.2.7.1 Heap operations in `malloc.picoc`",
       "issues": [],
@@ -3570,7 +3514,7 @@
       ]
     },
     {
-      "page": 289,
+      "page": 281,
       "anchor": "10272-decimal-conversion-in-atoipicoc",
       "title": "10.2.7.2 Decimal conversion in `atoi.picoc`",
       "issues": [],
@@ -3583,7 +3527,7 @@
       ]
     },
     {
-      "page": 290,
+      "page": 282,
       "anchor": "10273-environment-operations-in-envpicoc",
       "title": "10.2.7.3 Environment operations in `env.picoc` (1)",
       "issues": [],
@@ -3596,7 +3540,7 @@
       ]
     },
     {
-      "page": 291,
+      "page": 283,
       "anchor": "10273-environment-operations-in-envpicoc",
       "title": "10.2.7.3 Environment operations in `env.picoc` (2)",
       "issues": [],
@@ -3614,14 +3558,14 @@
       ]
     },
     {
-      "page": 292,
+      "page": 284,
       "anchor": "10273-environment-operations-in-envpicoc",
       "title": "10.2.7.3 Environment operations in `env.picoc` (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 293,
+      "page": 285,
       "anchor": "10274-process-exit-in-exitpicoc",
       "title": "10.2.7.4 Process exit in `exit.picoc`",
       "issues": [],
@@ -3634,7 +3578,7 @@
       ]
     },
     {
-      "page": 294,
+      "page": 286,
       "anchor": "1028-string-copying-comparison-and-length",
       "title": "10.2.8 string: copying, comparison, and length",
       "issues": [],
@@ -3647,7 +3591,7 @@
       ]
     },
     {
-      "page": 295,
+      "page": 287,
       "anchor": "1029-stdio-streams-formatting-and-scanning",
       "title": "10.2.9 stdio: streams, formatting, and scanning",
       "issues": [],
@@ -3665,7 +3609,7 @@
       ]
     },
     {
-      "page": 296,
+      "page": 288,
       "anchor": "10291-streams-and-output-in-stdiopicoc",
       "title": "10.2.9.1 Streams and output in `stdio.picoc` (1)",
       "issues": [],
@@ -3683,14 +3627,14 @@
       ]
     },
     {
-      "page": 297,
+      "page": 289,
       "anchor": "10291-streams-and-output-in-stdiopicoc",
       "title": "10.2.9.1 Streams and output in `stdio.picoc` (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 298,
+      "page": 290,
       "anchor": "10292-scanning-in-scanfpicoc",
       "title": "10.2.9.2 Scanning in `scanf.picoc`",
       "issues": [],
@@ -3703,7 +3647,7 @@
       ]
     },
     {
-      "page": 299,
+      "page": 291,
       "anchor": "10210-start-entering-and-leaving-a-user-program",
       "title": "10.2.10 start: entering and leaving a user program",
       "issues": [],
@@ -3716,7 +3660,7 @@
       ]
     },
     {
-      "page": 300,
+      "page": 292,
       "anchor": "10211-single-function-libraries",
       "title": "10.2.11 Single-function libraries",
       "issues": [],
@@ -3729,14 +3673,14 @@
       ]
     },
     {
-      "page": 301,
+      "page": 293,
       "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
       "title": "11. Complete startup: bootloader, kernel, init, shell, and user applications",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 302,
+      "page": 294,
       "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
       "title": "11. Complete startup: bootloader, kernel, init, shell, and user applications (1)",
       "issues": [],
@@ -3748,7 +3692,7 @@
       ]
     },
     {
-      "page": 303,
+      "page": 295,
       "anchor": "11-complete-startup-bootloader-kernel-init-shell-and-user-applications",
       "title": "11. Complete startup: bootloader, kernel, init, shell, and user applications (2)",
       "issues": [],
@@ -3761,7 +3705,7 @@
       ]
     },
     {
-      "page": 304,
+      "page": 296,
       "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
       "title": "11.1 Loading the kernel from the EPROM bootloader (1)",
       "issues": [],
@@ -3779,7 +3723,7 @@
       ]
     },
     {
-      "page": 305,
+      "page": 297,
       "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
       "title": "11.1 Loading the kernel from the EPROM bootloader (2)",
       "issues": [],
@@ -3791,7 +3735,7 @@
       ]
     },
     {
-      "page": 306,
+      "page": 298,
       "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
       "title": "11.1 Loading the kernel from the EPROM bootloader (3)",
       "issues": [],
@@ -3809,7 +3753,7 @@
       ]
     },
     {
-      "page": 307,
+      "page": 299,
       "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
       "title": "11.1 Loading the kernel from the EPROM bootloader (4)",
       "issues": [],
@@ -3822,7 +3766,7 @@
       ]
     },
     {
-      "page": 308,
+      "page": 300,
       "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
       "title": "11.1 Loading the kernel from the EPROM bootloader (5)",
       "issues": [],
@@ -3834,7 +3778,7 @@
       ]
     },
     {
-      "page": 309,
+      "page": 301,
       "anchor": "112-kernel-startup",
       "title": "11.2 Kernel startup (1)",
       "issues": [],
@@ -3847,7 +3791,7 @@
       ]
     },
     {
-      "page": 310,
+      "page": 302,
       "anchor": "112-kernel-startup",
       "title": "11.2 Kernel startup (2)",
       "issues": [],
@@ -3865,7 +3809,7 @@
       ]
     },
     {
-      "page": 311,
+      "page": 303,
       "anchor": "1121-loading-init-and-entering-normal-execution",
       "title": "11.2.1 Loading init and entering normal execution",
       "issues": [],
@@ -3878,7 +3822,7 @@
       ]
     },
     {
-      "page": 312,
+      "page": 304,
       "anchor": "113-init-process",
       "title": "11.3 Init process",
       "issues": [],
@@ -3896,7 +3840,7 @@
       ]
     },
     {
-      "page": 313,
+      "page": 305,
       "anchor": "1131-init-responsibilities",
       "title": "11.3.1 Init responsibilities",
       "issues": [],
@@ -3909,7 +3853,7 @@
       ]
     },
     {
-      "page": 314,
+      "page": 306,
       "anchor": "1132-initial-environment-configuration",
       "title": "11.3.2 Initial environment configuration",
       "issues": [],
@@ -3922,7 +3866,7 @@
       ]
     },
     {
-      "page": 315,
+      "page": 307,
       "anchor": "1133-loading-starting-and-waiting-for-the-shell",
       "title": "11.3.3 Loading, starting, and waiting for the shell (1)",
       "issues": [],
@@ -3940,14 +3884,14 @@
       ]
     },
     {
-      "page": 316,
+      "page": 308,
       "anchor": "1133-loading-starting-and-waiting-for-the-shell",
       "title": "11.3.3 Loading, starting, and waiting for the shell (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 317,
+      "page": 309,
       "anchor": "1134-shell-startup",
       "title": "11.3.4 Shell startup",
       "issues": [],
@@ -3965,7 +3909,7 @@
       ]
     },
     {
-      "page": 318,
+      "page": 310,
       "anchor": "1135-loading-user-applications",
       "title": "11.3.5 Loading user applications",
       "issues": [],
@@ -3983,28 +3927,28 @@
       ]
     },
     {
-      "page": 319,
+      "page": 311,
       "anchor": "1136-shell-exit-and-restart-policy",
       "title": "11.3.6 Shell exit and restart policy",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 320,
+      "page": 312,
       "anchor": "1137-when-init-terminates",
       "title": "11.3.7 When init terminates",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 321,
+      "page": 313,
       "anchor": "12-shell",
       "title": "12. Shell",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 322,
+      "page": 314,
       "anchor": "121-shell-owned-state",
       "title": "12.1 Shell-owned state (1)",
       "issues": [],
@@ -4017,7 +3961,7 @@
       ]
     },
     {
-      "page": 323,
+      "page": 315,
       "anchor": "121-shell-owned-state",
       "title": "12.1 Shell-owned state (2)",
       "issues": [],
@@ -4029,7 +3973,7 @@
       ]
     },
     {
-      "page": 324,
+      "page": 316,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (1)",
       "issues": [],
@@ -4047,7 +3991,7 @@
       ]
     },
     {
-      "page": 325,
+      "page": 317,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (2)",
       "issues": [],
@@ -4060,14 +4004,14 @@
       ]
     },
     {
-      "page": 326,
+      "page": 318,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 327,
+      "page": 319,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (1)",
       "issues": [],
@@ -4080,7 +4024,7 @@
       ]
     },
     {
-      "page": 328,
+      "page": 320,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (2)",
       "issues": [],
@@ -4098,14 +4042,14 @@
       ]
     },
     {
-      "page": 329,
+      "page": 321,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 330,
+      "page": 322,
       "anchor": "124-command-parsing-expansion-and-execution",
       "title": "12.4 Command parsing, expansion, and execution (1)",
       "issues": [],
@@ -4118,14 +4062,14 @@
       ]
     },
     {
-      "page": 331,
+      "page": 323,
       "anchor": "124-command-parsing-expansion-and-execution",
       "title": "12.4 Command parsing, expansion, and execution (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 332,
+      "page": 324,
       "anchor": "125-shell-built-in-commands",
       "title": "12.5 Shell built-in commands",
       "issues": [],
@@ -4136,7 +4080,7 @@
       ]
     },
     {
-      "page": 333,
+      "page": 325,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (1)",
       "issues": [],
@@ -4148,7 +4092,7 @@
       ]
     },
     {
-      "page": 334,
+      "page": 326,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (2)",
       "issues": [],
@@ -4166,7 +4110,7 @@
       ]
     },
     {
-      "page": 335,
+      "page": 327,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (3)",
       "issues": [],
@@ -4179,7 +4123,7 @@
       ]
     },
     {
-      "page": 336,
+      "page": 328,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (1)",
       "issues": [],
@@ -4191,7 +4135,7 @@
       ]
     },
     {
-      "page": 337,
+      "page": 329,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (2)",
       "issues": [],
@@ -4203,7 +4147,7 @@
       ]
     },
     {
-      "page": 338,
+      "page": 330,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (3)",
       "issues": [],
@@ -4215,7 +4159,7 @@
       ]
     },
     {
-      "page": 339,
+      "page": 331,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (4)",
       "issues": [],
@@ -4227,7 +4171,7 @@
       ]
     },
     {
-      "page": 340,
+      "page": 332,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (5)",
       "issues": [],
@@ -4239,7 +4183,7 @@
       ]
     },
     {
-      "page": 341,
+      "page": 333,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (6)",
       "issues": [],
@@ -4252,7 +4196,7 @@
       ]
     },
     {
-      "page": 342,
+      "page": 334,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (7)",
       "issues": [],
@@ -4265,7 +4209,7 @@
       ]
     },
     {
-      "page": 343,
+      "page": 335,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (8)",
       "issues": [],
@@ -4283,7 +4227,7 @@
       ]
     },
     {
-      "page": 344,
+      "page": 336,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (9)",
       "issues": [],
@@ -4296,7 +4240,7 @@
       ]
     },
     {
-      "page": 345,
+      "page": 337,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (1)",
       "issues": [],
@@ -4308,7 +4252,7 @@
       ]
     },
     {
-      "page": 346,
+      "page": 338,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (2)",
       "issues": [],
@@ -4320,7 +4264,7 @@
       ]
     },
     {
-      "page": 347,
+      "page": 339,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (3)",
       "issues": [],
@@ -4338,7 +4282,7 @@
       ]
     },
     {
-      "page": 348,
+      "page": 340,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (4)",
       "issues": [],
@@ -4351,14 +4295,14 @@
       ]
     },
     {
-      "page": 349,
+      "page": 341,
       "anchor": "13-user-applications-and-commands",
       "title": "13. User applications and commands",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 350,
+      "page": 342,
       "anchor": "131-writing-a-simple-user-application",
       "title": "13.1 Writing a simple user application (1)",
       "issues": [],
@@ -4381,14 +4325,14 @@
       ]
     },
     {
-      "page": 351,
+      "page": 343,
       "anchor": "131-writing-a-simple-user-application",
       "title": "13.1 Writing a simple user application (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 352,
+      "page": 344,
       "anchor": "132-applications-library-calls-and-host-requests",
       "title": "13.2 Applications, library calls, and host requests (1)",
       "issues": [],
@@ -4399,7 +4343,7 @@
       ]
     },
     {
-      "page": 353,
+      "page": 345,
       "anchor": "132-applications-library-calls-and-host-requests",
       "title": "13.2 Applications, library calls, and host requests (2)",
       "issues": [],
@@ -4410,14 +4354,14 @@
       ]
     },
     {
-      "page": 354,
+      "page": 346,
       "anchor": "1321-command-behavior-and-supported-options",
       "title": "13.2.1 Command behavior and supported options (1)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 355,
+      "page": 347,
       "anchor": "1321-command-behavior-and-supported-options",
       "title": "13.2.1 Command behavior and supported options (2)",
       "issues": [],
@@ -4435,21 +4379,21 @@
       ]
     },
     {
-      "page": 356,
+      "page": 348,
       "anchor": "1322-command-errors-and-exit-statuses",
       "title": "13.2.2 Command errors and exit statuses",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 357,
+      "page": 349,
       "anchor": "14-test-system",
       "title": "14. Test system",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 358,
+      "page": 350,
       "anchor": "141-library-os-shell-and-boot-test-categories",
       "title": "14.1 Library, OS, shell, and boot test categories",
       "issues": [],
@@ -4461,7 +4405,7 @@
       ]
     },
     {
-      "page": 359,
+      "page": 351,
       "anchor": "1411-files-that-make-up-a-test",
       "title": "14.1.1 Files that make up a test (1)",
       "issues": [],
@@ -4473,7 +4417,7 @@
       ]
     },
     {
-      "page": 360,
+      "page": 352,
       "anchor": "1411-files-that-make-up-a-test",
       "title": "14.1.1 Files that make up a test (2)",
       "issues": [],
@@ -4486,7 +4430,7 @@
       ]
     },
     {
-      "page": 361,
+      "page": 353,
       "anchor": "1412-library-test-example",
       "title": "14.1.2 Library test example (1)",
       "issues": [],
@@ -4503,14 +4447,14 @@
       ]
     },
     {
-      "page": 362,
+      "page": 354,
       "anchor": "1412-library-test-example",
       "title": "14.1.2 Library test example (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 363,
+      "page": 355,
       "anchor": "1413-os-test-example",
       "title": "14.1.3 OS test example (1)",
       "issues": [],
@@ -4528,7 +4472,7 @@
       ]
     },
     {
-      "page": 364,
+      "page": 356,
       "anchor": "1413-os-test-example",
       "title": "14.1.3 OS test example (2)",
       "issues": [],
@@ -4550,7 +4494,7 @@
       ]
     },
     {
-      "page": 365,
+      "page": 357,
       "anchor": "1414-shell-test-example",
       "title": "14.1.4 Shell test example",
       "issues": [],
@@ -4572,7 +4516,7 @@
       ]
     },
     {
-      "page": 366,
+      "page": 358,
       "anchor": "1415-boot-test-example",
       "title": "14.1.5 Boot test example",
       "issues": [],
@@ -4594,7 +4538,7 @@
       ]
     },
     {
-      "page": 367,
+      "page": 359,
       "anchor": "142-test-execution",
       "title": "14.2 Test execution",
       "issues": [],
@@ -4607,7 +4551,7 @@
       ]
     },
     {
-      "page": 368,
+      "page": 360,
       "anchor": "1421-make-targets",
       "title": "14.2.1 Make targets",
       "issues": [],
@@ -4620,21 +4564,21 @@
       ]
     },
     {
-      "page": 369,
+      "page": 361,
       "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 370,
+      "page": 362,
       "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 371,
+      "page": 363,
       "anchor": "151-operating-systems-topics",
       "title": "15.1 Operating-systems topics",
       "issues": [],
@@ -4647,7 +4591,7 @@
       ]
     },
     {
-      "page": 372,
+      "page": 364,
       "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
       "title": "15.1.1 Inspecting PicoOS execution in the ReTI-Emulator",
       "issues": [],
@@ -4675,7 +4619,7 @@
       ]
     },
     {
-      "page": 373,
+      "page": 365,
       "anchor": "1512-exploring-userspace-heap-allocation",
       "title": "15.1.2 Exploring userspace heap allocation (1)",
       "issues": [],
@@ -4693,14 +4637,14 @@
       ]
     },
     {
-      "page": 374,
+      "page": 366,
       "anchor": "1512-exploring-userspace-heap-allocation",
       "title": "15.1.2 Exploring userspace heap allocation (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 375,
+      "page": 367,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (1)",
       "issues": [],
@@ -4713,7 +4657,7 @@
       ]
     },
     {
-      "page": 376,
+      "page": 368,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (2)",
       "issues": [],
@@ -4736,14 +4680,14 @@
       ]
     },
     {
-      "page": 377,
+      "page": 369,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 378,
+      "page": 370,
       "anchor": "152-real-time-operating-systems-topics",
       "title": "15.2 Real-time operating-systems topics",
       "issues": [],
@@ -4756,7 +4700,7 @@
       ]
     },
     {
-      "page": 379,
+      "page": 371,
       "anchor": "1521-parent-workers-and-shared-memory",
       "title": "15.2.1 Parent, workers, and shared memory",
       "issues": [],
@@ -4768,7 +4712,7 @@
       ]
     },
     {
-      "page": 380,
+      "page": 372,
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code (1)",
       "issues": [],
@@ -4781,7 +4725,7 @@
       ]
     },
     {
-      "page": 381,
+      "page": 373,
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code (2)",
       "issues": [],
@@ -4799,7 +4743,7 @@
       ]
     },
     {
-      "page": 382,
+      "page": 374,
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code (3)",
       "issues": [],
@@ -4822,14 +4766,14 @@
       ]
     },
     {
-      "page": 383,
+      "page": 375,
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code (4)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 384,
+      "page": 376,
       "anchor": "1523-following-the-counter-and-mutex-through-execution",
       "title": "15.2.3 Following the counter and mutex through execution",
       "issues": [],
@@ -4842,35 +4786,35 @@
       ]
     },
     {
-      "page": 385,
+      "page": 377,
       "anchor": "16-use-of-ai-in-the-project",
       "title": "16. Use of AI in the project",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 386,
+      "page": 378,
       "anchor": "16-use-of-ai-in-the-project",
       "title": "16. Use of AI in the project",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 387,
+      "page": 379,
       "anchor": "17-limitations",
       "title": "17. Limitations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 388,
+      "page": 380,
       "anchor": "17-limitations",
       "title": "17. Limitations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 389,
+      "page": 381,
       "anchor": "appendix-inspecting-bin-files-with-hexyl",
       "title": "Appendix: Inspecting `.bin` files with `hexyl`",
       "issues": [],

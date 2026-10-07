@@ -8,6 +8,7 @@ import {readmeSource, md, hash, plain, displayHtml, presentationText} from './re
 import {prepareTable} from '../config/readme-tables.mjs'
 import {compactGroups, renderComposed} from '../config/readme-composition.mjs'
 import {placeSummaries} from '../config/readme-readability.mjs'
+import {visualOnlySection, keepSummary, plainTableLines} from '../config/readme-content-selection.mjs'
 import {ensureSlideIdentities} from './slide-identities.mjs'
 import {createSlideNotesStore} from './slide-notes.mjs'
 import {applySvgEdits} from '../config/readme-svg-edits.mjs'
@@ -241,6 +242,10 @@ for(const section of sections) {
  const summaryParts=section.anchor==='picoos'||section.anchor==='intended-physical-hardware'||section.anchor==='111-compilation-pipeline-and-compiler-passes'
   ? [] : groups.length ? balanced(summary,Math.max(2,Math.ceil(summary.length/groups.length))) : []
  groups=placeSummaries(groups,summaryParts,section)
+ if(visualOnlySection(section)) {
+  groups=groups.filter((panel,i)=>panel.group.length||keepSummary(section,i))
+    .map((panel,i)=>({...panel,summary:keepSummary(section,i)?panel.summary:[]}))
+ }
  groups.forEach(({group,layout,panels,weights,summary:pageSummary},number)=>{
   let content
   const columnKey='assets:'+group.map(a=>a.id).join('+')
@@ -274,10 +279,11 @@ for(const section of sections) {
   const fact=number===0?facts[section.anchor]:null
   if(fact) {
    const notes=typeof fact[0]==='string'?[fact]:fact
-   const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${bulletList(items)}</aside>`).join('\n')
+   const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
    content+=`\n${notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks}`
   }
-  pages.push({section,group,layout,content,number:groups.length>1?number+1:null})
+  if(visualOnlySection(section))content=content.replace(/<div class="readme-table">[\s\S]*?<\/table><\/div>/g,plainTableLines)
+  pages.push({section,group,layout,content,summary:pageSummary,number:groups.length>1?number+1:null})
  })
 }
 // Overview entries retain every README heading, including headings whose
@@ -339,9 +345,9 @@ await fs.writeFile('docs/readme-prose-review.json',JSON.stringify({
  sections:sections.map(section=>({
   anchor:section.anchor,title:presentationText(section.title),line:section.line,
   slides:deckPages.flatMap((page,i)=>!page.overview&&page.section===section?[i+3]:[]),
-  summary:summaries[section.anchor]||[],remark:facts[section.anchor]||null,
+  summary:visualOnlySection(section)?pages.filter(page=>page.section===section).flatMap(page=>page.summary||[]):summaries[section.anchor]||[],remark:facts[section.anchor]||null,
   paragraphs:section.paragraphs.map(paragraph=>({line:paragraph.line,sourceSha256:hash(paragraph.text)})),
-  treatment:section.anchor==='contents'?'Dynamic contents and overview hierarchy':summaries[section.anchor]?'Concise reviewed bullets; omit repetitions of source visuals':section.assets.length?'Source artifacts; prose repeats their explanation or links to other sections':'Section heading introduces descendant slides; repeated introduction omitted',
+  treatment:visualOnlySection(section)?'Source visuals without redundant bullet summaries; standards and analogies use plain notes':section.anchor==='contents'?'Dynamic contents and overview hierarchy':summaries[section.anchor]?'Concise reviewed bullets; omit repetitions of source visuals':section.assets.length?'Source artifacts; prose repeats their explanation or links to other sections':'Section heading introduces descendant slides; repeated introduction omitted',
  })),
 },null,2)+'\n')
 console.log(`${deckPages.length+2} slides, including contents and ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)
