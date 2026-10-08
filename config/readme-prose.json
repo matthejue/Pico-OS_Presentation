@@ -27,8 +27,7 @@
       "For variadic calls, walk arguments without knowing their **total count**",
       "Put the result in **IN2**; jump to the **shared epilogue**",
       "Restore **BAF** and the **return address**; return"
-    ],
-    "**Interrupt service routines** are easier to implement."
+    ]
   ],
   "24-system-call-interface-and-execution": [
     "**Library wrapper** → selector + request",
@@ -317,8 +316,8 @@
     ]
   ],
   "119-generated-memory-constants-for-the-bootloader-and-kernel": [
-    "**-k sram / eprom:** header-only generation",
-    "**Then compile:** include generated header",
+    "**-k sram / eprom:** generate header only",
+    "**Then compile:** include addresses + heap bounds",
     "**Kernel:** 4,096 heap; 2,715 stack cells",
     "**Header:** absolute addresses; **.sections:** relative offsets"
   ],
@@ -522,10 +521,12 @@
     "**next / wait_next:** independent list memberships"
   ],
   "421-loading-a-process-load-library-call": [
-    "**load():** receive the program into a reserved Process Payload",
-    "**Reception:** caller owns transfer record; no child PCB",
-    "**After reception:** create the child PCB and return its PID",
-    "**Initial state:** NEW; run() prepares and starts the child"
+    "Validate header; reserve **code/data, heap and stack** in SRAM",
+    "Receive program via **UART**: DMA or polling",
+    "Create **PCB**: assign PID, parent and working directory; set **state = NEW**",
+    "Initialize **activation**: CS/DS/SP/BAF; IN1/IN2/ACC = 0",
+    "Store **entry PC** on stack; create **fresh descriptors**",
+    "Append PCB to process list; return **PID** (0 on failure)"
   ],
   "42111-processload-transfer-record": [
     "**Owner:** loading caller’s pending_load",
@@ -539,12 +540,7 @@
     "**No argc / argv / envp** yet",
     "**Other cells:** unspecified; load does not zero"
   ],
-  "422-starting-a-process-run-library-call": [
-    "**Arguments:** spaces/tabs; quoted whitespace preserved",
-    "**Kernel:** builds pointer arrays + copies strings",
-    "**READY:** permits scheduling; no immediate CPU load",
-    "**First dispatch:** libstart initializes heap + environment"
-  ],
+  "422-starting-a-process-run-library-call": [],
   "42211-user-process-stack-placement": [
     "**Default heap:** 1,000 cells",
     "**Default stack offset:** reserves 1,001 cells beyond heap",

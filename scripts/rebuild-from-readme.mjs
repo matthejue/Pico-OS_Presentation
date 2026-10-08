@@ -274,8 +274,11 @@ for(const section of sections) {
   }
   if(!group.length) {
    const items=pageSummary.length?pageSummary:summary
-   if(section.anchor==='113-system-v-abi-stack-frames-and-call-cleanup')
-    content=`<div class="call-cleanup-panels">${items.filter(Array.isArray).map(item=>`<section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading">${prose(item[0])}</div>${bulletList(item.slice(1))}</section>`).join('\n')}</div>\n<div class="readme-list prose-summary">${bulletList(items.filter(item=>!Array.isArray(item)))}</div>`
+   if(section.anchor==='113-system-v-abi-stack-frames-and-call-cleanup') {
+    const additional=items.filter(item=>!Array.isArray(item))
+    content=`<div class="call-cleanup-panels">${items.filter(Array.isArray).map(item=>`<section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading">${prose(item[0])}</div>${bulletList(item.slice(1))}</section>`).join('\n')}</div>`
+    if(additional.length)content+=`\n<div class="readme-list prose-summary">${bulletList(additional)}</div>`
+   }
    else content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items)}</div>`
   }
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`

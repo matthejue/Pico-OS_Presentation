@@ -112,11 +112,12 @@
     "Never **restore faulting context**"
   ],
   "list-3919": [
-    "Pack PID, **arguments**, environment",
-    "Require **NEW** PCB",
-    "Copy **inheritable descriptors**",
-    "Build child stack; update SP/**BAF**",
-    "NEW → **READY**"
+    "Select **environment**: caller’s (`NULL`) or custom",
+    "Find PCB by PID; require **state = NEW**",
+    "Copy caller’s **inheritable descriptors**",
+    "Build **argc/argv/envp** on child stack; copy argument/environment strings",
+    "Update saved **activation.sp / activation.baf**",
+    "Set **state = READY**; return success"
   ],
   "list-5189": [
     "Request points to **local status**",

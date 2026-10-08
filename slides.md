@@ -560,7 +560,6 @@ binary/basic_string.sections
 <li>For variadic calls, walk arguments without knowing their <strong>total count</strong></li>
 <li>Put the result in <strong>IN2</strong>; jump to the <strong>shared epilogue</strong></li>
 <li>Restore <strong>BAF</strong> and the <strong>return address</strong>; return</li></ul></section></div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Interrupt service routines</strong> are easier to implement.</div></div>
 <aside class="context-note"><b>System V ABI</b><ul><li>Binary interface rules</li>
 <li>Calls: arguments, registers, stack</li>
 <li>PicoOS adapts the stack convention to ReTI</li></ul></aside>
@@ -1904,7 +1903,7 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Compiler <code>-k sram / eprom</code>:</strong> generates the header from the linked layout</li><li><strong>Next compile:</strong> embeds segment/stack addresses and heap bounds for startup without a process loader</li></ul></div>
+<div class="readme-list prose-summary"><ul><li><strong><code>-k sram / eprom</code>:</strong> generate header only</li><li><strong>Then compile:</strong> include addresses + heap bounds</li></ul></div>
 
 </div>
 
@@ -3140,7 +3139,7 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>37 syscalls</b><ul><li><strong>Selectors:</strong> 0–36, inclusive</li><li><strong>Source:</strong> <code>common/syscall.header</code></li></ul></aside>
+<aside class="context-note"><b>37 syscalls</b></aside>
 
 </div>
 
@@ -5068,10 +5067,12 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li><strong>Receive image:</strong> reserve a Process Payload and load the program</li>
-<li><strong>During transfer:</strong> caller owns <code>ProcessLoad</code>; no child PCB yet</li>
-<li><strong>On success:</strong> create the child PCB and return its PID</li>
-<li><strong>State NEW:</strong> <code>run()</code> prepares the child for scheduling</li></ul></div>
+<div class="readme-list"><ul><li>Validate header; reserve <strong>code/data, heap and stack</strong> in SRAM</li>
+<li>Receive program via <strong>UART</strong>: DMA or polling</li>
+<li>Create <strong>PCB</strong>: assign PID, parent and working directory; set <strong>state = NEW</strong></li>
+<li>Initialize <strong>activation</strong>: CS/DS/SP/BAF; IN1/IN2/ACC = 0</li>
+<li>Store <strong>entry PC</strong> on stack; create <strong>fresh descriptors</strong></li>
+<li>Append PCB to process list; return <strong>PID</strong> (0 on failure)</li></ul></div>
 
 </div>
 
@@ -5219,16 +5220,14 @@ struct ProcessControlBlock {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-3919 -->
-<div class="readme-list run-steps"><ol><li>Pack PID, <strong>arguments</strong>, environment<ul><li><code>NULL</code> → caller’s environment</li><li>Custom array → replacement environment</li></ul></li>
-<li>Find PCB; require <strong>NEW</strong></li>
-<li>Copy <strong>inheritable descriptors</strong></li>
-<li>Build child stack; update SP/<strong>BAF</strong></li>
-<li>NEW → <strong>READY</strong>; return success</li></ol></div>
+<div class="readme-list run-steps"><ol><li>Select <strong>environment</strong>: caller’s (<code>NULL</code>) or custom</li>
+<li>Find PCB by PID; require <strong>state = NEW</strong></li>
+<li>Copy caller’s <strong>inheritable descriptors</strong></li>
+<li>Build <strong>argc/argv/envp</strong> on child stack; copy argument/environment strings</li>
+<li>Update saved <strong>activation.sp / activation.baf</strong></li>
+<li>Set <strong>state = READY</strong>; return success</li></ol></div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Arguments:</strong> spaces/tabs; quoted whitespace preserved</li>
-<li><strong>Kernel:</strong> builds pointer arrays + copies strings</li></ul></div>
-
 </div>
 
 ---
