@@ -643,17 +643,17 @@ binary/basic_string.sections
 <!-- README_ASSET code-683 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-683" data-code-part="1">
 
-<!-- README_CODE_PART code-683 lines=1-7 -->
+<!-- README_CODE_PART code-683 lines=1-8 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>normal-function.picoc</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>multiple-returns.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-int add_one(int value) {
-    return value + 1;
-}
-
-int main(void) {
-    return add_one(41);
+int main(int argc, char **argv) {
+    if (argc > 1) {
+        return 42;
+    } else {
+        return 0;
+    }
 }
 ```
 
@@ -663,7 +663,7 @@ int main(void) {
 
 </div>
 <div class="readme-list prose-summary"><ul><li><strong>One epilogue</strong> per ordinary function</li>
-<li><strong>IN2:</strong> result survives frame + argument cleanup</li></ul></div>
+<li><strong>IN2:</strong> result survives the shared cleanup</li></ul></div>
 
 </div>
 
@@ -688,7 +688,7 @@ int main(void) {
 <div class="readme-code-header" v-pre><span>Host terminal</span><span class="code-range"></span></div>
 
 ```console {lines:false}
-$ picoc_compiler -c -O1 -v -w normal-function.picoc
+$ picoc_compiler -c -O1 -v -w multiple-returns.picoc
 ```
 
 </div>
@@ -700,24 +700,28 @@ $ picoc_compiler -c -O1 -v -w normal-function.picoc
 
 <ReadmeVisual kind="code" :width="495.79999999999995" data-code-source="code-702" data-code-part="1">
 
-<!-- README_CODE_PART code-702 lines=1-13 -->
+<!-- README_CODE_PART code-702 lines=1-17 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>normal-function.picoc_anf</span><span class="code-range">lines 1–13</span></div>
+<div class="readme-code-header" v-pre><span>multiple-returns.picoc_anf</span><span class="code-range">lines 1–17</span></div>
 
 ```text {lines:false}
 _global_inits:
-add_one:
-  NewStackframe(Num('0'))
-  Exp(StackframeParam(Num('0')))
-  Exp(Num('1'))
-  Exp(BinOp(Stack(Num('2')), Add(), Stack(Num('1'))))
-  Assign(IN2, Stack(Num('1')))
-  Exp(GoTo(Name('add_one_epilogue')))
-add_one_epilogue:
-  RestoreStackframe()
-  RestoreReturnAddress()
 main:
   NewStackframe(Num('0'))
+  // Return(Num('42'))
+  // IfElse(Atom(StackframeParam(Num('0')), Gt(), Num('1')), [], [])
+  Exp(StackframeParam(Num('0')))
+  Exp(Num('1'))
+  Exp(Atom(Stack(Num('2')), Gt(), Stack(Num('1')))),
+  IfElse(
+    Stack(
+      Num('1')),
+    [
+      GoTo(Name('main_if.2'))
+    ],
+    [
+      GoTo(Name('main_else.1'))
+    ])
 ```
 
 </div>
@@ -726,20 +730,20 @@ main:
 
 <ReadmeVisual kind="code" :width="422.3481481481481" data-code-source="code-702" data-code-part="2">
 
-<!-- README_CODE_PART code-702 lines=14-26 -->
+<!-- README_CODE_PART code-702 lines=18-30 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>normal-function.picoc_anf</span><span class="code-range">lines 14–26</span></div>
+<div class="readme-code-header" v-pre><span>multiple-returns.picoc_anf</span><span class="code-range">lines 18–30</span></div>
 
 ```text {lines:false}
-  // Call(Name('add_one'), [Num('41')])
-  Exp(Num('41'))
-  SaveReturnAddress(Name('main_cont.3'))
-  Exp(FunRef(Name('add_one')))
-  Exp(GoTo(Stack(Num('1'))))
-main_cont.3:
-  RemoveArguments(Num('1'))
-  Exp(IN2)
+main_if.2:
+  Exp(Num('42'))
   Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('main_epilogue')))
+main_else.1:
+  Exp(Num('0'))
+  Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('main_epilogue')))
+main_if_else_after.0:
   Exp(GoTo(Name('main_epilogue')))
 main_epilogue:
   RestoreStackframe()
@@ -770,49 +774,45 @@ main_epilogue:
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-735 -->
-<div class="code-columns" data-column-key="code:code-735" style="--readme-columns:minmax(0, 55fr) minmax(0, 45fr);--source-aspect:1.2790471560525036">
+<div class="code-columns" data-column-key="code:code-735" style="--readme-columns:minmax(0, 54fr) minmax(0, 46fr);--source-aspect:1.2790471560525036">
 
 <ReadmeVisual kind="code" :width="512.9999999999999" data-code-source="code-735" data-code-part="1">
 
-<!-- README_CODE_PART code-735 lines=1-34 -->
+<!-- README_CODE_PART code-735 lines=1-30 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>normal-function.reti_blocks</span><span class="code-range">lines 1–34</span></div>
+<div class="readme-code-header" v-pre><span>multiple-returns.reti_blocks</span><span class="code-range">lines 1–30</span></div>
 
 ```text {lines:false}
   .ivt
   .text
-add_one:
+main:
   # NewStackframe(Num('0'))
   PUSH BAF
   MOVE SP BAF
   SUBI SP 0
+  # // Return(Num('42'))
+  # // IfElse(Atom(StackframeParam(Num('0')), Gt(), Num('1')), [], [])
   # Exp(StackframeParam(Num('0')))
   LOADIN BAF ACC 3
   PUSH ACC
   # Exp(Num('1'))
   LOADI ACC 1
   PUSH ACC
-  # Exp(BinOp(Stack(Num('2')), Add(), Stack(Num('1'))))
+  # Exp(Atom(Stack(Num('2')), Gt(), Stack(Num('1'))))
   LOADIN SP ACC 2
   LOADIN SP IN2 1
-  ADD ACC IN2
-  STOREIN SP ACC 2
+  SUB ACC IN2
+  LOADI IN1 1
+  JUMP> 2
+  LOADI IN1 0
+  STOREIN SP IN1 2
   ADDI SP 1
-  # Assign(IN2, Stack(Num('1')))
-  POP IN2
-  # Exp(GoTo(Name('add_one_epilogue')))
-  JUMP32 add_one_epilogue
-add_one_epilogue:
-  # RestoreStackframe()
-  MOVE BAF SP
-  POP BAF
-  # RestoreReturnAddress()
-  POP IN1
-  MOVE IN1 PC
-main:
-  # NewStackframe(Num('0'))
-  PUSH BAF
-  MOVE SP BAF
+  # IfElse(Stack(Num('1')), [], [])
+  POP ACC
+  JUMP32== main_else.1
+  # GoTo(Name('main_if.2'))
+  # Exp(GoTo(Name('main_if.2')))
+  JUMP32 main_if.2
 ```
 
 </div>
@@ -821,34 +821,28 @@ main:
 
 <ReadmeVisual kind="code" :width="419.72727272727275" data-code-source="code-735" data-code-part="2">
 
-<!-- README_CODE_PART code-735 lines=35-67 -->
+<!-- README_CODE_PART code-735 lines=31-57 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>normal-function.reti_blocks</span><span class="code-range">lines 35–67</span></div>
+<div class="readme-code-header" v-pre><span>multiple-returns.reti_blocks</span><span class="code-range">lines 31–57</span></div>
 
 ```text {lines:false}
-  SUBI SP 0
-  # // Call(Name('add_one'), [Num('41')])
-  # Exp(Num('41'))
-  LOADI ACC 41
+main_if.2:
+  # Exp(Num('42'))
+  LOADI ACC 42
   PUSH ACC
-  # SaveReturnAddress(Name('main_cont.3'))
-  LOADI32 ACC main_cont.3
-  ADD ACC CS
-  PUSH ACC
-  # Exp(FunRef(Name('add_one')))
-  LOADI32 ACC add_one
-  ADD ACC CS
-  PUSH ACC
-  # Exp(GoTo(Stack(Num('1'))))
-  POP ACC
-  MOVE ACC PC
-main_cont.3:
-  # RemoveArguments(Num('1'))
-  ADDI SP 1
-  # Exp(IN2)
-  PUSH IN2
   # Assign(IN2, Stack(Num('1')))
   POP IN2
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_else.1:
+  # Exp(Num('0'))
+  LOADI ACC 0
+  PUSH ACC
+  # Assign(IN2, Stack(Num('1')))
+  POP IN2
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_if_else_after.0:
   # Exp(GoTo(Name('main_epilogue')))
   JUMP32 main_epilogue
 main_epilogue:
@@ -1247,24 +1241,7 @@ void _start(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-command-above">
-
-<!-- README_ASSET code-1029 -->
-<ReadmeVisual kind="code" :width="640" class="command-strip" data-code-source="code-1029" data-code-part="1">
-
-<!-- README_CODE_PART code-1029 lines=1-3 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-// dependencies: ../stdlib/libstdlib.reti_blocks
-
-#include "start.picoc"
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-1038+code-1029" style="--readme-columns:minmax(0, 64fr) minmax(0, 36fr);">
 
 <!-- README_ASSET code-1038 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1038" data-code-part="1">
@@ -1295,8 +1272,25 @@ void _start(int argc, char *first_argument) {
 
 </ReadmeVisual>
 
+<!-- README_ASSET code-1029 -->
+<ReadmeVisual kind="code" :width="640" data-code-source="code-1029" data-code-part="1">
+
+<!-- README_CODE_PART code-1029 lines=1-3 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
+// dependencies: ../stdlib/libstdlib.reti_blocks
+
+#include "start.picoc"
+```
+
 </div>
-<aside class="context-note"><b>libc startup analogy</b><span><strong>Runtime preparation</strong> before application main · <strong>libstart:</strong> heap/environment; main result → exit</span></aside>
+
+</ReadmeVisual>
+
+</div>
+<aside class="context-note"><b>C library (libc)</b><ul><li><strong>Services:</strong> I/O, strings, allocation, OS wrappers</li><li><strong>glibc CRT:</strong> <code>crt1.o</code> / <code>Scrt1.o</code> supplies <code>_start</code></li><li><strong>Startup:</strong> <code>_start</code> → <code>__libc_start_main</code> → <code>main</code> → <code>exit</code></li></ul></aside>
 
 </div>
 
@@ -1448,8 +1442,8 @@ void syscall_interrupt(void) {
 <!-- README_ASSET table-1125 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-1125:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><ul><li><code>SUBI SP 1</code></li><li><code>STOREIN SP ACC 1</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><ul><li><code>LOADIN SP ACC 1</code></li><li><code>ADDI SP 1</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:43.61%" /><col style="width:56.39%" /></colgroup><thead><tr><th>Pseudoinstruction</th><th>Expansion</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>PUSH ACC</code></td><td><code>SUBI SP 1</code>; <code>STOREIN SP ACC 1</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>POP ACC</code></td><td><code>LOADIN SP ACC 1</code>; <code>ADDI SP 1</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1521,7 +1515,7 @@ $$
 
 <!-- README_CODE_PART code-1167 lines=1-3 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>ReTI assembly</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>LOADI32 expansion</span><span class="code-range"></span></div>
 
 ```text {lines:false}
 LOADI reg signed_upper
@@ -1536,11 +1530,14 @@ ORI reg lower_bits
 <!-- README_ASSET code-1179 -->
 <ReadmeVisual kind="code" :width="240" data-code-source="code-1179" data-code-part="1">
 
-<!-- README_CODE_PART code-1179 lines=1-3 -->
+<!-- README_CODE_PART code-1179 lines=1-6 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>ReTI assembly</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>Example: 0x80000005</span><span class="code-range"></span></div>
 
 ```text {lines:false}
+# Upper: 0x80000005 >> 10 = 2^21
+# Signed: 2^21 - 2^22 = -2097152
+# Low: 0x80000005 & 0x3ff = 5
 LOADI ACC -2097152
 MULTI ACC 1024
 ORI ACC 5
@@ -1553,7 +1550,6 @@ ORI ACC 5
 </div>
 
 </div>
-<aside class="context-note"><b>RISC-V / C arithmetic</b><span><strong>RISC-V:</strong> shared low-product; separate high-product operations · <strong>C signed overflow:</strong> undefined; reconstruction remains in range</span></aside>
 
 </div>
 
@@ -1568,9 +1564,7 @@ ORI ACC 5
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 130fr) minmax(0, 90fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1189 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1189" data-code-part="1">
@@ -1588,25 +1582,6 @@ asm("MOVE ACC PC");
 </div>
 
 </ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET math-1210 -->
-<ReadmeVisual kind="math" :width="980">
-
-<div class="readme-math">
-
-$$
-\mathrm{unsigned\_upper}\,2^{10} - \mathrm{signed\_upper}\,2^{10} = 2^{32}.
-$$
-
-</div>
-
-</ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -1776,24 +1751,7 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 180fr) minmax(0, 160fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET table-1334 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-1334:1,2,3,4,5">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:41.74%" /><col style="width:58.26%" /></colgroup><thead><tr><th>Entry</th><th>Default value</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>codesegment_start</code></td><td>Words in <code>.ivt</code></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>datasegment_start</code></td><td>Words in <code>.ivt</code> + words in <code>.text</code></td></tr>
-<tr data-source-row="3"><td class="table-key"><code>heap_start</code></td><td><code>datasegment_start</code> + max(<code>.data</code> words, global-data extent)</td></tr>
-<tr data-source-row="4"><td class="table-key"><code>heap_size</code></td><td><code>−1</code></td></tr>
-<tr data-source-row="5"><td class="table-key"><code>stack_start</code></td><td><code>−1</code></td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-1354 -->
 <ReadmeVisual kind="image" :width="980">
@@ -1801,8 +1759,6 @@ MOVE ACC PC
 <img src="/readme/compiler-binary-assembly.svg" alt="1.1.8 Linked .sections metadata and the five-word binary header" />
 
 </ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -1819,12 +1775,10 @@ MOVE ACC PC
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 170fr) minmax(0, 180fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1359 -->
-<ReadmeVisual kind="code" :width="728" data-code-source="code-1359" data-code-part="1">
+<ReadmeVisual kind="code" :width="728" :text-scale="1.1" data-code-source="code-1359" data-code-part="1">
 
 <!-- README_CODE_PART code-1359 lines=1-6 -->
 <div class="readme-code readme-terminal">
@@ -1842,23 +1796,6 @@ $ hexyl -n 20 program.bin
 </div>
 
 </ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET table-1375 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-1375:1,2,3,4,5">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:19.22%" /><col style="width:19.24%" /><col style="width:27.59%" /><col style="width:33.94%" /></colgroup><thead><tr><th>Word</th><th>File byte offset</th><th>Value</th><th>Use in PicoOS</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">0</td><td>0</td><td><span class="source-link"><code>codesegment_start</code></span></td><td>Initial CS + entry</td></tr>
-<tr data-source-row="2"><td class="table-key">1</td><td>4</td><td><span class="source-link"><code>datasegment_start</code></span></td><td>Initial DS</td></tr>
-<tr data-source-row="3"><td class="table-key">2</td><td>8</td><td><span class="source-link"><code>heap_start</code></span></td><td>Process-local heap start</td></tr>
-<tr data-source-row="4"><td class="table-key">3</td><td>12</td><td><span class="source-link"><code>heap_size</code></span></td><td>Configured cells; −1 → default</td></tr>
-<tr data-source-row="5"><td class="table-key">4</td><td>16</td><td><span class="source-link"><code>stack_start</code></span></td><td>Highest stack cell; −1 → default</td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -1949,7 +1886,7 @@ $ hexyl -n 20 program.bin
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-1441 -->
-<ReadmeVisual kind="code" :width="676.4" data-code-source="code-1441" data-code-part="1">
+<ReadmeVisual kind="code" :width="676.4" :text-scale="1.1" data-code-source="code-1441" data-code-part="1">
 
 <!-- README_CODE_PART code-1441 lines=1-3 -->
 <div class="readme-code">
@@ -1966,6 +1903,7 @@ $ hexyl -n 20 program.bin
 </ReadmeVisual>
 
 </div>
+<div class="readme-list prose-summary"><ul><li><strong>Compiler <code>-k sram / eprom</code>:</strong> generates the header from the linked layout</li><li><strong>Next compile:</strong> embeds segment/stack addresses and heap bounds for startup without a process loader</li></ul></div>
 
 </div>
 
@@ -2079,7 +2017,7 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 116fr) minmax(0, 143fr)">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 200fr) minmax(0, 95fr)">
 
 <div class="readme-artifacts composition-panel layout-single">
 
@@ -2095,7 +2033,7 @@ $ hexyl -n 20 program.bin
 <div class="readme-artifacts composition-panel layout-single">
 
 <!-- README_ASSET table-1510 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-1510:1,2,3">
+<ReadmeVisual kind="table" :width="1080" :text-scale="0.82" data-table-key="table-1510:1,2,3">
 
 <div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:34.38%" /><col style="width:17.00%" /><col style="width:18.52%" /><col style="width:30.09%" /></colgroup><thead><tr><th>Address range</th><th>Top-bit prefix</th><th>ReTI region</th><th>Implemented PicoOS use</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>0x00000000..0x3fffffff</code></td><td><code>00</code></td><td>EPROM</td><td>Bootloader code + data</td></tr>
 <tr data-source-row="2"><td class="table-key"><strong><code>0x40000000..0x7fffffff</code></strong></td><td><strong><code>01</code></strong></td><td><strong>Periphery</strong></td><td>Implemented offsets 0–16</td></tr>
@@ -2156,12 +2094,12 @@ $ hexyl -n 20 program.bin
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 95fr) minmax(0, 240fr)">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 70fr) minmax(0, 265fr)">
 
 <div class="readme-artifacts composition-panel layout-single">
 
 <!-- README_ASSET code-1553 -->
-<ReadmeVisual kind="code" :width="640" data-code-source="code-1553" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" :text-scale="0.95" data-code-source="code-1553" data-code-part="1">
 
 <!-- README_CODE_PART code-1553 lines=1-3 -->
 <div class="readme-code">
@@ -2618,7 +2556,6 @@ void interrupt_controller_initialize(void) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>Linux comparison</b><span><strong>Linux:</strong> context on kernel stack · <strong>PicoOS:</strong> context on user stack · ReTI entry/RTI use active SP</span></aside>
 
 </div>
 
@@ -2658,8 +2595,6 @@ struct WaitPidRequest {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>System V ABI</b><span><strong>IN2:</strong> syscall + function result · Wrapper and entry agree</span></aside>
-<aside class="context-note"><b>POSIX portability</b><span>Source interfaces across different kernels · PicoOS signatures/behavior differ</span></aside>
 
 </div>
 
@@ -9054,7 +8989,7 @@ struct PicoFile {
 
 ## 11. Complete startup: bootloader, kernel, init, shell, and user applications (1)
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide startup-memory-introduction">
 
 <div class="readme-artifacts layout-single">
 
@@ -9073,6 +9008,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID e08cdffe-764a-4195-a7b6-36787b99a4e4 -->
 <!-- SOURCE Pico-OS/README.md#11-complete-startup-bootloader-kernel-init-shell-and-user-applications -->
+<!-- SHORT_VERSION_DISABLED -->
 
 ## 11. Complete startup: bootloader, kernel, init, shell, and user applications (2)
 
@@ -9474,24 +9410,7 @@ void reboot(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-1029+code-1038" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
-
-<!-- README_ASSET code-1029 repeated -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1029" data-code-part="1">
-
-<!-- README_CODE_PART code-1029 lines=1-3 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-// dependencies: ../stdlib/libstdlib.reti_blocks
-
-#include "start.picoc"
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-1038+code-1029" style="--readme-columns:minmax(0, 64fr) minmax(0, 36fr);">
 
 <!-- README_ASSET code-1038 repeated -->
 <ReadmeVisual kind="code" :width="470" data-code-source="code-1038" data-code-part="1">
@@ -9522,6 +9441,23 @@ void _start(int argc, char *first_argument) {
 
 </ReadmeVisual>
 
+<!-- README_ASSET code-1029 repeated -->
+<ReadmeVisual kind="code" :width="470" data-code-source="code-1029" data-code-part="1">
+
+<!-- README_CODE_PART code-1029 lines=1-3 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
+// dependencies: ../stdlib/libstdlib.reti_blocks
+
+#include "start.picoc"
+```
+
+</div>
+
+</ReadmeVisual>
+
 </div>
 
 </div>
@@ -9542,8 +9478,8 @@ void _start(int argc, char *first_argument) {
 <!-- README_ASSET table-7294 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-7294:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.19%" /><col style="width:68.81%" /></colgroup><thead><tr><th>Component</th><th>Responsibility</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Kernel <span class="source-link"><code>main()</code></span></td><td>Initialize subsystems + dispatch</td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>Init</code></span></td><td>Configure environment; supervise shell</td></tr>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:31.19%" /><col style="width:68.81%" /></colgroup><thead><tr><th>Component</th><th>Responsibility</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Kernel <span class="source-link"><code>main()</code></span></td><td>Provides the mechanisms to run processes</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>Init</code></span></td><td>Uses those mechanisms to set up the user environment</td></tr>
 <tr data-source-row="3"><td class="table-key"><span class="source-link"><code>Shell</code></span></td><td>Terminal ownership + command execution</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
@@ -9593,13 +9529,11 @@ void _start(int argc, char *first_argument) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7329 -->
-<div class="code-columns" data-column-key="code:code-7329" style="--readme-columns:minmax(0, 54fr) minmax(0, 46fr);--source-aspect:3.355111633372503">
+<ReadmeVisual kind="code" :width="980" class="init-session-code" data-code-source="code-7329" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="657.3913043478261" data-code-source="code-7329" data-code-part="1">
-
-<!-- README_CODE_PART code-7329 lines=1-16 -->
+<!-- README_CODE_PART code-7329 lines=1-32 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>system/init.picoc</span><span class="code-range">lines 1–16</span></div>
+<div class="readme-code-header" v-pre><span>system/init.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 int main(void) {
@@ -9618,19 +9552,6 @@ int main(void) {
             return 1;
         }
     }
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="560" data-code-source="code-7329" data-code-part="2">
-
-<!-- README_CODE_PART code-7329 lines=17-32 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>system/init.picoc</span><span class="code-range">lines 17–32</span></div>
-
-```c {lines:false}
 
     while (true) {
         shell_pid = load("./user/shell.bin");
@@ -9653,7 +9574,6 @@ int main(void) {
 
 </ReadmeVisual>
 
-</div>
 
 </div>
 
@@ -9670,114 +9590,11 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-1029+code-1038" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
-<!-- README_ASSET code-1029 repeated -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1029" data-code-part="1">
+<ReadmeVisual kind="image" :width="1200">
 
-<!-- README_CODE_PART code-1029 lines=1-3 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-// dependencies: ../stdlib/libstdlib.reti_blocks
-
-#include "start.picoc"
-```
-
-</div>
-
-</ReadmeVisual>
-
-<!-- README_ASSET code-1038 repeated -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1038" data-code-part="1">
-
-<!-- README_CODE_PART code-1038 lines=1-15 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/start.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-#include "../stdlib/stdlib.header"
-
-int main(int argc, char **argv);
-void initialize_environment(char **environment);
-
-void start_process(int argc, char **argv) {
-    init_process_heap();
-    initialize_environment(argv + argc + 1);
-    exit(main(argc, argv));
-}
-
-__attribute__((naked))
-void _start(int argc, char *first_argument) {
-    start_process(argc, (char **)&first_argument);
-}
-```
-
-</div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 586ab56d-c506-40eb-bd57-d5ca8a404017 -->
-<!-- SOURCE Pico-OS/README.md#1135-loading-user-applications -->
-
-# <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
-
-## 11.3.5 Loading user applications
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-1029+code-1038" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
-
-<!-- README_ASSET code-1029 repeated -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1029" data-code-part="1">
-
-<!-- README_CODE_PART code-1029 lines=1-3 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-// dependencies: ../stdlib/libstdlib.reti_blocks
-
-#include "start.picoc"
-```
-
-</div>
-
-</ReadmeVisual>
-
-<!-- README_ASSET code-1038 repeated -->
-<ReadmeVisual kind="code" :width="470" data-code-source="code-1038" data-code-part="1">
-
-<!-- README_CODE_PART code-1038 lines=1-15 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/start.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-#include "../stdlib/stdlib.header"
-
-int main(int argc, char **argv);
-void initialize_environment(char **environment);
-
-void start_process(int argc, char **argv) {
-    init_process_heap();
-    initialize_environment(argv + argc + 1);
-    exit(main(argc, argv));
-}
-
-__attribute__((naked))
-void _start(int argc, char *first_argument) {
-    start_process(argc, (char **)&first_argument);
-}
-```
-
-</div>
+<img src="/readme/shell-startup-flow.svg" alt="Shell-specific startup: inherited context, runtime preparation, descriptor and terminal setup, command loop, and return to init" />
 
 </ReadmeVisual>
 
@@ -11734,6 +11551,8 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 </div>
 
 </div>
+
+<aside class="context-note"><b>Inspect execution</b><span>Registers, memory, and memory-mapped peripherals while PicoOS runs</span></aside>
 
 </div>
 

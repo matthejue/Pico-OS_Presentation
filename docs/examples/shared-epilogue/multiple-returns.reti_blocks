@@ -1,0 +1,57 @@
+  .ivt
+  .text
+main:
+  # NewStackframe(Num('0'))
+  PUSH BAF
+  MOVE SP BAF
+  SUBI SP 0
+  # // Return(Num('42'))
+  # // IfElse(Atom(StackframeParam(Num('0')), Gt(), Num('1')), [], [])
+  # Exp(StackframeParam(Num('0')))
+  LOADIN BAF ACC 3
+  PUSH ACC
+  # Exp(Num('1'))
+  LOADI ACC 1
+  PUSH ACC
+  # Exp(Atom(Stack(Num('2')), Gt(), Stack(Num('1'))))
+  LOADIN SP ACC 2
+  LOADIN SP IN2 1
+  SUB ACC IN2
+  LOADI IN1 1
+  JUMP> 2
+  LOADI IN1 0
+  STOREIN SP IN1 2
+  ADDI SP 1
+  # IfElse(Stack(Num('1')), [], [])
+  POP ACC
+  JUMP32== main_else.1
+  # GoTo(Name('main_if.2'))
+  # Exp(GoTo(Name('main_if.2')))
+  JUMP32 main_if.2
+main_if.2:
+  # Exp(Num('42'))
+  LOADI ACC 42
+  PUSH ACC
+  # Assign(IN2, Stack(Num('1')))
+  POP IN2
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_else.1:
+  # Exp(Num('0'))
+  LOADI ACC 0
+  PUSH ACC
+  # Assign(IN2, Stack(Num('1')))
+  POP IN2
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_if_else_after.0:
+  # Exp(GoTo(Name('main_epilogue')))
+  JUMP32 main_epilogue
+main_epilogue:
+  # RestoreStackframe()
+  MOVE BAF SP
+  POP BAF
+  # RestoreReturnAddress()
+  POP IN1
+  MOVE IN1 PC
+  .data

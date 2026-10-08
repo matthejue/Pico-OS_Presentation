@@ -59,3 +59,88 @@ Current numbers below are review aids only; UUIDs determined every target.
 - No PDF was generated or exported.
 
 These user-requested table/column omissions and the abbreviated syscall example intentionally depart from the original source-coverage inventory. This review does not claim the strict full-source-content audit passes. No README rebuild or source snapshot update was performed.
+
+## Additional correction batch
+
+Applied the subsequent pending corrections by persistent UUID, including two
+screenshots saved during this review. The older completed `x_` files were not
+processed again.
+
+| Slide ID | Result |
+| --- | --- |
+| `d012f102-ce27-48a3-90bc-fb698ee36af3` | Replaced the example with one main, if/else, and two returns; aligned the diagram with the two explicit returns. |
+| `b07062cf-0509-47d2-bce5-60199deb0bca` | Replaced the command and ANF example with real compiler output; both branches use main_epilogue. |
+| `2f40f602-7242-41c9-87e4-e8f605a73715` | Replaced symbolic ReTI with the complete corresponding compiler output in balanced columns. |
+| `b129a8dc-55a9-4ce5-b247-33259f0b9019` | Replaced the analogy note with concise libc services and glibc CRT startup bullets; placed the longer startup example beside its wrapper. |
+| `c88b8466-2934-4c68-9ae1-1e2d31e684c0` | Replaced expansion bullets with semicolon-separated instructions. |
+| `b76f2e2a-4b26-4543-b159-a815e02c8b80` | Named the 0x80000005 example, showed how its upper/lower values are obtained, and removed the crossed-out arithmetic note. |
+| `512473e0-07c8-4c40-b081-248b80dba8b9` | Removed the modulo-equivalence equation; retained and centered the bootloader example. |
+| `8bce7067-7572-47c6-bdae-c29f2ee54bc9` | Removed the crossed-out defaults table and expanded the assembly diagram. |
+| `26f3feb1-ec31-4d4a-8379-0a9dd6437b1e` | Removed the crossed-out header table and centered the terminal example; kept hex-dump borders unwrapped. |
+| `e720ab54-002a-4dae-b3e8-9c9be745c27e` | Restored two memory-header explanations with the precise startup purpose; clarified that -k is a compiler option. |
+| `0dd731bf-b632-4826-9049-a7251b914a18` | Reduced the table and enlarged the memory map and its labels. |
+| `b76f762b-22f9-4111-a94b-c1f872bfec7e` | Reduced the code and enlarged the TSL diagram and its labels. |
+| `d964847e-9b73-4174-bfc7-26ea59781692` | Removed the crossed-out Linux comparison. |
+| `fa4b4712-4473-464e-9f7f-60df243ad2c0` | Removed the crossed-out System V ABI and POSIX notes. |
+| `6ba983ff-bdeb-4422-a3ae-b519df29be46` | Kept the complete startup heading and (1) suffix on one line within the slide margins. |
+| `6ce48ef8-591c-49ae-a58e-f7a99576e37f` | Swapped the startup examples; the longer start.picoc is on the left with more width. |
+
+### Sources and interpretation
+
+The replacement epilogue example and actual generated stages are saved in
+[docs/examples/shared-epilogue](examples/shared-epilogue/README.md).
+
+The libc note describes glibc specifically: libc supplies C runtime services,
+and its CRT objects supply `_start`, which calls `__libc_start_main` before
+`main` and exit. Verified against the primary glibc
+[startup source](https://github.com/bminor/glibc/blob/master/sysdeps/x86_64/start.S),
+[CRT build rules](https://github.com/bminor/glibc/blob/master/csu/Makefile), and
+[GNU C Library project description](https://sourceware.org/glibc/).
+
+Recovered original memory-header bullets from presentation commit `1bee8e4`:
+“-k sram / eprom: header-only generation” and “Then compile: include generated
+header”. PicoOS README section 1.1.9 and its Makefile header/build rules confirm
+the compiler generates addresses from the linked layout, then compilation
+embeds them for bootloader/kernel register setup and heap initialization.
+The bootloader includes both generated headers, initializes its own DS/stack,
+and discards the kernel image's heap fields. Thus the header supplies constants
+before ordinary process loading can establish a runtime context.
+
+The removed LOADI32 equation proves equality of the low 32 product bits for
+signed/unsigned upper fields. It is a valid supporting proof in README section
+1.1.7.2, but is not required for the instruction expansion or bootloader example.
+The retained example directly explains the signed conversion and low-bit split.
+
+The command-options correction for `9204e2d0-4668-4d63-b517-fcc62df0f1ea`
+remains unresolved: that exact slide is absent. Its reviewed `list-8353` group
+is recorded with `omitLists: true` in `config/readme-slide-selection.json`.
+No current slide was substituted by its number or title.
+
+All 333 surviving persistent identities and source anchors are preserved; the
+explicitly requested duplicate deletion is recorded below. Later slide numbers
+and pending short-version choices were remapped by UUID. Concurrent user
+short-version selection edits made during this review are retained.
+No README rebuild, snapshot update, or PDF export was performed. Presentation
+corrections intentionally replace/omit some source artifacts, so strict original
+source-content coverage is not claimed. The SVG correction configuration
+reproduces all three edited diagrams from the original PicoOS SVGs.
+
+### Corrections saved during the review
+
+- `9e2731c3-c572-4d7f-9ad0-078edba26eb5`: adopted the requested kernel/init distinction in the responsibilities table.
+- `53bcf41c-58cb-42b8-b736-411b5ef70f26`: merged the complete init session into one full-width code box with tighter leading.
+- `5bd4796d-e12d-4c12-8c43-d26718e7685e`: the later Markdown correction superseded the earlier screenshot's column swap. Replaced the duplicated libstart code with a shell-specific startup flow, verified against `user/shell.picoc` main and README 11.3.4.
+- `586ab56d-c506-40eb-bd57-d5ca8a404017`: deleted this exact redundant application-startup slide as explicitly requested. Both the README generation comments at 11.3.4/11.3.5 and the generator's `repeated` map deliberately requested identical libstart examples at each runtime stage. This explains the duplication; the new correction overrides that prior presentation choice.
+- `254c42e4-b819-464d-8cb8-732df8a5e942`: its new screenshot shows an older introduction layout, while the associated UUID currently holds inspection commands/tables. The crossed-out phrase was already absent. Added the requested concise registers/memory/peripherals inspection note to the slide identified by the stored UUID, without substituting another slide by title or number.
+
+The viewer now also inlines SVG data URLs, which Vite produces for small
+assets. Verified vector label selection, zoom controls, full code retention,
+and return to the same slide in both normal and selectable-text previews.
+All affected layouts passed bounds, alignment, and table-clipping checks.
+The final shell flow and the slide following the duplicate deletion were
+reviewed again. Identity, note/correction, navigation, and short-version tests
+pass; `git diff --check` passes. The source snapshot records its original
+334-slide generation; this correction batch reduces the current deck to 333
+without adopting a new README commit or rewriting that historical snapshot.
+
+Completed this additional batch: 10 Markdown files (14 checked bullets) and 10 screenshots. Completed files and image sidecars have the `x_` prefix. The missing-identity command-options correction remains unchecked.

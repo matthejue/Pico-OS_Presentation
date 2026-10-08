@@ -1,8 +1,0 @@
-{
-  "slide_id": "fa4b4712-4473-464e-9f7f-60df243ad2c0",
-  "slide_number": 62,
-  "slide_title": "2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention (1)",
-  "source_anchor": "241-syscall-selectors-and-register-convention",
-  "image_id": "22e736e7-afdc-4e84-bd9c-4ee27d36c165",
-  "filename": "slide-062-2-interrupts-system-calls-preemption-and-exceptions-2-4-system-call-interface-an--fa4b4712-4473-464e-9f7f-60df243ad2c0--screenshot-22e736e7-afdc-4e84-bd9c-4ee27d36c165.png"
-}

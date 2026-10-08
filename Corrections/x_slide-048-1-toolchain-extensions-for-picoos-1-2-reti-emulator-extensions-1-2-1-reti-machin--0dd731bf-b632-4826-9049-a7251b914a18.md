@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.2 ReTI-Emulator extensions
 source_anchor: "121-reti-machine-model-and-memory-mapped-peripherals"
 ---
 
-- male table smaller and visualisation larger!!!
+- [x] male table smaller and visualisation larger!!!

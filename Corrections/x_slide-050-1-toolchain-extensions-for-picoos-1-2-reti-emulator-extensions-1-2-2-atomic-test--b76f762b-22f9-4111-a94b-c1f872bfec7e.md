@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.2 ReTI-Emulator extensions
 source_anchor: "1221-test-and-set-in-sram"
 ---
 
-- make code example smaller and visualisation larger!!!
+- [x] make code example smaller and visualisation larger!!!

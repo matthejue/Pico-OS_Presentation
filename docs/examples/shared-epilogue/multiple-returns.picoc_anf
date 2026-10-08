@@ -1,0 +1,30 @@
+_global_inits:
+main:
+  NewStackframe(Num('0'))
+  // Return(Num('42'))
+  // IfElse(Atom(StackframeParam(Num('0')), Gt(), Num('1')), [], [])
+  Exp(StackframeParam(Num('0')))
+  Exp(Num('1'))
+  Exp(Atom(Stack(Num('2')), Gt(), Stack(Num('1')))),
+  IfElse(
+    Stack(
+      Num('1')),
+    [
+      GoTo(Name('main_if.2'))
+    ],
+    [
+      GoTo(Name('main_else.1'))
+    ])
+main_if.2:
+  Exp(Num('42'))
+  Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('main_epilogue')))
+main_else.1:
+  Exp(Num('0'))
+  Assign(IN2, Stack(Num('1')))
+  Exp(GoTo(Name('main_epilogue')))
+main_if_else_after.0:
+  Exp(GoTo(Name('main_epilogue')))
+main_epilogue:
+  RestoreStackframe()
+  RestoreReturnAddress()

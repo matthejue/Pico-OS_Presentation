@@ -71,7 +71,11 @@ async function enlarge(element) {
   // so diagram labels remain selectable, just like the former Mermaid labels.
   for (const image of clone.querySelectorAll('img')) {
     const url = new URL(image.src, location.href)
-    if (url.origin !== location.origin || !url.pathname.endsWith('.svg')) continue
+    // Vite can embed small SVG assets as data URLs. They need the same
+    // vector treatment as local SVG files for their labels to be selectable.
+    const embeddedSvg = url.protocol === 'data:' && /^data:image\/svg\+xml(?:;|,)/i.test(image.src)
+    const localSvg = url.origin === location.origin && url.pathname.endsWith('.svg')
+    if (!embeddedSvg && !localSvg) continue
     try {
       const response = await fetch(url)
       if (!response.ok) continue

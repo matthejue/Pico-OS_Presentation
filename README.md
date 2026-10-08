@@ -157,7 +157,7 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 334 slides. The short deck follows the saved exclusions. Slides load on demand to
+content slides are excluded. The full deck contains 333 slides. The short deck follows the saved exclusions. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content

@@ -67,6 +67,110 @@
     [
       "height=\"354\" viewBox=\"0 50 1440 354\"",
       "height=\"220\" viewBox=\"0 126 1440 220\""
+    ],
+    [
+      "height=\"220\" viewBox=\"0 126 1440 220\"",
+      "height=\"262\" viewBox=\"0 126 1440 262\""
+    ],
+    [
+      "height=\"132\"",
+      "height=\"176\""
+    ],
+    [
+      "V278",
+      "V322"
+    ],
+    [
+      "y=\"178\"",
+      "y=\"187\""
+    ],
+    [
+      "y=\"212\"",
+      "y=\"238\""
+    ],
+    [
+      "y=\"253\"",
+      "y=\"290\""
+    ],
+    [
+      "y=\"255\"",
+      "y=\"293\""
+    ],
+    [
+      "y=\"326\"",
+      "y=\"368\""
+    ],
+    [
+      "font-size=\"23\"",
+      "font-size=\"31\""
+    ],
+    [
+      "font-size=\"21\"",
+      "font-size=\"28\""
+    ],
+    [
+      "font-size=\"30\"",
+      "font-size=\"40\""
+    ]
+  ],
+  "compiler-shared-epilogue.svg": [
+    [
+      "return expression A",
+      "return 42"
+    ],
+    [
+      "return expression B",
+      "return 0"
+    ],
+    [
+      "function_epilogue",
+      "main_epilogue"
+    ],
+    [
+      "        <path d=\"M205.906,139L210.073,139C214.24,139,222.573,139,230.24,139C237.906,139,244.906,139,248.406,139L251.906,139\" id=\"picoos-diagram-5-L_return_b_epilogue_0\" class=\" edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link\" marker-end=\"url(#picoos-diagram-5_flowchart-v2-pointEnd)\" fill=\"none\" stroke=\"#167b84\" stroke-width=\"1px\" stroke-dasharray=\"0px\" />\n",
+      ""
+    ],
+    [
+      "        <g class=\"node default  \" id=\"picoos-diagram-5-flowchart-return_void-4\" transform=\"translate(106.953125, 243)\">\n          <rect class=\"basic label-container\" x=\"-52.1484375\" y=\"-27\" width=\"104.296875\" height=\"54\" rx=\"0\" ry=\"0\" fill=\"#f4f8f8\" stroke=\"#637983\" stroke-width=\"1.5px\" />\n          <g class=\"label\" transform=\"translate(-22.1484375, -12)\">\n            <rect rx=\"0\" ry=\"0\" fill=\"#f4f8f8\" stroke=\"#637983\" stroke-width=\"1px\" />\n            <g class=\"svg-label\">\n              <text x=\"0\" y=\"18\" font-family=\"Cantarell, sans-serif\" font-size=\"16px\" fill=\"#17313a\" xml:space=\"preserve\" stroke=\"none\" stroke-width=\"1px\">return</text></g>\n          </g>\n        </g>\n",
+      ""
+    ],
+    [
+      "picoos-diagram-5-L_return_void_epilogue_0",
+      "picoos-diagram-5-L_return_b_epilogue_0"
+    ],
+    [
+      "id=\"picoos-diagram-5-flowchart-return_b-2\" transform=\"translate(106.953125, 139)\"",
+      "id=\"picoos-diagram-5-flowchart-return_b-2\" transform=\"translate(106.953125, 243)\""
+    ]
+  ],
+  "reti-periphery-memory-map.svg": [
+    [
+      "height=\"144\" viewBox=\"0 46 1440 144\"",
+      "height=\"208\" viewBox=\"0 46 1440 208\""
+    ],
+    [
+      "height=\"104\"",
+      "height=\"168\""
+    ],
+    [
+      "V170",
+      "V234"
+    ],
+    [
+      "y=\"107\"",
+      "y=\"122\""
+    ],
+    [
+      "y=\"143\"",
+      "y=\"191\""
+    ],
+    [
+      "font-size=\"24\"",
+      "font-size=\"34\""
+    ],
+    [
+      "font-size=\"17\"",
+      "font-size=\"24\""
     ]
   ]
 }

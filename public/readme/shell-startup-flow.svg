@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="shell-startup-title shell-startup-desc">
+  <title id="shell-startup-title">Shell startup and return to init</title>
+  <desc id="shell-startup-desc">Init runs the shell with inherited environment and descriptors. The dispatcher enters libstart, which initializes the shell's own heap and environment. Shell main closes private descriptors, takes terminal ownership, sets SIGKILL as its parent-death signal, and reads and evaluates commands. When the shell returns, init's waitpid returns and init starts another session.</desc>
+  <defs><marker id="shell-startup-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#167b84"/></marker></defs>
+  <g font-family="Cantarell, sans-serif" fill="#17313a" text-anchor="middle">
+    <g stroke-width="2">
+      <rect x="20" y="30" width="340" height="110" fill="#f4f8f8" stroke="#637983"/>
+      <rect x="430" y="30" width="340" height="110" fill="#eaf5f5" stroke="#078b98"/>
+      <rect x="840" y="30" width="340" height="110" fill="#fff1d6" stroke="#c8861a"/>
+      <rect x="20" y="200" width="1160" height="260" fill="#f4f8f8" stroke="#637983"/>
+      <rect x="45" y="245" width="350" height="80" fill="#eaf5f5" stroke="#078b98"/>
+      <rect x="425" y="245" width="350" height="80" fill="#eaf5f5" stroke="#078b98"/>
+      <rect x="805" y="245" width="350" height="80" fill="#eaf5f5" stroke="#078b98"/>
+      <rect x="245" y="365" width="710" height="65" fill="#e7f3ea" stroke="#2f8f61"/>
+      <rect x="20" y="485" width="1160" height="55" fill="#fff1d6" stroke="#c8861a"/>
+    </g>
+    <g font-size="27" font-weight="bold" fill="#167b84">
+      <text x="190" y="69">Init: run(shell_pid, …)</text>
+      <text x="600" y="69">Dispatcher: RTI → _start</text>
+      <text x="1010" y="69">libstart: start_process</text>
+      <text x="600" y="231">user/shell.picoc · main()</text>
+    </g>
+    <g font-size="21">
+      <text x="190" y="108">Inherit environment + descriptors</text>
+      <text x="600" y="108">Enter the shell's runtime</text>
+      <text x="1010" y="108">Own heap + environment → main</text>
+      <text x="220" y="278">Close private descriptors 3–7</text>
+      <text x="220" y="306">Keep standard input/output/error</text>
+      <text x="600" y="278">Claim terminal ownership</text>
+      <text x="600" y="306">set_foreground_process(0)</text>
+      <text x="980" y="278">Parent-death signal: SIGKILL</text>
+      <text x="980" y="306">prctl(PR_SET_PDEATHSIG, …)</text>
+      <text x="600" y="405" font-size="27">Command loop: read_line → eval</text>
+      <text x="600" y="520">Shell returns → init's waitpid returns → init starts another session</text>
+    </g>
+  </g>
+  <g fill="none" stroke="#167b84" stroke-width="2" marker-end="url(#shell-startup-arrow)">
+    <path d="M360 85 H423"/>
+    <path d="M770 85 H833"/>
+    <path d="M1010 140 V175 H600 V195"/>
+    <path d="M395 285 H419"/>
+    <path d="M775 285 H799"/>
+    <path d="M980 325 V345 H600 V359"/>
+    <path d="M600 430 V479"/>
+  </g>
+</svg>

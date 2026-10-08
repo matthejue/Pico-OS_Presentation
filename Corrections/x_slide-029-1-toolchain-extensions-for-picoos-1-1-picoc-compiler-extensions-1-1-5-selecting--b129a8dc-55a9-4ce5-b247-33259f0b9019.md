@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extension
 source_anchor: "1152-picoos-libstart-startup-sequence"
 ---
 
-- The current remark box just contains usefless infomration, but it would be nice if you could do some research and put there some conside, short bullet points that explain what libc is and that it's responsbile for defining _start if I'm not mistaken und contains for more than just the _start function.
+- [x] The current remark box just contains usefless infomration, but it would be nice if you could do some research and put there some conside, short bullet points that explain what libc is and that it's responsbile for defining _start if I'm not mistaken und contains for more than just the _start function.

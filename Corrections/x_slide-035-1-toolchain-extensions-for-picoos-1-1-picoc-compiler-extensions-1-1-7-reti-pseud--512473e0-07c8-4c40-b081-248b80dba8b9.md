@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extension
 source_anchor: "1172-loading-32-bit-values-with-loadi32"
 ---
 
-- Where is this example with unsigned_upper2 10 −signed_upper2 10 =2 32 coming from? Why is it important to show? If it's not imprtant, please remove it from the slide!
+- [x] Where is this example with unsigned_upper2 10 −signed_upper2 10 =2 32 coming from? Why is it important to show? If it's not imprtant, please remove it from the slide!
