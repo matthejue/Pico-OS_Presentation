@@ -180,7 +180,7 @@
           <g class="label" transform="translate(-100, -24)">
             <rect rx="0" ry="0" fill="#f4f8f8" stroke="#637983" stroke-width="1px" />
             <g class="svg-label">
-              <text x="6.9375" y="18" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="3px">Includes, macros,</text><text x="44" y="42" font-family="Cantarell, sans-serif" font-size="16px" fill="#17313a" xml:space="preserve" stroke="none" stroke-width="3px">#pragma once</text></g>
+              <text x="100" y="30" text-anchor="middle" font-family="Cantarell, sans-serif" font-size="13px" fill="#17313a" xml:space="preserve" stroke="none">Includes, macros, #pragma once</text></g>
           </g>
         </g>
         <g class="node default added " id="picoos-diagram-2-flowchart-preprocessed-2" transform="translate(681.0625, 94)">

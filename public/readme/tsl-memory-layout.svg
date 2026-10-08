@@ -1,10 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="354" viewBox="0 50 1440 354" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="220" viewBox="0 126 1440 220" role="img" aria-labelledby="title desc">
   <title id="title">TSL DS ACC 2: atomic access to one SRAM word</title>
   <desc id="desc">Four adjacent, equally sized 32-bit SRAM word cells are separated by lines, with omitted memory at both ends. DS is 0x80000040, and offset 2 selects the cell at 0x80000042. TSL DS ACC 2 copies that cell's old value 0 into ACC and changes the same cell to 1 atomically. Neighboring cells remain unchanged.</desc>
   <g font-family="Cantarell, sans-serif" fill="#17313a">
-    <text x="60" y="78" font-family="Cantarell, sans-serif" font-size="21">DS = 0x80000040; DS + 2 = 0x80000042</text>
 
-    <text x="60" y="122" font-size="21">Each cell is one 32-bit word; addresses increase by 1 per cell.</text>
     <!-- One SRAM outline with equal-width word cells, plus omitted memory at both ends. -->
     <rect x="60" y="146" width="1320" height="132" fill="#f4f8f8"/>
     <path d="M720 146 H1005 V278 H720 Z" fill="#fff1d6"/>
@@ -34,6 +32,5 @@
     </g>
     <text x="60" y="326" font-size="23">1. Copy the old target value into ACC: <tspan font-weight="bold">ACC = 0</tspan></text>
     <text x="750" y="326" font-size="23">2. Set that same SRAM cell to <tspan font-weight="bold">1</tspan>.</text>
-    <text x="60" y="374" font-size="22" font-weight="bold">One atomic instruction: no interrupt or process switch between the read and write.</text>
   </g>
 </svg>

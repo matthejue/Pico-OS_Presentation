@@ -126,7 +126,6 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="asciinema-recording-meta">
-      <span>{{ active ? 'Player keys active · click outside to return to slide navigation' : 'Local recording · available offline' }}</span>
       <a :href="fallbackHref" target="_blank" rel="noopener">{{ fallbackLabel }} ↗</a>
     </div>
   </div>

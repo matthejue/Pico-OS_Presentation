@@ -423,7 +423,7 @@ scheduler
 
 </div>
 
-<div class="pipeline-panel"><div class="pipeline-heading"><strong>Extended:</strong> reusable units, <strong>Tree-sitter</strong> replaces <strong>Lark</strong></div><div class="readme-list"><ul><li><strong>Tree-sitter:</strong> parses preprocessed source into a parse tree</li>
+<div class="pipeline-panel"><div class="pipeline-heading"><strong>Extended:</strong> several source files</div><div class="readme-list"><ul><li><strong>Tree-sitter:</strong> parses preprocessed source into a parse tree</li>
 <li><strong>AST construction</strong>, symbol/type checks, linking + startup</li></ul></div>
 
 <!-- README_ASSET image-570 -->
@@ -579,7 +579,7 @@ binary/basic_string.sections
 <!-- README_ASSET table-644 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-644:1,2,3,4,5,6,7,8,9,10,11,12,13,14">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:29.49%" /><col style="width:40.26%" /><col style="width:30.25%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1" class="stack-caller"><td class="table-key"><strong>Higher addresses ↑</strong></td><td>Earlier stack contents</td><td>Earlier calls</td></tr>
+<div class="table-panels" v-pre><div class="readme-table stack-frame-table"><table><colgroup><col style="width:29.49%" /><col style="width:40.26%" /><col style="width:30.25%" /></colgroup><thead><tr><th>Position</th><th>Contents</th><th>Managed by</th></tr></thead><tbody><tr data-source-row="1" class="stack-caller"><td class="table-key"><strong>Higher addresses ↑</strong></td><td>Earlier stack contents</td><td>Earlier calls</td></tr>
 <tr data-source-row="2" class="stack-caller"><td class="table-key"><em><code>caller BAF + 3</code></em></td><td>Caller argument</td><td>Caller’s caller</td></tr>
 <tr data-source-row="3" class="stack-caller"><td class="table-key"><em><code>caller BAF + 2</code></em></td><td>Caller return address</td><td>Caller’s caller</td></tr>
 <tr data-source-row="4" class="stack-caller"><td class="table-key"><em><code>caller BAF + 1</code></em></td><td>Saved BAF</td><td>Caller frame</td></tr>
@@ -2054,12 +2054,12 @@ $ hexyl -n 20 program.bin
 <tr data-source-row="17"><td class="table-key">Stack/heap protection</td><td>Inclusive lower SP boundary</td></tr>
 <tr data-source-row="18"><td class="table-key">Runtime segment interpretation</td><td>Views follow live CS + DS</td></tr>
 <tr data-source-row="19"><td class="table-key">Source-level debugging</td><td>Globals, locals, frames, source locations</td></tr></tbody></table></div>
-<div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="20"><td class="table-key">SRAM transcoding</td><td>Numbers, characters, decoded instructions</td></tr>
-<tr data-source-row="21"><td class="table-key">Snapshots and restart</td><td>Save/restore/restart complete machine state</td></tr>
+<div class="readme-table"><table><colgroup><col style="width:37.50%" /><col style="width:62.50%" /></colgroup><thead><tr><th>Feature</th><th>Contribution</th></tr></thead><tbody><tr data-source-row="21"><td class="table-key">Snapshots and restart</td><td>Save/restore/restart complete machine state</td></tr>
 <tr data-source-row="22"><td class="table-key">Live inspection/editing</td><td>Select, scroll, center, edit views</td></tr>
 <tr data-source-row="23"><td class="table-key">Synthetic OS context</td><td>Synthetic startup kernel/interrupt context</td></tr>
 <tr data-source-row="24"><td class="table-key">Explicit ISR table size</td><td>Reserve five-entry IVT</td></tr>
-<tr data-source-row="25"><td class="table-key">Isolated assembly runs</td><td>Keep assembler periphery files isolated</td></tr></tbody></table></div></div>
+<tr data-source-row="25"><td class="table-key">Isolated assembly runs</td><td>Keep assembler periphery files isolated</td></tr>
+<tr data-source-row="20"><td class="table-key">SRAM transcoding</td><td>Numbers, characters, decoded instructions</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -2350,7 +2350,6 @@ TSL DS ACC 2
 
 <!-- README_ASSET recording-1667 -->
 <AsciinemaRecording src="/casts/reti_emulator.cast" title="ReTI-Emulator session" poster="npt:8" fallback-href="https://asciinema.org/a/1264549" />
-<div class="slide-note">Click to play; click outside to navigate</div>
 
 </div>
 
@@ -2883,6 +2882,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID 0afb8f9a-6eba-40db-97d9-6d43b2de56ae -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -2914,6 +2914,7 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID c9bd20c7-754d-46fe-9a04-cd60348d798c -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -2991,13 +2992,13 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2048 -->
-<div class="code-columns" data-column-key="code:code-2048" style="--readme-columns:minmax(0, 48fr) minmax(0, 52fr);--source-aspect:2.647806004618938">
+<div class="code-columns" data-column-key="code:code-2048" style="--readme-columns:minmax(0, 57fr) minmax(0, 43fr);--source-aspect:2.647806004618938">
 
-<ReadmeVisual kind="code" :width="538.8" data-code-source="code-2048" data-code-part="1">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-2048" data-code-part="1">
 
-<!-- README_CODE_PART code-2048 lines=1-19 -->
+<!-- README_CODE_PART code-2048 lines=1-25 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>interrupt_service_routines/os_isrs.picoc</span><span class="code-range">lines 1–19</span></div>
+<div class="readme-code-header" v-pre><span>interrupt_service_routines/os_isrs.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 __attribute__((naked))
@@ -3019,25 +3020,25 @@ void syscall_interrupt(void) {
     asm(KERNEL_SP_START_ASM); // LOADI32 SP -2147435351
     activate_kernel_stack_boundary();
 
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="583.7" data-code-source="code-2048" data-code-part="2">
-
-<!-- README_CODE_PART code-2048 lines=20-38 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>interrupt_service_routines/os_isrs.picoc</span><span class="code-range">lines 20–38</span></div>
-
-```c {lines:false}
     // Builds the handle_syscall arguments from the saved context
     asm("PUSH BAF"); // Caller context
     asm("LOADIN BAF IN2 5");
     asm("PUSH IN2"); // Syscall argument
     asm("LOADIN BAF IN2 6");
     asm("PUSH IN2"); // Syscall number
+```
+
+</div>
+
+</ReadmeVisual>
+
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-2048" data-code-part="2">
+
+<!-- README_CODE_PART code-2048 lines=26-38 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>interrupt_service_routines/os_isrs.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
 
     // A syscall that switches processes resumes with a successful IN2 result
     asm("LOADI IN2 1");
@@ -3074,26 +3075,7 @@ void syscall_interrupt(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-2133+code-2148" style="--readme-columns:minmax(0, 44fr) minmax(0, 56fr);">
-
-<!-- README_ASSET code-2133 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2133" data-code-part="1">
-
-<!-- README_CODE_PART code-2133 lines=1-5 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>common/periphery_asm.header</span><span class="code-range"></span></div>
-
-```c {lines:false}
-static inline void write_stack_heap_boundary_from_in1(void) {
-    asm("LOADI ACC 1048576");
-    asm("MULTI ACC 1024");
-    asm("STOREIN ACC IN1 10");
-}
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-2133+code-2148" style="--readme-columns:minmax(0, 58fr) minmax(0, 42fr);">
 
 <!-- README_ASSET code-2148 -->
 <ReadmeVisual kind="code" :width="712.7272727272727" data-code-source="code-2148" data-code-part="1">
@@ -3126,6 +3108,25 @@ void activate_current_process_stack_boundary(void) {
 
 </ReadmeVisual>
 
+<!-- README_ASSET code-2133 -->
+<ReadmeVisual kind="code" :width="560" data-code-source="code-2133" data-code-part="1">
+
+<!-- README_CODE_PART code-2133 lines=1-5 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>common/periphery_asm.header</span><span class="code-range"></span></div>
+
+```c {lines:false}
+static inline void write_stack_heap_boundary_from_in1(void) {
+    asm("LOADI ACC 1048576");
+    asm("MULTI ACC 1024");
+    asm("STOREIN ACC IN1 10");
+}
+```
+
+</div>
+
+</ReadmeVisual>
+
 </div>
 
 </div>
@@ -3144,13 +3145,11 @@ void activate_current_process_stack_boundary(void) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-2191 -->
-<div class="code-columns" data-column-key="code:code-2191" style="--readme-columns:minmax(0, 46fr) minmax(0, 54fr);--source-aspect:4.04361988386914">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-2191" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="560" data-code-source="code-2191" data-code-part="1">
-
-<!-- README_CODE_PART code-2191 lines=1-13 -->
+<!-- README_CODE_PART code-2191 lines=1-21 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/syscall.picoc</span><span class="code-range">lines 1–13</span></div>
+<div class="readme-code-header" v-pre><span>kernel/syscall.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 int handle_syscall(int syscall_number, int argument, int *caller_context) {
@@ -3166,30 +3165,12 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
             ((struct LoadProcessRequest *)argument)->show_loading_bar,
             caller_context
         );
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="657.3913043478261" data-code-source="code-2191" data-code-part="2">
-
-<!-- README_CODE_PART code-2191 lines=14-26 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/syscall.picoc</span><span class="code-range">lines 14–26</span></div>
-
-```c {lines:false}
     } else if (syscall_number == SYSCALL_RUN_PROCESS_WITH_ARGUMENTS) {
         return mark_process_ready_with_arguments((struct RunProcessRequest *)argument);
-    } else if (syscall_number == SYSCALL_LIST_PROCESSES) {
-        list_processes();
-        return 1;
-    } else if (syscall_number == SYSCALL_UNLOAD_PROCESS) {
-        return unload_process_by_pid(argument);
+
     }
 
     // ...
-
     return 0;
 }
 ```
@@ -3197,8 +3178,6 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 </div>
 
 </ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -3220,12 +3199,12 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 <!-- README_ASSET table-2237 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-2237:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:13.99%" /><col style="width:44.69%" /><col style="width:41.31%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th><th>Kernel functions</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">System control</td><td>Shutdown, reboot</td><td><ul><li><code>shutdown()</code></li><li><code>reboot()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key">Process management</td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td><td><ul><li><code>load_process_chunk()</code></li><li><code>mark_process_ready_with_arguments()</code></li><li><code>list_processes()</code></li><li><code>unload_process_by_pid()</code></li><li><code>exit_process()</code></li><li><code>wait_for_process_by_pid()</code></li><li><code>current_process()</code></li><li><code>set_foreground_process()</code></li><li><code>send_signal_by_pid()</code></li><li><code>set_parent_death_signal()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key">Scheduling</td><td>Queue sleep, queue wakeup, yield</td><td><ul><li><code>sleep_on_wait_queue()</code></li><li><code>wakeup_wait_queue()</code></li><li><code>dispatcher_switch_from_context()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key">Process and shared memory</td><td>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</td><td><ul><li><code>process_heap_start()</code></li><li><code>process_heap_size()</code></li><li><code>handle_process_heap_full_exception()</code></li><li><code>open_shared_memory()</code></li><li><code>map_shared_memory()</code></li><li><code>unlink_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key">Descriptors and I/O</td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td><td><ul><li>Availability → 1</li><li>Descriptor operations + UART output</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key">Paths and directories</td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td><td><ul><li><code>change_working_directory()</code></li><li><code>get_working_directory()</code></li><li><code>make_host_directory()</code></li><li><code>read_host_directory()</code></li><li><code>unlink_host_file()</code></li><li><code>remove_host_directory()</code></li><li><code>move_host_path()</code></li><li><code>touch_host_file()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27%" /><col style="width:73%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">System control</td><td>Shutdown, reboot</td></tr>
+<tr data-source-row="2"><td class="table-key">Process management</td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">Scheduling</td><td>Queue sleep, queue wakeup, yield</td></tr>
+<tr data-source-row="4"><td class="table-key">Process and shared memory</td><td>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</td></tr>
+<tr data-source-row="5"><td class="table-key">Descriptors and I/O</td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td></tr>
+<tr data-source-row="6"><td class="table-key">Paths and directories</td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4385,12 +4364,12 @@ void exit_process(int status) {
 <!-- README_ASSET table-3215 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3215:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:15.25%" /><col style="width:26.18%" /><col style="width:36.48%" /><col style="width:22.09%" /></colgroup><thead><tr><th>Condition</th><th>Trigger</th><th>Entry or reported cause</th><th>PicoOS handling</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Division or modulo by zero</td><td>DIV/DIVI/MOD/MODI with zero divisor</td><td>Cause 1; IVT entry 3</td><td><ul><li>Userspace → terminate</li><li>Kernel → panic + shutdown</li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key">Stack overflow</td><td>SP decreased below active boundary</td><td>Cause 2; IVT entry 3</td><td><ul><li>Process overflow → terminate</li><li>Kernel overflow → shutdown</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key">Illegal instruction</td><td>Invalid/unsupported decoded ReTI instruction</td><td>Cause 3; IVT entry 3</td><td>Same process/kernel fault policy</td></tr>
-<tr data-source-row="4"><td class="table-key">Process heap full</td><td><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</td><td><span class="source-link"><code>require_process_heap_allocation()</code></span> invokes the process-heap-full syscall</td><td>Print heap-full diagnostic; terminate process</td></tr>
-<tr data-source-row="5"><td class="table-key">Kernel heap full</td><td><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</td><td><span class="source-link"><code>require_kernel_heap_allocation()</code></span> calls the panic handler directly</td><td>UART panic; shut down kernel</td></tr>
-<tr data-source-row="6"><td class="table-key">Process and Shared Data Heap exhausted</td><td>No contiguous Process/Shared Data Payload</td><td>Returns <span class="source-link"><code>PSDMALLOC_INVALID_START</code></span>, no CPU exception is raised</td><td><ul><li>Load fails / shm_open returns −1</li><li>Process + kernel continue</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24%" /><col style="width:40%" /><col style="width:36%" /></colgroup><thead><tr><th>Condition</th><th>Trigger</th><th>PicoOS handling</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Division or modulo by zero</td><td>DIV/DIVI/MOD/MODI with zero divisor</td><td><ul><li>Userspace → terminate</li><li>Kernel → panic + shutdown</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key">Stack overflow</td><td>SP decreased below active boundary</td><td><ul><li>Process overflow → terminate</li><li>Kernel overflow → shutdown</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key">Illegal instruction</td><td>Invalid/unsupported decoded ReTI instruction</td><td>Same process/kernel fault policy</td></tr>
+<tr data-source-row="4"><td class="table-key">Process heap full</td><td><span class="source-link"><code>malloc()</code></span> or <span class="source-link"><code>realloc()</code></span> cannot satisfy a positive-size allocation</td><td>Print heap-full diagnostic; terminate process</td></tr>
+<tr data-source-row="5"><td class="table-key">Kernel heap full</td><td><span class="source-link"><code>kmalloc()</code></span> or <span class="source-link"><code>krealloc()</code></span> cannot satisfy a positive-size allocation</td><td>UART panic; shut down kernel</td></tr>
+<tr data-source-row="6"><td class="table-key">Process and Shared Data Heap exhausted</td><td>No contiguous Process/Shared Data Payload</td><td><ul><li>Load fails / shm_open returns −1</li><li>Process + kernel continue</li></ul></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4485,7 +4464,7 @@ struct Heap {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 210fr) minmax(0, 180fr)">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 245fr) minmax(0, 145fr)">
 
 <div class="readme-artifacts composition-panel layout-single">
 
@@ -4503,10 +4482,10 @@ struct Heap {
 <!-- README_ASSET table-3280 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3280:1,2,3,4">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:22.02%" /><col style="width:24.06%" /><col style="width:53.93%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>BlockHeader.size</code></span></td><td>Usable cells; excludes header</td><td><ul><li><code>heap_init_region()</code></li><li><code>heap_alloc_from()</code></li><li><code>heap_split_block()</code></li><li><code>heap_merge_free_blocks()</code></li><li><code>heap_realloc_from()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>BlockHeader.free</code></span></td><td>Whether payload can satisfy allocation</td><td><ul><li><code>heap_init_region()</code></li><li><code>heap_split_block()</code></li><li><code>heap_alloc_from()</code></li><li><code>heap_free_from()</code></li><li><code>heap_realloc_from()</code></li><li><code>heap_merge_free_blocks()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>BlockHeader.next</code></span></td><td>Next header or NULL</td><td><ul><li><code>heap_init_region()</code></li><li><code>heap_alloc_from()</code></li><li><code>heap_split_block()</code></li><li><code>heap_merge_free_blocks()</code></li><li><code>heap_realloc_from()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>Heap.first_block</code></span></td><td>First header; no separate block array</td><td><ul><li><code>heap_init_region()</code></li><li><code>heap_alloc_from()</code></li><li><code>heap_merge_free_blocks()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40%" /><col style="width:60%" /></colgroup><thead><tr><th>Field</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>BlockHeader.size</code></span></td><td>Usable cells; excludes header</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>BlockHeader.free</code></span></td><td>Whether payload can satisfy allocation</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>BlockHeader.next</code></span></td><td>Next header or NULL</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>Heap.first_block</code></span></td><td>First header; no separate block array</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -4713,6 +4692,8 @@ struct Heap {
 </div>
 
 ---
+transition: fade
+---
 
 <!-- SLIDE_ID b2386cf5-167b-49c5-af14-3d616eadad4b -->
 <!-- SOURCE Pico-OS/README.md#3631-initial-state-and-first-fit-search -->
@@ -4736,6 +4717,8 @@ struct Heap {
 
 </div>
 
+---
+transition: fade
 ---
 
 <!-- SLIDE_ID 0fb657aa-1ab6-4a86-b8a4-038d93abd916 -->
@@ -4761,6 +4744,8 @@ struct Heap {
 </div>
 
 ---
+transition: fade
+---
 
 <!-- SLIDE_ID 7c9a95c6-5c7c-48c5-a3c6-471fd91c460e -->
 <!-- SOURCE Pico-OS/README.md#36331-mark-d-free -->
@@ -4784,6 +4769,8 @@ struct Heap {
 
 </div>
 
+---
+transition: fade
 ---
 
 <!-- SLIDE_ID 646df371-c8ac-4fc8-b3bf-44b8b26ad107 -->
@@ -4809,6 +4796,8 @@ struct Heap {
 </div>
 
 ---
+transition: fade
+---
 
 <!-- SLIDE_ID f0d1be1f-687d-45e6-9dbc-688e50edcfe1 -->
 <!-- SOURCE Pico-OS/README.md#36341-mark-c-free -->
@@ -4833,6 +4822,8 @@ struct Heap {
 </div>
 
 ---
+transition: fade
+---
 
 <!-- SLIDE_ID 46ef18f2-0a25-448b-b876-dd6b2bed9c58 -->
 <!-- SOURCE Pico-OS/README.md#36342-first-merge-at-b -->
@@ -4856,6 +4847,8 @@ struct Heap {
 
 </div>
 
+---
+transition: fade
 ---
 
 <!-- SLIDE_ID bd958652-9053-43f0-b683-d10efc9475ce -->
@@ -4982,15 +4975,15 @@ struct ProcessControlBlock {
 <!-- README_ASSET table-3653 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3653:1,2,3,4,5,6,7,8,9">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:21.47%" /><col style="width:22.16%" /><col style="width:56.37%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>pid</code></span></td><td>Stable process ID</td><td><ul><li><code>create_process()</code></li><li><code>find_process_by_pid()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>state</code></span></td><td><ul><li>NEW / READY / RUNNING</li><li>BLOCKED / STOPPED / ZOMBIE</li></ul></td><td><ul><li><code>create_process()</code></li><li><code>mark_process_ready_with_arguments()</code></li><li><code>stop_process()</code></li><li><code>continue_process()</code></li><li><code>dispatcher_switch_to_process()</code></li><li><code>terminate_process()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></td><td>Absolute Process Payload base + size</td><td><ul><li><code>create_process()</code></li><li><code>remove_process()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></td><td>Relative userspace heap bounds</td><td><ul><li><code>create_process()</code></li><li><code>process_heap_start()</code></li><li><code>process_heap_size()</code></li><li><code>process_stack_boundary()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>binary_path</code></span></td><td>Owned executable path; later argv[0]</td><td><ul><li><code>create_process()</code></li><li><code>store_process_arguments()</code></li><li><code>list_processes()</code></li><li><code>remove_process()</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>working_directory</code></span></td><td>Owned absolute path; inherited or /</td><td><ul><li><code>create_process()</code></li><li><code>build_process_path()</code></li><li><code>change_working_directory()</code></li><li><code>remove_process()</code></li></ul></td></tr>
-<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>activation</code></span></td><td>Embedded saved CPU context</td><td><ul><li><code>create_process()</code></li><li><code>store_process_arguments()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>complete_pending_terminal_read()</code></li><li><code>dispatcher_jump_to_process()</code></li></ul></td></tr>
-<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>file_descriptors</code></span></td><td>Owned descriptor table</td><td><ul><li><code>create_process()</code></li><li><code>create_file_descriptor_table()</code></li><li><code>mark_process_ready_with_arguments()</code></li><li><code>remove_process()</code></li></ul></td></tr>
-<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>waiting_status_ptr</code></span></td><td>Pointer into suspended waitpid frame</td><td><ul><li><code>NULL</code></li><li><code>create_process()</code></li><li><code>wait_for_process_by_pid()</code></li><li><code>wake_parent_waiting_for_process()</code></li><li><code>notify_process_stopped()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:40%" /><col style="width:60%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>pid</code></span></td><td>Stable process ID</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>state</code></span></td><td><ul><li>NEW / READY / RUNNING</li><li>BLOCKED / STOPPED / ZOMBIE</li></ul></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>base_address</code></span>, <span class="source-link"><code>size</code></span></td><td>Absolute Process Payload base + size</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>heap_start</code></span>, <span class="source-link"><code>heap_size</code></span></td><td>Relative userspace heap bounds</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>binary_path</code></span></td><td>Owned executable path; later argv[0]</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>working_directory</code></span></td><td>Owned absolute path; inherited or /</td></tr>
+<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>activation</code></span></td><td>Embedded saved CPU context</td></tr>
+<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>file_descriptors</code></span></td><td>Owned descriptor table</td></tr>
+<tr data-source-row="9"><td class="table-key"><span class="source-link"><code>waiting_status_ptr</code></span></td><td>Pointer into suspended waitpid frame</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5014,15 +5007,15 @@ struct ProcessControlBlock {
 <!-- README_ASSET table-3653 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-3653:10,11,12,13,14,15,16,17,18">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.37%" /><col style="width:33.99%" /><col style="width:39.64%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><span class="source-link"><code>waiters</code></span></td><td>Embedded FIFO of waiting parents</td><td><ul><li><code>create_process()</code></li><li><code>wait_for_process_by_pid()</code></li><li><code>wake_parent_waiting_for_process()</code></li><li><code>notify_process_stopped()</code></li></ul></td></tr>
-<tr data-source-row="11"><td class="table-key"><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></td><td>Owning queue + intrusive successor</td><td><ul><li><code>create_process()</code></li><li><code>enqueue_current_process_on_wait_queue()</code></li><li><code>enqueue_terminal_reader()</code></li><li><code>wakeup_wait_queue()</code></li><li><code>remove_from_wait_queue()</code></li></ul></td></tr>
-<tr data-source-row="12"><td class="table-key"><span class="source-link"><code>next</code></span></td><td>Global process-list successor</td><td><ul><li><code>create_process()</code></li><li><code>scheduler_next_process()</code></li><li><code>find_process_by_pid()</code></li><li><code>remove_process()</code></li></ul></td></tr>
-<tr data-source-row="13"><td class="table-key"><span class="source-link"><code>shared_memory_attachments</code></span></td><td>Head of process mapping records</td><td><ul><li><code>create_process()</code></li><li><code>map_shared_memory()</code></li><li><code>remove_process()</code></li><li><code>release_process_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></td><td>Parent identity + parent-death signal</td><td><ul><li><code>create_process()</code></li><li><code>set_parent_death_signal()</code></li><li><code>orphan_and_signal_children()</code></li></ul></td></tr>
-<tr data-source-row="15"><td class="table-key"><span class="source-link"><code>exit_status</code></span></td><td>Retained zombie termination status</td><td><ul><li><code>create_process()</code></li><li><code>terminate_process()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
-<tr data-source-row="16"><td class="table-key"><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></td><td>Stop/prior-state/deferred-termination bookkeeping</td><td><ul><li><code>create_process()</code></li><li><code>stop_process()</code></li><li><code>continue_process()</code></li><li><code>send_signal_to_process()</code></li><li><code>prepare_process_termination()</code></li></ul></td></tr>
-<tr data-source-row="17"><td class="table-key"><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td><td>Retained buffer + requested count</td><td><ul><li><code>NULL</code></li><li><code>create_process()</code></li><li><code>begin_terminal_read()</code></li><li><code>complete_pending_terminal_read()</code></li><li><code>resume_pending_terminal_read()</code></li></ul></td></tr>
-<tr data-source-row="18"><td class="table-key"><span class="source-link"><code>pending_load</code></span></td><td>Metadata + progress of pending load</td><td><ul><li><code>NULL</code></li><li><code>create_process()</code></li><li><code>begin_process_load()</code></li><li><code>continue_process_load()</code></li><li><code>finish_process_load()</code></li><li><code>cancel_process_load()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48%" /><col style="width:52%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="10"><td class="table-key"><span class="source-link"><code>waiters</code></span></td><td>Embedded FIFO of waiting parents</td></tr>
+<tr data-source-row="11"><td class="table-key"><span class="source-link"><code>waiting_queue_ptr</code></span>, <span class="source-link"><code>wait_next</code></span></td><td>Owning queue + intrusive successor</td></tr>
+<tr data-source-row="12"><td class="table-key"><span class="source-link"><code>next</code></span></td><td>Global process-list successor</td></tr>
+<tr data-source-row="13"><td class="table-key"><span class="source-link"><code>shared_memory_attachments</code></span></td><td>Head of process mapping records</td></tr>
+<tr data-source-row="14"><td class="table-key"><span class="source-link"><code>parent_pid</code></span>, <span class="source-link"><code>parent_death_signal</code></span></td><td>Parent identity + parent-death signal</td></tr>
+<tr data-source-row="15"><td class="table-key"><span class="source-link"><code>exit_status</code></span></td><td>Retained zombie termination status</td></tr>
+<tr data-source-row="16"><td class="table-key"><span class="source-link"><code>stop_signal</code></span>, <span class="source-link"><code>stopped_from_state</code></span>, <span class="source-link"><code>pending_termination_signal</code></span></td><td>Stop/prior-state/deferred-termination bookkeeping</td></tr>
+<tr data-source-row="17"><td class="table-key"><span class="source-link"><code>pending_terminal_read_buffer</code></span>, <span class="source-link"><code>pending_terminal_read_count</code></span></td><td>Retained buffer + requested count</td></tr>
+<tr data-source-row="18"><td class="table-key"><span class="source-link"><code>pending_load</code></span></td><td>Metadata + progress of pending load</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5095,9 +5088,7 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 250fr) minmax(0, 110fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-3727 -->
 <ReadmeVisual kind="image" :width="980">
@@ -5105,20 +5096,6 @@ struct ProcessControlBlock {
 <img src="/readme/memory-process-list.svg" alt="Kernel globals and three linked PCBs in SRAM, followed by a process-list view of those same PCB objects with process_list_head, process_list_tail, and active_process pointing to PCB 1, PCB 3, and PCB 2" />
 
 </ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET table-3744 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-3744:1,2">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.86%" /><col style="width:27.65%" /><col style="width:41.50%" /></colgroup><thead><tr><th>List</th><th>Insertion policy</th><th>Pointers and linking cost</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">PCB list</td><td>Append at tail</td><td>Head for traversal; tail → O(1)</td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry</code></span> registry</td><td>Prepend at head</td><td>Head insertion → O(1)</td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -5159,10 +5136,10 @@ struct ProcessControlBlock {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li><strong>load():</strong> receive the program into a reserved Process Payload</li>
-<li><strong>Reception:</strong> caller owns transfer record; no child PCB</li>
-<li><strong>After reception:</strong> create the child PCB and return its PID</li>
-<li><strong>Initial state:</strong> NEW; run() prepares and starts the child</li></ul></div>
+<div class="readme-list"><ul><li><strong>Receive image:</strong> reserve a Process Payload and load the program</li>
+<li><strong>During transfer:</strong> caller owns <code>ProcessLoad</code>; no child PCB yet</li>
+<li><strong>On success:</strong> create the child PCB and return its PID</li>
+<li><strong>State NEW:</strong> <code>run()</code> prepares the child for scheduling</li></ul></div>
 
 </div>
 
@@ -5310,11 +5287,11 @@ struct ProcessControlBlock {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET list-3919 -->
-<div class="readme-list"><ul><li>Pack PID, <strong>arguments</strong>, environment</li>
-<li>Require <strong>NEW</strong> PCB</li>
+<div class="readme-list run-steps"><ol><li>Pack PID, <strong>arguments</strong>, environment<ul><li><code>NULL</code> → caller’s environment</li><li>Custom array → replacement environment</li></ul></li>
+<li>Find PCB; require <strong>NEW</strong></li>
 <li>Copy <strong>inheritable descriptors</strong></li>
 <li>Build child stack; update SP/<strong>BAF</strong></li>
-<li>NEW → <strong>READY</strong></li></ul></div>
+<li>NEW → <strong>READY</strong>; return success</li></ol></div>
 
 </div>
 <div class="readme-list prose-summary"><ul><li><strong>Arguments:</strong> spaces/tabs; quoted whitespace preserved</li>
@@ -5483,31 +5460,7 @@ startup_cell_count = 1 + 1 + argc + 1 + envc + 1
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-4063+code-4079" style="--readme-columns:minmax(0, 57fr) minmax(0, 43fr);">
-
-<!-- README_ASSET code-4063 -->
-<ReadmeVisual kind="code" :width="560.0000000000001" data-code-source="code-4063" data-code-part="1">
-
-<!-- README_CODE_PART code-4063 lines=1-10 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>add.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-#include "library/stdlib/stdlib.header"
-
-int main(int argc, char **argv) {
-    char *enabled = getenv("X");
-
-    if (argc == 3 && enabled != NULL && atoi(enabled) == 1) {
-        return atoi(argv[1]) + atoi(argv[2]);
-    }
-    return 0;
-}
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-4063+code-4079" style="--readme-columns:minmax(0, 48fr) minmax(0, 52fr);">
 
 <!-- README_ASSET code-4079 -->
 <ReadmeVisual kind="code" :width="422.45614035087726" data-code-source="code-4079" data-code-part="1">
@@ -5529,6 +5482,30 @@ int main(void) {
     environment[2] = NULL;
     run(pid, "2 3", environment);
     return waitpid(pid);
+}
+```
+
+</div>
+
+</ReadmeVisual>
+
+<!-- README_ASSET code-4063 -->
+<ReadmeVisual kind="code" :width="560.0000000000001" data-code-source="code-4063" data-code-part="1">
+
+<!-- README_CODE_PART code-4063 lines=1-10 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>add.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
+#include "library/stdlib/stdlib.header"
+
+int main(int argc, char **argv) {
+    char *enabled = getenv("X");
+
+    if (argc == 3 && enabled != NULL && atoi(enabled) == 1) {
+        return atoi(argv[1]) + atoi(argv[2]);
+    }
+    return 0;
 }
 ```
 
@@ -5585,7 +5562,7 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>fork / load + run</b><span><strong>Unix fork:</strong> clone parent process · <strong>PicoOS:</strong> fresh image + copied state</span></aside>
+<aside class="context-note"><b>fork + exec / load + run</b><span><strong>Unix:</strong> clone, then replace image · <strong>PicoOS:</strong> load a fresh child image, then prepare inherited state</span></aside>
 
 </div>
 
@@ -5777,12 +5754,12 @@ struct SharedMemoryAttachment {
 <!-- README_ASSET table-4295 -->
 <ReadmeVisual kind="table" :width="948" data-table-key="table-4295:1,2,3,4,5,6">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:36.63%" /><col style="width:21.37%" /><col style="width:42.01%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.name</code></span></td><td><ul><li>Owned lookup name</li><li>Unlink → free + NULL</li></ul></td><td><ul><li><code>open_shared_memory()</code></li><li><code>find_shared_memory_by_name()</code></li><li><code>unlink_shared_memory()</code></li><li><code>destroy_shared_memory_entry()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.id</code></span></td><td>Numeric open/map handle</td><td><ul><li><code>open_shared_memory()</code></li><li><code>find_shared_memory_by_id()</code></li><li><code>map_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.address</code></span></td><td>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</td><td><ul><li><code>open_shared_memory()</code></li><li><code>map_shared_memory()</code></li><li><code>destroy_shared_memory_entry()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></td><td>Attachment count, not distinct PID count</td><td><ul><li><code>open_shared_memory()</code></li><li><code>map_shared_memory()</code></li><li><code>release_process_shared_memory()</code></li><li><code>unlink_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></td><td>Defers destruction until the last attachment disappears</td><td><ul><li><code>open_shared_memory()</code></li><li><code>unlink_shared_memory()</code></li><li><code>release_process_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.next</code></span></td><td>Link to the next entry in the kernel's linked list</td><td><ul><li><code>open_shared_memory()</code></li><li><code>find_shared_memory_by_name()</code></li><li><code>find_shared_memory_by_id()</code></li><li><code>destroy_shared_memory_entry()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48%" /><col style="width:52%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.name</code></span></td><td><ul><li>Owned lookup name</li><li>Unlink → free + NULL</li></ul></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.id</code></span></td><td>Numeric open/map handle</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.address</code></span></td><td>Absolute start of the <span class="source-link"><code>PSDMalloc()</code></span> shared-memory data region</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.reference_count</code></span></td><td>Attachment count, not distinct PID count</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.unlink_requested</code></span></td><td>Defers destruction until the last attachment disappears</td></tr>
+<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>SharedMemoryEntry.next</code></span></td><td>Link to the next entry in the kernel's linked list</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5793,8 +5770,8 @@ struct SharedMemoryAttachment {
 <!-- README_ASSET table-4307 -->
 <ReadmeVisual kind="table" :width="766.8" data-table-key="table-4307:1,2">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33.33%" /><col style="width:30.13%" /><col style="width:36.54%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></td><td>Non-owning entry pointer; contributes one reference</td><td><ul><li><code>map_shared_memory()</code></li><li><code>release_process_shared_memory()</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.next</code></span></td><td>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</td><td><ul><li><code>map_shared_memory()</code></li><li><code>release_process_shared_memory()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:48%" /><col style="width:52%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.entry</code></span></td><td>Non-owning entry pointer; contributes one reference</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>SharedMemoryAttachment.next</code></span></td><td>Link in one PCB's <span class="source-link"><code>shared_memory_attachments</code></span> list</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -5911,18 +5888,14 @@ struct SharedMemoryAttachment {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 316fr) minmax(0, 316fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-columns shared-memory-examples" data-column-key="assets:code-4383+code-4415" style="--readme-columns:minmax(0, 55fr) minmax(0, 45fr);">
 
 <!-- README_ASSET code-4383 -->
-<div class="code-columns" data-column-key="code:code-4383" style="--readme-columns:minmax(0, 65fr) minmax(0, 35fr);--source-aspect:4.772452303396928">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-4383" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="936.7428571428571" data-code-source="code-4383" data-code-part="1">
-
-<!-- README_CODE_PART code-4383 lines=1-13 -->
+<!-- README_CODE_PART code-4383 lines=1-26 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>Shared-memory launcher example</span><span class="code-range">lines 1–13</span></div>
+<div class="readme-code-header" v-pre><span>Shared-memory launcher example</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 // dependencies: ../../library/unistd/libunistd.reti_blocks ../../library/sys/wait/libwait.reti_blocks ../../library/sys/mman/libmman.reti_blocks
@@ -5938,19 +5911,6 @@ int main(void) {
     int result = 1;
 
     shared_memory_id = shm_open("shared-value", 1);
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="504.4" data-code-source="code-4383" data-code-part="2">
-
-<!-- README_CODE_PART code-4383 lines=14-26 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>Shared-memory launcher example</span><span class="code-range">lines 14–26</span></div>
-
-```c {lines:false}
     shared_value = (int *)mmap(shared_memory_id);
     shared_value[0] = 7;
 
@@ -5969,12 +5929,6 @@ int main(void) {
 </div>
 
 </ReadmeVisual>
-
-</div>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
 
 <!-- README_ASSET code-4415 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-4415" data-code-part="1">
@@ -6007,8 +5961,6 @@ int main(int argc, char **argv) {
 
 </div>
 
-</div>
-
 ---
 
 <!-- SLIDE_ID f8d6bae2-637d-4220-b86f-5834b9a56216 -->
@@ -6025,9 +5977,9 @@ int main(int argc, char **argv) {
 <!-- README_ASSET table-4444 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4444:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23.28%" /><col style="width:10.35%" /><col style="width:16.57%" /><col style="width:35.66%" /><col style="width:14.15%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>open_shared_memory()</code></td><td>ID or −1</td><td>Find/create named shared entry</td><td><ul><li><code>find_shared_memory_by_name()</code></li><li><code>kmalloc()</code></li><li><code>copy_shared_memory_name()</code></li><li><code>PSDMalloc()</code></li><li><code>kfree()</code></li></ul></td><td><code>shm_open()</code></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>map_shared_memory()</code></td><td>Address or NULL</td><td>Attach process; return shared address</td><td><ul><li><code>current_process()</code></li><li><code>find_shared_memory_by_id()</code></li><li><code>kmalloc()</code></li></ul></td><td><code>mmap()</code></td></tr>
-<tr data-source-row="3"><td class="table-key"><code>unlink_shared_memory()</code></td><td>0 / −1</td><td>Remove name; defer final release</td><td><ul><li><code>find_shared_memory_by_name()</code></li><li><code>kfree()</code></li><li><code>destroy_shared_memory_entry()</code></li></ul></td><td><code>shm_unlink()</code></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:33%" /><col style="width:14%" /><col style="width:34%" /><col style="width:19%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>open_shared_memory()</code></td><td>ID or −1</td><td>Find/create named shared entry</td><td><code>shm_open()</code></td></tr>
+<tr data-source-row="2"><td class="table-key"><code>map_shared_memory()</code></td><td>Address or NULL</td><td>Attach process; return shared address</td><td><code>mmap()</code></td></tr>
+<tr data-source-row="3"><td class="table-key"><code>unlink_shared_memory()</code></td><td>0 / −1</td><td>Remove name; defer final release</td><td><code>shm_unlink()</code></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6156,13 +6108,11 @@ int main(int argc, char **argv) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-4607 -->
-<div class="code-columns" data-column-key="code:code-4607" style="--readme-columns:minmax(0, 63fr) minmax(0, 37fr);--source-aspect:2.613320017477062">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-4607" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="697.7675675675677" data-code-source="code-4607" data-code-part="1">
-
-<!-- README_CODE_PART code-4607 lines=1-19 -->
+<!-- README_CODE_PART code-4607 lines=1-38 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/scheduler.picoc</span><span class="code-range">lines 1–19</span></div>
+<div class="readme-code-header" v-pre><span>kernel/scheduler.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 bool scheduler_can_run(struct ProcessControlBlock *process) {
@@ -6184,19 +6134,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
         start = first_process();
     } else {
         start = current_process()->next;
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="409.80000000000007" data-code-source="code-4607" data-code-part="2">
-
-<!-- README_CODE_PART code-4607 lines=20-38 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/scheduler.picoc</span><span class="code-range">lines 20–38</span></div>
-
-```c {lines:false}
     }
 
     candidate = start;
@@ -6221,8 +6158,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 </div>
 
 </ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -6809,24 +6744,14 @@ struct wait_queue {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-stacked" style="--readme-rows:minmax(0, 287fr) minmax(0, 401fr)">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET table-5322 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-5322:1,2,3">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:17.23%" /><col style="width:49.63%" /><col style="width:33.14%" /></colgroup><thead><tr><th>Public/library operation</th><th>Syscall and kernel call path</th><th>Completion path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>sleep(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></td><td>An event owner reaches <span class="source-link"><code>wakeup_wait_queue(wq)</code></span>, often through <span class="source-link"><code>wakeup(wq)</code></span>.</td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>wakeup(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></td><td>Clear links; READY or completed beneath STOPPED</td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>waitpid(pid)</code></span></td><td>WAITPID → validate child → sleep_on_wait_queue</td><td><ul><li>Child exits/stops → status write</li><li>Same FIFO wakeup primitive</li></ul></td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-<!-- README_ASSET table-5331 -->
-<ReadmeVisual kind="table" :width="1122.1999999999998" data-table-key="table-5331:1,2,3,5">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30.81%" /><col style="width:9.62%" /><col style="width:8.16%" /><col style="width:30.81%" /><col style="width:20.58%" /></colgroup><thead><tr><th>Kernel function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Library entry</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><code>wait_for_process_by_pid()</code></td><td>Completion flag; userspace IN2 = 1</td><td>Validate child; collect or block</td><td><ul><li><code>current_process()</code></li><li><code>find_process_by_pid()</code></li><li><code>remove_process()</code></li><li><code>sleep_on_wait_queue()</code></li></ul></td><td><ul><li><code>waitpid()</code></li><li><code>SYSCALL_WAITPID</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><code>sleep_on_wait_queue()</code></td><td>No value; later resumes via RTI</td><td>Enqueue caller; BLOCKED; dispatch</td><td><ul><li><code>enqueue_current_process_on_wait_queue()</code></li><li><code>dispatcher_switch_from_context()</code></li></ul></td><td><ul><li><code>sleep()</code></li><li><code>SYSCALL_SLEEP</code></li><li><code>waitpid()</code></li><li><code>wait_for_process_by_pid()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><code>wakeup_wait_queue()</code></td><td>true if woke; false if empty</td><td>Wake FIFO head</td><td>None</td><td><ul><li><code>wakeup()</code></li><li><code>SYSCALL_WAKEUP</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><code>enqueue_current_process_on_wait_queue()</code></td><td>No value</td><td>Link current PCB into FIFO</td><td><code>current_process()</code></td><td><ul><li><code>sleep()</code></li><li><code>waitpid()</code></li><li><code>sleep_on_wait_queue()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25%" /><col style="width:75%" /></colgroup><thead><tr><th>Public/library operation</th><th>Syscall and kernel call path</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>sleep(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_SLEEP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>sleep_on_wait_queue(wq, caller_context)</code></span> → <span class="source-link"><code>enqueue_current_process_on_wait_queue(wq)</code></span></td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>wakeup(wq)</code></span></td><td><span class="source-link"><code>SYSCALL_WAKEUP</code></span> → <span class="source-link"><code>handle_syscall()</code></span> → <span class="source-link"><code>wakeup_wait_queue(wq)</code></span></td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>waitpid(pid)</code></span></td><td>WAITPID → validate child → sleep_on_wait_queue</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9181,16 +9106,7 @@ struct PicoFile {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:table-7026+code-7036" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
-
-<!-- README_ASSET table-7026 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-7026:1,2,3">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:26.36%" /><col style="width:18.93%" /><col style="width:18.97%" /><col style="width:16.85%" /><col style="width:18.88%" /></colgroup><thead><tr><th>Bootloader function</th><th>Result</th><th>Effects</th><th>Calls</th><th>Called by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>_start(void)</code></span></td><td>Naked entry → start_process</td><td>Install EPROM CS/DS + temporary SRAM stack</td><td><code>boot_main()</code></td><td><strong>Machine entry:</strong> PC 0 at boot. Kernel <span class="source-link"><code>reboot()</code></span></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>boot_main(void)</code></span></td><td>Load kernel; install segments; transfer control</td><td>Read five-word header; copy kernel payload</td><td><ul><li>UART host load; receive words</li><li>Copy to SRAM; jump to kernel</li></ul></td><td><strong>Bootloader functions:</strong> <span class="source-link"><code>_start()</code></span></td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>start_loaded_kernel(void)</code></span></td><td>Does not return</td><td>Relative → absolute segments; replace boot stack</td><td><ul><li><code>_start</code></li><li><code>main()</code></li></ul></td><td><strong>Bootloader functions:</strong> <span class="source-link"><code>boot_main()</code></span></td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7036 -->
 <ReadmeVisual kind="code" :width="560" data-code-source="code-7036" data-code-part="1">
@@ -9460,13 +9376,11 @@ void _start(void) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7173 -->
-<div class="code-columns" data-column-key="code:code-7173" style="--readme-columns:minmax(0, 40fr) minmax(0, 60fr);--source-aspect:3.590909090909091">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-7173" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="401.19999999999993" data-code-source="code-7173" data-code-part="1">
-
-<!-- README_CODE_PART code-7173 lines=1-12 -->
+<!-- README_CODE_PART code-7173 lines=1-24 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/kernel.picoc</span><span class="code-range">lines 1–12</span></div>
+<div class="readme-code-header" v-pre><span>kernel/kernel.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 int main(void) {
@@ -9481,19 +9395,6 @@ int main(void) {
     initialize_shared_memory();
     if (dma_is_active()) {
         initialize_dma();
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="601.8" data-code-source="code-7173" data-code-part="2">
-
-<!-- README_CODE_PART code-7173 lines=13-24 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/kernel.picoc</span><span class="code-range">lines 13–24</span></div>
-
-```c {lines:false}
     }
     interrupt_controller_initialize();
     init_pid = load_process("system/init.bin", loading_bar_enabled);
@@ -9511,8 +9412,6 @@ int main(void) {
 </div>
 
 </ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -10871,13 +10770,11 @@ bool redirect_standard_input(char *path) {
 <div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-8176 -->
-<div class="code-columns" data-column-key="code:code-8176" style="--readme-columns:minmax(0, 42fr) minmax(0, 58fr);--source-aspect:3.5898867690398633">
+<ReadmeVisual kind="code" :width="1080" data-code-source="code-8176" data-code-part="1">
 
-<ReadmeVisual kind="code" :width="452.8" data-code-source="code-8176" data-code-part="1">
-
-<!-- README_CODE_PART code-8176 lines=1-13 -->
+<!-- README_CODE_PART code-8176 lines=1-26 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>user/shell.picoc</span><span class="code-range">lines 1–13</span></div>
+<div class="readme-code-header" v-pre><span>user/shell.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 bool run_pipeline(char *command, int pipeline) {
@@ -10893,19 +10790,6 @@ bool run_pipeline(char *command, int pipeline) {
             right_command,
             "<",
             shell_pipe_path,
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="625.2952380952381" data-code-source="code-8176" data-code-part="2">
-
-<!-- README_CODE_PART code-8176 lines=14-26 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>user/shell.picoc</span><span class="code-range">lines 14–26</span></div>
-
-```c {lines:false}
             find_output_redirection(right_command),
             shell_pipe_right_command
         )) {
@@ -10924,8 +10808,6 @@ bool run_pipeline(char *command, int pipeline) {
 </div>
 
 </ReadmeVisual>
-
-</div>
 
 </div>
 

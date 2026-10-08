@@ -75,3 +75,9 @@
   grid-template-rows: repeat(4, auto);
   column-gap: 24px;
 }
+
+/* One neutral heading above two contiguous caller/callee color bands. */
+.readme-table.stack-frame-table th { background: #f4f8f8; color: var(--ink); }
+.run-steps li ul { font-size: 0.9em; margin-top: 0.2rem; }
+.run-steps li ul li { margin: 0.12rem 0; }
+.shared-memory-examples .readme-code-header { font-size: 12px; }
