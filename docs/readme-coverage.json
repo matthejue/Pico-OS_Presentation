@@ -4720,7 +4720,7 @@
       "sourceSha256": "cdb11cf05cb8f71fb850f80bb9f54a33998c04602ead123adb0ef983694cdda7",
       "slides": [
         {
-          "page": 163,
+          "page": 164,
           "layout": "single"
         }
       ],
@@ -4737,8 +4737,8 @@
       "sourceSha256": "260433f4e057fe7f7dbe0eda4ea38e536f7862fd1c7eb7feaf2f3bc45b1fcf40",
       "slides": [
         {
-          "page": 164,
-          "layout": "columns",
+          "page": 163,
+          "layout": "single",
           "codeParts": 1
         }
       ]
@@ -4750,32 +4750,36 @@
       "line": 4698,
       "endLine": 4704,
       "sourceSha256": "71e1e6cfa43c58ba839fbe5680388391fd75eaa23550bda0ad6dec0620fc74f1",
-      "slides": [
+      "slides": [],
+      "retainedRows": [],
+      "omittedRows": [
         {
-          "page": 164,
-          "layout": "columns",
-          "rows": [
-            1,
-            2,
-            3,
-            4,
-            5
-          ]
+          "row": 1,
+          "reason": "Saved process register table removed by request"
+        },
+        {
+          "row": 2,
+          "reason": "Saved process register table removed by request"
+        },
+        {
+          "row": 3,
+          "reason": "Saved process register table removed by request"
+        },
+        {
+          "row": 4,
+          "reason": "Saved process register table removed by request"
+        },
+        {
+          "row": 5,
+          "reason": "Saved process register table removed by request"
         }
       ],
-      "retainedRows": [
-        1,
-        2,
-        3,
-        4,
-        5
-      ],
-      "omittedRows": [],
       "displayColumns": [
         "Attribute",
         "Meaning",
         "Used by"
-      ]
+      ],
+      "excluded": "Saved process register table removed by request"
     },
     {
       "id": "list-4717",

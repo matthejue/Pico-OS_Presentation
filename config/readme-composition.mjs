@@ -76,8 +76,9 @@ export function compactGroups(groups, section) {
     return [single(parts[0]),composed(parts.slice(1).map(single),[240,100])]
   if (section.anchor==='1414-shell-test-example'&&types==='code,code,image')
     return [composed([{group:parts.slice(0,2),layout:'columns'},single(parts[2])],[240,100])]
-  if(section.anchor==='62-saved-process-registers'&&types==='image,code,table')
-    return [single(parts[0]),{group:parts.slice(1),layout:'columns'}]
+  // Show the register declaration before its stack/PCB diagram.
+  if(section.anchor==='62-saved-process-registers'&&types==='image,code')
+    return [single(parts[1]),single(parts[0])]
   if(section.anchor==='73-mutexes-with-test-and-set-and-wait-queues'&&types==='code,code,image,table,table')
     return [composed(parts.slice(0,2).map(single),[100,270]),single(parts[2]),{group:parts.slice(3),layout:'columns'}]
   if(section.anchor==='122-shell-startup-and-command-loop'&&types==='table,code,table')

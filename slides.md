@@ -6090,32 +6090,8 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET image-4677 -->
-<ReadmeVisual kind="image" :width="980">
-
-<img src="/readme/process-activation-record.svg" alt="PCB 1 contains activation at offsets 8 through 14, connected directly to enlarged in1, in2, acc, sp, baf, cs, and ds cells. active_process points to PCB 1. Saved sp points one cell below the saved PC on the process stack." />
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID d977a719-8394-49ef-a97d-232d5a623935 -->
-<!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
-
-# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
-
-## 6.2 Saved process registers (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-4686+table-4698" style="--readme-columns:minmax(0, 42fr) minmax(0, 58fr);">
-
 <!-- README_ASSET code-4686 -->
-<ReadmeVisual kind="code" :width="255" data-code-source="code-4686" data-code-part="1">
+<ReadmeVisual kind="code" :width="640" data-code-source="code-4686" data-code-part="1">
 
 <!-- README_CODE_PART code-4686 lines=1-9 -->
 <div class="readme-code">
@@ -6137,14 +6113,27 @@ struct ActivationRecord {
 
 </ReadmeVisual>
 
-<!-- README_ASSET table-4698 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-4698:1,2,3,4,5">
+</div>
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30%" /><col style="width:70%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>Argument/result registers at suspension</td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>sp</code></span></td><td>Below saved PC; PC at sp + 1</td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Interrupted PicoC frame base</td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base; instruction addresses</td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base; globals/static data</td></tr></tbody></table></div></div>
+</div>
+
+---
+
+<!-- SLIDE_ID d977a719-8394-49ef-a97d-232d5a623935 -->
+<!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
+
+# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
+
+## 6.2 Saved process registers (2)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<!-- README_ASSET image-4677 -->
+<ReadmeVisual kind="image" :width="980">
+
+<img src="/readme/process-activation-record.svg" alt="PCB 1 contains activation at offsets 8 through 14, connected directly to enlarged in1, in2, acc, sp, baf, cs, and ds cells. active_process points to PCB 1. Saved sp points one cell below the saved PC on the process stack." />
 
 </ReadmeVisual>
 

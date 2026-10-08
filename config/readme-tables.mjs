@@ -109,6 +109,11 @@ export function prepareTable(a) {
   const excluded='Mappings and priorities already shown in the interrupt-controller initialization diagram'
   return {...a,compactRows:[],retainedRows:[],omittedRows:rows.map(r=>({row:r.sourceRow,reason:excluded})),columns:labels.length,headerLabels:labels,excluded}
  }
+ // The saved-register table is omitted by request; retain the declaration and diagram.
+ if(a.id==='table-4698') {
+  const excluded='Saved process register table removed by request'
+  return {...a,compactRows:[],retainedRows:[],omittedRows:rows.map(r=>({row:r.sourceRow,reason:excluded})),columns:labels.length,headerLabels:labels,excluded}
+ }
  // GETPID directly calls current_process() in kernel/syscall.picoc; the
  // README's caller cell lists handle_syscall rather than the public wrapper.
  const selected=kernel?rows.filter(r=>/Library functions/.test(plain(r.cells.at(-1))) || nameOf(r.cells[0])==='current_process' || (labels[0]==='Kernel / Library Function'&&/\(Library only\)/.test(plain(r.cells[0])))):rows
