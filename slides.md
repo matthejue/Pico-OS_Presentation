@@ -9543,6 +9543,7 @@ int main(void) {
 
 <!-- SLIDE_ID 5bd4796d-e12d-4c12-8c43-d26718e7685e -->
 <!-- SOURCE Pico-OS/README.md#1134-shell-startup -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
 

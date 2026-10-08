@@ -1,0 +1,8 @@
+{
+  "slide_id": "576ccea6-9739-4681-bb90-2f6a9778eb39",
+  "slide_number": 101,
+  "slide_title": "2. Interrupts, system calls, preemption, and exceptions · 2.8 CPU exceptions and runtime errors · 2.8.1 CPU exception entry and registers · 2.8.1.3 Halting the kernel or terminating the process",
+  "source_anchor": "2813-halting-the-kernel-or-terminating-the-process",
+  "image_id": "31f1e04d-0a47-434d-beb5-257b1a69e952",
+  "filename": "slide-101-2-interrupts-system-calls-preemption-and-exceptions-2-8-cpu-exceptions-and-runti--576ccea6-9739-4681-bb90-2f6a9778eb39--screenshot-31f1e04d-0a47-434d-beb5-257b1a69e952.png"
+}
