@@ -5439,6 +5439,7 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID a77054e6-d573-437d-80af-29f8d4e6bf49 -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -6614,6 +6615,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID c3b9d33c-4dff-4d29-9232-c91eb5d52b9b -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -6639,6 +6641,7 @@ struct wait_queue {
 
 <!-- SLIDE_ID 748188f1-e8cf-4333-b1a3-7a72a6188e7c -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7421,6 +7424,7 @@ int begin_terminal_read(
 
 <!-- SLIDE_ID 4962f2d5-c05d-4f48-b108-fa72b64036c6 -->
 <!-- SOURCE Pico-OS/README.md#83-blocking-and-completing-terminal-reads -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7569,6 +7573,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 27948d7a-be13-4e04-bd3d-d050209f1897 -->
 <!-- SOURCE Pico-OS/README.md#86-file-descriptor-creation-inheritance-duplication-and-cleanup -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7653,6 +7658,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 2114e8f5-c77b-440b-aa55-3bc144fef61e -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7738,6 +7744,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 42ebfed2-abd0-46b7-b958-dd4f0972fc40 -->
 <!-- SOURCE Pico-OS/README.md#89-picoos-paths-working-directories-and-host-operations -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8035,6 +8042,7 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID fbcb268f-997c-40b7-a089-0e38a2ee9d1d -->
 <!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
 
