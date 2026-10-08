@@ -23,14 +23,6 @@
       "PicoOS adapts the stack convention to ReTI"
     ]
   ],
-  "116-program-sections-interrupt-table-entries-and-linker-placement": [
-    "System V ABI",
-    [
-      "**Binary contract:** lets compiled programs and libraries fit together",
-      "**Rules:** arguments, return values, registers, stack & file layout",
-      "**PicoOS:** adapts the calling convention to ReTI"
-    ]
-  ],
   "23-saved-interrupt-stack-frame": [
     "Linux comparison",
     [

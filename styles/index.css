@@ -647,6 +647,12 @@ html.selectable-text .slidev-layout * {
 .summary-cards > ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; list-style: none; padding: 0; }
 .summary-cards > ul > li { padding: 1rem; border: 1px solid var(--line-strong); border-top: 3px solid var(--cyan); background: #f4f8f8; font-size: 1rem; }
 .summary-cards > ul > li > ul { margin-top: 0.75rem; padding-left: 1.1rem; font-size: 0.93rem; }
+.call-cleanup-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; align-items: start; }
+.call-cleanup-panel.readme-list { padding: 1.15rem 1.25rem; border: 1px solid var(--line-strong); border-top: 3px solid var(--cyan); background: var(--machine-deep); font-size: 1rem; }
+.call-cleanup-heading { margin-bottom: 0.6rem; font-size: 1.25rem; }
+.call-cleanup-panel.readme-list > ul { padding-left: 1.15rem; }
+.call-cleanup-panel.readme-list li { margin: 0.65rem 0; }
+.call-cleanup-panel.readme-list li:last-child { margin-bottom: 0; }
 .layout-compact-stacked > .readme-list { flex: none; padding: 0; font-size: 0.9rem; }
 .layout-compact-stacked > .readme-list > ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.5rem; }
 .layout-compact-stacked > .readme-list li { margin: 0; }

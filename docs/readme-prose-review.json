@@ -423,10 +423,7 @@
         21,
         22
       ],
-      "summary": [
-        "**One epilogue** per ordinary function",
-        "**IN2:** result survives frame + argument cleanup"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {

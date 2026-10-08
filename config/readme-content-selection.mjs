@@ -13,7 +13,6 @@ export function visualOnlySection(section) {
 }
 
 const retainedFirstSlides = new Set([
-  '1132-shared-function-epilogue-and-return-values',
   '421-loading-a-process-load-library-call',
   '422-starting-a-process-run-library-call',
 ])

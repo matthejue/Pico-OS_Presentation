@@ -182,8 +182,8 @@ boxes filling their column width. Related assets share slides where they fit;
 application, library, and built-in catalogs use compact grids. The hardware
 slides include the setup, wiring, and README price estimates.
 
-In section 1, the first **Shared function epilogue and return values** slide
-retains its bullets; the later slides use code, tables, diagrams, and the
+In section 1, **Shared function epilogue and return values** and the
+later slides use code, tables, diagrams, and the
 recording without redundant bullet summaries. Eight former summary-only slides
 are omitted. Bullet lists inside tables retain their formatting, and
 standards and analogy remarks use compact plain-text notes. This selection is

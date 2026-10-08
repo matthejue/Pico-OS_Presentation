@@ -552,11 +552,15 @@ binary/basic_string.sections
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li>For <code>fun(arg1, arg2)</code>, first pushes <strong>arg2</strong>, then <strong>arg1</strong><ul class="requested-sub-bullet"><li><strong>Variadic functions:</strong> argument count doesn't matter</li></ul></li>
-<li><strong>Callee:</strong> pushes <strong>caller BAF</strong>; <strong>BAF → first local</strong></li>
-<li><strong>Return:</strong> restores <strong>BAF</strong>; result in <strong>IN2</strong></li>
-<li><strong>Caller:</strong> removes arguments after return</li>
-<li><strong>Callee handles BAF + arguments</strong> → elegant <strong>interrupt service routines</strong></li></ul></div>
+<div class="call-cleanup-panels"><section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading"><strong>Caller:</strong></div><ul><li>For <code>fun(arg1, arg2)</code>, evaluate and push <strong>arg2</strong>, then <strong>arg1</strong></li>
+<li>Push the <strong>return address</strong> to the continuation block</li>
+<li>Transfer control to the <strong>callee</strong></li>
+<li>Remove <strong>argument cells</strong> after return</li></ul></section>
+<section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading"><strong>Callee:</strong></div><ul><li>Save <strong>caller BAF</strong>; set <strong>BAF</strong> to the first local</li>
+<li>For variadic calls, walk arguments without knowing their <strong>total count</strong></li>
+<li>Put the result in <strong>IN2</strong>; jump to the <strong>shared epilogue</strong></li>
+<li>Restore <strong>BAF</strong> and the <strong>return address</strong>; return</li></ul></section></div>
+<div class="readme-list prose-summary"><div class="readme-item"><strong>Interrupt service routines</strong> are easier to implement.</div></div>
 <aside class="context-note"><b>System V ABI</b><ul><li>Binary interface rules</li>
 <li>Calls: arguments, registers, stack</li>
 <li>PicoOS adapts the stack convention to ReTI</li></ul></aside>
@@ -631,7 +635,7 @@ binary/basic_string.sections
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-stacked">
+<div class="readme-artifacts layout-stacked" style="--readme-rows:minmax(0, 240fr) minmax(0, 220fr)">
 
 <!-- README_ASSET image-678 -->
 <ReadmeVisual kind="image" :width="980">
@@ -662,8 +666,6 @@ int main(int argc, char **argv) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>One epilogue</strong> per ordinary function</li>
-<li><strong>IN2:</strong> result survives the shared cleanup</li></ul></div>
 
 </div>
 
@@ -1333,7 +1335,7 @@ void _start(int argc, char *first_argument) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 148fr) minmax(0, 143fr)">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 220fr) minmax(0, 143fr)">
 
 <div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-1713+code-1740" style="--readme-columns:minmax(0, 60fr) minmax(0, 40fr);">
 
@@ -1393,7 +1395,6 @@ void syscall_interrupt(void) {
 </div>
 
 </div>
-<aside class="context-note"><b>System V ABI</b><ul><li><strong>Binary contract:</strong> lets compiled programs and libraries fit together</li><li><strong>Rules:</strong> arguments, return values, registers, stack &amp; file layout</li><li><strong>PicoOS:</strong> adapts the calling convention to ReTI</li></ul></aside>
 
 </div>
 

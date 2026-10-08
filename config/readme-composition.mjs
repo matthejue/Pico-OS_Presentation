@@ -3,7 +3,7 @@
 // Weights reflect rendered content heights, rather than equal empty panels.
 const plans = {
   'build-and-run': [[132, 216]],
-  '116-program-sections-interrupt-table-entries-and-linker-placement': [[148, 143]],
+  '116-program-sections-interrupt-table-entries-and-linker-placement': [[220, 143]],
   '1171-interrupt-safe-push-and-pop': [[149, 132]],
   '1172-loading-32-bit-values-with-loadi32': [[78, 95]],
   '1174-pseudoinstruction-expansion-during-linking': [[197, 143]],

@@ -55,11 +55,10 @@ const contextRemarks=(section,fact,plainNote=false)=>{
  const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${plainNote||visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
  return notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks
 }
-const bulletList=(items,cls='',requestedSubBullet=false)=>{
- const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1),'',requestedSubBullet)}`:prose(item))
+const bulletList=(items,cls='')=>{
+ const content=items.map(item=>Array.isArray(item)?`${prose(item[0])}${bulletList(item.slice(1))}`:prose(item))
  if(!content.length)return ''
- if(content.length===1&&!requestedSubBullet)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
- if(content.length===1&&requestedSubBullet)cls='requested-sub-bullet'
+ if(content.length===1)return `<div class="${cls||'readme-item'}">${content[0]}</div>`
  return `<ul${cls?` class="${cls}"`:''}>${content.map(item=>`<li>${item}</li>`).join('\n')}</ul>`
 }
 const marker=a=>`<!-- README_ASSET ${a.id}${a.borrowed?' repeated':''} -->`
@@ -275,7 +274,9 @@ for(const section of sections) {
   }
   if(!group.length) {
    const items=pageSummary.length?pageSummary:summary
-   content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items,'',section.anchor==='113-system-v-abi-stack-frames-and-call-cleanup')}</div>`
+   if(section.anchor==='113-system-v-abi-stack-frames-and-call-cleanup')
+    content=`<div class="call-cleanup-panels">${items.filter(Array.isArray).map(item=>`<section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading">${prose(item[0])}</div>${bulletList(item.slice(1))}</section>`).join('\n')}</div>\n<div class="readme-list prose-summary">${bulletList(items.filter(item=>!Array.isArray(item)))}</div>`
+   else content=`<div class="readme-list${items.length>6?' bullet-columns':''}${items.length>=3&&items.every(Array.isArray)?' summary-cards':''}">${bulletList(items)}</div>`
   }
   else if(layout==='hardware')content=`${render(group.find(a=>a.type==='list'))}\n<div class="artifact-columns hardware-details" ${columnAttributes('hardware:details')}><div class="readme-list">${bulletList(summaries[section.anchor])}</div>\n\n${render(group.find(a=>a.type==='table'))}\n\n</div>`
   else if(section.anchor==='111-compilation-pipeline-and-compiler-passes')content=`<div class="readme-artifacts pipeline-comparison">${group.map((a,i)=>{

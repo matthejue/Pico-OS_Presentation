@@ -15,13 +15,20 @@
   ],
   "113-system-v-abi-stack-frames-and-call-cleanup": [
     [
-      "For `fun(arg1, arg2)`, first pushes **arg2**, then **arg1**",
-      "**Variadic functions:** argument count doesn't matter"
+      "**Caller:**",
+      "For `fun(arg1, arg2)`, evaluate and push **arg2**, then **arg1**",
+      "Push the **return address** to the continuation block",
+      "Transfer control to the **callee**",
+      "Remove **argument cells** after return"
     ],
-    "**Callee:** pushes **caller BAF**; **BAF → first local**",
-    "**Return:** restores **BAF**; result in **IN2**",
-    "**Caller:** removes arguments after return",
-    "**Callee handles BAF + arguments** → elegant **interrupt service routines**"
+    [
+      "**Callee:**",
+      "Save **caller BAF**; set **BAF** to the first local",
+      "For variadic calls, walk arguments without knowing their **total count**",
+      "Put the result in **IN2**; jump to the **shared epilogue**",
+      "Restore **BAF** and the **return address**; return"
+    ],
+    "**Interrupt service routines** are easier to implement."
   ],
   "24-system-call-interface-and-execution": [
     "**Library wrapper** → selector + request",
