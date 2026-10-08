@@ -93,14 +93,30 @@
 /* Preserve the complete init session in one readable code box. */
 .init-session-code .readme-code .slidev-code { line-height: 1.2 !important; padding: 12px 16px !important; }
 
-/* Command option groups retain their complete nested bullets across two slides. */
-.command-options > ul {
+/* Command groups use compact panels; their rows follow the content height. */
+.readme-list.command-options { padding: 0; font-size: 1rem; line-height: 1.35; }
+.readme-list.command-options > ul {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px 28px;
-  padding-left: 22px;
+  gap: 16px 24px;
+  align-items: start;
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
-.command-options > ul > li { margin: 0; padding-left: 2px; }
-.command-options li ul { font-size: 0.93em; margin-top: 5px; }
-.command-options li ul li { margin: 3px 0; }
+.command-options > ul > li {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line-strong);
+  border-top: 3px solid var(--cyan);
+  background: var(--machine-deep);
+}
+.command-options li ul { font-size: 0.93em; margin-top: 8px; padding-left: 20px; }
+.command-options li ul li { margin: 4px 0; padding-left: 1px; }
+.command-options li ul li:last-child { margin-bottom: 0; }
+
+/* Keep the complete command session comfortably centered in two columns. */
+[data-code-source="code-8413"] .readme-code .slidev-code {
+  line-height: 1.4 !important;
+  padding: 12px 14px !important;
+}

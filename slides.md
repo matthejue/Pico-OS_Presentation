@@ -10728,7 +10728,7 @@ PicoOS> /documentation/add.bin 7 5
 <!-- README_ASSET code-8413 -->
 <div class="code-columns" data-column-key="code:code-8413" style="--readme-columns:minmax(0, 61fr) minmax(0, 39fr);--source-aspect:4.555007256894049">
 
-<ReadmeVisual kind="code" :width="721.676923076923" data-code-source="code-8413" data-code-part="1">
+<ReadmeVisual kind="code" :width="721.676923076923" :text-scale="1.25" data-code-source="code-8413" data-code-part="1">
 
 <!-- README_CODE_PART code-8413 lines=1-11 -->
 <div class="readme-code readme-terminal">
@@ -10752,7 +10752,7 @@ PicoOS> kill.bin SIGSTOP $!
 
 </ReadmeVisual>
 
-<ReadmeVisual kind="code" :width="461.3999999999999" data-code-source="code-8413" data-code-part="2">
+<ReadmeVisual kind="code" :width="461.3999999999999" :text-scale="1.25" data-code-source="code-8413" data-code-part="2">
 
 <!-- README_CODE_PART code-8413 lines=12-22 -->
 <div class="readme-code readme-terminal">
