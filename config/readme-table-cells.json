@@ -398,5 +398,9 @@
   "table-644/12/1": "Second local",
   "table-1068/3/1": "`-C library/start/libstart.picoc`",
   "table-1068/4/1": "`-C library/start/libstart.picoc`",
-  "table-1068/5/1": "`-C library/start/libstart.picoc`"
+  "table-1068/5/1": "`-C library/start/libstart.picoc`",
+  "table-4698/1/1": "Argument/result registers at suspension",
+  "table-4698/3/1": "Interrupted PicoC frame base",
+  "table-4698/4/1": "Absolute code-segment base; instruction addresses",
+  "table-4698/5/1": "Absolute data-segment base; globals/static data"
 }

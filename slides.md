@@ -6129,7 +6129,7 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-4686+table-4698" style="--readme-columns:minmax(0, 45fr) minmax(0, 55fr);">
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-4686+table-4698" style="--readme-columns:minmax(0, 42fr) minmax(0, 58fr);">
 
 <!-- README_ASSET code-4686 -->
 <ReadmeVisual kind="code" :width="255" data-code-source="code-4686" data-code-part="1">
@@ -6157,11 +6157,11 @@ struct ActivationRecord {
 <!-- README_ASSET table-4698 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4698:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23%" /><col style="width:77%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>General argument/result registers at the suspension point</td></tr>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:30%" /><col style="width:70%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>Argument/result registers at suspension</td></tr>
 <tr data-source-row="2"><td class="table-key"><span class="source-link"><code>sp</code></span></td><td>Below saved PC; PC at sp + 1</td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Base address of the interrupted PicoC function frame</td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base used for instruction addresses</td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base used for globals/static data</td></tr></tbody></table></div></div>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Interrupted PicoC frame base</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base; instruction addresses</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base; globals/static data</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -9357,6 +9357,24 @@ int main(void) {
 
 ---
 
+<!-- SLIDE_ID 29fc322c-2021-49a7-a9d9-39f59b973eaa -->
+<!-- SOURCE Pico-OS/README.md#1133-loading-starting-and-waiting-for-the-shell -->
+
+# <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink>
+
+## Continue with user applications and commands
+
+<div class="deck-content readme-slide">
+
+<SectionJump section="13-user-applications-and-commands"
+  caption="From system startup to user applications"
+  description="See how user applications use library calls and run from the shell."
+  footer="Jump ahead · skip the remaining startup details and section 12" />
+
+</div>
+
+---
+
 <!-- SLIDE_ID 5bd4796d-e12d-4c12-8c43-d26718e7685e -->
 <!-- SOURCE Pico-OS/README.md#1134-shell-startup -->
 <!-- SHORT_VERSION_DISABLED -->
@@ -10510,6 +10528,13 @@ $ picoc_compiler --direct-source-link -O1 -s \
 $ reti_emulator -a binary/documentation/add.reti
 ```
 
+<div class="readme-code-header" v-pre><span>PicoOS: bootloader → kernel → init → shell</span><span class="code-range"></span></div>
+
+```console {lines:false}
+$ cd binary
+$ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.sections -D kernel/kernel.debuginfo -d -c
+```
+
 </div>
 
 </ReadmeVisual>
@@ -10652,7 +10677,6 @@ PicoOS> /documentation/add.bin 7 5
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>Unix command names</b><ul><li><strong>Reduced options:</strong> use the documented forms</li><li><strong>cd:</strong> built-in changes the shell directory</li></ul></aside>
 
 </div>
 
@@ -10684,7 +10708,6 @@ PicoOS> /documentation/add.bin 7 5
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>Unix command names</b><ul><li><strong>Reduced options:</strong> use the documented forms</li><li><strong>cd:</strong> built-in changes the shell directory</li></ul></aside>
 
 </div>
 
@@ -10756,7 +10779,6 @@ PicoOS> rmdir.bin demo
 </div>
 </div>
 
-<aside class="context-note"><b>Counter result</b><ul><li><strong>Killed counter:</strong> probe fails; ps still shows zombie</li><li><strong>$!:</strong> choose actual PID without hardcoding</li></ul></aside>
 
 </div>
 
@@ -11394,8 +11416,6 @@ $ reti_emulator -n 5 -O -r 262144 -e boot/bootloader.reti -S kernel/kernel.secti
 </div>
 
 </div>
-
-<aside class="context-note"><b>Inspect execution</b><span>Registers, memory, and memory-mapped peripherals while PicoOS runs</span></aside>
 
 </div>
 

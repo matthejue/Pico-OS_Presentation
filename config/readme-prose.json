@@ -931,10 +931,7 @@
     "**Echo:** -h/--help ordinary text",
     "**Other commands:** sole help argument recognized"
   ],
-  "1321-command-behavior-and-supported-options": [
-    "**Killed counter:** probe fails; ps still shows zombie",
-    "**$!:** choose actual PID without hardcoding"
-  ],
+  "1321-command-behavior-and-supported-options": [],
   "141-library-os-shell-and-boot-test-categories": [
     "**63 classes:** 13 library; 23 OS; 26 shell; 1 boot",
     "**49 System tests:** OS + shell",

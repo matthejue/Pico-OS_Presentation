@@ -2,25 +2,34 @@
 import { computed } from 'vue'
 import { usePresentationNavigation } from '../setup/presentation-navigation'
 
-const props = defineProps<{ section: string }>()
+const props = withDefaults(defineProps<{
+  section: string
+  caption?: string
+  description?: string
+  footer?: string
+}>(), {
+  caption: 'From kernel mechanisms to library calls',
+  description: 'See how a user library enters the kernel through a syscall.',
+  footer: 'Jump ahead · skip sections 8 and 9',
+})
 const { navigation, chapters, href } = usePresentationNavigation()
 const chapter = computed(() => chapters.value.find(item => item.anchor === props.section))
 </script>
 
 <template>
   <div class="section-jump">
-    <span class="section-jump-caption">From kernel mechanisms to library calls</span>
+    <span class="section-jump-caption">{{ caption }}</span>
     <a v-if="chapter" class="section-jump-card" :href="href(chapter.page)"
       :data-jump-anchor="section" @click.stop.prevent="navigation.go(chapter.page)">
       <span class="section-jump-number">{{ chapter.number }}</span>
       <span class="section-jump-copy">
         <strong>{{ chapter.title }}</strong>
-        <span>See how a user library enters the kernel through a syscall.</span>
+        <span>{{ description }}</span>
         <span class="section-jump-action">Open section overview <span aria-hidden="true">↗</span></span>
       </span>
       <span class="section-jump-arrow" aria-hidden="true">→</span>
     </a>
-    <span class="section-jump-footer">Jump ahead · skip sections 8 and 9</span>
+    <span class="section-jump-footer">{{ footer }}</span>
   </div>
 </template>
 

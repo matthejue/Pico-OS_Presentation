@@ -178,7 +178,11 @@ function renderCode(a) {
   // Input fixtures are command examples too. Prompts are presentation-only;
   // source ranges still identify and reconstruct the unmodified README code.
   const displayed=lines.map(line=>a.terminal&&a.language!=='console'&&line.trim()?`PicoOS> ${line}`:line)
-  const inner=`${partMarker}\n<div class="readme-code${a.terminal?' readme-terminal':''}">\n<div class="readme-code-header" v-pre><span>${esc(label)}</span><span class="code-range">${a.split?`lines ${start}–${offset}`:''}</span></div>\n\n\`\`\`${language} {lines:false}\n${displayed.join('\n')}\n\`\`\`\n\n</div>`
+  // Complete the application example with the same boot command used in the
+  // teaching/debugging section. Keep its source build commands intact.
+  const startup=a.id==='code-8274'?assets.find(asset=>asset.id==='code-8744'):undefined
+  const boot=startup?`\n<div class="readme-code-header" v-pre><span>PicoOS: bootloader → kernel → init → shell</span><span class="code-range"></span></div>\n\n\`\`\`console {lines:false}\n${startup.content.trimEnd()}\n\`\`\`\n`:''
+  const inner=`${partMarker}\n<div class="readme-code${a.terminal?' readme-terminal':''}">\n<div class="readme-code-header" v-pre><span>${esc(label)}</span><span class="code-range">${a.split?`lines ${start}–${offset}`:''}</span></div>\n\n\`\`\`${language} {lines:false}\n${displayed.join('\n')}\n\`\`\`\n${boot}\n</div>`
   const textScale=columnConfig.codeTextScales?.[a.id]
   return visual('code',inner,widths[i],a.command?'command-strip':'',`data-code-source="${a.id}" data-code-part="${i+1}"${textScale?' :text-scale="'+textScale+'"':''}`)
  })
