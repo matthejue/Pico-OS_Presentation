@@ -567,7 +567,6 @@ binary/basic_string.sections
 
 <!-- SLIDE_ID 2d92951f-5f88-46ca-9959-9c45f246e965 -->
 <!-- SOURCE Pico-OS/README.md#1131-stack-frame-layout-and-caller-cleanup -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions · 1.1.3 System V ABI stack frames and call cleanup
 
@@ -2884,7 +2883,6 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID 0afb8f9a-6eba-40db-97d9-6d43b2de56ae -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -2916,7 +2914,6 @@ struct Dup2Request { int old_file_descriptor; int new_file_descriptor; };
 
 <!-- SLIDE_ID c9bd20c7-754d-46fe-9a04-cd60348d798c -->
 <!-- SOURCE Pico-OS/README.md#2412-file-and-directory-request-structures -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.4 System-call interface and execution · 2.4.1 Syscall selectors and register convention
 
@@ -4440,7 +4437,6 @@ void exit_process(int status) {
 
 <!-- SLIDE_ID 297b295b-5c1c-42e6-b88c-f6f51a081573 -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -4481,7 +4477,6 @@ struct Heap {
 
 <!-- SLIDE_ID f48c8de3-76a5-47a9-8415-b949101cfe3e -->
 <!-- SOURCE Pico-OS/README.md#31-heap-block-layout-and-allocation-algorithm -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="3-memory-management-and-shared-memory">3. Memory management and shared memory</MajorSectionLink>
 
@@ -5092,7 +5087,6 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID 3df40f5a-3655-46c7-97c5-0a952f67dfe8 -->
 <!-- SOURCE Pico-OS/README.md#412-global-process-list-and-current-process -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.1 Process control block fields
 
@@ -5408,7 +5402,6 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID e359d1dd-0218-41b8-be1f-e4205cea5c38 -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -5446,7 +5439,6 @@ struct ProcessControlBlock {
 
 <!-- SLIDE_ID a77054e6-d573-437d-80af-29f8d4e6bf49 -->
 <!-- SOURCE Pico-OS/README.md#42212-initial-argc-argv-and-envp -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="4-processes-and-process-lifecycle">4. Processes and process lifecycle</MajorSectionLink> · 4.2 Loading and starting a process · 4.2.2 Starting a process (`run` library call) · 4.2.2.1 Initial user process stack
 
@@ -5726,7 +5718,6 @@ int main(int argc, char **argv) {
 
 <!-- SLIDE_ID f623a877-6c49-40a4-aaf8-8816379b491f -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
 
@@ -5771,7 +5762,6 @@ struct SharedMemoryAttachment {
 
 <!-- SLIDE_ID 8df448ef-73ff-41ef-970e-a7f4d2bb2f5d -->
 <!-- SOURCE Pico-OS/README.md#51-named-entries-and-per-process-attachments -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="5-shared-memory-entries-and-mappings">5. Shared Memory Entries and Mappings</MajorSectionLink>
 
@@ -6241,7 +6231,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <!-- SLIDE_ID 83080d75-fbd2-460d-bbe7-fd8ff5b72e6d -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -6266,7 +6255,6 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <!-- SLIDE_ID d977a719-8394-49ef-a97d-232d5a623935 -->
 <!-- SOURCE Pico-OS/README.md#62-saved-process-registers -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
@@ -6591,7 +6579,6 @@ void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_b
 
 <!-- SLIDE_ID ee2eb84b-fca3-4138-a2e3-270a4ef03bdb -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -6627,7 +6614,6 @@ struct wait_queue {
 
 <!-- SLIDE_ID c3b9d33c-4dff-4d29-9232-c91eb5d52b9b -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -6653,7 +6639,6 @@ struct wait_queue {
 
 <!-- SLIDE_ID 748188f1-e8cf-4333-b1a3-7a72a6188e7c -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -6686,7 +6671,6 @@ struct wait_queue {
 
 <!-- SLIDE_ID 7311ad58-2ead-4f75-9f64-735b85e96c9c -->
 <!-- SOURCE Pico-OS/README.md#71-wait-queues-and-pcb-links -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -6939,7 +6923,6 @@ struct wait_queue {
 
 <!-- SLIDE_ID 837b3982-4b8b-4b02-afeb-90f5c62ec5f1 -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7041,7 +7024,6 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 88497705-af19-49fe-a160-b5c50853d5d3 -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7066,7 +7048,6 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 13bb5e4a-484f-4859-b91f-5e4c3df1531c -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 
@@ -7486,7 +7467,6 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 3b561c36-b8a7-41d9-a50b-8efc8a02205e -->
 <!-- SOURCE Pico-OS/README.md#84-foreground-input-ownership-and-terminal-generated-signals -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7614,7 +7594,6 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID f4699dc0-c04d-4501-8296-d9f7f647244c -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7644,7 +7623,6 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID e36757dd-db92-4a3b-8b84-61a05cd997ff -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -7675,7 +7653,6 @@ void complete_pending_terminal_read(
 
 <!-- SLIDE_ID 2114e8f5-c77b-440b-aa55-3bc144fef61e -->
 <!-- SOURCE Pico-OS/README.md#88-opening-reading-writing-and-seeking -->
-<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="8-terminal-file-descriptors-and-host-filesystem">8. Terminal, file descriptors, and host filesystem</MajorSectionLink>
 
@@ -8381,6 +8358,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID f8f99ea8-a9eb-423f-a8e5-7b723fca685e -->
 <!-- SOURCE Pico-OS/README.md#10211-process-operations-in-processpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
 
@@ -8411,6 +8389,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 06822f91-611a-4795-a7ce-7e3645a7123e -->
 <!-- SOURCE Pico-OS/README.md#10212-descriptor-operations-in-iopicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
 
@@ -8440,6 +8419,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 5b082237-7bad-489f-a4c6-95ee9262e55e -->
 <!-- SOURCE Pico-OS/README.md#10213-working-directory-operations-in-working_directorypicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
 
@@ -8465,6 +8445,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 76448738-c898-4af5-a62d-427ddd97cbb2 -->
 <!-- SOURCE Pico-OS/README.md#10214-path-operations-in-file_removalpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
 
@@ -8492,6 +8473,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 43d7107e-d166-452c-800e-1df9e4c4c842 -->
 <!-- SOURCE Pico-OS/README.md#10215-wait-queue-operations-in-blockingpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.1 unistd: processes, descriptors, paths, and wait queues
 
@@ -8518,6 +8500,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 92b75598-372d-408d-b393-744c3332e3cf -->
 <!-- SOURCE Pico-OS/README.md#1022-fcntl-opening-and-creating-files -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -8543,6 +8526,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 85a267ef-74fe-48fe-8ef8-77a649dab165 -->
 <!-- SOURCE Pico-OS/README.md#1023-syswait-waiting-for-children -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -8568,6 +8552,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 68458579-f34d-41ca-a049-014ef436d742 -->
 <!-- SOURCE Pico-OS/README.md#1024-mutex-locking-and-waking-contenders -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -8597,6 +8582,7 @@ bool WIFSTOPPED(int status) {
 
 <!-- SLIDE_ID 71d0ab2b-a8ae-4f01-a1de-2c4a39c11e38 -->
 <!-- SOURCE Pico-OS/README.md#1025-sysmman-named-shared-memory -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -8740,6 +8726,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID 1bcc43f4-c6ba-4f9f-90c5-b52eaef9244a -->
 <!-- SOURCE Pico-OS/README.md#10271-heap-operations-in-mallocpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8770,6 +8757,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID b7ffb9a1-d56a-4a19-91f2-8cc680b1c59a -->
 <!-- SOURCE Pico-OS/README.md#10272-decimal-conversion-in-atoipicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8794,6 +8782,7 @@ struct DirectoryStream {
 
 <!-- SLIDE_ID 53fcb363-56f3-40f3-9bca-02d6fb41f3aa -->
 <!-- SOURCE Pico-OS/README.md#10273-environment-operations-in-envpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8834,6 +8823,7 @@ char *getenv(char *name) {
 
 <!-- SLIDE_ID 7790ca2b-50f9-4144-b6f3-c5aa7fa70502 -->
 <!-- SOURCE Pico-OS/README.md#10273-environment-operations-in-envpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8875,6 +8865,7 @@ char *getenv(char *name) {
 
 <!-- SLIDE_ID c302cae5-785c-4957-bc6f-00b9480079ba -->
 <!-- SOURCE Pico-OS/README.md#10273-environment-operations-in-envpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8891,6 +8882,7 @@ char *getenv(char *name) {
 
 <!-- SLIDE_ID bf127f7a-3383-4ab6-a54f-59c0197e587b -->
 <!-- SOURCE Pico-OS/README.md#10274-process-exit-in-exitpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.7 stdlib: process heap, environment, conversion, and exit
 
@@ -8915,6 +8907,7 @@ char *getenv(char *name) {
 
 <!-- SLIDE_ID c2a7aaa4-f602-4bd6-9ae3-430c408dcc86 -->
 <!-- SOURCE Pico-OS/README.md#1028-string-copying-comparison-and-length -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -8945,6 +8938,7 @@ char *getenv(char *name) {
 
 <!-- SLIDE_ID 5ce52698-129c-4e47-adea-d8efc2174b29 -->
 <!-- SOURCE Pico-OS/README.md#1029-stdio-streams-formatting-and-scanning -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -9058,6 +9052,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID aa8595d3-4b7e-4fbe-aea1-064642e8bad9 -->
 <!-- SOURCE Pico-OS/README.md#10292-scanning-in-scanfpicoc -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies · 10.2.9 stdio: streams, formatting, and scanning
 
@@ -9089,6 +9084,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID 1ba66188-6bb1-4769-b9d1-4112842fab45 -->
 <!-- SOURCE Pico-OS/README.md#10210-start-entering-and-leaving-a-user-program -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 
@@ -9114,6 +9110,7 @@ struct PicoFile {
 
 <!-- SLIDE_ID 56f3b78a-ab49-4757-947f-b04105efef7c -->
 <!-- SOURCE Pico-OS/README.md#10211-single-function-libraries -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.2 Library overview and dependencies
 

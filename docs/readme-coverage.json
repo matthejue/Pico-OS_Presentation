@@ -1,6 +1,6 @@
 {
   "sourceSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569",
-  "slideCount": 340,
+  "slideCount": 339,
   "assets": [
     {
       "id": "list-26",
@@ -1877,8 +1877,8 @@
       "omittedRows": [],
       "displayColumns": [
         "Device / array index",
-        "Mapping source → periphery cell",
-        "Priority source → periphery cell"
+        "Mapping source \u2192 periphery cell",
+        "Priority source \u2192 periphery cell"
       ]
     },
     {
@@ -9080,7 +9080,7 @@
       "slides": [
         {
           "page": 331,
-          "layout": "single",
+          "layout": "composed",
           "codeParts": 1
         }
       ]
@@ -9094,8 +9094,8 @@
       "sourceSha256": "86f92b34a217a47d6cf82edafe79fe24bcc32b1994b1f33dcd85a273be2eff65",
       "slides": [
         {
-          "page": 332,
-          "layout": "single",
+          "page": 331,
+          "layout": "composed",
           "codeParts": 2
         }
       ]
@@ -9109,7 +9109,7 @@
       "sourceSha256": "1dc6966266959b470c2b973c8f16ed8cb255024a063aff9e39a1cf1552a2640a",
       "slides": [
         {
-          "page": 333,
+          "page": 332,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9124,7 +9124,7 @@
       "sourceSha256": "8abd3d1689a6583f5ab6fe0df3d8ba986649ef81db1fe7495d6c1515db464618",
       "slides": [
         {
-          "page": 333,
+          "page": 332,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9139,7 +9139,7 @@
       "sourceSha256": "f329e8023b15b9d5e8116a08c40e067bb8da70c38e5cc6844145b2c31f8b6e2f",
       "slides": [
         {
-          "page": 333,
+          "page": 332,
           "layout": "composed",
           "codeParts": 1
         }
@@ -9154,7 +9154,7 @@
       "sourceSha256": "3679bd660b4b2070a5f8d71b4f9ee6a4862decda1b9d0b96a72c00b6a8ff8c38",
       "slides": [
         {
-          "page": 335,
+          "page": 334,
           "layout": "single",
           "rows": [
             1,
@@ -9194,7 +9194,7 @@
       "sourceSha256": "77fe6104ed955efc3752c1432e9ec4c6da25cf87db7369092ce520a85e26a724",
       "slides": [
         {
-          "page": 339,
+          "page": 338,
           "layout": "single",
           "items": [
             1,
@@ -9221,7 +9221,7 @@
       "sourceSha256": "a4243f46823a19a85040f9458b430eff3b3fda12ed2b440c1171951e41353e2c",
       "slides": [
         {
-          "page": 340,
+          "page": 339,
           "layout": "composed",
           "rows": [
             1,
@@ -9255,7 +9255,7 @@
       "sourceSha256": "6f276b021b028ba79b5ac611dc15259a07d66e4a2ebd1217dd135a7afe48949a",
       "slides": [
         {
-          "page": 340,
+          "page": 339,
           "layout": "composed",
           "codeParts": 1
         }

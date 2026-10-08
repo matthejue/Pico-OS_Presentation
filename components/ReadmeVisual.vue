@@ -47,7 +47,7 @@ function balanceRows() {
 }
 // Text examples on one slide share a displayed type size. Fit each at the width it will
 // actually occupy, allowing long lines/cells to wrap before reducing the type.
-function fitText(availableWidth, availableHeight) {
+function fitText(availableWidth, availableHeight, heightBudgetAt = () => availableHeight) {
   // A source's intrinsic width must not cap text size in a roomy panel. Reflow
   // at a readable preferred size, then reduce it only when height requires it.
   const preferred = props.textScale ?? (props.kind === 'code' ? 1.35 : 1.1)
@@ -56,11 +56,11 @@ function fitText(availableWidth, availableHeight) {
     return content.value.scrollHeight
   }
   let limit = preferred
-  if (heightAt(limit) * limit > availableHeight) {
+  if (heightAt(limit) * limit > heightBudgetAt(limit)) {
     let low = Math.min(0.05, preferred / 2), high = limit
     for (let i = 0; i < 12; i++) {
       const candidate = (low + high) / 2
-      if (heightAt(candidate) * candidate <= availableHeight) low = candidate
+      if (heightAt(candidate) * candidate <= heightBudgetAt(candidate)) low = candidate
       else high = candidate
     }
     limit = low
@@ -108,6 +108,7 @@ function measure() {
     const columns = parent?.matches('.layout-columns, .artifact-columns, .code-columns, .content-columns')
     const availableWidth = frame.value.clientWidth
     let availableHeight = columns ? parent.clientHeight : frame.value.clientHeight
+    let heightBudgetAt
     const panel = frame.value.closest('.composition-panel')
     if (panel) availableHeight = rowBudget(panel)
     if (parent?.matches('.layout-stacked')) availableHeight = rowBudget(frame.value)
@@ -129,10 +130,25 @@ function measure() {
       }
       else availableHeight = frame.value.matches('.command-strip') ? budget
         : budget - commands.reduce((sum, command) => sum + command.clientHeight, 0) - gap * commands.length
+      if ((props.kind === 'code' || props.kind === 'table') && !frame.value.matches('.command-strip') && commands.length) {
+        // Commands share this panel's text scale. Reserve their height at the
+        // candidate scale, not the previous frame's scale: otherwise a wrapped
+        // command alternately shrinks and grows the panels below it forever.
+        heightBudgetAt = candidate => budget - gap * commands.length - commands.reduce((sum, command) => {
+          const text = command.querySelector('.source-fit-content')
+          const previousWidth = text.style.width
+          const commandScale = candidate * (props.kind === 'table' ? 17 / 14 : 1)
+          text.style.width = `${command.clientWidth / commandScale}px`
+          const height = text.scrollHeight * commandScale
+          text.style.width = previousWidth
+          return sum + height
+        }, 0)
+        availableHeight = budget - gap * commands.length
+      }
     }
     if (availableWidth > 0 && availableHeight > 0) {
       if (props.kind === 'code' || props.kind === 'table') {
-        fitText(availableWidth, availableHeight)
+        fitText(availableWidth, availableHeight, heightBudgetAt)
         return
       }
       scale.value = Math.min(availableWidth / sourceWidth, availableHeight / nativeHeight.value)
