@@ -5,4 +5,4 @@ slide_title: "15. Use in operating-systems and real-time operating-systems lectu
 source_anchor: "1522-minimal-launcher-and-worker-code"
 ---
 
-- Please put me next a slide where there's a codebox from which I can copy with the link to the PicoOS release archive. Make this slide look stylish and fancy, but not over the top, just pleasing to the eye and of course in line with the design of this presentation slides
+- [x] Please put me next a slide where there's a codebox from which I can copy with the link to the PicoOS release archive. Make this slide look stylish and fancy, but not over the top, just pleasing to the eye and of course in line with the design of this presentation slides

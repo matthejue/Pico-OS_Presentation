@@ -194,19 +194,17 @@
   ],
   "list-9268": [
     "**No MMU**, isolation, or virtual memory",
-    "Host files via **UART**",
+    "Host files via **UART**; no filesystem",
     "**Eight descriptors**; independent copied state",
     "**Lazy Round Robin**; cyclic scan",
     "**Non-preemptive kernel**; deferred switching",
-    "**Fixed heap/stack**; no stack growth",
-    "**Reduced libraries**, formatting, shell parsing",
+    "**Fixed heap**",
     "**Hardware unimplemented**; instruction-count timing",
     "**No sound/LCD**; host terminal",
     [
       "**Static images:** no dynamic loader/shared libraries",
       "**Reduced C library:** linked through libstart"
-    ],
-    "**POSIX-like names**; reduced semantics"
+    ]
   ],
   "list-3143": [
     "Read **cause** + interrupted CS difference",

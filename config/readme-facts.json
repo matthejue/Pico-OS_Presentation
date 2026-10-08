@@ -98,13 +98,6 @@
       "**Shared PicoC frame** convention"
     ]
   ],
-  "17-limitations": [
-    "Scope",
-    [
-      "Educational OS mechanisms",
-      "POSIX-like interfaces; reduced behavior"
-    ]
-  ],
   "112-separate-compilation-reusable-artifacts-and-linking": [
     "GCC / Clang",
     [

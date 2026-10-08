@@ -11918,13 +11918,29 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 ---
 
+<!-- SLIDE_ID 9fffb17d-9607-4015-83ae-930d3e638635 -->
+<!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+<!-- Release archive URL: Pico-OS/README.md#build-and-run -->
+
+# <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
+
+## 15.2.2 Minimal launcher and worker code (3)
+
+<div class="deck-content readme-slide">
+
+<ReleaseArchive url="https://github.com/matthejue/Pico-OS/releases/latest/download/pico-os-runtime.tar.gz" />
+
+</div>
+
+---
+
 <!-- SLIDE_ID a5625633-6778-40bc-b5ab-164d28dccb33 -->
 <!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
 <!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
 
-## 15.2.2 Minimal launcher and worker code (3)
+## 15.2.2 Minimal launcher and worker code (4)
 
 <div class="deck-content readme-slide">
 
@@ -12034,20 +12050,16 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- README_ASSET list-9268 -->
 <div class="readme-list bullet-columns"><ul><li><strong>No MMU</strong>, isolation, or virtual memory</li>
-<li>Host files via <strong>UART</strong></li>
+<li>Host files via <strong>UART</strong>; no filesystem</li>
 <li><strong>Eight descriptors</strong>; independent copied state</li>
 <li><strong>Lazy Round Robin</strong>; cyclic scan</li>
 <li><strong>Non-preemptive kernel</strong>; deferred switching</li>
-<li><strong>Fixed heap/stack</strong>; no stack growth</li>
-<li><strong>Reduced libraries</strong>, formatting, shell parsing</li>
+<li><strong>Fixed heap</strong></li>
 <li><strong>Hardware unimplemented</strong>; instruction-count timing</li>
 <li><strong>No sound/LCD</strong>; host terminal</li>
-<li><strong>Static images:</strong> no dynamic loader/shared libraries<div class="readme-item"><strong>Reduced C library:</strong> linked through libstart</div></li>
-<li><strong>POSIX-like names</strong>; reduced semantics</li></ul></div>
+<li><strong>Static images:</strong> no dynamic loader/shared libraries<div class="readme-item"><strong>Reduced C library:</strong> linked through libstart</div></li></ul></div>
 
 </div>
-<aside class="context-note"><b>Scope</b><ul><li>Educational OS mechanisms</li>
-<li>POSIX-like interfaces; reduced behavior</li></ul></aside>
 
 </div>
 
