@@ -1,0 +1,352 @@
+[
+  {
+    "id": "b1b6b443-bff7-4da4-b0c8-634df08b043e",
+    "anchor": "81-per-process-file-descriptor-table",
+    "assets": [
+      "image-5567"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "9ec4de6e-9678-471f-9cdc-0a8e8a545ea2",
+    "anchor": "81-per-process-file-descriptor-table",
+    "assets": [
+      "table-5580:rows=1,2,3,4,5,6,7,8"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "8fd417e9-a6d4-4698-99ae-743cdf2f4ad5",
+    "anchor": "81-per-process-file-descriptor-table",
+    "assets": [
+      "image-5595"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "f43397f7-3fb6-4d41-ad76-d8b7dc266bcc",
+    "anchor": "82-global-terminal-input-buffer",
+    "assets": [
+      "image-5654"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "29d5e48c-160b-4537-9cf5-e075e44a6f34",
+    "anchor": "82-global-terminal-input-buffer",
+    "assets": [
+      "table-5658:rows=1,2,3,4,5"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "f72c28a4-247e-4eae-bd8c-e30a7406d742",
+    "anchor": "85-virtual-terminal-and-null-device-paths",
+    "assets": [
+      "table-5885:rows=1,2"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "5dc0c634-a0ed-4acc-9194-3fb896d0061f",
+    "anchor": "89-picoos-paths-working-directories-and-host-operations",
+    "assets": [
+      "table-6040:rows=1,2,3,4,5,6"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "bb99332c-bc15-4125-8a4a-e8eab79b7c20",
+    "anchor": "92-containment-and-reference-relationships",
+    "assets": [
+      "image-6123"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "08e3218a-5f01-428b-8073-c33581bc16af",
+    "anchor": "92-containment-and-reference-relationships",
+    "assets": [
+      "image-6139"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "d8b1e73e-25ce-415d-9f69-21b32385cd57",
+    "anchor": "1011-header-implementation-and-linking",
+    "assets": [
+      "code-6258",
+      "code-6274",
+      "code-6281"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "5de2a26a-4658-44a3-8cbb-a4606ab8e2da",
+    "anchor": "1012-packing-arguments-and-executing-the-syscall",
+    "assets": [
+      "code-6306"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "16cc1b17-e4ca-4b6b-8e87-a6d25f528752",
+    "anchor": "1012-packing-arguments-and-executing-the-syscall",
+    "assets": [
+      "code-6323"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "0af3c4f9-bac1-45ff-b328-463980effb88",
+    "anchor": "102-library-overview-and-dependencies",
+    "assets": [
+      "table-6536:rows=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "0c827c0c-9fa8-4239-89cd-852896ffd165",
+    "anchor": "111-loading-the-kernel-from-the-eprom-bootloader",
+    "assets": [
+      "code-7062",
+      "list-7109"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "ddaf829e-3b87-4e1d-8d5d-94ff9afa0bc5",
+    "anchor": "112-kernel-startup",
+    "assets": [
+      "code-1004 repeated"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "1aef0ee8-6100-4294-aa97-dd3d2be77003",
+    "anchor": "112-kernel-startup",
+    "assets": [
+      "code-7173",
+      "list-7202"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "083c38ea-e8ba-4f4d-9b1c-ec264b9fd269",
+    "anchor": "1121-loading-init-and-entering-normal-execution",
+    "assets": [
+      "code-7247",
+      "list-7267"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "9e2731c3-c572-4d7f-9ad0-078edba26eb5",
+    "anchor": "1131-init-responsibilities",
+    "assets": [
+      "table-7294:rows=1,2,3"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "cc487a97-4c03-4111-a5ba-87a158a402bb",
+    "anchor": "1132-initial-environment-configuration",
+    "assets": [
+      "table-7312:rows=1,2,3"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "53bcf41c-58cb-42b8-b736-411b5ef70f26",
+    "anchor": "1133-loading-starting-and-waiting-for-the-shell",
+    "assets": [
+      "code-7329",
+      "list-7366"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "99561f19-a97f-4372-b8e1-a5e5c5bb8b48",
+    "anchor": "1133-loading-starting-and-waiting-for-the-shell",
+    "assets": [],
+    "omitLists": true
+  },
+  {
+    "id": "5bd4796d-e12d-4c12-8c43-d26718e7685e",
+    "anchor": "1134-shell-startup",
+    "assets": [
+      "code-1029 repeated",
+      "code-1038 repeated"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "586ab56d-c506-40eb-bd57-d5ca8a404017",
+    "anchor": "1135-loading-user-applications",
+    "assets": [
+      "code-1029 repeated",
+      "code-1038 repeated"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "bdabf2d4-329b-4ea9-a1e2-0eec4a14928e",
+    "anchor": "1136-shell-exit-and-restart-policy",
+    "assets": [],
+    "omitLists": true
+  },
+  {
+    "id": "3225bb76-16b0-49fd-8d6d-5aabecfa69c9",
+    "anchor": "1137-when-init-terminates",
+    "assets": [],
+    "omitLists": true
+  },
+  {
+    "id": "9ae26a61-ba92-41ff-b1a3-785737926a3c",
+    "anchor": "121-shell-owned-state",
+    "assets": [
+      "table-7460:rows=1,2,3,4,5,6,7,8,9,10"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "75ddbca6-30c7-4ab9-8c9a-f02aae80ffd1",
+    "anchor": "121-shell-owned-state",
+    "assets": [
+      "image-7489"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "0594b9f5-0bd9-4b7c-b21d-35371d14269f",
+    "anchor": "125-shell-built-in-commands",
+    "assets": [
+      "table-7687:rows=1,2,3,4,5,6,7,8,9"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "98947404-3643-444c-8040-551d7f48d31c",
+    "anchor": "126-inputoutput-redirection",
+    "assets": [
+      "image-7929"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "31113768-c983-4f2d-95ba-38fce7a6547b",
+    "anchor": "127-sequential-file-backed-pipelines",
+    "assets": [
+      "image-8151"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "fa52f079-9361-4187-9d7e-4291c87d9920",
+    "anchor": "127-sequential-file-backed-pipelines",
+    "assets": [
+      "image-8161"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "ebdfae59-d4ac-4457-9fb4-254a82382579",
+    "anchor": "127-sequential-file-backed-pipelines",
+    "assets": [
+      "code-8176"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "526c134c-5ee2-4ecd-8934-7f6732cccaa2",
+    "anchor": "132-applications-library-calls-and-host-requests",
+    "assets": [
+      "table-8316:rows=1,2,3,4,5,6,7,8,9"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "a7978e96-0130-4f7a-b698-464b6a467c75",
+    "anchor": "132-applications-library-calls-and-host-requests",
+    "assets": [
+      "table-8316:rows=10,11,12,13,14,15,16,17,18"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "9204e2d0-4668-4d63-b517-fcc62df0f1ea",
+    "anchor": "1321-command-behavior-and-supported-options",
+    "assets": [
+      "list-8353"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "5d2e52ac-ae0e-43b4-949b-975d4ad36df2",
+    "anchor": "141-library-os-shell-and-boot-test-categories",
+    "assets": [
+      "image-8475"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "f29de854-80cc-455c-8c72-923791ea70c6",
+    "anchor": "1411-files-that-make-up-a-test",
+    "assets": [
+      "image-8483"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "f7808e70-3f36-4ff4-bcfe-b57ff57da51a",
+    "anchor": "1411-files-that-make-up-a-test",
+    "assets": [
+      "table-8489:rows=1,2,3,4,5,6,7,8,9,10"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "184f2426-3f5e-42bb-b921-e762c783e703",
+    "anchor": "1412-library-test-example",
+    "assets": [],
+    "omitLists": true
+  },
+  {
+    "id": "6b8d0346-4320-42ee-981c-88a856407f14",
+    "anchor": "1413-os-test-example",
+    "assets": [
+      "code-8574",
+      "code-8588",
+      "image-8596"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "cc7cf3b9-8ee7-449d-9037-cdae09312d31",
+    "anchor": "1414-shell-test-example",
+    "assets": [
+      "code-8612",
+      "code-8620",
+      "image-8632"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "c445421a-f33e-4054-8992-a34ecc3e8b01",
+    "anchor": "1415-boot-test-example",
+    "assets": [
+      "code-8640",
+      "code-8647",
+      "image-8657"
+    ],
+    "omitLists": true
+  },
+  {
+    "id": "e3008c5a-593c-4bce-9c18-47071858f894",
+    "anchor": "1521-parent-workers-and-shared-memory",
+    "assets": [
+      "image-8979"
+    ],
+    "omitLists": true
+  }
+]

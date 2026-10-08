@@ -1,6 +1,6 @@
 {
   "sourceSha256": "9e445e15907124c0209e82293f2f9fbc1c3ff6eee1a799ba96b5afd35f6a0569",
-  "slideCount": 340,
+  "slideCount": 334,
   "slides": [
     {
       "page": 1,
@@ -119,7 +119,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/readme/reti-memory-map.svg"
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjE4OCIgdmlld0JveD0iMCA0NiAxNDQwIDE4OCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPgogIDx0aXRsZSBpZD0idGl0bGUiPlJlVEkgYWRkcmVzcyBzcGFjZTwvdGl0bGU+CiAgPGRlc2MgaWQ9ImRlc2MiPlRoZSB0d28gaGlnaGVzdCBiaXRzIG9mIGEgMzItYml0IHdvcmQgYWRkcmVzcyBzZWxlY3QgRVBST00gd2l0aCBwcmVmaXggMDAsIHBlcmlwaGVyeSB3aXRoIHByZWZpeCAwMSwgb3IgU1JBTSB3aXRoIHByZWZpeCAxMCBvciAxMS4gRVBST00gYW5kIHBlcmlwaGVyeSBlYWNoIG9jY3VweSBvbmUgcXVhcnRlciBvZiB0aGUgYWRkcmVzcyBzcGFjZSwgd2hpbGUgU1JBTSBvY2N1cGllcyBvbmUgaGFsZi4gUmVnaW9uIHdpZHRocyBzaG93IGFkZHJlc3MgcmFuZ2VzLCBub3QgaW5zdGFsbGVkIG1lbW9yeSBjYXBhY2l0eS48L2Rlc2M+CiAgPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZmlsbD0iIzE3MzEzYSI+CiAgICA8IS0tIFNoYXJlZCBib3VuZGFyaWVzLCB3aXRoIHJlZ2lvbiB3aWR0aHMgaW4gdGhlIHJhdGlvIDE6MToyLiAtLT4KICAgIDxyZWN0IHg9IjYwIiB5PSI2NiIgd2lkdGg9IjEzMjAiIGhlaWdodD0iMTQ4IiBmaWxsPSIjZjRmOGY4IiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTM5MCA2NiBWMjE0IE03MjAgNjYgVjIxNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxnIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgICA8dGV4dCB4PSIyMjUiIHk9IjExNiIgZm9udC1zaXplPSIzNCIgZm9udC13ZWlnaHQ9ImJvbGQiPjAwOiBFUFJPTTwvdGV4dD4KICAgICAgPHRleHQgeD0iNTU1IiB5PSIxMTYiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSJib2xkIj4wMTogcGVyaXBoZXJ5PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxMTYiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSJib2xkIj4xMCAvIDExOiBTUkFNPC90ZXh0PgogICAgICA8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIzIj4KICAgICAgICA8dGV4dCB4PSIyMjUiIHk9IjE2OSI+MHgwMDAwMDAwMC4uMHgzZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NTUiIHk9IjE2OSI+MHg0MDAwMDAwMC4uMHg3ZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxNjkiPjB4ODAwMDAwMDAuLjB4ZmZmZmZmZmY8L3RleHQ+CiAgICAgIDwvZz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo="
         },
         {
           "kind": "table",
@@ -251,12 +251,12 @@
         {
           "kind": "code",
           "source": "code-696",
-          "fontSize": 17.58
+          "fontSize": 17.6
         },
         {
           "kind": "code",
           "source": "code-702",
-          "fontSize": 17.58
+          "fontSize": 17.61
         },
         {
           "kind": "code",
@@ -305,17 +305,17 @@
         {
           "kind": "code",
           "source": "code-839",
-          "fontSize": 16.13
+          "fontSize": 16.11
         },
         {
           "kind": "code",
           "source": "code-846",
-          "fontSize": 16.06
+          "fontSize": 16.12
         },
         {
           "kind": "code",
           "source": "code-846",
-          "fontSize": 16.06
+          "fontSize": 16.12
         }
       ]
     },
@@ -341,7 +341,7 @@
         {
           "kind": "code",
           "source": "code-918",
-          "fontSize": 16.07
+          "fontSize": 16.06
         },
         {
           "kind": "code",
@@ -364,12 +364,12 @@
         {
           "kind": "code",
           "source": "code-960",
-          "fontSize": 18.4
+          "fontSize": 18.42
         },
         {
           "kind": "code",
           "source": "code-967",
-          "fontSize": 18.4
+          "fontSize": 18.42
         }
       ]
     },
@@ -395,12 +395,12 @@
         {
           "kind": "code",
           "source": "code-1029",
-          "fontSize": 12.21
+          "fontSize": 12.2
         },
         {
           "kind": "code",
           "source": "code-1038",
-          "fontSize": 12.21
+          "fontSize": 12.2
         }
       ]
     },
@@ -690,7 +690,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/readme/reti-periphery-memory-map.svg"
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjE0NCIgdmlld0JveD0iMCA0NiAxNDQwIDE0NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPgogIDx0aXRsZSBpZD0idGl0bGUiPlJlVEkgYWRkcmVzcyBzcGFjZTogbWVtb3J5LW1hcHBlZCBwZXJpcGhlcnk8L3RpdGxlPgogIDxkZXNjIGlkPSJkZXNjIj5UaGUgY29tcGxldGUgUmVUSSBhZGRyZXNzIHNwYWNlIGhhcyBFUFJPTSB3aXRoIHByZWZpeCAwMCwgcGVyaXBoZXJ5IHdpdGggcHJlZml4IDAxLCBhbmQgU1JBTSB3aXRoIHByZWZpeCAxMCBvciAxMS4gVGhlIHBlcmlwaGVyeSByZWdpb24gc3BhbnMgMHg0MDAwMDAwMCB0aHJvdWdoIDB4N2ZmZmZmZmYuIFNSQU0gaXMgdHdpY2UgYXMgd2lkZSBhcyBFUFJPTSBvciBwZXJpcGhlcnkgYmVjYXVzZSBpdCBjb3ZlcnMgdHdvIHRvcC1iaXQgcHJlZml4ZXMuIE9ubHkgcGVyaXBoZXJ5IG9mZnNldHMgMCB0aHJvdWdoIDE2IGFyZSBpbXBsZW1lbnRlZCBtZW1vcnktbWFwcGVkIHJlZ2lzdGVycy48L2Rlc2M+CiAgPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZmlsbD0iIzE3MzEzYSI+CiAgICA8IS0tIFNoYXJlZCBib3VuZGFyaWVzLCB3aXRoIHJlZ2lvbiB3aWR0aHMgaW4gdGhlIHJhdGlvIDE6MToyLiAtLT4KICAgIDxyZWN0IHg9IjYwIiB5PSI2NiIgd2lkdGg9IjEzMjAiIGhlaWdodD0iMTA0IiBmaWxsPSIjZjRmOGY4Ii8+CiAgICA8cGF0aCBkPSJNMzkwIDY2IEg3MjAgVjE3MCBIMzkwIFoiIGZpbGw9IiNmZmYxZDYiLz4KICAgIDxyZWN0IHg9IjYwIiB5PSI2NiIgd2lkdGg9IjEzMjAiIGhlaWdodD0iMTA0IiBmaWxsPSJub25lIiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTM5MCA2NiBWMTcwIE03MjAgNjYgVjE3MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxnIHRleHQtYW5jaG9yPSJtaWRkbGUiPgogICAgICA8dGV4dCB4PSIyMjUiIHk9IjEwNyIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9ImJvbGQiPjAwOiBFUFJPTTwvdGV4dD4KICAgICAgPHRleHQgeD0iNTU1IiB5PSIxMDciIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj4wMTogcGVyaXBoZXJ5PC90ZXh0PgogICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxMDciIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIj4xMCAvIDExOiBTUkFNPC90ZXh0PgogICAgICA8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE3Ij4KICAgICAgICA8dGV4dCB4PSIyMjUiIHk9IjE0MyI+MHgwMDAwMDAwMC4uMHgzZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NTUiIHk9IjE0MyI+MHg0MDAwMDAwMC4uMHg3ZmZmZmZmZjwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxMDUwIiB5PSIxNDMiPjB4ODAwMDAwMDAuLjB4ZmZmZmZmZmY8L3RleHQ+CiAgICAgIDwvZz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo="
         },
         {
           "kind": "table",
@@ -725,7 +725,7 @@
         },
         {
           "kind": "image",
-          "source": "/readme/tsl-memory-layout.svg"
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDQwIiBoZWlnaHQ9IjM1NCIgdmlld0JveD0iMCA1MCAxNDQwIDM1NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsbGVkYnk9InRpdGxlIGRlc2MiPgogIDx0aXRsZSBpZD0idGl0bGUiPlRTTCBEUyBBQ0MgMjogYXRvbWljIGFjY2VzcyB0byBvbmUgU1JBTSB3b3JkPC90aXRsZT4KICA8ZGVzYyBpZD0iZGVzYyI+Rm91ciBhZGphY2VudCwgZXF1YWxseSBzaXplZCAzMi1iaXQgU1JBTSB3b3JkIGNlbGxzIGFyZSBzZXBhcmF0ZWQgYnkgbGluZXMsIHdpdGggb21pdHRlZCBtZW1vcnkgYXQgYm90aCBlbmRzLiBEUyBpcyAweDgwMDAwMDQwLCBhbmQgb2Zmc2V0IDIgc2VsZWN0cyB0aGUgY2VsbCBhdCAweDgwMDAwMDQyLiBUU0wgRFMgQUNDIDIgY29waWVzIHRoYXQgY2VsbCdzIG9sZCB2YWx1ZSAwIGludG8gQUNDIGFuZCBjaGFuZ2VzIHRoZSBzYW1lIGNlbGwgdG8gMSBhdG9taWNhbGx5LiBOZWlnaGJvcmluZyBjZWxscyByZW1haW4gdW5jaGFuZ2VkLjwvZGVzYz4KICA8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIiBmaWxsPSIjMTczMTNhIj4KICAgIDx0ZXh0IHg9IjYwIiB5PSI3OCIgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMSI+RFMgPSAweDgwMDAwMDQwOyBEUyArIDIgPSAweDgwMDAwMDQyPC90ZXh0PgoKICAgIDx0ZXh0IHg9IjYwIiB5PSIxMjIiIGZvbnQtc2l6ZT0iMjEiPkVhY2ggY2VsbCBpcyBvbmUgMzItYml0IHdvcmQ7IGFkZHJlc3NlcyBpbmNyZWFzZSBieSAxIHBlciBjZWxsLjwvdGV4dD4KICAgIDwhLS0gT25lIFNSQU0gb3V0bGluZSB3aXRoIGVxdWFsLXdpZHRoIHdvcmQgY2VsbHMsIHBsdXMgb21pdHRlZCBtZW1vcnkgYXQgYm90aCBlbmRzLiAtLT4KICAgIDxyZWN0IHg9IjYwIiB5PSIxNDYiIHdpZHRoPSIxMzIwIiBoZWlnaHQ9IjEzMiIgZmlsbD0iI2Y0ZjhmOCIvPgogICAgPHBhdGggZD0iTTcyMCAxNDYgSDEwMDUgVjI3OCBINzIwIFoiIGZpbGw9IiNmZmYxZDYiLz4KICAgIDxyZWN0IHg9IjYwIiB5PSIxNDYiIHdpZHRoPSIxMzIwIiBoZWlnaHQ9IjEzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgIDxwYXRoIGQ9Ik0xNTAgMTQ2IFYyNzggTTQzNSAxNDYgVjI3OCBNNzIwIDE0NiBWMjc4IE0xMDA1IDE0NiBWMjc4IE0xMjkwIDE0NiBWMjc4IiBmaWxsPSJub25lIiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPGcgdGV4dC1hbmNob3I9Im1pZGRsZSI+CiAgICAgIDx0ZXh0IHg9IjEwNSIgeT0iMjIyIiBmb250LXNpemU9IjMyIj7igKY8L3RleHQ+CiAgICAgIDx0ZXh0IHg9IjEzMzUiIHk9IjIyMiIgZm9udC1zaXplPSIzMiI+4oCmPC90ZXh0PgogICAgICA8ZyBmb250LXNpemU9IjIzIiBmb250LXdlaWdodD0iYm9sZCI+CiAgICAgICAgPHRleHQgeD0iMjkyLjUiIHk9IjE3OCI+RFMgKyAwIChiYXNlKTwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NzcuNSIgeT0iMTc4Ij5EUyArIDE8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iODYyLjUiIHk9IjE3OCI+RFMgKyAyICh0YXJnZXQpPC90ZXh0PgogICAgICAgIDx0ZXh0IHg9IjExNDcuNSIgeT0iMTc4Ij5EUyArIDM8L3RleHQ+CiAgICAgIDwvZz4KICAgICAgPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyMSI+CiAgICAgICAgPHRleHQgeD0iMjkyLjUiIHk9IjIxMiI+MHg4MDAwMDA0MDwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI1NzcuNSIgeT0iMjEyIj4weDgwMDAwMDQxPC90ZXh0PgogICAgICAgIDx0ZXh0IHg9Ijg2Mi41IiB5PSIyMTIiPjB4ODAwMDAwNDI8L3RleHQ+CiAgICAgICAgPHRleHQgeD0iMTE0Ny41IiB5PSIyMTIiPjB4ODAwMDAwNDM8L3RleHQ+CiAgICAgIDwvZz4KICAgICAgPGcgZm9udC1zaXplPSIyMSI+CiAgICAgICAgPHRleHQgeD0iMjkyLjUiIHk9IjI1MyI+dW5jaGFuZ2VkPC90ZXh0PgogICAgICAgIDx0ZXh0IHg9IjU3Ny41IiB5PSIyNTMiPnVuY2hhbmdlZDwvdGV4dD4KICAgICAgICA8dGV4dCB4PSI4NjIuNSIgeT0iMjU1IiBmb250LXNpemU9IjMwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzgwNTkxNiI+MCDihpIgMTwvdGV4dD4KICAgICAgICA8dGV4dCB4PSIxMTQ3LjUiIHk9IjI1MyI+dW5jaGFuZ2VkPC90ZXh0PgogICAgICA8L2c+CiAgICA8L2c+CiAgICA8dGV4dCB4PSI2MCIgeT0iMzI2IiBmb250LXNpemU9IjIzIj4xLiBDb3B5IHRoZSBvbGQgdGFyZ2V0IHZhbHVlIGludG8gQUNDOiA8dHNwYW4gZm9udC13ZWlnaHQ9ImJvbGQiPkFDQyA9IDA8L3RzcGFuPjwvdGV4dD4KICAgIDx0ZXh0IHg9Ijc1MCIgeT0iMzI2IiBmb250LXNpemU9IjIzIj4yLiBTZXQgdGhhdCBzYW1lIFNSQU0gY2VsbCB0byA8dHNwYW4gZm9udC13ZWlnaHQ9ImJvbGQiPjE8L3RzcGFuPi48L3RleHQ+CiAgICA8dGV4dCB4PSI2MCIgeT0iMzc0IiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iYm9sZCI+T25lIGF0b21pYyBpbnN0cnVjdGlvbjogbm8gaW50ZXJydXB0IG9yIHByb2Nlc3Mgc3dpdGNoIGJldHdlZW4gdGhlIHJlYWQgYW5kIHdyaXRlLjwvdGV4dD4KICA8L2c+Cjwvc3ZnPgo="
         }
       ]
     },
@@ -737,7 +737,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/readme/tsl-instruction-format.svg"
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTIwIiBoZWlnaHQ9IjI0MCIgdmlld0JveD0iMCAwIDExMjAgMjQwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+Cjx0aXRsZSBpZD0idGl0bGUiPlRTTCBEUyBBQ0MgMiBpbnN0cnVjdGlvbiBlbmNvZGluZzwvdGl0bGU+PGRlc2MgaWQ9ImRlc2MiPkJpdHMgMzEgdG8gMzAgYXJlIHR5cGUgMTAsIGJpdHMgMjkgdG8gMjggbW9kZSAxMCwgYml0cyAyNyB0byAyNSBzb3VyY2UgcmVnaXN0ZXIgRFMgMTExLCBiaXRzIDI0IHRvIDIyIGRlc3RpbmF0aW9uIHJlZ2lzdGVyIEFDQyAwMTEsIGFuZCBiaXRzIDIxIHRvIDAgdGhlIHNpZ25lZCBpbW1lZGlhdGUgMi4gVGhlIGNvbXBsZXRlIGluc3RydWN0aW9uIGlzIGhleGFkZWNpbWFsIEFFQzAwMDAyLjwvZGVzYz4KPGRlZnM+PG1hcmtlciBpZD0iYXJyb3ciIHZpZXdCb3g9IjAgMCAxMCAxMCIgcmVmWD0iOSIgcmVmWT0iNSIgbWFya2VyV2lkdGg9IjciIG1hcmtlckhlaWdodD0iNyIgb3JpZW50PSJhdXRvLXN0YXJ0LXJldmVyc2UiPjxwYXRoIGQ9Ik0wIDAgTDEwIDUgTDAgMTAgWiIgZmlsbD0iIzYzNzk4MyIvPjwvbWFya2VyPjwvZGVmcz4KPGcgZm9udC1mYW1pbHk9IkNhbnRhcmVsbCwgc2Fucy1zZXJpZiIgZmlsbD0iIzE3MzEzYSI+Cjx0ZXh0IHg9IjUxIiB5PSIzNyIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj4zMTwvdGV4dD4KPHRleHQgeD0iMTA5IiB5PSIzNyIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+MzA8L3RleHQ+CjxyZWN0IHg9IjQ4IiB5PSI1MiIgd2lkdGg9IjY0IiBoZWlnaHQ9Ijg4IiBmaWxsPSIjZjRmOGY4IiBzdHJva2U9IiM2Mzc5ODMiIHN0cm9rZS13aWR0aD0iMiIvPgo8dGV4dCB4PSI4MC4wIiB5PSI4OC4wIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj50eXA8L3RleHQ+Cjx0ZXh0IHg9IjgwLjAiIHk9IjExOC4wIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj4xMDwvdGV4dD4KPHRleHQgeD0iODAuMCIgeT0iMTcxIiBmb250LXNpemU9IjEzIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5TdG9yZSAvPC90ZXh0Pgo8dGV4dCB4PSI4MC4wIiB5PSIxODgiIGZvbnQtc2l6ZT0iMTMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPk1vdmU8L3RleHQ+Cjx0ZXh0IHg9IjExNSIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+Mjk8L3RleHQ+Cjx0ZXh0IHg9IjE3MyIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjI4PC90ZXh0Pgo8cmVjdCB4PSIxMTIiIHk9IjUyIiB3aWR0aD0iNjQiIGhlaWdodD0iODgiIGZpbGw9IiNmZmYxZDYiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjE0NC4wIiB5PSI4OC4wIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5NPC90ZXh0Pgo8dGV4dCB4PSIxNDQuMCIgeT0iMTE4LjAiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjEwPC90ZXh0Pgo8dGV4dCB4PSIxNDQuMCIgeT0iMTc4IiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5UU0w8L3RleHQ+Cjx0ZXh0IHg9IjE3OSIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+Mjc8L3RleHQ+Cjx0ZXh0IHg9IjI2OSIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjI1PC90ZXh0Pgo8cmVjdCB4PSIxNzYiIHk9IjUyIiB3aWR0aD0iOTYiIGhlaWdodD0iODgiIGZpbGw9IiNlYWY1ZjUiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjIyNC4wIiB5PSI4OC4wIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5TPC90ZXh0Pgo8dGV4dCB4PSIyMjQuMCIgeT0iMTE4LjAiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjExMTwvdGV4dD4KPHRleHQgeD0iMjI0LjAiIHk9IjE3OCIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+RFM8L3RleHQ+Cjx0ZXh0IHg9IjI3NSIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+MjQ8L3RleHQ+Cjx0ZXh0IHg9IjM2NSIgeT0iMzciIGZvbnQtc2l6ZT0iMTYiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjIyPC90ZXh0Pgo8cmVjdCB4PSIyNzIiIHk9IjUyIiB3aWR0aD0iOTYiIGhlaWdodD0iODgiIGZpbGw9IiNlN2YzZWEiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjMyMC4wIiB5PSI4OC4wIiBmb250LXNpemU9IjE4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5EPC90ZXh0Pgo8dGV4dCB4PSIzMjAuMCIgeT0iMTE4LjAiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjAxMTwvdGV4dD4KPHRleHQgeD0iMzIwLjAiIHk9IjE3OCIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+QUNDPC90ZXh0Pgo8dGV4dCB4PSIzNzEiIHk9IjM3IiBmb250LXNpemU9IjE2IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPjIxPC90ZXh0Pgo8dGV4dCB4PSIxMDY5IiB5PSIzNyIgZm9udC1zaXplPSIxNiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+MDwvdGV4dD4KPHJlY3QgeD0iMzY4IiB5PSI1MiIgd2lkdGg9IjcwNCIgaGVpZ2h0PSI4OCIgZmlsbD0iI2Y0ZjhmOCIgc3Ryb2tlPSIjNjM3OTgzIiBzdHJva2Utd2lkdGg9IjIiLz4KPHRleHQgeD0iNzIwLjAiIHk9Ijg4LjAiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPmk8L3RleHQ+Cjx0ZXh0IHg9IjcyMC4wIiB5PSIxMTguMCIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+MDAwMDAwMDAwMDAwMDAwMDAwMDAxMDwvdGV4dD4KPHRleHQgeD0iNzIwLjAiIHk9IjE3OCIgZm9udC1zaXplPSIxOCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+U2lnbmVkIG9mZnNldCArMjwvdGV4dD4KPHRleHQgeD0iNTYwIiB5PSIyMjciIGZvbnQtc2l6ZT0iMjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMTczMTNhIj5UU0wgRFMgQUNDIDIgIOKGkiAgMHhBRUMwMDAwMjwvdGV4dD4KPC9nPjwvc3ZnPgo="
         },
         {
           "kind": "table",
@@ -1513,7 +1513,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/memory-generic-heap.svg"
+          "source": "/readme/memory-generic-heap.svg"
         },
         {
           "kind": "table",
@@ -1543,7 +1543,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/memory-sram-overview.svg"
+          "source": "/readme/memory-sram-overview.svg"
         }
       ]
     },
@@ -1586,7 +1586,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-allocator-linkage.svg"
+          "source": "/readme/heap-allocator-linkage.svg"
         }
       ]
     },
@@ -1611,7 +1611,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-reallocation-decisions.svg"
+          "source": "/readme/heap-reallocation-decisions.svg"
         }
       ]
     },
@@ -1623,7 +1623,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-01-initial.svg"
+          "source": "/readme/heap-01-initial.svg"
         }
       ]
     },
@@ -1635,7 +1635,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-02-allocated.svg"
+          "source": "/readme/heap-02-allocated.svg"
         }
       ]
     },
@@ -1647,7 +1647,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-03-d-marked-free.svg"
+          "source": "/readme/heap-03-d-marked-free.svg"
         }
       ]
     },
@@ -1659,7 +1659,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-04-d-merged.svg"
+          "source": "/readme/heap-04-d-merged.svg"
         }
       ]
     },
@@ -1671,7 +1671,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-05-c-marked-free.svg"
+          "source": "/readme/heap-05-c-marked-free.svg"
         }
       ]
     },
@@ -1683,7 +1683,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-06-b-c-merged.svg"
+          "source": "/readme/heap-06-b-c-merged.svg"
         }
       ]
     },
@@ -1695,7 +1695,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/heap-07-b-d-merged.svg"
+          "source": "/readme/heap-07-b-d-merged.svg"
         }
       ]
     },
@@ -1771,7 +1771,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-state-transitions.svg"
+          "source": "/readme/process-state-transitions.svg"
         }
       ]
     },
@@ -1783,7 +1783,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/memory-process-list.svg"
+          "source": "/readme/memory-process-list.svg"
         },
         {
           "kind": "table",
@@ -1800,7 +1800,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/memory-process-payload-links.svg"
+          "source": "/readme/memory-process-payload-links.svg"
         }
       ]
     },
@@ -1819,7 +1819,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-load-transfer.svg"
+          "source": "/readme/process-load-transfer.svg"
         }
       ]
     },
@@ -1844,7 +1844,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-load-complete.svg"
+          "source": "/readme/process-load-complete.svg"
         }
       ]
     },
@@ -1888,7 +1888,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-run-setup.svg"
+          "source": "/readme/process-run-setup.svg"
         }
       ]
     },
@@ -1900,7 +1900,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-stack-placement.svg"
+          "source": "/readme/process-stack-placement.svg"
         }
       ]
     },
@@ -1952,12 +1952,12 @@
         {
           "kind": "code",
           "source": "code-4063",
-          "fontSize": 19.48
+          "fontSize": 21.19
         },
         {
           "kind": "code",
           "source": "code-4079",
-          "fontSize": 19.5
+          "fontSize": 21.17
         }
       ]
     },
@@ -1969,7 +1969,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-initial-stack-example.svg"
+          "source": "/readme/process-initial-stack-example.svg"
         }
       ]
     },
@@ -1981,7 +1981,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-inheritance.svg"
+          "source": "/readme/process-inheritance.svg"
         }
       ]
     },
@@ -1993,7 +1993,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/selectable-text/readme/process-environment-propagation.svg"
+          "source": "/readme/process-environment-propagation.svg"
         }
       ]
     },
@@ -2420,7 +2420,7 @@
       "visuals": [
         {
           "kind": "image",
-          "source": "/readme/blocking-cycle.svg"
+          "source": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIiByb2xlPSJpbWciIGFyaWEtbGFiZWxsZWRieT0idGl0bGUgZGVzYyI+Cjx0aXRsZSBpZD0idGl0bGUiPlNsZWVwLCB3YWtldXAsIHJlc3VtZTogdGhlIHdhaXRpbmcgY3ljbGU8L3RpdGxlPgo8ZGVzYyBpZD0iZGVzYyI+QSBjbG9ja3dpc2UgY3ljbGUgc2hvd3Mgb25lIHByb2Nlc3MncyBQQ0Igc3RhdGUuIEJMT0NLRUQ6IHdhaXRpbmcgZm9yIGFuIGV2ZW50IG9uIGEgd2FpdCBxdWV1ZSBhZnRlciBzbGVlcCgpLiBBbiBldmVudCB0cmlnZ2VycyB3YWtldXAoKSwgcmVtb3ZpbmcgdGhlIHdhaXRlciBhbmQgbWFraW5nIGl0cyBzdGF0ZSBSRUFEWTogd2FpdGluZyBmb3IgQ1BVIHRpbWUuIFRoZSBzY2hlZHVsZXIgc2VsZWN0cyBpdCBhbmQgdGhlIGRpc3BhdGNoZXIgcmVzdW1lcyBpdCB3aXRoIHN0YXRlIFJVTk5JTkcuIElmIGl0IG5lZWRzIGFub3RoZXIgZXZlbnQsIHNsZWVwKCkgam9pbnMgdGhlIHdhaXQgcXVldWUgYWdhaW4uIEtlcm5lbCBldmVudHMgdXNlIHRoZSBjb3JyZXNwb25kaW5nIHF1ZXVlIGhlbHBlcnMgZGlyZWN0bHkuIFRoZSBjZW50cmFsIG1lc3NhZ2UgaXMgUkVBRFkgZG9lcyBub3QgbWVhbiBSVU5OSU5HLjwvZGVzYz4KPGRlZnM+CjxtYXJrZXIgaWQ9ImFycm93IiB2aWV3Qm94PSIwIDAgMTAgMTAiIHJlZlg9IjkiIHJlZlk9IjUiIG1hcmtlcldpZHRoPSI3IiBtYXJrZXJIZWlnaHQ9IjciIG9yaWVudD0iYXV0by1zdGFydC1yZXZlcnNlIj48cGF0aCBkPSJNIDAgMCBMIDEwIDUgTCAwIDEwIFoiIGZpbGw9IiM2Mzc5ODMiLz48L21hcmtlcj4KPC9kZWZzPgo8ZyBmb250LWZhbWlseT0iQ2FudGFyZWxsLCBzYW5zLXNlcmlmIj4KPHJlY3QgeD0iMTYwIiB5PSIyNjAiIHdpZHRoPSIzNjAiIGhlaWdodD0iMTYwIiBmaWxsPSIjZmZmMWQ2IiBzdHJva2U9IiM4MDU5MTYiIHN0cm9rZS13aWR0aD0iMi41Ii8+CjxhIGhyZWY9Ii4uLy4uL2tlcm5lbC9wcm9jZXNzL3Byb2Nlc3MuaGVhZGVyI0wxNSI+PHRleHQgeD0iMzQwIiB5PSIzMjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMzgiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjODA1OTE2Ij5CTE9DS0VEPC90ZXh0PjwvYT4KPHRleHQgeD0iMzQwIiB5PSIzNzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPldhaXRpbmcgZm9yIGFuIGV2ZW50PC90ZXh0Pgo8cmVjdCB4PSIxMDgwIiB5PSIyNjAiIHdpZHRoPSIzNjAiIGhlaWdodD0iMTYwIiBmaWxsPSIjZWFmNWY1IiBzdHJva2U9IiMxNjdiODQiIHN0cm9rZS13aWR0aD0iMi41Ii8+CjxhIGhyZWY9Ii4uLy4uL2tlcm5lbC9wcm9jZXNzL3Byb2Nlc3MuaGVhZGVyI0wxMyI+PHRleHQgeD0iMTI2MCIgeT0iMzI2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjM4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzE2N2I4NCI+UkVBRFk8L3RleHQ+PC9hPgo8dGV4dCB4PSIxMjYwIiB5PSIzNzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjYiIGZvbnQtd2VpZ2h0PSJub3JtYWwiIGZpbGw9IiMxNzMxM2EiPldhaXRpbmcgZm9yIENQVSB0aW1lPC90ZXh0Pgo8cmVjdCB4PSI2MjAiIHk9IjYyMCIgd2lkdGg9IjM2MCIgaGVpZ2h0PSIxNjAiIGZpbGw9IiNlN2YzZWEiIHN0cm9rZT0iIzI1NzM0ZiIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KPGEgaHJlZj0iLi4vLi4va2VybmVsL3Byb2Nlc3MvcHJvY2Vzcy5oZWFkZXIjTDE0Ij48dGV4dCB4PSI4MDAiIHk9IjY4NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzOCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMyNTczNGYiPlJVTk5JTkc8L3RleHQ+PC9hPgo8dGV4dCB4PSI4MDAiIHk9IjczNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyNiIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+RXhlY3V0aW5nIG9uIHRoZSBDUFU8L3RleHQ+CjxwYXRoIGQ9Ik0gNTMyIDM0MCBIIDEwNjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPgo8YSBocmVmPSIuLi8uLi9saWJyYXJ5L3VuaXN0ZC9ibG9ja2luZy5waWNvYyNMMTciPjx0ZXh0IHg9IjgwMCIgeT0iMzAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjM0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzE3MzEzYSI+d2FrZXVwKCk8L3RleHQ+PC9hPgo8YSBocmVmPSIuLi8uLi9jb21tb24vd2FpdF9xdWV1ZS5oZWFkZXIjTDUiPjx0ZXh0IHg9IjgwMCIgeT0iMzg0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0ibm9ybWFsIiBmaWxsPSIjMTczMTNhIj5MZWF2ZSB3YWl0IHF1ZXVlPC90ZXh0PjwvYT4KPHBhdGggZD0iTSAxMjYwIDQzMiBDIDEyNjAgNTcwIDExMDggNzAwIDk5MiA3MDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPgo8YSBocmVmPSIuLi8uLi9rZXJuZWwvc2NoZWR1bGVyLnBpY29jI0wxMiI+PHRleHQgeD0iMTQzMCIgeT0iNTQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjI2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzE3MzEzYSI+U2NoZWR1bGVyIHNlbGVjdHM8L3RleHQ+PC9hPgo8YSBocmVmPSIuLi8uLi9rZXJuZWwvZGlzcGF0Y2hlci5waWNvYyNMNDMiPjx0ZXh0IHg9IjE0MzAiIHk9IjU4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+RGlzcGF0Y2hlciByZXN1bWVzPC90ZXh0PjwvYT4KPHBhdGggZD0iTSA2MDggNzAwIEMgNDkyIDcwMCAzNDAgNTcwIDM0MCA0MzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzYzNzk4MyIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIiBtYXJrZXItZW5kPSJ1cmwoI2Fycm93KSIvPgo8YSBocmVmPSIuLi8uLi9saWJyYXJ5L3VuaXN0ZC9ibG9ja2luZy5waWNvYyNMOSI+PHRleHQgeD0iMjU2IiB5PSI1NDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMzQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMTczMTNhIj5zbGVlcCgpPC90ZXh0PjwvYT4KPGEgaHJlZj0iLi4vLi4vY29tbW9uL3dhaXRfcXVldWUuaGVhZGVyI0w1Ij48dGV4dCB4PSIyNTYiIHk9IjU4MiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIyOCIgZm9udC13ZWlnaHQ9Im5vcm1hbCIgZmlsbD0iIzE3MzEzYSI+Sm9pbiB3YWl0IHF1ZXVlPC90ZXh0PjwvYT4KPGEgaHJlZj0iLi4vLi4va2VybmVsL3Byb2Nlc3MvcHJvY2Vzcy5oZWFkZXIjTDMzIj48dGV4dCB4PSI4MDAiIHk9IjUyNiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiMxNjdiODQiPlJFQURZIOKJoCBSVU5OSU5HPC90ZXh0PjwvYT4KPC9nPjwvc3ZnPgo="
         }
       ]
     },
@@ -2600,7 +2600,7 @@
         {
           "kind": "table",
           "source": "table-5580:1,2,3,4,5,6,7,8",
-          "fontSize": 21.6
+          "fontSize": 26.83
         }
       ]
     },
@@ -2655,7 +2655,7 @@
         {
           "kind": "table",
           "source": "table-5658:1,2,3,4,5",
-          "fontSize": 21.79
+          "fontSize": 23.14
         }
       ]
     },
@@ -2747,7 +2747,7 @@
         {
           "kind": "table",
           "source": "table-5885:1,2",
-          "fontSize": 22.92
+          "fontSize": 27.33
         }
       ]
     },
@@ -2819,7 +2819,7 @@
         {
           "kind": "table",
           "source": "table-6040:1,2,3,4,5,6",
-          "fontSize": 13.96
+          "fontSize": 27.02
         }
       ]
     },
@@ -2969,17 +2969,17 @@
         {
           "kind": "code",
           "source": "code-6258",
-          "fontSize": 19.38
+          "fontSize": 24.1
         },
         {
           "kind": "code",
           "source": "code-6274",
-          "fontSize": 19.38
+          "fontSize": 24.1
         },
         {
           "kind": "code",
           "source": "code-6281",
-          "fontSize": 19.4
+          "fontSize": 24.09
         }
       ]
     },
@@ -2992,7 +2992,7 @@
         {
           "kind": "code",
           "source": "code-6306",
-          "fontSize": 27.72
+          "fontSize": 27.73
         }
       ]
     },
@@ -3005,12 +3005,12 @@
         {
           "kind": "code",
           "source": "code-6323",
-          "fontSize": 15.98
+          "fontSize": 18.89
         },
         {
           "kind": "code",
           "source": "code-6323",
-          "fontSize": 15.98
+          "fontSize": 18.89
         }
       ]
     },
@@ -3311,12 +3311,12 @@
         {
           "kind": "code",
           "source": "code-6882",
-          "fontSize": 22.62
+          "fontSize": 22.7
         },
         {
           "kind": "table",
           "source": "table-6893:1",
-          "fontSize": 22.59
+          "fontSize": 22.64
         }
       ]
     },
@@ -3455,12 +3455,12 @@
         {
           "kind": "code",
           "source": "code-7062",
-          "fontSize": 12.56
+          "fontSize": 14.66
         },
         {
           "kind": "code",
           "source": "code-7062",
-          "fontSize": 12.56
+          "fontSize": 14.66
         }
       ]
     },
@@ -3498,7 +3498,7 @@
         {
           "kind": "code",
           "source": "code-1004",
-          "fontSize": 27.72
+          "fontSize": 27.73
         }
       ]
     },
@@ -3511,12 +3511,12 @@
         {
           "kind": "code",
           "source": "code-7173",
-          "fontSize": 14.14
+          "fontSize": 21.22
         },
         {
           "kind": "code",
           "source": "code-7173",
-          "fontSize": 14.16
+          "fontSize": 21.19
         }
       ]
     },
@@ -3529,7 +3529,7 @@
         {
           "kind": "code",
           "source": "code-7247",
-          "fontSize": 13.51
+          "fontSize": 20.9
         }
       ]
     },
@@ -3580,30 +3580,23 @@
     {
       "page": 266,
       "anchor": "1133-loading-starting-and-waiting-for-the-shell",
-      "title": "11.3.3 Loading, starting, and waiting for the shell (1)",
+      "title": "11.3.3 Loading, starting, and waiting for the shell",
       "issues": [],
       "visuals": [
         {
           "kind": "code",
           "source": "code-7329",
-          "fontSize": 15.01
+          "fontSize": 18.01
         },
         {
           "kind": "code",
           "source": "code-7329",
-          "fontSize": 15.01
+          "fontSize": 18.01
         }
       ]
     },
     {
       "page": 267,
-      "anchor": "1133-loading-starting-and-waiting-for-the-shell",
-      "title": "11.3.3 Loading, starting, and waiting for the shell (2)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 268,
       "anchor": "1134-shell-startup",
       "title": "11.3.4 Shell startup",
       "issues": [],
@@ -3611,17 +3604,17 @@
         {
           "kind": "code",
           "source": "code-1029",
-          "fontSize": 14.22
+          "fontSize": 19.86
         },
         {
           "kind": "code",
           "source": "code-1038",
-          "fontSize": 14.22
+          "fontSize": 19.86
         }
       ]
     },
     {
-      "page": 269,
+      "page": 268,
       "anchor": "1135-loading-user-applications",
       "title": "11.3.5 Loading user applications",
       "issues": [],
@@ -3629,38 +3622,24 @@
         {
           "kind": "code",
           "source": "code-1029",
-          "fontSize": 14.22
+          "fontSize": 19.86
         },
         {
           "kind": "code",
           "source": "code-1038",
-          "fontSize": 14.22
+          "fontSize": 19.86
         }
       ]
     },
     {
-      "page": 270,
-      "anchor": "1136-shell-exit-and-restart-policy",
-      "title": "11.3.6 Shell exit and restart policy",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 271,
-      "anchor": "1137-when-init-terminates",
-      "title": "11.3.7 When init terminates",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 272,
+      "page": 269,
       "anchor": "12-shell",
       "title": "12. Shell",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 273,
+      "page": 270,
       "anchor": "121-shell-owned-state",
       "title": "12.1 Shell-owned state (1)",
       "issues": [],
@@ -3668,12 +3647,12 @@
         {
           "kind": "table",
           "source": "table-7460:1,2,3,4,5,6,7,8,9,10",
-          "fontSize": 19.55
+          "fontSize": 21.49
         }
       ]
     },
     {
-      "page": 274,
+      "page": 271,
       "anchor": "121-shell-owned-state",
       "title": "12.1 Shell-owned state (2)",
       "issues": [],
@@ -3685,7 +3664,7 @@
       ]
     },
     {
-      "page": 275,
+      "page": 272,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (1)",
       "issues": [],
@@ -3703,7 +3682,7 @@
       ]
     },
     {
-      "page": 276,
+      "page": 273,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (2)",
       "issues": [],
@@ -3716,14 +3695,14 @@
       ]
     },
     {
-      "page": 277,
+      "page": 274,
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 278,
+      "page": 275,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (1)",
       "issues": [],
@@ -3736,7 +3715,7 @@
       ]
     },
     {
-      "page": 279,
+      "page": 276,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (2)",
       "issues": [],
@@ -3754,14 +3733,14 @@
       ]
     },
     {
-      "page": 280,
+      "page": 277,
       "anchor": "123-interactive-line-editing-and-command-history",
       "title": "12.3 Interactive line editing and command history (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 281,
+      "page": 278,
       "anchor": "124-command-parsing-expansion-and-execution",
       "title": "12.4 Command parsing, expansion, and execution (1)",
       "issues": [],
@@ -3774,14 +3753,14 @@
       ]
     },
     {
-      "page": 282,
+      "page": 279,
       "anchor": "124-command-parsing-expansion-and-execution",
       "title": "12.4 Command parsing, expansion, and execution (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 283,
+      "page": 280,
       "anchor": "125-shell-built-in-commands",
       "title": "12.5 Shell built-in commands",
       "issues": [],
@@ -3792,7 +3771,7 @@
       ]
     },
     {
-      "page": 284,
+      "page": 281,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (1)",
       "issues": [],
@@ -3804,7 +3783,7 @@
       ]
     },
     {
-      "page": 285,
+      "page": 282,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (2)",
       "issues": [],
@@ -3822,7 +3801,7 @@
       ]
     },
     {
-      "page": 286,
+      "page": 283,
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals (3)",
       "issues": [],
@@ -3835,7 +3814,7 @@
       ]
     },
     {
-      "page": 287,
+      "page": 284,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (1)",
       "issues": [],
@@ -3847,7 +3826,7 @@
       ]
     },
     {
-      "page": 288,
+      "page": 285,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (2)",
       "issues": [],
@@ -3859,7 +3838,7 @@
       ]
     },
     {
-      "page": 289,
+      "page": 286,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (3)",
       "issues": [],
@@ -3871,7 +3850,7 @@
       ]
     },
     {
-      "page": 290,
+      "page": 287,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (4)",
       "issues": [],
@@ -3883,7 +3862,7 @@
       ]
     },
     {
-      "page": 291,
+      "page": 288,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (5)",
       "issues": [],
@@ -3895,7 +3874,7 @@
       ]
     },
     {
-      "page": 292,
+      "page": 289,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (6)",
       "issues": [],
@@ -3908,7 +3887,7 @@
       ]
     },
     {
-      "page": 293,
+      "page": 290,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (7)",
       "issues": [],
@@ -3921,7 +3900,7 @@
       ]
     },
     {
-      "page": 294,
+      "page": 291,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (8)",
       "issues": [],
@@ -3939,7 +3918,7 @@
       ]
     },
     {
-      "page": 295,
+      "page": 292,
       "anchor": "126-inputoutput-redirection",
       "title": "12.6 Input/output redirection (9)",
       "issues": [],
@@ -3952,7 +3931,7 @@
       ]
     },
     {
-      "page": 296,
+      "page": 293,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (1)",
       "issues": [],
@@ -3964,7 +3943,7 @@
       ]
     },
     {
-      "page": 297,
+      "page": 294,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (2)",
       "issues": [],
@@ -3976,7 +3955,7 @@
       ]
     },
     {
-      "page": 298,
+      "page": 295,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (3)",
       "issues": [],
@@ -3984,17 +3963,17 @@
         {
           "kind": "code",
           "source": "code-8176",
-          "fontSize": 18.11
+          "fontSize": 22.05
         },
         {
           "kind": "code",
           "source": "code-8176",
-          "fontSize": 18.13
+          "fontSize": 22.08
         }
       ]
     },
     {
-      "page": 299,
+      "page": 296,
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines (4)",
       "issues": [],
@@ -4007,14 +3986,14 @@
       ]
     },
     {
-      "page": 300,
+      "page": 297,
       "anchor": "13-user-applications-and-commands",
       "title": "13. User applications and commands",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 301,
+      "page": 298,
       "anchor": "131-writing-a-simple-user-application",
       "title": "13.1 Writing a simple user application (1)",
       "issues": [],
@@ -4037,14 +4016,14 @@
       ]
     },
     {
-      "page": 302,
+      "page": 299,
       "anchor": "131-writing-a-simple-user-application",
       "title": "13.1 Writing a simple user application (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 303,
+      "page": 300,
       "anchor": "132-applications-library-calls-and-host-requests",
       "title": "13.2 Applications, library calls, and host requests (1)",
       "issues": [],
@@ -4055,7 +4034,7 @@
       ]
     },
     {
-      "page": 304,
+      "page": 301,
       "anchor": "132-applications-library-calls-and-host-requests",
       "title": "13.2 Applications, library calls, and host requests (2)",
       "issues": [],
@@ -4066,16 +4045,9 @@
       ]
     },
     {
-      "page": 305,
+      "page": 302,
       "anchor": "1321-command-behavior-and-supported-options",
-      "title": "13.2.1 Command behavior and supported options (1)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 306,
-      "anchor": "1321-command-behavior-and-supported-options",
-      "title": "13.2.1 Command behavior and supported options (2)",
+      "title": "13.2.1 Command behavior and supported options",
       "issues": [],
       "visuals": [
         {
@@ -4091,21 +4063,21 @@
       ]
     },
     {
-      "page": 307,
+      "page": 303,
       "anchor": "1322-command-errors-and-exit-statuses",
       "title": "13.2.2 Command errors and exit statuses",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 308,
+      "page": 304,
       "anchor": "14-test-system",
       "title": "14. Test system",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 309,
+      "page": 305,
       "anchor": "141-library-os-shell-and-boot-test-categories",
       "title": "14.1 Library, OS, shell, and boot test categories",
       "issues": [],
@@ -4117,7 +4089,7 @@
       ]
     },
     {
-      "page": 310,
+      "page": 306,
       "anchor": "1411-files-that-make-up-a-test",
       "title": "14.1.1 Files that make up a test (1)",
       "issues": [],
@@ -4129,7 +4101,7 @@
       ]
     },
     {
-      "page": 311,
+      "page": 307,
       "anchor": "1411-files-that-make-up-a-test",
       "title": "14.1.1 Files that make up a test (2)",
       "issues": [],
@@ -4137,14 +4109,14 @@
         {
           "kind": "table",
           "source": "table-8489:1,2,3,4,5,6,7,8,9,10",
-          "fontSize": 18.53
+          "fontSize": 20.32
         }
       ]
     },
     {
-      "page": 312,
+      "page": 308,
       "anchor": "1412-library-test-example",
-      "title": "14.1.2 Library test example (1)",
+      "title": "14.1.2 Library test example",
       "issues": [],
       "visuals": [
         {
@@ -4159,14 +4131,7 @@
       ]
     },
     {
-      "page": 313,
-      "anchor": "1412-library-test-example",
-      "title": "14.1.2 Library test example (2)",
-      "issues": [],
-      "visuals": []
-    },
-    {
-      "page": 314,
+      "page": 309,
       "anchor": "1413-os-test-example",
       "title": "14.1.3 OS test example (1)",
       "issues": [],
@@ -4174,17 +4139,17 @@
         {
           "kind": "code",
           "source": "code-8546",
-          "fontSize": 15.44
+          "fontSize": 15.46
         },
         {
           "kind": "code",
           "source": "code-8555",
-          "fontSize": 15.44
+          "fontSize": 15.46
         }
       ]
     },
     {
-      "page": 315,
+      "page": 310,
       "anchor": "1413-os-test-example",
       "title": "14.1.3 OS test example (2)",
       "issues": [],
@@ -4192,12 +4157,12 @@
         {
           "kind": "code",
           "source": "code-8574",
-          "fontSize": 14.88
+          "fontSize": 21.38
         },
         {
           "kind": "code",
           "source": "code-8588",
-          "fontSize": 14.89
+          "fontSize": 21.38
         },
         {
           "kind": "image",
@@ -4206,7 +4171,7 @@
       ]
     },
     {
-      "page": 316,
+      "page": 311,
       "anchor": "1414-shell-test-example",
       "title": "14.1.4 Shell test example",
       "issues": [],
@@ -4214,12 +4179,12 @@
         {
           "kind": "code",
           "source": "code-8612",
-          "fontSize": 18.12
+          "fontSize": 27.77
         },
         {
           "kind": "code",
           "source": "code-8620",
-          "fontSize": 18.12
+          "fontSize": 27.77
         },
         {
           "kind": "image",
@@ -4228,7 +4193,7 @@
       ]
     },
     {
-      "page": 317,
+      "page": 312,
       "anchor": "1415-boot-test-example",
       "title": "14.1.5 Boot test example",
       "issues": [],
@@ -4236,12 +4201,12 @@
         {
           "kind": "code",
           "source": "code-8640",
-          "fontSize": 14.15
+          "fontSize": 22.62
         },
         {
           "kind": "code",
           "source": "code-8647",
-          "fontSize": 14.3
+          "fontSize": 22.62
         },
         {
           "kind": "image",
@@ -4250,7 +4215,7 @@
       ]
     },
     {
-      "page": 318,
+      "page": 313,
       "anchor": "142-test-execution",
       "title": "14.2 Test execution",
       "issues": [],
@@ -4263,7 +4228,7 @@
       ]
     },
     {
-      "page": 319,
+      "page": 314,
       "anchor": "1421-make-targets",
       "title": "14.2.1 Make targets",
       "issues": [],
@@ -4276,21 +4241,21 @@
       ]
     },
     {
-      "page": 320,
+      "page": 315,
       "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 321,
+      "page": 316,
       "anchor": "15-use-in-operating-systems-and-real-time-operating-systems-lectures",
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 322,
+      "page": 317,
       "anchor": "151-operating-systems-topics",
       "title": "15.1 Operating-systems topics",
       "issues": [],
@@ -4303,7 +4268,7 @@
       ]
     },
     {
-      "page": 323,
+      "page": 318,
       "anchor": "1511-inspecting-picoos-execution-in-the-reti-emulator",
       "title": "15.1.1 Inspecting PicoOS execution in the ReTI-Emulator",
       "issues": [],
@@ -4331,7 +4296,7 @@
       ]
     },
     {
-      "page": 324,
+      "page": 319,
       "anchor": "1512-exploring-userspace-heap-allocation",
       "title": "15.1.2 Exploring userspace heap allocation (1)",
       "issues": [],
@@ -4349,14 +4314,14 @@
       ]
     },
     {
-      "page": 325,
+      "page": 320,
       "anchor": "1512-exploring-userspace-heap-allocation",
       "title": "15.1.2 Exploring userspace heap allocation (2)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 326,
+      "page": 321,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (1)",
       "issues": [],
@@ -4369,7 +4334,7 @@
       ]
     },
     {
-      "page": 327,
+      "page": 322,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (2)",
       "issues": [],
@@ -4392,14 +4357,14 @@
       ]
     },
     {
-      "page": 328,
+      "page": 323,
       "anchor": "1513-editing-and-executing-symbolic-reti-assembly",
       "title": "15.1.3 Editing and executing symbolic ReTI assembly (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 329,
+      "page": 324,
       "anchor": "152-real-time-operating-systems-topics",
       "title": "15.2 Real-time operating-systems topics",
       "issues": [],
@@ -4412,7 +4377,7 @@
       ]
     },
     {
-      "page": 330,
+      "page": 325,
       "anchor": "1521-parent-workers-and-shared-memory",
       "title": "15.2.1 Parent, workers, and shared memory",
       "issues": [],
@@ -4424,7 +4389,7 @@
       ]
     },
     {
-      "page": 331,
+      "page": 326,
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code (1)",
       "issues": [],
@@ -4432,32 +4397,24 @@
         {
           "kind": "code",
           "source": "code-9017",
-          "fontSize": 27.73
-        }
-      ]
-    },
-    {
-      "page": 332,
-      "anchor": "1522-minimal-launcher-and-worker-code",
-      "title": "15.2.2 Minimal launcher and worker code (2)",
-      "issues": [],
-      "visuals": [
-        {
-          "kind": "code",
-          "source": "code-9034",
-          "fontSize": 16.82
+          "fontSize": 11.29
         },
         {
           "kind": "code",
           "source": "code-9034",
-          "fontSize": 16.82
+          "fontSize": 11.29
+        },
+        {
+          "kind": "code",
+          "source": "code-9034",
+          "fontSize": 11.29
         }
       ]
     },
     {
-      "page": 333,
+      "page": 327,
       "anchor": "1522-minimal-launcher-and-worker-code",
-      "title": "15.2.2 Minimal launcher and worker code (3)",
+      "title": "15.2.2 Minimal launcher and worker code (2)",
       "issues": [],
       "visuals": [
         {
@@ -4478,14 +4435,14 @@
       ]
     },
     {
-      "page": 334,
+      "page": 328,
       "anchor": "1522-minimal-launcher-and-worker-code",
-      "title": "15.2.2 Minimal launcher and worker code (4)",
+      "title": "15.2.2 Minimal launcher and worker code (3)",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 335,
+      "page": 329,
       "anchor": "1523-following-the-counter-and-mutex-through-execution",
       "title": "15.2.3 Following the counter and mutex through execution",
       "issues": [],
@@ -4498,35 +4455,35 @@
       ]
     },
     {
-      "page": 336,
+      "page": 330,
       "anchor": "16-use-of-ai-in-the-project",
       "title": "16. Use of AI in the project",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 337,
+      "page": 331,
       "anchor": "16-use-of-ai-in-the-project",
       "title": "16. Use of AI in the project",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 338,
+      "page": 332,
       "anchor": "17-limitations",
       "title": "17. Limitations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 339,
+      "page": 333,
       "anchor": "17-limitations",
       "title": "17. Limitations",
       "issues": [],
       "visuals": []
     },
     {
-      "page": 340,
+      "page": 334,
       "anchor": "appendix-inspecting-bin-files-with-hexyl",
       "title": "Appendix: Inspecting `.bin` files with `hexyl`",
       "issues": [],

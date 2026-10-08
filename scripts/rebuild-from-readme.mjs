@@ -21,6 +21,13 @@ const {sections,assets}=readmeSource(source)
 const lists=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))
 const summaries=JSON.parse(await fs.readFile('config/readme-prose.json','utf8'))
 const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
+// Reviewed slide-local choices use source artifacts and UUIDs, so hidden slides
+// keep their content and renumbering cannot transfer a choice to another page.
+const slideSelection=JSON.parse(await fs.readFile('config/readme-slide-selection.json','utf8'))
+const panelKey=(anchor,group)=>JSON.stringify([anchor,group.map(a=>a.id+(a.borrowed?' repeated':'')+(a.type==='table'?':rows='+a.compactRows.map(row=>row.sourceRow).join(','):''))])
+const selectionByPanel=new Map(slideSelection.map(choice=>[JSON.stringify([choice.anchor,choice.assets]),choice]))
+if(selectionByPanel.size!==slideSelection.length)throw Error('Ambiguous reviewed slide selection')
+const matchedSelections=new Set()
 const codeLabels=JSON.parse(await fs.readFile('config/readme-code-labels.json','utf8'))
 const tableWidths=JSON.parse(await fs.readFile('config/readme-table-widths.json','utf8'))
 const columnConfig=JSON.parse(await fs.readFile('config/readme-columns.json','utf8'))
@@ -43,9 +50,9 @@ for(const section of sections.filter(omitSourceLists))for(const asset of section
  inventory.get(asset.id).excluded=sourceListOmission
 const esc=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;')
 const prose=s=>displayHtml(md.renderInline(s))
-const contextRemarks=(section,fact)=>{
+const contextRemarks=(section,fact,plainNote=false)=>{
  const notes=typeof fact[0]==='string'?[fact]:fact
- const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
+ const remarks=notes.map(([title,items])=>`<aside class="context-note"><b>${esc(title)}</b>${plainNote||visualOnlySection(section)?`<span>${items.map(prose).join(' · ')}</span>`:bulletList(items)}</aside>`).join('\n')
  return notes.length>1?`<div class="context-notes">${remarks}</div>`:remarks
 }
 const bulletList=(items,cls='',requestedSubBullet=false)=>{
@@ -248,7 +255,15 @@ for(const section of sections) {
   groups=groups.filter((panel,i)=>panel.group.length||keepSummary(section,i))
     .map((panel,i)=>({...panel,summary:keepSummary(section,i)?panel.summary:[]}))
  }
- groups.forEach(({group,layout,panels,weights,summary:pageSummary},number)=>{
+ groups=groups.flatMap(panel=>{
+  const choice=selectionByPanel.get(panelKey(section.anchor,panel.group))
+  if(!choice)return [panel]
+  if(matchedSelections.has(choice.id))throw Error('Ambiguous slide selection: '+choice.id)
+  matchedSelections.add(choice.id)
+  const selected=choice.omitLists?{...removeSourceListPanels(panel),summary:[]}:panel
+  return selected.group.length||selected.summary.length?[{...selected,choice}]:[]
+ })
+ groups.forEach(({group,layout,panels,weights,summary:pageSummary,choice},number)=>{
   let content
   const columnKey='assets:'+group.map(a=>a.id).join('+')
   if(layout==='columns') {
@@ -279,10 +294,13 @@ for(const section of sections) {
    else content+=`\n${notes}`
   }
   const fact=number===0?facts[section.anchor]:null
-  if(fact)content+=`\n${contextRemarks(section,fact)}`
-  pages.push({section,group,layout,content,summary:pageSummary,number:groups.length>1?number+1:null})
+  if(fact)content+=`\n${contextRemarks(section,fact,choice?.omitLists)}`
+  if(section.anchor==='1522-minimal-launcher-and-worker-code')
+   content=`<div class="example-label">Shared-memory mutex example</div>\n\n${content}`
+  pages.push({section,group,layout,content,summary:pageSummary,id:choice?.id,number:groups.length>1?number+1:null})
  })
 }
+if(matchedSelections.size!==slideSelection.length)throw Error('Reviewed slide selection no longer matches source artifacts: '+slideSelection.filter(choice=>!matchedSelections.has(choice.id)).map(choice=>choice.id).join(', '))
 // A removed introduction can still carry a required standards comparison.
 // Place that compact note with its first surviving descendant example.
 for(const section of sections.filter(s=>visualOnlySection(s)&&facts[s.anchor]&&!pages.some(p=>p.section===s))) {
@@ -335,11 +353,16 @@ const body=deckPages.map((p,i)=>{
  // keeps its explicit display mapping and consecutive title numbering.
  const main=ancestors.length?ancestors.join(' · '):''
  const subtitle=`## ${displayTitle(s.title)}${p.number?` (${p.number})`:''}`
- return `<!-- SOURCE Pico-OS/README.md#${s.anchor} -->\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide">\n\n${p.content}\n\n</div>`
+ const exampleClass=s.anchor==='1522-minimal-launcher-and-worker-code'&&p.number===1?' shared-mutex-code':''
+ return `${p.id?'<!-- SLIDE_ID '+p.id+' -->\n':''}<!-- SOURCE Pico-OS/README.md#${s.anchor} -->\n\n${main?'# '+main+'\n\n':''}${subtitle}\n\n<div class="deck-content readme-slide${exampleClass}">\n\n${p.content}\n\n</div>`
 })
 const contents='<!-- SOURCE Pico-OS/README.md#contents -->\n\n<div class="eyebrow section-eyebrow">Presentation map</div>\n\n# Contents\n\n<PresentationContents />'
 const rebuilt=presentationText(cover.trimEnd()+'\n\n---\n\n'+contents+'\n\n---\n\n'+body.join('\n\n---\n\n')+'\n')
 const protectedDeck=protectRebuild(previous,ensureSlideIdentities(rebuilt,presentationText(previous)),allowedRemovalIds)
+for(const choice of slideSelection.filter(choice=>choice.omitLists))for(const id of choice.assets.filter(id=>id.startsWith('list-'))) {
+ const entry=inventory.get(id)
+ if(!entry.slides.length)entry.excluded=sourceListOmission
+}
 const rebuiltSelection=formatSlideNumbers(remapRebuildSelection(previous,protectedDeck,parseSlideNumbers(previousSelection)))
 // Generate and validate the whole candidate before replacing any output.
 if(await fs.readFile('slides.md','utf8')!==previous)throw Error('Slide source changed during the rebuild; no output was replaced. Re-run using the latest slides.md.')
@@ -357,9 +380,9 @@ await fs.writeFile('docs/readme-prose-review.json',JSON.stringify({
  sections:sections.map(section=>({
   anchor:section.anchor,title:presentationText(section.title),line:section.line,
   slides:deckPages.flatMap((page,i)=>!page.overview&&page.section===section?[i+3]:[]),
-  summary:visualOnlySection(section)?pages.filter(page=>page.section===section).flatMap(page=>page.summary||[]):summaries[section.anchor]||[],remark:facts[section.anchor]||null,
+  summary:pages.filter(page=>page.section===section).flatMap(page=>page.summary||[]),remark:facts[section.anchor]||null,
   paragraphs:section.paragraphs.map(paragraph=>({line:paragraph.line,sourceSha256:hash(paragraph.text)})),
-  treatment:visualOnlySection(section)?'Source visuals without redundant bullet summaries; standards and analogies use plain notes':section.anchor==='contents'?'Dynamic contents and overview hierarchy':summaries[section.anchor]?'Concise reviewed bullets; omit repetitions of source visuals':section.assets.length?'Source artifacts; prose repeats their explanation or links to other sections':'Section heading introduces descendant slides; repeated introduction omitted',
+  treatment:slideSelection.some(choice=>choice.anchor===section.anchor)?'Reviewed slide-local list omissions; excluded slides retain their summaries and source lists':visualOnlySection(section)?'Source visuals without redundant bullet summaries; standards and analogies use plain notes':section.anchor==='contents'?'Dynamic contents and overview hierarchy':summaries[section.anchor]?'Concise reviewed bullets; omit repetitions of source visuals':section.assets.length?'Source artifacts; prose repeats their explanation or links to other sections':'Section heading introduces descendant slides; repeated introduction omitted',
  })),
 },null,2)+'\n')
 console.log(`${deckPages.length+2} slides, including contents and ${startedSections.size} section overviews; complete source code/diagrams; reviewed bullets + library-facing table rows.`)

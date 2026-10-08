@@ -48,3 +48,30 @@
 .layout-composed:not(:has(.readme-visual)) { grid-template-rows: repeat(2, max-content); }
 .layout-composed > .composition-panel { min-width: 0; min-height: 0; }
 .composition-panel > .readme-list { padding: 0; }
+
+.example-label {
+  flex: none;
+  color: var(--cyan-dim);
+  font-size: 0.85rem;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+/* Keep both complete programs readable: compact blank lines and put the
+   shared header's includes beside its struct in one full-width code box. */
+.shared-mutex-code .readme-code .slidev-code { padding: 10px 14px !important; }
+.shared-mutex-code .readme-code .slidev-code code {
+  display: flex;
+  flex-direction: column;
+  white-space: normal !important;
+}
+.shared-mutex-code .readme-code .slidev-code .line { line-height: 1.25 !important; }
+.shared-mutex-code .readme-code .slidev-code .line:empty { height: 6px; }
+.shared-mutex-code .readme-code-header { font-size: 19px; padding: 8px 14px; }
+.shared-mutex-code [data-code-source="code-9017"] .slidev-code code {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(4, auto);
+  column-gap: 24px;
+}

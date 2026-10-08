@@ -157,7 +157,7 @@ Navigation follows the generated README hierarchy and the active full or short
 deck. Dense section overviews adapt to four measured columns, with continuation
 slide numbers wrapping in pairs. Empty branches and sections disappear; ancestors remain when descendants
 have content. Section overviews and Contents are maintained automatically when
-content slides are excluded. The full deck contains 355 slides. The short deck follows the saved exclusions. Slides load on demand to
+content slides are excluded. The full deck contains 334 slides. The short deck follows the saved exclusions. Slides load on demand to
 avoid rendering the entire diagram-heavy deck in the background.
 
 ## Preserving the README content
@@ -209,6 +209,16 @@ removed across these three sections. The Unix signal comparison remains as a
 plain note beside the signal function table. Rebuild protection requires each
 intentional slide removal to be named by UUID; all surviving slide identities
 and short-version choices are preserved.
+
+Slides currently included in the short deck in sections 8–15 also omit standalone
+lists, except the section 15 introduction. Five slides left empty by this cleanup
+are removed. Table and diagram bullets remain intact. **Unix: reaping** and **Device
+inode analogy** remain as compact plain-text remarks. **Unix fork + exec / PicoOS**,
+the requested comparison boxes, and **Reading the stack** are omitted.
+[`config/readme-slide-selection.json`](config/readme-slide-selection.json) stores
+the reviewed source-artifact groups and UUIDs so rebuilds preserve these choices
+without changing excluded slides. Empty list columns and rows collapse, and
+surviving code, tables, and diagrams fill the available space.
 
 Crowded examples use the full slide area. Their prose moves to a roomier next
 slide or a separate explanation slide in the same subsection. Useful bullets

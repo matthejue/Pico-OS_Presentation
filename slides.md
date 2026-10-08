@@ -5536,7 +5536,6 @@ int main(void) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>Reading the stack</b><span>argc includes program name · <strong>argv/envp:</strong> NULL-terminated arrays · PicoOS prepares stack during run</span></aside>
 
 </div>
 
@@ -7114,10 +7113,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Open:</strong> lowest free slot 0–4; exhaustion −1</li>
-<li><strong>Slots 5–7:</strong> shell backups; explicit dup2 allowed</li></ul></div>
-<aside class="context-note"><b>Unix comparison</b><ul><li><strong>Unix:</strong> shared open-file descriptions</li>
-<li><strong>PicoOS:</strong> independent copied entries/offsets</li></ul></aside>
 
 </div>
 
@@ -7149,8 +7144,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>STDERR kind:</strong> preserved when copied to other index</li>
-<li><strong>No pipe kind:</strong> pipelines use files</li></ul></div>
 
 </div>
 
@@ -7175,7 +7168,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Zombie:</strong> retains descriptor allocations until collection</div></div>
 
 </div>
 
@@ -7240,8 +7232,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>128 cells:</strong> all usable; count distinguishes full/empty</li>
-<li><strong>Full ring:</strong> drop incoming byte; no flow control</li></ul></div>
 
 </div>
 
@@ -7270,8 +7260,6 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Read:</strong> available bytes; need not fill count</li>
-<li><strong>Accessor:</strong> exposes object without usable extern globals</li></ul></div>
 
 </div>
 
@@ -7560,12 +7548,7 @@ void complete_pending_terminal_read(
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Exact normalized paths:</strong> select kernel behavior</li>
-<li><strong>Marker contents:</strong> no device state</li>
-<li><strong>Other /device paths:</strong> ordinary host files</li>
-<li><strong>Null write:</strong> count + logical offset; no UART</li></ul></div>
-<aside class="context-note"><b>Device inode analogy</b><ul><li><strong>Conventional OS:</strong> special device inode</li>
-<li><strong>PicoOS:</strong> exact path selects virtual behavior</li></ul></aside>
+<aside class="context-note"><b>Device inode analogy</b><span><strong>Conventional OS:</strong> special device inode · <strong>PicoOS:</strong> exact path selects virtual behavior</span></aside>
 
 </div>
 
@@ -7731,12 +7714,6 @@ void complete_pending_terminal_read(
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>PicoOS chdir:</strong> PCB only; host directory unchanged</li>
-<li><strong>Relative paths:</strong> prepend PCB working directory</li>
-<li><strong>Normalize:</strong> separators, dot, root-clamped dot-dot, PATH_MAX</li></ul></div>
-<aside class="context-note"><b>POSIX / Linux / Windows hosts</b><ul><li><strong>POSIX:</strong> reject symlink traversal</li>
-<li><strong>Linux:</strong> BENEATH / NO_SYMLINKS / NO_XDEV</li>
-<li><strong>Windows:</strong> reject reparse points + junctions</li></ul></aside>
 
 </div>
 
@@ -7907,8 +7884,6 @@ void complete_pending_terminal_read(
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Kernel requests:</strong> local frames; no heap allocation</li>
-<li><strong>next / wait_next:</strong> different lists</li></ul></div>
 
 </div>
 
@@ -7933,8 +7908,6 @@ void complete_pending_terminal_read(
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>waiters / waiting_queue_ptr:</strong> ownership versus membership</li>
-<li><strong>parent_pid / device path:</strong> IDs/names; not object pointers</li></ul></div>
 
 </div>
 
@@ -8145,8 +8118,6 @@ $ picoc_compiler -c -O1 library/sys/wait/libwait.picoc
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>libwait:</strong> private syscall bridge; no unistd dependency</li>
-<li><strong>Kernel:</strong> separate build; runtime INT 0 entry</li></ul></div>
 
 </div>
 
@@ -8161,8 +8132,8 @@ $ picoc_compiler -c -O1 library/sys/wait/libwait.picoc
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Request + result:</strong> stack-local; no heap allocation</li>
-<li><strong>Helper zero:</strong> retry</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-6306 -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-6306" data-code-part="1">
 
@@ -8183,9 +8154,9 @@ struct WaitPidRequest {
 
 </div>
 
-</ReadmeVisual></div>
-<aside class="context-note"><b>waitpid / POSIX</b><ul><li><strong>PicoOS:</strong> one PID; returns child status</li>
-<li><strong>POSIX:</strong> output parameter + options</li></ul></aside>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -8264,8 +8235,6 @@ bool WIFSTOPPED(int status) {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Blocked wait resumes:</strong> IN2=1; no busy polling</li>
-<li><strong>Public result:</strong> child status; no options argument</li></ul></div>
 
 </div>
 
@@ -8354,11 +8323,6 @@ bool WIFSTOPPED(int status) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Private syscall helpers:</strong> avoid full unistd dependency</li>
-<li><strong>Plain writers:</strong> no stdio streams/format parser</li>
-<li><strong>Short local loops:</strong> avoid unused string library</li>
-<li><strong>Smaller image:</strong> more SRAM for heap + stack</li>
-<li><strong>UART backend:</strong> usable before userspace startup</li></ul></div>
 
 </div>
 
@@ -9290,7 +9254,7 @@ void _start(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7062 -->
 <div class="code-columns" data-column-key="code:code-7062" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:2.408421052631579">
@@ -9364,12 +9328,6 @@ void boot_main(void) {
 </ReadmeVisual>
 
 </div>
-
-<!-- README_ASSET list-7109 -->
-<div class="readme-list"><ul><li>Request <strong>kernel.bin</strong>; validate header size</li>
-<li>Read offsets; <strong>−1 stack</strong> → SRAM top</li>
-<li>Receive payload through <strong>polling/DMA</strong></li>
-<li>Install kernel <strong>registers</strong>; enter code</li></ul></div>
 
 </div>
 
@@ -9461,8 +9419,8 @@ void start_loaded_kernel(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns prose-with-code" style="--readme-columns:minmax(0, 36fr) minmax(0, 64fr)"><div class="readme-list prose-summary"><ul><li><strong>Globals:</strong> kernel .data</li>
-<li><strong>init_request:</strong> kernel-stack local</li></ul></div>
+<div class="readme-artifacts layout-single">
+
 <!-- README_ASSET code-1004 repeated -->
 <ReadmeVisual kind="code" :width="640" data-code-source="code-1004" data-code-part="1">
 
@@ -9480,7 +9438,9 @@ void _start(void) {
 
 </div>
 
-</ReadmeVisual></div>
+</ReadmeVisual>
+
+</div>
 
 </div>
 
@@ -9495,7 +9455,7 @@ void _start(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7173 -->
 <div class="code-columns" data-column-key="code:code-7173" style="--readme-columns:minmax(0, 40fr) minmax(0, 60fr);--source-aspect:3.590909090909091">
@@ -9552,15 +9512,7 @@ int main(void) {
 
 </div>
 
-<!-- README_ASSET list-7202 -->
-<div class="readme-list"><ul><li>Initialize <strong>heaps + stack boundary</strong></li>
-<li>Reset <strong>terminal, process list, shared-memory registry</strong></li>
-<li>Initialize <strong>DMA + interrupt controller</strong></li>
-<li>Load init; build <strong>initial stack</strong>; READY</li>
-<li><strong>Dispatch</strong> init; startup never resumes</li></ul></div>
-
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Generated entry:</strong> calls kernel main</div></div>
 
 </div>
 
@@ -9575,10 +9527,10 @@ int main(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-7247+list-7267" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7247 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-7247" data-code-part="1">
+<ReadmeVisual kind="code" :width="710.8" data-code-source="code-7247" data-code-part="1">
 
 <!-- README_CODE_PART code-7247 lines=1-15 -->
 <div class="readme-code">
@@ -9606,16 +9558,7 @@ void reboot(void) {
 
 </ReadmeVisual>
 
-<!-- README_ASSET list-7267 -->
-<div class="readme-list"><ul><li><strong>shutdown:</strong> halt; retain allocations</li>
-<li><strong>reboot:</strong> disable interrupts; clear timer/boundary</li>
-<li>PC ← <strong>0</strong>; restart EPROM bootloader</li></ul></div>
-
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Init:</strong> PID 1; directory /; no parent</li>
-<li><strong>Environment:</strong> empty; argv[0] only</li>
-<li><strong>First dispatch:</strong> RTI → libstart; not main directly</li>
-<li><strong>Load/run failure:</strong> return to generated halt</li></ul></div>
 
 </div>
 
@@ -9705,11 +9648,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Kernel:</strong> execution + resources</li>
-<li><strong>Init:</strong> configure session; keep shell available</li>
-<li><strong>Init path:</strong> resolve from /; no pwd host request</li></ul></div>
-<aside class="context-note"><b>Init / PID 1 analogy</b><ul><li><strong>Userspace supervisor:</strong> environment → shell → wait → repeat</li>
-<li><strong>Kernel:</strong> mechanisms; <strong>init:</strong> session policy</li></ul></aside>
 
 </div>
 
@@ -9717,6 +9655,7 @@ void _start(int argc, char *first_argument) {
 
 <!-- SLIDE_ID cc487a97-4c03-4111-a5ba-87a158a402bb -->
 <!-- SOURCE Pico-OS/README.md#1132-initial-environment-configuration -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
 
@@ -9736,10 +9675,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>257-cell buffer:</strong> reject file ≥256 cells</li>
-<li><strong>Records:</strong> newline/CRLF-separated NAME=value</li>
-<li><strong>Configuration failure:</strong> init returns 1</li>
-<li><strong>PATH=/user:</strong> optional loading-bar entry</li></ul></div>
 
 </div>
 
@@ -9750,11 +9685,11 @@ void _start(int argc, char *first_argument) {
 
 # <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
 
-## 11.3.3 Loading, starting, and waiting for the shell (1)
+## 11.3.3 Loading, starting, and waiting for the shell
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-compact-stacked">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET code-7329 -->
 <div class="code-columns" data-column-key="code:code-7329" style="--readme-columns:minmax(0, 54fr) minmax(0, 46fr);--source-aspect:3.355111633372503">
@@ -9819,30 +9754,7 @@ int main(void) {
 
 </div>
 
-<!-- README_ASSET list-7366 -->
-<div class="readme-list"><ul><li>Read config; set <strong>loading-bar environment</strong></li>
-<li><strong>Load/run</strong> shell; inherit environment + descriptors</li>
-<li><strong>Waitpid</strong> exact PID; restart after exit/stop</li>
-<li>Environment/load/run failure → <strong>status 1</strong></li></ul></div>
-
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 99561f19-a97f-4372-b8e1-a5e5c5bb8b48 -->
-<!-- SOURCE Pico-OS/README.md#1133-loading-starting-and-waiting-for-the-shell -->
-
-# <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
-
-## 11.3.3 Loading, starting, and waiting for the shell (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Environment:</strong> config parsed before shell loop</li>
-<li><strong>waitpid:</strong> exact shell PID; exit or stop</li>
-<li><strong>Failure:</strong> environment/load/run → status 1</li></ul></div>
 
 </div>
 
@@ -9906,9 +9818,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Own heap + environment:</strong> libstart before main</li>
-<li><strong>Descriptors + input ownership:</strong> then command loop</li>
-<li><strong>Init waits:</strong> shell return permits new session</li></ul></div>
 
 </div>
 
@@ -9972,46 +9881,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>External command:</strong> fresh payload; load + run</li>
-<li><strong>Built-in:</strong> executes inside shell</li>
-<li><strong>Foreground:</strong> shell waits; <strong>background:</strong> next prompt</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID bdabf2d4-329b-4ea9-a1e2-0eec4a14928e -->
-<!-- SOURCE Pico-OS/README.md#1136-shell-exit-and-restart-policy -->
-
-# <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
-
-## 11.3.6 Shell exit and restart policy
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>exit</strong> → end session; init restarts shell</li>
-<li><strong>poweroff</strong> → halt; <strong>reboot</strong> → EPROM</li>
-<li><strong>Stopped</strong> shell can trigger new session</li>
-<li><strong>Init</strong> in /system; commands in /user</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 3225bb76-16b0-49fd-8d6d-5aabecfa69c9 -->
-<!-- SOURCE Pico-OS/README.md#1137-when-init-terminates -->
-
-# <MajorSectionLink section="11-complete-startup-bootloader-kernel-init-shell-and-user-applications">11. Complete startup: bootloader, kernel, init, shell, and user applications</MajorSectionLink> · 11.3 Init process
-
-## 11.3.7 When init terminates
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>PID 1</strong> has no signal protection</li>
-<li>Kernel releases <strong>init</strong> resources</li>
-<li><strong>Children orphaned</strong> + parent-death signals</li>
-<li>Survivors continue; <strong>init</strong> never restarted</li>
-<li><strong>Final-candidate deletion:</strong> dispatcher limitation</li></ul></div>
 
 </div>
 
@@ -10056,8 +9925,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>.data:</strong> history, read-ahead, pipeline scratch</li>
-<li><strong>Stack:</strong> 80-cell command array</li></ul></div>
 
 </div>
 
@@ -10082,8 +9949,6 @@ void _start(int argc, char *first_argument) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Input path:</strong> terminal ring → shell buffer → command</li>
-<li><strong>Environment:</strong> separate User Process Heap allocations</li></ul></div>
 
 </div>
 
@@ -10425,10 +10290,6 @@ int read_line(char *buffer, int capacity) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>9 built-ins:</strong> mutate shell’s own state</li>
-<li><strong>No unset / wait</strong> built-ins</li>
-<li><strong>NAME=value alone:</strong> external command</li>
-<li><strong>Operands:</strong> required; exit/fg/bg reject extras</li></ul></div>
 
 </div>
 
@@ -10640,17 +10501,6 @@ int set_foreground_process(int pid) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary nested-summary"><ul><li><strong>Redirection rules</strong><ul><li><strong>Backup slots:</strong> stdin 5; stdout 6; stderr 7</li>
-<li><strong>Open 0–4 full:</strong> fail before starting child</li>
-<li><strong>Operators:</strong> input → stdout → stderr order</li>
-<li><strong>Parse suffixes:</strong> remove in reverse order</li></ul></li>
-<li><strong>Lifetime + failures</strong><ul><li><strong>Dup2:</strong> separate path + offset copies</li>
-<li><strong>Restore shell:</strong> before foreground wait</li>
-<li><strong>Setup failure:</strong> close temporary + saved descriptors</li>
-<li><strong>Nested shell:</strong> keeps redirected 0–2</li></ul></li></ul></div>
-<aside class="context-note"><b>Unix fork + exec / PicoOS</b><ul><li><strong>Unix:</strong> redirect forked child; replace image</li>
-<li><strong>PicoOS:</strong> redirect shell; copy on run; restore</li>
-<li><strong>No paging:</strong> alone does not explain missing fork</li></ul></aside>
 
 </div>
 
@@ -10978,11 +10828,6 @@ bool redirect_standard_input(char *path) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>One pipeline:</strong> finite foreground commands</li>
-<li><strong>TMP:</strong> <code>.picoos-pipe-&lt;shell PID&gt;.tmp</code></li></ul></div>
-<aside class="context-note"><b>Conventional pipe comparison</b><ul><li><strong>Kernel buffer:</strong> concurrent readers/writers; backpressure</li>
-<li><strong>PicoOS file:</strong> sequential; no unbounded/interactive stream</li>
-<li><strong>Kernel pipe needs:</strong> endpoints, queues, EOF, concurrent startup</li></ul></aside>
 
 </div>
 
@@ -11007,8 +10852,6 @@ bool redirect_standard_input(char *path) {
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Existing TMP:</strong> truncated, then removed</li>
-<li><strong>Longer pipelines / &amp;:</strong> unsupported</li></ul></div>
 
 </div>
 
@@ -11083,7 +10926,6 @@ bool run_pipeline(char *command, int pipeline) {
 </div>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Whole producer result:</strong> stored before consumer starts</div></div>
 
 </div>
 
@@ -11269,8 +11111,6 @@ PicoOS> /documentation/add.bin 7 5
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Command loading:</strong> parent shell’s operation</li>
-<li><strong>Output routing:</strong> depends on inherited descriptor</li></ul></div>
 
 </div>
 
@@ -11303,52 +11143,6 @@ PicoOS> /documentation/add.bin 7 5
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Echo:</strong> -h/--help ordinary text</li>
-<li><strong>Other commands:</strong> sole help argument recognized</li></ul></div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 9204e2d0-4668-4d63-b517-fcc62df0f1ea -->
-<!-- SOURCE Pico-OS/README.md#1321-command-behavior-and-supported-options -->
-
-# <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
-
-## 13.2.1 Command behavior and supported options (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET list-8353 -->
-<div class="readme-list bullet-columns"><ul><li><strong>echo:</strong> space-joined text + newline<ul><li><strong>\n:</strong> embedded newline; <strong>no -n</strong></li>
-<li><strong>-h/--help:</strong> ordinary text; status 0</li></ul></li>
-<li><strong>count:</strong> at most one nonnegative busy-loop delay<ul><li><strong>Delay:</strong> not milliseconds</li>
-<li><strong>Prints indefinitely:</strong> yield after each value</li></ul></li>
-<li><strong>cat:</strong> files or stdin; 64-cell chunks<ul><li><strong>Terminal:</strong> editable lines; Ctrl+D finishes</li>
-<li><strong>Files:</strong> preserve bytes; terminal escapes nonprintables</li></ul></li>
-<li><strong>touch:</strong> multiple paths; <strong>cp/mv:</strong> source + destination<ul><li><strong>cp:</strong> 64-cell chunks</li>
-<li><strong>ps:</strong> includes zombies</li>
-<li><strong>touch:</strong> stop on first failure</li>
-<li><strong>mv:</strong> one host move request; no options</li>
-<li><strong>cp:</strong> disables loading bar</li></ul></li>
-<li><strong>sed:</strong> seekable stdin; no pathname operand<ul><li><strong>i / c / a:</strong> numbered-line insert/change/append</li>
-<li><strong>s/old/new/:</strong> first literal match; no regex</li>
-<li><strong>/pattern/iTEXT:</strong> insert before matching lines</li>
-<li><strong>Whole input:</strong> in memory; loading bar disabled</li></ul></li>
-<li><strong>ls:</strong> one directory; <strong>-a:</strong> hidden names<ul><li><strong>mkdir:</strong> no -p; <strong>rm:</strong> nonrecursive</li>
-<li><strong>rmdir:</strong> multiple empty directories</li></ul></li>
-<li><strong>kill:</strong> SIGKILL default; names or numbers<ul><li><strong>Signal 0:</strong> probe; zombies rejected</li>
-<li><strong>Accepted request:</strong> yield; no group PID forms</li></ul></li>
-<li><strong>poweroff:</strong> halt; <strong>reboot:</strong> EPROM restart<ul><li><strong>uname:</strong> installed version</li>
-<li><strong>No operands:</strong> all three</li></ul></li></ul></div>
-
-</div>
-<div class="readme-list prose-summary"><ul><li><strong>Killed counter:</strong> probe fails; ps still shows zombie</li>
-<li><strong>$!:</strong> choose actual PID without hardcoding</li></ul></div>
-<aside class="context-note"><b>Unix command names</b><ul><li>Reduced option sets</li>
-<li><strong>cd:</strong> built-in changes shell directory</li></ul></aside>
 
 </div>
 
@@ -11359,7 +11153,7 @@ PicoOS> /documentation/add.bin 7 5
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
 
-## 13.2.1 Command behavior and supported options (2)
+## 13.2.1 Command behavior and supported options
 
 <div class="deck-content readme-slide">
 
@@ -11474,10 +11268,6 @@ PicoOS> rmdir.bin demo
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>63 classes:</strong> 13 library; 23 OS; 26 shell; 1 boot</li>
-<li><strong>49 System tests:</strong> OS + shell</li>
-<li><strong>Missing input/expectation:</strong> directory excluded</li>
-<li><strong>cat_binary:</strong> shell fixture by exact input rule</li></ul></div>
 
 </div>
 
@@ -11502,8 +11292,6 @@ PicoOS> rmdir.bin demo
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Fixtures:</strong> stage under binary/test</li>
-<li><strong>Private applications:</strong> compiled + assembled there</li></ul></div>
 
 </div>
 
@@ -11537,7 +11325,6 @@ PicoOS> rmdir.bin demo
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><div class="readme-item"><strong>Runner:</strong> original input; <strong>guest:</strong> staged data</div></div>
 
 </div>
 
@@ -11548,7 +11335,7 @@ PicoOS> rmdir.bin demo
 
 # <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
 
-## 14.1.2 Library test example (1)
+## 14.1.2 Library test example
 
 <div class="deck-content readme-slide">
 
@@ -11594,24 +11381,6 @@ int main() {
 </div>
 
 </div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 184f2426-3f5e-42bb-b921-e762c783e703 -->
-<!-- SOURCE Pico-OS/README.md#1412-library-test-example -->
-
-# <MajorSectionLink section="14-test-system">14. Test system</MajorSectionLink> · 14.1 Library, OS, shell, and boot test categories
-
-## 14.1.2 Library test example (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-list"><ul><li><strong>Library test:</strong> linked ISR support; no PicoOS kernel</li>
-<li><strong>Staged/direct:</strong> same second-line expectation</li>
-<li><strong>Compare:</strong> ignore trailing whitespace per line</li>
-<li><strong>Failure:</strong> mismatch, error, missing output, 5-second timeout</li></ul></div>
 
 </div>
 
@@ -11746,8 +11515,6 @@ process with pid 5 created
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>OS category:</strong> launcher + exact three-line input</li>
-<li><strong>Launcher:</strong> orchestrates processes/events without host commands</li></ul></div>
 
 </div>
 
@@ -11815,9 +11582,6 @@ process with pid 4 created
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Encoded keys:</strong> arrows, Home, Escape, Backspace, controls</li>
-<li><strong>Input:</strong> send next line after new prompt</li>
-<li><strong>Private programs/data:</strong> optional</li></ul></div>
 
 </div>
 
@@ -11883,8 +11647,6 @@ process with pid 4 created
 </div>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>One boot fixture:</strong> no private PicoC program</li>
-<li><strong>Same full startup:</strong> bootloader → kernel → init → shell</li></ul></div>
 
 </div>
 
@@ -12410,10 +12172,6 @@ JUMP 0
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Three processes:</strong> parent + two identical workers</li>
-<li><strong>One region:</strong> counter + shared mutex</li>
-<li><strong>Separate local mutexes:</strong> would not protect common counter</li>
-<li><strong>Two increments:</strong> expected final value 2</li></ul></div>
 
 </div>
 
@@ -12426,9 +12184,11 @@ JUMP 0
 
 ## 15.2.2 Minimal launcher and worker code (1)
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide shared-mutex-code">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 150fr) minmax(0, 240fr)">
+<div class="example-label">Shared-memory mutex example</div>
+
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 100fr) minmax(0, 360fr)">
 
 <div class="readme-artifacts composition-panel layout-single">
 
@@ -12456,16 +12216,14 @@ struct SharedState {
 
 </div>
 
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-9034+code-9076" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
 
 <!-- README_ASSET code-9034 -->
-<div class="code-columns" data-column-key="code:code-9034" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:3.091891891891892">
-
 <ReadmeVisual kind="code" :width="560" data-code-source="code-9034" data-code-part="1">
 
-<!-- README_CODE_PART code-9034 lines=1-16 -->
+<!-- README_CODE_PART code-9034 lines=1-31 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>documentation/shared_mutex/launcher.picoc</span><span class="code-range">lines 1–16</span></div>
+<div class="readme-code-header" v-pre><span>documentation/shared_mutex/launcher.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 // dependencies: ../../library/unistd/libunistd.reti_blocks ../../library/sys/wait/libwait.reti_blocks ../../library/sys/mman/libmman.reti_blocks ../../library/mutex/libmutex.reti_blocks
@@ -12484,19 +12242,6 @@ int main(void) {
     shared_memory_id = shm_open(
         "shared-memory-mutex",
         sizeof(struct SharedState)
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="560" data-code-source="code-9034" data-code-part="2">
-
-<!-- README_CODE_PART code-9034 lines=17-31 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>documentation/shared_mutex/launcher.picoc</span><span class="code-range">lines 17–31</span></div>
-
-```c {lines:false}
     );
     shared_state = (struct SharedState *)mmap(shared_memory_id);
     shared_state->workers = 0;
@@ -12517,29 +12262,6 @@ int main(void) {
 </div>
 
 </ReadmeVisual>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID d0d41e3f-aa5f-439c-9c4a-07220adf33c0 -->
-<!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
-
-# <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
-
-## 15.2.2 Minimal launcher and worker code (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 300fr) minmax(0, 65fr)">
-
-<div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-9076+code-9111" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
 
 <!-- README_ASSET code-9076 -->
 <ReadmeVisual kind="code" :width="560" data-code-source="code-9076" data-code-part="1">
@@ -12573,8 +12295,31 @@ int main(void) {
 
 </ReadmeVisual>
 
+</div>
+
+</div>
+
+</div>
+
+---
+
+<!-- SLIDE_ID d0d41e3f-aa5f-439c-9c4a-07220adf33c0 -->
+<!-- SOURCE Pico-OS/README.md#1522-minimal-launcher-and-worker-code -->
+
+# <MajorSectionLink section="15-use-in-operating-systems-and-real-time-operating-systems-lectures">15. Use in operating-systems and real-time operating-systems lectures</MajorSectionLink> · 15.2 Real-time operating-systems topics
+
+## 15.2.2 Minimal launcher and worker code (2)
+
+<div class="deck-content readme-slide">
+
+<div class="example-label">Shared-memory mutex example</div>
+
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 300fr) minmax(0, 65fr)">
+
+<div class="readme-artifacts composition-panel layout-single">
+
 <!-- README_ASSET code-9111 -->
-<ReadmeVisual kind="code" :width="560" data-code-source="code-9111" data-code-part="1">
+<ReadmeVisual kind="code" :width="779.6" data-code-source="code-9111" data-code-part="1">
 
 <!-- README_CODE_PART code-9111 lines=1-13 -->
 <div class="readme-code readme-terminal">
@@ -12636,6 +12381,8 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 ## 15.2.2 Minimal launcher and worker code (3)
 
 <div class="deck-content readme-slide">
+
+<div class="example-label">Shared-memory mutex example</div>
 
 <div class="readme-list"><ul><li><strong>Initialize mutex:</strong> before starting either child</li>
 <li><strong>Open existing:</strong> size 0 prevents accidental creation</li>

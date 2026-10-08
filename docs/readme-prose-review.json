@@ -9,14 +9,7 @@
         4,
         5
       ],
-      "summary": [
-        "**Educational OS** running on **ReTI**",
-        "**Components:** Bootloader, Kernel, Init process, Shell, Libraries, Applications",
-        "**Non-preemptive kernel**",
-        "**No MMU or Isolation**",
-        "**Host-backed File System via UART**",
-        "**Unix / POSIX-inspired**; small subset; no conformance claim"
-      ],
+      "summary": [],
       "remark": [
         [
           "Unix",
@@ -186,12 +179,7 @@
         9,
         10
       ],
-      "summary": [
-        "**Parts total:** €78.18 including VAT",
-        "**DigiKey Germany:** 12 August 2026",
-        "**Excludes:** wiring, PCB, cables, shipping",
-        "**Hardware:** computer connected via USB–UART"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -308,14 +296,7 @@
       "slides": [
         14
       ],
-      "summary": [
-        "**Original:** one source file",
-        "**Lark:** parses source into a parse tree",
-        "**AST construction**, then single-file lowering to ReTI",
-        "**Extended:** reusable units, **Tree-sitter** replaces **Lark**",
-        "**Tree-sitter:** parses preprocessed source into a parse tree",
-        "**AST construction**, symbol/type checks, linking + startup"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -3280,14 +3261,7 @@
         142
       ],
       "summary": [],
-      "remark": [
-        "Reading the stack",
-        [
-          "argc includes program name",
-          "**argv/envp:** NULL-terminated arrays",
-          "PicoOS prepares stack during run"
-        ]
-      ],
+      "remark": null,
       "paragraphs": [
         {
           "line": 4060,
@@ -4432,20 +4406,8 @@
         191,
         192
       ],
-      "summary": [
-        "**Open:** lowest free slot 0–4; exhaustion −1",
-        "**Slots 5–7:** shell backups; explicit dup2 allowed",
-        "**STDERR kind:** preserved when copied to other index",
-        "**No pipe kind:** pipelines use files",
-        "**Zombie:** retains descriptor allocations until collection"
-      ],
-      "remark": [
-        "Unix comparison",
-        [
-          "**Unix:** shared open-file descriptions",
-          "**PicoOS:** independent copied entries/offsets"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 5555,
@@ -4496,7 +4458,7 @@
           "sourceSha256": "9ea5217c2dcccd766089c1abd098698f976423892475383cbf48b635a5380dc7"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "82-global-terminal-input-buffer",
@@ -4506,12 +4468,7 @@
         193,
         194
       ],
-      "summary": [
-        "**128 cells:** all usable; count distinguishes full/empty",
-        "**Full ring:** drop incoming byte; no flow control",
-        "**Read:** available bytes; need not fill count",
-        "**Accessor:** exposes object without usable extern globals"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4547,7 +4504,7 @@
           "sourceSha256": "2a3e7d1678ba34551ace0622b52ce9cc0b3839a7eed7084a3149824e294d4586"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "83-blocking-and-completing-terminal-reads",
@@ -4669,12 +4626,7 @@
       "slides": [
         200
       ],
-      "summary": [
-        "**Exact normalized paths:** select kernel behavior",
-        "**Marker contents:** no device state",
-        "**Other /device paths:** ordinary host files",
-        "**Null write:** count + logical offset; no UART"
-      ],
+      "summary": [],
       "remark": [
         "Device inode analogy",
         [
@@ -4696,7 +4648,7 @@
           "sourceSha256": "bea6cd9bd12dfb2bddb2bc62944c0448b427c61a8948befc263c6f5f73f44188"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "86-file-descriptor-creation-inheritance-duplication-and-cleanup",
@@ -4814,20 +4766,10 @@
         207
       ],
       "summary": [
-        "**PicoOS chdir:** PCB only; host directory unchanged",
-        "**Relative paths:** prepend PCB working directory",
-        "**Normalize:** separators, dot, root-clamped dot-dot, PATH_MAX",
         "**chdir failure:** old directory preserved",
         "**getcwd:** copy stored path; no host request"
       ],
-      "remark": [
-        "POSIX / Linux / Windows hosts",
-        [
-          "**POSIX:** reject symlink traversal",
-          "**Linux:** BENEATH / NO_SYMLINKS / NO_XDEV",
-          "**Windows:** reject reparse points + junctions"
-        ]
-      ],
+      "remark": null,
       "paragraphs": [
         {
           "line": 6015,
@@ -4858,7 +4800,7 @@
           "sourceSha256": "193db830b85a6d309323a814b0d1fad32a618fe3e07c0760a0161a30719b5367"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "9-kernel-data-structures-relationships-storage-and-lifetimes",
@@ -4921,12 +4863,7 @@
         213,
         214
       ],
-      "summary": [
-        "**Kernel requests:** local frames; no heap allocation",
-        "**next / wait_next:** different lists",
-        "**waiters / waiting_queue_ptr:** ownership versus membership",
-        "**parent_pid / device path:** IDs/names; not object pointers"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -4954,7 +4891,7 @@
           "sourceSha256": "1f438add2f8b7ab822c9e67efb04e6e8c27e30c3d3c605b8a10b6659af89a6ac"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "93-kernel-global-variables-and-process-list-roots",
@@ -5053,9 +4990,7 @@
       ],
       "summary": [
         "**Header:** signatures; compiler checks calls",
-        "**Implementation:** linked into user image",
-        "**libwait:** private syscall bridge; no unistd dependency",
-        "**Kernel:** separate build; runtime INT 0 entry"
+        "**Implementation:** linked into user image"
       ],
       "remark": null,
       "paragraphs": [
@@ -5092,7 +5027,7 @@
           "sourceSha256": "b00f9281888bc7ec08174436a38de178a8fa8325e70f6fbe68346adeccfdd9be"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1012-packing-arguments-and-executing-the-syscall",
@@ -5102,19 +5037,8 @@
         221,
         222
       ],
-      "summary": [
-        "**Request + result:** stack-local; no heap allocation",
-        "**Helper zero:** retry",
-        "**Blocked wait resumes:** IN2=1; no busy polling",
-        "**Public result:** child status; no options argument"
-      ],
-      "remark": [
-        "waitpid / POSIX",
-        [
-          "**PicoOS:** one PID; returns child status",
-          "**POSIX:** output parameter + options"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 6301,
@@ -5137,7 +5061,7 @@
           "sourceSha256": "ba8331ff8b2f5d180861060ca40aba0c1d7385e06ce87b73c39f2c7dbc60b49e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1013-interrupt-entry-waiting-and-return",
@@ -5239,13 +5163,7 @@
       "slides": [
         225
       ],
-      "summary": [
-        "**Private syscall helpers:** avoid full unistd dependency",
-        "**Plain writers:** no stdio streams/format parser",
-        "**Short local loops:** avoid unused string library",
-        "**Smaller image:** more SRAM for heap + stack",
-        "**UART backend:** usable before userspace startup"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -5273,7 +5191,7 @@
           "sourceSha256": "9e395b6e8c7cffbba4f8cd54bad79350e69ec58456c78638c53593b2675ce90d"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1021-unistd-processes-descriptors-paths-and-wait-queues",
@@ -5830,7 +5748,7 @@
           "sourceSha256": "c099175dc0eeb0b37c15bc061d991af44479d41503a80676567a23db77ab98b0"
         }
       ],
-      "treatment": "Source artifacts; prose repeats their explanation or links to other sections"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "112-kernel-startup",
@@ -5840,11 +5758,7 @@
         260,
         261
       ],
-      "summary": [
-        "**Globals:** kernel .data",
-        "**init_request:** kernel-stack local",
-        "**Generated entry:** calls kernel main"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -5864,7 +5778,7 @@
           "sourceSha256": "0e754edcc465e5d2f7a05abee64999a46268f6b55d2e0ff639437e026cbc70ee"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1121-loading-init-and-entering-normal-execution",
@@ -5873,12 +5787,7 @@
       "slides": [
         262
       ],
-      "summary": [
-        "**Init:** PID 1; directory /; no parent",
-        "**Environment:** empty; argv[0] only",
-        "**First dispatch:** RTI → libstart; not main directly",
-        "**Load/run failure:** return to generated halt"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -5906,7 +5815,7 @@
           "sourceSha256": "58a863cbbb2f533420ed7f56f649e83ec7550b79d60595ece2017b4163bd96d5"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "113-init-process",
@@ -5932,18 +5841,8 @@
       "slides": [
         264
       ],
-      "summary": [
-        "**Kernel:** execution + resources",
-        "**Init:** configure session; keep shell available",
-        "**Init path:** resolve from /; no pwd host request"
-      ],
-      "remark": [
-        "Init / PID 1 analogy",
-        [
-          "**Userspace supervisor:** environment → shell → wait → repeat",
-          "**Kernel:** mechanisms; **init:** session policy"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 7291,
@@ -5954,7 +5853,7 @@
           "sourceSha256": "7a9bab6dfde51b324e92f8a31d3e026d1c914462e516e9cce583b0a7784fc8e3"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1132-initial-environment-configuration",
@@ -5963,12 +5862,7 @@
       "slides": [
         265
       ],
-      "summary": [
-        "**257-cell buffer:** reject file ≥256 cells",
-        "**Records:** newline/CRLF-separated NAME=value",
-        "**Configuration failure:** init returns 1",
-        "**PATH=/user:** optional loading-bar entry"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -5980,21 +5874,16 @@
           "sourceSha256": "9fb7b60c7fa8da28aa571a33d4cd1739f4e57ef53b1c3422bcab7aec4a336cbf"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1133-loading-starting-and-waiting-for-the-shell",
       "title": "11.3.3 Loading, starting, and waiting for the shell",
       "line": 7322,
       "slides": [
-        266,
-        267
+        266
       ],
-      "summary": [
-        "**Environment:** config parsed before shell loop",
-        "**waitpid:** exact shell PID; exit or stop",
-        "**Failure:** environment/load/run → status 1"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6010,20 +5899,16 @@
           "sourceSha256": "01e2a17daa99efb90217f98eae73888d077b7b9e93a7aadba0934c41841b07ef"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1134-shell-startup",
       "title": "11.3.4 Shell startup",
       "line": 7385,
       "slides": [
-        268
+        267
       ],
-      "summary": [
-        "**Own heap + environment:** libstart before main",
-        "**Descriptors + input ownership:** then command loop",
-        "**Init waits:** shell return permits new session"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6035,20 +5920,16 @@
           "sourceSha256": "2abe92b5bb1f9e07cf64c682cd2b3290d8c3881c198028f521b00ff8451f57a1"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1135-loading-user-applications",
       "title": "11.3.5 Loading user applications",
       "line": 7397,
       "slides": [
-        269
+        268
       ],
-      "summary": [
-        "**External command:** fresh payload; load + run",
-        "**Built-in:** executes inside shell",
-        "**Foreground:** shell waits; **background:** next prompt"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6060,21 +5941,14 @@
           "sourceSha256": "32097af14619804b3df0efeeadb41c02137b0b3b4f66bf7f6402e7f1b8d8c6d0"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1136-shell-exit-and-restart-policy",
       "title": "11.3.6 Shell exit and restart policy",
       "line": 7410,
-      "slides": [
-        270
-      ],
-      "summary": [
-        "**exit** → end session; init restarts shell",
-        "**poweroff** → halt; **reboot** → EPROM",
-        "**Stopped** shell can trigger new session",
-        "**Init** in /system; commands in /user"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6086,22 +5960,14 @@
           "sourceSha256": "e0d734a8735f60a9f5338a8cbe614b8fbb601ef140c7290a527de8d211f82a24"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1137-when-init-terminates",
       "title": "11.3.7 When init terminates",
       "line": 7421,
-      "slides": [
-        271
-      ],
-      "summary": [
-        "**PID 1** has no signal protection",
-        "Kernel releases **init** resources",
-        "**Children orphaned** + parent-death signals",
-        "Survivors continue; **init** never restarted",
-        "**Final-candidate deletion:** dispatcher limitation"
-      ],
+      "slides": [],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6125,7 +5991,7 @@
           "sourceSha256": "84ab201c594d9b30b1704ab849f9a0689c0349a1105db00d8ea71edfd9724534"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "12-shell",
@@ -6147,15 +6013,10 @@
       "title": "12.1 Shell-owned state",
       "line": 7453,
       "slides": [
-        273,
-        274
+        270,
+        271
       ],
-      "summary": [
-        "**.data:** history, read-ahead, pipeline scratch",
-        "**Stack:** 80-cell command array",
-        "**Input path:** terminal ring → shell buffer → command",
-        "**Environment:** separate User Process Heap allocations"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6179,23 +6040,23 @@
           "sourceSha256": "5ee0e340ebe6700cc63fdc5fee6aa573e09194d24069811cc313e0d03af68b8d"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "122-shell-startup-and-command-loop",
       "title": "12.2 Shell startup and command loop",
       "line": 7504,
       "slides": [
-        275,
-        276,
-        277
+        272,
+        273,
+        274
       ],
       "summary": [
+        "**Redirected stdin:** commands until EOF",
+        "**Read-ahead:** retain bytes after first newline",
         "**Startup:** close 3–7; keep inherited standard streams",
         "**Input ownership:** negative shell PID",
-        "**Parent-death policy:** SIGKILL",
-        "**Redirected stdin:** commands until EOF",
-        "**Read-ahead:** retain bytes after first newline"
+        "**Parent-death policy:** SIGKILL"
       ],
       "remark": null,
       "paragraphs": [
@@ -6227,9 +6088,9 @@
       "title": "12.3 Interactive line editing and command history",
       "line": 7564,
       "slides": [
-        278,
-        279,
-        280
+        275,
+        276,
+        277
       ],
       "summary": [
         "**Command buffer:** 79 characters + terminator",
@@ -6263,8 +6124,8 @@
       "title": "12.4 Command parsing, expansion, and execution",
       "line": 7641,
       "slides": [
-        281,
-        282
+        278,
+        279
       ],
       "summary": [
         "**One unquoted pipe:** balanced quotes required",
@@ -6318,14 +6179,9 @@
       "title": "12.5 Shell built-in commands",
       "line": 7681,
       "slides": [
-        283
+        280
       ],
-      "summary": [
-        "**9 built-ins:** mutate shell’s own state",
-        "**No unset / wait** built-ins",
-        "**NAME=value alone:** external command",
-        "**Operands:** required; exit/fg/bg reject extras"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6337,16 +6193,16 @@
           "sourceSha256": "a3cbd715ea651b4c0831086543295fb60515eaff631cf6c9326229a4af989ba1"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1251-foreground-processes-background-processes-and-job-control-signals",
       "title": "12.5.1 Foreground processes, background processes, and job-control signals",
       "line": 7704,
       "slides": [
-        284,
-        285,
-        286
+        281,
+        282,
+        283
       ],
       "summary": [
         [
@@ -6418,40 +6274,18 @@
       "title": "12.6 Input/output redirection",
       "line": 7859,
       "slides": [
+        284,
+        285,
+        286,
         287,
         288,
         289,
         290,
         291,
-        292,
-        293,
-        294,
-        295
+        292
       ],
-      "summary": [
-        [
-          "**Redirection rules**",
-          "**Backup slots:** stdin 5; stdout 6; stderr 7",
-          "**Open 0–4 full:** fail before starting child",
-          "**Operators:** input → stdout → stderr order",
-          "**Parse suffixes:** remove in reverse order"
-        ],
-        [
-          "**Lifetime + failures**",
-          "**Dup2:** separate path + offset copies",
-          "**Restore shell:** before foreground wait",
-          "**Setup failure:** close temporary + saved descriptors",
-          "**Nested shell:** keeps redirected 0–2"
-        ]
-      ],
-      "remark": [
-        "Unix fork + exec / PicoOS",
-        [
-          "**Unix:** redirect forked child; replace image",
-          "**PicoOS:** redirect shell; copy on run; restore",
-          "**No paging:** alone does not explain missing fork"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 7862,
@@ -6546,33 +6380,20 @@
           "sourceSha256": "fd222c31666bfd0e602fc1a7434f226e50071f6e2945fcde70b1310c9edd8018"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "127-sequential-file-backed-pipelines",
       "title": "12.7 Sequential file-backed pipelines",
       "line": 8124,
       "slides": [
-        296,
-        297,
-        298,
-        299
+        293,
+        294,
+        295,
+        296
       ],
-      "summary": [
-        "**One pipeline:** finite foreground commands",
-        "**TMP:** `.picoos-pipe-<shell PID>.tmp`",
-        "**Existing TMP:** truncated, then removed",
-        "**Longer pipelines / &:** unsupported",
-        "**Whole producer result:** stored before consumer starts"
-      ],
-      "remark": [
-        "Conventional pipe comparison",
-        [
-          "**Kernel buffer:** concurrent readers/writers; backpressure",
-          "**PicoOS file:** sequential; no unbounded/interactive stream",
-          "**Kernel pipe needs:** endpoints, queues, EOF, concurrent startup"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 8127,
@@ -6619,7 +6440,7 @@
           "sourceSha256": "870c30b8802adece73672b4fed7c88249a06b220974eec870473eb2cc0528bd6"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "13-user-applications-and-commands",
@@ -6641,8 +6462,8 @@
       "title": "13.1 Writing a simple user application",
       "line": 8244,
       "slides": [
-        301,
-        302
+        298,
+        299
       ],
       "summary": [
         "**argc check:** two operands; failure status 1",
@@ -6685,15 +6506,10 @@
       "title": "13.2 Applications, library calls, and host requests",
       "line": 8303,
       "slides": [
-        303,
-        304
+        300,
+        301
       ],
-      "summary": [
-        "**Command loading:** parent shell’s operation",
-        "**Output routing:** depends on inherited descriptor",
-        "**Echo:** -h/--help ordinary text",
-        "**Other commands:** sole help argument recognized"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6713,27 +6529,17 @@
           "sourceSha256": "79b4b75444902c6d661971d0cb6bea88b80669c30b88b1ad81fcc41d3543e00c"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1321-command-behavior-and-supported-options",
       "title": "13.2.1 Command behavior and supported options",
       "line": 8347,
       "slides": [
-        305,
-        306
+        302
       ],
-      "summary": [
-        "**Killed counter:** probe fails; ps still shows zombie",
-        "**$!:** choose actual PID without hardcoding"
-      ],
-      "remark": [
-        "Unix command names",
-        [
-          "Reduced option sets",
-          "**cd:** built-in changes shell directory"
-        ]
-      ],
+      "summary": [],
+      "remark": null,
       "paragraphs": [
         {
           "line": 8350,
@@ -6748,14 +6554,14 @@
           "sourceSha256": "24e085a274a4ebab73af812828346e2028979221e6fb965834a4155e8496b881"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1322-command-errors-and-exit-statuses",
       "title": "13.2.2 Command errors and exit statuses",
       "line": 8441,
       "slides": [
-        307
+        303
       ],
       "summary": [
         "Results → **stdout**; diagnostics → stderr",
@@ -6797,14 +6603,9 @@
       "title": "14.1 Library, OS, shell, and boot test categories",
       "line": 8460,
       "slides": [
-        309
+        305
       ],
-      "summary": [
-        "**63 classes:** 13 library; 23 OS; 26 shell; 1 boot",
-        "**49 System tests:** OS + shell",
-        "**Missing input/expectation:** directory excluded",
-        "**cat_binary:** shell fixture by exact input rule"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6820,21 +6621,17 @@
           "sourceSha256": "92e88b2eea37275f7dcd9b1599043bd37f127bd516ec39fa836f8fc1254a5957"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1411-files-that-make-up-a-test",
       "title": "14.1.1 Files that make up a test",
       "line": 8477,
       "slides": [
-        310,
-        311
+        306,
+        307
       ],
-      "summary": [
-        "**Fixtures:** stage under binary/test",
-        "**Private applications:** compiled + assembled there",
-        "**Runner:** original input; **guest:** staged data"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6850,22 +6647,16 @@
           "sourceSha256": "9049ef5ad8f803f10312e34d5052f2f5ea282cde7f6c7fd9e242d8041b76d451"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1412-library-test-example",
       "title": "14.1.2 Library test example",
       "line": 8507,
       "slides": [
-        312,
-        313
+        308
       ],
-      "summary": [
-        "**Library test:** linked ISR support; no PicoOS kernel",
-        "**Staged/direct:** same second-line expectation",
-        "**Compare:** ignore trailing whitespace per line",
-        "**Failure:** mismatch, error, missing output, 5-second timeout"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6885,20 +6676,17 @@
           "sourceSha256": "4e1eb8ef0bc48b2ef5171cfa8f848fd5296522b8d7a609abdeb97fc81ec04d6e"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1413-os-test-example",
       "title": "14.1.3 OS test example",
       "line": 8540,
       "slides": [
-        314,
-        315
+        309,
+        310
       ],
-      "summary": [
-        "**OS category:** launcher + exact three-line input",
-        "**Launcher:** orchestrates processes/events without host commands"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6926,20 +6714,16 @@
           "sourceSha256": "5073032fee853fbbc74a3f1f0b2c41b6aec7a92053a83ca069bbadaa7dfe403a"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1414-shell-test-example",
       "title": "14.1.4 Shell test example",
       "line": 8601,
       "slides": [
-        316
+        311
       ],
-      "summary": [
-        "**Encoded keys:** arrows, Home, Escape, Backspace, controls",
-        "**Input:** send next line after new prompt",
-        "**Private programs/data:** optional"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6959,19 +6743,16 @@
           "sourceSha256": "7f9cfecf23cff022d151092c67db3e05b0a997a6ddb5dbbac461bf118d25802f"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1415-boot-test-example",
       "title": "14.1.5 Boot test example",
       "line": 8634,
       "slides": [
-        317
+        312
       ],
-      "summary": [
-        "**One boot fixture:** no private PicoC program",
-        "**Same full startup:** bootloader → kernel → init → shell"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -6991,14 +6772,14 @@
           "sourceSha256": "dc35948630e277947cd762906d0ca94668ab4ebedbc74c3a6f2a039927edfe89"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "142-test-execution",
       "title": "14.2 Test execution",
       "line": 8662,
       "slides": [
-        318
+        313
       ],
       "summary": [
         "**Per class:** fresh emulator + temporary peripherals",
@@ -7028,7 +6809,7 @@
       "title": "14.2.1 Make targets",
       "line": 8685,
       "slides": [
-        319
+        314
       ],
       "summary": [
         "**run-os:** inspect OS_RUN_PATH; no expected-output comparison",
@@ -7052,7 +6833,7 @@
       "title": "15. Use in operating-systems and real-time operating-systems lectures",
       "line": 8704,
       "slides": [
-        321
+        316
       ],
       "summary": [
         "Inspect source + **live execution**",
@@ -7073,7 +6854,7 @@
       "title": "15.1 Operating-systems topics",
       "line": 8711,
       "slides": [
-        322
+        317
       ],
       "summary": [
         "**Compare:** PicoC → symbolic ReTI → binary → live state",
@@ -7097,7 +6878,7 @@
       "title": "15.1.1 Inspecting PicoOS execution in the ReTI-Emulator",
       "line": 8729,
       "slides": [
-        323
+        318
       ],
       "summary": [],
       "remark": null,
@@ -7134,8 +6915,8 @@
       "title": "15.1.2 Exploring userspace heap allocation",
       "line": 8782,
       "slides": [
-        324,
-        325
+        319,
+        320
       ],
       "summary": [
         "**Predict:** storage, aliases, required free address",
@@ -7168,9 +6949,9 @@
       "title": "15.1.3 Editing and executing symbolic ReTI assembly",
       "line": 8837,
       "slides": [
-        326,
-        327,
-        328
+        321,
+        322,
+        323
       ],
       "summary": [
         "**Labels + pseudoinstructions:** compiler resolves/expands",
@@ -7216,7 +6997,7 @@
       "title": "15.2 Real-time operating-systems topics",
       "line": 8947,
       "slides": [
-        329
+        324
       ],
       "summary": [
         "**Inspect:** scheduling, waiting, synchronization",
@@ -7236,14 +7017,9 @@
       "title": "15.2.1 Parent, workers, and shared memory",
       "line": 8961,
       "slides": [
-        330
+        325
       ],
-      "summary": [
-        "**Three processes:** parent + two identical workers",
-        "**One region:** counter + shared mutex",
-        "**Separate local mutexes:** would not protect common counter",
-        "**Two increments:** expected final value 2"
-      ],
+      "summary": [],
       "remark": null,
       "paragraphs": [
         {
@@ -7267,17 +7043,16 @@
           "sourceSha256": "986e4c50208eb561968902e64d17352bc922c85b17fb798ce638143d8fb2c961"
         }
       ],
-      "treatment": "Concise reviewed bullets; omit repetitions of source visuals"
+      "treatment": "Reviewed slide-local list omissions; excluded slides retain their summaries and source lists"
     },
     {
       "anchor": "1522-minimal-launcher-and-worker-code",
       "title": "15.2.2 Minimal launcher and worker code",
       "line": 9007,
       "slides": [
-        331,
-        332,
-        333,
-        334
+        326,
+        327,
+        328
       ],
       "summary": [
         "**Initialize mutex:** before starting either child",
@@ -7319,7 +7094,7 @@
       "title": "15.2.3 Following the counter and mutex through execution",
       "line": 9136,
       "slides": [
-        335
+        329
       ],
       "summary": [
         [
@@ -7369,7 +7144,7 @@
       "title": "16. Use of AI in the project",
       "line": 9193,
       "slides": [
-        337
+        331
       ],
       "summary": [
         [
@@ -7432,7 +7207,7 @@
       "title": "17. Limitations",
       "line": 9262,
       "slides": [
-        339
+        333
       ],
       "summary": [],
       "remark": [
@@ -7455,7 +7230,7 @@
       "title": "Appendix: Inspecting `.bin` files with `hexyl`",
       "line": 9298,
       "slides": [
-        340
+        334
       ],
       "summary": [
         "**Header:** 20 bytes; words big-endian",

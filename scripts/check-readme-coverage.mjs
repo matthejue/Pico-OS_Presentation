@@ -6,6 +6,7 @@ import {prepareTable} from '../config/readme-tables.mjs'
 import {loadSourceState} from './source-state.mjs'
 import {applySvgEdits} from '../config/readme-svg-edits.mjs'
 import {visualOnlySection, keepSummary, omitSourceLists, sourceListOmission} from '../config/readme-content-selection.mjs'
+import {inspectSlideIdentities} from './slide-identities.mjs'
 const sourcePath=process.env.PRESENTATION_SOURCE || (await loadSourceState()).snapshotPath
 const source=await fs.readFile(sourcePath,'utf8'),rawDeck=await fs.readFile('slides.md','utf8')
 // Persistent identity is invisible metadata, independent of source coverage.
@@ -15,13 +16,15 @@ const {assets,sections}=readmeSource(source),fences=md.parse(deck,{}).filter(t=>
 const sectionFor=anchor=>sections.find(section=>section.anchor===anchor)
 const summaries=JSON.parse(await fs.readFile('config/readme-lists.json','utf8'))
 const codeLabels=JSON.parse(await fs.readFile('config/readme-code-labels.json','utf8'))
+const slideSelection=JSON.parse(await fs.readFile('config/readme-slide-selection.json','utf8'))
+const selectedListIds=new Set(slideSelection.filter(choice=>choice.omitLists).flatMap(choice=>choice.assets.filter(id=>id.startsWith('list-'))))
 assert.equal(inventory.sourceSha256,hash(source))
 for(const a of assets) {
  const entry=inventory.assets.find(e=>e.id===a.id)
  assert.ok(entry,`${a.id}: inventoried`);assert.equal(entry.sourceSha256,a.sha256)
  if(a.navigationOnly){assert.ok(entry.excluded);continue}
- if(a.type==='list'&&omitSourceLists(sectionFor(a.anchor))) {
-  assert.equal(entry.excluded,sourceListOmission,`${a.id}: intentional section 2 omission recorded`)
+ if(a.type==='list'&&(omitSourceLists(sectionFor(a.anchor))||selectedListIds.has(a.id))) {
+  assert.equal(entry.excluded,sourceListOmission,`${a.id}: requested list omission recorded`)
   assert.equal(entry.slides.length,0,`${a.id}: no remaining list placement`)
   assert.ok(!deck.includes(`<!-- README_ASSET ${a.id} -->`),`${a.id}: source list removed`)
   continue
@@ -73,12 +76,17 @@ const facts=JSON.parse(await fs.readFile('config/readme-facts.json','utf8'))
 const remarks=fact=>typeof fact[0]==='string'?[fact]:fact
 const bullets=[...Object.values(summaries).flat(Infinity),...Object.values(prose).flat(Infinity),...Object.values(facts).flatMap(f=>remarks(f).flatMap(note=>note[1]))]
 for(const bullet of bullets)assert.ok(plain(bullet).split(/\s+/).length<=10,`Brief bullet: ${bullet}`)
-for(const [anchor,items] of Object.entries(prose))for(const item of (visualOnlySection(sectionFor(anchor))?proseReview.sections.find(section=>section.anchor===anchor).summary:items).flat(Infinity))
+for(const anchor of Object.keys(prose))for(const item of proseReview.sections.find(section=>section.anchor===anchor).summary.flat(Infinity))
  assert.ok(deck.includes(displayHtml(md.renderInline(item))),`${anchor}: reviewed prose actually appears alongside its source assets`)
 for(const [anchor,fact] of Object.entries(facts))for(const item of remarks(fact).flatMap(note=>note[1]))
  assert.ok(deck.includes(displayHtml(md.renderInline(item))),`${anchor}: contextual/standards remark present`)
 assert.equal((deck.slice(cover.length).match(/<(?:p|div class="readme-explanation")\b/g)||[]).length,0,'No continuous slide prose')
 const sectionSlideIndices=new Map()
+const selectedSlides=new Set(slideSelection.filter(choice=>choice.omitLists).map(choice=>choice.id))
+for(const slide of inspectSlideIdentities(rawDeck))if(selectedSlides.has(slide.id)) {
+ const outsideVisuals=slide.content.replace(/<ReadmeVisual\b[\s\S]*?<\/ReadmeVisual>/g,'')
+ assert.ok(!/<(?:ul|ol)\b|class="readme-list/.test(outsideVisuals),`${slide.title}: requested standalone lists removed`)
+}
 for(const slide of rawDeck.split(/^---\s*$/m).slice(2)) {
  const anchor=slide.match(/<!-- SOURCE Pico-OS\/README.md#([^ ]+) -->/)?.[1]
  if(!anchor||!visualOnlySection(sectionFor(anchor))||slide.includes('<SectionOverview '))continue

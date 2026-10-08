@@ -3,7 +3,7 @@
     [
       "Unix",
       [
-        "Multiuser · multitasking OS family",
+        "Multiuser \u00b7 multitasking OS family",
         "Shell + small, composable tools"
       ]
     ],
@@ -55,18 +55,10 @@
   "42212-initial-argc-argv-and-envp": [
     "System V Intel386 / POSIX",
     [
-      "**Intel386 Fig. 3-31:** argc → argv → NULL → envp",
+      "**Intel386 Fig. 3-31:** argc \u2192 argv \u2192 NULL \u2192 envp",
       "**ReTI:** entry PC, word characters; no auxiliary vector",
       "**POSIX.1-2024:** arrays/environment; no physical layout",
       "**PicoOS:** load + run; no exec replacement"
-    ]
-  ],
-  "422121-concrete-initial-stack-example": [
-    "Reading the stack",
-    [
-      "argc includes program name",
-      "**argv/envp:** NULL-terminated arrays",
-      "PicoOS prepares stack during run"
     ]
   ],
   "4222-parent-to-child-inheritance": [
@@ -98,55 +90,11 @@
       "**PicoOS:** all actions fixed"
     ]
   ],
-  "81-per-process-file-descriptor-table": [
-    "Unix comparison",
-    [
-      "**Unix:** shared open-file descriptions",
-      "**PicoOS:** independent copied entries/offsets"
-    ]
-  ],
-  "89-picoos-paths-working-directories-and-host-operations": [
-    "POSIX / Linux / Windows hosts",
-    [
-      "**POSIX:** reject symlink traversal",
-      "**Linux:** BENEATH / NO_SYMLINKS / NO_XDEV",
-      "**Windows:** reject reparse points + junctions"
-    ]
-  ],
-  "1012-packing-arguments-and-executing-the-syscall": [
-    "waitpid / POSIX",
-    [
-      "**PicoOS:** one PID; returns child status",
-      "**POSIX:** output parameter + options"
-    ]
-  ],
   "10291-streams-and-output-in-stdiopicoc": [
     "System V-style variadic ABI",
     [
       "**printf / fprintf:** walk stack arguments",
       "**Shared PicoC frame** convention"
-    ]
-  ],
-  "1131-init-responsibilities": [
-    "Init / PID 1 analogy",
-    [
-      "**Userspace supervisor:** environment → shell → wait → repeat",
-      "**Kernel:** mechanisms; **init:** session policy"
-    ]
-  ],
-  "126-inputoutput-redirection": [
-    "Unix fork + exec / PicoOS",
-    [
-      "**Unix:** redirect forked child; replace image",
-      "**PicoOS:** redirect shell; copy on run; restore",
-      "**No paging:** alone does not explain missing fork"
-    ]
-  ],
-  "1321-command-behavior-and-supported-options": [
-    "Unix command names",
-    [
-      "Reduced option sets",
-      "**cd:** built-in changes shell directory"
     ]
   ],
   "17-limitations": [
@@ -167,7 +115,7 @@
     "libc startup analogy",
     [
       "**Runtime preparation** before application main",
-      "**libstart:** heap/environment; main result → exit"
+      "**libstart:** heap/environment; main result \u2192 exit"
     ]
   ],
   "1172-loading-32-bit-values-with-loadi32": [
@@ -189,14 +137,6 @@
     [
       "**PicoOS single quotes:** still expand variables",
       "**echo:** interprets \\n itself; no shell escape pass"
-    ]
-  ],
-  "127-sequential-file-backed-pipelines": [
-    "Conventional pipe comparison",
-    [
-      "**Kernel buffer:** concurrent readers/writers; backpressure",
-      "**PicoOS file:** sequential; no unbounded/interactive stream",
-      "**Kernel pipe needs:** endpoints, queues, EOF, concurrent startup"
     ]
   ]
 }

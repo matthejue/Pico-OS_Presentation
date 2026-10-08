@@ -130,7 +130,7 @@ const summaryDestinations = {
   },
   "1522-minimal-launcher-and-worker-code": {
     "code-9017": "after",
-    "code-9076": "after"
+    "code-9111": "after"
   }
 }
 

@@ -85,8 +85,13 @@ export function compactGroups(groups, section) {
     return [{group:parts.slice(0,2),layout:'columns'},single(parts[2])]
   if(section.anchor==='111-loading-the-kernel-from-the-eprom-bootloader'&&types==='table,code,image,code,list,code,image')
     return [{group:parts.slice(0,2),layout:'columns'},single(parts[2]),{group:parts.slice(3,5),layout:'compact-stacked'},composed(parts.slice(5).map(single),[230,160])]
-  if(section.anchor==='1522-minimal-launcher-and-worker-code'&&types==='code,code,code,code,code')
-    return [composed(parts.slice(0,2).map(single),[150,240]),composed([{group:parts.slice(2,4),layout:'columns'},single(parts[4])],[300,65])]
+  if(section.anchor==='1522-minimal-launcher-and-worker-code'&&types==='code,code,code,code,code') {
+    // Compare the complete parent and child programs in aligned columns.
+    // The short shared declaration stays above them; build/run commands follow.
+    parts[1].split = false
+    return [composed([single(parts[0]),{group:parts.slice(1,3),layout:'columns'}],[100,360]),
+      composed(parts.slice(3).map(single),[300,65])]
+  }
   if(section.anchor==='1172-loading-32-bit-values-with-loadi32'&&types==='math,code,code,code,math')
     return [composed([single(parts[0]),{group:parts.slice(1,3),layout:'columns'}],[90,160]),composed([single(parts[3]),single(parts[4])],[130,90])]
   // Expanded storage views and redirection stages need the complete slide width.
