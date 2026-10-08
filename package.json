@@ -17,6 +17,7 @@
     "test:rebuild": "node scripts/test-rebuild-protection.mjs",
     "test:overviews": "node scripts/test-section-overviews.mjs",
     "test:navigation": "node scripts/test-presentation-navigation.mjs",
+    "test:print-range:browser": "node scripts/test-print-range-browser.mjs",
     "test:notes": "node scripts/test-slide-identities.mjs && node scripts/test-slide-notes.mjs",
     "test:notes:browser": "node scripts/test-slide-notes-browser.mjs"
   },

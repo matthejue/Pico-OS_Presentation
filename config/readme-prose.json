@@ -17,7 +17,7 @@
     [
       "**Caller:**",
       "For `fun(arg1, arg2)`, evaluate and push **arg2**, then **arg1**",
-      "Push the **return address** to the continuation block",
+      "Push the **return address** onto the stack",
       "Transfer control to the **callee**",
       "Remove **argument cells** after return"
     ],

@@ -553,7 +553,7 @@ binary/basic_string.sections
 <div class="deck-content readme-slide">
 
 <div class="call-cleanup-panels"><section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading"><strong>Caller:</strong></div><ul><li>For <code>fun(arg1, arg2)</code>, evaluate and push <strong>arg2</strong>, then <strong>arg1</strong></li>
-<li>Push the <strong>return address</strong> to the continuation block</li>
+<li>Push the <strong>return address</strong> onto the stack</li>
 <li>Transfer control to the <strong>callee</strong></li>
 <li>Remove <strong>argument cells</strong> after return</li></ul></section>
 <section class="call-cleanup-panel readme-list"><div class="call-cleanup-heading"><strong>Callee:</strong></div><ul><li>Save <strong>caller BAF</strong>; set <strong>BAF</strong> to the first local</li>
@@ -1278,7 +1278,7 @@ void _start(int argc, char *first_argument) {
 
 <!-- README_CODE_PART code-1029 lines=1-3 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/start/libstart.picoc</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>-C library/start/libstart.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 // dependencies: ../stdlib/libstdlib.reti_blocks

@@ -8,7 +8,7 @@
   "code-924": "section-placement.reti_blocks",
   "code-967": "section-placement.reti",
   "code-1004": "Compiler-generated _start · source equivalent",
-  "code-1029": "library/start/libstart.picoc",
+  "code-1029": "-C library/start/libstart.picoc",
   "code-1038": "library/start/start.picoc",
   "code-1189": "boot/bootloader.picoc",
   "code-1292": "program.sections",

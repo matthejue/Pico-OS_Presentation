@@ -323,11 +323,14 @@ complete active deck with `scripts/link-presentation-pdf.mjs`. This last step
 is required for linked PDFs; raw Slidev export chunks still contain temporary
 destination URLs. It uses the `pdf-lib` dependency already used by Slidev.
 
-The default `PDF_CHUNK_SIZE=20` limits how many slides Chromium renders at once.
+The default `PDF_CHUNK_SIZE=5` limits rendering work and restarts Chromium after
+every five slides to avoid failures during repeated PDF printing.
 The app waits for the initial router URL before Slidev initializes navigation,
 so `--range` renders only the requested chunk rather than the entire deck.
-For machines with less available memory, use e.g.
-`make generate-short-presentation-pdf PDF_CHUNK_SIZE=5`.
+Use `PDF_CHUNK_SIZE` to adjust the batch size if needed.
+With the development server running, `yarn test:print-range:browser` checks
+range filtering and direct slide navigation. Set `PRESENTATION_URL` for a
+different server.
 
 ## Enlarging visuals
 
