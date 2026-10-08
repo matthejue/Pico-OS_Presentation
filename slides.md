@@ -3633,6 +3633,7 @@ void timer_interrupt_process(void) {
 
 <!-- SLIDE_ID baa38261-7bb9-4d5a-b91d-7fd604f5bc9c -->
 <!-- SOURCE Pico-OS/README.md#253-shell-character-delay-for-different-timer-intervals -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="2-interrupts-system-calls-preemption-and-exceptions">2. Interrupts, system calls, preemption, and exceptions</MajorSectionLink> · 2.5 Timer interrupts and userspace preemption
 
@@ -7050,6 +7051,7 @@ void mutex_unlock(struct mutex *m) {
 
 <!-- SLIDE_ID 13bb5e4a-484f-4859-b91f-5e4c3df1531c -->
 <!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
 

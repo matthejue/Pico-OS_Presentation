@@ -1,0 +1,8 @@
+{
+  "slide_id": "0a747ec2-be9b-434b-869b-49316c9b40ea",
+  "slide_number": 179,
+  "slide_title": "7. Blocking, wait queues, signals, and mutexes · 7.1 Wait queues and PCB links · 7.1.2 Child waiting with waitpid · 7.1.2.1 Recording termination status",
+  "source_anchor": "7121-recording-termination-status",
+  "image_id": "553fc228-0c5a-4c85-9d1b-1a5483319801",
+  "filename": "slide-179-7-blocking-wait-queues-signals-and-mutexes-7-1-wait-queues-and-pcb-links-7-1-2-c--0a747ec2-be9b-434b-869b-49316c9b40ea--screenshot-553fc228-0c5a-4c85-9d1b-1a5483319801.png"
+}
