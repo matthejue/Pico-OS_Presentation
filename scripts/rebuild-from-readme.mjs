@@ -90,7 +90,7 @@ function prepare(a) {
  if(a.type==='table') {
   const t=prepareTable(a),entry=inventory.get(a.id)
   Object.assign(entry,{retainedRows:t.retainedRows,omittedRows:t.omittedRows,displayColumns:t.headerLabels.map(presentationText)})
-  if(!t.compactRows?.length){entry.excluded='Internal function table; no library-facing operation';return []}
+  if(!t.compactRows?.length){entry.excluded=t.excluded||'Internal function table; no library-facing operation';return []}
   if(t.unresolved.length)throw Error('Missing reviewed table summary: '+JSON.stringify(t.unresolved))
   const capacity=readableTableCapacities[a.id] ?? (denseFieldTables.has(a.id)?12:grids.has(a.id)?(a.id==='table-8316'?9:15):t.columns<=3&&!preserveVertical.has(a.id)?24:t.columns>=5?9:14)
   return balanced(t.compactRows,capacity).map(rows=>({...t,compactRows:rows,grid:grids.has(a.id),tableColumns:rows.length>=10&&t.columns<=3&&!preserveVertical.has(a.id)?2:1}))

@@ -2498,9 +2498,7 @@ void interrupt_controller_initialize(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 250fr) minmax(0, 100fr)">
-
-<div class="readme-artifacts composition-panel layout-single">
+<div class="readme-artifacts layout-single">
 
 <!-- README_ASSET image-1807 -->
 <ReadmeVisual kind="image" :width="980">
@@ -2508,21 +2506,6 @@ void interrupt_controller_initialize(void) {
 <img src="/readme/interrupt-controller-initialization.svg" alt="SRAM initialization arrays and six interrupt-controller cells in the ReTI memory map" />
 
 </ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<!-- README_ASSET table-1813 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-1813:1,2,3">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:12.68%" /><col style="width:40.97%" /><col style="width:46.35%" /></colgroup><thead><tr><th>Device / array index</th><th>Mapping source → periphery cell</th><th>Priority source → periphery cell</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">Timer / <code>0</code></td><td><code>interrupt_device_isrs[0] = 1</code> → <code>0x40000003</code></td><td><code>interrupt_device_priorities[0] = 1</code> → <code>0x40000006</code></td></tr>
-<tr data-source-row="2"><td class="table-key">DMA on custom line / <code>1</code></td><td><code>interrupt_device_isrs[1] = 4</code> → <code>0x40000004</code></td><td><code>interrupt_device_priorities[1] = 1</code> → <code>0x40000007</code></td></tr>
-<tr data-source-row="3"><td class="table-key">UART / <code>2</code></td><td><code>interrupt_device_isrs[2] = 2</code> → <code>0x40000005</code></td><td><code>interrupt_device_priorities[2] = 2</code> → <code>0x40000008</code></td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
 
 </div>
 

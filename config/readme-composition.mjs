@@ -11,7 +11,6 @@ const plans = {
   '119-generated-memory-constants-for-the-bootloader-and-kernel': [[170, 230], 1],
   '1221-test-and-set-in-sram': [[95, 240]],
   '1222-tsl-instruction-encoding': [[150, 200]],
-  '221-interrupt-controller-initialization': [1, [250, 100]],
   '121-reti-machine-model-and-memory-mapped-peripherals': [[116, 143], 1],
   '21-reti-interrupt-entry-and-the-interrupt-service-routine-table': [1, [216, 114]],
   '242-system-call-entry-execution-and-return-to-userspace': [1, 1, [230, 125]],

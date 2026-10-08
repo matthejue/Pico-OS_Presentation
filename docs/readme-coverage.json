@@ -1844,7 +1844,7 @@
       "slides": [
         {
           "page": 60,
-          "layout": "composed"
+          "layout": "single"
         }
       ],
       "sourcePath": "documentation/images/interrupt-controller-initialization.svg",
@@ -1858,28 +1858,28 @@
       "line": 1813,
       "endLine": 1817,
       "sourceSha256": "478d91cb5b545cd7e979834d7375e2fa213db6d5d1bb835863c275baf6fd6136",
-      "slides": [
+      "slides": [],
+      "retainedRows": [],
+      "omittedRows": [
         {
-          "page": 60,
-          "layout": "composed",
-          "rows": [
-            1,
-            2,
-            3
-          ]
+          "row": 1,
+          "reason": "Mappings and priorities already shown in the interrupt-controller initialization diagram"
+        },
+        {
+          "row": 2,
+          "reason": "Mappings and priorities already shown in the interrupt-controller initialization diagram"
+        },
+        {
+          "row": 3,
+          "reason": "Mappings and priorities already shown in the interrupt-controller initialization diagram"
         }
       ],
-      "retainedRows": [
-        1,
-        2,
-        3
-      ],
-      "omittedRows": [],
       "displayColumns": [
         "Device / array index",
         "Mapping source → periphery cell",
         "Priority source → periphery cell"
-      ]
+      ],
+      "excluded": "Mappings and priorities already shown in the interrupt-controller initialization diagram"
     },
     {
       "id": "table-1830",

@@ -103,6 +103,12 @@ export function prepareTable(a) {
  const header=cellsOf(a.header), labels=header.map(plain)
  const kernel=/^Kernel function(?:$| \(shared helper\))|^Kernel \/ Library Function$/.test(labels[0])
  const rows=a.rows.map((r,i)=>({sourceRow:i+1,cells:cellsOf(r)})).filter(r=>r.cells.some(c=>plain(c)))
+ // The initialization diagram already shows every mapping and priority.
+ // Omit the duplicate table so the diagram can use the full slide area.
+ if(a.id==='table-1813') {
+  const excluded='Mappings and priorities already shown in the interrupt-controller initialization diagram'
+  return {...a,compactRows:[],retainedRows:[],omittedRows:rows.map(r=>({row:r.sourceRow,reason:excluded})),columns:labels.length,headerLabels:labels,excluded}
+ }
  // GETPID directly calls current_process() in kernel/syscall.picoc; the
  // README's caller cell lists handle_syscall rather than the public wrapper.
  const selected=kernel?rows.filter(r=>/Library functions/.test(plain(r.cells.at(-1))) || nameOf(r.cells[0])==='current_process' || (labels[0]==='Kernel / Library Function'&&/\(Library only\)/.test(plain(r.cells[0])))):rows
