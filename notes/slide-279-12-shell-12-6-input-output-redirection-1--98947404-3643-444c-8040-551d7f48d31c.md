@@ -1,6 +1,6 @@
 ---
 slide_id: "98947404-3643-444c-8040-551d7f48d31c"
-slide_number: 283
+slide_number: 279
 slide_title: "12. Shell · 12.6 Input/output redirection (1)"
 source_anchor: "126-inputoutput-redirection"
 ---

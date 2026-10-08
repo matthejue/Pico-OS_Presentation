@@ -5,4 +5,4 @@ slide_title: "6. Scheduling and context switching · 6.4 Restoring the selected 
 source_anchor: "64-restoring-the-selected-process-and-returning-with-rti"
 ---
 
-- please don't split into 2 codeboxes, no splitting!!!
+- [x] please don't split into 2 codeboxes, no splitting!!!

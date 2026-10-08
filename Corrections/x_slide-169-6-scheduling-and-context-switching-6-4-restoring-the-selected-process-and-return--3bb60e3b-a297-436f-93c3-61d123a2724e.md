@@ -5,4 +5,4 @@ slide_title: "6. Scheduling and context switching · 6.4 Restoring the selected 
 source_anchor: "64-restoring-the-selected-process-and-returning-with-rti"
 ---
 
-- please switch the visualisation and the codebox, such that the codex from the next slide is here on this slide and the visualisation is on the next slide
+- [x] please switch the visualisation and the codebox, such that the codex from the next slide is here on this slide and the visualisation is on the next slide

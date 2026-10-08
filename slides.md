@@ -4236,24 +4236,7 @@ void handle_cpu_exception(int interrupted_kernel_cs_difference) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-3169+code-3175" style="--readme-columns:minmax(0, 32fr) minmax(0, 68fr);">
-
-<!-- README_ASSET code-3169 -->
-<ReadmeVisual kind="code" :width="263.52941176470586" data-code-source="code-3169" data-code-part="1" :text-scale="1.2">
-
-<!-- README_CODE_PART code-3169 lines=1-3 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/kernel.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
-void shutdown(void) {
-    asm("JUMP 0");
-}
-```
-
-</div>
-
-</ReadmeVisual>
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-3175+code-3169" style="--readme-columns:minmax(0, 68fr) minmax(0, 32fr);">
 
 <!-- README_ASSET code-3175 -->
 <ReadmeVisual kind="code" :width="560" data-code-source="code-3175" data-code-part="1" :text-scale="1.2">
@@ -4268,6 +4251,23 @@ void exit_process(int status) {
     dispatcher_start_next_process();
     // Switching to a next process returns via RTI; shutdown is only reached when none remain
     shutdown();
+}
+```
+
+</div>
+
+</ReadmeVisual>
+
+<!-- README_ASSET code-3169 -->
+<ReadmeVisual kind="code" :width="263.52941176470586" data-code-source="code-3169" data-code-part="1" :text-scale="1.2">
+
+<!-- README_CODE_PART code-3169 lines=1-3 -->
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>kernel/kernel.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
+void shutdown(void) {
+    asm("JUMP 0");
 }
 ```
 
@@ -6129,7 +6129,7 @@ struct ProcessControlBlock *scheduler_next_process(void) {
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-columns" data-column-key="assets:code-4686+table-4698" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts layout-columns" data-column-key="assets:code-4686+table-4698" style="--readme-columns:minmax(0, 45fr) minmax(0, 55fr);">
 
 <!-- README_ASSET code-4686 -->
 <ReadmeVisual kind="code" :width="255" data-code-source="code-4686" data-code-part="1">
@@ -6157,11 +6157,11 @@ struct ActivationRecord {
 <!-- README_ASSET table-4698 -->
 <ReadmeVisual kind="table" :width="1080" data-table-key="table-4698:1,2,3,4,5">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:14.19%" /><col style="width:31.40%" /><col style="width:54.41%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th><th>Used by</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>General argument/result registers at the suspension point</td><td><ul><li><code>create_process()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>dispatcher_jump_to_process()</code></li><li><code>complete_pending_terminal_read()</code></li><li><code>resume_pending_terminal_read()</code></li><li><code>in2</code></li></ul></td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>sp</code></span></td><td>Below saved PC; PC at sp + 1</td><td><ul><li><code>create_process()</code></li><li><code>store_process_arguments()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>dispatcher_jump_to_process()</code></li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Base address of the interrupted PicoC function frame</td><td><ul><li><code>create_process()</code></li><li><code>store_process_arguments()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>dispatcher_jump_to_process()</code></li></ul></td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base used for instruction addresses</td><td><ul><li><code>create_process()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>dispatcher_jump_to_process()</code></li></ul></td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base used for globals/static data</td><td><ul><li><code>create_process()</code></li><li><code>dispatcher_switch_from_context()</code></li><li><code>dispatcher_jump_to_process()</code></li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:23%" /><col style="width:77%" /></colgroup><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>in1</code></span>, <span class="source-link"><code>in2</code></span>, <span class="source-link"><code>acc</code></span></td><td>General argument/result registers at the suspension point</td></tr>
+<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>sp</code></span></td><td>Below saved PC; PC at sp + 1</td></tr>
+<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>baf</code></span></td><td>Base address of the interrupted PicoC function frame</td></tr>
+<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>cs</code></span></td><td>Absolute code-segment base used for instruction addresses</td></tr>
+<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>ds</code></span></td><td>Absolute data-segment base used for globals/static data</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -6177,30 +6177,6 @@ struct ActivationRecord {
 # <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
 
 ## 6.3 Saving the current process and selecting the next process (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<!-- README_ASSET image-4746 -->
-<ReadmeVisual kind="image" :width="980">
-
-<img src="/readme/process-dispatcher-save.svg" alt="caller_context points into PCB 3's user stack. Six arrows copy DS, CS, BAF, IN2, IN1 and ACC from offsets 1 through 6 to PCB 3.activation in the Kernel Heap. A separate address arrow saves caller_context + 6 as activation.sp. PC remains on the stack at offset 7." />
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 2141e618-bd32-4be3-8de8-56f85854b82e -->
-<!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
-
-# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
-
-## 6.3 Saving the current process and selecting the next process (2)
 
 <div class="deck-content readme-slide">
 
@@ -6235,6 +6211,30 @@ void dispatcher_switch_from_context(int *caller_context) {
 ```
 
 </div>
+
+</ReadmeVisual>
+
+</div>
+
+</div>
+
+---
+
+<!-- SLIDE_ID 2141e618-bd32-4be3-8de8-56f85854b82e -->
+<!-- SOURCE Pico-OS/README.md#63-saving-the-current-process-and-selecting-the-next-process -->
+
+# <MajorSectionLink section="6-scheduling-and-context-switching">6. Scheduling and context switching</MajorSectionLink>
+
+## 6.3 Saving the current process and selecting the next process (2)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<!-- README_ASSET image-4746 -->
+<ReadmeVisual kind="image" :width="980">
+
+<img src="/readme/process-dispatcher-save.svg" alt="caller_context points into PCB 3's user stack. Six arrows copy DS, CS, BAF, IN2, IN1 and ACC from offsets 1 through 6 to PCB 3.activation in the Kernel Heap. A separate address arrow saves caller_context + 6 as activation.sp. PC remains on the stack at offset 7." />
 
 </ReadmeVisual>
 
@@ -6321,14 +6321,43 @@ void dispatcher_start_next_process(void) {
 
 ## 6.4 Restoring the selected process and returning with `RTI` (1)
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide single-code-compact">
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET image-4874 -->
-<ReadmeVisual kind="image" :width="980">
+<!-- README_ASSET code-4900 -->
+<!-- README_CODE_PART code-4900 lines=1-22 -->
+<ReadmeVisual kind="code" :width="980" data-code-source="code-4900" data-code-part="1">
 
-<img src="/readme/process-dispatcher-restore.svg" alt="PCB 1's activation fields live in SRAM's Kernel Heap and are copied into a separate CPU register bank. Steps 1–4 identify the restoration actions, not process numbers. Restored SP points to the saved ACC cell in PCB 1's user stack in SRAM's Process Payload A. In Step 4 the CPU executes RTI, meaning return from interrupt: it reads the saved PC from the next stack cell at SP + 1, updates CPU PC and SP, and resumes process 1 in its .text. The stack boundary is installed in a separate periphery register." />
+<div class="readme-code">
+<div class="readme-code-header" v-pre><span>kernel/dispatcher.picoc</span><span class="code-range"></span></div>
+
+```c {lines:false}
+__attribute__((naked))
+void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_boundary) {
+    // Reads the process pointer and its precomputed stack boundary from the call frame
+    asm("LOADIN SP BAF 2");
+    asm("LOADIN SP IN1 3");
+
+    // Restores SP before the process boundary so an interrupt cannot compare the
+    // kernel stack against the process heap during this context-switch window
+    asm("LOADIN BAF SP 11");
+    write_stack_heap_boundary_from_in1();
+
+    // Restores the remaining activation record while BAF still points to the process
+    asm("LOADIN BAF CS 13");
+    asm("LOADIN BAF DS 14");
+    asm("LOADIN BAF IN1 8");
+    asm("LOADIN BAF IN2 9");
+    asm("LOADIN BAF ACC 10");
+    asm("LOADIN BAF BAF 12");
+
+    // Restores the saved program counter from the selected process's restored stack and resumes there
+    asm("RTI");
+}
+```
+
+</div>
 
 </ReadmeVisual>
 
@@ -6349,58 +6378,12 @@ void dispatcher_start_next_process(void) {
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET code-4900 -->
-<div class="code-columns" data-column-key="code:code-4900" style="--readme-columns:minmax(0, 47fr) minmax(0, 53fr);--source-aspect:4.586752308309916">
+<!-- README_ASSET image-4874 -->
+<ReadmeVisual kind="image" :width="980">
 
-<ReadmeVisual kind="code" :width="560.0000000000001" data-code-source="code-4900" data-code-part="1">
-
-<!-- README_CODE_PART code-4900 lines=1-11 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/dispatcher.picoc</span><span class="code-range">lines 1–11</span></div>
-
-```c {lines:false}
-__attribute__((naked))
-void dispatcher_jump_to_process(struct ProcessControlBlock *process, int stack_boundary) {
-    // Reads the process pointer and its precomputed stack boundary from the call frame
-    asm("LOADIN SP BAF 2");
-    asm("LOADIN SP IN1 3");
-
-    // Restores SP before the process boundary so an interrupt cannot compare the
-    // kernel stack against the process heap during this context-switch window
-    asm("LOADIN BAF SP 11");
-    write_stack_heap_boundary_from_in1();
-
-```
-
-</div>
+<img src="/readme/process-dispatcher-restore.svg" alt="PCB 1's activation fields live in SRAM's Kernel Heap and are copied into a separate CPU register bank. Steps 1–4 identify the restoration actions, not process numbers. Restored SP points to the saved ACC cell in PCB 1's user stack in SRAM's Process Payload A. In Step 4 the CPU executes RTI, meaning return from interrupt: it reads the saved PC from the next stack cell at SP + 1, updates CPU PC and SP, and resumes process 1 in its .text. The stack boundary is installed in a separate periphery register." />
 
 </ReadmeVisual>
-
-<ReadmeVisual kind="code" :width="631.4893617021277" data-code-source="code-4900" data-code-part="2">
-
-<!-- README_CODE_PART code-4900 lines=12-22 -->
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>kernel/dispatcher.picoc</span><span class="code-range">lines 12–22</span></div>
-
-```c {lines:false}
-    // Restores the remaining activation record while BAF still points to the process
-    asm("LOADIN BAF CS 13");
-    asm("LOADIN BAF DS 14");
-    asm("LOADIN BAF IN1 8");
-    asm("LOADIN BAF IN2 9");
-    asm("LOADIN BAF ACC 10");
-    asm("LOADIN BAF BAF 12");
-
-    // Restores the saved program counter from the selected process's restored stack and resumes there
-    asm("RTI");
-}
-```
-
-</div>
-
-</ReadmeVisual>
-
-</div>
 
 </div>
 
@@ -6899,6 +6882,21 @@ void mutex_unlock(struct mutex *m) {
 </ReadmeVisual>
 
 </div>
+
+</div>
+
+---
+
+<!-- SLIDE_ID f5740e3b-34f8-4420-9fde-edf850080a3d -->
+<!-- SOURCE Pico-OS/README.md#73-mutexes-with-test-and-set-and-wait-queues -->
+
+# <MajorSectionLink section="7-blocking-wait-queues-signals-and-mutexes">7. Blocking, wait queues, signals, and mutexes</MajorSectionLink>
+
+## Continue with userspace libraries
+
+<div class="deck-content readme-slide">
+
+<SectionJump section="10-userspace-libraries" />
 
 </div>
 
@@ -7870,160 +7868,41 @@ void complete_pending_terminal_read(
 
 ---
 
-<!-- SLIDE_ID fbcb268f-997c-40b7-a089-0e38a2ee9d1d -->
-<!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
-
-## 10.1.1 Header, implementation, and linking (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<ReadmeVisual kind="table" :width="1080">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:45%" /><col style="width:55%" /></colgroup><thead><tr><th>File</th><th>Role in the unistd library</th></tr></thead><tbody><tr><td class="table-key"><code>library/unistd/unistd.header</code></td><td>Declares <code>getpid(void)</code></td></tr><tr><td class="table-key"><code>library/unistd/process.picoc</code></td><td>Implements <code>getpid()</code> + <code>invoke_syscall()</code></td></tr><tr><td class="table-key"><code>library/unistd/libunistd.picoc</code></td><td>Collects process, I/O, path and blocking implementations</td></tr><tr><td class="table-key"><code>common/syscall.header</code></td><td>Shared selector <code>SYSCALL_GETPID = 8</code></td></tr><tr><td class="table-key"><code>libunistd.reti_blocks</code></td><td>Reusable code blocks, linked into the user image</td></tr><tr><td class="table-key"><code>libunistd.st</code></td><td>Function signatures + types, beside the code blocks</td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
-<aside class="context-note"><b>Header → library → kernel</b><ul><li><strong>Header:</strong> checks calls</li><li><strong>Linked code:</strong> runs in userspace</li><li><strong>INT 0:</strong> enters the kernel</li></ul></aside>
-
-</div>
-
----
-
 <!-- SLIDE_ID d8b1e73e-25ce-415d-9f69-21b32385cd57 -->
 <!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
 
 # <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
 
-## 10.1.1 Header, implementation, and linking (2)
+## 10.1.1 Header, implementation, and linking
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 240fr) minmax(0, 65fr)">
+<div class="readme-artifacts layout-columns" style="--readme-columns:minmax(0, 32fr) minmax(0, 68fr)">
 
-<div class="readme-artifacts composition-panel layout-columns" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr)">
-
-<ReadmeVisual kind="code" :width="560">
+<ReadmeVisual kind="code" :width="980" :text-scale="1.2">
 
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/unistd/libunistd.picoc</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/unistd.header · excerpt</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-#include "../stdlib/stdlib.header"
-#include "process.picoc"
-#include "io.picoc"
-#include "working_directory.picoc"
-#include "file_removal.picoc"
-#include "blocking.picoc"
+#pragma once
+
+int getpid(void);
 ```
 
 </div>
 
 </ReadmeVisual>
 
-<ReadmeVisual kind="code" :width="440">
+<ReadmeVisual kind="code" :width="980" :text-scale="1.2">
 
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>Application · header + call (excerpt)</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/process.picoc · excerpt</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-#include "../library/unistd/unistd.header"
+#include "unistd.header"
+#include "../../common/syscall.header"
 
-int main(void) {
-    int pid = getpid();
-    return 0;
-}
-```
-
-</div>
-
-</ReadmeVisual>
-
-</div>
-
-<div class="readme-artifacts composition-panel layout-single">
-
-<ReadmeVisual kind="code" :width="980">
-
-<div class="readme-code readme-terminal">
-<div class="readme-code-header" v-pre><span>Host terminal</span><span class="code-range"></span></div>
-
-```console {lines:false}
-$ picoc_compiler -c -O1 library/unistd/libunistd.picoc
-```
-
-</div>
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-<aside class="context-note"><b>Linking</b><ul><li><strong>Application image:</strong> link <code>libunistd.reti_blocks</code> + dependencies</li><li><strong>Types:</strong> keep <code>libunistd.st</code> beside it</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 5de2a26a-4658-44a3-8cbb-a4606ab8e2da -->
-<!-- SOURCE Pico-OS/README.md#1012-packing-arguments-and-executing-the-syscall -->
-
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
-
-## 10.1.2 Packing arguments and executing the syscall (1)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-stacked">
-
-<ReadmeVisual kind="code" :width="640">
-
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>common/syscall.header · excerpt</span><span class="code-range"></span></div>
-
-```c {lines:false}
-#define SYSCALL_GETPID 8
-```
-
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="table" :width="1080">
-
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25%" /><col style="width:75%" /></colgroup><thead><tr><th>Register</th><th>Value at the syscall boundary</th></tr></thead><tbody><tr><td class="table-key"><code>ACC</code></td><td>8 = <code>SYSCALL_GETPID</code></td></tr><tr><td class="table-key"><code>IN1</code></td><td>0: no argument required</td></tr><tr><td class="table-key"><code>IN2</code></td><td>Kernel result: current process PID</td></tr></tbody></table></div></div>
-
-</ReadmeVisual>
-
-</div>
-<aside class="context-note"><b>getpid()</b><ul><li><strong>No parameters:</strong> no request structure</li><li><strong>One result:</strong> an integer PID</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID 16cc1b17-e4ca-4b6b-8e87-a6d25f528752 -->
-<!-- SOURCE Pico-OS/README.md#1012-packing-arguments-and-executing-the-syscall -->
-
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
-
-## 10.1.2 Packing arguments and executing the syscall (2)
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-columns" style="--readme-columns:minmax(0, 59fr) minmax(0, 41fr)">
-
-<ReadmeVisual kind="code" :text-scale="1" :width="560">
-
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/unistd/process.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
 int invoke_syscall(int number, int argument) {
     int result;
 
@@ -8033,22 +7912,9 @@ int invoke_syscall(int number, int argument) {
     asm("STOREIN BAF IN2 0");
     return result;
 }
-```
 
-</div>
-
-</ReadmeVisual>
-
-<ReadmeVisual kind="code" :text-scale="1" :width="440">
-
-<div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/unistd/process.picoc</span><span class="code-range"></span></div>
-
-```c {lines:false}
 int getpid(void) {
-    return invoke_syscall(
-        SYSCALL_GETPID, 0
-    );
+    return invoke_syscall(SYSCALL_GETPID, 0);
 }
 ```
 
@@ -8057,56 +7923,6 @@ int getpid(void) {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>C call → INT 0 → C return</b><ul><li><strong>LOADIN:</strong> stack arguments → ACC / IN1</li><li><strong>STOREIN:</strong> IN2 → local result</li></ul></aside>
-
-</div>
-
----
-
-<!-- SLIDE_ID c97fa599-e01c-4809-8260-ddaa492474b8 -->
-<!-- SOURCE Pico-OS/README.md#10131-cpu-execution-and-sram-storage -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid · 10.1.3 Interrupt entry and return
-
-## 10.1.3.1 CPU execution and SRAM storage
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<ReadmeVisual kind="image" :width="1080">
-
-<img src="/readme/getpid-memory-context.svg" alt="One CPU alternates between user library and kernel code in SRAM. The kernel reads the current PCB PID from the Kernel Heap and returns it through IN2 to the library result on the user stack." />
-
-</ReadmeVisual>
-
-</div>
-
-</div>
-
----
-
-<!-- SLIDE_ID 2a9f965e-ea7e-4c55-836b-1ce4fe34ed42 -->
-<!-- SOURCE Pico-OS/README.md#10132-following-entry-and-the-two-return-paths -->
-<!-- SHORT_VERSION_DISABLED -->
-
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid · 10.1.3 Interrupt entry and return
-
-## 10.1.3.2 Following entry and return
-
-<div class="deck-content readme-slide">
-
-<div class="readme-artifacts layout-single">
-
-<ReadmeVisual kind="image" :width="1080">
-
-<img src="/readme/getpid-return-path.svg" alt="getpid calls invoke_syscall with selector 8 and argument 0. INT 0 enters the kernel, which reads current_process()->pid. The interrupt return restores the user context and returns the PID in IN2. The helper stores and returns that PID." />
-
-</ReadmeVisual>
-
-</div>
-<aside class="context-note"><b>Immediate result</b><ul><li><strong>Kernel:</strong> reads the caller’s PID</li><li><strong>Wrapper:</strong> returns the PID; no wait queue or retry loop</li></ul></aside>
 
 </div>
 
@@ -11464,7 +11280,7 @@ process with pid 4 created
 
 <div class="deck-content readme-slide">
 
-<div class="readme-list"><ul><li>Inspect source + <strong>live execution</strong></li>
+<div class="readme-list"><ul><li><strong>Live execution</strong></li>
 <li><strong>OS:</strong> processes, interrupts, memory, files</li>
 <li><strong>RTOS:</strong> scheduling, queues, synchronization</li></ul></div>
 
