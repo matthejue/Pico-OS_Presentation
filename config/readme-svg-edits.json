@@ -11,6 +11,10 @@
     [
       ">splicing</text>",
       ">#pragma once</text>"
+    ],
+    [
+      "<text x=\"6.9375\" y=\"18\" font-family=\"Cantarell, sans-serif\" font-size=\"16px\" fill=\"#17313a\" xml:space=\"preserve\" stroke=\"none\" stroke-width=\"3px\">Includes, macros,</text><text x=\"44\" y=\"42\" font-family=\"Cantarell, sans-serif\" font-size=\"16px\" fill=\"#17313a\" xml:space=\"preserve\" stroke=\"none\" stroke-width=\"3px\">#pragma once</text>",
+      "<text x=\"100\" y=\"30\" text-anchor=\"middle\" font-family=\"Cantarell, sans-serif\" font-size=\"13px\" fill=\"#17313a\" xml:space=\"preserve\" stroke=\"none\">Includes, macros, #pragma once</text>"
     ]
   ],
   "reti-memory-map.svg": [
@@ -45,6 +49,24 @@
     [
       "font-size=\"17\"",
       "font-size=\"23\""
+    ]
+  ],
+  "tsl-memory-layout.svg": [
+    [
+      "    <text x=\"60\" y=\"78\" font-family=\"Cantarell, sans-serif\" font-size=\"21\">DS = 0x80000040; DS + 2 = 0x80000042</text>\n",
+      ""
+    ],
+    [
+      "    <text x=\"60\" y=\"122\" font-size=\"21\">Each cell is one 32-bit word; addresses increase by 1 per cell.</text>\n",
+      ""
+    ],
+    [
+      "    <text x=\"60\" y=\"374\" font-size=\"22\" font-weight=\"bold\">One atomic instruction: no interrupt or process switch between the read and write.</text>\n",
+      ""
+    ],
+    [
+      "height=\"354\" viewBox=\"0 50 1440 354\"",
+      "height=\"220\" viewBox=\"0 126 1440 220\""
     ]
   ]
 }

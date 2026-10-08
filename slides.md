@@ -1731,6 +1731,7 @@ MOVE ACC PC
 
 <!-- SLIDE_ID 31140f53-de63-4caf-befa-1e32bdba8891 -->
 <!-- SOURCE Pico-OS/README.md#118-linked-sections-metadata-and-the-five-word-binary-header -->
+<!-- SHORT_VERSION_DISABLED -->
 
 # <MajorSectionLink section="1-toolchain-extensions-for-picoos">1. Toolchain extensions for PicoOS</MajorSectionLink> · 1.1 PicoC-Compiler extensions
 
@@ -6103,7 +6104,7 @@ int main(int argc, char **argv) {
 
 ## 6.1.1.4 Implementation
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide single-code-compact">
 
 <div class="readme-artifacts layout-single">
 
@@ -6702,7 +6703,6 @@ struct wait_queue {
 </ReadmeVisual>
 
 </div>
-<aside class="context-note"><b>Unix: reaping</b><span>Collect status; remove child · <strong>PicoOS:</strong> no reparenting to init</span></aside>
 
 </div>
 
@@ -9371,7 +9371,7 @@ void _start(void) {
 
 ## 11.2 Kernel startup (2)
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide single-code-compact">
 
 <div class="readme-artifacts layout-single">
 
@@ -10765,7 +10765,7 @@ bool redirect_standard_input(char *path) {
 
 ## 12.7 Sequential file-backed pipelines (3)
 
-<div class="deck-content readme-slide">
+<div class="deck-content readme-slide single-code-compact">
 
 <div class="readme-artifacts layout-single">
 

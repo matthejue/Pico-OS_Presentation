@@ -1,0 +1,8 @@
+{
+  "slide_id": "c276aed7-d90d-4f32-9092-8d3a724154e5",
+  "slide_number": 71,
+  "slide_title": "2. Interrupts, system calls, preemption, and exceptions · 2.4 System-call interface and execution · 2.4.2 System-call entry, execution, and return to userspace · 2.4.2.1 Entering kernel context · 2.4.2.1.1 Stack-boundary helpers",
+  "source_anchor": "24211-stack-boundary-helpers",
+  "image_id": "2bf6acca-b2db-47c9-84b8-d7cb610a147d",
+  "filename": "x_slide-071-2-interrupts-system-calls-preemption-and-exceptions-2-4-system-call-interface-an--c276aed7-d90d-4f32-9092-8d3a724154e5--screenshot-2bf6acca-b2db-47c9-84b8-d7cb610a147d.png"
+}

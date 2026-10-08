@@ -81,3 +81,8 @@
 .run-steps li ul { font-size: 0.9em; margin-top: 0.2rem; }
 .run-steps li ul li { margin: 0.12rem 0; }
 .shared-memory-examples .readme-code-header { font-size: 12px; }
+
+/* Tall, unsplit code uses tighter leading while preserving every source line. */
+.single-code-compact .readme-code .slidev-code,
+.single-code-compact .readme-code .slidev-code code,
+.single-code-compact .readme-code .slidev-code .line { line-height: 1.2 !important; }

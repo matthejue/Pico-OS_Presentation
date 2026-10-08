@@ -1,0 +1,8 @@
+{
+  "slide_id": "1395b8ee-c3c3-480e-8e62-2db36b0c9e19",
+  "slide_number": 141,
+  "slide_title": "4. Processes and process lifecycle · 4.2 Loading and starting a process · 4.2.2 Starting a process (run library call) · 4.2.2.1 Initial user process stack · 4.2.2.1.2 Initial argc, argv, and envp · 4.2.2.1.2.1 Concrete initial-stack example (1)",
+  "source_anchor": "422121-concrete-initial-stack-example",
+  "image_id": "89b24dc7-9900-4089-a4db-94041076423f",
+  "filename": "x_slide-141-4-processes-and-process-lifecycle-4-2-loading-and-starting-a-process-4-2-2-start--1395b8ee-c3c3-480e-8e62-2db36b0c9e19--screenshot-89b24dc7-9900-4089-a4db-94041076423f.png"
+}
