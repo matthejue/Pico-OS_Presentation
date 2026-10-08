@@ -1687,8 +1687,8 @@
       {
         "anchor": "101-from-a-library-call-to-the-kernel-waitpid",
         "number": "10.1",
-        "title": "From a library call to the kernel: waitpid",
-        "titleHtml": "From a library call to the kernel: waitpid",
+        "title": "From a library call to the kernel: getpid",
+        "titleHtml": "From a library call to the kernel: getpid",
         "depth": 1,
         "descendants": [
           "1011-header-implementation-and-linking",
@@ -1717,8 +1717,8 @@
       {
         "anchor": "1013-interrupt-entry-waiting-and-return",
         "number": "10.1.3",
-        "title": "Interrupt entry, waiting, and return",
-        "titleHtml": "Interrupt entry, waiting, and return",
+        "title": "Interrupt entry and return",
+        "titleHtml": "Interrupt entry and return",
         "depth": 2,
         "descendants": [
           "10131-cpu-execution-and-sram-storage",
@@ -1736,8 +1736,8 @@
       {
         "anchor": "10132-following-entry-and-the-two-return-paths",
         "number": "10.1.3.2",
-        "title": "Following entry and the two return paths",
-        "titleHtml": "Following entry and the two return paths",
+        "title": "Following entry and return",
+        "titleHtml": "Following entry and return",
         "depth": 3,
         "descendants": []
       },

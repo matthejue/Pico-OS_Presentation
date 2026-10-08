@@ -5,4 +5,4 @@ slide_title: "2. Interrupts, system calls, preemption, and exceptions · 2.4 Sys
 source_anchor: "24221-system-call-groups"
 ---
 
-- please integrate the number of syscall overall somehow in this table here, but e.g. giving in another column the index ranges
+- [x] please integrate the number of syscall overall somehow in this table here, but e.g. giving in another column the index ranges

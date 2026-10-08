@@ -5,4 +5,4 @@ slide_title: "2. Interrupts, system calls, preemption, and exceptions · 2.4 Sys
 source_anchor: "241-syscall-selectors-and-register-convention"
 ---
 
-- as here library of waitpid is used, please show in the user library section of the presentation another really simple library. Please rewrite this user library example section there to not user waitpid anymore
+- [x] as here library of waitpid is used, please show in the user library section of the presentation another really simple library. Please rewrite this user library example section there to not user waitpid anymore

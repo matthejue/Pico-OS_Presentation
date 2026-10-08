@@ -144,3 +144,54 @@ pass; `git diff --check` passes. The source snapshot records its original
 without adopting a new README commit or rewriting that historical snapshot.
 
 Completed this additional batch: 10 Markdown files (14 checked bullets) and 10 screenshots. Completed files and image sidecars have the `x_` prefix. The missing-identity command-options correction remains unchecked.
+
+## Final pending batch: startup consistency, ABI, syscalls and library example
+
+Completed four Markdown files (five unchecked bullets) and one annotated
+screenshot, matched by their stored persistent `slide_id`. Completed Markdown
+bullets are checked; all five files and the screenshot sidecar have `x_` prefixes.
+Previously completed correction content was not processed again.
+
+- `2814405e-f7c3-4011-8d19-e9751be78c74`: interpreted both “keep consistent”
+  annotation rectangles as requests for identical startup and next-function
+  wording across init, shell and user applications. All three now show
+  `-C library/start/libstart.picoc` and `main()`.
+- `72e18091-38e6-4018-a9a1-48f57ef8c058`: replaced the ABI remark with three
+  concise bullets: binary contract, argument/register/stack/file rules, and
+  PicoOS's ReTI adaptation. Checked the general definition against the primary
+  [System V ABI specification](https://www.sco.com/developers/gabi/) and its
+  [low-level system interface chapter](https://www.sco.com/developers/devspecs/gabi41.pdf).
+- `e0885272-03d0-4677-b7f0-e46b49a56218`: kept the syscall-section waitpid
+  example and rewrote the six existing chapter 10.1 example slides around
+  `getpid()`. Header/linking, selector/registers, wrapper/helper, SRAM storage,
+  and entry/return now follow this simpler call. Updated the section overview's
+  display names while retaining its navigation anchors.
+- `cf38293b-13ad-4a01-91e1-05d7f041e34c`: added selector ranges 0–1, 2–11,
+  12–14, 15–20, 21–28 and 29–36, plus the total of 37 syscalls. The negative
+  load-continuation return sentinel is not a syscall selector.
+- `9204e2d0-4668-4d63-b517-fcc62df0f1ea`: resolved the previously missing
+  target by recovering the exact UUID's authored slide from the parent of
+  commit `f54d3ca`. Restored that identity, retained every original command
+  bullet and nested bullet, and split the list into two readable pages. The
+  existing terminal session is now the third page; its counter-result notes
+  are retained there. Enabled the previously omitted source-list selection.
+  This completes the correction previously recorded above as unresolved.
+
+PicoOS facts and snippets were verified locally against
+`library/unistd/unistd.header`, `library/unistd/process.picoc`,
+`library/unistd/libunistd.picoc`, `common/syscall.header`,
+`kernel/syscall.picoc`, and README section 13.2.1. The two new getpid diagrams
+are selectable SVGs in the deck's existing palette with sharp rectangular boxes.
+
+All 333 pre-existing slide identities, source anchors and exclusion markers
+are retained. The recovered slide and its new continuation bring the deck to
+335 slides. Pending short-version choices were remapped using the corresponding
+UUIDs. No new README revision was adopted or source snapshot rewritten.
+
+Rendered and inspected the affected content slides and chapter 10 overview.
+Final bounds/clipping checks reported no issues or browser errors. Verified
+code, diagram and command-list enlargement, viewer controls, vector text and
+return to the same slide. Identity, note/correction, navigation and short-version
+tests pass. No PDF was generated or exported. The chapter 10 example intentionally
+replaces the README's waitpid material, so strict original-source coverage is
+not claimed and a README rebuild was not run.

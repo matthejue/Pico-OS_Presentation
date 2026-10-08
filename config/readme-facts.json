@@ -26,8 +26,9 @@
   "116-program-sections-interrupt-table-entries-and-linker-placement": [
     "System V ABI",
     [
-      "C helpers + inline assembly",
-      "Shared ReTI stack-frame rules"
+      "**Binary contract:** lets compiled programs and libraries fit together",
+      "**Rules:** arguments, return values, registers, stack & file layout",
+      "**PicoOS:** adapts the calling convention to ReTI"
     ]
   ],
   "23-saved-interrupt-stack-frame": [

@@ -1312,9 +1312,9 @@ void _start(int argc, char *first_argument) {
 
 <div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:24.20%" /><col style="width:52.37%" /><col style="width:23.44%" /></colgroup><thead><tr><th>Image</th><th>_start used</th><th>Next function</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">EPROM bootloader</td><td>Explicit naked _start; no -C</td><td><span class="source-link"><code>boot_main()</code></span></td></tr>
 <tr data-source-row="2"><td class="table-key">SRAM kernel</td><td>Compiler-generated _start</td><td><span class="source-link"><code>main()</code></span></td></tr>
-<tr data-source-row="3"><td class="table-key">Init process</td><td>libstart; -C library/start/libstart.picoc</td><td><span class="source-link"><code>main()</code></span></td></tr>
-<tr data-source-row="4"><td class="table-key">Shell</td><td>Same libstart -C option</td><td><span class="source-link"><code>main()</code></span></td></tr>
-<tr data-source-row="5"><td class="table-key">User applications</td><td>Common userspace libstart link rule</td><td>Application main()</td></tr></tbody></table></div></div>
+<tr data-source-row="3"><td class="table-key">Init process</td><td><code>-C library/start/libstart.picoc</code></td><td><span class="source-link"><code>main()</code></span></td></tr>
+<tr data-source-row="4"><td class="table-key">Shell</td><td><code>-C library/start/libstart.picoc</code></td><td><span class="source-link"><code>main()</code></span></td></tr>
+<tr data-source-row="5"><td class="table-key">User applications</td><td><code>-C library/start/libstart.picoc</code></td><td><span class="source-link"><code>main()</code></span></td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
@@ -1393,7 +1393,7 @@ void syscall_interrupt(void) {
 </div>
 
 </div>
-<aside class="context-note"><b>System V ABI</b><span>C helpers + inline assembly · Shared ReTI stack-frame rules</span></aside>
+<aside class="context-note"><b>System V ABI</b><ul><li><strong>Binary contract:</strong> lets compiled programs and libraries fit together</li><li><strong>Rules:</strong> arguments, return values, registers, stack &amp; file layout</li><li><strong>PicoOS:</strong> adapts the calling convention to ReTI</li></ul></aside>
 
 </div>
 
@@ -3132,19 +3132,14 @@ int handle_syscall(int syscall_number, int argument, int *caller_context) {
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-2237 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-2237:1,2,3,4,5,6">
+<ReadmeVisual kind="table" :width="1080">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27%" /><col style="width:73%" /></colgroup><thead><tr><th>Group</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key">System control</td><td>Shutdown, reboot</td></tr>
-<tr data-source-row="2"><td class="table-key">Process management</td><td><ul><li>Load/run/list/unload/exit/wait/PID</li><li>Foreground/signals/parent-death</li></ul></td></tr>
-<tr data-source-row="3"><td class="table-key">Scheduling</td><td>Queue sleep, queue wakeup, yield</td></tr>
-<tr data-source-row="4"><td class="table-key">Process and shared memory</td><td>Heap start, heap size, heap-exhaustion handling, shared-memory open, map, unlink</td></tr>
-<tr data-source-row="5"><td class="table-key">Descriptors and I/O</td><td><ul><li>Availability/open/read/write/close/seek/dup</li><li>Direct UART byte</li></ul></td></tr>
-<tr data-source-row="6"><td class="table-key">Paths and directories</td><td><ul><li>chdir/getcwd/mkdir/readdir</li><li>unlink/rmdir/move/touch</li></ul></td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:27%" /><col style="width:16%" /><col style="width:57%" /></colgroup><thead><tr><th>Group</th><th>Selector range</th><th>Syscalls, in declaration order</th></tr></thead><tbody><tr><td class="table-key">System control</td><td>0–1</td><td>Shutdown, reboot</td></tr><tr><td class="table-key">Process management</td><td>2–11</td><td>Load/run/list/unload/exit/wait/PID<br />Foreground/signals/parent-death</td></tr><tr><td class="table-key">Scheduling</td><td>12–14</td><td>Queue sleep, queue wakeup, yield</td></tr><tr><td class="table-key">Process and shared memory</td><td>15–20</td><td>Heap start/size/full; shared-memory open/map/unlink</td></tr><tr><td class="table-key">Descriptors and I/O</td><td>21–28</td><td>Availability/open/read/write/close/seek/dup<br />Direct UART byte</td></tr><tr><td class="table-key">Paths and directories</td><td>29–36</td><td>chdir/getcwd/mkdir/readdir<br />unlink/rmdir/move/touch</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
+<aside class="context-note"><b>37 syscalls</b><ul><li><strong>Selectors:</strong> 0–36, inclusive</li><li><strong>Source:</strong> <code>common/syscall.header</code></li></ul></aside>
 
 </div>
 
@@ -7879,7 +7874,7 @@ void complete_pending_terminal_read(
 <!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
 
 ## 10.1.1 Header, implementation, and linking (1)
 
@@ -7887,23 +7882,14 @@ void complete_pending_terminal_read(
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET table-6244 -->
-<ReadmeVisual kind="table" :width="1080" data-table-key="table-6244:1,2,3,4,5,6,7,8">
+<ReadmeVisual kind="table" :width="1080">
 
-<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:35.85%" /><col style="width:64.15%" /></colgroup><thead><tr><th>File</th><th>Role in the wait library</th></tr></thead><tbody><tr data-source-row="1"><td class="table-key"><span class="source-link"><code>wait.header</code></span></td><td>Public <code>waitpid()</code> + <code>WIFSTOPPED()</code> declarations</td></tr>
-<tr data-source-row="2"><td class="table-key"><span class="source-link"><code>wait.picoc</code></span></td><td>Implementation + syscall helper</td></tr>
-<tr data-source-row="3"><td class="table-key"><span class="source-link"><code>libwait.picoc</code></span></td><td>Compilation unit links wait implementation</td></tr>
-<tr data-source-row="4"><td class="table-key"><span class="source-link"><code>common/stddef.header</code></span></td><td>Shared <code>bool</code>, <code>NULL</code>, <code>true</code>, and <code>false</code> definitions</td></tr>
-<tr data-source-row="5"><td class="table-key"><span class="source-link"><code>common/signal.header</code></span></td><td>Stopped-status constants for <code>WIFSTOPPED()</code></td></tr>
-<tr data-source-row="6"><td class="table-key"><span class="source-link"><code>common/syscall.header</code></span></td><td>Shared selector + child PID/status request layout</td></tr>
-<tr data-source-row="7"><td class="table-key"><span class="source-link"><code>libwait.reti_blocks</code></span></td><td>Reusable ReTI code blocks; linker input</td></tr>
-<tr data-source-row="8"><td class="table-key"><span class="source-link"><code>libwait.st</code></span></td><td>Function signatures + types; used alongside code blocks</td></tr></tbody></table></div></div>
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:45%" /><col style="width:55%" /></colgroup><thead><tr><th>File</th><th>Role in the unistd library</th></tr></thead><tbody><tr><td class="table-key"><code>library/unistd/unistd.header</code></td><td>Declares <code>getpid(void)</code></td></tr><tr><td class="table-key"><code>library/unistd/process.picoc</code></td><td>Implements <code>getpid()</code> + <code>invoke_syscall()</code></td></tr><tr><td class="table-key"><code>library/unistd/libunistd.picoc</code></td><td>Collects process, I/O, path and blocking implementations</td></tr><tr><td class="table-key"><code>common/syscall.header</code></td><td>Shared selector <code>SYSCALL_GETPID = 8</code></td></tr><tr><td class="table-key"><code>libunistd.reti_blocks</code></td><td>Reusable code blocks, linked into the user image</td></tr><tr><td class="table-key"><code>libunistd.st</code></td><td>Function signatures + types, beside the code blocks</td></tr></tbody></table></div></div>
 
 </ReadmeVisual>
 
 </div>
-<div class="readme-list prose-summary"><ul><li><strong>Header:</strong> signatures; compiler checks calls</li>
-<li><strong>Implementation:</strong> linked into user image</li></ul></div>
+<aside class="context-note"><b>Header → library → kernel</b><ul><li><strong>Header:</strong> checks calls</li><li><strong>Linked code:</strong> runs in userspace</li><li><strong>INT 0:</strong> enters the kernel</li></ul></aside>
 
 </div>
 
@@ -7912,46 +7898,46 @@ void complete_pending_terminal_read(
 <!-- SLIDE_ID d8b1e73e-25ce-415d-9f69-21b32385cd57 -->
 <!-- SOURCE Pico-OS/README.md#1011-header-implementation-and-linking -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
 
 ## 10.1.1 Header, implementation, and linking (2)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 220fr) minmax(0, 75fr)">
+<div class="readme-artifacts layout-composed" style="--readme-rows:minmax(0, 240fr) minmax(0, 65fr)">
 
-<div class="readme-artifacts composition-panel layout-columns" data-column-key="assets:code-6258+code-6274" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);">
+<div class="readme-artifacts composition-panel layout-columns" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr)">
 
-<!-- README_ASSET code-6258 -->
-<ReadmeVisual kind="code" :width="384" data-code-source="code-6258" data-code-part="1">
+<ReadmeVisual kind="code" :width="560">
 
-<!-- README_CODE_PART code-6258 lines=1-7 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/sys/wait/wait.header</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/libunistd.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-#pragma once
-
-#include "../../../common/stddef.header"
-#include "../../../common/signal.header"
-
-int waitpid(int pid);
-bool WIFSTOPPED(int status);
+#include "../stdlib/stdlib.header"
+#include "process.picoc"
+#include "io.picoc"
+#include "working_directory.picoc"
+#include "file_removal.picoc"
+#include "blocking.picoc"
 ```
 
 </div>
 
 </ReadmeVisual>
 
-<!-- README_ASSET code-6274 -->
-<ReadmeVisual kind="code" :width="384" data-code-source="code-6274" data-code-part="1">
+<ReadmeVisual kind="code" :width="440">
 
-<!-- README_CODE_PART code-6274 lines=1-1 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/sys/wait/libwait.picoc</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>Application · header + call (excerpt)</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-#include "wait.picoc"
+#include "../library/unistd/unistd.header"
+
+int main(void) {
+    int pid = getpid();
+    return 0;
+}
 ```
 
 </div>
@@ -7962,15 +7948,13 @@ bool WIFSTOPPED(int status);
 
 <div class="readme-artifacts composition-panel layout-single">
 
-<!-- README_ASSET code-6281 -->
-<ReadmeVisual kind="code" :width="640" class="command-strip" data-code-source="code-6281" data-code-part="1">
+<ReadmeVisual kind="code" :width="980">
 
-<!-- README_CODE_PART code-6281 lines=1-1 -->
 <div class="readme-code readme-terminal">
 <div class="readme-code-header" v-pre><span>Host terminal</span><span class="code-range"></span></div>
 
 ```console {lines:false}
-$ picoc_compiler -c -O1 library/sys/wait/libwait.picoc
+$ picoc_compiler -c -O1 library/unistd/libunistd.picoc
 ```
 
 </div>
@@ -7980,6 +7964,7 @@ $ picoc_compiler -c -O1 library/sys/wait/libwait.picoc
 </div>
 
 </div>
+<aside class="context-note"><b>Linking</b><ul><li><strong>Application image:</strong> link <code>libunistd.reti_blocks</code> + dependencies</li><li><strong>Types:</strong> keep <code>libunistd.st</code> beside it</li></ul></aside>
 
 </div>
 
@@ -7988,37 +7973,35 @@ $ picoc_compiler -c -O1 library/sys/wait/libwait.picoc
 <!-- SLIDE_ID 5de2a26a-4658-44a3-8cbb-a4606ab8e2da -->
 <!-- SOURCE Pico-OS/README.md#1012-packing-arguments-and-executing-the-syscall -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
 
 ## 10.1.2 Packing arguments and executing the syscall (1)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-single">
+<div class="readme-artifacts layout-stacked">
 
-<!-- README_ASSET code-6306 -->
-<ReadmeVisual kind="code" :width="640" data-code-source="code-6306" data-code-part="1">
+<ReadmeVisual kind="code" :width="640">
 
-<!-- README_CODE_PART code-6306 lines=1-8 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>common/syscall.header</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>common/syscall.header · excerpt</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-// ...
-
-struct WaitPidRequest {
-    int pid;
-    int *status;
-};
-
-// ...
+#define SYSCALL_GETPID 8
 ```
 
 </div>
 
 </ReadmeVisual>
 
+<ReadmeVisual kind="table" :width="1080">
+
+<div class="table-panels" v-pre><div class="readme-table"><table><colgroup><col style="width:25%" /><col style="width:75%" /></colgroup><thead><tr><th>Register</th><th>Value at the syscall boundary</th></tr></thead><tbody><tr><td class="table-key"><code>ACC</code></td><td>8 = <code>SYSCALL_GETPID</code></td></tr><tr><td class="table-key"><code>IN1</code></td><td>0: no argument required</td></tr><tr><td class="table-key"><code>IN2</code></td><td>Kernel result: current process PID</td></tr></tbody></table></div></div>
+
+</ReadmeVisual>
+
 </div>
+<aside class="context-note"><b>getpid()</b><ul><li><strong>No parameters:</strong> no request structure</li><li><strong>One result:</strong> an integer PID</li></ul></aside>
 
 </div>
 
@@ -8027,29 +8010,21 @@ struct WaitPidRequest {
 <!-- SLIDE_ID 16cc1b17-e4ca-4b6b-8e87-a6d25f528752 -->
 <!-- SOURCE Pico-OS/README.md#1012-packing-arguments-and-executing-the-syscall -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid
 
 ## 10.1.2 Packing arguments and executing the syscall (2)
 
 <div class="deck-content readme-slide">
 
-<div class="readme-artifacts layout-single">
+<div class="readme-artifacts layout-columns" style="--readme-columns:minmax(0, 59fr) minmax(0, 41fr)">
 
-<!-- README_ASSET code-6323 -->
-<div class="code-columns" data-column-key="code:code-6323" style="--readme-columns:minmax(0, 50fr) minmax(0, 50fr);--source-aspect:3.2779369627507164">
+<ReadmeVisual kind="code" :text-scale="1" :width="560">
 
-<ReadmeVisual kind="code" :width="560" data-code-source="code-6323" data-code-part="1">
-
-<!-- README_CODE_PART code-6323 lines=1-15 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/sys/wait/wait.picoc</span><span class="code-range">lines 1–15</span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/process.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-#include "wait.header"
-#include "../../../common/syscall.header"
-
-// Invokes INT 0 with ACC/IN1 and returns IN2 without loading unistd into SRAM
-int invoke_waitpid_syscall(int number, int argument) {
+int invoke_syscall(int number, int argument) {
     int result;
 
     asm("LOADIN BAF ACC 3");
@@ -8058,35 +8033,22 @@ int invoke_waitpid_syscall(int number, int argument) {
     asm("STOREIN BAF IN2 0");
     return result;
 }
-
-int waitpid(int pid) {
 ```
 
 </div>
 
 </ReadmeVisual>
 
-<ReadmeVisual kind="code" :width="560" data-code-source="code-6323" data-code-part="2">
+<ReadmeVisual kind="code" :text-scale="1" :width="440">
 
-<!-- README_CODE_PART code-6323 lines=16-30 -->
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/sys/wait/wait.picoc</span><span class="code-range">lines 16–30</span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/process.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
-    int status = 0;
-    struct WaitPidRequest request;
-
-    request.pid = pid;
-    request.status = &status;
-    while (!invoke_waitpid_syscall(SYSCALL_WAITPID, (int)&request)) {
-    }
-    return status;
-}
-
-bool WIFSTOPPED(int status) {
-    return status == SIGNAL_STOP_STATUS ||
-           status == SIGNAL_STOPPED_STATUS ||
-           status == SIGNAL_TERMINAL_INPUT_STATUS;
+int getpid(void) {
+    return invoke_syscall(
+        SYSCALL_GETPID, 0
+    );
 }
 ```
 
@@ -8095,8 +8057,7 @@ bool WIFSTOPPED(int status) {
 </ReadmeVisual>
 
 </div>
-
-</div>
+<aside class="context-note"><b>C call → INT 0 → C return</b><ul><li><strong>LOADIN:</strong> stack arguments → ACC / IN1</li><li><strong>STOREIN:</strong> IN2 → local result</li></ul></aside>
 
 </div>
 
@@ -8106,7 +8067,7 @@ bool WIFSTOPPED(int status) {
 <!-- SOURCE Pico-OS/README.md#10131-cpu-execution-and-sram-storage -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid · 10.1.3 Interrupt entry, waiting, and return
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid · 10.1.3 Interrupt entry and return
 
 ## 10.1.3.1 CPU execution and SRAM storage
 
@@ -8114,10 +8075,9 @@ bool WIFSTOPPED(int status) {
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET image-6402 -->
-<ReadmeVisual kind="image" :width="980">
+<ReadmeVisual kind="image" :width="1080">
 
-<img src="/readme/waitpid-memory-context.svg" alt="One CPU fetches kernel instructions and parent instructions from their separate SRAM text sections. The complete SRAM row locates kernel globals, PCBs, the Kernel Stack, and the parent's image, heap, and stack. Enlarged panels show PCB 1.activation, PCB 1.waiting_status_ptr, PCB 2.waiters, the saved interrupt frame and PC, WaitPidRequest, and the separate status integer." />
+<img src="/readme/getpid-memory-context.svg" alt="One CPU alternates between user library and kernel code in SRAM. The kernel reads the current PCB PID from the Kernel Heap and returns it through IN2 to the library result on the user stack." />
 
 </ReadmeVisual>
 
@@ -8131,22 +8091,22 @@ bool WIFSTOPPED(int status) {
 <!-- SOURCE Pico-OS/README.md#10132-following-entry-and-the-two-return-paths -->
 <!-- SHORT_VERSION_DISABLED -->
 
-# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: waitpid · 10.1.3 Interrupt entry, waiting, and return
+# <MajorSectionLink section="10-userspace-libraries">10. Userspace libraries</MajorSectionLink> · 10.1 From a library call to the kernel: getpid · 10.1.3 Interrupt entry and return
 
-## 10.1.3.2 Following entry and the two return paths
+## 10.1.3.2 Following entry and return
 
 <div class="deck-content readme-slide">
 
 <div class="readme-artifacts layout-single">
 
-<!-- README_ASSET image-6445 -->
-<ReadmeVisual kind="image" :width="980">
+<ReadmeVisual kind="image" :width="1080">
 
-<img src="/readme/waitpid-return-paths.svg" alt="Five aligned columns distinguish CPU execution from SRAM state: parent INT 0, kernel wait setup, execution of other processes, kernel notification of a child event, and parent resumption after RTI. An immediate-result shortcut connects kernel wait handling directly to parent resumption." />
+<img src="/readme/getpid-return-path.svg" alt="getpid calls invoke_syscall with selector 8 and argument 0. INT 0 enters the kernel, which reads current_process()->pid. The interrupt return restores the user context and returns the PID in IN2. The helper stores and returns that PID." />
 
 </ReadmeVisual>
 
 </div>
+<aside class="context-note"><b>Immediate result</b><ul><li><strong>Kernel:</strong> reads the caller’s PID</li><li><strong>Wrapper:</strong> returns the PID; no wait queue or retry loop</li></ul></aside>
 
 </div>
 
@@ -10849,12 +10809,77 @@ PicoOS> /documentation/add.bin 7 5
 
 ---
 
+
+<!-- SLIDE_ID 9204e2d0-4668-4d63-b517-fcc62df0f1ea -->
+<!-- SOURCE Pico-OS/README.md#1321-command-behavior-and-supported-options -->
+
+# <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
+
+## 13.2.1 Command behavior and supported options (1)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<ReadmeVisual kind="table" :width="1080">
+
+<div class="readme-list command-options" v-pre><ul><li><strong>echo:</strong> space-joined text + newline<ul><li><strong>\n:</strong> embedded newline; <strong>no -n</strong></li>
+<li><strong>-h/--help:</strong> ordinary text; status 0</li></ul></li><li><strong>count:</strong> at most one nonnegative busy-loop delay<ul><li><strong>Delay:</strong> not milliseconds</li>
+<li><strong>Prints indefinitely:</strong> yield after each value</li></ul></li><li><strong>cat:</strong> files or stdin; 64-cell chunks<ul><li><strong>Terminal:</strong> editable lines; Ctrl+D finishes</li>
+<li><strong>Files:</strong> preserve bytes; terminal escapes nonprintables</li></ul></li><li><strong>touch:</strong> multiple paths; <strong>cp/mv:</strong> source + destination<ul><li><strong>cp:</strong> 64-cell chunks</li>
+<li><strong>ps:</strong> includes zombies</li>
+<li><strong>touch:</strong> stop on first failure</li>
+<li><strong>mv:</strong> one host move request; no options</li>
+<li><strong>cp:</strong> disables loading bar</li></ul></li></ul></div>
+
+</ReadmeVisual>
+
+</div>
+<aside class="context-note"><b>Unix command names</b><ul><li><strong>Reduced options:</strong> use the documented forms</li><li><strong>cd:</strong> built-in changes the shell directory</li></ul></aside>
+
+</div>
+
+
+---
+
+
+<!-- SLIDE_ID f74ad270-3a59-4dc9-9afc-932b96cab487 -->
+<!-- SOURCE Pico-OS/README.md#1321-command-behavior-and-supported-options -->
+
+# <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
+
+## 13.2.1 Command behavior and supported options (2)
+
+<div class="deck-content readme-slide">
+
+<div class="readme-artifacts layout-single">
+
+<ReadmeVisual kind="table" :width="1080">
+
+<div class="readme-list command-options" v-pre><ul><li><strong>sed:</strong> seekable stdin; no pathname operand<ul><li><strong>i / c / a:</strong> numbered-line insert/change/append</li>
+<li><strong>s/old/new/:</strong> first literal match; no regex</li>
+<li><strong>/pattern/iTEXT:</strong> insert before matching lines</li>
+<li><strong>Whole input:</strong> in memory; loading bar disabled</li></ul></li><li><strong>ls:</strong> one directory; <strong>-a:</strong> hidden names<ul><li><strong>mkdir:</strong> no -p; <strong>rm:</strong> nonrecursive</li>
+<li><strong>rmdir:</strong> multiple empty directories</li></ul></li><li><strong>kill:</strong> SIGKILL default; names or numbers<ul><li><strong>Signal 0:</strong> probe; zombies rejected</li>
+<li><strong>Accepted request:</strong> yield; no group PID forms</li></ul></li><li><strong>poweroff:</strong> halt; <strong>reboot:</strong> EPROM restart<ul><li><strong>uname:</strong> installed version</li>
+<li><strong>No operands:</strong> all three</li></ul></li></ul></div>
+
+</ReadmeVisual>
+
+</div>
+<aside class="context-note"><b>Unix command names</b><ul><li><strong>Reduced options:</strong> use the documented forms</li><li><strong>cd:</strong> built-in changes the shell directory</li></ul></aside>
+
+</div>
+
+
+---
+
 <!-- SLIDE_ID 17211802-dd5d-4f64-b59a-2c1c97236e61 -->
 <!-- SOURCE Pico-OS/README.md#1321-command-behavior-and-supported-options -->
 
 # <MajorSectionLink section="13-user-applications-and-commands">13. User applications and commands</MajorSectionLink> · 13.2 Applications, library calls, and host requests
 
-## 13.2.1 Command behavior and supported options
+## 13.2.1 Command behavior and supported options (3)
 
 <div class="deck-content readme-slide">
 
@@ -10912,8 +10937,9 @@ PicoOS> rmdir.bin demo
 </ReadmeVisual>
 
 </div>
-
 </div>
+
+<aside class="context-note"><b>Counter result</b><ul><li><strong>Killed counter:</strong> probe fails; ps still shows zombie</li><li><strong>$!:</strong> choose actual PID without hardcoding</li></ul></aside>
 
 </div>
 

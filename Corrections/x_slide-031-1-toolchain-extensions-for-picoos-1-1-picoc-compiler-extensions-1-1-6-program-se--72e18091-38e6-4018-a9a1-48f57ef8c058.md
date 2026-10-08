@@ -5,4 +5,4 @@ slide_title: "1. Toolchain extensions for PicoOS · 1.1 PicoC-Compiler extension
 source_anchor: "116-program-sections-interrupt-table-entries-and-linker-placement"
 ---
 
-- this new explanation of System V ABI  got a lot worse, please explain in this remark box in a really rememberable and understnable short way in bullet points what SystemV ABI is!!!
+- [x] this new explanation of System V ABI  got a lot worse, please explain in this remark box in a really rememberable and understnable short way in bullet points what SystemV ABI is!!!

@@ -273,7 +273,7 @@
   ],
   "table-531/14/0": "ISR entries",
   "table-531/23/0": "Debug trap + NOP",
-  "table-1068/5/2": "Application main()",
+  "table-1068/5/2": "`main()`",
   "table-1584/1/3": "Store S at DS-relative address",
   "table-1975/1/1": "Binary path",
   "table-1975/2/0": [
@@ -395,5 +395,8 @@
   "table-644/9/1": "Return address",
   "table-644/10/1": "Saved BAF",
   "table-644/12/0": "**`BAF - 1`**",
-  "table-644/12/1": "Second local"
+  "table-644/12/1": "Second local",
+  "table-1068/3/1": "`-C library/start/libstart.picoc`",
+  "table-1068/4/1": "`-C library/start/libstart.picoc`",
+  "table-1068/5/1": "`-C library/start/libstart.picoc`"
 }
