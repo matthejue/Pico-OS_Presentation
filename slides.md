@@ -7882,7 +7882,7 @@ void complete_pending_terminal_read(
 <ReadmeVisual kind="code" :width="980" :text-scale="1.2">
 
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/unistd/unistd.header · excerpt</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/unistd.header</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 #pragma once
@@ -7897,7 +7897,7 @@ int getpid(void);
 <ReadmeVisual kind="code" :width="980" :text-scale="1.2">
 
 <div class="readme-code">
-<div class="readme-code-header" v-pre><span>library/unistd/process.picoc · excerpt</span><span class="code-range"></span></div>
+<div class="readme-code-header" v-pre><span>library/unistd/process.picoc</span><span class="code-range"></span></div>
 
 ```c {lines:false}
 #include "unistd.header"
@@ -12025,7 +12025,6 @@ PicoOS> /documentation/shared_mutex/launcher.bin
 
 <!-- SLIDE_ID e6126660-8ba5-4fb6-b371-4aae70da00fe -->
 <!-- SOURCE Pico-OS/README.md#17-limitations -->
-<!-- SHORT_VERSION_DISABLED -->
 
 ## 17. Limitations
 
