@@ -75,7 +75,7 @@ const presentationVersion = releaseVersion.trim()
 <div class="deck-content readme-slide">
 
 <div class="readme-list"><ul><li><strong>Educational OS</strong> running on <strong>ReTI</strong></li>
-<li><strong>Components:</strong> Bootloader, Kernel, Init process, Shell, Libraries, Applications</li>
+<li><strong>Components:</strong> Bootloader, Kernel, Init process, Shell, Libraries, User application</li>
 <li><strong>Non-preemptive kernel</strong></li>
 <li><strong>No MMU or Isolation</strong></li>
 <li><strong>Host-backed File System via UART</strong></li>

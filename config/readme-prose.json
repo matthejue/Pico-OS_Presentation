@@ -1,7 +1,7 @@
 {
   "picoos": [
     "**Educational OS** running on **ReTI**",
-    "**Components:** Bootloader, Kernel, Init process, Shell, Libraries, Applications",
+    "**Components:** Bootloader, Kernel, Init process, Shell, Libraries, User application",
     "**Non-preemptive kernel**",
     "**No MMU or Isolation**",
     "**Host-backed File System via UART**",
